@@ -52,7 +52,10 @@
                     </div>
                     <div>
                         <div class="my-1 text-lg whitespace-nowrap font-semibold">
-                            <p>66 bar process</p>
+                            <p>66</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                <div class="bg-pink-300 h-2.5 rounded-full dark:bg-blue-500" style="width: 66%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -76,7 +79,10 @@
                     </div>
                     <div>
                         <div class="my-1 text-lg whitespace-nowrap font-semibold">
-                            <p>66 bar process</p>
+                            <p>66</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                <div class="bg-green-300 h-2.5 rounded-full dark:bg-blue-500" style="width: 66%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,7 +106,10 @@
                     </div>
                     <div>
                         <div class="my-1 text-lg whitespace-nowrap font-semibold">
-                            <p>66 bar process</p>
+                            <p>66</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                <div class="bg-yellow-300 h-2.5 rounded-full dark:bg-blue-500" style="width: 66%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
