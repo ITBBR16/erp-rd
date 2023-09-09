@@ -1,4 +1,4 @@
-<p align="center"><img src="/public/img/Logo Black besar.png" width="400" alt="Rumah Drone Logo"></p>
+<p align="center"><img src="/public/img/Logo Rumah Drone - Digital_Combination Logo - White.png" width="400" alt="Rumah Drone Logo"></p>
 
 ## Install Tailwind
 
