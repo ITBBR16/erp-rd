@@ -6,6 +6,9 @@
             Dashboard
         </div>
     </div>
+    <div>
+        <div></div>
+    </div>
     <div class="border border-gray-300 rounded-lg p-4 overflow-hidden my-4">
         <div class="text-gray-500 font-semibold text-lg mb-4">Status</div>
         <div class="grid grid-cols-4 gap-4 mb-4">
