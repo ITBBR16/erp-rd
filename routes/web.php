@@ -19,6 +19,18 @@ Route::get('/', function () {
 Route::get('/gudang', function () {
     return view('gudang.main.index');
 });
+Route::get('gudang/sender', function () {
+    return view('gudang.sender.main');
+});
+Route::get('gudang/belanja', function () {
+    return view('gudang.shop.belanja');
+});
+Route::get('gudang/req-payment', function () {
+    return view('gudang.shop.payment');
+});
+Route::get('gudang/input-resi', function () {
+    return view('gudang.shop.resi');
+});
 Route::get('/battery', function () {
     return view('battery.main.index');
 });

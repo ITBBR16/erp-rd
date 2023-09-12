@@ -6,12 +6,14 @@
     <title>Stagging Gudang</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     @vite('resources/css/app.css')
 </head>
 <body>
 
 @include('gudang.layouts.header')
 @include('gudang.layouts.sidebar')
+
 
 <div class="p-4 sm:ml-64 mt-14">
     @yield('container')

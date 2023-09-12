@@ -8,7 +8,7 @@
     </div>
     <div class="border border-gray-300 rounded-lg p-4 overflow-hidden my-2">
         <div class="text-gray-500 font-semibold text-lg mb-4">Status</div>
-        <div class="grid grid-cols-4 gap-4 mb-2 w-full">
+        <div class="grid grid-cols-4 gap-4 w-full">
             <div class="px-4 border-r">
                 <div class="py-4">
                     <div class="flex flex-nowrap items-center">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="my-1 text-lg whitespace-nowrap font-semibold">
+                        <div class="my-1 text-2xl whitespace-nowrap font-semibold">
                             <p>66</p>
                         </div>
                     </div>
@@ -53,8 +53,8 @@
                     <div>
                         <div class="my-1 text-lg whitespace-nowrap font-semibold">
                             <p>66</p>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="bg-pink-300 h-2.5 rounded-full dark:bg-blue-500" style="width: 66%"></div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-pink-300 h-2.5 rounded-full" style="width: 66%"></div>
                             </div>
                         </div>
                     </div>
@@ -80,8 +80,8 @@
                     <div>
                         <div class="my-1 text-lg whitespace-nowrap font-semibold">
                             <p>66</p>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="bg-green-300 h-2.5 rounded-full dark:bg-blue-500" style="width: 66%"></div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-green-300 h-2.5 rounded-full" style="width: 66%"></div>
                             </div>
                         </div>
                     </div>
@@ -107,8 +107,8 @@
                     <div>
                         <div class="my-1 text-lg whitespace-nowrap font-semibold">
                             <p>66</p>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                <div class="bg-yellow-300 h-2.5 rounded-full dark:bg-blue-500" style="width: 66%"></div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-yellow-300 h-2.5 rounded-full" style="width: 66%"></div>
                             </div>
                         </div>
                     </div>
