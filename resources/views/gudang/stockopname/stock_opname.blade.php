@@ -127,7 +127,7 @@
                             <i class="material-symbols-outlined text-base">edit</i>
                         </button>
                         <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                            <i class="material-symbols-outlined text-base">delete</i>
+                            <i class="material-symbols-outlined text-base">settings_backup_restore</i>
                         </button>
                     </div>
                 </td>
@@ -160,7 +160,7 @@
                             <i class="material-symbols-outlined text-base">edit</i>
                         </button>
                         <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                            <i class="material-symbols-outlined text-base">delete</i>
+                            <i class="material-symbols-outlined text-base">settings_backup_restore</i>
                         </button>
                     </div>
                 </td>
