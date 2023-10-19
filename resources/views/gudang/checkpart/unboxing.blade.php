@@ -90,6 +90,16 @@
                             <label for="drive_link">Link Drive</label>
                             <input type="url" name="drive_link" id="drive_link" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" value="https://drive.google.com/drive/folders/1cvhAhUj92Tf7sMNLLiMH-VJeSs3cw9NS?usp=sharing" readonly required>
                         </div>
+                        <div>
+                            <label for="kondisi_paket">Kondisi Diterima</label>
+                            <select id="kondisi_paket" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                                <option hidden>Pilih Kondisi Paket</option>
+                                <option value="">Sangat Baik</option>
+                                <option value="">Baik</option>
+                                <option value="">Rusak</option>
+                                <option value="">Rusak Parah</option>
+                            </select>
+                        </div>
                         <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit Unboxing</button>
                     </form>
                 </div>

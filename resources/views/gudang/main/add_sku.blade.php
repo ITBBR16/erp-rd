@@ -31,11 +31,11 @@
                     <th scope="col" class="px-4 py-2">Seri</th>
                     <th scope="col" class="px-4 py-2">RD Name</th>
                     <th scope="col" class="px-4 py-2">Need SN</th>
-                    <th scope="col" class="px-4 py-2">SKU DJI</th>
-                    <th scope="col" class="px-4 py-2">DJI Name</th>
-                    <th scope="col" class="px-4 py-2">Product Type</th>
+                    <th scope="col" class="px-4 py-2">SKU External</th>
+                    <th scope="col" class="px-4 py-2">Name External</th>
+                    <th scope="col" class="px-4 py-2">Category</th>
                     <th scope="col" class="px-4 py-2">Status</th>
-                    <th scope="col" class="px-4 py-2">Kategori</th>
+                    <th scope="col" class="px-4 py-2">Jenis</th>
                 </tr>
             </thead>
             <tbody>
