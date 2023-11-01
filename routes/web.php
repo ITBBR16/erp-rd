@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\customer\AddCustomerController;
+use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\customer\LogAdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,3 +80,13 @@ Route::get('/repair', function () {
 Route::get('/logistik', function () {
     return view('logistik.main.index');
 });
+
+Route::get('/customer', [DashboardCustomerController::class, 'index']);
+
+Route::get('/customer/log-admin', [LogAdminController::class, 'index']);
+
+Route::get('/customer/add-customer', [AddCustomerController::class, 'index']);
+Route::post('/customer/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
+Route::get('/getKota/{provinsiId}', [AddCustomerController::class, 'getKota']);
+Route::get('/getKecamatan/{kotaId}', [AddCustomerController::class, 'getKecamatan']);
+Route::get('/getKelurahan/{kecamatanId}', [AddCustomerController::class, 'getKelurahan']);
