@@ -2,7 +2,13 @@
 
 namespace App\Repositories\customer;
 
-class CustomerInterface
+interface CustomerInterface
 {
-    public function getAll(){}
+    public function getAll();
+
+    public function getSelectKota();
+
+    public function getSelectKecamatan();
+
+    public function getSelectKelurahan();
 }

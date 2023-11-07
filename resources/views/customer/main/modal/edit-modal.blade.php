@@ -61,11 +61,13 @@
                             <div class="relative z-0 w-full mb-6 group">
                                 <select name="provinsi" id="provinsi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                                     <option hidden>Provinsi</option>
-                                    {{-- @foreach ($provinsi as $prov)
+                                    @foreach ($provinsi as $prov)
                                         @if ($item->provinsi == $prov->id)
                                             <option value="{{ $prov['id'] }}" selected>{{ $prov['name'] }}</option>
+                                        @else
+                                            <option value="{{ $prov['id'] }}">{{ $prov['name'] }}</option>
                                         @endif
-                                    @endforeach --}}
+                                    @endforeach
                                 </select>
                                 @error('provinsi')
                                     <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -73,7 +75,13 @@
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
                                 <select name="kota_kabupaten" id="kota_kabupaten" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                                    
+                                    @foreach ($dataKota as $kota)
+                                        @if ($item->kota_kabupaten == $kota->id)
+                                            <option value="{{ $kota->id }}" selected>{{ $kota->name }}</option>
+                                        @else
+                                            <option value="{{ $kota->id }}">{{ $kota->name }}</option>
+                                        @endif
+                                    @endforeach
                                 </select>
                                 @error('kota_kabupaten')
                                     <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -82,15 +90,29 @@
                         </div>
                         <div class="grid md:grid-cols-3 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="kecamatan" id="kecamatan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kecamatan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('kecamatan', $item->kecamatan) }}">
-                                <label for="kecamatan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kecamatan</label>
+                                <select name="kecamatan" id="kecamatan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                                    @foreach ($dataKecamatan as $kec)
+                                        @if ($item->kecamatan == $kec->id)
+                                            <option value="{{ $kec->id }}" selected>{{ $kec->name }}</option>
+                                        @else
+                                            <option value="{{ $kec->id }}">{{ $kec->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                                 @error('kecamatan')
                                     <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="kelurahan" id="kelurahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kelurahan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('kelurahan', $item->kelurahan) }}">
-                                <label for="kelurahan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kelurahan</label>
+                                <select name="kelurahan" id="kelurahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                                    @foreach ($dataKelurahan as $kel)
+                                        @if ($item->kelurahan == $kel->id)
+                                            <option value="{{ $kel->id }}" selected>{{ $kel->name }}</option>
+                                        @else
+                                            <option value="{{ $kel->id }}">{{ $kel->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                                 @error('kelurahan')
                                     <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror

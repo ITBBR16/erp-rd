@@ -85,7 +85,7 @@ Route::get('/logistik', function () {
 });
 
 Route::prefix('/customer')->group(function () {
-    Route::resource('/', DashboardCustomerController::class)->only(['index', 'edit', 'update', 'destroy', 'search']);
+    Route::resource('/', DashboardCustomerController::class)->only(['index', 'update', 'destroy', 'search']);
 
     Route::get('/log-admin', [LogAdminController::class, 'index']);
     Route::get('/add-customer', [AddCustomerController::class, 'index']);

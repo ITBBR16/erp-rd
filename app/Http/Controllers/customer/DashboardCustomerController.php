@@ -4,26 +4,30 @@ namespace App\Http\Controllers\customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\customer\Customer;
+use App\Models\wilayah\Provinsi;
 use App\Repositories\customer\CustomerRepository;
 use Illuminate\Http\Request;
 
 class DashboardCustomerController extends Controller
 {
-    private $customerRepo;
-
-    public function __construct(CustomerRepository $customerRepo)
-    {
-        $this->customerRepo = $customerRepo;
-    }
+    public function __construct(private CustomerRepository $customerRepo){}
 
     public function index() 
     {
         $dataCustomer = $this->customerRepo->getAll();
+        $dataKota = $this->customerRepo->getSelectKota();
+        $dataKecamatan = $this->customerRepo->getSelectKecamatan();
+        $dataKelurahan = $this->customerRepo->getSelectKelurahan();
+        $provinsi = Provinsi::all();
 
         return view('customer.main.index', [
             'title' => 'Dashboard Customer',
             'active' => 'dashboard-customer',
             'dataCustomer' => $dataCustomer,
+            'dataKota' => $dataKota,
+            'dataKecamatan' => $dataKecamatan,
+            'dataKelurahan' => $dataKelurahan,
+            'provinsi' => $provinsi
         ]);
     }
 

@@ -3,8 +3,11 @@
 namespace App\Repositories\customer;
 
 use App\Models\customer\Customer;
+use App\Models\wilayah\Kecamatan;
+use App\Models\wilayah\Kelurahan;
+use App\Models\wilayah\Kota;
 
-class CustomerRepository
+class CustomerRepository implements CustomerInterface
 {
     public function getAll()
     {
@@ -18,8 +21,31 @@ class CustomerRepository
         return $dataCustomer;
     }
 
-    public function getSearch()
+    public function getSelectKota()
     {
-        
+        $dataKota = Kota::select('kabupaten.*')
+                    ->join('customer', 'kabupaten.provinsi_id', '=', 'customer.provinsi')
+                    ->get();
+
+        return $dataKota;
     }
+
+    public function getSelectKecamatan()
+    {
+        $dataKecamatan = Kecamatan::select('kecamatan.*')
+                    ->join('customer', 'kecamatan.kabupaten_id', '=', 'customer.kota_kabupaten')
+                    ->get();
+
+        return $dataKecamatan;
+    }
+
+    public function getSelectKelurahan()
+    {
+        $dataKelurahan = Kelurahan::select('kelurahan.*')
+                    ->join('customer', 'kelurahan.kecamatan_id', '=', 'customer.kecamatan')
+                    ->get();
+
+        return $dataKelurahan;
+    }
+
 }
