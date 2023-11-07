@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Models\customer;
+namespace App\Models\wilayah;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Provinsi extends Model
 {
     use HasFactory;
 
     protected $connection = 'rumahdrone_customer';
 
-    protected $table = 'customer';
+    protected $table = 'provinsi';
 
-    protected $guarded = ['id'];
-
+    public function kota()
+    {
+        return $this->hasMany(Kota::class);
+    }
 }

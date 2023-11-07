@@ -37,18 +37,21 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($logData as $log)
+                    
+                @endforeach
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <td class="px-6 py-2">
-                        Fahrul Ahmad
+                        {{ $log->customer_id }}
                     </td>
                     <td class="px-6 py-2">
-                        Daniel
+                        {{ $log->employee_id }}
                     </td>
                     <td class="px-6 py-2">
-                        Edit
+                        {{ $log->action }}
                     </td>
                     <td class="px-6 py-2">
-                        17 Agustus 2023
+                        {{ $log->edit_at }}
                     </td>
                 </tr>
             </tbody>

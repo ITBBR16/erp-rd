@@ -6,6 +6,22 @@
             Dashboard
         </div>
     </div>
+    @if (session()->has('success'))
+        
+    <div id="alert-success-input" class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800" role="alert">
+        <span class="material-symbols-outlined flex-shrink-0 w-4 h-4">task_alt</span>
+        <div class="ml-3 text-sm font-medium">
+            {{ session('success') }}
+        </div>
+        <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-success-input" aria-label="Close">
+          <span class="sr-only">Dismiss</span>
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+          </svg>
+        </button>
+    </div>
+    
+    @endif
     <div class="relative overflow-x-auto mt-6">
         <div class="flex items-center justify-between py-4">
             <label for="table-search" class="sr-only">Search</label>
@@ -15,7 +31,7 @@
                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
-                <input type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Items">
+                <input type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search. . .">
             </div>
         </div>
     </div>
@@ -24,6 +40,9 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
+                    <th scope="col" class="px-6 py-3">
+                        #
+                    </th>
                     <th scope="col" class="px-6 py-3">
                         Nama Customer
                     </th>
@@ -39,21 +58,50 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td class="px-6 py-2">
-                        Fahrul Ahmad
-                    </td>
-                    <td class="px-6 py-2">
-                        +6285156519066
-                    </td>
-                    <td class="px-6 py-2">
-                        Jl. D. Maninjau Tengah, Malang
-                    </td>
-                    <td class="px-6 py-2">
-                        
-                    </td>
+                @foreach ($dataCustomer as $dc)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td class="px-6 py-2">
+                            {{ $loop->iteration }}
+                        </td>
+                        <td class="px-6 py-2 customer-name">
+                            {{ $dc->first_name }} {{ $dc->last_name }}
+                        </td>
+                        <td class="px-6 py-2">
+                            +{{ $dc->no_telpon }}
+                        </td>
+                        <td class="px-6 py-2">
+                            {{ $dc->nama_jalan }}
+                        </td>
+                        <td class="px-6 py-2">
+                            <div class="flex flex-wrap">
+                                <button type="button" data-modal-target="view-customer" data-modal-toggle="view-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">visibility</i>
+                                </button>
+                                <button type="button" data-modal-target="update-customer" data-modal-toggle="update-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">edit</i>
+                                </button>
+                                <button type="button" data-modal-target="delete-customer" data-modal-toggle="delete-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">delete</i>
+                                </button>
+                            </div>
+                        </td>
+                @endforeach
                 </tr>
             </tbody>
         </table>
     </div>
+
+    <div id="dataNotFound" class="hidden p-4 justify-center">
+        <div class="flex items-center">
+            <figure class="max-w-lg">
+                <img class="h-auto max-w-full rounded-lg" src="/img/not-found.png" alt="Not Found">
+                <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Data Not Found</figcaption>
+            </figure>
+        </div>
+    </div>
+
+    {{-- Modal --}}
+    @include('customer.main.modal.delete-modal')
+    @include('customer.main.modal.edit-modal')
+    @include('customer.main.modal.view-modal')
 @endsection

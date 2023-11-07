@@ -3,6 +3,9 @@
 use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\customer\DashboardCustomerController;
 use App\Http\Controllers\customer\LogAdminController;
+use App\Http\Controllers\wilayah\KecamatanController;
+use App\Http\Controllers\wilayah\KelurahanController;
+use App\Http\Controllers\wilayah\KotaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,12 +84,15 @@ Route::get('/logistik', function () {
     return view('logistik.main.index');
 });
 
-Route::get('/customer', [DashboardCustomerController::class, 'index']);
+Route::prefix('/customer')->group(function () {
+    Route::resource('/', DashboardCustomerController::class)->only(['index', 'edit', 'update', 'destroy', 'search']);
 
-Route::get('/customer/log-admin', [LogAdminController::class, 'index']);
+    Route::get('/log-admin', [LogAdminController::class, 'index']);
+    Route::get('/add-customer', [AddCustomerController::class, 'index']);
+    Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
 
-Route::get('/customer/add-customer', [AddCustomerController::class, 'index']);
-Route::post('/customer/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
-Route::get('/getKota/{provinsiId}', [AddCustomerController::class, 'getKota']);
-Route::get('/getKecamatan/{kotaId}', [AddCustomerController::class, 'getKecamatan']);
-Route::get('/getKelurahan/{kecamatanId}', [AddCustomerController::class, 'getKelurahan']);
+});
+// Dependent Dropdown 
+Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
+Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
+Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);

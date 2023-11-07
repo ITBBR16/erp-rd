@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const provinsiSelect = document.getElementById('select_provinsi');
-    const kotaSelect = document.getElementById('select_kota_kab');
-    const kecamatanSelect = document.getElementById('select_kecamatan');
-    const kelurahanSelect = document.getElementById('select_kelurahan');
+    const provinsiSelect = document.getElementById('provinsi');
+    const kotaSelect = document.getElementById('kota_kabupaten');
+    const kecamatanSelect = document.getElementById('kecamatan');
+    const kelurahanSelect = document.getElementById('kelurahan');
 
     provinsiSelect.addEventListener('change', function () {
         const selectedProvinsi = provinsiSelect.value;

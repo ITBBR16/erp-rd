@@ -22,5 +22,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
 <script src="/js/toggle.js"></script>
 <script src="/js/dropdown_wilayah.js"></script>
+<script src="/js/search.js"></script>
 </body>
 </html>
