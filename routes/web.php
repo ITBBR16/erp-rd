@@ -3,10 +3,12 @@
 use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\customer\DashboardCustomerController;
 use App\Http\Controllers\customer\LogAdminController;
+use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KecamatanController;
 use App\Http\Controllers\wilayah\KelurahanController;
 use App\Http\Controllers\wilayah\KotaController;
 use Illuminate\Support\Facades\Route;
+use Psy\CodeCleaner\ReturnTypePass;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +20,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
+Route::get('/', function() {
     return view('index');
 });
 Route::get('/gudang', function () {
@@ -84,6 +85,10 @@ Route::get('/logistik', function () {
     return view('logistik.main.index');
 });
 
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'authentic'])->name('form-login');
+Route::post('/logout', [LoginController::class, 'logout']);
+
 Route::prefix('/customer')->group(function () {
     Route::resource('/', DashboardCustomerController::class)->only(['index', 'update', 'destroy', 'search']);
 
@@ -91,7 +96,7 @@ Route::prefix('/customer')->group(function () {
     Route::get('/add-customer', [AddCustomerController::class, 'index']);
     Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
 
-});
+})->middleware('auth');
 // Dependent Dropdown 
 Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
 Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
