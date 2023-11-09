@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\login;
 
 use App\Http\Controllers\Controller;
-use App\Models\employee\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,23 +15,21 @@ class LoginController extends Controller
         ]);
     }
 
-    public function authentic(Request $request)
+    public function authenticate(Request $request)
     {
         $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required'
         ]);
 
-        $employee = Employee::where('username', $credentials['username'])->first();
-
-        if($employee) {
-            
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-    
+
+            dd($request);
             return redirect()->intended('/customer');
         }
 
-        return back()->with('loginError', 'Failed to Login !');
+        return back()->with('loginError', 'Failed to Login!');
     }
 
     public function logout(Request $request)

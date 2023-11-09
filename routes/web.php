@@ -85,18 +85,19 @@ Route::get('/logistik', function () {
     return view('logistik.main.index');
 });
 
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'authentic'])->name('form-login');
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
 Route::post('/logout', [LoginController::class, 'logout']);
 
 Route::prefix('/customer')->group(function () {
-    Route::resource('/', DashboardCustomerController::class)->only(['index', 'update', 'destroy', 'search']);
+    Route::resource('/', DashboardCustomerController::class)->only(['index', 'update', 'destroy']);
 
     Route::get('/log-admin', [LogAdminController::class, 'index']);
     Route::get('/add-customer', [AddCustomerController::class, 'index']);
     Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
 
-})->middleware('auth');
+});
+
 // Dependent Dropdown 
 Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
 Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);

@@ -14,19 +14,18 @@ class User extends Authenticatable
 
     protected $connection = 'rumahdrone_employee';
 
-    protected $table = 'users';
+    protected $table = 'employee';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    // protected $fillable = [
-    //     'name',
-    //     'email',
-    //     'password',
-    // ];
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,8 +42,8 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    // protected $casts = [
-    //     'email_verified_at' => 'datetime',
-    //     'password' => 'hashed',
-    // ];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 }

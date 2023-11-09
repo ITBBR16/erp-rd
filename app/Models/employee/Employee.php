@@ -15,4 +15,5 @@ class Employee extends Model
 
     protected $guarded = ['id'];
 
+
 }
