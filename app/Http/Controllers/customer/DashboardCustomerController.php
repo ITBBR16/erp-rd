@@ -31,12 +31,12 @@ class DashboardCustomerController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Customer $customer)
     {
-        $validate = $request->validate([
+        $rules = [
             'first_name' => 'required|max:50',
             'last_name' => 'required|max:50',
-            'no_telpon' => 'required|unique:customer|regex:/^62\d{9,}$/',
+            'no_telpon' => 'required|regex:/^62\d{9,}$/',
             'email' => 'nullable|email:dns',
             'instansi' => 'max:50',
             'provinsi' => 'required',
@@ -45,15 +45,24 @@ class DashboardCustomerController extends Controller
             'kelurahan' => 'required',
             'kode_pos' => 'required|numeric|digits:5',
             'nama_jalan' => 'required|max:255'
-        ]);
+        ];
+        
+        // if($request->no_telpon != $customer->no_telpon) {
+        //     $rules['no_telpon'] = 'required|regex:/^62\d{9,}$/|unique:customer';
+        // }
 
-        Customer::find($id)->update($validate);
+        $validate = $request->validate($rules);
+        
+        $customer->update($validate);
 
-        return back()->with('success', 'Success Update Customer Data');
+        return redirect('/customer')->with('success', 'Success Update Customer Data');
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
+        // $customerId = $request->route('id');
+        // $this->customerRepo->deleteCustomer($customerId);
+        
         Customer::destroy($id);
 
         return back()->with('success', 'Success Delete Data');

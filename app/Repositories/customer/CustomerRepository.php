@@ -48,4 +48,14 @@ class CustomerRepository implements CustomerInterface
         return $dataKelurahan;
     }
 
+    public function deleteCustomer($customerId)
+    {
+        Customer::destroy($customerId);
+    }
+
+    public function updateCustomer($customerId, array $validate)
+    {
+        return Customer::whereId($customerId)->update($validate);
+    }
+
 }

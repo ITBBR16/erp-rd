@@ -16,6 +16,8 @@ class User extends Authenticatable
 
     protected $table = 'employee';
 
+    protected $guarded = ['id'];
+
     /**
      * The attributes that are mass assignable.
      *

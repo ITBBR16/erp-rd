@@ -25,7 +25,7 @@ class AddCustomerController extends Controller
         $validate = $request->validate([
             'first_name' => 'required|max:50',
             'last_name' => 'required|max:50',
-            'no_telpon' => 'required|regex:/^62\d{9,}$/',
+            'no_telpon' => 'required|regex:/^62\d{9,}$/|unique:customer',
             'email' => 'nullable|email:dns',
             'instansi' => 'max:50',
             'provinsi' => 'required',
@@ -36,8 +36,8 @@ class AddCustomerController extends Controller
             'nama_jalan' => 'required|max:255'
         ]);
 
-        dd($validate);
-        // Customer::create($validate);
+        // dd($validate);
+        Customer::create($validate);
 
         return redirect('/customer/add-customer')->with('success', 'Success Add New Customer !!');
 

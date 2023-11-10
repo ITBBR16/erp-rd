@@ -83,12 +83,14 @@
                                 <button type="button" data-modal-target="view-customer" data-modal-toggle="view-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">visibility</i>
                                 </button>
-                                <button type="button" data-modal-target="update-customer" data-modal-toggle="update-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">edit</i>
-                                </button>
-                                <button type="button" data-modal-target="delete-customer" data-modal-toggle="delete-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">delete</i>
-                                </button>
+                                @if (auth()->user()->is_admin)
+                                    <button type="button" data-modal-target="update-customer" data-modal-toggle="update-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">edit</i>
+                                    </button>
+                                    <button type="button" data-modal-target="delete-customer" data-modal-toggle="delete-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">delete</i>
+                                    </button>
+                                @endif
                             </div>
                         </td>
                     </tr>

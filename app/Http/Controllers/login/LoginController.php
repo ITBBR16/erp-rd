@@ -22,11 +22,14 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        // dd($request);
 
-            dd($request);
+        if(Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            // $user = Auth::user();
+
             return redirect()->intended('/customer');
+            // dd($request);
         }
 
         return back()->with('loginError', 'Failed to Login!');

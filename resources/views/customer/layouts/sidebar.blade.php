@@ -13,12 +13,12 @@
                     <span class="flex-1 ml-3 whitespace-nowrap">New Customer</span>
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="/customer/log-admin" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">content_paste</span>
                     <span class="flex-1 ml-3 whitespace-nowrap">Admin Log</span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </div>
 </aside>
