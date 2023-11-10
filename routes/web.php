@@ -1,6 +1,14 @@
 <?php
 
+use App\Http\Controllers\customer\AddCustomerController;
+use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\customer\LogAdminController;
+use App\Http\Controllers\login\LoginController;
+use App\Http\Controllers\wilayah\KecamatanController;
+use App\Http\Controllers\wilayah\KelurahanController;
+use App\Http\Controllers\wilayah\KotaController;
 use Illuminate\Support\Facades\Route;
+use Psy\CodeCleaner\ReturnTypePass;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +21,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::middleware('guest')->group(function (){
+    Route::controller(LoginController::class)->group(function () {
+        Route::get('/login', [LoginController::class, 'index'])->name('login');
+        Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
+    });
+});
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::prefix('/customer')->group(function () {
+        Route::resource('/', DashboardCustomerController::class)->only(['index', 'update', 'destroy'])->parameters(['' => 'customer']);
+        
+        Route::get('/log-admin', [LogAdminController::class, 'index']);
+        Route::get('/add-customer', [AddCustomerController::class, 'index']);
+        Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
+    });
+});
+
+// Dependent Dropdown 
+Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
+Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
+Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);
+
+Route::get('/', function() {
     return view('index');
 });
 Route::get('/gudang', function () {
