@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\customer;
 
-use App\Http\Controllers\Controller;
-use App\Models\customer\Customer;
-use App\Models\wilayah\Provinsi;
-use App\Repositories\customer\CustomerRepository;
 use Illuminate\Http\Request;
+use App\Models\divisi\Divisi;
+use Illuminate\Validation\Rule;
+use App\Models\wilayah\Provinsi;
+use App\Models\customer\Customer;
+use App\Http\Controllers\Controller;
+use App\Repositories\customer\CustomerRepository;
+use Illuminate\Support\Facades\Http;
 
 class DashboardCustomerController extends Controller
 {
@@ -20,6 +23,9 @@ class DashboardCustomerController extends Controller
         $dataKelurahan = $this->customerRepo->getSelectKelurahan();
         $provinsi = Provinsi::all();
 
+        $divisiId = auth()->user()->divisi_id;
+        $divisiName = Divisi::find($divisiId);
+
         return view('customer.main.index', [
             'title' => 'Dashboard Customer',
             'active' => 'dashboard-customer',
@@ -27,7 +33,8 @@ class DashboardCustomerController extends Controller
             'dataKota' => $dataKota,
             'dataKecamatan' => $dataKecamatan,
             'dataKelurahan' => $dataKelurahan,
-            'provinsi' => $provinsi
+            'provinsi' => $provinsi,
+            'divisi' => $divisiName,
         ]);
     }
 
@@ -36,7 +43,6 @@ class DashboardCustomerController extends Controller
         $rules = [
             'first_name' => 'required|max:50',
             'last_name' => 'required|max:50',
-            'no_telpon' => 'required|regex:/^62\d{9,}$/',
             'email' => 'nullable|email:dns',
             'instansi' => 'max:50',
             'provinsi' => 'required',
@@ -47,22 +53,34 @@ class DashboardCustomerController extends Controller
             'nama_jalan' => 'required|max:255'
         ];
         
-        // if($request->no_telpon != $customer->no_telpon) {
-        //     $rules['no_telpon'] = 'required|regex:/^62\d{9,}$/|unique:customer';
-        // }
+        if($request->no_telpon != $customer->no_telpon) {
+            $rules['no_telpon'] = ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')];
+        }
 
         $validate = $request->validate($rules);
-        
-        $customer->update($validate);
 
-        return redirect('/customer')->with('success', 'Success Update Customer Data');
+        $updateUrl = 'https://script.google.com/macros/s/AKfycbyP1p8iZJsmM5ufLroaG7y3M1jlk7uJFwuwN6koluDVZ6fhsb4ehn8J1c1Pri6NVGmn/exec';
+        $newPhoneNumber = ($request->no_telpon != $customer->no_telpon) ? $validate['no_telpon'] : '';
+
+        $response = Http::post($updateUrl, [
+            'phoneNumberToSearch' => $customer->no_telpon,
+            'newFirstName' => $validate['first_name'],
+            'newLastName' => $validate['last_name'],
+            'newPhoneNumber' => $newPhoneNumber,
+        ]);
+
+        if($response->successful()) {
+            $customer->update($validate);
+            
+            return redirect('/customer')->with('success', 'Success Update Customer Data.');
+        } else {
+            return back()->with('error', 'Failed to Update Customer Data.');
+        }
+
     }
 
     public function destroy($id)
     {
-        // $customerId = $request->route('id');
-        // $this->customerRepo->deleteCustomer($customerId);
-        
         Customer::destroy($id);
 
         return back()->with('success', 'Success Delete Data');

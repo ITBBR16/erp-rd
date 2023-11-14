@@ -16,7 +16,8 @@ class CustomerRepository implements CustomerInterface
                         ->leftJoin('kabupaten', 'customer.kota_kabupaten', '=', 'kabupaten.id')
                         ->leftJoin('kecamatan', 'customer.kecamatan', '=', 'kecamatan.id')
                         ->leftJoin('kelurahan', 'customer.kelurahan', '=', 'kelurahan.id')
-                        ->get();
+                        ->orderBy('customer.id', 'desc')
+                        ->paginate(2);
 
         return $dataCustomer;
     }

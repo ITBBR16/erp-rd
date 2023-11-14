@@ -7,14 +7,16 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/loading.css">
     @vite('resources/css/app.css')
 </head>
 <body>
 
-    <section class="min-h-screen flex items-stretch text-white ">
+    <section class="min-h-screen flex items-stretch text-white relative">
         @yield('container')
     </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+<script src="/js/loader.js"></script>
 </body>
 </html>
