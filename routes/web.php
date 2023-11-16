@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\customer\LogAdminController;
 use App\Http\Controllers\employee\EmployeeController;
 use App\Http\Controllers\login\LoginController;
@@ -22,15 +23,18 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::prefix('/customer')->group(function () {
-        Route::resource('/', DashboardCustomerController::class)->only(['index', 'update', 'destroy'])->parameters(['' => 'customer']);
+        Route::get('/', [DashboardCustomerController::class, 'index']);
+        
+        Route::resource('/data-customer', DataCustomerController::class)->only(['index', 'update', 'destroy'])->parameters(['' => 'customer']);
+        Route::get('/data-customer/search', [DataCustomerController::class, 'search']);
+        
+        Route::get('/add-customer', [AddCustomerController::class, 'index']);
+        Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
         
         Route::middleware('admin.superadmin')->group(function () {
             Route::get('/add-user', [EmployeeController::class, 'index']);
             Route::post('/add-user', [EmployeeController::class, 'store'])->name('form-user');
         });
-
-        Route::get('/add-customer', [AddCustomerController::class, 'index']);
-        Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
     });
 });
 

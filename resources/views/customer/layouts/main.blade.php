@@ -25,6 +25,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="/js/toggle.js"></script>
 <script src="/js/dropdown_wilayah.js"></script>
 <script src="/js/search.js"></script>
