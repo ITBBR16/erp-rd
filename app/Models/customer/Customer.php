@@ -10,9 +10,8 @@ class Customer extends Model
     use HasFactory;
 
     protected $connection = 'rumahdrone_customer';
-
     protected $table = 'customer';
-
     protected $guarded = ['id'];
 
+    
 }

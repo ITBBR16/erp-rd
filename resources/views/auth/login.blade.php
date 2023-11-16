@@ -1,7 +1,7 @@
 @extends('auth.layouts.main')
 
 @section('container')
-    <img src="/img/wave.png" alt="Login" class="fixed hidden lg:block inset-0 h-full" style="z-index: -1;">
+    <img src="/img/second_wave.png" alt="Login" class="fixed hidden lg:block inset-0 h-full" style="z-index: -1;">
     <div class="w-screen h-screen flex flex-col justify-center items-center lg:grid lg:grid-cols-2">
         <img src="/img/unlock.svg" alt="" class="hidden lg:block w-1/3 transition-all mx-auto">
         <div class="flex flex-col justify-center items-center w-1/2">
@@ -25,15 +25,15 @@
                 </div>
             
             @endif
-            <form action="{{ route('form-login') }}" method="POST">
+            <form action="{{ route('form-login') }}" method="POST" autocomplete="off">
                 @csrf
                 <div class="relative">
                     <span class="material-symbols-outlined absolute text-gray-700 text-3xl">person</span>
-                    <input type="text" name="username" id="username" placeholder="Username" class="pl-8 text-gray-900 border-0 border-b-2 focus:outline-none focus:ring-0 focus:border-blue-600 text-lg @error('username') border-red-600 dark:border-red-500 @enderror" value="{{ old('username') }}" autofocus>
+                    <input type="text" name="username" id="username" placeholder="Username" class="pl-8 text-gray-900 border-0 border-b-2 focus:outline-none focus:ring-0 focus:border-blue-600 text-lg @error('username') border-red-600 dark:border-red-500 @enderror" value="{{ old('username') }}" required autofocus>
                 </div>
                 <div class="relative mt-8">
                     <span class="material-symbols-outlined absolute text-gray-700 text-3xl">lock</span>
-                    <input type="password" name="password" id="password" placeholder="Password" class="pl-8 text-gray-900 border-0 border-b-2 font-display focus:outline-none focus:ring-0 focus:border-blue-600 text-lg @error('password') border-red-600 dark:border-red-500 @enderror">
+                    <input type="password" name="password" id="password" placeholder="Password" class="pl-8 text-gray-900 border-0 border-b-2 font-display focus:outline-none focus:ring-0 focus:border-blue-600 text-lg @error('password') border-red-600 dark:border-red-500 @enderror" required>
                 </div>
                 <div class="relative mt-4 text-center">
                     <button type="submit" class="py-3 px-20 text-blue-600 hover:text-white border border-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center">Login</button>
@@ -41,4 +41,9 @@
             </form>
         </div>
     </div>
-@endsection
+    <div id="loader" style="display: none;">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="loader absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="loader-text font-bold">Loading . . .</div>
+    </div>
+    @endsection
