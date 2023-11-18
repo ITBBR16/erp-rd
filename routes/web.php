@@ -5,6 +5,7 @@ use App\Http\Controllers\customer\DashboardCustomerController;
 use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\customer\LogAdminController;
 use App\Http\Controllers\employee\EmployeeController;
+use App\Http\Controllers\kios\DashboardKiosController;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KecamatanController;
 use App\Http\Controllers\wilayah\KelurahanController;
@@ -20,6 +21,11 @@ Route::middleware('guest')->group(function (){
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Dependent Dropdown 
+Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
+Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
+Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);
 
 Route::middleware('auth')->group(function () {
     Route::prefix('/customer')->group(function () {
@@ -38,16 +44,14 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// Dependent Dropdown 
-Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
-Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
-Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);
-
 Route::middleware('superadmin')->group(function () {
     Route::get('/', function() {
         return view('admin.index');
     });
 });
+
+
+Route::get('/kios', [DashboardKiosController::class, 'index']);
 
 // Route::get('/gudang', function () {
 //     return view('gudang.main.index');
@@ -90,12 +94,6 @@ Route::middleware('superadmin')->group(function () {
 // Route::get('/battery', function () {
 //     return view('battery.main.index');
 // });
-
-
-// Route::get('/kios', function () {
-//     return view('kios.main.index');
-// });
-
 
 // Route::get('/content', function () {
 //     return view('content.main.index');

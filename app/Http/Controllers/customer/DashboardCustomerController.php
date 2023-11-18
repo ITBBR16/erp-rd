@@ -16,9 +16,13 @@ class DashboardCustomerController extends Controller
 
     public function index() 
     {
+        $divisiId = auth()->user()->divisi_id;
+        $divisiName = Divisi::find($divisiId);
+
         return view('customer.main.index', [
             'title' => 'Dashboard Customer',
             'active' => 'dashboard-customer',
+            'divisi' => $divisiName,
         ]);
     }
 
