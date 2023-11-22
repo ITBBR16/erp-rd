@@ -11,13 +11,10 @@ use App\Http\Controllers\wilayah\KecamatanController;
 use App\Http\Controllers\wilayah\KelurahanController;
 use App\Http\Controllers\wilayah\KotaController;
 use Illuminate\Support\Facades\Route;
-use Psy\CodeCleaner\ReturnTypePass;
 
 Route::middleware('guest')->group(function (){
-    Route::controller(LoginController::class)->group(function () {
-        Route::get('/login', [LoginController::class, 'index'])->name('login');
-        Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
-    });
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -27,7 +24,7 @@ Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
 Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
 Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);
 
-Route::middleware('auth')->group(function () {
+Route::middleware('access')->group(function () {
     Route::prefix('/customer')->group(function () {
         Route::get('/', [DashboardCustomerController::class, 'index']);
         
@@ -51,7 +48,7 @@ Route::middleware('superadmin')->group(function () {
 });
 
 
-Route::get('/kios', [DashboardKiosController::class, 'index']);
+// Route::get('/kios', [DashboardKiosController::class, 'index']);
 
 // Route::get('/gudang', function () {
 //     return view('gudang.main.index');

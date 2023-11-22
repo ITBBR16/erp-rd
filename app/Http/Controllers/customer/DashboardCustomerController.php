@@ -2,28 +2,32 @@
 
 namespace App\Http\Controllers\customer;
 
-use Illuminate\Http\Request;
 use App\Models\divisi\Divisi;
-use Illuminate\Validation\Rule;
-use App\Models\wilayah\Provinsi;
-use App\Models\customer\Customer;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
-use App\Repositories\customer\CustomerRepository;
-use Illuminate\Support\Facades\Http;
+use Clockwork\Request\Request;
+
+;
 
 class DashboardCustomerController extends Controller
 {
-
     public function index() 
     {
-        $divisiId = auth()->user()->divisi_id;
-        $divisiName = Divisi::find($divisiId);
+        $user = auth()->user();
 
-        return view('customer.main.index', [
-            'title' => 'Dashboard Customer',
-            'active' => 'dashboard-customer',
-            'divisi' => $divisiName,
-        ]);
+        try {
+    
+            $divisiId = $user->divisi_id;
+            $divisiName = Divisi::find($divisiId);
+    
+            return view('customer.main.index', [
+                'title' => 'Dashboard Customer',
+                'active' => 'dashboard-customer',
+                'divisi' => $divisiName,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('loginError', 'Failed to authenticate user: ' . $e->getMessage());
+        }
     }
 
 }
