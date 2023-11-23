@@ -52,6 +52,7 @@ class DataCustomerController extends Controller
             'kode_pos' => 'required|numeric|digits:5',
             'nama_jalan' => 'required|max:255'
         ];
+        dd($request);
         
         if($request->no_telpon != $customer->no_telpon) {
             $rules['no_telpon'] = ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')];

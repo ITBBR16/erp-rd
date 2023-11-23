@@ -28,6 +28,8 @@ class AddCustomerController extends Controller
 
     public function store(Request $request)
     {
+        $divisiId = auth()->user()->divisi_id;
+
         $validate = $request->validate([
             'first_name' => 'required|max:50',
             'last_name' => 'required|max:50',
@@ -41,6 +43,8 @@ class AddCustomerController extends Controller
             'kode_pos' => 'required|numeric|digits:5',
             'nama_jalan' => 'required|max:255'
         ]);
+
+        $validate['by_divisi'] = $divisiId;
 
         $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
         $response = Http::post($appScriptUrl, [

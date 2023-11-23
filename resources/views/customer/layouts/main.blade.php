@@ -31,5 +31,10 @@
 <script src="/js/dropdown_wilayah.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/loader.js"></script>
+@if (session()->has('error'))
+    <script>
+        $('#update-customer{{ $item->id }}').modal('show');
+    </script>
+@endif
 </body>
 </html>

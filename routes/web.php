@@ -34,7 +34,7 @@ Route::middleware('access')->group(function () {
         Route::get('/add-customer', [AddCustomerController::class, 'index']);
         Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
         
-        Route::middleware('admin.superadmin')->group(function () {
+        Route::middleware('admin.superAdmin')->group(function () {
             Route::get('/add-user', [EmployeeController::class, 'index']);
             Route::post('/add-user', [EmployeeController::class, 'store'])->name('form-user');
         });

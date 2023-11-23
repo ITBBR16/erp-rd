@@ -15,7 +15,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="px-6 py-6 lg:px-8">
-                    <form action="{{ url('customer/'.$item->id) }}" method="POST" autocomplete="off">
+                    <form action="{{ url('customer/data-customer/'.$item->id) }}" method="POST" autocomplete="off">
                         @method('PUT')
                         @csrf
                         <div class="grid md:grid-cols-2 md:gap-6 pt">
