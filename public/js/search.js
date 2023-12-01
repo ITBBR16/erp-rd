@@ -9,31 +9,32 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             $('.customer-row').hide();
 
-            $.ajax({
-                url: '/customer/data-customer/search',
+            fetch('/customer/data-customer/search?query=' + encodeURIComponent(query), {
                 method: 'GET',
-                data: { query: query },
-                dataType: 'json',
-                success: function (response) {
-                    if (response.hasOwnProperty('data')) {
-                        const data = response.data;
-
-                        if (data.length === 0) {
-                            dataNotFound.style.display = 'block';
-                        } else {
-                            $.each(data, function (key, customer) {
-                                $('#customerRow_' + customer.id).show();
-                            });
-
-                            dataNotFound.style.display = 'none';
-                        }
-                    } else {
-                        console.error('Invalid response format: missing "data" property');
-                    }
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-                error: function (xhr, status, error) {
-                    console.error('AJAX error:', status, error);
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.hasOwnProperty('data')) {
+                    const customers = data.data;
+
+                    if (customers.length === 0) {
+                        dataNotFound.style.display = 'block';
+                    } else {
+                        customers.forEach(customer => {
+                            $('#customerRow_' + customer.id).show();
+                        });
+
+                        dataNotFound.style.display = 'none';
+                    }
+                } else {
+                    console.error('Invalid response format: missing "data" property');
                 }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
             });
         }
     });

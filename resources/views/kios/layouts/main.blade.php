@@ -16,7 +16,7 @@
 @include('kios.layouts.header')
 @include('kios.layouts.sidebar')
 
-<div class="p-4 sm:ml-64 mt-14">
+<div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-hidden">
     @yield('container')
 </div>
 

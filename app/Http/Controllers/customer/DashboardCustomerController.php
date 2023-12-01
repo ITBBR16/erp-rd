@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\customer;
 
 use App\Models\divisi\Divisi;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
-use Clockwork\Request\Request;
 
 ;
 
@@ -18,7 +16,11 @@ class DashboardCustomerController extends Controller
         try {
     
             $divisiId = $user->divisi_id;
-            $divisiName = Divisi::find($divisiId);
+            if($divisiId != 0){
+                $divisiName = Divisi::find($divisiId);
+            } else {
+                $divisiName = 'Super Admin';
+            }
     
             return view('customer.main.index', [
                 'title' => 'Dashboard Customer',

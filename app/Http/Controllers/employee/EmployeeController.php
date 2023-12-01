@@ -17,7 +17,11 @@ class EmployeeController extends Controller
     {
         $divisi = Divisi::all();
         $divisiId = auth()->user()->divisi_id;
-        $divisiName = Divisi::find($divisiId);
+        if($divisiId != 0){
+            $divisiName = Divisi::find($divisiId);
+        } else {
+            $divisiName = 'Super Admin';
+        }
         $status = DB::connection('rumahdrone_employee')->table('status')->get();
 
         return view('customer.main.add-user' , [

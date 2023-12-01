@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const option = document.createElement('option');
                         option.value = kota.id;
                         option.textContent = kota.name;
+                        option.classList.add('dark:bg-gray-700');
                         kotaSelect.appendChild(option);
                     });
                 });
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const option = document.createElement('option');
                         option.value = kecamatan.id;
                         option.textContent = kecamatan.name;
+                        option.classList.add('dark:bg-gray-700');
                         kecamatanSelect.appendChild(option);
                     });
 
@@ -73,7 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     const defaultOption = document.createElement('option');
                     defaultOption.textContent = 'Pilih Kelurahan';
                     defaultOption.setAttribute('hidden', true);
-                    kelurahanSelect.appendChild(defaultOption)
+                    option.classList.add('dark:bg-gray-700');
+                    kelurahanSelect.appendChild(defaultOption);
 
                     data.forEach(kelurahan => {
                         const option = document.createElement('option');

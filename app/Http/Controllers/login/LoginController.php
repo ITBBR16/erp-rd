@@ -23,8 +23,13 @@ class LoginController extends Controller
 
         if($token = JWTAuth::attempt($credentials)) {
             $cookie = cookie('jwt_token', $token, 60 * 24);
+            $user = JWTAuth::setToken($token)->authenticate();
+            if($user->is_admin == 1){
+                return redirect('/')->withCookie($cookie);
+            } elseif($user->is_admin == 2 && $user->divisi_id == 1){
+                return redirect()->intended('/kios')->withCookie($cookie);
+            }
 
-            return redirect('/customer')->withCookie($cookie);
         }
 
         return back()->with('loginError', 'Failed to Login!');
@@ -45,29 +50,4 @@ class LoginController extends Controller
         return redirect('/login')->withCookie($cookie);
     }
 
-    // public function authenticate(Request $request)
-    // {
-    //     $credentials = $request->validate([
-    //         'username' => 'required',
-    //         'password' => 'required'
-    //     ]);
-
-    //     if(Auth::attempt($credentials)) {
-    //         $request->session()->regenerate();
-
-    //         return redirect()->intended('/customer');
-    //     }
-
-    //     return back()->with('loginError', 'Failed to Login!');
-    // }
-
-    // public function logout(Request $request)
-    // {
-    //     Auth::logout();
-
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-
-    //     return redirect()->away('/login');
-    // }
 }

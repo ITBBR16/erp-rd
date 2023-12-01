@@ -17,12 +17,15 @@ class AccessControl
 
         if ($token) {
             try {
-                JWTAuth::setToken($token)->authenticate();
+                $user = JWTAuth::setToken($token)->authenticate();
             } catch (\Exception $e) {
                 return $this->redirectAndForgetCookie();
             }
-
-            return $next($request);
+            if($user->is_admin == 1 || $user->is_admin == 2 && $user->divisi_id == 1 || $user->is_admin == 2 && $user->divisi_id == 2){
+                return $next($request);
+            } else {
+                return $this->redirectAndForgetCookie();
+            }
         }
 
         return $this->redirectAndForgetCookie();
@@ -33,19 +36,4 @@ class AccessControl
         return Redirect::to('login')->withCookie(cookie()->forget('jwt_token'));
     }
 
-    // public function handle(Request $request, Closure $next): Response
-    // {
-    //     if (!auth()->check()) {
-    //         return redirect('/login');
-    //     }
-    
-    //     $user = Auth::user();
-
-    //     if($user && ($user->is_admin == 1 || $user->is_admin == 2)) {
-    //         return $next($request);
-    //     }
-
-    //     abort(403, 'Unauthorized action.');
-    
-    // }
 }

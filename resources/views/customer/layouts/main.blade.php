@@ -20,9 +20,10 @@
     @yield('container')
 </div>
 
-<div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" style="display: none;">
-    <div class="loader top-1/2 transform"></div>
-    <div class="loader-text font-bold ml-2 text-white">Loading . . .</div>
+<div id="loader" style="display: none;">
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+    <div class="loader absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="loader-text font-bold">Loading . . .</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
@@ -31,10 +32,8 @@
 <script src="/js/dropdown_wilayah.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/loader.js"></script>
-@if (session()->has('error'))
-    <script>
-        $('#update-customer{{ $item->id }}').modal('show');
-    </script>
-@endif
+{{-- <script>
+    document.getElementById('update-customer10').classList.remove('hidden');
+</script> --}}
 </body>
 </html>

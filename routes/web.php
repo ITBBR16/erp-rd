@@ -3,9 +3,10 @@
 use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\customer\DashboardCustomerController;
 use App\Http\Controllers\customer\DataCustomerController;
-use App\Http\Controllers\customer\LogAdminController;
 use App\Http\Controllers\employee\EmployeeController;
 use App\Http\Controllers\kios\DashboardKiosController;
+use App\Http\Controllers\kios\KiosShopController;
+use App\Http\Controllers\kios\KiosSupplierController;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KecamatanController;
 use App\Http\Controllers\wilayah\KelurahanController;
@@ -24,11 +25,25 @@ Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
 Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
 Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);
 
+Route::middleware('superadmin')->group(function () {
+    Route::get('/', function() {
+        return view('admin.index');
+    });
+});
+
+Route::middleware('kios')->group(function () {
+    Route::prefix('/kios')->group(function () {
+        Route::get('/', [DashboardKiosController::class, 'index']);
+        Route::get('/supplier', [KiosSupplierController::class, 'index']);
+        Route::get('/shop', [KiosShopController::class, 'index']);
+    });
+});
+
 Route::middleware('access')->group(function () {
     Route::prefix('/customer')->group(function () {
         Route::get('/', [DashboardCustomerController::class, 'index']);
         
-        Route::resource('/data-customer', DataCustomerController::class)->only(['index', 'update', 'destroy'])->parameters(['' => 'customer']);
+        Route::resource('/data-customer', DataCustomerController::class)->only(['index', 'update', 'destroy']);
         Route::get('/data-customer/search', [DataCustomerController::class, 'search']);
         
         Route::get('/add-customer', [AddCustomerController::class, 'index']);
@@ -41,51 +56,44 @@ Route::middleware('access')->group(function () {
     });
 });
 
-Route::middleware('superadmin')->group(function () {
-    Route::get('/', function() {
-        return view('admin.index');
-    });
+
+
+Route::get('/gudang', function () {
+    return view('gudang.main.index');
 });
-
-
-// Route::get('/kios', [DashboardKiosController::class, 'index']);
-
-// Route::get('/gudang', function () {
-//     return view('gudang.main.index');
-// });
-// Route::get('gudang/sender', function () {
-//     return view('gudang.sender.main');
-// });
-// Route::get('gudang/belanja', function () {
-//     return view('gudang.shop.belanja.belanja');
-// });
-// Route::get('gudang/req-payment', function () {
-//     return view('gudang.shop.payment');
-// });
-// Route::get('gudang/input-resi', function () {
-//     return view('gudang.shop.resi');
-// });
-// Route::get('gudang/unboxing', function () {
-//     return view('gudang.checkpart.unboxing');
-// });
-// Route::get('gudang/quality-control', function () {
-//     return view('gudang.checkpart.qc.quality_control');
-// });
-// Route::get('gudang/quality-control/detail', function () {
-//     return view('gudang.checkpart.detail');
-// });
-// Route::get('gudang/validasi', function () {
-//     return view('gudang.checkpart.validasi');
-// });
-// Route::get('gudang/stock-opname', function () {
-//     return view('gudang.stockopname.stock_opname');
-// });
-// Route::get('gudang/inventory', function () {
-//     return view('gudang.main.inventory');
-// });
-// Route::get('gudang/inventory/tambah-sku', function () {
-//     return view('gudang.main.add_sku');
-// });
+Route::get('gudang/sender', function () {
+    return view('gudang.sender.main');
+});
+Route::get('gudang/belanja', function () {
+    return view('gudang.shop.belanja.belanja');
+});
+Route::get('gudang/req-payment', function () {
+    return view('gudang.shop.payment');
+});
+Route::get('gudang/input-resi', function () {
+    return view('gudang.shop.resi');
+});
+Route::get('gudang/unboxing', function () {
+    return view('gudang.checkpart.unboxing');
+});
+Route::get('gudang/quality-control', function () {
+    return view('gudang.checkpart.qc.quality_control');
+});
+Route::get('gudang/quality-control/detail', function () {
+    return view('gudang.checkpart.detail');
+});
+Route::get('gudang/validasi', function () {
+    return view('gudang.checkpart.validasi');
+});
+Route::get('gudang/stock-opname', function () {
+    return view('gudang.stockopname.stock_opname');
+});
+Route::get('gudang/inventory', function () {
+    return view('gudang.main.inventory');
+});
+Route::get('gudang/inventory/tambah-sku', function () {
+    return view('gudang.main.add_sku');
+});
 
 
 // Route::get('/battery', function () {

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\divisi\Divisi;
 use App\Http\Controllers\Controller;
 
-class DashboardKiosController extends Controller
+class KiosSupplierController extends Controller
 {
     public function index()
     {
@@ -18,9 +18,9 @@ class DashboardKiosController extends Controller
             $divisiName = 'Super Admin';
         }
 
-        return view('kios.main.index', [
-            'title' => 'Kios',
-            'active' => 'dashboard-kios',
+        return view('kios.supplier.supplier', [
+            'title' => 'Supplier',
+            'active' => 'supplier',
             'divisi' => $divisiName,
         ]);
     }

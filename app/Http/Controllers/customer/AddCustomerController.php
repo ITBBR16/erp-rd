@@ -16,7 +16,11 @@ class AddCustomerController extends Controller
     {
         $provinsi = Provinsi::all();
         $divisiId = auth()->user()->divisi_id;
-        $divisiName = Divisi::find($divisiId);
+        if($divisiId != 0){
+            $divisiName = Divisi::find($divisiId);
+        } else {
+            $divisiName = 'Super Admin';
+        }
 
         return view('customer.main.add-customer', [
             'title' => 'Add Customer',

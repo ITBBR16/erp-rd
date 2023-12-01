@@ -24,7 +24,11 @@ class DataCustomerController extends Controller
         $provinsi = Provinsi::all();
 
         $divisiId = auth()->user()->divisi_id;
-        $divisiName = Divisi::find($divisiId);
+        if($divisiId != 0){
+            $divisiName = Divisi::find($divisiId);
+        } else {
+            $divisiName = 'Super Admin';
+        }
 
         return view('customer.main.data-customer', [
             'title' => 'Detail Customer',
@@ -38,7 +42,7 @@ class DataCustomerController extends Controller
         ]);
     }
 
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, $id)
     {
         $rules = [
             'first_name' => 'required|max:50',
@@ -52,8 +56,9 @@ class DataCustomerController extends Controller
             'kode_pos' => 'required|numeric|digits:5',
             'nama_jalan' => 'required|max:255'
         ];
-        dd($request);
         
+        $customer = Customer::find($id);
+
         if($request->no_telpon != $customer->no_telpon) {
             $rules['no_telpon'] = ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')];
         }
