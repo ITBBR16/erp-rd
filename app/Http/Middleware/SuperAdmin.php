@@ -26,8 +26,10 @@ class SuperAdmin
             } else {
                 return $this->redirectAndForgetCookie();
             }
+        } else{
+            return $this->redirectAndForgetCookie();
         }
-
+        
         abort(403, 'Unauthorized action.');
     }
 

@@ -18,7 +18,7 @@ class KiosShopController extends Controller
             $divisiName = 'Super Admin';
         }
 
-        return view('kios.product.index', [
+        return view('kios.shop.index', [
             'title' => 'Shop',
             'active' => 'shop',
             'divisi' => $divisiName,

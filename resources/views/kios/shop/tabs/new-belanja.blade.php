@@ -4,22 +4,22 @@
             <div class="flex flex-wrap -mx-3">
                 <div class="max-w-full px-3 md:w-10/12 md:flex-none">
                     <div class="flex flex-wrap -mx-3">
-                        <div class="grid w-full md:w-full md:grid-cols-2 md:gap-4 md:px-3">
-                            <div class="relative z-0 w-full mb-4 group">
-                                <input type="text" name="floating_supplier" id="floating_supplier" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                                <label for="floating_supplier" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Supplier</label>
-                            </div>
-                            <div class="relative z-0 w-full mb-4 group">
-                                <input type="text" name="floating_invoice" id="floating_invoice" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                                <label for="floating_invoice" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Invoice</label>
-                            </div>
+                        <div class="relative z-0 w-full md:w-1/2 md:px-3 mb-4 group">
+                            <label for="select_jDrone" class="sr-only"></label>
+                            <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                <option hidden>Supplier</option>
+                                <option value="" class="dark:bg-gray-700">DJI</option>
+                                <option value="" class="dark:bg-gray-700">DORAN</option>
+                                <option value="" class="dark:bg-gray-700">TAM</option>
+                                <option value="" class="dark:bg-gray-700">DBSI</option>
+                            </select>
                         </div>
                     </div>
                     <div class="flex flex-wrap -mx-3 md:px-3">
                         <div class="grid md:w-full md:grid-cols-5 md:gap-4">
                             <div>
                                 <label for="select_jDrone" class="sr-only"></label>
-                                <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                                     <option hidden>Series Drone</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC 3</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC 2</option>
@@ -29,8 +29,8 @@
                             </div>
                             <div>
                                 <label for="select_part" class="sr-only"></label>
-                                <select id="select_part" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                    <option hidden>Categories Drone</option>
+                                <select id="select_part" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                    <option hidden>Paket Penjualan</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC PRO FLY MORE COMBO</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC 2 PRO BASIC</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC 3 PRO COMBO RC PRO</option>
@@ -55,7 +55,7 @@
                         <div class="grid md:w-full md:grid-cols-5 md:gap-4">
                             <div>
                                 <label for="select_jDrone" class="sr-only"></label>
-                                <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                                     <option hidden>Series Drone</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC 3</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC 2</option>
@@ -65,8 +65,8 @@
                             </div>
                             <div>
                                 <label for="select_part" class="sr-only"></label>
-                                <select id="select_part" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                    <option hidden>Categories Drone</option>
+                                <select id="select_part" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                    <option hidden>Paket Penjualan</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC PRO FLY MORE COMBO</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC 2 PRO BASIC</option>
                                     <option value="" class="dark:bg-gray-700">DJI MAVIC 3 PRO COMBO RC PRO</option>
@@ -82,9 +82,17 @@
                             </div>
                             <div class="flex justify-center items-center">
                                 <button type="button">
-                                    <span class="material-symbols-outlined text-red-600 hover:text-red-500">add_circle</span>
+                                    <span class="material-symbols-outlined text-red-600 hover:text-red-500">cancel</span>
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row justify-between px-6 my-6 border-t-2">
+                        <div class="flex gap-3 text-red-600 cursor-pointer mt-4">
+                            <button type="button">
+                                <span class="material-symbols-outlined text-red-600 hover:text-red-500">add_circle</span>
+                            </button>
+                            Tambah Item
                         </div>
                     </div>
                     <div class="flex flex-row my-4 bg-gray-200 p-3 rounded-md dark:bg-gray-700">
@@ -93,7 +101,7 @@
                                 Total Jenis
                                 <p>2</p>
                             </div>
-                            <div class="flex flex-row mt-3 border-b-2 justify-between text-gray-800 font-semibold text-md dark:text-white">
+                            <div class="flex flex-row mt-3 border-b-2 border-gray-400 justify-between text-gray-800 font-semibold text-md dark:text-white">
                                 Total Item
                                 <p>16</p>
                             </div>

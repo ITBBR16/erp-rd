@@ -9,6 +9,7 @@
     <link rel="icon" href="{{ asset('/img/RD Tab Icon.png') }}" sizes="16x16 32x32" type="image/png">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/loading.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
     @vite('resources/css/app.css')
 </head>
 <body>
@@ -24,5 +25,6 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="/js/toggle.js"></script>
 <script src="/js/search.js"></script>
+<script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 </body>
 </html>

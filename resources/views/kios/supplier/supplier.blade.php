@@ -70,9 +70,6 @@
                         No Telpon
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         Alamat
                     </th>
                     <th scope="col" class="px-6 py-3">

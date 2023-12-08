@@ -104,5 +104,5 @@
         </table>
     </div>
     {{-- Modal Action --}}
-    @include('kios.product.shop.modal.modal-delete')
+    @include('kios.shop.modal.modal-delete')
 </div>
