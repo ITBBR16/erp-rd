@@ -5,7 +5,7 @@ namespace App\Http\Controllers\kios;
 use App\Http\Controllers\Controller;
 use App\Repositories\kios\KiosRepository;
 
-class DashboardKiosController extends Controller
+class KiosPaymentController extends Controller
 {
     public function __construct(private KiosRepository $suppKiosRepo){}
 
@@ -14,9 +14,9 @@ class DashboardKiosController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
 
-        return view('kios.main.index', [
-            'title' => 'Kios',
-            'active' => 'dashboard-kios',
+        return view('kios.shop.payment.payment', [
+            'title' => 'Payment',
+            'active' => 'payment',
             'dropdown' => '',
             'divisi' => $divisiName,
         ]);

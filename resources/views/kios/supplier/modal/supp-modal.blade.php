@@ -11,7 +11,7 @@
                 </button>
             </div>
             <div class="px-6 py-6 lg:px-8">
-                <form action="#" method="POST" autocomplete="off">
+                <form action="{{ route('supplier.store') }}" method="POST" autocomplete="off">
                     @csrf
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div class="relative z-0 w-full mb-6 group">
@@ -31,16 +31,16 @@
                     </div>
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" name="no_telpon" id="no_telpon" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('no_telpon') border-red-600 dark:border-red-500 @enderror" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="" value="{{ old('no_telpon') }}" required>
-                            <label for="no_telpon" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Telpon PIC</label>
-                            @error('no_telpon')
+                            <input type="text" name="npwp" id="npwp" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('npwp') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('npwp') }}" required>
+                            <label for="npwp" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">NPWP</label>
+                            @error('npwp')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" name="npwp" id="npwp" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('npwp') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('npwp') }}" required>
-                            <label for="npwp" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">NPWP</label>
-                            @error('npwp')
+                            <input type="text" name="no_telpon" id="no_telpon" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('no_telpon') border-red-600 dark:border-red-500 @enderror" pattern="[0-9]{12,}" placeholder="" value="{{ old('no_telpon') }}" required>
+                            <label for="no_telpon" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Telpon PIC</label>
+                            @error('no_telpon')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
@@ -53,32 +53,24 @@
                         @enderror
                     </div>
                     <h3 class="my-3 font-semibold text-gray-900 dark:text-white">Kategori Supplier</h3>
-                    <ul class="w-full text-sm font-medium text-gray-900 border border-gray-200 dark:border-gray-600 dark:text-white">
-                        <li class="w-full ml-4">
-                            <div class="flex flex-row w-full">
-                                <div class="flex flex-row items-center w-1/2">
-                                    <input type="checkbox" id="consumer-cb" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="consumer-cb" class="py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Consumer</label>
+                    <div class="w-full text-sm font-medium text-gray-900 border border-gray-200 dark:border-gray-600 dark:text-white">
+                        <div class="flex flex-col">
+                            @php $count = 0; @endphp
+                            @foreach ($kategori as $ktg)
+                                @if ($count % 2 == 0)
+                                    <div class="flex flex-row w-full">
+                                @endif
+                                <div class="ml-4 flex flex-row items-center w-1/2">
+                                    <input type="checkbox" name="kategori[]" id="kategori{{ $ktg->id }}" value="{{ $ktg->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                    <label for="kategori{{ $ktg->id }}" class="py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $ktg->nama }}</label>
                                 </div>
-                                <div class="flex flex-row items-center w-1/2">
-                                    <input type="checkbox" id="handheld-cb" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="handheld-cb" class="py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Handheld</label>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="w-full ml-4">
-                            <div class="flex flex-row w-full">
-                                <div class="flex flex-row items-center w-1/2">
-                                    <input type="checkbox" id="enterprise-cb" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="enterprise-cb" class="py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Enterprise</label>
-                                </div>
-                                <div class="flex flex-row items-center w-1/2">
-                                    <input type="checkbox" id="agriculture-cb" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="agriculture-cb" class="py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Agriculture</label>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                                @if ($count % 2 != 0 || $loop->last)
+                                    </div>
+                                @endif
+                                @php $count++; @endphp
+                            @endforeach
+                        </div>
+                    </div>
                     <div class="mt-4 text-end">
                         <button type="submit" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
                     </div>

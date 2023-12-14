@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers\kios;
 
-use Illuminate\Http\Request;
-use App\Models\divisi\Divisi;
 use App\Http\Controllers\Controller;
+use App\Repositories\kios\KiosRepository;
 
 class KiosShopController extends Controller
 {
+    public function __construct(private KiosRepository $suppKiosRepo){}
+
     public function index()
     {
         $user = auth()->user();
-        $divisiId = $user->divisi_id;
-        if($divisiId != 0){
-            $divisiName = Divisi::find($divisiId);
-        } else {
-            $divisiName = 'Super Admin';
-        }
+        $divisiName = $this->suppKiosRepo->getDivisi($user);
 
         return view('kios.shop.index', [
             'title' => 'Shop',
             'active' => 'shop',
+            'dropdown' => '',
             'divisi' => $divisiName,
         ]);
     }

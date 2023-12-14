@@ -54,7 +54,7 @@
                         Rp. 5.407.200
                     </td>
                     <td class="px-6 py-2">
-                        <span class="bg-orange-400 rounded-md px-2 py-0 text-white">Waiting</span>
+                        <span class="bg-orange-400 rounded-md px-2 py-0 text-white">Incoming</span>
                     </td>
                     <td class="px-6 py-2">
                         <div class="flex flex-wrap">

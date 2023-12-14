@@ -1,8 +1,8 @@
 <div class="hidden p-4" id="new-product" role="tabpanel" aria-labelledby="new-product-tab">
     <form autocomplete="off">
         <div class="w-full px-3 py-3 mx-auto">
-            <div class="flex flex-wrap -mx-3">
-                <div class="max-w-full px-3 md:w-10/12 md:flex-none">
+            <div class="flex flex-nowrap -mx-3">
+                <div class="max-w-full px-3 md:w-2/3 md:flex-none">
                     <div class="flex flex-wrap -mx-3">
                         <div class="relative z-0 w-full md:w-1/2 md:px-3 mb-4 group">
                             <label for="select_jDrone" class="sr-only"></label>
@@ -16,7 +16,7 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap -mx-3 md:px-3">
-                        <div class="grid md:w-full md:grid-cols-5 md:gap-4">
+                        <div class="grid md:w-full md:grid-cols-4 md:gap-4">
                             <div>
                                 <label for="select_jDrone" class="sr-only"></label>
                                 <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
@@ -39,10 +39,6 @@
                             <div class="relative z-0 w-full mb-4 group">
                                 <input type="text" name="floating_iQty" id="floating_iQty" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
                                 <label for="floating_iQty" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
-                            </div>
-                            <div class="relative z-0 w-full mb-4 group">
-                                <input type="text" name="floating_iNominal" id="floating_iNominal" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                                <label for="floating_iNominal" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Total Nominal</label>
                             </div>
                             <div class="flex justify-center items-center">
                                 <button type="button">
@@ -52,7 +48,7 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap -mx-3 md:px-3">
-                        <div class="grid md:w-full md:grid-cols-5 md:gap-4">
+                        <div class="grid md:w-full md:grid-cols-4 md:gap-4">
                             <div>
                                 <label for="select_jDrone" class="sr-only"></label>
                                 <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
@@ -76,10 +72,6 @@
                                 <input type="text" name="floating_iQty" id="floating_iQty" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
                                 <label for="floating_iQty" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
                             </div>
-                            <div class="relative z-0 w-full mb-4 group">
-                                <input type="text" name="floating_iNominal" id="floating_iNominal" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                                <label for="floating_iNominal" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Total Nominal</label>
-                            </div>
                             <div class="flex justify-center items-center">
                                 <button type="button">
                                     <span class="material-symbols-outlined text-red-600 hover:text-red-500">cancel</span>
@@ -87,31 +79,53 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-row justify-between px-6 my-6 border-t-2">
-                        <div class="flex gap-3 text-red-600 cursor-pointer mt-4">
+                    <div class="flex flex-row justify-between text-rose-600 hover:text-red-400">
+                        <div class="flex gap-3 cursor-pointer mt-4">
                             <button type="button">
-                                <span class="material-symbols-outlined text-red-600 hover:text-red-500">add_circle</span>
+                                <span class="material-symbols-outlined">add_circle</span>
                             </button>
-                            Tambah Item
+                            <span>Tambah Kelengkapan</span>
                         </div>
                     </div>
-                    <div class="flex flex-row my-4 bg-gray-200 p-3 rounded-md dark:bg-gray-700">
-                        <div class="flex flex-col justify-around w-full">
-                            <div class="flex flex-row justify-between text-gray-800 font-semibold text-md dark:text-white">
-                                Total Jenis
-                                <p>2</p>
+                    <div class="flex flex-wrap justify-end pr-5">
+                        <button type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
+                    </div>
+                </div>
+                {{-- Order Summary --}}
+                <div class="w-full max-w-full px-3 lg:w-1/3 lg:flex-none">
+                    <div class="relative flex flex-col h-auto min-w-0 break-words bg-white border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+                        <div class="p-4 pb-4 mb-0 bg-white border-b-0 border-solid rounded-t-2xl border-b-transparent dark:bg-gray-800 dark:border-gray-600">
+                            <div class="flex flex-wrap -mx-3">
+                                <div class="flex items-center flex-none w-full max-w-full px-3">
+                                    <span class="text-xl text-gray-600 font-medium block dark:text-white">Order Summary</span>
+                                </div>
                             </div>
-                            <div class="flex flex-row mt-3 border-b-2 border-gray-400 justify-between text-gray-800 font-semibold text-md dark:text-white">
-                                Total Item
-                                <p>16</p>
-                            </div>
-                            <div class="flex flex-row mt-5 justify-between text-gray-800 font-semibold text-md dark:text-white">
-                                Total Purchase
-                                <p>Rp. 38.400.000</p>
+                        </div>
+                        <div class="flex-auto p-4 pb-4">
+                            <div class="flex flex-wrap -mx-3">
+                                <div class="w-full max-w-full px-4 md:w-full md:flex-none space-y-2">
+                                    <div class="flex flex-row">
+                                        <div class="flex items-center flex-none w-1/2 max-w-full">
+                                            <span class="text-lg text-gray-600 font-medium block dark:text-white">Total Item</span>
+                                        </div>
+                                        <div class="flex items-center flex-none w-1/2 max-w-full justify-end">
+                                            <span class="text-lg text-gray-600 font-medium block dark:text-white">66</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <div class="flex items-center flex-none w-1/2 max-w-full">
+                                            <span class="text-lg text-gray-600 font-medium block dark:text-white">Total Quantity</span>
+                                        </div>
+                                        <div class="flex items-center flex-none w-1/2 max-w-full justify-end">
+                                            <span class="text-lg text-gray-600 font-medium dark:text-white">666</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </form>

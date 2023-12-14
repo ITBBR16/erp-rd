@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="flex text-3xl font-bold mb-8 text-gray-700 border-b border-gray-400 py-3 dark:text-gray-300">
-        <span>Add New Supplier</span>
+        <span>Pembayaran</span>
     </div>
 
     @if (session()->has('success'))
@@ -34,9 +34,17 @@
             </button>
         </div>
     @endif
-    <div class="relative overflow-x-auto mt-6">
-        <div class="relative overflow-x-auto mt-6">
-            <div class="flex items-center justify-between py-4">
+    <div class="flex flex-nowrap relative overflow-x-auto">
+        <div class="flex flex-row justify-between w-full">
+            <div class="flex flex-row gap-6">
+                <div class="relative">
+                    <button type="button" class="text-rose-600 border border-rose-600 hover:text-white hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-rose-400 font-medium rounded-xl text-base py-1.5 px-5 text-center">Belum Terbayar</button>
+                </div>
+                <div class="relative">
+                    <button type="button" class="text-rose-600 border border-rose-600 hover:text-white hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-rose-400 font-medium rounded-xl text-base py-1.5 px-5 text-center">Sudah Terbayar</button>
+                </div>
+            </div>
+            <div class="flex flex-row gap-6">
                 <label for="table-search" class="sr-only">Search</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -46,31 +54,38 @@
                     </div>
                     <input type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search. . .">
                 </div>
-                <div class="flex text-end">
-                    <button type="button" data-modal-target="add-supplier-kios" data-modal-toggle="add-supplier-kios" class="flex text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 dark:focus:ring-indigo-800">Add Supplier</button>
+                <div class="relative max-w-sm">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                        </svg>
+                    </div>
+                    <input type="text" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="relative">
+                    <button type="button" class="p-2 text-blue-700 border border-blue-700 hover:text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg text-sm py-2.5 px-5 text-center dark:border-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Add Payment</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="relative overflow-x-auto">
+    <div class="relative overflow-x-auto mt-6">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        #
+                        Order ID
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        PIC Supplier
+                        Invoice
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Company Name
+                        Jenis Pembayaran
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        No Telpon
+                        Nominal
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Kategori
+                        Status
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Action
@@ -78,60 +93,41 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($suppliers as $key => $sp)
-                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                        <td class="px-6 py-2">
-                            {{ 1 + $key }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $sp->pic_name }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $sp->nama_perusahaan }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $sp->no_telpon }}
-                        </td>
-                        <td class="px-6 py-2">
-                            @php $no = 0; @endphp
-                            @foreach ($sp->kategoris as $pktg)
-                                @if ($no % 2 == 0)
-                                    <div class="flex flex-row">
-                                @endif
-                                    <div class="flex flex-row gap-2 text-center pt-2">
-                                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300">{{ $pktg->nama }}</span>
-                                    </div>
-                                @if ($no % 2 != 0 || $loop->last)
-                                    </div>
-                                @endif
-                                @php $no++ @endphp
-                            @endforeach
-                        </td>
-                        <td class="px-6 py-2">
-                            <div class="flex flex-wrap">
-                                <button type="button" data-modal-target="view-supplier" data-modal-toggle="view-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base">visibility</span>
-                                </button>
-                                <button type="button" data-modal-target="edit-supplier" data-modal-toggle="edit-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base">edit</span>
-                                </button>
-                                <button type="button" data-modal-target="delete-supplier" data-modal-toggle="delete-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base">delete</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
+                <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                    <th class="px-6 py-2">
+                        K.666
+                    </th>
+                    <td class="px-6 py-2">
+                        INV/20230908/MPL/3446962446
+                    </td>
+                    <td class="px-6 py-2">
+                        Pembelian Produk Baru
+                    </td>
+                    <td class="px-6 py-2">
+                        Rp. 5.407.200
+                    </td>
+                    <td class="px-6 py-2">
+                        <span class="bg-orange-400 rounded-md px-2 py-0 text-white">Unpaid</span>
+                    </td>
+                    <td class="px-6 py-2">
+                        <div class="flex flex-wrap">
+                            <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <i class="material-symbols-outlined text-base">visibility</i>
+                            </button>
+                            <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <i class="material-symbols-outlined text-base">edit</i>
+                            </button>
+                            <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <i class="material-symbols-outlined text-base">delete</i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <div class="mt-4 ">
-            {{-- {{ $suppliers->links() }} --}}
+            {{-- {{ $dataCustomer->links() }} --}}
         </div>
     </div>
 
-    {{-- Modal --}}
-    @include('kios.supplier.modal.supp-modal')
-    @include('kios.supplier.modal.view-supp')
-    @include('kios.supplier.modal.edit-supp')
-    @include('kios.supplier.modal.delete-supp')
 @endsection
