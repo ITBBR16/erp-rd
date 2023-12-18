@@ -1,6 +1,19 @@
 @extends('kios.layouts.main')
 
 @section('container')
+    <div class="mb-4 border-b border-gray-200">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="shopTab" data-tabs-toggle="#shopTabContent" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dbl-tab" data-tabs-target="#dbl" type="button" role="tab" aria-controls="dbl" aria-selected="false">Detail Belanja</button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="new-product-tab" data-tabs-target="#new-product" type="button" role="tab" aria-controls="new-product" aria-selected="false">Belanja Product New</button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="second-product-tab" data-tabs-target="#second-product" type="button" role="tab" aria-controls="second-product" aria-selected="false">Belanja Product Second</button>
+            </li>
+        </ul>
+    </div>
 
     @if (session()->has('success'))
         <div id="alert-success-input" class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800" role="alert">
@@ -32,19 +45,6 @@
         </div>
     @endif
 
-    <div class="mb-4 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="shopTab" data-tabs-toggle="#shopTabContent" role="tablist">
-            <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dbl-tab" data-tabs-target="#dbl" type="button" role="tab" aria-controls="dbl" aria-selected="false">Detail Belanja</button>
-            </li>
-            <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="new-product-tab" data-tabs-target="#new-product" type="button" role="tab" aria-controls="new-product" aria-selected="false">Belanja Product New</button>
-            </li>
-            <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="second-product-tab" data-tabs-target="#second-product" type="button" role="tab" aria-controls="second-product" aria-selected="false">Belanja Product Second</button>
-            </li>
-        </ul>
-    </div>
     <div class="shopTabContent">
         @include('kios.shop.tabs.detail-belanja')
         @include('kios.shop.tabs.new-belanja')

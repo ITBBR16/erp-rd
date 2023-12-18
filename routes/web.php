@@ -6,6 +6,7 @@ use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\employee\EmployeeController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\kios\DashboardKiosController;
+use App\Http\Controllers\kios\KiosFileUpload;
 use App\Http\Controllers\kios\KiosPaymentController;
 use App\Http\Controllers\kios\KiosProductController;
 use App\Http\Controllers\kios\KiosShopController;
@@ -39,10 +40,18 @@ Route::middleware('kios')->group(function () {
         Route::get('/', [DashboardKiosController::class, 'index']);
         Route::resource('/supplier', KiosSupplierController::class);
         Route::get('/shop', [KiosShopController::class, 'index']);
+        Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');
+        
         Route::resource('/product', KiosProductController::class);
+        Route::get('/get-paket-penjualan/{paketPenjualanId}', [KiosProductController::class, 'getPaketPenjualan']);
+        
         Route::get('/add-product', [AddKelengkapanKiosController::class, 'index']);
-        Route::get('/upload', [KiosProductController::class, 'index_add_part']);
+        Route::post('/add-product', [AddKelengkapanKiosController::class, 'store'])->name('form-kelengkapan');
+        Route::get('/getKelengkapan/{jenisId}', [AddKelengkapanKiosController::class, 'getKelengkapan']);
+
+        Route::get('/upload', [KiosFileUpload::class, 'index']);
         Route::get('/pembayaran', [KiosPaymentController::class, 'index']);
+        
     });
 });
 

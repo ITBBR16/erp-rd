@@ -18,4 +18,9 @@ class ProdukKategori extends Model
     {
         return $this->belongsToMany(SupplierKios::class, 'supplier_kios_kategori', 'produk_kategori_id', 'supplier_kios_id');
     }
+
+    public function jenis()
+    {
+        return $this->hasMany(ProdukJenis::class);
+    }
 }

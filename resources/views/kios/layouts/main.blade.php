@@ -16,7 +16,7 @@
 @include('kios.layouts.header')
 @include('kios.layouts.sidebar')
 
-<div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-auto">
+<div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-y-scroll">
     @yield('container')
 </div>
 
@@ -32,5 +32,7 @@
 <script src="/js/search.js"></script>
 <script src="/js/loader.js"></script>
 <script src="/js/add-form-kelengkapan.js"></script>
+<script src="/js/add-form-jk.js"></script>
+<script src="/js/dd-new-belanja.js"></script>
 </body>
 </html>

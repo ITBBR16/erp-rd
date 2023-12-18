@@ -7,6 +7,7 @@ use App\Models\divisi\Divisi;
 use App\Http\Controllers\Controller;
 use App\Models\produk\ProdukJenis;
 use App\Models\produk\ProdukKategori;
+use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 
 class KiosProductController extends Controller
@@ -17,46 +18,36 @@ class KiosProductController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $kategori = ProdukKategori::all();
+        $jenisProduk = ProdukJenis::with('subjenis')->get();
+        $paketProduk = ProdukSubJenis::with('kelengkapans')->get();
 
         return view('kios.product.index', [
             'title' => 'Product',
             'active' => 'product',
             'dropdown' => true,
-            'kategori' => $kategori,
             'divisi' => $divisiName,
+            'paketProduk' => $paketProduk,
+            'jenisProduk' => $jenisProduk,
         ]);
     }
 
-    public function store(Request $request)
+    public function update(Request $request, $id)
     {
-        $validate = $request->validate([
-            'kategori_id' => 'required',
-            'nama' => 'required',
-        ]);
 
-        $validate['nama'] = strtoupper($validate['nama']);
-        try{
-            ProdukJenis::create($validate);
-            return redirect('/kios/product')->with('success', 'Success Create New Product Type.');
-        } catch(\Exception $e){
-            return redirect('kios/product')->with('error', $e->getMessage());
+    }
+
+    public function destroy($id)
+    {
+        
+    }
+
+    public function getPaketPenjualan($paketPenjualanId)
+    {
+        $ddPaketPenjualan = ProdukSubJenis::where('jenis_id', $paketPenjualanId)->get;
+
+        if(count($ddPaketPenjualan) > 0) {
+            return response()->json($ddPaketPenjualan);
         }
-
-
-
     }
 
-    public function index_add_part()
-    {
-        $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
-
-        return view('kios.product.file-upload', [
-            'title' => 'File Upload',
-            'active' => 'file-upload',
-            'dropdown' => true,
-            'divisi' => $divisiName,
-        ]);
-    }
 }

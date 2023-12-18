@@ -13,7 +13,17 @@ class ProdukJenis extends Model
     protected $table = 'produk_jenis';
     protected $guarded = ['id'];
 
-    public function kategori(){
-        return $this->belongsTo(ProdukSubJenis::class);
+    public function subjenis()
+    {
+        return $this->hasMany(ProdukSubJenis::class, 'jenis_id');
     }
+
+    public function produkkategori(){
+        return $this->belongsTo(ProdukKategori::class);
+    }
+
+    public function kelengkapans(){
+        return $this->hasMany(ProdukKelengkapan::class, 'produk_jenis_id');
+    }
+
 }

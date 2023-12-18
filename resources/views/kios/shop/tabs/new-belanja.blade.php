@@ -1,90 +1,57 @@
 <div class="hidden p-4" id="new-product" role="tabpanel" aria-labelledby="new-product-tab">
-    <form autocomplete="off">
+    <form action="#" method="POST" autocomplete="off">
         <div class="w-full px-3 py-3 mx-auto">
             <div class="flex flex-nowrap -mx-3">
-                <div class="max-w-full px-3 md:w-2/3 md:flex-none">
+                <div class="max-w-full px-3 md:w-10/12 md:flex-none">
                     <div class="flex flex-wrap -mx-3">
                         <div class="relative z-0 w-full md:w-1/2 md:px-3 mb-4 group">
-                            <label for="select_jDrone" class="sr-only"></label>
-                            <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                <option hidden>Supplier</option>
-                                <option value="" class="dark:bg-gray-700">DJI</option>
-                                <option value="" class="dark:bg-gray-700">DORAN</option>
-                                <option value="" class="dark:bg-gray-700">TAM</option>
-                                <option value="" class="dark:bg-gray-700">DBSI</option>
+                            <label for="supplier_kios" class="sr-only"></label>
+                            <select name="supplier_kios" id="supplier_kios" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
+                                <option value="" hidden>Supplier</option>
+                                @foreach ($supplier as $supp)
+                                    <option value="{{ $supp->id }}" class="dark:bg-gray-700">{{ $supp->nama_perusahaan }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="flex flex-wrap -mx-3 md:px-3">
-                        <div class="grid md:w-full md:grid-cols-4 md:gap-4">
+                    <div id="form-new-belanja" class="flex flex-wrap -mx-3 md:px-3">
+                        <div id="dd-new-belanja" class="grid md:w-full md:grid-cols-4 md:gap-4">
                             <div>
-                                <label for="select_jDrone" class="sr-only"></label>
-                                <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                <label for="jenis_produk" class="sr-only"></label>
+                                <select name="jenis_produk[]" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                                     <option hidden>Series Drone</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC 3</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC 2</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MINI 2</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC PRO</option>
+                                    @foreach ($jenisProduk as $jp)
+                                        <option value="{{ $jp->id }}" class="dark:bg-gray-700">{{ $jp->jenis_produk }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div>
-                                <label for="select_part" class="sr-only"></label>
-                                <select id="select_part" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                    <option hidden>Paket Penjualan</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC PRO FLY MORE COMBO</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC 2 PRO BASIC</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC 3 PRO COMBO RC PRO</option>
+                                <label for="paket_penjualan" class="sr-only"></label>
+                                <select name="paket_penjualan[]" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                                    <option hidden>-- Paket Penjualan --</option>
+                                    @foreach ($paketPenjualan as $pp)
+                                    <option value="{{ $pp->id }}" class="dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-4 group">
-                                <input type="text" name="floating_iQty" id="floating_iQty" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                                <label for="floating_iQty" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
+                                <input type="text" name="quantity" id="quantity" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                                <label for="quantity" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
                             </div>
                             <div class="flex justify-center items-center">
-                                <button type="button">
+                                <button type="button" class="remove-form-pembelian" style="display: none">
                                     <span class="material-symbols-outlined text-red-600 hover:text-red-500">cancel</span>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-wrap -mx-3 md:px-3">
-                        <div class="grid md:w-full md:grid-cols-4 md:gap-4">
-                            <div>
-                                <label for="select_jDrone" class="sr-only"></label>
-                                <select id="select_jDrone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                    <option hidden>Series Drone</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC 3</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC 2</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MINI 2</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC PRO</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="select_part" class="sr-only"></label>
-                                <select id="select_part" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                    <option hidden>Paket Penjualan</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC PRO FLY MORE COMBO</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC 2 PRO BASIC</option>
-                                    <option value="" class="dark:bg-gray-700">DJI MAVIC 3 PRO COMBO RC PRO</option>
-                                </select>
-                            </div>
-                            <div class="relative z-0 w-full mb-4 group">
-                                <input type="text" name="floating_iQty" id="floating_iQty" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                                <label for="floating_iQty" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
-                            </div>
-                            <div class="flex justify-center items-center">
-                                <button type="button">
-                                    <span class="material-symbols-outlined text-red-600 hover:text-red-500">cancel</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-row justify-between text-rose-600 hover:text-red-400">
-                        <div class="flex gap-3 cursor-pointer mt-4">
-                            <button type="button">
+                    
+                    <div class="flex justify-between text-rose-600">
+                        <div class="flex cursor-pointer mt-4 hover:text-red-400">
+                            <button type="button" id="add-new-belanja" class="flex flex-row justify-between gap-2">
                                 <span class="material-symbols-outlined">add_circle</span>
+                                <span class="">Tambah Kelengkapan</span>
                             </button>
-                            <span>Tambah Kelengkapan</span>
                         </div>
                     </div>
                     <div class="flex flex-wrap justify-end pr-5">
@@ -92,7 +59,7 @@
                     </div>
                 </div>
                 {{-- Order Summary --}}
-                <div class="w-full max-w-full px-3 lg:w-1/3 lg:flex-none">
+                {{-- <div class="w-full max-w-full px-3 lg:w-1/3 lg:flex-none">
                     <div class="relative flex flex-col h-auto min-w-0 break-words bg-white border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                         <div class="p-4 pb-4 mb-0 bg-white border-b-0 border-solid rounded-t-2xl border-b-transparent dark:bg-gray-800 dark:border-gray-600">
                             <div class="flex flex-wrap -mx-3">
@@ -124,8 +91,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                
+                </div> --}}
             </div>
         </div>
     </form>

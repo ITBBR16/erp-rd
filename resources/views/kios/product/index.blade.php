@@ -46,9 +46,6 @@
                 </div>
                 <input type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search. . .">
             </div>
-            <div class="flex text-end">
-                <button type="button" data-modal-target="add-jenis-product" data-modal-toggle="add-jenis-product" class="flex text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 dark:focus:ring-indigo-800">Add Jenis</button>
-            </div>
         </div>
     </div>
 
@@ -74,46 +71,43 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- @foreach ($dataCustomer as $key => $dc)
-                    <tr id="customerRow_{{ $dc->id }}" class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
+                @foreach ($jenisProduk as $key => $pd)
+                    <tr id="customerRow_{{ $pd->id }}" class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
                         <td class="px-6 py-2">
-                            {{ $dataCustomer->firstItem() + $key }}
+                            {{ 1 + $key }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $dc->first_name }} {{ $dc->last_name }}
+                            {{ $pd->jenis_produk }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $dc->no_telpon }}
+                            @foreach ($pd->subjenis as $item)
+                                {{ $item->paket_penjualan }}
+                            @endforeach
                         </td>
                         <td class="px-6 py-2">
-                            {{ $dc->nama_jalan }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $dc->created_at->diffForHumans() }}
+                            {{ $pd->nama_jalan }}
                         </td>
                         <td class="px-6 py-2">
                             <div class="flex flex-wrap">
-                                <button type="button" data-modal-target="view-customer" data-modal-toggle="view-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="view-customer" data-modal-toggle="view-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">visibility</i>
                                 </button>
                                 @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
-                                    <button type="button" data-modal-target="update-customer" data-modal-toggle="update-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="update-customer" data-modal-toggle="update-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">edit</i>
                                     </button>
-                                    <button type="button" data-modal-target="delete-customer" data-modal-toggle="delete-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="delete-customer" data-modal-toggle="delete-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">delete</i>
                                     </button>
                                 @endif
                             </div>
                         </td>
                     </tr>
-                @endforeach --}}
+                @endforeach
             </tbody>
         </table>
         <div class="mt-4 ">
             {{-- {{ $dataCustomer->links() }} --}}
         </div>
     </div>
-
-    @include('kios.product.modal.modal-jenis-produk')
 @endsection
