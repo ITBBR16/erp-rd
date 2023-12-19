@@ -18,6 +18,7 @@ class KiosPaymentController extends Controller
             'title' => 'Payment',
             'active' => 'payment',
             'dropdown' => '',
+            'dropdownShop' => '',
             'divisi' => $divisiName,
         ]);
     }

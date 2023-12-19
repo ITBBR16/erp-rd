@@ -72,37 +72,37 @@
             </thead>
             <tbody>
                 @foreach ($jenisProduk as $key => $pd)
-                    <tr id="customerRow_{{ $pd->id }}" class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
-                        <td class="px-6 py-2">
-                            {{ 1 + $key }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $pd->jenis_produk }}
-                        </td>
-                        <td class="px-6 py-2">
-                            @foreach ($pd->subjenis as $item)
-                                {{ $item->paket_penjualan }}
-                            @endforeach
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $pd->nama_jalan }}
-                        </td>
-                        <td class="px-6 py-2">
-                            <div class="flex flex-wrap">
-                                <button type="button" data-modal-target="view-customer" data-modal-toggle="view-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">visibility</i>
-                                </button>
-                                @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
-                                    <button type="button" data-modal-target="update-customer" data-modal-toggle="update-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">edit</i>
+                    @foreach ($pd->subjenis as $sj)
+                        <tr id="customerRow_{{ $pd->id }}" class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
+                            <td class="px-6 py-2">
+                                {{ 1 + $key }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $pd->jenis_produk }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $sj->paket_penjualan }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $pd->nama_jalan }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <div class="flex flex-wrap">
+                                    <button type="button" data-modal-target="view-customer" data-modal-toggle="view-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">visibility</i>
                                     </button>
-                                    <button type="button" data-modal-target="delete-customer" data-modal-toggle="delete-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">delete</i>
-                                    </button>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
+                                    @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
+                                        <button type="button" data-modal-target="update-customer" data-modal-toggle="update-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base">edit</i>
+                                        </button>
+                                        <button type="button" data-modal-target="delete-customer" data-modal-toggle="delete-customer{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base">delete</i>
+                                        </button>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 @endforeach
             </tbody>
         </table>

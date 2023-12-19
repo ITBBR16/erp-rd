@@ -25,6 +25,7 @@ class KiosProductController extends Controller
             'title' => 'Product',
             'active' => 'product',
             'dropdown' => true,
+            'dropdownShop' => '',
             'divisi' => $divisiName,
             'paketProduk' => $paketProduk,
             'jenisProduk' => $jenisProduk,

@@ -19,6 +19,7 @@ class KiosFileUpload extends Controller
             'title' => 'File Upload',
             'active' => 'file-upload',
             'dropdown' => true,
+            'dropdownShop' => '',
             'divisi' => $divisiName,
         ]);
     }

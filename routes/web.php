@@ -10,6 +10,7 @@ use App\Http\Controllers\kios\KiosFileUpload;
 use App\Http\Controllers\kios\KiosPaymentController;
 use App\Http\Controllers\kios\KiosProductController;
 use App\Http\Controllers\kios\KiosShopController;
+use App\Http\Controllers\kios\KiosShopSecondController;
 use App\Http\Controllers\kios\KiosSupplierController;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KecamatanController;
@@ -39,8 +40,10 @@ Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
         Route::get('/', [DashboardKiosController::class, 'index']);
         Route::resource('/supplier', KiosSupplierController::class);
-        Route::get('/shop', [KiosShopController::class, 'index']);
+        Route::resource('/shop', KiosShopController::class);
         Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');
+
+        Route::get('/shop-second', [KiosShopSecondController::class, 'index']);
         
         Route::resource('/product', KiosProductController::class);
         Route::get('/get-paket-penjualan/{paketPenjualanId}', [KiosProductController::class, 'getPaketPenjualan']);

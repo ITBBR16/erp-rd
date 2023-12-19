@@ -18,6 +18,7 @@ class DashboardKiosController extends Controller
             'title' => 'Kios',
             'active' => 'dashboard-kios',
             'dropdown' => '',
+            'dropdownShop' => '',
             'divisi' => $divisiName,
         ]);
     }

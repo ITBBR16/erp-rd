@@ -28,6 +28,7 @@ class AddKelengkapanKiosController extends Controller
             'title' => 'Add Product',
             'active' => 'add-product',
             'dropdown' => true,
+            'dropdownShop' => '',
             'divisi' => $divisiName,
             'kategori' => $kategori,
             'jenis_produk' => $jenis_produk,

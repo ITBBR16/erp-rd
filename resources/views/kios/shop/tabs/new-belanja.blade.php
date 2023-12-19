@@ -1,5 +1,6 @@
 <div class="hidden p-4" id="new-product" role="tabpanel" aria-labelledby="new-product-tab">
-    <form action="#" method="POST" autocomplete="off">
+    <form action="{{ route('form-belanja') }}" method="POST" autocomplete="off">
+        @csrf
         <div class="w-full px-3 py-3 mx-auto">
             <div class="flex flex-nowrap -mx-3">
                 <div class="max-w-full px-3 md:w-10/12 md:flex-none">
@@ -18,8 +19,8 @@
                         <div id="dd-new-belanja" class="grid md:w-full md:grid-cols-4 md:gap-4">
                             <div>
                                 <label for="jenis_produk" class="sr-only"></label>
-                                <select name="jenis_produk[]" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                    <option hidden>Series Drone</option>
+                                <select name="jenis_produk[]" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
+                                    <option value="" hidden>Series Drone</option>
                                     @foreach ($jenisProduk as $jp)
                                         <option value="{{ $jp->id }}" class="dark:bg-gray-700">{{ $jp->jenis_produk }}</option>
                                     @endforeach
@@ -27,15 +28,15 @@
                             </div>
                             <div>
                                 <label for="paket_penjualan" class="sr-only"></label>
-                                <select name="paket_penjualan[]" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                    <option hidden>-- Paket Penjualan --</option>
+                                <select name="paket_penjualan[]" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
+                                    <option value="" hidden>-- Paket Penjualan --</option>
                                     @foreach ($paketPenjualan as $pp)
                                     <option value="{{ $pp->id }}" class="dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-4 group">
-                                <input type="text" name="quantity" id="quantity" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                                <input type="number" name="quantity[]" id="quantity" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
                                 <label for="quantity" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
                             </div>
                             <div class="flex justify-center items-center">
@@ -45,7 +46,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="flex justify-between text-rose-600">
                         <div class="flex cursor-pointer mt-4 hover:text-red-400">
                             <button type="button" id="add-new-belanja" class="flex flex-row justify-between gap-2">
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap justify-end pr-5">
-                        <button type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
+                        <button type="submit" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
                     </div>
                 </div>
                 {{-- Order Summary --}}

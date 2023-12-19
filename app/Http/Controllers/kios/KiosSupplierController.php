@@ -31,6 +31,7 @@ class KiosSupplierController extends Controller
             'title' => 'Supplier',
             'active' => 'supplier',
             'dropdown' => '',
+            'dropdownShop' => '',
             'divisi' => $divisiName,
             'kategori' => $kategori,
             'suppliers' => $suppliers,

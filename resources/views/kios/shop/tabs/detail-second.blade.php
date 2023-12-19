@@ -1,4 +1,4 @@
-<div class="hidden p-4" id="dbl" role="tabpanel" aria-labelledby="dbl-tab">
+<div class="hidden p-4" id="dsbl" role="tabpanel" aria-labelledby="dsbl-tab">
     <div class="relative overflow-x-auto">
         <div class="flex items-center justify-between py-4">
             <div class="flex text-xl">
@@ -40,49 +40,44 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $item)
+                {{-- @foreach ($data as $item)
                     <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <th class="px-6 py-2">
-                            K.{{ $item->id }}
+                            K.{{ $item['orderId'] }}
                         </th>
                         <td class="px-6 py-2">
-                            {{ $item->supplier->nama_perusahaan }}
+                            {{ $item['supplier_kios'] }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $item->invoice }}
+                            {{ $item['invoice'] }}
                         </td>
                         <td class="px-6 py-2">
-                            Rp. {{ number_format($item->orderLists->sum('nilai'), 0, ',', '.') }}
+                            {{ $item['totalNilai'] }}
                         </td>
                         <td class="px-6 py-2">
-                            @if ($item->status == 'Belum Validasi')
-                                <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $item->status }}</span>
-                            @else
-                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $item->status }}</span>
-                            @endif
+                            <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $item['status'] }}</span>
                         </td>
                         <td class="px-6 py-2">
                             <div class="flex flex-wrap">
-                                <button type="button" data-modal-target="view-order-new" data-modal-toggle="view-order-new{{ $item->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">task_alt</i>
+                                </button>
+                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">visibility</i>
                                 </button>
-                                @if ($item->status == 'Belum Validasi')
-                                    <button type="button" data-modal-target="validasi-order" data-modal-toggle="validasi-order{{ $item->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">task_alt</i>
-                                    </button>
-                                    <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja{{ $item->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">delete</i>
-                                    </button>
-                                @endif
+                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">edit</i>
+                                </button>
+                                <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">delete</i>
+                                </button>
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @endforeach --}}
             </tbody>
         </table>
     </div>
     {{-- Modal Action --}}
-    @include('kios.shop.modal.view-new')
-    @include('kios.shop.modal.validasi-new')
-    @include('kios.shop.modal.delete-new')
+    {{-- @include('kios.shop.modal.modal-delete') --}}
 </div>

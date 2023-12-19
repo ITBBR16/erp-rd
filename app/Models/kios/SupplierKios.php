@@ -19,4 +19,9 @@ class SupplierKios extends Model
         return $this->belongsToMany(ProdukKategori::class, 'supplier_kios_kategori', 'supplier_kios_id', 'produk_kategori_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(KiosOrder::class, 'supplier_kios_id');
+    }
+
 }

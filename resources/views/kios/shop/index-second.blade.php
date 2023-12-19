@@ -4,10 +4,10 @@
     <div class="mb-4 border-b border-gray-200">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="shopTab" data-tabs-toggle="#shopTabContent" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dbl-tab" data-tabs-target="#dbl" type="button" role="tab" aria-controls="dbl" aria-selected="false">Detail Belanja</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dsbl-tab" data-tabs-target="#dsbl" type="button" role="tab" aria-controls="dsbl" aria-selected="false">Detail Belanja</button>
             </li>
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="new-product-tab" data-tabs-target="#new-product" type="button" role="tab" aria-controls="new-product" aria-selected="false">Belanja Product New</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="second-product-tab" data-tabs-target="#second-product" type="button" role="tab" aria-controls="second-product" aria-selected="false">Belanja Product Second</button>
             </li>
         </ul>
     </div>
@@ -43,8 +43,8 @@
     @endif
 
     <div class="shopTabContent">
-        @include('kios.shop.tabs.detail-belanja')
-        @include('kios.shop.tabs.new-belanja')
+        @include('kios.shop.tabs.detail-second')
+        @include('kios.shop.tabs.second-belanja')
     </div> 
 
 @endsection

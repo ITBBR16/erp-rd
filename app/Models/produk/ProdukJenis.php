@@ -2,6 +2,7 @@
 
 namespace App\Models\produk;
 
+use App\Models\kios\KiosOrderList;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

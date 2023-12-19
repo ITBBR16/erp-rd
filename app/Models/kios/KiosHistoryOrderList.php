@@ -2,8 +2,9 @@
 
 namespace App\Models\kios;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\kios\KiosOrder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KiosHistoryOrderList extends Model
 {
@@ -12,4 +13,9 @@ class KiosHistoryOrderList extends Model
     protected $connection = 'rumahdrone_kios';
     protected $table = 'history_order';
     protected $guarded = ['id'];
+
+    public function order()
+    {
+        return $this->belongsTo(KiosOrder::class);
+    }
 }

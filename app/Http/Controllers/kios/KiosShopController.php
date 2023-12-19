@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\kios;
 
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosHistoryOrderList;
+use App\Models\kios\KiosOrder;
+use App\Models\kios\KiosOrderList;
 use App\Models\kios\SupplierKios;
 use App\Models\produk\ProdukJenis;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
-use Clockwork\Request\Request;
+use Illuminate\Http\Request;
+use Exception;
 
 class KiosShopController extends Controller
 {
@@ -20,20 +24,132 @@ class KiosShopController extends Controller
         $supplier = SupplierKios::all();
         $jenisProduk = ProdukJenis::all();
         $paketPenjualan = ProdukSubJenis::all();
+        $orders = KiosOrder::with('orderLists.paket', 'supplier')->get();
 
         return view('kios.shop.index', [
             'title' => 'Shop',
             'active' => 'shop',
             'dropdown' => '',
+            'dropdownShop' => true,
             'divisi' => $divisiName,
             'supplier' => $supplier,
             'jenisProduk' => $jenisProduk,
             'paketPenjualan' => $paketPenjualan,
+            'data' => $orders,
         ]);
     }
 
     public function store(Request $request)
     {
+        $request->validate([
+            'supplier_kios' => 'required',
+            'jenis_produk' => 'required|array',
+            'paket_penjualan' => 'required|array',
+            'quantity' => 'required|array'
+        ]);
+
+        try{
+            $order = new KiosOrder();
+            $order->supplier_kios_id = $request->input('supplier_kios');
+            $order->status = 'Belum Validasi';
+            $order->save();
+
+            $quantities = $request->input('quantity');
+            $jenisProduk = $request->input('jenis_produk');
+            $paket_penjualan = $request->input('paket_penjualan');
+            foreach($paket_penjualan as $key => $item) {
+                $orderList = new KiosOrderList();
+                $orderList->order_id = $order->id;
+                $orderList->produk_jenis_id = $jenisProduk[$key];
+                $orderList->sub_jenis_id = $item;
+                $orderList->quantity = $quantities[$key];
+                $orderList->save();
+
+                $history = new KiosHistoryOrderList();
+                $history->order_id = $order->id;
+                $history->produk_jenis_id = $jenisProduk[$key];
+                $history->sub_jenis_id = $item;
+                $history->quantity = $quantities[$key];
+                $history->save();
+            }
+
+            return back()->with('success', 'Success Add New Order List.');
+
+        } catch(Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'invoice' => 'required',
+            'supplier_kios' => 'required',
+            'jenis_paket' => 'required|array',
+            'quantity' => 'required|array',
+            'nilai' => 'required|array',
+        ]);
+
+        try{
+            $order = KiosOrder::findOrFail($id);
+            $order->status = 'Tervalidasi';
+            $order->invoice = $request->input('invoice');
+            $order->save();
+
+            foreach($request->input('jenis_paket') as $index => $jenisPaket) {
+                $orderList = $order->orderLists()
+                            ->where('order_id', $id)
+                            ->where('sub_jenis_id', $jenisPaket)
+                            ->first();
+
+                $historiOrder = $order->histories()
+                            ->where('order_id', $id)
+                            ->where('sub_jenis_id', $jenisPaket)
+                            ->first();
+
+                if($orderList) {
+                    $orderList->produk_jenis_id = $request->input('jenis_produk')[$index];
+                    $orderList->sub_jenis_id = $jenisPaket;
+                    $orderList->quantity = $request->input('quantity')[$index];
+                    $orderList->nilai = $request->input('nilai')[$index];
+                    $orderList->save();
+
+                    $historiOrder->produk_jenis_id = $request->input('jenis_produk')[$index];
+                    $historiOrder->sub_jenis_id = $jenisPaket;
+                    $historiOrder->quantity = $request->input('quantity')[$index];
+                    $historiOrder->nilai = $request->input('nilai')[$index];
+                    $historiOrder->save();
+                } else {
+                    $newOrderList = new KiosOrderList([
+                        'produk_jenis_id' => $request->input('jenis_produk')[$index],
+                        'sub_jenis_id' => $jenisPaket,
+                        'quantity' => $request->input('quantity')[$index],
+                        'nilai' => $request->input('nilai')[$index],
+                    ]);
+
+                    $newHistory = new KiosHistoryOrderList([
+                        'produk_jenis_id' => $request->input('jenis_produk')[$index],
+                        'sub_jenis_id' => $jenisPaket,
+                        'quantity' => $request->input('quantity')[$index],
+                        'nilai' => $request->input('nilai')[$index],
+                    ]);
+
+                    $order->orderLists()->save($newOrderList);
+                    $order->histories()->save($newHistory);
+                }
+            }
+
+            return back()->with('success', 'Success Validasi Order.');
+            
+        } catch(Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
         
+    }
+
+    public function destroy($id)
+    {
+
     }
 }
