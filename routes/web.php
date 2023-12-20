@@ -43,7 +43,8 @@ Route::middleware('kios')->group(function () {
         Route::resource('/shop', KiosShopController::class);
         Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');
 
-        Route::get('/shop-second', [KiosShopSecondController::class, 'index']);
+        Route::resource('/shop-second', KiosShopSecondController::class);
+        Route::get('/get-kelengkapan-second/{jenisId}', [KiosShopSecondController::class, 'getKelengkapanSecond']);
         
         Route::resource('/product', KiosProductController::class);
         Route::get('/get-paket-penjualan/{paketPenjualanId}', [KiosProductController::class, 'getPaketPenjualan']);

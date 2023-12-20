@@ -12,6 +12,7 @@ use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\Http;
 
 class KiosShopController extends Controller
 {
@@ -49,11 +50,24 @@ class KiosShopController extends Controller
         ]);
 
         try{
+            // Identifikasi Supplier
+            $supplierId = $request->input('supplier_kios');
+            $searchSupplier = SupplierKios::findOrFail($supplierId);
+            $supplierName = $searchSupplier->nama_perusahaan;
+
+            // Save order ke table order
             $order = new KiosOrder();
             $order->supplier_kios_id = $request->input('supplier_kios');
             $order->status = 'Belum Validasi';
             $order->save();
 
+            // Send data to api
+            $apiUrl = "https://script.google.com/macros/s/AKfycbwFGLi6XLWUKPvxiEqC8jQDJtynpwZWoYTW4Gqc_M2smqiU_nNYyHlalYUq1_jaUlGQOQ/exec";
+            $response = Http::post($apiUrl, [
+                'orderId' => 'K.' . $order->id,
+                'supplier' => $supplierName,
+            ]);
+            
             $quantities = $request->input('quantity');
             $jenisProduk = $request->input('jenis_produk');
             $paket_penjualan = $request->input('paket_penjualan');
@@ -76,6 +90,9 @@ class KiosShopController extends Controller
             return back()->with('success', 'Success Add New Order List.');
 
         } catch(Exception $e) {
+            if(isset($order) && $order->id){
+                $order->delete();
+            }
             return back()->with('error', $e->getMessage());
         }
 
@@ -150,6 +167,15 @@ class KiosShopController extends Controller
 
     public function destroy($id)
     {
+        try{
+            $order = KiosOrder::findOrFail($id);
+            KiosOrderList::where('order_id', $id)->delete();
 
+            $order->delete();
+
+            return back()->with('success', 'Success Delete Order.');
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

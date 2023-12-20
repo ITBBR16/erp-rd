@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\kios;
 
 use Illuminate\Http\Request;
-use App\Models\kios\KiosOrder;
+use App\Models\customer\Customer;
+use App\Models\produk\ProdukJenis;
 use App\Http\Controllers\Controller;
+use App\Models\produk\ProdukSubJenis;
+use App\Models\produk\ProdukKelengkapan;
 use App\Repositories\kios\KiosRepository;
+use App\Models\kios\KiosMetodePembelianSecond;
+use App\Models\kios\KiosStatusPembayaran;
+use Exception;
 
 class KiosShopSecondController extends Controller
 {
@@ -15,18 +21,11 @@ class KiosShopSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $orders = KiosOrder::with('orderLists', 'supplier')->get();
-
-        foreach ($orders as $order) {
-            $totalNominal = $order->orderLists->sum('nilai');
-            $data[] = [
-                'orderId' => $order->id,
-                'invoice' => $order->invoice,
-                'status' => $order->status,
-                'supplier_kios' => $order->supplier->nama_perusahaan,
-                'totalNilai' => $totalNominal,
-            ];
-        }
+        $metode_pembelian = KiosMetodePembelianSecond::all();
+        $statusPembayaran = KiosStatusPembayaran::all();
+        $customer = Customer::all();
+        $kiosProduk = ProdukJenis::with('subjenis.kelengkapans')->get();
+        $kelengkapan = ProdukKelengkapan::all();
 
         return view('kios.shop.index-second', [
             'title' => 'Shop Second',
@@ -34,12 +33,40 @@ class KiosShopSecondController extends Controller
             'divisi' => $divisiName,
             'dropdown' => '',
             'dropdownShop' => true,
-            'data' => $data,
+            'metodePembelian' => $metode_pembelian,
+            'customer' => $customer,
+            'produkKios' => $kiosProduk,
+            'kelengkapan' => $kelengkapan,
+            'statusPembayaran' => $statusPembayaran,
         ]);
     }
 
     public function store(Request $request)
     {
-        
+        $request->validate([
+            'metode_pembelian' => 'required',
+            'customer' => 'required',
+            'tanggal_pembelian' => 'required',
+            'jenis_drone_seconde' => 'required',
+            'status_pembayaran' => 'required',
+            'biaya_pembelian' => 'required',
+            'kelengkapan_second' => 'required',
+            'quantity_second' => 'required',
+        ]);
+
+        try{
+
+            
+
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+    }
+
+    public function getKelengkapanSecond($jenisId)
+    {
+        $subJenis = ProdukSubJenis::findOrFail($jenisId);
+        return response()->json(['kelengkapans' => $subJenis->kelengkapans]);
     }
 }

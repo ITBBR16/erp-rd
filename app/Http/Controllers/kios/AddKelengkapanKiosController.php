@@ -101,9 +101,7 @@ class AddKelengkapanKiosController extends Controller
     {
         $ddKelengkapan = ProdukKelengkapan::where('produk_jenis_id', $jenisId)->get();
 
-        if(count($ddKelengkapan) > 0) {
-            return response()->json($ddKelengkapan);
-        }
+        return response()->json($ddKelengkapan);
     }
 
 }

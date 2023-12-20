@@ -34,5 +34,6 @@
 <script src="/js/add-form-kelengkapan.js"></script>
 <script src="/js/add-form-jk.js"></script>
 <script src="/js/dd-new-belanja.js"></script>
+<script src="/js/dd-checkbox-second.js"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@ class KiosOrder extends Model
 
     public function supplier()
     {
-        return $this->belongsTo(SupplierKios::class, 'id');
+        return $this->belongsTo(SupplierKios::class, 'supplier_kios_id');
     }
 
     public function orderLists()
