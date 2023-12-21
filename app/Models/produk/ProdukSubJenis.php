@@ -3,6 +3,7 @@
 namespace App\Models\produk;
 
 use App\Models\kios\KiosOrderList;
+use App\Models\kios\SupplierKios;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,4 +28,10 @@ class ProdukSubJenis extends Model
     {
         return $this->hasMany(KiosOrderList::class);
     }
+
+    public function suppliers()
+    {
+        return $this->belongsToMany(SupplierKios::class, 'supplier_kios_sub', 'sub_jenis_id', 'supplier_kios_id');
+    }
+
 }

@@ -35,5 +35,8 @@
 <script src="/js/add-form-jk.js"></script>
 <script src="/js/dd-new-belanja.js"></script>
 <script src="/js/dd-checkbox-second.js"></script>
+<script src="/js/toggle-payment-kios.js"></script>
+<script src="/js/dropdown_wilayah.js"></script>
+<script src="/js/dd-daily-recap.js"></script>
 </body>
 </html>

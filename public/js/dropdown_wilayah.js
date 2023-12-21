@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const defaultOption = document.createElement('option');
                     defaultOption.textContent = 'Pilih Kelurahan';
                     defaultOption.setAttribute('hidden', true);
-                    option.classList.add('dark:bg-gray-700');
+                    defaultOption.classList.add('dark:bg-gray-700');
                     kelurahanSelect.appendChild(defaultOption);
 
                     data.forEach(kelurahan => {

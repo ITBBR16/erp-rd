@@ -25,6 +25,11 @@ class KiosOrder extends Model
 
     public function histories()
     {
-        return $this->hasMany(KiosHistoryOrderList::class);
+        return $this->hasMany(KiosHistoryOrderList::class, 'order_id');
+    }
+
+    public function paymentkios()
+    {
+        return $this->hasMany(KiosPayment::class, 'order_id');
     }
 }

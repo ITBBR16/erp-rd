@@ -6,6 +6,7 @@ use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\employee\EmployeeController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\kios\DashboardKiosController;
+use App\Http\Controllers\kios\KiosDailyRecapController;
 use App\Http\Controllers\kios\KiosFileUpload;
 use App\Http\Controllers\kios\KiosPaymentController;
 use App\Http\Controllers\kios\KiosProductController;
@@ -39,6 +40,9 @@ Route::middleware('superadmin')->group(function () {
 Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
         Route::get('/', [DashboardKiosController::class, 'index']);
+        Route::get('/daily-recap', [KiosDailyRecapController::class, 'index']);
+        Route::post('/daily-recap', [KiosDailyRecapController::class, 'store'])->name('form-daily-recap');
+
         Route::resource('/supplier', KiosSupplierController::class);
         Route::resource('/shop', KiosShopController::class);
         Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');

@@ -38,10 +38,10 @@
         <div class="flex flex-row justify-between w-full">
             <div class="flex flex-row gap-6">
                 <div class="relative">
-                    <button type="button" class="text-rose-600 border border-rose-600 hover:text-white hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-rose-400 font-medium rounded-xl text-base py-1.5 px-5 text-center">Belum Terbayar</button>
+                    <button id="belum-bayar" onclick="toggleFormPayment('unpaid-kios')" type="button" class="text-white bg-rose-700 border border-rose-600 hover:text-white hover:bg-rose-700 font-medium rounded-xl text-base py-1.5 px-5 text-center">Belum Terbayar</button>
                 </div>
                 <div class="relative">
-                    <button type="button" class="text-rose-600 border border-rose-600 hover:text-white hover:bg-rose-700 focus:ring-4 focus:outline-none focus:ring-rose-400 font-medium rounded-xl text-base py-1.5 px-5 text-center">Sudah Terbayar</button>
+                    <button id="sudah-bayar" onclick="toggleFormPayment('done-payment-kios')" type="button" class="text-rose-600 border border-rose-600 hover:text-white hover:bg-rose-700 font-medium rounded-xl text-base py-1.5 px-5 text-center">Sudah Terbayar</button>
                 </div>
             </div>
             <div class="flex flex-row gap-6">
@@ -63,12 +63,12 @@
                     <input type="text" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="relative">
-                    <button type="button" class="p-2 text-blue-700 border border-blue-700 hover:text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg text-sm py-2.5 px-5 text-center dark:border-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Add Payment</button>
+                    <button type="button" data-modal-target="add-payment-kios" data-modal-toggle="add-payment-kios" class="p-2 text-blue-700 border border-blue-700 hover:text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg text-sm py-2.5 px-5 text-center dark:border-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Add Payment</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="relative overflow-x-auto mt-6">
+    <div id="unpaid-kios" class="relative overflow-x-auto mt-6" style="display: block">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
@@ -93,41 +93,131 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                    <th class="px-6 py-2">
-                        K.666
-                    </th>
-                    <td class="px-6 py-2">
-                        INV/20230908/MPL/3446962446
-                    </td>
-                    <td class="px-6 py-2">
-                        Pembelian Produk Baru
-                    </td>
-                    <td class="px-6 py-2">
-                        Rp. 5.407.200
-                    </td>
-                    <td class="px-6 py-2">
-                        <span class="bg-orange-400 rounded-md px-2 py-0 text-white">Unpaid</span>
-                    </td>
-                    <td class="px-6 py-2">
-                        <div class="flex flex-wrap">
-                            <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                <i class="material-symbols-outlined text-base">visibility</i>
-                            </button>
-                            <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                <i class="material-symbols-outlined text-base">edit</i>
-                            </button>
-                            <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                <i class="material-symbols-outlined text-base">delete</i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                @foreach ($payment as $py)
+                    @if ($py->status == 'Unpaid' || $py->status == 'Wait Payment')
+                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <th class="px-6 py-2">
+                                K.{{ $py->order_id }}
+                            </th>
+                            <td class="px-6 py-2">
+                                {{ $py->order->invoice }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $py->jenis_pemabayaran }}
+                            </td>
+                            <td class="px-6 py-2">
+                                Rp. {{ number_format($py->nilai, 0, ',', '.') }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $py->status }}</span>
+                            </td>
+                            <td class="px-6 py-2">
+                                <div class="flex flex-wrap">
+                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">visibility</i>
+                                    </button>
+                                    <button type="button" data-modal-target="konfirmasi-pembayaran" data-modal-toggle="konfirmasi-pembayaran" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">task_alt</i>
+                                    </button>
+                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">edit</i>
+                                    </button>
+                                    <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">delete</i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
             </tbody>
         </table>
+        @if (!$payment->contains('status', 'Unpaid'))
+            <div class="p-4">
+                <div class="flex items-center justify-center">
+                    <figure class="max-w-lg">
+                        <img class="h-auto max-w-full rounded-lg" src="/img/empty-cart.png" alt="Not Found" width="250" height="150">
+                        <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Empty Order Payment</figcaption>
+                    </figure>
+                </div>
+            </div>
+        @endif
         <div class="mt-4 ">
             {{-- {{ $dataCustomer->links() }} --}}
         </div>
     </div>
+
+    <div id="done-payment-kios" class="relative overflow-x-auto mt-6" style="display: none">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Order ID
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Invoice
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Jenis Pembayaran
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Nominal
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Status
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($payment as $dpy)
+                    @if ($dpy->status == 'Paid')
+                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <th class="px-6 py-2">
+                                K.{{ $dpy->order_id }}
+                            </th>
+                            <td class="px-6 py-2">
+                                {{ $dpy->order->invoice }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $dpy->jenis_pemabayaran }}
+                            </td>
+                            <td class="px-6 py-2">
+                                Rp. {{ number_format($dpy->nilai, 0, ',', '.') }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $dpy->status }}</span>
+                            </td>
+                            <td class="px-6 py-2">
+                                <div class="flex flex-wrap">
+                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">visibility</i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+        @if (!$payment->contains('status', 'Paid'))
+            <div class="p-4">
+                <div class="flex items-center justify-center">
+                    <figure class="max-w-lg">
+                        <img class="h-auto max-w-full rounded-lg" src="/img/empty-cart.png" alt="Not Found" width="250" height="150">
+                        <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Empty Order Payment</figcaption>
+                    </figure>
+                </div>
+            </div>
+        @endif
+        <div class="mt-4 ">
+            {{-- {{ $dataCustomer->links() }} --}}
+        </div>
+    </div>
+
+    {{-- Modal --}}
+    @include('kios.shop.payment.modal.add-payment')
 
 @endsection

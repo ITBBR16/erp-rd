@@ -44,7 +44,7 @@ class KiosProductController extends Controller
 
     public function getPaketPenjualan($paketPenjualanId)
     {
-        $ddPaketPenjualan = ProdukSubJenis::where('jenis_id', $paketPenjualanId)->get;
+        $ddPaketPenjualan = ProdukSubJenis::where('jenis_id', $paketPenjualanId)->get();
 
         if(count($ddPaketPenjualan) > 0) {
             return response()->json($ddPaketPenjualan);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\kios;
 
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosPayment;
 use App\Repositories\kios\KiosRepository;
 
 class KiosPaymentController extends Controller
@@ -13,6 +14,7 @@ class KiosPaymentController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $payment = KiosPayment::with('order')->get();
 
         return view('kios.shop.payment.payment', [
             'title' => 'Payment',
@@ -20,6 +22,7 @@ class KiosPaymentController extends Controller
             'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
+            'payment' => $payment,
         ]);
     }
 }

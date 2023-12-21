@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function(){
     
     jenisDroneSecond.addEventListener('change', function() {
         const subJenisId = jenisDroneSecond.value;
-        console.log(subJenisId);
+        
         if(subJenisId){
             fetch(`/kios/get-kelengkapan-second/${subJenisId}`)
             .then(response => response.json())
