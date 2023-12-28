@@ -1,23 +1,27 @@
 <?php
 
-use App\Http\Controllers\customer\AddCustomerController;
-use App\Http\Controllers\customer\DashboardCustomerController;
-use App\Http\Controllers\customer\DataCustomerController;
-use App\Http\Controllers\employee\EmployeeController;
-use App\Http\Controllers\kios\AddKelengkapanKiosController;
-use App\Http\Controllers\kios\DashboardKiosController;
-use App\Http\Controllers\kios\KiosDailyRecapController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\kios\KiosFileUpload;
+use App\Http\Controllers\login\LoginController;
+use App\Http\Controllers\wilayah\KotaController;
+use App\Http\Controllers\kios\KiosShopController;
 use App\Http\Controllers\kios\KiosPaymentController;
 use App\Http\Controllers\kios\KiosProductController;
-use App\Http\Controllers\kios\KiosShopController;
-use App\Http\Controllers\kios\KiosShopSecondController;
+use App\Http\Controllers\employee\EmployeeController;
 use App\Http\Controllers\kios\KiosSupplierController;
-use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KecamatanController;
 use App\Http\Controllers\wilayah\KelurahanController;
-use App\Http\Controllers\wilayah\KotaController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\kios\DashboardKiosController;
+use App\Http\Controllers\kios\KiosDailyRecapController;
+use App\Http\Controllers\kios\KiosPengirimanController;
+use App\Http\Controllers\kios\KiosShopSecondController;
+use App\Http\Controllers\customer\AddCustomerController;
+use App\Http\Controllers\customer\DataCustomerController;
+use App\Http\Controllers\kios\AddKelengkapanKiosController;
+use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\logistik\LogistikDashboardController;
+use App\Http\Controllers\logistik\LogistikPenerimaanController;
+use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 
 Route::middleware('guest')->group(function (){
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -58,8 +62,20 @@ Route::middleware('kios')->group(function () {
         Route::get('/getKelengkapan/{jenisId}', [AddKelengkapanKiosController::class, 'getKelengkapan']);
 
         Route::get('/upload', [KiosFileUpload::class, 'index']);
-        Route::get('/pembayaran', [KiosPaymentController::class, 'index']);
+        Route::resource('/pembayaran', KiosPaymentController::class);
+        Route::post('/pembayaran/{id}', [KiosPaymentController::class, 'validasi'])->name('form-validasi-payment');
+
+        Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);
+        Route::get('/getLayanan/{ekspedisiId}', [KiosPengirimanController::class, 'getLayanan']);
         
+    });
+});
+
+Route::middleware('logistik')->group(function () {
+    Route::prefix('/logistik')->group(function () {
+        Route::get('/', [LogistikDashboardController::class, 'index']);
+        Route::resource('/penerimaan', LogistikPenerimaanController::class)->only(['index', 'update']);
+        Route::get('/validasi', [LogistikValidasiProdukController::class, 'index']);
     });
 });
 

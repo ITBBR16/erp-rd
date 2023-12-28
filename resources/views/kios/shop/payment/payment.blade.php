@@ -94,7 +94,7 @@
             </thead>
             <tbody>
                 @foreach ($payment as $py)
-                    @if ($py->status == 'Unpaid' || $py->status == 'Wait Payment')
+                    @if ($py->status == 'Unpaid' || $py->status == 'Waiting For Payment')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 K.{{ $py->order_id }}
@@ -103,10 +103,13 @@
                                 {{ $py->order->invoice }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $py->jenis_pemabayaran }}
+                                {{ $py->jenis_pembayaran }}
                             </td>
                             <td class="px-6 py-2">
-                                Rp. {{ number_format($py->nilai, 0, ',', '.') }}
+                                @php
+                                    $totalNilai = $py->nilai + $py->ongkir + $py->pajak;
+                                @endphp
+                                Rp. {{ number_format($totalNilai, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-2">
                                 <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $py->status }}</span>
@@ -116,15 +119,17 @@
                                     <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
                                     </button>
-                                    <button type="button" data-modal-target="konfirmasi-pembayaran" data-modal-toggle="konfirmasi-pembayaran" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">task_alt</i>
-                                    </button>
-                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">edit</i>
-                                    </button>
-                                    <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">delete</i>
-                                    </button>
+                                    @if ($py->status == 'Unpaid')
+                                        <button type="button" data-modal-target="konfirmasi-pembayaran{{ $py->id }}" data-modal-toggle="konfirmasi-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base">task_alt</i>
+                                        </button>
+                                        <button type="button" data-modal-target="edit-pembayaran{{ $py->id }}" data-modal-toggle="edit-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base">edit</i>
+                                        </button>
+                                        <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base">delete</i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -132,7 +137,7 @@
                 @endforeach
             </tbody>
         </table>
-        @if (!$payment->contains('status', 'Unpaid'))
+        @if (!$payment->contains('status', 'Unpaid') && !$payment->contains('status', 'Waiting For Payment'))
             <div class="p-4">
                 <div class="flex items-center justify-center">
                     <figure class="max-w-lg">
@@ -182,10 +187,13 @@
                                 {{ $dpy->order->invoice }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $dpy->jenis_pemabayaran }}
+                                {{ $dpy->jenis_pembayaran }}
                             </td>
                             <td class="px-6 py-2">
-                                Rp. {{ number_format($dpy->nilai, 0, ',', '.') }}
+                                @php
+                                    $totalNilai = $dpy->nilai + $dpy->ongkir + $dpy->pajak;
+                                @endphp
+                                Rp. {{ number_format($totalNilai, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-2">
                                 <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $dpy->status }}</span>
@@ -219,5 +227,7 @@
 
     {{-- Modal --}}
     @include('kios.shop.payment.modal.add-payment')
+    @include('kios.shop.payment.modal.validasi-payment')
+    @include('kios.shop.payment.modal.edit-payment')
 
 @endsection

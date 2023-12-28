@@ -68,6 +68,10 @@ class KiosShopController extends Controller
                 'orderId' => 'K.' . $order->id,
                 'supplier' => $supplierName,
             ]);
+
+            $linkDrive = json_decode($response->body(), true);
+            $order->link_drive = $linkDrive[0];
+            $order->save();
             
             $quantities = $request->input('quantity');
             $jenisProduk = $request->input('jenis_produk');

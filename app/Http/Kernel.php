@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'access' => \App\Http\Middleware\AccessControl::class,
         'superadmin' => \App\Http\Middleware\SuperAdmin::class,
         'admin.superAdmin' => \App\Http\Middleware\AdminSuperAdmin::class,
-        'kios' => \App\Http\Middleware\KiosMD::class,
+        'kios' => \App\Http\Middleware\MDKios::class,
+        'logistik' => \App\Http\Middleware\MDLogistik::class,
     ];
 }

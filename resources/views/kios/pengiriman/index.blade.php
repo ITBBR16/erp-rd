@@ -1,13 +1,13 @@
-@extends('logistik.layouts.main')
+@extends('kios.layouts.main')
 
 @section('container')
     <div class="mb-4 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="penerimaanTab" data-tabs-toggle="#penerimaanTabContent" role="tablist">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="pengirimanTab" data-tabs-toggle="#pengirimanTabContent" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="penerimaanAktif-tab" data-tabs-target="#penerimaanAktif" type="button" role="tab" aria-controls="penerimaanAktif" aria-selected="false">PENERIMAAN AKTIF</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="pengirimanAktif-tab" data-tabs-target="#pengirimanAktif" type="button" role="tab" aria-controls="pengirimanAktif" aria-selected="false">PENGIRIMAN AKTIF</button>
             </li>
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="history-penerimaan-tab" data-tabs-target="#history-penerimaan" type="button" role="tab" aria-controls="history-penerimaan" aria-selected="false">HISTORY PENERIMAAN</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="history-pengiriman-tab" data-tabs-target="#history-pengiriman" type="button" role="tab" aria-controls="history-pengiriman" aria-selected="false">HISTORY PENGIRIMAN</button>
             </li>
         </ul>
     </div>
@@ -42,9 +42,9 @@
         </div>
     @endif
 
-    <div class="penerimaanTabContent">
-        @include('logistik.main.tabs.penerimaan-aktif')
-        @include('logistik.main.tabs.history-penerimaan')
+    <div class="pengirimanTabContent">
+        @include('kios.pengiriman.tabs.pengiriman-aktif')
+        @include('kios.pengiriman.tabs.history-pengiriman')
     </div> 
 
 @endsection

@@ -28,6 +28,8 @@ class LoginController extends Controller
                 return redirect('/')->withCookie($cookie);
             } elseif($user->is_admin == 2 && $user->divisi_id == 1){
                 return redirect()->intended('/kios')->withCookie($cookie);
+            } elseif($user->is_admin == 2 && $user->divisi_id == 6){
+                return redirect()->intended('/logistik')->withCookie($cookie);
             }
 
         }

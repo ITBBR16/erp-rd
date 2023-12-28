@@ -12,17 +12,10 @@
             </div>
             <form action="#" method="POST" autocomplete="off">
                 <div class="px-6 py-6 lg:px-8">
-                    <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-6 group">
-                            <select name="order_id" id="order_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
-                                <option value="" hidden>-- Order ID --</option>
-                            </select>
-                        </div>
-                        <div class="relative z-0 w-full mb-6 group">
-                            <select name="jenis_transaksi" id="jenis_transaksi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
-                                <option value="" hidden>-- Jenis Transaksi --</option>
-                            </select>
-                        </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        <select name="order_id" id="order_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                            <option value="" hidden>-- Order ID --</option>
+                        </select>
                     </div>
                     <div class="flex">
                         <label class="relative inline-flex items-center me-5 mb-4 cursor-pointer">
@@ -41,9 +34,9 @@
                     <div id="new-paymment-metode" style="display: none">
                         <div class="grid md:grid-cols-2 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="bank_pembayaran" id="bank_pembayaran" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('bank_pembayaran') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('bank_pembayaran') }}" required>
-                                <label for="bank_pembayaran" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Bank Pembayaran</label>
-                                @error('bank_pembayaran')
+                                <input type="text" name="media_transaksi" id="media_transaksi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('media_transaksi') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('media_transaksi') }}" required>
+                                <label for="media_transaksi" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Media Transaksi</label>
+                                @error('media_transaksi')
                                     <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -55,21 +48,12 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="grid md:grid-cols-2 md:gap-6">
-                            <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="nama_akun" id="nama_akun" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nama_akun') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('nama_akun') }}" required>
-                                <label for="nama_akun" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nama Akun</label>
-                                @error('nama_akun')
-                                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="media_transaksi" id="media_transaksi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('media_transaksi') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('media_transaksi') }}" required>
-                                <label for="media_transaksi" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Media Transaksi</label>
-                                @error('media_transaksi')
-                                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
-                            </div>
+                        <div class="relative z-0 w-full mb-6 group">
+                            <input type="text" name="nama_akun" id="nama_akun" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nama_akun') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('nama_akun') }}" required>
+                            <label for="nama_akun" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nama Akun</label>
+                            @error('nama_akun')
+                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 md:gap-6">

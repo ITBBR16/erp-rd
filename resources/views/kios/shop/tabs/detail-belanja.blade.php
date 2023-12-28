@@ -52,7 +52,15 @@
                             {{ $item->invoice }}
                         </td>
                         <td class="px-6 py-2">
-                            Rp. {{ number_format($item->orderLists->sum('nilai'), 0, ',', '.') }}
+                            @php
+                                $totalNilai = 0;
+                            @endphp
+                            @foreach ($item->orderLists as $order)
+                                @php
+                                    $totalNilai += $order->quantity * $order->nilai;
+                                @endphp
+                            @endforeach
+                            Rp. {{ number_format($totalNilai, 0, ',', '.') }}
                         </td>
                         <td class="px-6 py-2">
                             @if ($item->status == 'Belum Validasi')

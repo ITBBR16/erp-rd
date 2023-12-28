@@ -2,6 +2,7 @@
 
 namespace App\Models\divisi;
 
+use App\Models\ekspedisi\PengirimanEkspedisi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,4 +14,9 @@ class Divisi extends Model
     protected $table = 'divisi';
 
     protected $guarded = ['id'];
+
+    public function pengiriman()
+    {
+        return $this->hasMany(PengirimanEkspedisi::class);
+    }
 }
