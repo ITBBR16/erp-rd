@@ -1,95 +1,90 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const provinsiSelect = document.getElementById('provinsi');
-    const kotaSelect = document.getElementById('kota_kabupaten');
-    const kecamatanSelect = document.getElementById('kecamatan');
-    const kelurahanSelect = document.getElementById('kelurahan');
+$(document).ready(function () {
+    const provinsiSelect = $('#provinsi');
+    const kotaSelect = $('#kota_kabupaten');
+    const kecamatanSelect = $('#kecamatan');
+    const kelurahanSelect = $('#kelurahan');
 
-    provinsiSelect.addEventListener('change', function () {
-        const selectedProvinsi = provinsiSelect.value;
+    provinsiSelect.on('change', function () {
+        const selectedProvinsi = provinsiSelect.val();
 
         if (selectedProvinsi) {
-        
             fetch(`/getKota/${selectedProvinsi}`)
                 .then(response => response.json())
                 .then(data => {
+                    kotaSelect.html('');
 
-                    kotaSelect.innerHTML = '';
-
-                    const defaultOption = document.createElement('option');
-                    defaultOption.textContent = 'Pilih Kota / Kabupaten';
-                    defaultOption.setAttribute('hidden', true);
-                    kotaSelect.appendChild(defaultOption)
+                    const defaultOption = $('<option>')
+                        .text('Pilih Kota / Kabupaten')
+                        .attr('hidden', true);
+                    kotaSelect.append(defaultOption);
 
                     data.forEach(kota => {
-                        const option = document.createElement('option');
-                        option.value = kota.id;
-                        option.textContent = kota.name;
-                        option.classList.add('dark:bg-gray-700');
-                        kotaSelect.appendChild(option);
+                        const option = $('<option>')
+                            .val(kota.id)
+                            .text(kota.name)
+                            .addClass('dark:bg-gray-700');
+                        kotaSelect.append(option);
                     });
-                });
+                })
+                .catch(error => console.error('Error fetching data:', error));
         } else {
-            kotaSelect.innerHTML = '';
+            kotaSelect.html('');
         }
     });
 
-    kotaSelect.addEventListener('change', function () {
-        const selectedKota = kotaSelect.value;
+    kotaSelect.on('change', function () {
+        const selectedKota = kotaSelect.val();
 
-        if(selectedKota) {
+        if (selectedKota) {
             fetch(`/getKecamatan/${selectedKota}`)
                 .then(response => response.json())
                 .then(data => {
+                    kecamatanSelect.html('');
 
-                    kecamatanSelect.innerHTML = '';
-
-                    const defaultOption = document.createElement('option');
-                    defaultOption.textContent = 'Pilih Kecamatan';
-                    defaultOption.setAttribute('hidden', true);
-                    kecamatanSelect.appendChild(defaultOption)
+                    const defaultOption = $('<option>')
+                        .text('Pilih Kecamatan')
+                        .attr('hidden', true);
+                    kecamatanSelect.append(defaultOption);
 
                     data.forEach(kecamatan => {
-                        const option = document.createElement('option');
-                        option.value = kecamatan.id;
-                        option.textContent = kecamatan.name;
-                        option.classList.add('dark:bg-gray-700');
-                        kecamatanSelect.appendChild(option);
+                        const option = $('<option>')
+                            .val(kecamatan.id)
+                            .text(kecamatan.name)
+                            .addClass('dark:bg-gray-700');
+                        kecamatanSelect.append(option);
                     });
-
-                });
+                })
+                .catch(error => console.error('Error fetching data:', error));
         } else {
-            kecamatanSelect.innerHTML = '';
+            kecamatanSelect.html('');
         }
     });
 
-    kecamatanSelect.addEventListener('change', function () {
-        const selectedKota = kecamatanSelect.value;
+    kecamatanSelect.on('change', function () {
+        const selectedKota = kecamatanSelect.val();
 
-        if(selectedKota) {
+        if (selectedKota) {
             fetch(`/getKelurahan/${selectedKota}`)
                 .then(response => response.json())
                 .then(data => {
+                    kelurahanSelect.html('');
 
-                    kelurahanSelect.innerHTML = '';
-
-                    const defaultOption = document.createElement('option');
-                    defaultOption.textContent = 'Pilih Kelurahan';
-                    defaultOption.setAttribute('hidden', true);
-                    defaultOption.classList.add('dark:bg-gray-700');
-                    kelurahanSelect.appendChild(defaultOption);
+                    const defaultOption = $('<option>')
+                        .text('Pilih Kelurahan')
+                        .attr('hidden', true)
+                        .addClass('dark:bg-gray-700');
+                    kelurahanSelect.append(defaultOption);
 
                     data.forEach(kelurahan => {
-                        const option = document.createElement('option');
-                        option.value = kelurahan.id;
-                        option.textContent = kelurahan.name;
-                        kelurahanSelect.appendChild(option);
+                        const option = $('<option>')
+                            .val(kelurahan.id)
+                            .text(kelurahan.name);
+                        kelurahanSelect.append(option);
                     });
-
-                });
+                })
+                .catch(error => console.error('Error fetching data:', error));
         } else {
-            kelurahanSelect.innerHTML = '';
+            kelurahanSelect.html('');
         }
     });
-
-
 });

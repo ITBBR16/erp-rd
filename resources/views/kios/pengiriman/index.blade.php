@@ -45,6 +45,8 @@
     <div class="pengirimanTabContent">
         @include('kios.pengiriman.tabs.pengiriman-aktif')
         @include('kios.pengiriman.tabs.history-pengiriman')
-    </div> 
+    </div>
+
+    <script src="/js/dd-layanan-pengiriman.js"></script>
 
 @endsection

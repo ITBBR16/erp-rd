@@ -45,6 +45,6 @@
     <div class="shopTabContent">
         @include('kios.shop.tabs.detail-second')
         @include('kios.shop.tabs.second-belanja')
-    </div> 
+    </div>
 
 @endsection

@@ -1,34 +1,36 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const seriProduk = document.getElementById('seri_produk');
-    const jenisProduk = document.getElementById('jenis_paket');
+$(document).ready(function () {
+    const seriProduk = $('#seri_produk');
+    const jenisProduk = $('#jenis_paket');
 
-    seriProduk.addEventListener('change', function () {
-        const selectSeri = seriProduk.value;
+    seriProduk.on('change', function () {
+        const selectSeri = seriProduk.val();
         
         if (selectSeri) {
         
             fetch(`/kios/get-paket-penjualan/${selectSeri}`)
                 .then(response => response.json())
                 .then(data => {
+                    jenisProduk.empty();
 
-                    jenisProduk.innerHTML = '';
-
-                    const defaultOption = document.createElement('option');
-                    defaultOption.textContent = '-- Jenis Paket --';
-                    defaultOption.setAttribute('hidden', true);
-                    jenisProduk.appendChild(defaultOption)
+                    const defaultOption = $('<option>', {
+                        text: '-- Jenis Paket --',
+                        hidden: true
+                    });
+                    jenisProduk.append(defaultOption);
 
                     data.forEach(produk_sub_jenis => {
-                        const option = document.createElement('option');
-                        option.value = produk_sub_jenis.id;
-                        option.textContent = produk_sub_jenis.paket_penjualan;
-                        option.classList.add('dark:bg-gray-700');
-                        jenisProduk.appendChild(option);
+                        const option = $('<option>', {
+                            value: produk_sub_jenis.id,
+                            text: produk_sub_jenis.paket_penjualan
+                        }).addClass('dark:bg-gray-700');
+                        jenisProduk.append(option);
                     });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
                 });
         } else {
-            jenisProduk.innerHTML = '';
+            jenisProduk.empty();
         }
     });
-
 });

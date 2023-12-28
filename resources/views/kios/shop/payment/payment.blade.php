@@ -119,17 +119,15 @@
                                     <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
                                     </button>
-                                    @if ($py->status == 'Unpaid')
-                                        <button type="button" data-modal-target="konfirmasi-pembayaran{{ $py->id }}" data-modal-toggle="konfirmasi-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base">task_alt</i>
-                                        </button>
-                                        <button type="button" data-modal-target="edit-pembayaran{{ $py->id }}" data-modal-toggle="edit-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base">edit</i>
-                                        </button>
-                                        <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base">delete</i>
-                                        </button>
-                                    @endif
+                                    <button type="button" data-modal-target="konfirmasi-pembayaran{{ $py->id }}" data-modal-toggle="konfirmasi-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">task_alt</i>
+                                    </button>
+                                    <button type="button" data-modal-target="edit-pembayaran{{ $py->id }}" data-modal-toggle="edit-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">edit</i>
+                                    </button>
+                                    <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">delete</i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>

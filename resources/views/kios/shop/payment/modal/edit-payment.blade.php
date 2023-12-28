@@ -33,15 +33,13 @@
                         </div>
                         <div class="flex">
                             <label class="relative inline-flex items-center me-5 mb-4 cursor-pointer">
-                                <input type="checkbox" id="new-metode-payment-edit" value="" class="sr-only peer">
+                                <input type="checkbox" id="new-metode-payment-edit" data-id="{{ $item->id }}" value="" class="sr-only peer">
                                 <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-600 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
                                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Metode Pembayaran Baru</span>
                             </label>
                         </div>
-                        <div id="have-payment-edit">
-                            
-                        </div>
-                        <div id="new-payment-metode-edit" style="display: none">
+                        <div id="have-payment-edit-{{ $item->id }}"></div>
+                        <div id="new-payment-metode-edit-{{ $item->id }}" style="display: none">
                             <div class="grid md:grid-cols-2 md:gap-6">
                                 <div class="relative z-0 w-full mb-6 group">
                                     <input type="text" name="media_pembayaran" id="media_pembayaran" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('media_pembayaran') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('media_pembayaran') }}">
@@ -66,7 +64,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="grid grid-cols-3 md:gap-6">
+                        <div class="grid grid-cols-3 md:gap-6 mt-2">
                             <div class="relative z-0 w-full mb-6 group">
                                 <input type="text" name="nilai_belanja" id="nilai_belanja" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nilai_belanja') border-red-600 dark:border-red-500 @enderror" placeholder="" value="Rp. {{ number_format($item->nilai, 0, ',', '.') }}" disabled>
                                 <label for="nilai_belanja" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Total Belanja</label>

@@ -1,31 +1,29 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('new-metode-payment-edit').addEventListener('change', function() {
-        console.log('halo halo');
+$(document).ready(function() {
+    $(document).on('change', '#new-metode-payment-edit', function() {
+        let formId = $(this).data("id");
+       
+        var havePaymentEdit = $("#have-payment-edit-"+formId);
+        var newPaymentEdit = $("#new-payment-metode-edit-"+formId);
         
-        var havePaymentEdit = document.getElementById('have-payment-edit');
-        var newPaymentEdit = document.getElementById('new-payment-metode-edit');
-        
-        console.log('this.checked:', this.checked);
-    
-        if (this.checked) {
-            havePaymentEdit.style.display = 'none';
-            newPaymentEdit.style.display = 'block';
+        if ($(this).is(':checked')) {
+            havePaymentEdit.hide();
+            newPaymentEdit.show();
         } else {
-            havePaymentEdit.style.display = 'block';
-            newPaymentEdit.style.display = 'none';
+            havePaymentEdit.show();
+            newPaymentEdit.hide();
         }
     });
     
-    document.getElementById('new-metode-payment').addEventListener('change', function() {
-        var havePayment = document.getElementById('have-payment');
-        var newPayment = document.getElementById('new-paymment-metode');
-    
-        if (this.checked) {
-            havePayment.style.display = 'none';
-            newPayment.style.display = 'block';
+    $('#new-metode-payment').on('change', function() {
+        var havePayment = $('#have-payment');
+        var newPayment = $('#new-paymment-metode');
+        
+        if ($(this).is(':checked')) {
+            havePayment.hide();
+            newPayment.show();
         } else {
-            havePayment.style.display = 'block';
-            newPayment.style.display = 'none';
+            havePayment.show();
+            newPayment.hide();
         }
     });
 });
