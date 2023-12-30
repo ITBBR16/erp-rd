@@ -19,7 +19,7 @@ class KiosPengirimanController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'pelayanan.ekspedisi', 'divisi')->get();
+        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'pelayanan.ekspedisi', 'divisi', 'penerimaan')->get();
         $ekspedisi = Ekspedisi::all();
         $layanan = JenisPelayanan::all();
 

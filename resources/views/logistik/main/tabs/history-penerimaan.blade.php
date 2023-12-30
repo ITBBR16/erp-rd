@@ -19,7 +19,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Order Id
+                        Divisi
                     </th>
                     <th scope="col" class="px-6 py-3">
                         No Resi
@@ -46,7 +46,7 @@
                     @if ($history->pengiriman->status == 'Diterima')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                K.{{ $history->pengiriman->order_id }}
+                                {{ $history->pengiriman->divisi->nama }}
                             </th>
                             <td class="px-6 py-2">
                                 {{ $history->pengiriman->no_resi }}

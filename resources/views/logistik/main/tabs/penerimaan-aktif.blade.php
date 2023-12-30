@@ -22,9 +22,6 @@
                         Divisi
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Order Id
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         No Resi
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -32,6 +29,9 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Jenis Layanan
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tanggal Dikirim
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status
@@ -48,9 +48,6 @@
                             <th class="px-6 py-2">
                                 {{ $data->divisi->nama }}
                             </th>
-                            <th class="px-6 py-2">
-                                K.{{ $data->order_id }}
-                            </th>
                             <td class="px-6 py-2">
                                 {{ $data->no_resi }}
                             </td>
@@ -59,6 +56,9 @@
                             </td>
                             <td class="px-6 py-2">
                                 {{ $data->pelayanan->nama_layanan }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $data->tanggal_kirim }}
                             </td>
                             <td class="px-6 py-2">
                                 <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $data->status }}</span>

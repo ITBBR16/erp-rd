@@ -62,6 +62,13 @@
                                     <button type="button" data-modal-target="view-order-new" data-modal-toggle="view-order-new{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
                                     </button>
+                                    @foreach ($data->penerimaan as $penerimaan)
+                                        @if ($penerimaan->link_img != '')
+                                            <button type="button" data-modal-target="view-img-penerimaan" data-modal-toggle="view-img-penerimaan{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                                <i class="material-symbols-outlined text-base">photo</i>
+                                            </button>
+                                        @endif
+                                    @endforeach
                                 </div>
                             </td>
                         </tr>
@@ -81,5 +88,5 @@
         </div>
     @endif
     {{-- Modal Action --}}
-    
+    @include('kios.pengiriman.modal.view-img')
 </div>
