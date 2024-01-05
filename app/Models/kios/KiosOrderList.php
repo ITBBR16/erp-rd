@@ -2,6 +2,7 @@
 
 namespace App\Models\kios;
 
+use App\Models\ekspedisi\ValidasiProduk;
 use App\Models\produk\ProdukSubJenis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,12 @@ class KiosOrderList extends Model
 
     public function paket()
     {
-        return $this->belongsTo(ProdukSubJenis::class);
+        return $this->belongsTo(ProdukSubJenis::class, 'sub_jenis_id');
+    }
+
+    public function validasi()
+    {
+        return $this->belongsTo(ValidasiProduk::class);
     }
 
 }

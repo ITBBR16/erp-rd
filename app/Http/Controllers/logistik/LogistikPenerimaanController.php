@@ -20,7 +20,7 @@ class LogistikPenerimaanController extends Controller
         $divisiName = $this->umumRepo->getDivisi($user);
         $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'pelayanan.ekspedisi')
                         ->where('status', 'Incoming')
-                        ->orWhere('status', 'Diterima')
+                        ->orWhere('status', 'InRD')
                         ->get();
         $historyPenerimaan = PenerimaanProduk::with('pengiriman.order.supplier', 'pengiriman.pelayanan.ekspedisi')->get();
 

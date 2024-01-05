@@ -75,7 +75,9 @@ Route::middleware('logistik')->group(function () {
     Route::prefix('/logistik')->group(function () {
         Route::get('/', [LogistikDashboardController::class, 'index']);
         Route::resource('/penerimaan', LogistikPenerimaanController::class)->only(['index', 'update']);
-        Route::get('/validasi', [LogistikValidasiProdukController::class, 'index']);
+        Route::resource('/validasi', LogistikValidasiProdukController::class)->only(['index', 'store']);
+        Route::get('/getOrderList/{orderId}', [LogistikValidasiProdukController::class, 'getOrderList']);
+        Route::get('/getQtyOrderList/{orderListId}', [LogistikValidasiProdukController::class, 'getQtyOrderList']);
     });
 });
 
