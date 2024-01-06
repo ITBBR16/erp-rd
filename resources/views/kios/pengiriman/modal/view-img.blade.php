@@ -5,8 +5,7 @@
                 preg_match('/\/file\/d\/(.*?)\/view/', $prm->link_img, $matches);
                 $fileId = isset($matches[1]) ? $matches[1] : null;
             @endphp
-            <iframe src="https://drive.google.com/file/d/{{ $fileId }}/preview" class="absolute" frameborder="0"></iframe>
+            <iframe src="https://drive.google.com/file/d/{{ $fileId }}/preview" class="absolute" frameborder="0" loading="lazy"></iframe>
         @endforeach
     </div>
-    
 @endforeach

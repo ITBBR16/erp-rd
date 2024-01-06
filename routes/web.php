@@ -19,6 +19,7 @@ use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\kios\KiosKomplainController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
@@ -67,6 +68,8 @@ Route::middleware('kios')->group(function () {
 
         Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);
         Route::get('/getLayanan/{ekspedisiId}', [KiosPengirimanController::class, 'getLayanan']);
+
+        Route::get('/komplain', [KiosKomplainController::class, 'index']);
         
     });
 });

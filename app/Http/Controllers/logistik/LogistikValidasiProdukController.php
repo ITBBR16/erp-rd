@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\logistik;
 
+use Exception;
 use Illuminate\Http\Request;
+use App\Models\kios\KiosProduk;
+use Illuminate\Validation\Rule;
+use App\Models\kios\KiosOrderList;
 use App\Http\Controllers\Controller;
-use App\Models\ekspedisi\PengirimanEkspedisi;
+use App\Models\kios\KiosSerialNumber;
 use App\Models\ekspedisi\ValidasiProduk;
 use App\Models\kios\KiosKomplainSupplier;
-use App\Models\kios\KiosOrderList;
-use App\Models\kios\KiosProduk;
-use App\Models\kios\KiosSerialNumber;
 use App\Repositories\umum\UmumRepository;
-use Exception;
+use App\Models\ekspedisi\PengirimanEkspedisi;
 
 class LogistikValidasiProdukController extends Controller
 {
@@ -37,7 +38,7 @@ class LogistikValidasiProdukController extends Controller
     {
         try {
             $request->validate([
-                'validasi-sn' => 'required|array|min:1',
+                'validasi-sn' => ['required', 'array', 'min:1', Rule::unique('rumahdrone_kios.serial_number', 'serial_number')],
             ]);
 
             $validasiQty = $request->input('validasi-qty');
@@ -45,40 +46,55 @@ class LogistikValidasiProdukController extends Controller
             $validasiIdPengiriman = $request->input('validasi_resi');
             $validasiListProdukId = $request->input('list_order');
             $validasiSerialNumber = $request->input('validasi-sn');
+            $validasiOrderId = $request->input('order_id');
 
             $serialNumber = array_filter($validasiSerialNumber, function ($item) {
                 return $item !== null;
             });
             $uniqueSN = array_unique($serialNumber);
             $status = '';
-
+            
             if(count($serialNumber) === count($uniqueSN)) {
-                
-                $validasiBarang = ValidasiProduk::create([
-                    'order_list_id' => $validasiListProdukId,
-                    'pengiriman_barang_id' => $validasiIdPengiriman,
-                    'quantity_received' => count($serialNumber),
-                    'status' => $status,
-                ]);
+
+                $validasiBarang = new ValidasiProduk();
+                $validasiBarang->order_list_id = $validasiListProdukId;
+                $validasiBarang->pengiriman_barang_id = $validasiIdPengiriman;
+                $validasiBarang->quantity_received = count($serialNumber);
+                $validasiBarang->save();
+
                 $validasiId = $validasiBarang->id;
-                
-                if($validasiQty === count($serialNumber)){
-                    $status = 'Done';
-                } else {
+
+                if ($validasiQty != count($serialNumber)) {
                     $status = 'Kurang';
                     KiosKomplainSupplier::create([
                         'validasi_id' => $validasiId,
-                        'status' => 'Not Proccess',
+                        'quantity' => $validasiQty - count($serialNumber),
+                        'status' => 'Unprocessed',
                     ]);
+                } else {
+                    $status = 'Done';
                 }
+
+                $validasiBarang->status = $status;
+                $validasiBarang->save();
+
             } else {
                 if(isset($validasiBarang) && $validasiBarang->id){
                     $validasiBarang->delete();
                 }
                 return back()->with('error', 'Serial Number Tidak Boleh Sama.');
             }
-
+            
+            KiosOrderList::where('id', $validasiListProdukId)->update(['status' => $status]);
             $cekJenisPaket = KiosProduk::where('sub_jenis_id', $validasiSubJenisId)->first();
+            $orderLists = KiosOrderList::where('order_id', $validasiOrderId)->get();
+            $allDone = $orderLists->every(function ($orderList) {
+                return $orderList->status == 'Done' || $orderList->status == 'Kurang';
+            });
+
+            if($allDone) {
+                PengirimanEkspedisi::where('id', $validasiIdPengiriman)->update(['status' => 'Done']);
+            }
 
             if(!$cekJenisPaket) {
                 $newProduk = KiosProduk::create([
@@ -91,7 +107,7 @@ class LogistikValidasiProdukController extends Controller
                 $produkId = $cekJenisPaket->id;
             }
 
-            foreach($validasiSerialNumber as $vsn) {
+            foreach($serialNumber as $vsn) {
                 $newSN = new KiosSerialNumber();
                 $newSN->produk_id = $produkId;
                 $newSN->validasi_id = $validasiId;
@@ -99,6 +115,7 @@ class LogistikValidasiProdukController extends Controller
                 $newSN->status = 'Ready';
                 $newSN->save();
             }
+
 
             return back()->with('success', 'Success Validasi Data.');
 

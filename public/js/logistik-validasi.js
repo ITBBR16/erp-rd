@@ -50,6 +50,8 @@ $(document).ready(function(){
                         const newRow = $('<div class="w-full grid grid-cols-3 gap-6"></div>');
                         const validasiQty = document.getElementById('validasi-qty');
                         const paketId = document.getElementById('paket_id');
+                        const ordertId = document.getElementById('order_id');
+                        ordertId.value = data.order_id;
                         paketId.value = data.sub_jenis_id;
                         validasiQty.value = data.quantity;
                         let angka = 1;

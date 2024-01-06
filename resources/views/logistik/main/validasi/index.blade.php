@@ -39,6 +39,8 @@
     <form action="{{ route('validasi.store') }}" method="POST" autocomplete="off">
         @csrf
         <input type="hidden" id="validasi-qty" name="validasi-qty">
+        <input type="hidden" id="paket_id" name="paket_id">
+        <input type="hidden" id="order_id" name="order_id">
         <div class="w-10/12 md:grid md:grid-cols-3 gap-8 mb-6">
             <div class="relative z-0 group">
                 <select name="validasi_resi" id="validasi_resi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
