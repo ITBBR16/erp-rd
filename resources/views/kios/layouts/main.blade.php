@@ -39,5 +39,6 @@
 <script src="/js/dropdown_wilayah.js"></script>
 <script src="/js/dd-daily-recap.js"></script>
 <script src="/js/dd-layanan-pengiriman.js"></script>
+<script src="/js/dd-komplain-supplier.js"></script>
 </body>
 </html>

@@ -38,7 +38,7 @@
             </thead>
             <tbody>
                 @foreach ($dataIncoming as $data)
-                    @if ($data->status == 'Incoming' || $data->status == 'Unprocess')
+                    @if ($data->status == 'Incoming' || $data->status == 'Unprocess' || $data->status == 'Pengiriman Balik')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 K.{{ $data->order_id }}
@@ -73,7 +73,7 @@
             </tbody>
         </table>
     </div>
-    @if (!$dataIncoming->contains('status', 'Incoming') && !$dataIncoming->contains('status', 'Unprocess'))
+    @if (!$dataIncoming->contains('status', 'Incoming') && !$dataIncoming->contains('status', 'Unprocess') && !$dataIncoming->contains('status', 'Pengiriman Balik'))
         <div class="p-4 mt-4">
             <div class="flex datas-center justify-center">
                 <figure class="max-w-lg">

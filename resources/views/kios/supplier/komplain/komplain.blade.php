@@ -58,10 +58,10 @@
                         Invoice
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Quantity
+                        Produk
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Nominal
+                        Quantity
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status
@@ -72,37 +72,39 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- @foreach ($payment as $dpy)
-                    @if ($dpy->status == 'Paid')
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                            <th class="px-6 py-2">
-                                K.{{ $dpy->order_id }}
-                            </th>
-                            <td class="px-6 py-2">
-                                {{ $dpy->order->invoice }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ $dpy->jenis_pembayaran }}
-                            </td>
-                            <td class="px-6 py-2">
-                                @php
-                                    $totalNilai = $dpy->nilai + $dpy->ongkir + $dpy->pajak;
-                                @endphp
-                                Rp. {{ number_format($totalNilai, 0, ',', '.') }}
-                            </td>
-                            <td class="px-6 py-2">
-                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $dpy->status }}</span>
-                            </td>
-                            <td class="px-6 py-2">
-                                <div class="flex flex-wrap">
-                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">visibility</i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @endif
-                @endforeach --}}
+                @foreach ($dataKomplain as $komplain)
+                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <th class="px-6 py-2">
+                            K.{{ $komplain->validasi->orderLists->order->id }}
+                        </th>
+                        <td class="px-6 py-2">
+                            {{ $komplain->validasi->orderLists->order->invoice }}
+                        </td>
+                        <td class="px-6 py-2">
+                            {{ $komplain->validasi->orderLists->paket->produkjenis->jenis_produk }} {{ $komplain->validasi->orderLists->paket->paket_penjualan }}
+                        </td>
+                        <td class="px-6 py-2">
+                            {{ $komplain->quantity }}
+                        </td>
+                        <td class="px-6 py-2">
+                            @if ($komplain->status === 'Unprocessed')
+                                <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $komplain->status }}</span>
+                            @else
+                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $komplain->status }}</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-2">
+                            <div class="flex flex-wrap">
+                                {{-- <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="view-complain" data-modal-toggle="view-complain{{ $komplain->id }}">
+                                    <i class="material-symbols-outlined text-base">visibility</i>
+                                </button> --}}
+                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="validasi-komplain" data-modal-toggle="validasi-komplain{{ $komplain->id }}">
+                                    <i class="material-symbols-outlined text-base">task_alt</i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
         
@@ -110,5 +112,8 @@
             {{-- {{ $dataCustomer->links() }} --}}
         </div>
     </div>
+
+    {{-- Modal --}}
+    @include('kios.supplier.komplain.modal.validasi-komplain')
 
 @endsection

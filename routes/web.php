@@ -69,7 +69,7 @@ Route::middleware('kios')->group(function () {
         Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);
         Route::get('/getLayanan/{ekspedisiId}', [KiosPengirimanController::class, 'getLayanan']);
 
-        Route::get('/komplain', [KiosKomplainController::class, 'index']);
+        Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);
         
     });
 });
