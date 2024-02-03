@@ -95,12 +95,14 @@
                         </td>
                         <td class="px-6 py-2">
                             <div class="flex flex-wrap">
-                                {{-- <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="view-complain" data-modal-toggle="view-complain{{ $komplain->id }}">
+                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="view-complain" data-modal-toggle="view-complain{{ $komplain->id }}">
                                     <i class="material-symbols-outlined text-base">visibility</i>
-                                </button> --}}
-                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="validasi-komplain" data-modal-toggle="validasi-komplain{{ $komplain->id }}">
-                                    <i class="material-symbols-outlined text-base">task_alt</i>
                                 </button>
+                                @if ($komplain->status === 'Unprocessed')
+                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="validasi-komplain" data-modal-toggle="validasi-komplain{{ $komplain->id }}">
+                                        <i class="material-symbols-outlined text-base">task_alt</i>
+                                    </button>
+                                @endif
                             </div>
                         </td>
                     </tr>

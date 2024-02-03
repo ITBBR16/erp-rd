@@ -22,10 +22,6 @@ class KiosSupplierController extends Controller
 
         $kategori = ProdukKategori::all();
         $suppliers = SupplierKios::with('kategoris')->get();
-
-        foreach($suppliers as $spl) {
-            $spl->formatRupiah = 'Rp. ' . number_format($spl->deposit, 0, ',', '.');
-        }
         
         return view('kios.supplier.supplier', [
             'title' => 'Supplier',

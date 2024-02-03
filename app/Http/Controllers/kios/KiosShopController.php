@@ -26,7 +26,7 @@ class KiosShopController extends Controller
         $supplier = SupplierKios::all();
         $jenisProduk = ProdukJenis::all();
         $paketPenjualan = ProdukSubJenis::all();
-        $orders = KiosOrder::with('orderLists.paket', 'supplier')->get();
+        $orders = KiosOrder::with('orderLists.paket', 'supplier')->orderBy('created_at', 'desc')->get();
 
         return view('kios.shop.index', [
             'title' => 'Shop',

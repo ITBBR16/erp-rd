@@ -76,6 +76,7 @@ class KiosPaymentController extends Controller
             PengirimanEkspedisi::create([
                 'divisi_id' => $divisiId,
                 'order_id' => $request->input('order_id'),
+                'status_order' => 'Baru',
                 'status' => 'Unprocess',
             ]);
 

@@ -41,13 +41,13 @@
                     @if ($data->status == 'Incoming' || $data->status == 'Unprocess' || $data->status == 'Pengiriman Balik')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                K.{{ $data->order_id }}
+                                {{ ($data->status_order == 'Baru' ? 'K.' . $data->order->id : 'S.' . $data->ordersecond->id) }}
                             </th>
                             <td class="px-6 py-2">
                                 {{ $data->no_resi }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $data->order->supplier->nama_perusahaan }}
+                                {{ ($data->status_order == 'Baru' ? $data->order->supplier->nama_perusahaan : ($data->ordersecond->come_from == 'Customer' ? $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->first_name : $data->ordersecond->marketplace->nama)) }}
                             </td>
                             <td class="px-6 py-2">
                                 @if ($data->jenis_layanan_id != '')

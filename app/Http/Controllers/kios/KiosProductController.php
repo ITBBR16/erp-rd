@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\kios;
 
 use Illuminate\Http\Request;
-use App\Models\divisi\Divisi;
 use App\Http\Controllers\Controller;
-use App\Models\produk\ProdukJenis;
-use App\Models\produk\ProdukKategori;
+use App\Models\kios\KiosProduk;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
+use Exception;
 
 class KiosProductController extends Controller
 {
@@ -18,8 +17,9 @@ class KiosProductController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $jenisProduk = ProdukJenis::with('subjenis')->get();
-        $paketProduk = ProdukSubJenis::with('kelengkapans')->get();
+        $produk = KiosProduk::with('subjenis')->get()->sortByDesc(function ($produk) {
+            return $produk->status == 'Promo' ? 1 : 0;
+        });
 
         return view('kios.product.index', [
             'title' => 'Product',
@@ -27,14 +27,35 @@ class KiosProductController extends Controller
             'dropdown' => true,
             'dropdownShop' => '',
             'divisi' => $divisiName,
-            'paketProduk' => $paketProduk,
-            'jenisProduk' => $jenisProduk,
+            'produks' => $produk,
         ]);
     }
 
     public function update(Request $request, $id)
     {
+        try{
+            $srp = preg_replace("/[^0-9]/", "", $request->input('harga_jual'));
+            $harga_promo = preg_replace("/[^0-9]/", "", $request->input('harga_promo'));
+            $start_promo = $request->input('start_date');
+            $end_promo = $request->input('end_date');
 
+            $product = KiosProduk::find($id);
+            $product->srp = $srp;
+
+            if($end_promo != '') {
+                $product->harga_promo = $harga_promo;
+                $product->start_promo = $start_promo;
+                $product->end_promo = $end_promo;
+                $product->status = 'Promo';
+            }
+
+            $product->save();
+
+            return back()->with('success', 'Success Update Product.');
+
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function destroy($id)

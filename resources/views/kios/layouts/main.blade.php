@@ -10,6 +10,25 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/loading.css">
     @vite('resources/css/app.css')
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-invoice, #print-invoice * {
+                visibility: visible;
+            }
+            #print-invoice {
+                padding: 0px;
+                margin-top: -70px;
+                margin-left: -50px;
+                margin-right: -50px;
+            }
+            @page {
+                margin: 0;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -27,18 +46,27 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/datepicker.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"></script> --}}
 <script src="/js/toggle.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/loader.js"></script>
 <script src="/js/add-form-kelengkapan.js"></script>
 <script src="/js/add-form-jk.js"></script>
 <script src="/js/dd-new-belanja.js"></script>
-<script src="/js/dd-checkbox-second.js"></script>
+<script src="/js/shop-second.js"></script>
 <script src="/js/toggle-payment-kios.js"></script>
 <script src="/js/dropdown_wilayah.js"></script>
 <script src="/js/dd-daily-recap.js"></script>
 <script src="/js/dd-layanan-pengiriman.js"></script>
 <script src="/js/dd-komplain-supplier.js"></script>
+<script src="/js/date-picker.js"></script>
+<script src="/js/kasir-kios.js"></script>
+<script src="/js/daftar-produk.js"></script>
 </body>
 </html>

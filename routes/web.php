@@ -19,6 +19,7 @@ use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\kios\KiosKasirController;
 use App\Http\Controllers\kios\KiosKomplainController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
@@ -52,17 +53,21 @@ Route::middleware('kios')->group(function () {
         Route::resource('/shop', KiosShopController::class);
         Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');
 
-        Route::resource('/shop-second', KiosShopSecondController::class);
+        Route::resource('/shop-second', KiosShopSecondController::class)->names([
+            'edit' => 'shop-second.quality-control',
+        ]);
         Route::get('/get-kelengkapan-second/{jenisId}', [KiosShopSecondController::class, 'getKelengkapanSecond']);
-        
+
         Route::resource('/product', KiosProductController::class);
         Route::get('/get-paket-penjualan/{paketPenjualanId}', [KiosProductController::class, 'getPaketPenjualan']);
-        
+
         Route::get('/add-product', [AddKelengkapanKiosController::class, 'index']);
         Route::post('/add-product', [AddKelengkapanKiosController::class, 'store'])->name('form-kelengkapan');
         Route::get('/getKelengkapan/{jenisId}', [AddKelengkapanKiosController::class, 'getKelengkapan']);
 
         Route::get('/upload', [KiosFileUpload::class, 'index']);
+        Route::get('/getPaket', [KiosFileUpload::class, 'getPaket']);
+
         Route::resource('/pembayaran', KiosPaymentController::class);
         Route::post('/pembayaran/{id}', [KiosPaymentController::class, 'validasi'])->name('form-validasi-payment');
 
@@ -70,7 +75,11 @@ Route::middleware('kios')->group(function () {
         Route::get('/getLayanan/{ekspedisiId}', [KiosPengirimanController::class, 'getLayanan']);
 
         Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);
-        
+
+        Route::resource('/kasir', KiosKasirController::class)->only(['index', 'store']);
+        Route::get('/autocomplete', [KiosKasirController::class, 'autocomplete']);
+        Route::get('/getSerialNumber/{id}', [KiosKasirController::class, 'getSerialNumber']);
+        Route::get('/getCustomer/{customerId}', [KiosKasirController::class, 'getCustomer']);
     });
 });
 

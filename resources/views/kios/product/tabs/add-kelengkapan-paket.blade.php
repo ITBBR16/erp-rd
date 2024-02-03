@@ -2,7 +2,7 @@
     <form action="{{ route('form-kelengkapan') }}" method="POST" autocomplete="off">
         @csrf
         <div class="w-10/12">
-            <div class="grid grid-cols-2 gap-4 md:gap-6">
+            <div class="grid grid-cols-3 gap-4 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="jenis_id"></label>
                     <select name="jenis_id" id="jenis_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_id') border-red-600 dark:border-red-500 @enderror" required>
@@ -16,6 +16,22 @@
                         @endforeach
                     </select>
                     @error('jenis_id')
+                        <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="relative z-0 w-full mb-6 group">
+                    <label for="kategori_paket"></label>
+                    <select name="kategori_paket" id="kategori_paket" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_paket') border-red-600 dark:border-red-500 @enderror" required>
+                        <option value="" hidden>-- Kategori Paket --</option>
+                        @foreach ($types as $type)
+                            @if (old('kategori_paket') == $type->id)
+                                <option value="{{ $type->id }}" class="dark:bg-gray-700" selected>{{ $type->type }}</option>
+                            @else
+                                <option value="{{ $type->id }}" class="dark:bg-gray-700">{{ $type->type }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    @error('kategori_paket')
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>

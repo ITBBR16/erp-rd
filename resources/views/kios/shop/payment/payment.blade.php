@@ -116,9 +116,6 @@
                             </td>
                             <td class="px-6 py-2">
                                 <div class="flex flex-wrap">
-                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">visibility</i>
-                                    </button>
                                     <button type="button" data-modal-target="konfirmasi-pembayaran{{ $py->id }}" data-modal-toggle="konfirmasi-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">task_alt</i>
                                     </button>

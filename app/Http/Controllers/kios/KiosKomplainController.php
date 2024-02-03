@@ -5,6 +5,7 @@ namespace App\Http\Controllers\kios;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ekspedisi\PengirimanEkspedisi;
+use App\Models\kios\KiosAkunRD;
 use App\Models\kios\KiosKomplainSupplier;
 use App\Models\kios\KiosOrderList;
 use App\Models\kios\SupplierKios;
@@ -22,6 +23,7 @@ class KiosKomplainController extends Controller
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $statusKomplain = DB::connection('rumahdrone_kios')->table('kios_status_komplain')->get();
         $dataKomplain = KiosKomplainSupplier::with('validasi.orderLists.order', 'validasi.orderLists.paket.produkjenis')->get();
+        $bankAkun = KiosAkunRD::all();
 
         return view('kios.supplier.komplain.komplain', [
             'title' => 'Komplain',
@@ -31,6 +33,7 @@ class KiosKomplainController extends Controller
             'divisi' => $divisiName,
             'dataKomplain' => $dataKomplain,
             'statusKomplain' => $statusKomplain,
+            'bankAkun' => $bankAkun,
         ]);
     }
 

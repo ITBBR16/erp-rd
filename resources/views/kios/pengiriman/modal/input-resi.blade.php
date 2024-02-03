@@ -17,15 +17,19 @@
                         @method('PUT')
                         <div class="grid md:grid-cols-2 md:gap-6 pt">
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="order_id" id="order_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="K.{{ $item->order->id }}" disabled required>
+                                <input type="text" name="order_id" id="order_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ ($item->status_order == 'Baru' ? 'K.' . $item->order->id : 'S.' . $item->ordersecond->id) }}" required>
                                 <label for="order_id" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Order ID</label>
                             </div>
                             @error('order_id')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
-                            <div class="relative z-0 w-full mb-6 group">
-                                <input type="date" name="tanggal_dikirim" id="tanggal_dikirim" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ old('tanggal_dikirim', $item->tanggal_kirim) }}" {{ ($item->tanggal_kirim != '' ? 'disabled' : '') }} required>
-                                <label for="tanggal_dikirim" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tanggal Dikirim</label>
+                            <div class="relative w-full group">
+                                <div class="absolute start-0 bottom-9 ps-1 font-bold text-gray-500 dark:text-gray-400 pointer-events-none">
+                                   <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                    </svg>
+                                </div>
+                                <input datepicker datepicker-autohide name="tanggal_dikirim" id="date-input" type="text" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" placeholder="Tanggal Pengiriman" required>
                             </div>
                             @error('tanggal_dikirim')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>

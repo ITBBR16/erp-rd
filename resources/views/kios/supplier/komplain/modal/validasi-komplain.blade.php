@@ -37,8 +37,8 @@
                             <div id="bank-transfer-id" class="relative z-0 w-full mb-6 group" style="display: none">
                                 <select name="bank-transfer" id="bank-transfer" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
                                     <option value="" hidden>-- Bank Transfer --</option>
-                                    @foreach ($statusKomplain as $sk)
-                                        <option value="{{ $sk->id }}" class="dark:bg-gray-700">{{ $sk->nama }}</option>
+                                    @foreach ($bankAkun as $bank)
+                                        <option value="{{ $bank->id }}" class="dark:bg-gray-700">{{ $bank->nama_akun }}</option>
                                     @endforeach
                                 </select>
                             </div>

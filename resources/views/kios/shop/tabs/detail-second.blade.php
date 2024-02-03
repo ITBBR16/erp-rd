@@ -20,19 +20,22 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Order ID
+                        Metode Pembelian
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Supplier
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Invoice
+                        Tanggal Pembelian
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Total Nominal
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Status
+                        Status Pembayaran
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Status Order
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Action
@@ -40,44 +43,66 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- @foreach ($data as $item)
-                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                        <th class="px-6 py-2">
-                            K.{{ $item['orderId'] }}
-                        </th>
-                        <td class="px-6 py-2">
-                            {{ $item['supplier_kios'] }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $item['invoice'] }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $item['totalNilai'] }}
-                        </td>
-                        <td class="px-6 py-2">
-                            <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $item['status'] }}</span>
-                        </td>
-                        <td class="px-6 py-2">
-                            <div class="flex flex-wrap">
-                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                @foreach ($orderSecond as $os)
+                <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                    <th class="px-6 py-2">
+                        {{ $os->buymetodesecond->metode_pembelian }}
+                    </th>
+                    <td class="px-6 py-2">
+                        @if ($os->come_from == 'Customer')
+                            {{ $os->customer->first_name }} {{ $os->customer->last_name }}
+                        @else
+                            {{ $os->marketplace->nama }}
+                        @endif
+                    </td>
+                    <td class="px-6 py-2">
+                        {{ $os->tanggal_pembelian }}
+                    </td>
+                    <td class="px-6 py-2">
+                        Rp. {{ number_format($os->biaya_pembelian, 0, ',', '.') }}
+                    </td>
+                    <td class="px-6 py-2">
+                        @if ($os->statuspembayaran->status_pembayaran == 'Paid')
+                            <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{ $os->statuspembayaran->status_pembayaran }}</span>
+                        @else
+                            <span class="bg-yellow-100 text-yellow-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{ $os->statuspembayaran->status_pembayaran }}</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-2">
+                        <span class="bg-{{ ($os->status != 'Done' ? 'orange' : 'green') }}-400 rounded-md px-2 py-0 text-white">{{ $os->status }}</span>
+                    </td>
+                    <td class="px-6 py-2">
+                        <div class="flex flex-wrap">
+                            <button type="button" data-modal-target="view-second" data-modal-toggle="view-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <i class="material-symbols-outlined text-base">visibility</i>
+                            </button>
+                            @if ($os->status == 'Proses QC')
+                                <a href="{{ route('shop-second.quality-control', encrypt($os->id)) }}" target="_blank" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">construction</i>
+                                </a>
+                            @endif
+                            @if ($os->status == 'Negoisasi Ulang')
+                                <button type="button" data-modal-target="validasi-second" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">person_alert</i>
+                                </button>
+                            @endif
+                            @if ($os->statuspembayaran->status_pembayaran != 'Paid')
+                                <button type="button" data-modal-target="validasi-second" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">task_alt</i>
                                 </button>
-                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">visibility</i>
-                                </button>
-                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">edit</i>
-                                </button>
-                                <button type="button" data-modal-target="delete-belanja" data-modal-toggle="delete-belanja" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="delete-second" data-modal-toggle="delete-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">delete</i>
                                 </button>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach --}}
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
-    {{-- Modal Action --}}
-    {{-- @include('kios.shop.modal.modal-delete') --}}
+    {{-- Modal --}}
+    @include('kios.shop.modal.view-second')
+    @include('kios.shop.modal.validasi-second')
+    @include('kios.shop.modal.delete-second')
 </div>

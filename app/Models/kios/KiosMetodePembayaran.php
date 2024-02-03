@@ -11,7 +11,7 @@ class KiosMetodePembayaran extends Model
     use HasFactory;
 
     protected $connection = 'rumahdrone_kios';
-    protected $table = 'metode_pembayaran';
+    protected $table = 'metode_pembayaran_supplier';
     protected $guarded = ['id'];
 
     public function payment()

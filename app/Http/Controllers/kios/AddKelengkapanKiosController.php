@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\produk\ProdukKategori;
 use App\Models\produk\ProdukKelengkapan;
 use App\Models\produk\ProdukSubJenis;
+use App\Models\produk\ProdukType;
 use App\Repositories\kios\KiosRepository;
 use Exception;
 
@@ -23,6 +24,7 @@ class AddKelengkapanKiosController extends Controller
         $jenis_produk = ProdukJenis::all();
         $kategori = ProdukKategori::all();
         $kelengkapan = ProdukKelengkapan::all();
+        $types = ProdukType::all();
 
         return view('kios.product.add-produk', [
             'title' => 'Add Product',
@@ -33,6 +35,7 @@ class AddKelengkapanKiosController extends Controller
             'kategori' => $kategori,
             'jenis_produk' => $jenis_produk,
             'kelengkapan' => $kelengkapan,
+            'types' => $types,
         ]);
     }
 
@@ -76,6 +79,7 @@ class AddKelengkapanKiosController extends Controller
             try{
                 $produkJenis = ProdukSubJenis::create([
                     'jenis_id' => $request->jenis_id,
+                    'produk_type_id' => $request->kategori_paket,
                     'paket_penjualan' => $validatePenjualan['paket_penjualan'],
                 ]);
 

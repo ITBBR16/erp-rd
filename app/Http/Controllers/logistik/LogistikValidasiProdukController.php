@@ -93,7 +93,7 @@ class LogistikValidasiProdukController extends Controller
             });
 
             if($allDone) {
-                PengirimanEkspedisi::where('id', $validasiIdPengiriman)->update(['status' => 'Done']);
+                PengirimanEkspedisi::where('id', $validasiIdPengiriman)->update(['status' => 'InRD']);
             }
 
             if(!$cekJenisPaket) {

@@ -4,6 +4,7 @@ namespace App\Models\ekspedisi;
 
 use App\Models\divisi\Divisi;
 use App\Models\kios\KiosOrder;
+use App\Models\kios\KiosOrderSecond;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,4 +35,10 @@ class PengirimanEkspedisi extends Model
     {
         return $this->hasMany(PenerimaanProduk::class);
     }
+
+    public function ordersecond()
+    {
+        return $this->belongsTo(KiosOrderSecond::class, 'order_id');
+    }
+
 }

@@ -39,11 +39,13 @@ class KiosPengirimanController extends Controller
     {
         try{
             $pengiriman = PengirimanEkspedisi::findOrFail($id);
+            $tanggal = $request->input('tanggal_dikirim');
+            $tanggalKirim = Carbon::parse($tanggal)->format('d-m-Y');
             $dataUpdate = [
                 'jenis_layanan_id' => $request->input('layanan'),
                 'no_resi' => $request->input('no_resi'),
                 'no_faktur' => $request->input('no_faktur'),
-                'tanggal_kirim' => $request->input('tanggal_dikirim'),
+                'tanggal_kirim' => $tanggalKirim,
                 'status' => 'Incoming'
             ];
 
