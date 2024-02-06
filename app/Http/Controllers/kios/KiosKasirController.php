@@ -61,7 +61,7 @@ class KiosKasirController extends Controller
             $kasirTanggal = Carbon::now()->format('d-m-Y H:i:s');
             $kasirCustomer = $request->input('nama_customer');
             $kasirMetodePembayaran = $request->input('kasir_metode_pembayaran');
-            $kasirDiscount = $request->input('kasir_discount');
+            $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount'));
             $kasirTax = $request->input('kasir_tax');
 
             $kasirItem = $request->input('item_id');

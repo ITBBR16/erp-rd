@@ -7,8 +7,8 @@ $(document).ready(function(){
 
     function updateSubtotalBox() {
         let kasirSubtotal = 0;
-        let kasirDiscount = parseFloat($("#kasir-discount").val()) || 0;
-        let kasirTax = parseFloat($("#kasir-tax").val()) || 0;
+        let kasirDiscount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
+        let kasirTax = parseFloat($("#kasir-tax").val());
         
         $("#kasir-container tr").each(function() {
             var kasirQty = $(this).find("[name='kasir_qty[]']").val();
@@ -17,10 +17,9 @@ $(document).ready(function(){
             kasirSubtotal += parseFloat(kasirPrice.replace(/\D/g, '')) * kasirQty;
         });
 
-        var totalDiscount = kasirSubtotal * kasirDiscount / 100;
         var totalTax = kasirSubtotal * kasirTax / 100;
-        var totalPayment = kasirSubtotal - totalDiscount + totalTax;
-        var showDiscount = "(" + kasirDiscount + "%) " + formatRupiah(totalDiscount);
+        var totalPayment = kasirSubtotal - kasirDiscount + totalTax;
+        var showDiscount = formatRupiah(kasirDiscount);
         var showTax = "(" + kasirTax + "%) " + formatRupiah(totalTax);
 
         $("#kasir-box-subtotal").text(formatRupiah(kasirSubtotal));
@@ -31,7 +30,7 @@ $(document).ready(function(){
 
     function updateInvoice() {
         let subTotal = 0;
-        let discount = parseFloat($("#kasir-discount").val()) || 0;
+        let discount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
         let tax = parseFloat($("#kasir-tax").val()) || 0;
         let invoiceContent = "";
 
@@ -55,10 +54,9 @@ $(document).ready(function(){
             `;
         });
 
-        var totalDiscount = subTotal * discount / 100;
         var totalTax = subTotal * tax / 100;
-        var totalPayment = subTotal - totalDiscount + totalTax;
-        var showDiscount = "(" + discount + "%) " + formatRupiah(totalDiscount);
+        var totalPayment = subTotal - discount + totalTax;
+        var showDiscount = formatRupiah(discount);
         var showTax = "(" + tax + "%) " + formatRupiah(totalTax);
 
         $("#invoice-subtotal").text(formatRupiah(subTotal));
@@ -240,13 +238,21 @@ $(document).ready(function(){
         updateSubtotalBox();
     });
 
-    $(document).on("change", "#kasir-tax", function () {
-        updateSubtotalBox();
-    });
-
     $(document).on("change", ".kasir_qty", function () {
         updateSubtotalBox();
     });
+
+    function formatAngka(angka) {
+        return accounting.formatMoney(angka, "", 0, ".", ",");
+    }
+    
+    $(document).on("input", "#kasir-discount", function () {
+        var inputValue = $(this).val();
+        inputValue = inputValue.replace(/[^\d]/g, '');
+        var parsedValue = parseInt(inputValue, 10);
+        $(this).val(formatAngka(parsedValue));
+    });
+
 
     // $(document).on("click", "#button-download-invoice", function (e) {
     //     e.preventDefault();

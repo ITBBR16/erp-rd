@@ -17,12 +17,17 @@ class KiosQcProdukSecond extends Model
 
     public function kelengkapans() {
         return $this->belongsToMany(ProdukKelengkapan::class, 'kios_kelengkapan_second_list', 'qc_id', 'produk_kelengkapan_id')
-                    ->withPivot('pivot_qc_id', 'kondisi', 'keterangan', 'serial_number', 'harga_satuan', 'status');
+                    ->withPivot('pivot_qc_id', 'kios_produk_second_id', 'kondisi', 'keterangan', 'serial_number', 'harga_satuan', 'status');
     }
 
     public function ordersecond()
     {
         return $this->belongsTo(KiosOrderSecond::class, 'order_second_id');
+    }
+
+    public function produksecond()
+    {
+        return $this->belongsTo(KiosProdukSecond::class, 'kios_produk_second_id');
     }
 
 }

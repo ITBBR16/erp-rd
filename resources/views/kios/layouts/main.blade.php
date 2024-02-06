@@ -68,5 +68,6 @@
 <script src="/js/date-picker.js"></script>
 <script src="/js/kasir-kios.js"></script>
 <script src="/js/daftar-produk.js"></script>
+<script src="/js/file-upload.js"></script>
 </body>
 </html>

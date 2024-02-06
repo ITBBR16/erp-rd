@@ -5,8 +5,8 @@
                 <div class="px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10">
                     <div class="mx-auto">
                         {{-- Body --}}
-                        <div id="print-invoice" class="text-xs flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-gray-800">
-                            <div style="max-width: 210mm;">
+                        <div class="text-xs flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-gray-800">
+                            <div id="print-invoice" class="text-xs" style="max-width: 210mm;">
                                 <div class="flex justify-between">
                                     <div class="w-60">
                                         <img src="/img/Logo Rumah Drone Black.png" alt="Logo Rumah Drone Black.png">

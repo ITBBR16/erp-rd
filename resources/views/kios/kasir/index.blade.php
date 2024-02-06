@@ -69,14 +69,14 @@
                     <div>
                         <label for="kasir-discount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Discount :</label>
                         <div class="flex">
-                            <input type="text" name="kasir_discount" id="kasir-discount" class="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1'); if(parseInt(this.value) < 0) this.value = '0'; else if(parseInt(this.value) > 100) this.value = '100';">
-                            <span class="material-symbols-outlined inline-flex items-center px-3 text-lg text-gray-900 bg-gray-200 border rounded-l-0 border-gray-300 rounded-r-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">percent</span>
+                            <span class="inline-flex items-center px-3 text-lg text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="kasir_discount" id="kasir-discount" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
                         </div>
                     </div>
                     <div>
                         <label for="kasir-tax" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tax :</label>
                         <div class="flex">
-                            <input type="text" name="kasir_tax" id="kasir-tax" class="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1'); if(parseInt(this.value) < 0) this.value = '0'; else if(parseInt(this.value) > 100) this.value = '100';">
+                            <input type="text" name="kasir_tax" id="kasir-tax" class="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="11" readonly>
                             <span class="material-symbols-outlined inline-flex items-center px-3 text-lg text-gray-900 bg-gray-200 border rounded-l-0 border-gray-300 rounded-r-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">percent</span>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
                             <p class="font-semibold text-gray-900 dark:text-white">Discount :</p>
                         </div>
                         <div class="flex justify-end ml-auto">
-                            <p id="kasir-box-discount" class="text-gray-900 font-normal dark:text-white">(0%) Rp. 0</p>
+                            <p id="kasir-box-discount" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -147,7 +147,7 @@
                             <p class="font-semibold text-gray-900 dark:text-white">Tax :</p>
                         </div>
                         <div class="flex justify-end ml-auto">
-                            <p id="kasir-box-tax" class="text-gray-900 font-normal dark:text-white">(0%) Rp. 0</p>
+                            <p id="kasir-box-tax" class="text-gray-900 font-normal dark:text-white">(11%) Rp. 0</p>
                         </div>
                     </div>
                     <div class="flex items-center justify-between border-t-2">

@@ -2,10 +2,11 @@ $(document).ready(function(){
     const jenisDroneSecond = $('#jenis_drone_second');
     const container = $('#kelengkapan-second');
     const biayaPengambilan = $('#biaya_pengambilan');
-    const comeFrom = $('#come_from');
-    const customer = $('#customerContainer');
-    const marketplace = $('#marketplaceContainer');
+    const biayaOngkir = $('#biaya_ongkir');
     const biayaSatuan = $('.biaya_satuan');
+    const nomorCustomer = $('#nomor_customer');
+    const idCustmer = $('#id_customer');
+    const namaCustomer = $('#nama_customer')
     
     jenisDroneSecond.on('change', function() {
         const subJenisId = jenisDroneSecond.val();
@@ -36,6 +37,27 @@ $(document).ready(function(){
             container.html('');
         }
     });
+
+    nomorCustomer.on('change', function() {
+        const idValue = nomorCustomer.val();
+        fetch(`/kios/getCustomerbyNomor/${idValue}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                idCustmer.val('');
+                namaCustomer.val('Nomor Belum Terdaftar').addClass('border-red-500 text-red-500');
+                $('#nama_customer_label').addClass('text-red-500')
+            } else {
+                data.forEach(customer => {
+                    var namaLengkap = customer.first_name + " " + customer.last_name;
+                    idCustmer.val(customer.id);
+                    namaCustomer.val(namaLengkap).removeClass('border-red-500 text-red-500');
+                    $('#nama_customer_label').removeClass('text-red-500')
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
     
     function formatRupiah(angka) {
         return accounting.formatMoney(angka, "", 0, ".", ",");
@@ -48,31 +70,18 @@ $(document).ready(function(){
         $(this).val(formatRupiah(parsedValue));
     });
 
-    biayaSatuan.on('input', function () {
+    biayaOngkir.on('input', function () {
         var inputValue = $(this).val();
         inputValue = inputValue.replace(/[^\d]/g, '');
         var parsedValue = parseInt(inputValue, 10);
         $(this).val(formatRupiah(parsedValue));
     });
 
-    comeFrom.on('change', function () {
-        const valAsal = comeFrom.val();
-
-        $('#customer').val('');
-        $('#marketplace').val('');
-        
-        if( valAsal == 'Customer' ) {
-            customer.show();
-            customer.prop('required', true);
-            marketplace.hide();
-            marketplace.prop('required', false);
-        } else {
-            customer.hide();
-            customer.prop('required', false);
-            marketplace.show();
-            marketplace.prop('required', true);
-        }
-        
+    biayaSatuan.on('input', function () {
+        var inputValue = $(this).val();
+        inputValue = inputValue.replace(/[^\d]/g, '');
+        var parsedValue = parseInt(inputValue, 10);
+        $(this).val(formatRupiah(parsedValue));
     });
 
     // Cek nilai pada halaman qc second

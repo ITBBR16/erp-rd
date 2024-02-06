@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="flex text-3xl font-bold mb-8 text-gray-700 border-b border-gray-400 py-3 dark:text-gray-300">
-        <span>Daftar Produk Baru</span>
+        <span>Daftar Produk Second</span>
     </div>
 
     @if (session()->has('success'))
@@ -57,16 +57,10 @@
                         Jenis Produk
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Stok
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         SRP
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Aktif
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Action
@@ -74,13 +68,10 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($produks as $key => $pd)
+                @foreach ($produkseconds as $key => $pd)
                 <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
                     <td class="px-6 py-2">
                         {{ $pd->subjenis->produkjenis->jenis_produk }} {{ $pd->subjenis->paket_penjualan }}
-                    </td>
-                    <td class="px-6 py-2">
-                        {{ $pd->serialnumber->where('produk_id', $pd->id)->where('status', 'Ready')->count() }}
                     </td>
                     <td class="px-6 py-2">
                         <div class="flex">
@@ -90,12 +81,6 @@
                     </td>
                     <td class="px-6 py-2">
                         <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
-                    </td>
-                    <td class="px-6 py-2">
-                        <label class="relative inline-flex items-center me-5 cursor-pointer">
-                            <input type="checkbox" id="produk-aktif" data-id="{{ $pd->id }}" class="sr-only peer">
-                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-600 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
-                        </label>
                     </td>
                     <td class="px-6 py-2">
                         <div class="flex flex-wrap">
@@ -121,7 +106,4 @@
         </div>
     </div>
 
-    {{-- Modal Daftar Produk --}}
-    @include('kios.product.modal.modal-view-daftar-produk')
-    @include('kios.product.modal.modal-edit-daftar-produk')
 @endsection

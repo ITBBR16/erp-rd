@@ -17,9 +17,9 @@ class KiosProductController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $produk = KiosProduk::with('subjenis')->get()->sortByDesc(function ($produk) {
+        $produk = KiosProduk::with('subjenis', 'serialnumber')->get()->sortByDesc(function ($produk) {
             return $produk->status == 'Promo' ? 1 : 0;
-        });
+        });;
 
         return view('kios.product.index', [
             'title' => 'Product',

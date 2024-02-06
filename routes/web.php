@@ -21,6 +21,7 @@ use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\customer\DashboardCustomerController;
 use App\Http\Controllers\kios\KiosKasirController;
 use App\Http\Controllers\kios\KiosKomplainController;
+use App\Http\Controllers\kios\KiosProductSecondController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
@@ -57,8 +58,10 @@ Route::middleware('kios')->group(function () {
             'edit' => 'shop-second.quality-control',
         ]);
         Route::get('/get-kelengkapan-second/{jenisId}', [KiosShopSecondController::class, 'getKelengkapanSecond']);
+        Route::get('/getCustomerbyNomor/{nomor}', [KiosShopSecondController::class, 'getCustomerbyNomor']);
 
         Route::resource('/product', KiosProductController::class);
+        Route::resource('/product-second', KiosProductSecondController::class);
         Route::get('/get-paket-penjualan/{paketPenjualanId}', [KiosProductController::class, 'getPaketPenjualan']);
 
         Route::get('/add-product', [AddKelengkapanKiosController::class, 'index']);

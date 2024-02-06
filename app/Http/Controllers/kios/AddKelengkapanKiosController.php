@@ -29,7 +29,7 @@ class AddKelengkapanKiosController extends Controller
         return view('kios.product.add-produk', [
             'title' => 'Add Product',
             'active' => 'add-product',
-            'dropdown' => true,
+            'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'kategori' => $kategori,

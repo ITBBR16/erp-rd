@@ -49,17 +49,16 @@
                         {{ $os->buymetodesecond->metode_pembelian }}
                     </th>
                     <td class="px-6 py-2">
-                        @if ($os->come_from == 'Customer')
-                            {{ $os->customer->first_name }} {{ $os->customer->last_name }}
-                        @else
-                            {{ $os->marketplace->nama }}
-                        @endif
+                        {{ $os->customer->first_name }} {{ $os->customer->last_name }}
                     </td>
                     <td class="px-6 py-2">
                         {{ $os->tanggal_pembelian }}
                     </td>
                     <td class="px-6 py-2">
-                        Rp. {{ number_format($os->biaya_pembelian, 0, ',', '.') }}
+                        @php
+                            $totalNilai = $os->biaya_pembelian + $os->biaya_ongkir;
+                        @endphp
+                        Rp. {{ number_format($totalNilai, 0, ',', '.') }}
                     </td>
                     <td class="px-6 py-2">
                         @if ($os->statuspembayaran->status_pembayaran == 'Paid')

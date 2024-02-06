@@ -3,15 +3,15 @@
 namespace App\Models\kios;
 
 use App\Models\produk\ProdukSubJenis;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class KiosProduk extends Model
+class KiosProdukSecond extends Model
 {
     use HasFactory;
 
     protected $connection = 'rumahdrone_kios';
-    protected $table = 'kios_produk';
+    protected $table = 'kios_produk_second';
     protected $guarded = ['id'];
 
     public function subjenis()
@@ -19,9 +19,8 @@ class KiosProduk extends Model
         return $this->belongsTo(ProdukSubJenis::class, 'sub_jenis_id');
     }
 
-    public function serialnumber()
+    public function produksecondlist()
     {
-        return $this->hasMany(KiosSerialNumber::class, 'produk_id');
+        return $this->hasMany(KiosQcProdukSecond::class, 'kios_produk_second_id');
     }
-
 }

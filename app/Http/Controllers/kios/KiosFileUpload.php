@@ -21,14 +21,14 @@ class KiosFileUpload extends Controller
         return view('kios.product.file-upload', [
             'title' => 'File Upload',
             'active' => 'file-upload',
-            'dropdown' => true,
+            'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'jenisdrone' => $jenisDrone,
         ]);
     }
 
-    public function store(Request $request)
+    public function uploadbaru(Request $request)
     {
         $request->validate([
             'file_paket_produk' => 'image|mimes:jpeg,png,jpg',
@@ -40,6 +40,11 @@ class KiosFileUpload extends Controller
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function uploadsecond(Request $request)
+    {
+        
     }
 
 }

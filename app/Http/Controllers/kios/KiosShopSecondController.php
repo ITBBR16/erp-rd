@@ -50,7 +50,7 @@ class KiosShopSecondController extends Controller
         ]);
     }
 
-    public function store(Request $request) // Kirim Ke akuntan jika status DP atau Paid
+    public function store(Request $request) // Kirim Ke akuntan jika Online
     {
         $request->validate([
             'kelengkapan_second' => 'array',
@@ -66,25 +66,28 @@ class KiosShopSecondController extends Controller
             $mpId = $request->input('metode_pembelian');
             $tanggalPembelian = Carbon::parse($tanggal)->format('d-m-Y');
             $biayaPengambilan = preg_replace("/[^0-9]/", "", $request->input('biaya_pengambilan'));
+            $biayaOngkir = preg_replace("/[^0-9]/", "", $request->input('biaya_ongkir'));
             $qtySecond = $request->input('quantity_second');
             $qtyNotNull = array_filter($qtySecond, function ($item) {
                 return $item !== null;
             });
+            $inputStatus = $request->input('status_pembayaran');
+            $statusBayar = ($inputStatus == 'Offline' || $inputStatus == 'Online Pending' ? 'Unpaid' : ($inputStatus == 'Online DP' ? 'DP' : 'Paid'));
 
             $comeFrom = $request->input('come_from');
             $customerInput = $request->input('customer');
-            $marketplaceInput = $request->input('marketplace');
-            $asalId = ($comeFrom == 'Customer' ? $customerInput : $marketplaceInput);
+            $asalId = $request->input('marketplace');
 
             $orderSecond = KiosOrderSecond::create([
                 'come_from' => $comeFrom,
+                'customer_id' => $customerInput,
                 'asal_id' => $asalId,
                 'metode_pembelian_id' => $mpId,
                 'tanggal_pembelian' => $tanggalPembelian,
                 'sub_jenis_id' => $request->input('jenis_drone_second'),
-                'status_pembayaran_id' => $request->input('status_pembayaran'),
+                'status_pembayaran_id' => $statusBayar,
                 'biaya_pembelian' => $biayaPengambilan,
-                'status' => 'Belum Validasi',
+                'biaya_ongkir' => $biayaOngkir,
             ]);
 
             $metodePembelian = KiosMetodePembelianSecond::findOrFail($mpId)->metode_pembelian;
@@ -200,4 +203,11 @@ class KiosShopSecondController extends Controller
         $subJenis = ProdukSubJenis::findOrFail($jenisId);
         return response()->json(['kelengkapans' => $subJenis->kelengkapans]);
     }
+
+    public function getCustomerbyNomor($nomor)
+    {
+        $dataCustomer = Customer::where('no_telpon', $nomor)->get();
+        return response()->json($dataCustomer);
+    }
+
 }

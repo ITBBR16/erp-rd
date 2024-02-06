@@ -30,7 +30,7 @@ class KiosOrderSecond extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'asal_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function subjenis()
