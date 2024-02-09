@@ -3,7 +3,7 @@
 @section('container')
 
     <div class="mb-4 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="shopTab" data-tabs-toggle="#shopTabContent" role="tablist">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="addKelengkapan" data-tabs-toggle="#addKelengkapanContent" role="tablist">
             <li class="mr-2" role="presentation">
                 <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="ajk-tab" data-tabs-target="#ajk" type="button" role="tab" aria-controls="ajk" aria-selected="false">Jenis Kelengkapan</button>
             </li>

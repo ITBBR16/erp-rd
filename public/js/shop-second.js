@@ -4,7 +4,7 @@ $(document).ready(function(){
     const biayaPengambilan = $('#biaya_pengambilan');
     const biayaOngkir = $('#biaya_ongkir');
     const biayaSatuan = $('.biaya_satuan');
-    const nomorCustomer = $('#nomor_customer');
+    const nomorCustomer = $('#no_customer_second');
     const idCustmer = $('#id_customer');
     const namaCustomer = $('#nama_customer')
     
@@ -40,23 +40,32 @@ $(document).ready(function(){
 
     nomorCustomer.on('change', function() {
         const idValue = nomorCustomer.val();
-        fetch(`/kios/getCustomerbyNomor/${idValue}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.length === 0) {
-                idCustmer.val('');
-                namaCustomer.val('Nomor Belum Terdaftar').addClass('border-red-500 text-red-500');
-                $('#nama_customer_label').addClass('text-red-500')
-            } else {
-                data.forEach(customer => {
-                    var namaLengkap = customer.first_name + " " + customer.last_name;
-                    idCustmer.val(customer.id);
-                    namaCustomer.val(namaLengkap).removeClass('border-red-500 text-red-500');
-                    $('#nama_customer_label').removeClass('text-red-500')
-                });
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        const nomor = idValue.replace(/\D/g, "");
+        
+        if(nomor != '') {
+            fetch(`/kios/getCustomerbyNomor/${nomor}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    idCustmer.val('');
+                    namaCustomer.val('Nomor Belum Terdaftar').addClass('border-red-500 text-red-500');
+                    $('#nama_customer_label').addClass('text-red-500')
+                } else {
+                    data.forEach(customer => {
+                        var namaLengkap = customer.first_name + " " + customer.last_name;
+                        idCustmer.val(customer.id);
+                        namaCustomer.val(namaLengkap).removeClass('border-red-500 text-red-500');
+                        $('#nama_customer_label').removeClass('text-red-500')
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        } else {
+            idCustmer.val('');
+            namaCustomer.val('').removeClass('border-red-500 text-red-500');
+            $('#nama_customer_label').removeClass('text-red-500')
+        }
+        
     });
     
     function formatRupiah(angka) {

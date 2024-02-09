@@ -2,7 +2,23 @@
     <form action="{{ route('form-kelengkapan') }}" method="POST" autocomplete="off">
         @csrf
         <div class="w-10/12">
-            <div class="grid grid-cols-3 gap-4 md:gap-6">
+            <div class="grid grid-cols-2 gap-4 md:gap-6">
+                <div class="relative z-0 w-full mb-6 group">
+                    <label for="kategori_paket"></label>
+                    <select name="kategori_paket" id="kategori_paket" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_paket') border-red-600 dark:border-red-500 @enderror" required>
+                        <option value="" hidden>-- Kategori Paket --</option>
+                        @foreach ($types as $type)
+                            @if (old('kategori_paket') == $type->id)
+                                <option value="{{ $type->id }}" class="dark:bg-gray-700" selected>{{ $type->type }}</option>
+                            @else
+                                <option value="{{ $type->id }}" class="dark:bg-gray-700">{{ $type->type }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    @error('kategori_paket')
+                        <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="jenis_id"></label>
                     <select name="jenis_id" id="jenis_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_id') border-red-600 dark:border-red-500 @enderror" required>
@@ -19,19 +35,13 @@
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="relative z-0 w-full mb-6 group">
-                    <label for="kategori_paket"></label>
-                    <select name="kategori_paket" id="kategori_paket" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_paket') border-red-600 dark:border-red-500 @enderror" required>
-                        <option value="" hidden>-- Kategori Paket --</option>
-                        @foreach ($types as $type)
-                            @if (old('kategori_paket') == $type->id)
-                                <option value="{{ $type->id }}" class="dark:bg-gray-700" selected>{{ $type->type }}</option>
-                            @else
-                                <option value="{{ $type->id }}" class="dark:bg-gray-700">{{ $type->type }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                    @error('kategori_paket')
+            </div>
+            <div class="grid grid-cols-2 gap-4 md:gap-6">
+                <div class="relative z-0 w-full group">
+                    <input type="text" name="berat_paket" id="berat_paket" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('berat_paket') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('paket_penjualan') }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                    <label for="berat_paket" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Berat Produk</label>
+                    <span class="absolute bottom-8 end-0 font-bold text-gray-500 dark:text-gray-400">Kg</span>
+                    @error('berat_paket')
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>

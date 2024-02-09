@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    let itemCount = $("#kasir-container tr").length;
 
     function formatRupiah(angka) {
         return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
@@ -97,6 +96,8 @@ $(document).ready(function(){
     function printInvoice() {
         window.print();
     }
+
+    let itemCount = $("#kasir-container tr").length;
 
     $("#add-item-kasir").on("click", function () {
          itemCount++

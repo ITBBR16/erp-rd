@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="mb-4 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="shopTab" data-tabs-toggle="#shopTabContent" role="tablist">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="shopSecondTabs" data-tabs-toggle="#shopSecondTabsContent" role="tablist">
             <li class="mr-2" role="presentation">
                 <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dsbl-tab" data-tabs-target="#dsbl" type="button" role="tab" aria-controls="dsbl" aria-selected="false">Detail Belanja</button>
             </li>
@@ -42,7 +42,7 @@
         </div>
     @endif
 
-    <div class="shopTabContent">
+    <div class="shopSecondTabsContent">
         @include('kios.shop.tabs.detail-second')
         @include('kios.shop.tabs.second-belanja')
     </div>

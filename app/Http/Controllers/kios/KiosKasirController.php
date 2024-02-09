@@ -15,8 +15,6 @@ use App\Repositories\kios\KiosRepository;
 use Carbon\Carbon;
 use Exception;
 
-use function PHPSTORM_META\type;
-
 class KiosKasirController extends Controller
 {
     public function __construct(private KiosRepository $suppKiosRepo){}

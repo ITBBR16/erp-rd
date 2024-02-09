@@ -2,6 +2,7 @@
 
 namespace App\Models\customer;
 
+use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosOrderSecond;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,11 @@ class Customer extends Model
     public function suppliersecond()
     {
         return $this->hasMany(KiosOrderSecond::class);
+    }
+
+    public function dailyrecap()
+    {
+        return $this->hasMany(KiosDailyRecap::class);
     }
 
 }

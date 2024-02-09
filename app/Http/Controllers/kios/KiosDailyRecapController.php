@@ -9,8 +9,11 @@ use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
 use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosRecapKeperluan;
+use App\Models\kios\KiosRecapStatus;
 use App\Models\produk\ProdukJenis;
 use App\Models\produk\ProdukStatus;
+use App\Models\produk\ProdukSubJenis;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\kios\KiosRepository;
 
@@ -25,7 +28,10 @@ class KiosDailyRecapController extends Controller
         $provinsi = Provinsi::all();
         $customer = Customer::all();
         $statusProduk = ProdukStatus::all();
-        $seriProduk = ProdukJenis::all();
+        $subjenisProduk = ProdukSubJenis::all();
+        $dailyRecap = KiosDailyRecap::orderByDesc('id')->get();
+        $recapStatus = KiosRecapStatus::all();
+        $recapKeperluan = KiosRecapKeperluan::all();
 
         return view('kios.main.recap', [
             'title' => 'Daily Recap',
@@ -36,7 +42,10 @@ class KiosDailyRecapController extends Controller
             'provinsi' => $provinsi,
             'customer' => $customer,
             'statusProduk' => $statusProduk,
-            'seriProduk' => $seriProduk,
+            'subjenisProduk' => $subjenisProduk,
+            'dailyRecap' => $dailyRecap,
+            'statusrecap' => $recapStatus,
+            'keperluanrecap' => $recapKeperluan,
         ]);
     }
 
@@ -47,22 +56,16 @@ class KiosDailyRecapController extends Controller
 
         if($request->has('nama_customer')) {
             
-            $request->validate([
-                'nama_customer' => 'required',
-                'jenis_produk' => 'required',
-                'seri_produk' => 'required',
-                'jenis_paket' => 'required',
-                'keterangan' => 'required',
-            ]);
-            
             try{
                 $dailyRecap = new KiosDailyRecap([
                     'employee_id' => $picId,
                     'customer_id' => $request->input('nama_customer'),
                     'jenis_id' => $request->input('jenis_produk'),
-                    'produk_jenis_id' => $request->input('seri_produk'),
-                    'sub_jenis_id' => $request->input('jenis_paket'),
+                    'sub_jenis_id' => $request->input('sub_jenis_produk'),
+                    'keperluan_id' => $request->input('keperluan_recap'),
+                    'barang_cari' => $request->input('barang_cari'),
                     'keterangan' => $request->input('keterangan'),
+                    'status_id' => $request->input('status_recap'),
                 ]);
     
                 $dailyRecap->save();

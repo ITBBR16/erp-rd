@@ -2,7 +2,7 @@
 
 @section('container')
 <div class="mb-4 border-b border-gray-200">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="shopTab" data-tabs-toggle="#shopTabContent" role="tablist">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="drTab" data-tabs-toggle="#drTabContent" role="tablist">
         <li class="mr-2" role="presentation">
             <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="idr-tab" data-tabs-target="#idr" type="button" role="tab" aria-controls="idr" aria-selected="false">Input Daily Recap</button>
         </li>
@@ -42,7 +42,7 @@
         </div>
     @endif
 
-    <div class="shopTabContent">
+    <div class="drTabContent">
         @include('kios.main.tabs.input-daily-recap')
         @include('kios.main.tabs.new-customer')
     </div>

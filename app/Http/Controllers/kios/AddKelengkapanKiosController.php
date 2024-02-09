@@ -68,8 +68,10 @@ class AddKelengkapanKiosController extends Controller
         } elseif($request->has('paket_penjualan')) {
 
             $validatePenjualan = $request->validate([
+                'kategori_paket' => 'required',
                 'jenis_id' => 'required',
                 'paket_penjualan' => 'required',
+                'berat_paket' => 'required',
                 'kelengkapan' => 'required|array',
                 'quantity' => 'required|array',
             ]);
@@ -81,6 +83,7 @@ class AddKelengkapanKiosController extends Controller
                     'jenis_id' => $request->jenis_id,
                     'produk_type_id' => $request->kategori_paket,
                     'paket_penjualan' => $validatePenjualan['paket_penjualan'],
+                    'berat' => $request->berat_paket,
                 ]);
 
                 $kelengkapanId = $request->input('kelengkapan');

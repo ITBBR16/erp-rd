@@ -2,6 +2,7 @@
 
 namespace App\Models\produk;
 
+use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosOrderList;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosProduk;
@@ -49,6 +50,11 @@ class ProdukSubJenis extends Model
     public function produktype()
     {
         return $this->belongsTo(ProdukType::class, 'produk_type_id');
+    }
+
+    public function dialyrecap()
+    {
+        return $this->hasMany(KiosDailyRecap::class);
     }
 
 }

@@ -72,7 +72,7 @@
                     </td>
                     <td class="px-6 py-2">
                         <div class="flex flex-wrap">
-                            <button type="button" data-modal-target="view-second" data-modal-toggle="view-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                            <button type="button" data-modal-target="view-second{{ $os->id }}" data-modal-toggle="view-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-base">visibility</i>
                             </button>
                             @if ($os->status == 'Proses QC')
@@ -80,16 +80,11 @@
                                     <i class="material-symbols-outlined text-base">construction</i>
                                 </a>
                             @endif
-                            @if ($os->status == 'Negoisasi Ulang')
-                                <button type="button" data-modal-target="validasi-second" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">person_alert</i>
-                                </button>
-                            @endif
                             @if ($os->statuspembayaran->status_pembayaran != 'Paid')
-                                <button type="button" data-modal-target="validasi-second" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="validasi-second{{ $os->id }}" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">task_alt</i>
                                 </button>
-                                <button type="button" data-modal-target="delete-second" data-modal-toggle="delete-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="delete-second{{ $os->id }}" data-modal-toggle="delete-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">delete</i>
                                 </button>
                             @endif

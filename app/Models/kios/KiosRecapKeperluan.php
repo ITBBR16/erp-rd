@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Models\employee;
+namespace App\Models\kios;
 
-use App\Models\kios\KiosDailyRecap;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Employee extends Model
+class KiosRecapKeperluan extends Model
 {
     use HasFactory;
 
-    protected $connection = 'rumahdrone_employee';
-    protected $table = 'employee';
+    protected $connection = 'rumahdrone_kios';
+    protected $table = 'kios_recap_keperluan';
     protected $guarded = ['id'];
 
     public function dailyrecap()
