@@ -159,6 +159,7 @@ class KiosShopSecondController extends Controller
                     'keterangan' => $keterangan[$index],
                     'harga_satuan' => $hargaSatuan[$index],
                     'serial_number' => $serialNumbers[$index],
+                    'status' => 'Ready',
                 ];
 
                 $kiosQcPS->kelengkapans()->where('pivot_qc_id', $pivotId)->update($data);

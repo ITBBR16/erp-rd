@@ -15,7 +15,7 @@ class KiosProductSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $produkSeconds = KiosProdukSecond::with('subjenis');
+        $produkSeconds = KiosProdukSecond::with('subjenis')->get();
 
         return view('kios.product.produk-second', [
             'title' => 'Product Second',
@@ -25,6 +25,16 @@ class KiosProductSecondController extends Controller
             'divisi' => $divisiName,
             'produkseconds' => $produkSeconds,
         ]);
+    }
+
+    public function updateSRPSecond(Request $request)
+    {
+        $productSecondId = $request->input('productId');
+        $newSrp = $request->input('newSrp');
+
+        $productSecond = KiosProdukSecond::findOrFail($productSecondId);
+        $productSecond->srp = $newSrp;
+        $productSecond->save();
     }
 
 }

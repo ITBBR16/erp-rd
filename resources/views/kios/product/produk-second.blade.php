@@ -53,16 +53,19 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 40%;">
                         Jenis Produk
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        SRP
+                    <th scope="col" class="px-6 py-3" style="width: 10%">
+                        CC Produk
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 20%">
+                        Harga Jual Produk
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="width: 10%">
                         Status
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 20%">
                         Action
                     </th>
                 </tr>
@@ -74,16 +77,19 @@
                         {{ $pd->subjenis->produkjenis->jenis_produk }} {{ $pd->subjenis->paket_penjualan }}
                     </td>
                     <td class="px-6 py-2">
+                        {{ $pd->cc_produk_second }}
+                    </td>
+                    <td class="px-6 py-2">
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
-                            <input type="text" id="website-admin" class="rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ ($pd->status == 'Promo' ? number_format($pd->harga_promo, 0, ',', '.') : number_format($pd->srp, 0, ',', '.')) }}">
+                            <input type="text" id="srp-daftar-produk-second-{{ $pd->id }}" data-id="{{ $pd->id }}" class="srp-daftar-produk-second rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($pd->srp, 0, ',', '.') }}">
                         </div>
                     </td>
                     <td class="px-6 py-2">
                         <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
                     </td>
                     <td class="px-6 py-2">
-                        <div class="flex flex-wrap">
+                        {{-- <div class="flex flex-wrap">
                             <button type="button" data-modal-target="view-detail-produk" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-base">visibility</i>
                             </button>
@@ -95,7 +101,7 @@
                                     <i class="material-symbols-outlined text-base">delete</i>
                                 </button>
                             @endif
-                        </div>
+                        </div> --}}
                     </td>
                 </tr>
                 @endforeach

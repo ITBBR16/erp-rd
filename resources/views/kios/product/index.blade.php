@@ -85,7 +85,7 @@
                     <td class="px-6 py-2">
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
-                            <input type="text" id="website-admin" class="rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ ($pd->status == 'Promo' ? number_format($pd->harga_promo, 0, ',', '.') : number_format($pd->srp, 0, ',', '.')) }}">
+                            <input type="text" id="update-srp-baru-{{ $pd->id }}" data-id="{{ $pd->id }}" class="update-srp-baru rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ ($pd->status == 'Promo' ? number_format($pd->harga_promo, 0, ',', '.') : number_format($pd->srp, 0, ',', '.')) }}">
                         </div>
                     </td>
                     <td class="px-6 py-2">
@@ -99,11 +99,11 @@
                     </td>
                     <td class="px-6 py-2">
                         <div class="flex flex-wrap">
-                            <button type="button" data-modal-target="view-detail-produk" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                            <button type="button" data-modal-target="view-detail-produk{{ $pd->id }}" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-base">visibility</i>
                             </button>
                             @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
-                                <button type="button" data-modal-target="update-produk" data-modal-toggle="update-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="update-produk{{ $pd->id }}" data-modal-toggle="update-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">edit</i>
                                 </button>
                                 <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">

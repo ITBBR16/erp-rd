@@ -8,6 +8,7 @@ use App\Models\kios\KiosProduk;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 use Exception;
+use Termwind\Components\Raw;
 
 class KiosProductController extends Controller
 {
@@ -61,6 +62,16 @@ class KiosProductController extends Controller
     public function destroy($id)
     {
         
+    }
+
+    public function updateSrpBaru(Request $request)
+    {
+        $productSecondId = $request->input('productId');
+        $newSrp = $request->input('newSrp');
+
+        $productSecond = KiosProduk::findOrFail($productSecondId);
+        $productSecond->srp = $newSrp;
+        $productSecond->save();
     }
 
     public function getPaketPenjualan($paketPenjualanId)

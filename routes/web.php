@@ -19,6 +19,7 @@ use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\kios\KiosBuatPaketSecondController;
 use App\Http\Controllers\kios\KiosKasirController;
 use App\Http\Controllers\kios\KiosKomplainController;
 use App\Http\Controllers\kios\KiosProductSecondController;
@@ -60,15 +61,29 @@ Route::middleware('kios')->group(function () {
         Route::get('/get-kelengkapan-second/{jenisId}', [KiosShopSecondController::class, 'getKelengkapanSecond']);
         Route::get('/getCustomerbyNomor/{nomor}', [KiosShopSecondController::class, 'getCustomerbyNomor']);
 
-        Route::resource('/product', KiosProductController::class);
-        Route::resource('/product-second', KiosProductSecondController::class);
-        Route::get('/get-paket-penjualan/{paketPenjualanId}', [KiosProductController::class, 'getPaketPenjualan']);
+        Route::group(['controller' => KiosProductController::class], function () {
+            Route::resource('/product', KiosProductController::class);
+            Route::post('/update-srp-baru', 'updateSrpBaru');
+            Route::get('/get-paket-penjualan/{paketPenjualanId}', 'getPaketPenjualan');
+        });
+
+        Route::group(['controller' => KiosProductSecondController::class], function () {
+            Route::resource('/product-second', KiosProductSecondController::class);
+            Route::post('/update-srp-second', 'updateSRPSecond');
+        });
 
         Route::get('/add-product', [AddKelengkapanKiosController::class, 'index']);
         Route::post('/add-product', [AddKelengkapanKiosController::class, 'store'])->name('form-kelengkapan');
         Route::get('/getKelengkapan/{jenisId}', [AddKelengkapanKiosController::class, 'getKelengkapan']);
 
-        Route::get('/upload', [KiosFileUpload::class, 'index']);
+        Route::group(['controller' => KiosBuatPaketSecondController::class], function () {
+            Route::resource('add-paket-penjualan-second', KiosBuatPaketSecondController::class)->only(['index', 'store']);
+            Route::get('/getKelengkapanSecond', 'getKelengkapanSecond');
+            Route::get('/getSNSecond/{id}', 'getSNSecond');
+            Route::get('/getPriceSecond/{id}', 'getPriceSecond');
+        });
+
+        Route::resource('/upload', KiosFileUpload::class)->only(['index', 'uploadbaru', 'uploadsecond']);
         Route::get('/getPaket', [KiosFileUpload::class, 'getPaket']);
 
         Route::resource('/pembayaran', KiosPaymentController::class);
