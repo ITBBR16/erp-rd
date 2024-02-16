@@ -1,5 +1,5 @@
 <div class="hidden p-4" id="file-new" role="tabpanel" aria-labelledby="file-new-tab">
-    <form action="#" method="POST" autocomplete="off" enctype="multipart/form-data" class="mt-6">
+    <form action="{{ route('file-produk-baru') }}" method="POST" autocomplete="off" enctype="multipart/form-data" class="mt-6">
         @csrf
         <div class="w-10/12">
             <div class="grid grid-cols-2 gap-4 md:gap-6">
@@ -27,7 +27,7 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
                         </div>
                         <div id="selected_images_paket" class="flex flex-col items-center justify-center pt-5 pb-6" style="display: none"></div>
-                        <input name="file_paket_produk" id="file_paket_produk" type="file" class="hidden" required>
+                        <input name="file_paket_produk" id="file_paket_produk" type="file" class="hidden">
                     </label>
                 </div>
             </div>

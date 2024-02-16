@@ -3,7 +3,9 @@
 namespace App\Models\kios;
 
 use App\Models\produk\ProdukSubJenis;
+use App\Models\kios\KiosQcProdukSecond;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\produk\ProdukKelengkapan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KiosProdukSecond extends Model
@@ -21,6 +23,6 @@ class KiosProdukSecond extends Model
 
     public function produksecondlist()
     {
-        return $this->hasMany(KiosQcProdukSecond::class, 'kios_produk_second_id');
+        return $this->belongsToMany(ProdukKelengkapan::class, 'kios_kelengkapan_second_list', 'kios_produk_second_id', 'produk_kelengkapan_id');
     }
 }

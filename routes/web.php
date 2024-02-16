@@ -48,7 +48,7 @@ Route::middleware('superadmin')->group(function () {
 Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
         Route::get('/', [DashboardKiosController::class, 'index']);
-        Route::get('/daily-recap', [KiosDailyRecapController::class, 'index']);
+        Route::resource('/daily-recap', KiosDailyRecapController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::post('/daily-recap', [KiosDailyRecapController::class, 'store'])->name('form-daily-recap');
 
         Route::resource('/supplier', KiosSupplierController::class);
@@ -83,8 +83,11 @@ Route::middleware('kios')->group(function () {
             Route::get('/getPriceSecond/{id}', 'getPriceSecond');
         });
 
-        Route::resource('/upload', KiosFileUpload::class)->only(['index', 'uploadbaru', 'uploadsecond']);
-        Route::get('/getPaket', [KiosFileUpload::class, 'getPaket']);
+        Route::group(['controller' => KiosFileUpload::class], function () {
+            Route::get('/upload', 'index');
+            Route::post('/file-produk-baru', 'uploadbaru')->name('file-produk-baru');
+            Route::post('/file-produk-second', 'uploadsecond')->name('file-produk-second');
+        });
 
         Route::resource('/pembayaran', KiosPaymentController::class);
         Route::post('/pembayaran/{id}', [KiosPaymentController::class, 'validasi'])->name('form-validasi-payment');

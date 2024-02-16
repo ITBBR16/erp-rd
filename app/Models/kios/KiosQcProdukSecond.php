@@ -25,9 +25,4 @@ class KiosQcProdukSecond extends Model
         return $this->belongsTo(KiosOrderSecond::class, 'order_second_id');
     }
 
-    public function produksecond()
-    {
-        return $this->belongsTo(KiosProdukSecond::class, 'kios_produk_second_id');
-    }
-
 }

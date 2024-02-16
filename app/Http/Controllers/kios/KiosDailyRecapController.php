@@ -11,7 +11,6 @@ use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosRecapKeperluan;
 use App\Models\kios\KiosRecapStatus;
-use App\Models\produk\ProdukJenis;
 use App\Models\produk\ProdukStatus;
 use App\Models\produk\ProdukSubJenis;
 use Illuminate\Support\Facades\Http;
@@ -111,5 +110,37 @@ class KiosDailyRecapController extends Controller
         
         }
 
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $dataRecap = KiosDailyRecap::findOrFail($id);
+            $dataRecap->update([
+                'customer_id' => $request->input('edit_recap_nama_customer'),
+                'jenis_id' => $request->input('edit_recap_jenis_produk'),
+                'sub_jenis_id' => $request->input('edit_recap_sub_jenis_produk'),
+                'keperluan_id' => $request->input('edit_recap_keperluan'),
+                'barang_cari' => $request->input('edit_recap_barang_cari'),
+                'keterangan' => $request->input('edit_recap_keterangan'),
+                'status_id' => $request->input('edit_recap_status'),
+            ]);
+
+            return back()->with('success', 'Success Update Data Recap.');
+        } catch(Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try{
+            $dailyRecapId = KiosDailyRecap::findOrFail($id);
+            $dailyRecapId->delete();
+
+            return back()->with('success', 'Success Delete Data Recap.');
+        } catch(Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

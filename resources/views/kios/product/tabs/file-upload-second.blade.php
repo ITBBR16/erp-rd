@@ -1,5 +1,5 @@
 <div class="hidden p-4" id="file-second" role="tabpanel" aria-labelledby="file-second-tab">
-    <form action="#" method="POST" autocomplete="off" enctype="multipart/form-data" class="mt-6">
+    <form action="{{ route('file-produk-second') }}" method="POST" autocomplete="off" enctype="multipart/form-data" class="mt-6">
         @csrf
         <div class="w-10/12">
             <div class="grid grid-cols-2 gap-4 md:gap-6">
