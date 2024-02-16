@@ -53,22 +53,19 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 40%;">
                         Jenis Produk
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 10%;">
                         Stok
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 20%;">
                         SRP
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 10%;">
                         Status
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Aktif
-                    </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 20%;">
                         Action
                     </th>
                 </tr>
@@ -92,12 +89,6 @@
                         <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
                     </td>
                     <td class="px-6 py-2">
-                        <label class="relative inline-flex items-center me-5 cursor-pointer">
-                            <input type="checkbox" id="produk-aktif" data-id="{{ $pd->id }}" class="sr-only peer">
-                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-600 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
-                        </label>
-                    </td>
-                    <td class="px-6 py-2">
                         <div class="flex flex-wrap">
                             <button type="button" data-modal-target="view-detail-produk{{ $pd->id }}" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-base">visibility</i>
@@ -106,7 +97,7 @@
                                 <button type="button" data-modal-target="update-produk{{ $pd->id }}" data-modal-toggle="update-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">edit</i>
                                 </button>
-                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="delete-produk{{ $pd->id }}" data-modal-toggle="delete-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">delete</i>
                                 </button>
                             @endif
@@ -124,4 +115,6 @@
     {{-- Modal Daftar Produk --}}
     @include('kios.product.modal.modal-view-daftar-produk')
     @include('kios.product.modal.modal-edit-daftar-produk')
+    @include('kios.product.modal.modal-delete-daftar-produk')
+    
 @endsection

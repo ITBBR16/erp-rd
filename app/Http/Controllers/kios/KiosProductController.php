@@ -61,7 +61,14 @@ class KiosProductController extends Controller
 
     public function destroy($id)
     {
-        
+        try {
+            $productBaruKios = KiosProduk::findOrFail($id);
+            $productBaruKios->delete();
+
+            return back()->with('success', 'Success Delete Product.');
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function updateSrpBaru(Request $request)
