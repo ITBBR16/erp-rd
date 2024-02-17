@@ -45,7 +45,6 @@ class KiosShopController extends Controller
     {
         $request->validate([
             'supplier_kios' => 'required',
-            'jenis_produk' => 'required|array',
             'paket_penjualan' => 'required|array',
             'quantity' => 'required|array'
         ]);
@@ -74,19 +73,17 @@ class KiosShopController extends Controller
             $order->save();
             
             $quantities = $request->input('quantity');
-            $jenisProduk = $request->input('jenis_produk');
             $paket_penjualan = $request->input('paket_penjualan');
             foreach($paket_penjualan as $key => $item) {
                 $orderList = new KiosOrderList();
                 $orderList->order_id = $order->id;
-                $orderList->produk_jenis_id = $jenisProduk[$key];
                 $orderList->sub_jenis_id = $item;
                 $orderList->quantity = $quantities[$key];
+                $orderList->status = 'Belum Validasi';
                 $orderList->save();
 
                 $history = new KiosHistoryOrderList();
                 $history->order_id = $order->id;
-                $history->produk_jenis_id = $jenisProduk[$key];
                 $history->sub_jenis_id = $item;
                 $history->quantity = $quantities[$key];
                 $history->save();
@@ -134,13 +131,12 @@ class KiosShopController extends Controller
                             ->first();
 
                 if($orderList) {
-                    $orderList->produk_jenis_id = $request->input('jenis_produk')[$index];
                     $orderList->sub_jenis_id = $request->input('jenis_paket')[$index];
                     $orderList->quantity = $request->input('quantity')[$index];
                     $orderList->nilai = $request->input('nilai')[$index];
+                    $orderList->status = 'Belum Validasi';
                     $orderList->save();
 
-                    $historiOrder->produk_jenis_id = $request->input('jenis_produk')[$index];
                     $historiOrder->sub_jenis_id = $request->input('jenis_paket')[$index];
                     $historiOrder->quantity = $request->input('quantity')[$index];
                     $historiOrder->nilai = $request->input('nilai')[$index];
@@ -153,14 +149,13 @@ class KiosShopController extends Controller
 
                 } else {
                     $newOrderList = new KiosOrderList([
-                        'produk_jenis_id' => $request->input('jenis_produk')[$index],
                         'sub_jenis_id' => $request->input('jenis_paket')[$index],
                         'quantity' => $request->input('quantity')[$index],
                         'nilai' => $request->input('nilai')[$index],
+                        'status' => 'Belum Validasi',
                     ]);
 
                     $newHistory = new KiosHistoryOrderList([
-                        'produk_jenis_id' => $request->input('jenis_produk')[$index],
                         'sub_jenis_id' => $request->input('jenis_paket')[$index],
                         'quantity' => $request->input('quantity')[$index],
                         'nilai' => $request->input('nilai')[$index],
@@ -201,4 +196,5 @@ class KiosShopController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
 }

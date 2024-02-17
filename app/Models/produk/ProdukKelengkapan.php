@@ -24,8 +24,8 @@ class ProdukKelengkapan extends Model
                     ->withPivot('pivot_qc_id', 'kondisi', 'keterangan', 'serial_number', 'harga_satuan', 'status');
     }
 
-    public function produksecond()
+    public function produkseconds()
     {
-        return $this->belongsToMany(KiosProdukSecond::class, 'kios_kelengkapan_second_list', 'produk_kelengkapan_id', 'kios_produk_second_id');
+        return $this->belongsToMany(KiosProdukSecond::class, 'kios_kelengkapan_second_list', 'produk_kelengkapan_id', 'kios_produk_second_id')->withPivot('qc_id');
     }
 }

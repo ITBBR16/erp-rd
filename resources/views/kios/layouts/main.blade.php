@@ -59,7 +59,7 @@
         <script src="/js/loader.js"></script>
         <script src="/js/add-form-kelengkapan.js"></script>
         <script src="/js/add-form-jk.js"></script>
-        <script src="/js/dd-new-belanja.js"></script>
+        <script src="/js/shop-baru.js"></script>
         <script src="/js/shop-second.js"></script>
         <script src="/js/toggle-payment-kios.js"></script>
         <script src="/js/dropdown_wilayah.js"></script>

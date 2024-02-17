@@ -5,6 +5,8 @@ namespace App\Http\Controllers\kios;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosProdukSecond;
+use App\Models\kios\KiosQcProdukSecond;
+use App\Models\produk\ProdukKelengkapan;
 use App\Repositories\kios\KiosRepository;
 
 class KiosProductSecondController extends Controller
