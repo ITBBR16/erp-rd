@@ -26,7 +26,7 @@ $(document).ready(function() {
                 </div>
                 <div class="flex justify-center items-center col-span-1">
                     <button type="button" class="remove-form-pembelian" data-id="${nomorFormBelanja}">
-                        <span class="material-symbols-outlined text-red-600 hover:text-red-500">cancel</span>
+                        <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                     </button>
                 </div>
             </div>
@@ -64,7 +64,7 @@ $(document).ready(function() {
         </div>
         <div class="flex justify-center items-center col-span-1">
             <button type="button" class="remove-form-validasi" data-id="${nomorFormValidasi}">
-                <span class="material-symbols-outlined text-red-600 hover:text-red-500">cancel</span>
+                <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
             </button>
         </div>
     </div>

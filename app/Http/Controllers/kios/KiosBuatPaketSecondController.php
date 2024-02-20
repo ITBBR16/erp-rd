@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\kios;
 
+use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +12,6 @@ use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosQcProdukSecond;
 use App\Models\produk\ProdukKelengkapan;
 use App\Repositories\kios\KiosRepository;
-use Exception;
 
 class KiosBuatPaketSecondController extends Controller
 {
@@ -52,10 +53,14 @@ class KiosBuatPaketSecondController extends Controller
                 return back()->with('error', 'Serial Number tidak boleh ada yang sama.');
             }
 
+            $randString = Str::random(10);
+            $snProduk = 'Sec-' . $randString;
+
             $produkSecond = KiosProdukSecond::create([
                 'sub_jenis_id' => $request->input('paket_penjualan_produk_second'),
                 'srp' => $srpSecond,
                 'cc_produk_second' => $request->input('cc_produk_second'),
+                'serial_number' => $snProduk,
                 'status' => 'Ready',
             ]);
 

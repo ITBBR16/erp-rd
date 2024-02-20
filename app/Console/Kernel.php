@@ -10,7 +10,11 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command(DeleteExpiredPromoKios::class)->daily();
+        $schedule->command(DeleteExpiredPromoKios::class)
+                 ->everyMinute()
+                 ->timezone('Asia/Jakarta');
+        
+        $schedule->command('cache:clear')->daily();
     }
 
     protected function commands(): void

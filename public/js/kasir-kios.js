@@ -121,7 +121,7 @@ $(document).ready(function(){
             </td>
             <td class="px-4 py-4">
                 <button type="button" class="remove-kasir-item" data-id="${itemCount}">
-                    <span class="material-symbols-outlined text-red-600 hover:text-red-500">cancel</span>
+                    <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                 </button>
             </td>
         </tr>
@@ -171,7 +171,6 @@ $(document).ready(function(){
     $(document).on('change', '.item_name', function () {
         let formIdItem = $(this).data("id");
         var formSN = $('#kasir_sn-'+formIdItem);
-        var formHarga = $('#kasir-harga-'+formIdItem);
         var idItem = $('#item-id-'+formIdItem).val();
         fetch('/kios/getSerialNumber/' + idItem)
         .then(response => response.json())
@@ -195,9 +194,38 @@ $(document).ready(function(){
                 formSN.append(option);
             });
             
-            var toHarga = formatRupiah(data.data_produk);
-            formHarga.val(toHarga);
+            data.sn_second.forEach(sn_second => {
+                const option_second = $('<option>', {
+                    value: sn_second.id,
+                    text: sn_second.serial_number
+                })
+                .addClass('dark:bg-gray-700');
+                formSN.append(option_second);
+            });
 
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    });
+
+    $(document).on('change', '.kasir_sn', function () {
+        let formIdItem = $(this).data("id");
+        var formSN = $('#kasir_sn-'+formIdItem);
+        var formHarga = $('#kasir-harga-'+formIdItem);
+        var idItem = $('#item-id-'+formIdItem).val();
+        let cekSn = formSN.find('option:selected').text();
+
+        fetch('/kios/getSerialNumber/' + idItem)
+        .then(response => response.json())
+        .then(data => {
+            if (cekSn.startsWith("Sec-")) {
+                var hargaSecond = formatRupiah(data.nilai_second);
+                formHarga.val(hargaSecond);
+            } else {
+                var hargaBaru = formatRupiah(data.nilai);
+                formHarga.val(hargaBaru);
+            }
         })
         .catch(error => {
             console.error('Error fetching data:', error);

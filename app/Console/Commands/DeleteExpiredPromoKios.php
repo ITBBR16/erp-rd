@@ -17,8 +17,9 @@ class DeleteExpiredPromoKios extends Command
 
         foreach ($expiredProducts as $product) {
             $product->harga_promo = 0;
-            $product->start_date_promo = null;
-            $product->end_date_promo = null;
+            $product->start_promo = null;
+            $product->end_promo = null;
+            $product->status = 'Ready';
             $product->save();
         }
 

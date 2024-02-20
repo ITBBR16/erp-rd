@@ -69,6 +69,6 @@
         <script src="/js/daftar-produk.js"></script>
         <script src="/js/file-upload.js"></script>
         <script src="/js/create-produk-second.js"></script>
-        {{-- <script src="/js/kasir-kios.js"></script> --}}
+        <script src="/js/kasir-kios.js"></script>
     </body>
 </html>

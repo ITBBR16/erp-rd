@@ -36,55 +36,69 @@ class KiosPaymentController extends Controller
 
     public function validasi(Request $request, $id)
     {
-        $user = auth()->user();
-        $divisiId = $user->divisi_id;
-        $divisi = $this->suppKiosRepo->getDivisi($user);
-        $divisiName = $divisi->nama;
-        $tanggal = Carbon::now();
-        $tanggal->setTimezone('Asia/Jakarta');
-        $formattedDate = $tanggal->format('d/m/Y H:i:s');
-        $kiosPayment = KiosPayment::findOrFail($id);
 
-        $totalBelanja = preg_replace("/[^0-9]/", "", $request->input('nilai_belanja'));
-        $totalOngkir = preg_replace("/[^0-9]/", "", $request->input('ongkir'));
-        $totalPajak = preg_replace("/[^0-9]/", "", $request->input('pajak'));
+        $request->validate([
+            'media_transaksi' => 'required',
+            'no_rek' => 'required',
+            'nama_akun' => 'required',
+        ]);
 
-        $urlFinance = 'https://script.google.com/macros/s/AKfycbzBE9VL6syqbKmLYxur9vffg9uJiNdV-Nu8Vg-RL1aEE7U_0WP6vqzg09FOrlZJD1uTfg/exec';
-        $dataFinance = [
-            'tanggal' => $formattedDate,
-            'divisi' => $divisiName,
-            'no_transaksi' => 'Kios-' . $id,
-            'supplier_kios' => $request->input('supplier_kios'),
-            'invoice' => $request->input('invoice'),
-            'media_transaksi' => $request->input('media_transaksi'),
-            'no_rek' => $request->input('no_rek'),
-            'nama_akun' => $request->input('nama_akun'),
-            'nilai_belanja' => $totalBelanja,
-            'ongkir' => $totalOngkir,
-            'pajak' => $totalPajak,
-            'keterangan' => $request->input('keterangan'),
-        ];
+        try {
 
-        $response = Http::post($urlFinance, $dataFinance);
-        
-        $kiosPayment->keterangan = $request->input('keterangan');
-        $kiosPayment->tanggal_request = $formattedDate;
-        $kiosPayment->status = 'Waiting For Payment';
-        
-        if($response->successful()) {
-            $kiosPayment->save();
-            PengirimanEkspedisi::create([
-                'divisi_id' => $divisiId,
-                'order_id' => $request->input('order_id'),
-                'status_order' => 'Baru',
-                'status' => 'Unprocess',
-            ]);
+            $user = auth()->user();
+            $divisiId = $user->divisi_id;
+            $divisi = $this->suppKiosRepo->getDivisi($user);
+            $divisiName = $divisi->nama;
+            $tanggal = Carbon::now();
+            $tanggal->setTimezone('Asia/Jakarta');
+            $formattedDate = $tanggal->format('d/m/Y H:i:s');
+            $kiosPayment = KiosPayment::findOrFail($id);
+    
+            $totalBelanja = preg_replace("/[^0-9]/", "", $request->input('nilai_belanja'));
+            $totalOngkir = preg_replace("/[^0-9]/", "", $request->input('ongkir'));
+            $totalPajak = preg_replace("/[^0-9]/", "", $request->input('pajak'));
+    
+            $urlFinance = 'https://script.google.com/macros/s/AKfycbzBE9VL6syqbKmLYxur9vffg9uJiNdV-Nu8Vg-RL1aEE7U_0WP6vqzg09FOrlZJD1uTfg/exec';
+            $dataFinance = [
+                'tanggal' => $formattedDate,
+                'divisi' => $divisiName,
+                'no_transaksi' => 'Kios-' . $id,
+                'supplier_kios' => $request->input('supplier_kios'),
+                'invoice' => $request->input('invoice'),
+                'media_transaksi' => $request->input('media_transaksi'),
+                'no_rek' => $request->input('no_rek'),
+                'nama_akun' => $request->input('nama_akun'),
+                'nilai_belanja' => $totalBelanja,
+                'ongkir' => $totalOngkir,
+                'pajak' => $totalPajak,
+                'keterangan' => $request->input('keterangan'),
+            ];
+    
+            $response = Http::post($urlFinance, $dataFinance);
+            
+            $kiosPayment->keterangan = $request->input('keterangan');
+            $kiosPayment->tanggal_request = $formattedDate;
+            $kiosPayment->status = 'Waiting For Payment';
+            
+            if($response->successful()) {
+                $kiosPayment->save();
+                PengirimanEkspedisi::create([
+                    'divisi_id' => $divisiId,
+                    'order_id' => $request->input('order_id'),
+                    'status_order' => 'Baru',
+                    'status' => 'Unprocess',
+                ]);
+    
+                return back()->with('success', 'Success Request Payment.');
+    
+            } else {
+                return back()->with('error', 'Cant Send To Request Payment.');
+            }
 
-            return back()->with('success', 'Success Request Payment.');
-
-        } else {
-            return back()->with('error', 'Cant Send To Request Payment.');
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
+
 
     }
 
@@ -96,8 +110,9 @@ class KiosPaymentController extends Controller
             $ongkir = preg_replace("/[^0-9]/", "", $request->input('ongkir'));
             $pajak = preg_replace("/[^0-9]/", "", $request->input('pajak'));
             
-            if($request->filled('no_rek')){
+            if($request->has('new-metode-payment-edit')){
                 $validate = $request->validate([
+                                'supplier_id' => 'required',
                                 'media_pembayaran' => 'required',
                                 'no_rek' => ['required', Rule::unique('rumahdrone_kios.metode_pembayaran', 'no_rek')],
                                 'nama_akun' => 'required',
@@ -135,8 +150,12 @@ class KiosPaymentController extends Controller
 
     }
 
-    public function destroy($id)
+    public function updatePayment($id)
     {
+        $paymentKios = KiosPayment::findOrFail($id);
+        $paymentKios->status = 'Paid';
 
+        return response()->json(['message' => 'Product status updated successfully']);
     }
+
 }

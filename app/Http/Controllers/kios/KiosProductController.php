@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\kios;
 
+use Exception;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Termwind\Components\Raw;
 use App\Models\kios\KiosProduk;
+use App\Models\produk\ProdukType;
+use App\Http\Controllers\Controller;
+use App\Models\produk\ProdukKategori;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
-use Exception;
-use Termwind\Components\Raw;
 
 class KiosProductController extends Controller
 {
@@ -21,6 +23,8 @@ class KiosProductController extends Controller
         $produk = KiosProduk::with('subjenis', 'serialnumber')->get()->sortByDesc(function ($produk) {
             return $produk->status == 'Promo' ? 1 : 0;
         });;
+        $kategori = ProdukKategori::all();
+        $types = ProdukType::all();
 
         return view('kios.product.index', [
             'title' => 'Product',
@@ -29,6 +33,8 @@ class KiosProductController extends Controller
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'produks' => $produk,
+            'kategoriProduk' => $kategori,
+            'typeProduks' => $types,
         ]);
     }
 

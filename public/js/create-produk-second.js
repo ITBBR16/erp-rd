@@ -51,7 +51,7 @@ $(document).ready(function(){
             </div>
             <div class="flex col-span-1 justify-center items-center">
                 <button type="button" class="remove-kelengkapan-second" data-id="${nomorKelengkapan}">
-                    <span class="material-symbols-outlined text-red-600 hover:text-red-500">cancel</span>
+                    <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                 </button>
             </div>
         </div>

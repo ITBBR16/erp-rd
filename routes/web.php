@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\kios\KiosFileUpload;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
 use App\Http\Controllers\kios\KiosShopController;
@@ -55,11 +54,13 @@ Route::middleware('kios')->group(function () {
         Route::resource('/shop', KiosShopController::class);
         Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');
 
-        Route::resource('/shop-second', KiosShopSecondController::class)->names([
-            'edit' => 'shop-second.quality-control',
-        ]);
-        Route::get('/get-kelengkapan-second/{jenisId}', [KiosShopSecondController::class, 'getKelengkapanSecond']);
-        Route::get('/getCustomerbyNomor/{nomor}', [KiosShopSecondController::class, 'getCustomerbyNomor']);
+        Route::group(['controller' => KiosShopSecondController::class], function () {
+            Route::resource('/shop-second', KiosShopSecondController::class)->names([
+                'edit' => 'shop-second.quality-control',
+            ]);
+            Route::get('/get-kelengkapan-second/{jenisId}', 'getKelengkapanSecond');
+            Route::get('/getCustomerbyNomor/{nomor}', 'getCustomerbyNomor');
+        });
 
         Route::group(['controller' => KiosProductController::class], function () {
             Route::resource('/product', KiosProductController::class);
@@ -72,9 +73,11 @@ Route::middleware('kios')->group(function () {
             Route::post('/update-srp-second', 'updateSRPSecond');
         });
 
-        Route::get('/add-product', [AddKelengkapanKiosController::class, 'index']);
-        Route::post('/add-product', [AddKelengkapanKiosController::class, 'store'])->name('form-kelengkapan');
-        Route::get('/getKelengkapan/{jenisId}', [AddKelengkapanKiosController::class, 'getKelengkapan']);
+        Route::group(['controller' => AddKelengkapanKiosController::class], function () {
+            Route::get('/add-product', 'index');
+            Route::post('/add-product', 'store')->name('form-kelengkapan');
+            Route::get('/getKelengkapan/{jenisId}', 'getKelengkapan');
+        });
 
         Route::group(['controller' => KiosBuatPaketSecondController::class], function () {
             Route::resource('add-paket-penjualan-second', KiosBuatPaketSecondController::class)->only(['index', 'store']);
@@ -83,24 +86,23 @@ Route::middleware('kios')->group(function () {
             Route::get('/getPriceSecond/{id}', 'getPriceSecond');
         });
 
-        Route::group(['controller' => KiosFileUpload::class], function () {
-            Route::get('/upload', 'index');
-            Route::post('/file-produk-baru', 'uploadbaru')->name('file-produk-baru');
-            Route::post('/file-produk-second', 'uploadsecond')->name('file-produk-second');
+        Route::group(['controller' => KiosPaymentController::class], function () {
+            Route::resource('/pembayaran', KiosPaymentController::class)->only(['index', 'update']);
+            Route::post('/pembayaran/{id}', 'validasi')->name('form-validasi-payment');
+            Route::put('/api/updatePayment/{id}', 'updatePayment');
         });
-
-        Route::resource('/pembayaran', KiosPaymentController::class);
-        Route::post('/pembayaran/{id}', [KiosPaymentController::class, 'validasi'])->name('form-validasi-payment');
 
         Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);
         Route::get('/getLayanan/{ekspedisiId}', [KiosPengirimanController::class, 'getLayanan']);
 
         Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);
 
-        Route::resource('/kasir', KiosKasirController::class)->only(['index', 'store']);
-        Route::get('/autocomplete', [KiosKasirController::class, 'autocomplete']);
-        Route::get('/getSerialNumber/{id}', [KiosKasirController::class, 'getSerialNumber']);
-        Route::get('/getCustomer/{customerId}', [KiosKasirController::class, 'getCustomer']);
+        Route::group(['controller' => KiosKasirController::class], function () {
+            Route::resource('/kasir', KiosKasirController::class)->only(['index', 'store']);
+            Route::get('/autocomplete', 'autocomplete');
+            Route::get('/getSerialNumber/{id}', 'getSerialNumber');
+            Route::get('/getCustomer/{customerId}', 'getCustomer');
+        });
     });
 });
 

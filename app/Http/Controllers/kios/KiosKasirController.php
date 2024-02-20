@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\customer\Customer;
 use App\Models\kios\KiosAkunRD;
 use App\Models\kios\KiosProduk;
+use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksi;
 use App\Models\kios\KiosTransaksiDetail;
@@ -114,9 +115,19 @@ class KiosKasirController extends Controller
     public function getSerialNumber($id)
     {
         $produkId = KiosProduk::where('sub_jenis_id', $id)->value('id');
-        $dataProduk = KiosProduk::where('sub_jenis_id', $id)->value('srp');
+        $dataProduk = KiosProduk::where('sub_jenis_id', $id)->first();
+        if ($dataProduk->status === 'Promo') {
+            $nilai = $dataProduk->harga_promo;
+        } else {
+            $nilai = $dataProduk->srp;
+        }
+
         $dataSN = KiosSerialNumber::where('produk_id', $produkId)->where('status', 'Ready')->get();
-        return response()->json(['data_sn' => $dataSN, 'data_produk' => $dataProduk]);
+
+        $nilaiSecond = KiosProdukSecond::where('sub_jenis_id', $id)->value('srp');
+        $snSecond = KiosProdukSecond::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
+        
+        return response()->json(['data_sn' => $dataSN, 'sn_second' => $snSecond, 'nilai' => $nilai, 'nilai_second' => $nilaiSecond]);
     }
 
     public function getCustomer($customerId)
