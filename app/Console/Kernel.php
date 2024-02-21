@@ -11,7 +11,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command(DeleteExpiredPromoKios::class)
-                 ->everyMinute()
+                 ->daily()
                  ->timezone('Asia/Jakarta');
         
         $schedule->command('cache:clear')->daily();

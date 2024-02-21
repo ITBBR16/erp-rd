@@ -19,4 +19,9 @@ class KiosImageProduk extends Model
         return $this->belongsTo(ProdukSubJenis::class, 'sub_jenis_id');
     }
 
+    public function produkbarukios()
+    {
+        return $this->belongsTo(KiosProduk::class, 'id');
+    }
+
 }

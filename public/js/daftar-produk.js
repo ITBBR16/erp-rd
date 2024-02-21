@@ -3,13 +3,12 @@ $(document).ready(function () {
     const hargaPromo = $('.harga_promo');
     const srpDPS = $('.srp-daftar-produk-second');
     const srpDPB = $('.update-srp-baru');
-
+    
     function formatRupiah(angka) {
         return accounting.formatMoney(angka, "", 0, ".", ",");
     }
 
     // Daftar produk baru
-    
     hargaJual.on('input', function () {
         var srpValue = $(this).val();
         srpValue = srpValue.replace(/[^\d]/g, '');
@@ -57,7 +56,6 @@ $(document).ready(function () {
     });
 
     // Daftar produk bekas
-
     srpDPS.on('input', function() {
         var inputValue = $(this).val();
         inputValue = inputValue.replace(/[^\d]/g, '');

@@ -9,6 +9,7 @@ use App\Models\produk\ProdukType;
 use App\Models\produk\ProdukJenis;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosImageProduk;
+use App\Models\kios\KiosProduk;
 use Illuminate\Support\Facades\Http;
 use App\Models\produk\ProdukKategori;
 use App\Models\produk\ProdukSubJenis;
@@ -72,11 +73,10 @@ class AddKelengkapanKiosController extends Controller
             $validatePenjualan = $request->validate([
                 'kategori_paket' => 'required',
                 'jenis_id' => 'required',
-                'paket_penjualan' => 'required',
                 'berat_paket' => 'required',
+                'paket_penjualan' => 'required',
                 'kelengkapan' => 'required|array',
                 'quantity' => 'required|array',
-                'fu_nama_produk' => 'required',
                 'file_paket_produk' => 'image|mimes:jpeg,png,jpg',
                 'file_kelengkapan_produk.*' => 'image|mimes:jpeg,png,jpg',
             ]);
@@ -102,6 +102,7 @@ class AddKelengkapanKiosController extends Controller
                 $idProdukBaru = $request->jenis_id;
                 $findNama = ProdukJenis::findOrFail($idProdukBaru);
                 $namaProdukBaru = $findNama->jenis_produk . " " . $validatePenjualan['paket_penjualan'];
+
                 $fileData = base64_encode($request->file('file_paket_produk')->get());
                 $filesDataKelengkapan = $request->file('file_kelengkapan_produk');
                 $originFileName = $request->file('file_paket_produk')->getClientOriginalName();
@@ -147,6 +148,12 @@ class AddKelengkapanKiosController extends Controller
                         $kelengkapanImage->link_drive = $kelengkapan['url'];
                         $kelengkapanImage->save();
                     }
+
+                    KiosProduk::create([
+                        'sub_jenis_id' => $produkJenis->id,
+                        'produk_img_id' => $imageProdukKios->id,
+                        'status' => 'Not Ready',
+                    ]);
 
                 }
 

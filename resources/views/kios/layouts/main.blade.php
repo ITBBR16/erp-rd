@@ -32,20 +32,17 @@
         </style>
     </head>
     <body>
+        {{-- <div id="loader" class="z-50" style="display: none;">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+            <div class="loader absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+            <div class="loader-text font-bold">Loading . . .</div>
+        </div> --}}
 
         @include('kios.layouts.header')
         @include('kios.layouts.sidebar')
 
         <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-y-scroll scrollbar-none">
             @yield('container')
-        </div>
-
-        @yield('scripts')
-
-        <div id="loader" style="display: none;">
-            <div class="absolute inset-0 bg-black opacity-50"></div>
-            <div class="loader absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
-            <div class="loader-text font-bold">Loading . . .</div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>

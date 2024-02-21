@@ -24,4 +24,9 @@ class KiosProduk extends Model
         return $this->hasMany(KiosSerialNumber::class, 'produk_id');
     }
 
+    public function imageprodukbaru()
+    {
+        return $this->belongsTo(KiosImageProduk::class, 'produk_img_id');
+    }
+
 }
