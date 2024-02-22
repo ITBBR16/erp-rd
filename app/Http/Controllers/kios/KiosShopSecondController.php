@@ -8,14 +8,15 @@ use Illuminate\Http\Request;
 use App\Models\customer\Customer;
 use App\Models\produk\ProdukJenis;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosMarketplace;
 use App\Models\kios\KiosOrderSecond;
+use Illuminate\Support\Facades\Http;
 use App\Models\produk\ProdukSubJenis;
 use App\Models\kios\KiosQcProdukSecond;
 use App\Models\produk\ProdukKelengkapan;
 use App\Models\kios\KiosStatusPembayaran;
 use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
-use App\Models\kios\KiosMarketplace;
 use App\Models\kios\KiosMetodePembelianSecond;
 
 class KiosShopSecondController extends Controller
@@ -85,7 +86,7 @@ class KiosShopSecondController extends Controller
                 'metode_pembelian_id' => $mpId,
                 'tanggal_pembelian' => $tanggalPembelian,
                 'sub_jenis_id' => $request->input('jenis_drone_second'),
-                'status_pembayaran_id' => $statusBayar,
+                'status_pembayaran' => $statusBayar,
                 'biaya_pembelian' => $biayaPengambilan,
                 'biaya_ongkir' => $biayaOngkir,
             ]);
@@ -122,6 +123,52 @@ class KiosShopSecondController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
+    }
+
+    public function validasisecond(Request $request, $id)
+    {
+        try {
+
+            $user = auth()->user();
+            $divisiId = $user->divisi_id;
+            $divisi = $this->suppKiosRepo->getDivisi($user);
+            $divisiName = $divisi->nama;
+            $tanggal = Carbon::now();
+            $tanggal->setTimezone('Asia/Jakarta');
+            $formattedDate = $tanggal->format('d/m/Y H:i:s');
+            $urlFinance = 'https://script.google.com/macros/s/AKfycbzBE9VL6syqbKmLYxur9vffg9uJiNdV-Nu8Vg-RL1aEE7U_0WP6vqzg09FOrlZJD1uTfg/exec';
+                
+            $dataFinance = [
+                'tanggal' => $formattedDate,
+                'divisi' => $divisiName,
+                'no_transaksi' => 'KiosSecond-' . $id,
+                'supplier_kios' => $request->input('supplier_kios'),
+                'invoice' => $request->input('invoice'),
+                'media_transaksi' => $request->input('media_transaksi_second'),
+                'no_rek' => $request->input('no_rek'),
+                'nama_akun' => $request->input('nama_akun'),
+                'nilai_belanja' => $request->input('biaya_pembelian'),
+                'ongkir' => $request->input('ongkir_second'),
+                'pajak' => 0,
+                'keterangan' => $request->input('keterangan'),
+            ];
+        
+            $response = Http::post($urlFinance, $dataFinance);
+
+            if ($response->successful()) {
+
+                $kiosOrderSecond = KiosOrderSecond::findOrFail($id);
+                $kiosOrderSecond->status_pembarayan = 'Waiting For Payment';
+                $kiosOrderSecond->save();
+                return back()->with('success', 'Success Request Payment.');
+
+            } else {
+                return back()->with('error', 'Something Went Wrong.');
+            }
+
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function edit($encryptId)

@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosImageSecond;
+use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosQcProdukSecond;
 use App\Models\produk\ProdukKelengkapan;
+use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 
 class KiosBuatPaketSecondController extends Controller
@@ -56,22 +59,76 @@ class KiosBuatPaketSecondController extends Controller
             $randString = Str::random(10);
             $snProduk = 'Sec-' . $randString;
 
-            $produkSecond = KiosProdukSecond::create([
-                'sub_jenis_id' => $request->input('paket_penjualan_produk_second'),
-                'srp' => $srpSecond,
-                'cc_produk_second' => $request->input('cc_produk_second'),
-                'serial_number' => $snProduk,
-                'status' => 'Ready',
-            ]);
+            $urlApiProdukSecond = 'https://script.google.com/macros/s/AKfycbwzPkDQn1MbdVOHLRfozYviDzoIl3UwfvTeCLyIuLo--_azk7oqNitRFBt6XAlhpKB3bg/exec';
+            $idProdukSecond = $request->paket_penjualan_produk_second;
+            $findNama = ProdukSubJenis::findOrFail($idProdukSecond);
+            $namaProdukSecond = $findNama->produkjenis->jenis_produk . " " . $findNama->paket_penjualan;
 
-            foreach($snSecond as $item) {
-                DB::connection('rumahdrone_produk')
-                        ->table('kios_kelengkapan_second_list')
-                        ->where('pivot_qc_id', $item)
-                        ->update(['kios_produk_second_id' => $produkSecond->id, 'status' => 'On Sell']);
+            $fileData = base64_encode($request->file('file_paket_produk')->get());
+            $filesDataKelengkapan = $request->file('file_kelengkapan_produk');
+            $originFileName = $request->file('file_paket_produk')->getClientOriginalName();
+
+            $payload = [
+                'status' => 'Second',
+                'nama_produk' => $namaProdukSecond,
+                'file_upload' => $fileData,
+                'file_paket_produk' => $originFileName,
+                'additional_files' => [],
+            ];
+
+            foreach ($filesDataKelengkapan as $fileKelengkapan) {
+                $fileData = base64_encode($fileKelengkapan->get());
+                $fileName = $fileKelengkapan->getClientOriginalName();
+                
+                $payload['additional_files'][] = [
+                    'file_upload' => $fileData,
+                    'file_name' => $fileName,
+                ];
             }
 
-            return back()->with('success', 'Success Created Product Second.');
+            $response = Http::post($urlApiProdukSecond, $payload);
+            $linkFileSecond = json_decode($response->body(), true);
+
+            $statusFile = $linkFileSecond['status'];
+            $paketFile = $linkFileSecond['file_url'];
+            $kelengkapanFile = $linkFileSecond['additional_file_urls'];
+
+            if( $statusFile == 'success' ) {
+
+                $imageProductSecond = new KiosImageSecond();
+                $imageProductSecond->sub_jenis_id = $idProdukSecond;
+                $imageProductSecond->use_for = 'Paket';
+                $imageProductSecond->nama = $namaProdukSecond;
+                $imageProductSecond->link_drive = $paketFile;
+                $imageProductSecond->save();
+
+                foreach($kelengkapanFile as $kelengkapan) {
+                    $kelengkapanImage = new KiosImageSecond();
+                    $kelengkapanImage->sub_jenis_id = $idProdukSecond;
+                    $kelengkapanImage->use_for = 'Kelengkapan';
+                    $kelengkapanImage->nama = $kelengkapan['nama'];
+                    $kelengkapanImage->link_drive = $kelengkapan['url'];
+                    $kelengkapanImage->save();
+                }
+
+                $produkSecond = KiosProdukSecond::create([
+                    'sub_jenis_id' => $request->input('paket_penjualan_produk_second'),
+                    'srp' => $srpSecond,
+                    'cc_produk_second' => $request->input('cc_produk_second'),
+                    'serial_number' => $snProduk,
+                    'status' => 'Ready',
+                ]);
+
+                foreach($snSecond as $item) {
+                    DB::connection('rumahdrone_produk')
+                            ->table('kios_kelengkapan_second_list')
+                            ->where('pivot_qc_id', $item)
+                            ->update(['kios_produk_second_id' => $produkSecond->id, 'status' => 'On Sell']);
+                }
+    
+                return back()->with('success', 'Success Created Product Second.');
+            }
+
 
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());

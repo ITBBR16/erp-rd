@@ -61,10 +61,10 @@
                         Rp. {{ number_format($totalNilai, 0, ',', '.') }}
                     </td>
                     <td class="px-6 py-2">
-                        @if ($os->statuspembayaran->status_pembayaran == 'Paid')
-                            <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{ $os->statuspembayaran->status_pembayaran }}</span>
+                        @if ($os->status_pembayaran == 'Paid')
+                            <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">{{ $os->status_pembayaran }}</span>
                         @else
-                            <span class="bg-yellow-100 text-yellow-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{ $os->statuspembayaran->status_pembayaran }}</span>
+                            <span class="bg-yellow-100 text-yellow-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{{ $os->status_pembayaran }}</span>
                         @endif
                     </td>
                     <td class="px-6 py-2">
@@ -80,7 +80,7 @@
                                     <i class="material-symbols-outlined text-base">construction</i>
                                 </a>
                             @endif
-                            @if ($os->statuspembayaran->status_pembayaran != 'Paid')
+                            @if ($os->status_pembayaran != 'Paid')
                                 <button type="button" data-modal-target="validasi-second{{ $os->id }}" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">task_alt</i>
                                 </button>

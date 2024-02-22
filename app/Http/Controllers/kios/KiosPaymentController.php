@@ -62,7 +62,7 @@ class KiosPaymentController extends Controller
             $dataFinance = [
                 'tanggal' => $formattedDate,
                 'divisi' => $divisiName,
-                'no_transaksi' => 'Kios-' . $id,
+                'no_transaksi' => 'KiosBaru-' . $id,
                 'supplier_kios' => $request->input('supplier_kios'),
                 'invoice' => $request->input('invoice'),
                 'media_transaksi' => $request->input('media_transaksi'),

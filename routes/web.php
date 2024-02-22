@@ -58,6 +58,7 @@ Route::middleware('kios')->group(function () {
             Route::resource('/shop-second', KiosShopSecondController::class)->names([
                 'edit' => 'shop-second.quality-control',
             ]);
+            Route::post('/validasiSecond/{id}', 'validasisecond')->name('validasi-payment-second');
             Route::get('/get-kelengkapan-second/{jenisId}', 'getKelengkapanSecond');
             Route::get('/getCustomerbyNomor/{nomor}', 'getCustomerbyNomor');
         });

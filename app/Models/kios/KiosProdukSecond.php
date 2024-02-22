@@ -30,4 +30,9 @@ class KiosProdukSecond extends Model
         return $this->belongsToMany(ProdukKelengkapan::class, 'kios_kelengkapan_second_list', 'kios_produk_second_id', 'produk_kelengkapan_id')->withPivot('qc_id');
     }
 
+    public function imageprodukbaru()
+    {
+        return $this->belongsTo(KiosImageSecond::class, 'produk_image_id');
+    }
+
 }

@@ -53,10 +53,13 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
-                    <th scope="col" class="px-6 py-3" style="width: 40%;">
+                    <th scope="col" class="px-6 py-3" style="width: 35%;">
                         Jenis Produk
                     </th>
-                    <th scope="col" class="px-6 py-3" style="width: 10%">
+                    <th scope="col" class="px-6 py-3" style="width: 16%">
+                        Serial Number
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="width: 5%">
                         CC Produk
                     </th>
                     <th scope="col" class="px-6 py-3" style="width: 20%">
@@ -75,6 +78,9 @@
                 <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
                     <td class="px-6 py-2">
                         {{ $pd->subjenis->produkjenis->jenis_produk }} {{ $pd->subjenis->paket_penjualan }}
+                    </td>
+                    <td class="px-6 py-2">
+                        {{ $pd->serial_number }}
                     </td>
                     <td class="px-6 py-2">
                         {{ $pd->cc_produk_second }}

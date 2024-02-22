@@ -11,11 +11,12 @@
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <div class="px-6 py-6 lg:px-8">
-                    <form action="#" method="POST" autocomplete="off">
+                <form action="{{ route('validasi-payment-second', $item->id) }}" method="POST" autocomplete="off">
+                    @csrf
+                    <div class="px-6 py-6 lg:px-8">
                         <div class="grid md:grid-cols-2 md:gap-6 pt">
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="supplier_second" id="supplier_second{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->come_from == 'Customer' ? $item->customer->first_name . ' ' . $item->customer->last_name : $item->marketplace->nama }}" readonly>
+                                <input type="text" name="supplier_second" id="supplier_second{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->customer->first_name . ' ' . $item->customer->last_name }}" readonly>
                                 <label for="supplier_second{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Supplier</label>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
@@ -25,17 +26,49 @@
                         </div>
                         <div class="grid md:grid-cols-2 md:gap-6 pt">
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="tipe_drone" id="tipe_drone{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->subjenis->produkjenis->jenis_produk }}" readonly>
+                                <input type="text" name="tipe_drone" id="tipe_drone{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->subjenis->produkjenis->jenis_produk }} {{ $item->subjenis->paket_penjualan }}" readonly>
                                 <label for="tipe_drone{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tipe Drone</label>
                             </div>
-                            <div class="relative z-0 w-full group">
-                                <span class="absolute start-0 bottom-8 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                            <div class="relative z-0 w-full mb-6 group">
+                                <input type="text" name="asal_pembelian" id="asal_pembelian{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->marketplace->nama }}" readonly>
+                                <label for="asal_pembelian{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Asal Beli</label>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-6 group">
+                                <input type="text" name="media_transaksi_second" id="media_transaksi_second{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="" required>
+                                <label for="media_transaksi_second{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Media Transaksi</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-6 group">
+                                <input type="text" name="no_rek" id="no_rek{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="" required>
+                                <label for="no_rek{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Rekening / VA</label>
+                            </div>
+                        </div>
+                        <div class="relative z-0 w-full mb-6 group">
+                            <input type="text" name="nama_akun" id="nama_akun{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="" required>
+                            <label for="nama_akun{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nama Akun</label>
+                        </div>
+                        <div class="grid grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full group flex items-center mb-6">
+                                <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
                                 <input type="text" name="biaya_pembelian" id="biaya_pembelian{{ $item->id }}" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="{{ number_format($item->biaya_pembelian, 0, ',', '.') }}">
                                 <label for="biaya_pembelian{{ $item->id }}" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Pengambilan</label>
                             </div>
+                            <div class="relative z-0 w-full group flex items-center mb-6">
+                                <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                                <input type="text" name="ongkir_second" id="ongkir_second{{ $item->id }}" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="{{ number_format($item->ongkir, 0, ',', '.') }}">
+                                <label for="ongkir_second{{ $item->id }}" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Pengambilan</label>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="relative z-0 w-full group">
+                            <input type="text" name="keterangan" id="keterangan{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="" required>
+                            <label for="keterangan{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Keterangan</label>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-end p-3 border-t-2 rounded-b dark:border-gray-600">
+                        <button type="submit" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
