@@ -19,9 +19,11 @@ use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\customer\DashboardCustomerController;
 use App\Http\Controllers\kios\KiosBuatPaketSecondController;
+use App\Http\Controllers\kios\KiosDashboardProduk;
 use App\Http\Controllers\kios\KiosKasirController;
 use App\Http\Controllers\kios\KiosKomplainController;
 use App\Http\Controllers\kios\KiosProductSecondController;
+use App\Http\Controllers\kios\KiosUnboxingQCBaruController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
@@ -46,7 +48,9 @@ Route::middleware('superadmin')->group(function () {
 
 Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
+        // 
         Route::get('/', [DashboardKiosController::class, 'index']);
+        
         Route::resource('/daily-recap', KiosDailyRecapController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::post('/daily-recap', [KiosDailyRecapController::class, 'store'])->name('form-daily-recap');
 
@@ -62,6 +66,8 @@ Route::middleware('kios')->group(function () {
             Route::get('/get-kelengkapan-second/{jenisId}', 'getKelengkapanSecond');
             Route::get('/getCustomerbyNomor/{nomor}', 'getCustomerbyNomor');
         });
+
+        Route::get('/dashboard-produk', [KiosDashboardProduk::class, 'index']);
 
         Route::group(['controller' => KiosProductController::class], function () {
             Route::resource('/product', KiosProductController::class)->only(['index', 'update', 'destroy']);
@@ -79,6 +85,8 @@ Route::middleware('kios')->group(function () {
             Route::post('/add-product', 'store')->name('form-kelengkapan');
             Route::get('/getKelengkapan/{jenisId}', 'getKelengkapan');
         });
+
+        Route::get('/unboxing-qc-produk-baru', [KiosUnboxingQCBaruController::class, 'index']);
 
         Route::group(['controller' => KiosBuatPaketSecondController::class], function () {
             Route::resource('add-paket-penjualan-second', KiosBuatPaketSecondController::class)->only(['index', 'store']);

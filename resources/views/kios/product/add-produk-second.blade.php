@@ -1,4 +1,5 @@
 @extends('kios.layouts.main')
+@extends($sidebarLayout)
 
 @section('container')
 

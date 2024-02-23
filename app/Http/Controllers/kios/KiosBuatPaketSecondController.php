@@ -24,18 +24,21 @@ class KiosBuatPaketSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $sideBar = 'kios.layouts.sidebarProduct';
         $dataKelengkapan = KiosQcProdukSecond::with('kelengkapans')->get();
         $kiosProduks = ProdukJenis::with('subjenis.kelengkapans')->get();
         
         return view('kios.product.add-produk-second', [
             'title' => 'Create Paket Second',
             'active' => 'create-paket-second',
-            'dropdown' => '',
+            'navActive' => 'product',
+            'dropdown' => 'add-product',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'kelengkapansecond' => $dataKelengkapan,
             'kiosproduks' => $kiosProduks,
-        ]);
+        ])
+        ->with('sidebarLayout', $sideBar);
     }
 
     public function store(Request $request)

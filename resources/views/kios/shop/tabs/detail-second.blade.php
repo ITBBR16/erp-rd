@@ -77,12 +77,12 @@
                             </button>
                             @if ($os->status == 'Proses QC')
                                 <a href="{{ route('shop-second.quality-control', encrypt($os->id)) }}" target="_blank" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">construction</i>
+                                    <i class="material-symbols-outlined text-xl">search_check</i>
                                 </a>
                             @endif
                             @if ($os->status_pembayaran != 'Paid')
                                 <button type="button" data-modal-target="validasi-second{{ $os->id }}" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">task_alt</i>
+                                    <i class="material-symbols-outlined text-base">add_card</i>
                                 </button>
                                 <button type="button" data-modal-target="delete-second{{ $os->id }}" data-modal-toggle="delete-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">delete</i>
