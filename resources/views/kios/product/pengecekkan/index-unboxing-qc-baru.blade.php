@@ -3,12 +3,12 @@
 
 @section('container')
     <div class="mb-4 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="pengirimanTab" data-tabs-toggle="#pengirimanTabContent" role="tablist">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="pengecekkanBaruTab" data-tabs-toggle="#pengecekkanBaruTabContent" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="pengirimanAktif-tab" data-tabs-target="#pengirimanAktif" type="button" role="tab" aria-controls="pengirimanAktif" aria-selected="false">PENGIRIMAN AKTIF</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="listPengecekkanBaru-tab" data-tabs-target="#listPengecekkanBaru" type="button" role="tab" aria-controls="listPengecekkanBaru" aria-selected="false">List Pengecekkan</button>
             </li>
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="history-pengiriman-tab" data-tabs-target="#history-pengiriman" type="button" role="tab" aria-controls="history-pengiriman" aria-selected="false">HISTORY PENGIRIMAN</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="unboxingQcBaru-tab" data-tabs-target="#unboxingQcBaru" type="button" role="tab" aria-controls="unboxingQcBaru" aria-selected="false">Unboxing & QC</button>
             </li>
         </ul>
     </div>
@@ -43,11 +43,8 @@
         </div>
     @endif
 
-    <div class="pengirimanTabContent">
-        @include('kios.pengiriman.tabs.pengiriman-aktif')
-        @include('kios.pengiriman.tabs.history-pengiriman')
-    </div>
-
-    <script src="/js/dd-layanan-pengiriman.js"></script>
-
+    <div class="pengecekkanBaruTabContent">
+        @include('kios.product.pengecekkan.tabs.list-pengecekkan-baru')
+        @include('kios.product.pengecekkan.tabs.unboxing-qc-baru')
+    </div> 
 @endsection

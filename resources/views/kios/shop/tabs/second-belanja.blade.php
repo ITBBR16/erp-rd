@@ -8,11 +8,23 @@
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="come_from" class="sr-only">Come From</label>
                     <select name="come_from" id="come_from" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('come_from') border-red-600 dark:border-red-500 @enderror" required>
-                        <option value="" hidden>-- Come From --</option>
+                        <option value="" hidden>Dapat Dari Mana ?</option>
                         <option value="Customer" class="dark:bg-gray-700">Customer</option>
                         <option value="Hunting" class="dark:bg-gray-700">Hunting</option>
                     </select>
                     @error('come_from')
+                        <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="relative z-0 w-full mb-6 group" id="marketplaceContainer">
+                    <label for="marketplace" class="sr-only">Nama Marketplace</label>
+                    <select name="marketplace" id="marketplace" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('marketplace') border-red-600 dark:border-red-500 @enderror">
+                        <option value="" hidden>-- Asal --</option>
+                        @foreach ($marketplace as $market)
+                            <option value="{{ $market->id }}" class="dark:bg-gray-700">{{ $market->nama }}</option>
+                        @endforeach
+                    </select>
+                    @error('marketplace')
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
@@ -25,18 +37,6 @@
                         @endforeach
                     </select>
                     @error('metode_pembelian')
-                        <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="relative z-0 w-full mb-6 group" id="marketplaceContainer">
-                    <label for="marketplace" class="sr-only">Nama Marketplace</label>
-                    <select name="marketplace" id="marketplace" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('marketplace') border-red-600 dark:border-red-500 @enderror">
-                        <option value="" hidden>-- Pilih Marketplace --</option>
-                        @foreach ($marketplace as $market)
-                            <option value="{{ $market->id }}" class="dark:bg-gray-700">{{ $market->nama }}</option>
-                        @endforeach
-                    </select>
-                    @error('marketplace')
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>

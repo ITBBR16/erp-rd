@@ -19,6 +19,7 @@ class KiosSupplierController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $sideBar = 'kios.layouts.sidebarProduct';
 
         $kategori = ProdukKategori::all();
         $suppliers = SupplierKios::with('kategoris')->get();
@@ -26,12 +27,14 @@ class KiosSupplierController extends Controller
         return view('kios.supplier.supplier', [
             'title' => 'Supplier',
             'active' => 'supplier',
+            'navActive' => 'product',
             'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'kategori' => $kategori,
             'suppliers' => $suppliers,
-        ]);
+        ])
+        ->with('sidebarLayout', $sideBar);
     }
 
     public function store(Request $request)

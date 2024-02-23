@@ -27,6 +27,7 @@ class KiosShopSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $sideBar = 'kios.layouts.sidebarProduct';
         $metode_pembelian = KiosMetodePembelianSecond::all();
         $statusPembayaran = KiosStatusPembayaran::all();
         $customer = Customer::all();
@@ -38,6 +39,7 @@ class KiosShopSecondController extends Controller
         return view('kios.shop.index-second', [
             'title' => 'Shop Second',
             'active' => 'shop-second',
+            'navActive' => 'product',
             'divisi' => $divisiName,
             'dropdown' => '',
             'dropdownShop' => true,
@@ -48,7 +50,8 @@ class KiosShopSecondController extends Controller
             'statusPembayaran' => $statusPembayaran,
             'orderSecond' => $secondOrder,
             'marketplace' => $marketplace,
-        ]);
+        ])
+        ->with('sidebarLayout', $sideBar);
     }
 
     public function store(Request $request) // Kirim Ke akuntan jika Online
@@ -177,14 +180,17 @@ class KiosShopSecondController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $kos = KiosOrderSecond::findOrFail($id);
+        $sideBar = 'kios.layouts.sidebarProduct';
         return view('kios.shop.qc-second.qc-second', [
             'title' => 'Quality Control Second',
             'active' => 'shop-second',
+            'navActive' => 'product',
             'divisi' => $divisiName,
             'dropdown' => '',
             'dropdownShop' => true,
             'kos' => $kos,
-        ]);
+        ])
+        ->with('sidebarLayout', $sideBar);
     }
 
     public function update(Request $request, $id)

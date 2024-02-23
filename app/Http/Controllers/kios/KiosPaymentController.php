@@ -21,17 +21,20 @@ class KiosPaymentController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $sideBar = 'kios.layouts.sidebarProduct';
         $payment = KiosPayment::with('order.supplier', 'metodepembayaran')->get();
         $metodePembayaran = KiosMetodePembayaran::all();
 
         return view('kios.shop.payment.payment', [
             'title' => 'Payment',
             'active' => 'payment',
+            'navActive' => 'product',
             'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'payment' => $payment,
-        ]);
+        ])
+        ->with('sidebarLayout', $sideBar);
     }
 
     public function validasi(Request $request, $id)

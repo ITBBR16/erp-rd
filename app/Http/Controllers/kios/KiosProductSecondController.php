@@ -17,16 +17,19 @@ class KiosProductSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $sideBar = 'kios.layouts.sidebarProduct';
         $produkSeconds = KiosProdukSecond::with('subjenis')->get();
 
         return view('kios.product.produk-second', [
             'title' => 'Product Second',
             'active' => 'product-second',
-            'dropdown' => true,
+            'navActive' => 'product',
+            'dropdown' => 'list-produk',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'produkseconds' => $produkSeconds,
-        ]);
+        ])
+        ->with('sidebarLayout', $sideBar);
     }
 
     public function updateSRPSecond(Request $request)

@@ -1,4 +1,5 @@
 @extends('kios.layouts.main')
+@extends($sidebarLayout)
 
 @section('container')
 <div class="mb-4 border-b border-gray-200">

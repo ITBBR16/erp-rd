@@ -23,6 +23,7 @@ class KiosShopController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $sideBar = 'kios.layouts.sidebarProduct';
         $supplier = SupplierKios::all();
         $jenisProduk = ProdukJenis::all();
         $paketPenjualan = ProdukSubJenis::all();
@@ -31,6 +32,7 @@ class KiosShopController extends Controller
         return view('kios.shop.index', [
             'title' => 'Shop',
             'active' => 'shop',
+            'navActive' => 'product',
             'dropdown' => '',
             'dropdownShop' => true,
             'divisi' => $divisiName,
@@ -38,7 +40,8 @@ class KiosShopController extends Controller
             'jenisProduk' => $jenisProduk,
             'paketPenjualan' => $paketPenjualan,
             'data' => $orders,
-        ]);
+        ])
+        ->with('sidebarLayout', $sideBar);
     }
 
     public function store(Request $request)

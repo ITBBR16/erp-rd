@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\kios;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\kios\KiosRepository;
 
-class DashboardKiosController extends Controller
+class KiosDashboardProduk extends Controller
 {
     public function __construct(private KiosRepository $suppKiosRepo){}
 
@@ -13,16 +14,17 @@ class DashboardKiosController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarAnalisa';
+        $sideBar = 'kios.layouts.sidebarProduct';
 
-        return view('kios.main.index', [
-            'title' => 'Kios',
-            'active' => 'dashboard-kios',
-            'navActive' => 'analisa',
+        return view('kios.product.dashboard', [
+            'title' => 'Dashboard Produk',
+            'active' => 'dashboard-produk',
+            'navActive' => 'product',
             'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
         ])
         ->with('sidebarLayout', $sideBar);
     }
+    
 }

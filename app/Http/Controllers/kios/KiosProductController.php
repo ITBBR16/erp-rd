@@ -20,6 +20,7 @@ class KiosProductController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $sideBar = 'kios.layouts.sidebarProduct';
         $produk = KiosProduk::with('subjenis', 'serialnumber')->get()->sortByDesc(function ($produk) {
             return $produk->status == 'Promo' ? 1 : 0;
         });;
@@ -29,13 +30,15 @@ class KiosProductController extends Controller
         return view('kios.product.index', [
             'title' => 'Product',
             'active' => 'product',
-            'dropdown' => true,
+            'navActive' => 'product',
+            'dropdown' => 'list-produk',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'produks' => $produk,
             'kategoriProduk' => $kategori,
             'typeProduks' => $types,
-        ]);
+        ])
+        ->with('sidebarLayout', $sideBar);
     }
 
     public function update(Request $request, $id)
