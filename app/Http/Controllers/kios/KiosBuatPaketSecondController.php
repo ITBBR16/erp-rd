@@ -24,7 +24,6 @@ class KiosBuatPaketSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarProduct';
         $dataKelengkapan = KiosQcProdukSecond::with('kelengkapans')->get();
         $kiosProduks = ProdukJenis::with('subjenis.kelengkapans')->get();
         
@@ -37,8 +36,7 @@ class KiosBuatPaketSecondController extends Controller
             'divisi' => $divisiName,
             'kelengkapansecond' => $dataKelengkapan,
             'kiosproduks' => $kiosProduks,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 
     public function store(Request $request)

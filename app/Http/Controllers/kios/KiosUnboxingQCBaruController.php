@@ -16,7 +16,6 @@ class KiosUnboxingQCBaruController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarProduct';
         $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'pelayanan.ekspedisi')
                         ->where('status', 'Incoming')
                         ->orWhere('status', 'InRD')
@@ -33,8 +32,7 @@ class KiosUnboxingQCBaruController extends Controller
             'divisi' => $divisiName,
             'dataIncoming' => $dataIncoming,
             'historyPenerimaan' => $historyPenerimaan,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 
 }

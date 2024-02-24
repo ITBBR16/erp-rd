@@ -133,7 +133,7 @@ $(document).ready(function(){
 
     $(document).on('focus', '.item_name', function () {
         let itemNameId = $(this).data("id");
-        $.get('/kios/autocomplete', function(data) {
+        $.get('/kios/kasir/autocomplete', function(data) {
             $("#item-name-"+itemNameId).autocomplete({
                 source: function(request, response) {
                     
@@ -172,7 +172,7 @@ $(document).ready(function(){
         let formIdItem = $(this).data("id");
         var formSN = $('#kasir_sn-'+formIdItem);
         var idItem = $('#item-id-'+formIdItem).val();
-        fetch('/kios/getSerialNumber/' + idItem)
+        fetch('/kios/kasir/getSerialNumber/' + idItem)
         .then(response => response.json())
         .then(data => {
 
@@ -216,7 +216,7 @@ $(document).ready(function(){
         var idItem = $('#item-id-'+formIdItem).val();
         let cekSn = formSN.find('option:selected').text();
 
-        fetch('/kios/getSerialNumber/' + idItem)
+        fetch('/kios/kasir/getSerialNumber/' + idItem)
         .then(response => response.json())
         .then(data => {
             if (cekSn.startsWith("Sec-")) {
@@ -245,7 +245,7 @@ $(document).ready(function(){
         var invoiceTlp = $('#invoice-no-tlp');
         var invoiceJalan = $('#invoice-jalan');
         var namaCustomer = $('#nama_customer').val();
-        fetch(`/kios/getCustomer/${namaCustomer}`)
+        fetch(`/kios/kasir/getCustomer/${namaCustomer}`)
         .then(response => response.json())
         .then(data => {
             data.forEach(customer => {

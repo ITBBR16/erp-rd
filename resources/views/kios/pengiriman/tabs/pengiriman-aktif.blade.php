@@ -59,10 +59,10 @@
                             </td>
                             <td class="px-6 py-2">
                                 <div class="flex flex-wrap">
-                                    <button type="button" data-modal-target="view-order-new" data-modal-toggle="view-order-new{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    {{-- <button type="button" data-modal-target="view-order-aktif{{ $data->id }}" data-modal-toggle="view-order-aktif{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
-                                    </button>
-                                    <button type="button" data-modal-target="input-resi" data-modal-toggle="input-resi{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    </button> --}}
+                                    <button type="button" data-modal-target="input-resi{{ $data->id }}" data-modal-toggle="input-resi{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">receipt_long</i>
                                     </button>
                                 </div>

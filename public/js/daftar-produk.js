@@ -37,7 +37,7 @@ $(document).ready(function () {
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
-            url: '/kios/update-srp-baru',
+            url: '/kios/product/update-srp-baru',
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': csrfToken
@@ -70,7 +70,7 @@ $(document).ready(function () {
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
-            url: '/kios/update-srp-second',
+            url: '/kios/product/update-srp-second',
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': csrfToken

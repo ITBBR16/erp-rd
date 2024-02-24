@@ -1,5 +1,4 @@
 @extends('kios.layouts.main')
-@extends($sidebarLayout)
 
 @section('container')
     <div class="flex text-3xl font-bold mb-8 text-gray-700 border-b border-gray-400 py-3 dark:text-gray-300">
@@ -110,13 +109,13 @@
                         </td>
                         <td class="px-6 py-2">
                             <div class="flex flex-wrap">
-                                <button type="button" data-modal-target="view-supplier" data-modal-toggle="view-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="view-supplier{{ $sp->id }}" data-modal-toggle="view-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <span class="material-symbols-outlined text-base">visibility</span>
                                 </button>
-                                <button type="button" data-modal-target="edit-supplier" data-modal-toggle="edit-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="edit-supplier{{ $sp->id }}" data-modal-toggle="edit-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <span class="material-symbols-outlined text-base">edit</span>
                                 </button>
-                                <button type="button" data-modal-target="delete-supplier" data-modal-toggle="delete-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="delete-supplier{{ $sp->id }}" data-modal-toggle="delete-supplier{{ $sp->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <span class="material-symbols-outlined text-base">delete</span>
                                 </button>
                             </div>

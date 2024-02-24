@@ -59,12 +59,12 @@
                             </td>
                             <td class="px-6 py-2">
                                 <div class="flex flex-wrap">
-                                    <button type="button" data-modal-target="view-order-new" data-modal-toggle="view-order-new{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    {{-- <button type="button" data-modal-target="view-order-history{{ $data->id }}" data-modal-toggle="view-order-history{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
-                                    </button>
+                                    </button> --}}
                                     @foreach ($data->penerimaan as $penerimaan)
                                         @if ($penerimaan->link_img != '')
-                                            <button type="button" data-modal-target="view-img-penerimaan" data-modal-toggle="view-img-penerimaan{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                            <button type="button" data-modal-target="view-img-penerimaan{{ $data->id }}" data-modal-toggle="view-img-penerimaan{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                                 <i class="material-symbols-outlined text-base">photo</i>
                                             </button>
                                         @endif

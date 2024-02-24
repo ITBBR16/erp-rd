@@ -12,7 +12,7 @@ $(document).ready(function(){
         const subJenisId = jenisDroneSecond.val();
         
         if(subJenisId){
-            fetch(`/kios/get-kelengkapan-second/${subJenisId}`)
+            fetch(`/kios/product/get-kelengkapan-second/${subJenisId}`)
             .then(response => response.json())
             .then(data => {
                 container.html('');
@@ -43,7 +43,7 @@ $(document).ready(function(){
         const nomor = idValue.replace(/\D/g, "");
         
         if(nomor != '') {
-            fetch(`/kios/getCustomerbyNomor/${nomor}`)
+            fetch(`/kios/product/getCustomerbyNomor/${nomor}`)
             .then(response => response.json())
             .then(data => {
                 if (data.length === 0) {

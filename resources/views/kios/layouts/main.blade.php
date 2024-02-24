@@ -40,6 +40,16 @@
 
         @include('kios.layouts.header')
 
+        @if (Request::is('kios/analisa/*'))
+            @include('kios.layouts.sidebarAnalisa')
+        @elseif (Request::is('kios/customer/*'))
+            @include('kios.layouts.sidebarCustomer')
+        @elseif (Request::is('kios/product/*'))
+            @include('kios.layouts.sidebarProduct')
+        @elseif (Request::is('kios/kasir/*'))
+            @include('kios.layouts.sidebarKasir')
+        @endif
+
         <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-y-scroll scrollbar-none">
             @yield('container')
         </div>

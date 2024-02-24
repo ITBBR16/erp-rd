@@ -28,7 +28,6 @@ class AddKelengkapanKiosController extends Controller
         $kategori = ProdukKategori::all();
         $kelengkapan = ProdukKelengkapan::all();
         $types = ProdukType::all();
-        $sideBar = 'kios.layouts.sidebarProduct';
 
         return view('kios.product.add-produk', [
             'title' => 'Add Product',
@@ -41,8 +40,7 @@ class AddKelengkapanKiosController extends Controller
             'jenis_produk' => $jenis_produk,
             'kelengkapan' => $kelengkapan,
             'types' => $types,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 
     public function store(Request $request)

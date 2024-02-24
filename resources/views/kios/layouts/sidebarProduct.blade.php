@@ -17,13 +17,13 @@
             </button>
             <ul id="dropdown-produk" class="{{ ($dropdown === 'list-produk') ? '' : 'hidden' }} py-2 space-y-1">
                 <li>
-                    <a href="/kios/product" class="{{ ($active === 'product') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                    <a href="/kios/product/list-product" class="{{ ($active === 'product') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                         <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">list_alt</span>
                         <span class="flex-1 ml-3 whitespace-nowrap">Produk Baru</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/kios/product-second" class="{{ ($active === 'product-second') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                    <a href="/kios/product/list-product-second" class="{{ ($active === 'product-second') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                         <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">list_alt</span>
                         <span class="flex-1 ml-3 whitespace-nowrap">Produk Second</span>
                     </a>
@@ -40,25 +40,25 @@
                 </button>
                 <ul id="dropdown-shop" class="{{ $dropdownShop ? '' : 'hidden' }} py-2 space-y-1">
                     <li>
-                        <a href="/kios/shop" class="{{ ($active === 'shop') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                        <a href="/kios/product/shop" class="{{ ($active === 'shop') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                             <span class="flex-1 ml-3 whitespace-nowrap">Produk Baru</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/kios/shop-second" class="{{ ($active === 'shop-second') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                        <a href="/kios/product/shop-second" class="{{ ($active === 'shop-second') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                             <span class="flex-1 ml-3 whitespace-nowrap">Produk Second</span>
                         </a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="/kios/pembayaran" class="{{ ($active === 'payment') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a href="/kios/product/pembayaran" class="{{ ($active === 'payment') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">shopping_cart_checkout</span>
                     <span class="flex-1 ml-3 whitespace-nowrap">Pembayaran</span>
                 </a>
             </li>
             <li>
-                <a href="/kios/pengiriman" class="{{ ($active === 'shipment') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a href="/kios/product/pengiriman" class="{{ ($active === 'shipment') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">local_shipping</span>
                     <span class="flex-1 ml-3 whitespace-nowrap">Pengiriman</span>
                 </a>
@@ -74,7 +74,7 @@
                 </button>
                 <ul id="dropdown-pengecekkan-baru" class="{{ ($dropdown === 'pengecekkan-baru') ? '' : 'hidden' }} py-2 space-y-1">
                     <li>
-                        <a href="/kios/unboxing-qc-produk-baru" class="{{ ($active === 'unboxing-qc') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                        <a href="/kios/product/unboxing-qc-produk-baru" class="{{ ($active === 'unboxing-qc') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                             <span class="flex-1 ml-3 whitespace-nowrap">Unboxing & QC</span>
                         </a>
                     </li>
@@ -108,7 +108,7 @@
         <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
             <li class="text-sm text-gray-700 dark:text-white">Add Supplier & Product</li>
             <li>
-                <a href="/kios/supplier" class="{{ ($active === 'supplier') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a href="/kios/product/supplier" class="{{ ($active === 'supplier') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">account_box</span>
                     <span class="flex-1 ml-3 whitespace-nowrap">Supplier</span>
                 </a>
@@ -121,13 +121,13 @@
                 </button>
                 <ul id="dropdown-tambah-produk" class="{{ ($dropdown === 'add-product') ? '' : 'hidden' }} py-2 space-y-1">
                     <li>
-                        <a href="/kios/add-product" class="{{ ($active === 'add-product') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                        <a href="/kios/product/add-product" class="{{ ($active === 'add-product') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                             <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">list_alt_add</span>
                             <span class="flex-1 ml-3 whitespace-nowrap">Produk Baru</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/kios/add-paket-penjualan-second" class="{{ ($active === 'create-paket-second') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                        <a href="/kios/product/add-paket-penjualan-second" class="{{ ($active === 'create-paket-second') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                             <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">list_alt_add</span>
                             <span class="flex-1 ml-3 whitespace-nowrap">Produk Second</span>
                         </a>
@@ -138,7 +138,7 @@
         <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
             <li class="text-sm text-gray-700 dark:text-white">Komplain</li>
             <li>
-                <a href="/kios/komplain" class="{{ ($active === 'komplain') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a href="/kios/product/komplain" class="{{ ($active === 'komplain') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">person_alert</span>
                     <span class="flex-1 ml-3 whitespace-nowrap">Komplain Supplier</span>
                 </a>

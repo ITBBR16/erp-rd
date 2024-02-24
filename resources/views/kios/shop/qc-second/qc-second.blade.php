@@ -1,5 +1,4 @@
 @extends('kios.layouts.main')
-@extends($sidebarLayout)
 
 @section('container')
     <div class="flex flex-row justify-between items-center border-b border-gray-400 py-3">

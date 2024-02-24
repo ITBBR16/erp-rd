@@ -17,7 +17,7 @@
                                 <div class="font-medium leading-none dark:text-gray-100">Hapus Data {{ $item->nama_perusahaan }} ?</div>
                                 <p class="text-sm text-gray-600 leading-none mt-1 dark:text-gray-500">Data Supplier Akan Dihapus Permanent</p>
                             </div>
-                            <button type="submit" class="flex-no-shrink bg-red-500 px-5 ml-4 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 text-white rounded-full" data-modal-hide="delete-supplier">Delete</button>
+                            <button type="submit" class="flex-no-shrink bg-red-500 px-5 ml-4 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 text-white rounded-full">Delete</button>
                         </div>
                     </div>
                 </form>

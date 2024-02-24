@@ -21,7 +21,6 @@ class KiosKomplainController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarProduct';
         $statusKomplain = DB::connection('rumahdrone_kios')->table('kios_status_komplain')->get();
         $dataKomplain = KiosKomplainSupplier::with('validasi.orderLists.order', 'validasi.orderLists.paket.produkjenis')->get();
         $bankAkun = KiosAkunRD::all();
@@ -36,8 +35,7 @@ class KiosKomplainController extends Controller
             'dataKomplain' => $dataKomplain,
             'statusKomplain' => $statusKomplain,
             'bankAkun' => $bankAkun,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 
     public function update(Request $request, $id)

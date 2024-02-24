@@ -24,7 +24,6 @@ class KiosKasirController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarKasir';
         $today = Carbon::now();
         $dueDate = $today->copy()->addMonth(3);
         $customerData = Customer::all();
@@ -43,8 +42,7 @@ class KiosKasirController extends Controller
             'customerdata' => $customerData,
             'akunrd' => $akunRd,
             'invoiceid' => $invoiceId,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 
     public function store(Request $request)

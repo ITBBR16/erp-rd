@@ -16,16 +16,16 @@
             {{-- Navbar --}}
             <div class="flex items-center justify-between font-medium md:gap-6">
                 <div>
-                    <a href="/kios" class="{{ ($navActive === 'analisa') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Analisis</a>
+                    <a href="/kios/analisa/dashboard" class="{{ ($navActive === 'analisa') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Analisa</a>
                 </div>
                 <div>
-                    <a href="/kios/daily-recap" class="{{ ($navActive === 'customer') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Customer</a>
+                    <a href="/kios/customer/daily-recap" class="{{ ($navActive === 'customer') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Customer</a>
                 </div>
                 <div>
-                    <a href="/kios/dashboard-produk" class="{{ ($navActive === 'product') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Product</a>
+                    <a href="/kios/product/dashboard-produk" class="{{ ($navActive === 'product') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Product</a>
                 </div>
                 <div>
-                    <a href="/kios/kasir" class="{{ ($navActive === 'kasir') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Kasir</a>
+                    <a href="/kios/kasir/kasir" class="{{ ($navActive === 'kasir') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Kasir</a>
                 </div>
                 <div>
                     <a href="#" class="{{ ($navActive === 'aftersales') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Aftersales</a>

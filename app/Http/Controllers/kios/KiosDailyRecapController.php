@@ -24,7 +24,6 @@ class KiosDailyRecapController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarCustomer';
         $provinsi = Provinsi::all();
         $customer = Customer::all();
         $statusProduk = ProdukStatus::all();
@@ -47,8 +46,7 @@ class KiosDailyRecapController extends Controller
             'dailyRecap' => $dailyRecap,
             'statusrecap' => $recapStatus,
             'keperluanrecap' => $recapKeperluan,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 
     public function store(Request $request)

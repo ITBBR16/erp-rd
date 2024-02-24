@@ -7,7 +7,7 @@ $(document).ready(function () {
         
         if (selectSeri) {
         
-            fetch(`/kios/get-paket-penjualan/${selectSeri}`)
+            fetch(`/kios/product/get-paket-penjualan/${selectSeri}`)
                 .then(response => response.json())
                 .then(data => {
                     jenisProduk.empty();

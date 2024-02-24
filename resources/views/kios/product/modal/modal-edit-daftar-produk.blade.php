@@ -13,7 +13,7 @@
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <form action="{{ route('product.update', $produk->id) }}" method="POST" autocomplete="off">
+                <form action="{{ route('list-product.update', $produk->id) }}" method="POST" autocomplete="off">
                     @csrf
                     @method('PUT')
                     <div class="px-6 py-6 lg:px-8 space-y-6">

@@ -14,7 +14,6 @@ class KiosDashboardProduk extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarProduct';
 
         return view('kios.product.dashboard', [
             'title' => 'Dashboard Produk',
@@ -23,8 +22,7 @@ class KiosDashboardProduk extends Controller
             'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
     
 }

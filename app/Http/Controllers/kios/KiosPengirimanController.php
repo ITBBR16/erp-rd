@@ -19,7 +19,6 @@ class KiosPengirimanController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarProduct';
         $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'pelayanan.ekspedisi', 'divisi', 'penerimaan')->get();
         $ekspedisi = Ekspedisi::all();
         $layanan = JenisPelayanan::all();
@@ -34,8 +33,7 @@ class KiosPengirimanController extends Controller
             'dataIncoming' => $dataIncoming,
             'ekspedisi' => $ekspedisi,
             'jenisLayanan' => $layanan,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 
     public function update(Request $request, $id)

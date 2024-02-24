@@ -6,7 +6,7 @@ $(document).ready(function(){
         const ekspedisiValue = ekspedisiSelect.val();
 
         if (ekspedisiValue) {
-            fetch(`/kios/getLayanan/${ekspedisiValue}`)
+            fetch(`/kios/product/getLayanan/${ekspedisiValue}`)
                 .then(response => response.json())
                 .then(data => {
                     layananSelect.empty();

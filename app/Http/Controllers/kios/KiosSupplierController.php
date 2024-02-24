@@ -19,7 +19,6 @@ class KiosSupplierController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarProduct';
 
         $kategori = ProdukKategori::all();
         $suppliers = SupplierKios::with('kategoris')->get();
@@ -33,8 +32,7 @@ class KiosSupplierController extends Controller
             'divisi' => $divisiName,
             'kategori' => $kategori,
             'suppliers' => $suppliers,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 
     public function store(Request $request)

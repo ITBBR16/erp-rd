@@ -8,7 +8,7 @@ $(document).ready(function() {
         const jenisValue = jenisSelect.val();
 
         if (jenisValue) {
-            fetch(`/kios/getKelengkapan/${jenisValue}`)
+            fetch(`/kios/product/getKelengkapan/${jenisValue}`)
                 .then(response => response.json())
                 .then(data => {
                     kelengkapanSelect.html('');
@@ -62,7 +62,7 @@ $(document).ready(function() {
         const jenisValue = jenisSelect.val();
 
         if (jenisValue) {
-            fetch(`/kios/getKelengkapan/${jenisValue}`)
+            fetch(`/kios/product/getKelengkapan/${jenisValue}`)
                 .then(response => response.json())
                 .then(data => {
                     $('#kelengkapan-' + nomorKelengkapan).html('');

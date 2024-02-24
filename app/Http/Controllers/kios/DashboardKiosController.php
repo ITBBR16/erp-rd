@@ -22,7 +22,6 @@ class DashboardKiosController extends Controller
             'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
-        ])
-        ->with('sidebarLayout', $sideBar);
+        ]);
     }
 }

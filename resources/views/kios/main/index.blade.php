@@ -1,5 +1,4 @@
 @extends('kios.layouts.main')
-@extends($sidebarLayout)
 
 @section('container')
     <div class="grid grid-cols-2 gap-8 mb-8 border-b border-gray-400 py-3">

@@ -58,7 +58,7 @@ $(document).ready(function(){
         `
         kelengkapanSecondContainer.append(tambahFormKelengkapan);
     
-        fetch(`/kios/getKelengkapanSecond`)
+        fetch(`/kios/product/getKelengkapanSecond`)
         .then(response => response.json())
         .then(data => {
             $('#kelengkapan-second-' + nomorKelengkapan).html('');
@@ -99,7 +99,7 @@ $(document).ready(function(){
         let ksId = $(this).data("id");
         const valKelengkapan = $("#kelengkapan-second-"+ksId).val();
         
-        fetch(`/kios/getSNSecond/${valKelengkapan}`)
+        fetch(`/kios/product/getSNSecond/${valKelengkapan}`)
         .then(response => response.json())
         .then(data => {
             $('#sn-second-' + ksId).html('');
