@@ -74,52 +74,13 @@
                         </div>
                     </div>
                     <div>
-                        <label for="kasir-tax" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tax :</label>
+                        <input type="hidden" name="kasir_tax" id="kasir-tax" class="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" readonly>
+                        <label for="kasir-ongkir" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ongkir :</label>
                         <div class="flex">
-                            <input type="text" name="kasir_tax" id="kasir-tax" class="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="11" readonly>
-                            <span class="material-symbols-outlined inline-flex items-center px-3 text-lg text-gray-900 bg-gray-200 border rounded-l-0 border-gray-300 rounded-r-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">percent</span>
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="kasir_ongkir" id="kasir-ongkir" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
                         </div>
                     </div>
-                </div>
-                <div class="relative overflow-x-auto pt-4">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 border-b-2 uppercase dark:text-gray-400">
-                            <tr>
-                                <th scope="col" class="px-4 py-3" style="width: 40%;">
-                                    Product Name
-                                </th>
-                                <th scope="col" class="px-4 py-3" style="width: 30%;">
-                                    Serial Number
-                                </th>
-                                <th scope="col" class="px-4 py-3" style="width: 10%;">
-                                    QTY
-                                </th>
-                                <th scope="col" class="px-4 py-3" style="width: 30%;">
-                                    Total Price
-                                </th>
-                                <th scope="col" class="px-4 py-3">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="kasir-container">
-                            
-                        </tbody>
-                        <tfoot>
-                            <tr class="font-semibold text-gray-900 dark:text-white">
-                                <td class="px-4 py-3">
-                                    <div class="flex justify-between text-rose-600">
-                                        <div class="flex cursor-pointer mt-4 hover:text-red-400">
-                                            <button type="button" id="add-item-kasir" class="flex flex-row justify-between gap-2">
-                                                <span class="material-symbols-outlined">add_circle</span>
-                                                <span class="">Tambah Item</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
                 </div>
             </div>
     
@@ -144,10 +105,18 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex justify-start">
+                            <p class="font-semibold text-gray-900 dark:text-white">Ongkir :</p>
+                        </div>
+                        <div class="flex justify-end ml-auto">
+                            <p id="kasir-box-ongkir" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Tax :</p>
                         </div>
                         <div class="flex justify-end ml-auto">
-                            <p id="kasir-box-tax" class="text-gray-900 font-normal dark:text-white">(11%) Rp. 0</p>
+                            <p id="kasir-box-tax" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
                     </div>
                     <div class="flex items-center justify-between border-t-2">
@@ -161,6 +130,49 @@
                     <button type="button" data-modal-target="kasir-invoice" data-modal-toggle="kasir-invoice" class="review-invoice text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full">Review Invoice</button>
                 </div>
             </div>
+        </div>
+        <div class="relative overflow-x-auto pt-4">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-900 border-b-2 uppercase dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-4 py-3" style="width: 20%;">
+                            Jenis Transaksi
+                        </th>
+                        <th scope="col" class="px-4 py-3" style="width: 30%;">
+                            Product Name
+                        </th>
+                        <th scope="col" class="px-4 py-3" style="width: 20%;">
+                            Serial Number
+                        </th>
+                        <th scope="col" class="px-4 py-3" style="width: 20%;">
+                            Total Price
+                        </th>
+                        <th scope="col" class="px-4 py-3" style="width: 5%;">
+                            Tax
+                        </th>
+                        <th scope="col" class="px-4 py-3" style="width: 5%;">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="kasir-container">
+                    
+                </tbody>
+                <tfoot>
+                    <tr class="font-semibold text-gray-900 dark:text-white">
+                        <td class="px-4 py-3">
+                            <div class="flex justify-between text-rose-600">
+                                <div class="flex cursor-pointer mt-4 hover:text-red-400">
+                                    <button type="button" id="add-item-kasir" class="flex flex-row justify-between gap-2">
+                                        <span class="material-symbols-outlined">add_circle</span>
+                                        <span class="">Tambah Item</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </form>
     {{-- Modal --}}

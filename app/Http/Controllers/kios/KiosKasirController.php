@@ -52,21 +52,22 @@ class KiosKasirController extends Controller
             $request->validate([
                 'nama_customer' => 'required',
                 'kasir_metode_pembayaran' => 'required',
+                'jenis_transaksi' => 'required|array|min:1',
                 'kasir_sn' => 'required|array|min:1',
                 'item_id' => 'required|array|min:1',
-                'kasir_qty' => 'required|array|min:1',
                 'kasir_harga' => 'required|array|min:1',
+                'checkbox_tax'
             ]);
             
-            $kasirTanggal = Carbon::now()->format('d-m-Y H:i:s');
+            $kasirOngkir = $request->input('kasir_ongkir');
             $kasirCustomer = $request->input('nama_customer');
             $kasirMetodePembayaran = $request->input('kasir_metode_pembayaran');
             $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount'));
             $kasirTax = $request->input('kasir_tax');
 
+            $kasirJenisTransaksi = $request->input('jenis_transaksi');
             $kasirItem = $request->input('item_id');
             $kasirSN = $request->input('kasir_sn');
-            $kasirQty = $request->input('kasir_qty');
             $kasirSrp = preg_replace("/[^0-9]/", "", $request->input('kasir_harga'));
             $totalHarga = 0;
 
@@ -78,19 +79,19 @@ class KiosKasirController extends Controller
             $transaksi->employee_id = $userId;
             $transaksi->customer_id = $kasirCustomer;
             $transaksi->metode_pembayaran = $kasirMetodePembayaran;
+            $transaksi->ongkir = $kasirOngkir;
             $transaksi->discount = $kasirDiscount;
             $transaksi->tax = $kasirTax;
-            $transaksi->tanggal_pembelian = $kasirTanggal;
             $transaksi->save();
 
             foreach($kasirItem as $index => $item) {
-                $totalHarga += $kasirQty[$index] * $kasirSrp[$index];
+                $totalHarga += $kasirSrp[$index];
                 
                 $detailTransaksi = new KiosTransaksiDetail();
                 $detailTransaksi->kios_transaksi_id = $transaksi->id;
+                $detailTransaksi->jenis_transaksi = $kasirJenisTransaksi;
                 $detailTransaksi->kios_produk_id = $item;
                 $detailTransaksi->serial_number_id = $kasirSN[$index];
-                $detailTransaksi->quantity = $kasirQty[$index];
                 $detailTransaksi->save();
 
                 KiosSerialNumber::find($kasirSN[$index])->update(['status' => 'Sold']);
@@ -107,28 +108,35 @@ class KiosKasirController extends Controller
 
     }
 
-    public function autocomplete()
+    public function autocomplete($jenisTransaksi)
     {
-        $items = ProdukSubJenis::with('produkjenis')->get();
+        if ($jenisTransaksi == 'Baru') {
+            // $items = ProdukSubJenis::with('produkjenis')->get();
+            $items = KiosProduk::with('subjenis.produkjenis')->where('status', 'Ready')->get();
+        } elseif ($jenisTransaksi == 'Bekas') {
+            $items = KiosProdukSecond::with('subjenis.produkjenis')->where('status', 'Ready')->get();
+        }
         return response()->json($items);
     }
 
-    public function getSerialNumber($id)
+    public function getSerialNumber($jenisTransaksi, $id)
     {
-        $produkId = KiosProduk::where('sub_jenis_id', $id)->value('id');
-        $dataProduk = KiosProduk::where('sub_jenis_id', $id)->first();
-        if ($dataProduk->status === 'Promo') {
-            $nilai = $dataProduk->harga_promo;
-        } else {
-            $nilai = $dataProduk->srp;
+        if($jenisTransaksi == 'Baru') {
+            $produkId = KiosProduk::where('sub_jenis_id', $id)->value('id');
+            $dataProduk = KiosProduk::where('sub_jenis_id', $id)->first();
+            if ($dataProduk->status === 'Promo') {
+                $nilai = $dataProduk->harga_promo;
+            } else {
+                $nilai = $dataProduk->srp;
+            }
+    
+            $dataSN = KiosSerialNumber::where('produk_id', $produkId)->where('status', 'Ready')->get();
+        } elseif($jenisTransaksi == 'Bekas') {
+            $nilai = KiosProdukSecond::where('sub_jenis_id', $id)->value('srp');
+            $dataSN = KiosProdukSecond::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
         }
-
-        $dataSN = KiosSerialNumber::where('produk_id', $produkId)->where('status', 'Ready')->get();
-
-        $nilaiSecond = KiosProdukSecond::where('sub_jenis_id', $id)->value('srp');
-        $snSecond = KiosProdukSecond::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
         
-        return response()->json(['data_sn' => $dataSN, 'sn_second' => $snSecond, 'nilai' => $nilai, 'nilai_second' => $nilaiSecond]);
+        return response()->json(['data_sn' => $dataSN, 'nilai' => $nilai]);
     }
 
     public function getCustomer($customerId)

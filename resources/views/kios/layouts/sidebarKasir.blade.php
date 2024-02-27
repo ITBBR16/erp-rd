@@ -3,7 +3,7 @@
         <ul class="space-y-2 font-medium">
             <li>
                 <a href="/kios/kasir/kasir" class="{{ ($active === 'kasir-kios') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">dashboard</span>
+                    <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">point_of_sale</span>
                     <span class="flex-1 ml-3 whitespace-nowrap">Kasir</span>
                 </a>
             </li>

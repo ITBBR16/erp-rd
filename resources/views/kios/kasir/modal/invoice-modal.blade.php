@@ -86,8 +86,8 @@
                                         <p class="text-xs text-gray-500">- Pembayaran melalui Marketplace atau transfer rek BCA 4400175395 | Mandiri 1560012623593 a/n Farra Rachmanda</p>
                                     </div>
                                     <div class="flex sm:justify-end">
-                                        <div class="text-sm w-full max-w-2xl sm:text-end space-y-2">
-                                            <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
+                                        <div class="text-sm w-full max-w-2xl sm:text-end">
+                                            <div class="grid grid-cols-2 sm:grid-cols-1 gap-1">
                                                 <dl class="grid sm:grid-cols-5 gap-x-3">
                                                     <dt class="col-span-2 font-semibold text-gray-800 dark:text-gray-200">Subtotal:</dt>
                                                     <dd id="invoice-subtotal" class="col-span-3 text-gray-500"></dd>
@@ -95,6 +95,10 @@
                                                 <dl class="grid sm:grid-cols-5 gap-x-3">
                                                     <dt class="col-span-2 font-semibold text-gray-800 dark:text-gray-200">Discount:</dt>
                                                     <dd id="invoice-discount" class="col-span-3 text-gray-500"></dd>
+                                                </dl>
+                                                <dl class="grid sm:grid-cols-5 gap-x-3">
+                                                    <dt class="col-span-2 font-semibold text-gray-800 dark:text-gray-200">Ongkir:</dt>
+                                                    <dd id="invoice-ongkir" class="col-span-3 text-gray-500"></dd>
                                                 </dl>
                                                 <dl class="grid sm:grid-cols-5 gap-x-3">
                                                     <dt class="col-span-2 font-semibold text-gray-800 dark:text-gray-200">Tax:</dt>

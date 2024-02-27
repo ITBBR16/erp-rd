@@ -116,8 +116,8 @@ Route::middleware('kios')->group(function () {
         Route::prefix('/kasir')->group(function () {
             Route::group(['controller' => KiosKasirController::class], function () {
                 Route::resource('/kasir', KiosKasirController::class)->only(['index', 'store']);
-                Route::get('/autocomplete', 'autocomplete');
-                Route::get('/getSerialNumber/{id}', 'getSerialNumber');
+                Route::get('/autocomplete/{jenisTransaksi}', 'autocomplete');
+                Route::get('/getSerialNumber/{jenisTransaksi}/{id}', 'getSerialNumber');
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
             });
         });
