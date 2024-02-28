@@ -13,7 +13,6 @@ class DashboardKiosController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $sideBar = 'kios.layouts.sidebarAnalisa';
 
         return view('kios.main.index', [
             'title' => 'Kios',
