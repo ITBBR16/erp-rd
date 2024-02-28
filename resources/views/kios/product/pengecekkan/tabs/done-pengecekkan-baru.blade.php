@@ -1,4 +1,4 @@
-<div class="hidden p-4" id="listPengecekkanBaru" role="tabpanel" aria-labelledby="listPengecekkanBaru-tab">
+<div class="hidden p-4" id="historyPengecekkanBaru" role="tabpanel" aria-labelledby="historyPengecekkanBaru-tab">
     <div class="relative overflow-x-auto">
         <div class="relative overflow-x-auto">
             <div class="flex items-center justify-between py-4">
@@ -28,7 +28,7 @@
                         Jenis Layanan
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Tanggal Dikirim
+                        Tanggal Penerimaan
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status
@@ -39,31 +39,28 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($dataIncoming as $data)
-                    @if ($data->status == 'Incoming')
+                @foreach ($historyPenerimaan as $history)
+                    @if ($history->pengiriman->status == 'Diterima' || $history->pengiriman->status == 'InRD')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ $data->no_resi }}
+                                {{ $history->pengiriman->no_resi }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $data->pelayanan->ekspedisi->ekspedisi }}
+                                {{ $history->pengiriman->pelayanan->ekspedisi->ekspedisi }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $data->pelayanan->nama_layanan }}
+                                {{ $history->pengiriman->pelayanan->nama_layanan }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $data->tanggal_kirim }}
+                                {{ $history->tanggal_diterima }}
                             </td>
                             <td class="px-6 py-2">
-                                <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $data->status }}</span>
+                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $history->pengiriman->status }}</span>
                             </td>
                             <td class="px-6 py-2">
                                 <div class="flex flex-wrap">
-                                    {{-- <button type="button" data-modal-target="view-order-new{{ $data->id }}" data-modal-toggle="view-order-new{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="view-done-penerimaan{{ $history->id }}" data-modal-toggle="view-done-penerimaan{{ $history->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
-                                    </button> --}}
-                                    <button type="button" data-modal-target="modal-penerimaan{{ $data->id }}" data-modal-toggle="modal-penerimaan{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">receipt_long</i>
                                     </button>
                                 </div>
                             </td>
@@ -76,17 +73,18 @@
             {{-- {{ $suppliers->links() }} --}}
         </div>
     </div>
-    @if (!$dataIncoming->contains('status', 'Incoming'))
+    @if (!$dataIncoming->contains('status', 'Diterima') && !$dataIncoming->contains('status', 'InRD'))
         <div class="p-4 mt-4">
-            <div class="flex datas-center justify-center">
+            <div class="flex justify-center">
                 <figure class="max-w-lg">
                     <img class="h-auto max-w-full rounded-lg" src="/img/box-empty-3d.png" alt="Not Found" width="200" height="10">
-                    <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Belum ada paket yang dikirim</figcaption>
+                    <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Belum ada history penerimaan barang</figcaption>
                 </figure>
             </div>
         </div>
     @endif
 
     {{-- Modal --}}
-    @include('kios.product.pengecekkan.modal.modal-penerimaan-baru')
+    @include('kios.product.pengecekkan.modal.modal-view-done-penerimaan')
+
 </div>

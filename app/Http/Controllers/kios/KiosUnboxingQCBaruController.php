@@ -22,8 +22,7 @@ class KiosUnboxingQCBaruController extends Controller
                         ->get();
         $historyPenerimaan = PenerimaanProduk::with('pengiriman.order.supplier', 'pengiriman.pelayanan.ekspedisi')->get();
 
-
-        return view('kios.product.pengecekkan.index-unboxing-qc-baru', [
+        return view('kios.product.pengecekkan.index-pengecekkan-baru', [
             'title' => 'Unboxing & QC',
             'active' => 'unboxing-qc',
             'navActive' => 'product',

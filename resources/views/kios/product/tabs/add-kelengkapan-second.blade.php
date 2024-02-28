@@ -60,7 +60,7 @@
             </div>
             <h3 class="mt-6 text-gray-900 dark:text-white font-semibold text-xl">Data File Upload</h3>
             <div class="bg-white p-4 text-white border-0 border-transparent border-solid shadow-md rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
-                <div class=" mt-3 grid grid-cols-2 gap-4 md:gap-6">
+                <div class="mt-3 grid grid-cols-2 gap-4 md:gap-6">
                     <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">File Utama Produk :</label>
                     <div class="flex items-center justify-center w-full">
                         <label for="file_paket_produk" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">

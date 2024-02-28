@@ -74,13 +74,13 @@
                 </button>
                 <ul id="dropdown-pengecekkan-baru" class="{{ ($dropdown === 'pengecekkan-baru') ? '' : 'hidden' }} py-2 space-y-1">
                     <li>
-                        <a href="/kios/product/unboxing-qc-produk-baru" class="{{ ($active === 'unboxing-qc') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
-                            <span class="flex-1 ml-3 whitespace-nowrap">Unboxing & QC</span>
+                        <a href="/kios/product/pengecekkan-produk-baru" class="{{ ($active === 'unboxing-qc') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                            <span class="flex-1 ml-3 whitespace-nowrap">Penerimaan</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
-                            <span class="flex-1 ml-3 whitespace-nowrap">Validasi</span>
+                            <span class="flex-1 ml-3 whitespace-nowrap">Validasi & QC</span>
                         </a>
                     </li>
                 </ul>

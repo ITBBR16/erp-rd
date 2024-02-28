@@ -17,10 +17,10 @@
                         @method('PUT')
                         <div class="grid md:grid-cols-2 md:gap-6 pt">
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="order_id" id="order_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ ($item->status_order == 'Baru' ? 'K.' . $item->order->id : 'S.' . $item->ordersecond->id) }}" required>
-                                <label for="order_id" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Order ID</label>
+                                <input type="text" name="order_id" id="order_id{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ ($item->status_order == 'Baru' ? 'K.' . $item->order->id : 'S.' . $item->ordersecond->id) }}" required>
+                                <label for="order_id{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Order ID</label>
                             </div>
-                            @error('order_id')
+                            @error('order_id{{ $item->id }}')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                             <div class="relative w-full group">
@@ -29,54 +29,49 @@
                                       <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                     </svg>
                                 </div>
-                                <input datepicker datepicker-autohide name="tanggal_dikirim" id="date-input" type="text" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" placeholder="Tanggal Pengiriman" required>
+                                <input datepicker datepicker-autohide name="tanggal_dikirim" id="date-input{{ $item->id }}" type="text" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" placeholder="Tanggal Pengiriman" required>
                             </div>
-                            @error('tanggal_dikirim')
+                            @error('tanggal_dikirim{{ $item->id }}')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="grid md:grid-cols-2 md:gap-6 pt">
                             <div class="relative z-0 w-full mb-6 group">
-                                <select name="ekspedisi" id="ekspedisi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" {{ ($item->jenis_layanan_id != '' ? 'disabled' : '') }} required>
+                                <select name="ekspedisi" id="ekspedisi{{ $item->id }}" data-id="{{ $item->id }}" class="ekspedisi block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" {{ ($item->jenis_layanan_id != '' ? 'disabled' : '') }} required>
                                     <option value="" hidden>-- Ekspedisi --</option>
                                     @foreach ($ekspedisi as $eks)
-                                        @php
-                                            $selected = ($item->pelayanan && $item->pelayanan->ekspedisi && $item->pelayanan->ekspedisi->id == $eks->id) ? 'selected' : '';
-                                        @endphp
-                                        <option value="{{ $eks->id }}" class="dark:bg-gray-700" {{ $selected }}>{{ $eks->ekspedisi }}</option>
+                                        <option value="{{ $eks->id }}" class="dark:bg-gray-700">{{ $eks->ekspedisi }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            @error('ekspedisi')
+                            @error('ekspedisi{{ $item->id }}')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                             <div class="relative z-0 w-full mb-6 group">
-                                <select name="layanan" id="layanan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" {{ ($item->jenis_layanan_id != '' ? 'disabled' : '') }} required>
+                                <select name="layanan" id="layanan{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" {{ ($item->jenis_layanan_id != '' ? 'disabled' : '') }} required>
                                     <option value="" hidden>-- Jenis Pengiriman --</option>
                                     @foreach ($jenisLayanan as $layanan)
-                                        @if ($item->jenis_layanan_id == $layanan->id)
-                                            <option value="{{ $layanan->id }}" class="dark:bg-gray-700" selected>{{ $layanan->nama_layanan }}</option>
-                                        @endif
+                                        <option value="{{ $layanan->id }}" class="dark:bg-gray-700">{{ $layanan->nama_layanan }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            @error('layanan')
+                            @error('layanan{{ $item->id }}')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="grid grid-cols-2 md:gap-6 pt">
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="no_resi" id="no_resi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ old('no_resi', $item->no_resi) }}" {{ ($item->no_resi != '' ? 'disabled' : '') }} required>
-                                <label for="no_resi" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Resi</label>
+                                <input type="text" name="no_resi" id="no_resi{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ old('no_resi', $item->no_resi) }}" {{ ($item->no_resi != '' ? 'disabled' : '') }} required>
+                                <label for="no_resi{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Resi</label>
                             </div>
-                            @error('no_resi')
+                            @error('no_resi{{ $item->id }}')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="no_faktur" id="no_faktur" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ old('no_resi', $item->no_faktur) }}" {{ ($item->no_faktur != '' ? 'disabled' : '') }}>
-                                <label for="no_faktur" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Faktur Pajak</label>
+                                <input type="text" name="no_faktur" id="no_faktur{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ old('no_resi', $item->no_faktur) }}" {{ ($item->no_faktur != '' ? 'disabled' : '') }}>
+                                <label for="no_faktur{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Faktur Pajak</label>
                             </div>
-                            @error('no_faktur')
+                            @error('no_faktur{{ $item->id }}')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>

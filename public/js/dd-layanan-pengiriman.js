@@ -1,8 +1,9 @@
 $(document).ready(function(){
-    const ekspedisiSelect = $('#ekspedisi');
-    const layananSelect = $('#layanan');
     
-    ekspedisiSelect.on('change', function () {
+    $(document).on('change', '.ekspedisi',function () {
+        const idEkspedisi = $(this).data("id");
+        const ekspedisiSelect = $('#ekspedisi'+idEkspedisi);
+        const layananSelect = $('#layanan'+idEkspedisi);
         const ekspedisiValue = ekspedisiSelect.val();
 
         if (ekspedisiValue) {

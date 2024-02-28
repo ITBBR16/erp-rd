@@ -108,7 +108,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getPriceSecond/{id}', 'getPriceSecond');
             });
             
-            Route::get('/unboxing-qc-produk-baru', [KiosUnboxingQCBaruController::class, 'index']);
+            Route::get('/pengecekkan-produk-baru', [KiosUnboxingQCBaruController::class, 'index']);
             
             Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);
         });
