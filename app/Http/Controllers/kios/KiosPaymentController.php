@@ -8,6 +8,7 @@ use App\Models\kios\KiosPayment;
 use App\Http\Controllers\Controller;
 use App\Models\ekspedisi\PengirimanEkspedisi;
 use App\Models\kios\KiosMetodePembayaran;
+use App\Models\kios\KiosOrder;
 use App\Repositories\kios\KiosRepository;
 use Carbon\Carbon;
 use Exception;
@@ -53,6 +54,7 @@ class KiosPaymentController extends Controller
             $tanggal->setTimezone('Asia/Jakarta');
             $formattedDate = $tanggal->format('d/m/Y H:i:s');
             $kiosPayment = KiosPayment::findOrFail($id);
+            $orderId = $request->input('order_id');
     
             $totalBelanja = preg_replace("/[^0-9]/", "", $request->input('nilai_belanja'));
             $totalOngkir = preg_replace("/[^0-9]/", "", $request->input('ongkir'));
@@ -79,12 +81,23 @@ class KiosPaymentController extends Controller
             $kiosPayment->keterangan = $request->input('keterangan');
             $kiosPayment->tanggal_request = $formattedDate;
             $kiosPayment->status = 'Waiting For Payment';
-            
+
+            // Message to finance group
+            $orderBaru = KiosOrder::findOrFail($orderId);
+            $orderBaru->status = 'Waiting For Payment';
+            $totalPembayaran = $totalBelanja + $totalOngkir + $totalPajak;
+            $namaGroup = '';
+            $header = '*Incoming Request Payment Produk Baru*\n\n';
+            $body = 'Order ID : ' . $orderId . '\nRef : KiosBaru-' . $id . '\nTotal Nominal : ' . $totalPembayaran . '\nLink Order ID : ';
+            $footer = 'Ditunggu Paymentnya kakak 😘\nJangan lupa Upload Bukti Transfer di Link Drive yaa';
+            $message = $header . $body . $footer;
+
             if($response->successful()) {
                 $kiosPayment->save();
+                $orderBaru->save();
                 PengirimanEkspedisi::create([
                     'divisi_id' => $divisiId,
-                    'order_id' => $request->input('order_id'),
+                    'order_id' => $orderId,
                     'status_order' => 'Baru',
                     'status' => 'Unprocess',
                 ]);

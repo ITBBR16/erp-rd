@@ -2,15 +2,18 @@ $(document).ready(function() {
     $(document).on('change', '#new-metode-payment-edit', function() {
         let formId = $(this).data("id");
        
-        var havePaymentEdit = $("#have-payment-edit-"+formId);
-        var newPaymentEdit = $("#new-payment-metode-edit-"+formId);
+        var editMediaPembayaran = $('#media-pembayaran-' + formId);
+        var editNoRek = $('#no-rek-' + formId);
+        var editNamaAkun = $('#nama-akun-' + formId);
         
         if ($(this).is(':checked')) {
-            havePaymentEdit.hide();
-            newPaymentEdit.show();
+            editMediaPembayaran.prop("readonly", false);
+            editNoRek.prop("readonly", false);
+            editNamaAkun.prop("readonly", false);
         } else {
-            havePaymentEdit.show();
-            newPaymentEdit.hide();
+            editMediaPembayaran.prop("readonly", true);
+            editNoRek.prop("readonly", true);
+            editNamaAkun.prop("readonly", true);
         }
     });
     

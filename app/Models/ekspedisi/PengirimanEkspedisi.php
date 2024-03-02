@@ -16,9 +16,9 @@ class PengirimanEkspedisi extends Model
     protected $table = 'pengiriman_ekspedisi';
     protected $guarded = ['id'];
 
-    public function pelayanan()
+    public function ekspedisi()
     {
-        return $this->belongsTo(JenisPelayanan::class, 'jenis_layanan_id');
+        return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
     }
 
     public function order()

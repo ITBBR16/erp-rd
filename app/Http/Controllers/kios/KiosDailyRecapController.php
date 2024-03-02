@@ -81,6 +81,7 @@ class KiosDailyRecapController extends Controller
             $validate = $request->validate([
                 'first_name' => 'required|max:50',
                 'last_name' => 'required|max:50',
+                'asal_informasi' => 'required',
                 'no_telpon' => ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
                 'email' => 'nullable|email:dns',
                 'instansi' => 'max:50',

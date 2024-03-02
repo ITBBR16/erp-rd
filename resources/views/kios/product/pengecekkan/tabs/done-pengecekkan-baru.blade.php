@@ -25,9 +25,6 @@
                         Ekspedisi
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Jenis Layanan
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         Tanggal Penerimaan
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -46,10 +43,7 @@
                                 {{ $history->pengiriman->no_resi }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $history->pengiriman->pelayanan->ekspedisi->ekspedisi }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ $history->pengiriman->pelayanan->nama_layanan }}
+                                {{ $history->pengiriman->ekspedisi->ekspedisi }}
                             </td>
                             <td class="px-6 py-2">
                                 {{ $history->tanggal_diterima }}
@@ -73,7 +67,7 @@
             {{-- {{ $suppliers->links() }} --}}
         </div>
     </div>
-    @if (!$dataIncoming->contains('status', 'Diterima') && !$dataIncoming->contains('status', 'InRD'))
+    @if ($history->pengiriman->status != 'Diterima' && $history->pengiriman->status != 'InRD')
         <div class="p-4 mt-4">
             <div class="flex justify-center">
                 <figure class="max-w-lg">

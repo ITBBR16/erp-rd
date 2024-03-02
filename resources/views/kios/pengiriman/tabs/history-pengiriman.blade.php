@@ -50,8 +50,8 @@
                                 {{ ($data->status_order == 'Baru' ? $data->order->supplier->nama_perusahaan : ($data->ordersecond->come_from == 'Customer' ? $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->first_name : $data->ordersecond->marketplace->nama)) }}
                             </td>
                             <td class="px-6 py-2">
-                                @if ($data->jenis_layanan_id != '')
-                                    {{ $data->pelayanan->ekspedisi->ekspedisi }}
+                                @if ($data->ekspedisi_id != '')
+                                    {{ $data->ekspedisi->ekspedisi }}
                                 @endif
                             </td>
                             <td class="px-6 py-2">

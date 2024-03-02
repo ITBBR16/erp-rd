@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ekspedisi\JenisPelayanan;
 use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
+use App\Models\kios\KiosOrder;
+use App\Models\kios\KiosOrderSecond;
 
 class KiosPengirimanController extends Controller
 {
@@ -19,9 +21,8 @@ class KiosPengirimanController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'pelayanan.ekspedisi', 'divisi', 'penerimaan')->get();
+        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'divisi', 'penerimaan', 'ekspedisi')->get();
         $ekspedisi = Ekspedisi::all();
-        $layanan = JenisPelayanan::all();
 
         return view('kios.pengiriman.index', [
             'title' => 'Shipment',
@@ -32,7 +33,6 @@ class KiosPengirimanController extends Controller
             'divisi' => $divisiName,
             'dataIncoming' => $dataIncoming,
             'ekspedisi' => $ekspedisi,
-            'jenisLayanan' => $layanan,
         ]);
     }
 
@@ -42,14 +42,25 @@ class KiosPengirimanController extends Controller
             $pengiriman = PengirimanEkspedisi::findOrFail($id);
             $tanggal = $request->input('tanggal_dikirim');
             $tanggalKirim = Carbon::parse($tanggal)->format('d-m-Y');
+            $statusOrder = $request->input('status_order');
+            $orderId = $request->input('order_id');
+            
+            if($statusOrder == 'Baru') {
+                $order = KiosOrder::findOrFail($orderId);
+            } else {
+                $order = KiosOrderSecond::findOrFail($orderId);
+            }
+
             $dataUpdate = [
-                'jenis_layanan_id' => $request->input('layanan'),
+                'ekspedisi_id' => $request->input('ekspedisi'),
                 'no_resi' => $request->input('no_resi'),
                 'no_faktur' => $request->input('no_faktur'),
                 'tanggal_kirim' => $tanggalKirim,
                 'status' => 'Incoming'
             ];
 
+            $order->status = 'Incoming';
+            $order->save();
             $pengiriman->update($dataUpdate);
 
             return back()->with('success', 'Success Update Data.');

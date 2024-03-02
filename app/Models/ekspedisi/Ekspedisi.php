@@ -13,7 +13,7 @@ class Ekspedisi extends Model
     protected $table = 'ekspedisi';
     protected $guarded = ['id'];
 
-    public function pelayanan()
+    public function pengiriman()
     {
         return $this->hasMany(JenisPelayanan::class);
     }

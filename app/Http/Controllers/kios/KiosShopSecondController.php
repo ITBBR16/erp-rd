@@ -172,65 +172,6 @@ class KiosShopSecondController extends Controller
         }
     }
 
-    public function edit($encryptId)
-    {
-        $id = decrypt($encryptId);
-        $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $kos = KiosOrderSecond::findOrFail($id);
-        return view('kios.shop.qc-second.qc-second', [
-            'title' => 'Quality Control Second',
-            'active' => 'shop-second',
-            'navActive' => 'product',
-            'divisi' => $divisiName,
-            'dropdown' => '',
-            'dropdownShop' => true,
-            'kos' => $kos,
-        ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        try {
-            $tgl_qc = Carbon::now()->format('d-m-Y');
-            $statusQc = $request->input('status_qc_second');
-            $catatanQc = $request->input('catatan');
-            $pivotIds = $request->input('pivot_id');
-            $serialNumbers = $request->input('serial_number');
-            $hargaSatuan = preg_replace("/[^0-9]/", "", $request->input('harga_satuan'));
-            $keterangan = $request->input('keterangan');
-            $kondisi = $request->input('kondisi');
-            $kiosQcPS = KiosQcProdukSecond::find($id);
-
-            foreach ($pivotIds as $index => $pivotId) {
-                $data = [
-                    'kondisi' => $kondisi[$index],
-                    'keterangan' => $keterangan[$index],
-                    'harga_satuan' => $hargaSatuan[$index],
-                    'serial_number' => $serialNumbers[$index],
-                    'status' => 'Ready',
-                ];
-
-                $kiosQcPS->kelengkapans()->where('pivot_qc_id', $pivotId)->update($data);
-            }
-
-            if ($statusQc == 'Negoisasi Ulang') {
-                 
-            } else {
-                $kiosQcPS->ordersecond->status = $statusQc;
-                $kiosQcPS->ordersecond->save();
-            }
-
-            $kiosQcPS->catatan = $catatanQc;
-            $kiosQcPS->tanggal_qc = $tgl_qc;
-            $kiosQcPS->save();
-
-            return redirect()->route('shop-second.index')->with('success', 'Success Input QC Result.');
-        } catch (Exception $e) {
-            return back()->with('error', $e->getMessage());
-        }
-    }
-
     public function destroy($id)
     {
         try {
@@ -250,14 +191,21 @@ class KiosShopSecondController extends Controller
 
     public function getKelengkapanSecond($jenisId)
     {
+        $idJenisProduk = ProdukSubJenis::where('id', $jenisId)->value('jenis_id');
         $subJenis = ProdukSubJenis::findOrFail($jenisId);
-        return response()->json(['kelengkapans' => $subJenis->kelengkapans]);
+        return response()->json(['kelengkapans' => $subJenis->kelengkapans, 'idJenisProduk' => $idJenisProduk]);
     }
 
     public function getCustomerbyNomor($nomor)
     {
         $dataCustomer = Customer::where('no_telpon', $nomor)->get();
         return response()->json($dataCustomer);
+    }
+
+    public function getAdditionalKelengkapan($id)
+    {
+        $kelengkapanByProduk = ProdukKelengkapan::where('produk_jenis_id', $id)->get();
+        return response()->json($kelengkapanByProduk);
     }
 
 }

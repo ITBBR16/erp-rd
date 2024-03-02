@@ -63,6 +63,7 @@
             <h3 class="my-4 text-gray-900 dark:text-white font-semibold text-xl">Informasi Pembelian</h3>
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
+                    <input type="hidden" id="produk-jenis-id">
                     <label for="jenis_drone_second" class="sr-only">Jenis Paket Produk</label>
                     <select name="jenis_drone_second" id="jenis_drone_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_drone_second') border-red-600 dark:border-red-500 @enderror" required>
                         <option value="" hidden>-- Jenis Produk --</option>
@@ -106,6 +107,29 @@
             <h3 class="my-4 text-gray-900 dark:text-white font-semibold text-xl">Kelengkapan</h3>
             <div id="kelengkapan-second">
                 
+            </div>
+            <div id="tambah-kelengkapan">
+
+            </div>
+            <div class="flex justify-between text-rose-600">
+                <div class="flex cursor-pointer mt-4 hover:text-red-400">
+                    <button type="button" id="add-second-belanja" class="flex flex-row justify-between gap-2">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span class="">Tambah Kelengkapan</span>
+                    </button>
+                </div>
+            </div>
+            <h3 class="my-4 text-gray-900 dark:text-white font-semibold text-xl">Additional Kelengkapan</h3>
+            <div id="additional-kelengkapan-second">
+                
+            </div>
+            <div class="flex justify-between text-rose-600">
+                <div class="flex cursor-pointer mt-4 hover:text-red-400">
+                    <button type="button" id="add-second-additional-belanja" class="flex flex-row justify-between gap-2">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span class="">Tambah Additional Kelengkapan</span>
+                    </button>
+                </div>
             </div>
             <div class="mt-4 text-end">
                 <button type="submit" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>

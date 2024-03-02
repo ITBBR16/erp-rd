@@ -25,9 +25,6 @@
                         Ekspedisi
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Jenis Layanan
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         Tanggal Dikirim
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -46,13 +43,10 @@
                                 {{ $data->no_resi }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $data->pelayanan->ekspedisi->ekspedisi }}
+                                {{ $data->ekspedisi->ekspedisi }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $data->pelayanan->nama_layanan }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ $data->tanggal_kirim }}
+                                {{ \Carbon\Carbon::parse($data->updated_at)->isoFormat('D MMMM YYYY') }}
                             </td>
                             <td class="px-6 py-2">
                                 <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $data->status }}</span>

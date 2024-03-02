@@ -26,7 +26,7 @@
                         Supplier
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Invoice
+                        Tanggal Pembelian
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Total Nominal
@@ -43,13 +43,13 @@
                 @foreach ($data as $item)
                     <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <th class="px-6 py-2">
-                            K.{{ $item->id }}
+                            N.{{ $item->id }}
                         </th>
                         <td class="px-6 py-2">
                             {{ $item->supplier->nama_perusahaan }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $item->invoice }}
+                            {{ \Carbon\Carbon::parse($item->created_at)->isoFormat('D MMMM YYYY') }}
                         </td>
                         <td class="px-6 py-2">
                             @php

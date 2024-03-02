@@ -42,19 +42,17 @@
                                         @foreach ($paketPenjualan as $pp)
                                             @if ($ol->sub_jenis_id == $pp->id)
                                                 <option value="{{ $pp->id }}" selected class="dark:bg-gray-700">{{ $pp->produkjenis->jenis_produk }} {{ $pp->paket_penjualan }}</option>
-                                            @else
-                                                <option value="{{ $pp->id }}" selected class="dark:bg-gray-700">{{ $pp->produkjenis->jenis_produk }} {{ $pp->paket_penjualan }}</option>
                                             @endif
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="relative z-0 w-full group">
-                                    <input type="number" name="quantity[]" id="quantity{{ $key }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $ol->quantity }}" required>
-                                    <label for="quantity{{ $key }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
+                                    <input type="text" name="quantity[]" id="val-qty-buy-baru{{ $key }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $ol->quantity }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                                    <label for="val-qty-buy-baru{{ $key }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
                                 </div>
                                 <div class="relative z-0 w-full group">
-                                    <input type="number" name="nilai[]" id="nilai{{ $key }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $ol->nilai }}" required>
-                                    <label for="nilai{{ $key }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Harga /pcs</label>
+                                    <input type="text" name="nilai[]" id="val-nilai-buy-baru{{ $key }}" class="val-nilai-buy-baru block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $ol->nilai }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                                    <label for="val-nilai-buy-baru{{ $key }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Harga /pcs</label>
                                 </div>
                             </div>
                             @endforeach
@@ -63,7 +61,7 @@
                             <div class="flex cursor-pointer mt-4 hover:text-red-400">
                                 <button type="button" id="add-form-validasi-belanja" data-id="{{ $item->id }}" class="flex flex-row justify-between gap-2">
                                     <span class="material-symbols-outlined">add_circle</span>
-                                    <span class="">Tambah Kelengkapan</span>
+                                    <span class="">Tambah Produk</span>
                                 </button>
                             </div>
                         </div>

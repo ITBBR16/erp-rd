@@ -68,7 +68,7 @@
                         Order ID
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Invoice
+                        Tanggal Belanja
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Jenis Pembayaran
@@ -89,10 +89,10 @@
                     @if ($py->status == 'Unpaid' || $py->status == 'Waiting For Payment')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                K.{{ $py->order_id }}
+                                N.{{ $py->order_id }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $py->order->invoice }}
+                                {{ \Carbon\Carbon::parse($py->order->tanggal_pembelian)->isoFormat('D MMMM YYYY') }}
                             </td>
                             <td class="px-6 py-2">
                                 {{ $py->jenis_pembayaran }}
@@ -146,7 +146,7 @@
                         Order ID
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Invoice
+                        Tanggal Belanja
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Jenis Pembayaran
@@ -170,7 +170,7 @@
                                 K.{{ $dpy->order_id }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $dpy->order->invoice }}
+                                {{ \Carbon\Carbon::parse($dpy->order->tanggal_pembelian)->isoFormat('D MMMM YYYY') }}
                             </td>
                             <td class="px-6 py-2">
                                 {{ $dpy->jenis_pembayaran }}

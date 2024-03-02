@@ -41,7 +41,7 @@
                     @if ($data->status == 'Incoming' || $data->status == 'Unprocess' || $data->status == 'Pengiriman Balik')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ ($data->status_order == 'Baru' ? 'K.' . $data->order->id : 'S.' . $data->ordersecond->id) }}
+                                {{ ($data->status_order == 'Baru' ? 'N.' . $data->order->id : 'S.' . $data->ordersecond->id) }}
                             </th>
                             <td class="px-6 py-2">
                                 {{ $data->no_resi }}
@@ -50,8 +50,8 @@
                                 {{ ($data->status_order == 'Baru' ? $data->order->supplier->nama_perusahaan : ($data->ordersecond->come_from == 'Customer' ? $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->first_name : $data->ordersecond->marketplace->nama)) }}
                             </td>
                             <td class="px-6 py-2">
-                                @if ($data->jenis_layanan_id != '')
-                                    {{ $data->pelayanan->ekspedisi->ekspedisi }}
+                                @if ($data->ekspedisi_id != '')
+                                    {{ $data->ekspedisi->ekspedisi }}
                                 @endif
                             </td>
                             <td class="px-6 py-2">
@@ -62,9 +62,11 @@
                                     {{-- <button type="button" data-modal-target="view-order-aktif{{ $data->id }}" data-modal-toggle="view-order-aktif{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
                                     </button> --}}
-                                    <button type="button" data-modal-target="input-resi{{ $data->id }}" data-modal-toggle="input-resi{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">receipt_long</i>
-                                    </button>
+                                    @if ($data->status == 'Unprocess')
+                                        <button type="button" data-modal-target="input-resi{{ $data->id }}" data-modal-toggle="input-resi{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base">receipt_long</i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

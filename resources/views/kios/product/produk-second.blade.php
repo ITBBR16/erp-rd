@@ -54,7 +54,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
                     <th scope="col" class="px-6 py-3" style="width: 35%;">
-                        Jenis Produk
+                        Paket Penjualan
                     </th>
                     <th scope="col" class="px-6 py-3" style="width: 16%">
                         Serial Number

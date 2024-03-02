@@ -4,9 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
 use App\Http\Controllers\kios\KiosShopController;
+use App\Http\Controllers\kios\KiosDashboardProduk;
+use App\Http\Controllers\kios\KiosKasirController;
 use App\Http\Controllers\kios\KiosPaymentController;
 use App\Http\Controllers\kios\KiosProductController;
 use App\Http\Controllers\employee\EmployeeController;
+use App\Http\Controllers\kios\KiosKomplainController;
 use App\Http\Controllers\kios\KiosSupplierController;
 use App\Http\Controllers\wilayah\KecamatanController;
 use App\Http\Controllers\wilayah\KelurahanController;
@@ -16,14 +19,13 @@ use App\Http\Controllers\kios\KiosPengirimanController;
 use App\Http\Controllers\kios\KiosShopSecondController;
 use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\customer\DataCustomerController;
-use App\Http\Controllers\kios\AddKelengkapanKiosController;
-use App\Http\Controllers\customer\DashboardCustomerController;
-use App\Http\Controllers\kios\KiosBuatPaketSecondController;
-use App\Http\Controllers\kios\KiosDashboardProduk;
-use App\Http\Controllers\kios\KiosKasirController;
-use App\Http\Controllers\kios\KiosKomplainController;
 use App\Http\Controllers\kios\KiosProductSecondController;
-use App\Http\Controllers\kios\KiosUnboxingQCBaruController;
+use App\Http\Controllers\kios\AddKelengkapanKiosController;
+use App\Http\Controllers\kios\KiosBuatPaketSecondController;
+use App\Http\Controllers\kios\KiosPenerimaanProdukController;
+use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
+use App\Http\Controllers\kios\KiosPengecekkanSecondController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
@@ -74,14 +76,13 @@ Route::middleware('kios')->group(function () {
             
             Route::resource('/shop', KiosShopController::class);
             Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');
-            
+            Route::resource('/shop-second', KiosShopSecondController::class);
+
             Route::group(['controller' => KiosShopSecondController::class], function () {
-                Route::resource('/shop-second', KiosShopSecondController::class)->names([
-                    'edit' => 'shop-second.quality-control',
-                ]);
                 Route::post('/validasiSecond/{id}', 'validasisecond')->name('validasi-payment-second');
                 Route::get('/get-kelengkapan-second/{jenisId}', 'getKelengkapanSecond');
                 Route::get('/getCustomerbyNomor/{nomor}', 'getCustomerbyNomor');
+                Route::get('/getAdditionalKelengkapan/{id}', 'getAdditionalKelengkapan');
             });
             
             Route::group(['controller' => KiosPaymentController::class], function () {
@@ -89,7 +90,7 @@ Route::middleware('kios')->group(function () {
                 Route::post('/pembayaran/{id}', 'validasi')->name('form-validasi-payment');
                 Route::put('/api/updatePayment/{id}', 'updatePayment');
             });
-
+            
             Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);
             Route::get('/getLayanan/{ekspedisiId}', [KiosPengirimanController::class, 'getLayanan']);
             
@@ -100,7 +101,7 @@ Route::middleware('kios')->group(function () {
                 Route::post('/add-product', 'store')->name('form-kelengkapan');
                 Route::get('/getKelengkapan/{jenisId}', 'getKelengkapan');
             });
-
+            
             Route::group(['controller' => KiosBuatPaketSecondController::class], function () {
                 Route::resource('add-paket-penjualan-second', KiosBuatPaketSecondController::class)->only(['index', 'store']);
                 Route::get('/getKelengkapanSecond', 'getKelengkapanSecond');
@@ -108,7 +109,15 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getPriceSecond/{id}', 'getPriceSecond');
             });
             
-            Route::get('/pengecekkan-produk-baru', [KiosUnboxingQCBaruController::class, 'index']);
+            Route::get('/penerimaan-produk', [KiosPenerimaanProdukController::class, 'index']);
+            
+            Route::resource('/pengecekkan-produk-second', KiosPengecekkanSecondController::class)->names([
+                'edit' => 'shop-second.quality-control',
+            ]);
+            
+            Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
+            Route::get('/getOrderList/{orderId}', [KiosPengecekkanProdukBaruController::class, 'getOrderList']);
+            Route::get('/getQtyOrderList/{orderListId}', [KiosPengecekkanProdukBaruController::class, 'getQtyOrderList']);
             
             Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);
         });

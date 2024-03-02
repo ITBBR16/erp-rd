@@ -23,7 +23,7 @@
                         Metode Pembelian
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Supplier
+                        Nama Customer
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Tanggal Pembelian
@@ -75,11 +75,11 @@
                             <button type="button" data-modal-target="view-second{{ $os->id }}" data-modal-toggle="view-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-base">visibility</i>
                             </button>
-                            @if ($os->status == 'Proses QC')
+                            {{-- @if ($os->status == 'Proses QC')
                                 <a href="{{ route('shop-second.quality-control', encrypt($os->id)) }}" target="_blank" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-xl">search_check</i>
                                 </a>
-                            @endif
+                            @endif --}}
                             @if ($os->status_pembayaran != 'Paid')
                                 <button type="button" data-modal-target="validasi-second{{ $os->id }}" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">add_card</i>

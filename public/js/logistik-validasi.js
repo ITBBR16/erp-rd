@@ -7,7 +7,7 @@ $(document).ready(function(){
         const dataOrderList = validasi_resi.val();
         
         if(dataOrderList){
-            fetch(`/logistik/getOrderList/${dataOrderList}`)
+            fetch(`/kios/product/getOrderList/${dataOrderList}`)
                 .then(response => response.json())
                 .then(data => {
                     listOrder.empty();
@@ -40,12 +40,11 @@ $(document).ready(function(){
         const orderListId = listOrder.val();
         
         if(orderListId){
-            fetch(`/logistik/getQtyOrderList/${orderListId}`)
+            fetch(`/kios/product/getQtyOrderList/${orderListId}`)
                 .then(response => response.json())
                 .then(data => {
                     inputSN.empty();
 
-                    
                     data.forEach(data => {
                         const newRow = $('<div class="w-full grid grid-cols-3 gap-6"></div>');
                         const validasiQty = document.getElementById('validasi-qty');

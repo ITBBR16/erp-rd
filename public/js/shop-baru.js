@@ -2,9 +2,13 @@ $(document).ready(function() {
     let nomorFormBelanja = 1;
     let nomorFormValidasi = 1;
     const containerFormBelanjaBaru = $('#form-new-belanja');
-    const containerFormValidasi = $('#form-validasi');
     const tambahFormBelanjaBaru = $('#add-new-belanja');
     const tambahFormValidasi = $('#add-form-validasi-belanja');
+    const validasiNilaiBuyBaru = $('.val-nilai-buy-baru');
+
+    function formatRupiah(angka) {
+        return accounting.formatMoney(angka, "", 0, ".", ",");
+    }
 
     tambahFormBelanjaBaru.on('click', function () {
         nomorFormBelanja++
@@ -55,12 +59,12 @@ $(document).ready(function() {
             </select>
         </div>
         <div class="relative z-0 w-full group">
-            <input type="number" name="quantity[]" id="quantity${nomorFormValidasi}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="0" required>
-            <label for="quantity${nomorFormValidasi}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
+            <input type="text" name="quantity[]" id="val-qty-buy-baru${nomorFormValidasi}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="0" required>
+            <label for="val-qty-buy-baru${nomorFormValidasi}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
         </div>
         <div class="relative z-0 w-full group">
-            <input type="number" name="nilai[]" id="nilai${nomorFormValidasi}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="0" required>
-            <label for="nilai${nomorFormValidasi}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Harga /pcs</label>
+            <input type="text" name="nilai[]" id="val-nilai-buy-baru${nomorFormValidasi}" class="val-nilai-buy-baru block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="0" required>
+            <label for="val-nilai-buy-baru${nomorFormValidasi}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Harga /pcs</label>
         </div>
         <div class="flex justify-center items-center col-span-1">
             <button type="button" class="remove-form-validasi" data-id="${nomorFormValidasi}">
@@ -77,6 +81,13 @@ $(document).ready(function() {
         let formId = $(this).data("id");
         $("#form-validasi-"+formId).remove();
         nomorFormBelanja--;
+    });
+
+    $(document).on('input', '.val-nilai-buy-baru', function () {
+        var inputValue = $(this).val();
+        inputValue = inputValue.replace(/[^\d]/g, '');
+        var parsedValue = parseInt(inputValue, 10);
+        $(this).val(formatRupiah(parsedValue));
     });
 
 });

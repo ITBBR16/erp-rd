@@ -70,11 +70,12 @@
         <script src="/js/toggle-payment-kios.js"></script>
         <script src="/js/dropdown_wilayah.js"></script>
         <script src="/js/dd-daily-recap.js"></script>
-        <script src="/js/dd-layanan-pengiriman.js"></script>
         <script src="/js/dd-komplain-supplier.js"></script>
         <script src="/js/daftar-produk.js"></script>
         <script src="/js/file-upload.js"></script>
         <script src="/js/create-produk-second.js"></script>
         <script src="/js/kasir-kios.js"></script>
+        <script src="/js/logistik-validasi.js"></script>
+        <script src="/js/qc-second.js"></script>
     </body>
 </html>
