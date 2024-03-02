@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2024 at 09:41 AM
+-- Generation Time: Mar 02, 2024 at 11:55 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -46,7 +46,8 @@ CREATE TABLE `daily_recap` (
 --
 
 INSERT INTO `daily_recap` (`id`, `employee_id`, `customer_id`, `jenis_id`, `sub_jenis_id`, `keperluan_id`, `barang_cari`, `keterangan`, `status_id`, `created_at`, `updated_at`) VALUES
-(3, 3, 9, 3, 11, 2, 'Drone', 'Ikut PO tanggal 6-6-6666', 4, '2024-02-16 00:36:19', '2024-02-16 00:36:19');
+(3, 3, 9, 3, 11, 2, 'Drone', 'Ikut PO tanggal 6-6-6666', 4, '2024-02-16 00:36:19', '2024-02-16 00:36:19'),
+(4, 3, 10, 4, 13, 3, 'Drone', 'Mau jual drone harga gak masuk', 1, '2024-02-23 20:11:46', '2024-02-23 20:11:46');
 
 -- --------------------------------------------------------
 
@@ -133,6 +134,22 @@ INSERT INTO `kios_image_paket_baru` (`id`, `sub_jenis_id`, `use_for`, `nama`, `l
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `kios_image_paket_second`
+--
+
+CREATE TABLE `kios_image_paket_second` (
+  `id` int(11) NOT NULL,
+  `sub_jenis_id` int(11) NOT NULL,
+  `use_for` varchar(50) NOT NULL,
+  `nama` varchar(50) NOT NULL,
+  `link_drive` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `kios_komplain_second`
 --
 
@@ -200,7 +217,7 @@ CREATE TABLE `kios_payment` (
 
 INSERT INTO `kios_payment` (`id`, `order_id`, `metode_pembayaran_id`, `jenis_pembayaran`, `nilai`, `ongkir`, `pajak`, `keterangan`, `status`, `tanggal_request`, `tanggal_payment`, `created_at`, `updated_at`) VALUES
 (1, 9, 1, 'Pembelian Barang, Ongkir', 27996000, 166000, 0, 'Coba Req Payment', 'Paid', '23/12/2023 14:29:51', '2023-12-23 14:30:11', '2023-12-20 20:00:11', '2023-12-23 00:29:55'),
-(2, 20, 1, 'Pembelian Barang, Ongkir', 27000000, 666000, 0, NULL, 'Unpaid', '19/02/2024 14:00:29', NULL, '2023-12-26 21:58:21', '2024-02-19 00:00:40');
+(2, 20, 1, 'Pembelian Barang, Ongkir', 27000000, 666000, 0, 'Coba beli drone baru', 'Paid', '02/03/2024 11:41:01', NULL, '2023-12-26 21:58:21', '2024-03-01 21:41:11');
 
 -- --------------------------------------------------------
 
@@ -226,7 +243,7 @@ CREATE TABLE `kios_produk` (
 --
 
 INSERT INTO `kios_produk` (`id`, `sub_jenis_id`, `produk_img_id`, `srp`, `harga_promo`, `start_promo`, `end_promo`, `status`, `created_at`, `updated_at`) VALUES
-(1, 11, NULL, 6000000, 6666666, '02/21/2024', '02/23/2024', 'Promo', '2024-01-05 21:00:48', '2024-02-21 01:32:48'),
+(1, 11, NULL, 6000000, 0, NULL, NULL, 'Ready', '2024-01-05 21:00:48', '2024-02-23 20:26:00'),
 (8, 12, NULL, 2700000, 0, NULL, NULL, 'Ready', '2024-01-06 02:11:24', '2024-02-19 20:56:12'),
 (9, 13, 1, 0, 0, NULL, NULL, 'Not Ready', '2024-02-21 07:06:27', '2024-02-21 00:14:52');
 
@@ -239,6 +256,7 @@ INSERT INTO `kios_produk` (`id`, `sub_jenis_id`, `produk_img_id`, `srp`, `harga_
 CREATE TABLE `kios_produk_second` (
   `id` int(11) NOT NULL,
   `sub_jenis_id` int(11) NOT NULL,
+  `produk_image_id` int(11) DEFAULT NULL,
   `srp` int(11) NOT NULL,
   `cc_produk_second` int(11) NOT NULL,
   `serial_number` varchar(255) NOT NULL,
@@ -251,9 +269,9 @@ CREATE TABLE `kios_produk_second` (
 -- Dumping data for table `kios_produk_second`
 --
 
-INSERT INTO `kios_produk_second` (`id`, `sub_jenis_id`, `srp`, `cc_produk_second`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
-(1, 11, 5600000, 66, 'Sec-251163548', 'Ready', '2024-02-13 00:10:54', '2024-02-13 00:57:19'),
-(2, 12, 2500000, 44, 'Sec-235148875', 'Ready', '2024-02-13 00:56:41', '2024-02-13 00:56:53');
+INSERT INTO `kios_produk_second` (`id`, `sub_jenis_id`, `produk_image_id`, `srp`, `cc_produk_second`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
+(1, 11, NULL, 5600000, 66, 'Sec-251163548', 'Ready', '2024-02-13 00:10:54', '2024-02-13 00:57:19'),
+(2, 12, NULL, 2500000, 44, 'Sec-235148875', 'Ready', '2024-02-13 00:56:41', '2024-02-13 00:56:53');
 
 -- --------------------------------------------------------
 
@@ -264,8 +282,6 @@ INSERT INTO `kios_produk_second` (`id`, `sub_jenis_id`, `srp`, `cc_produk_second
 CREATE TABLE `kios_qc_produk_second` (
   `id` int(11) NOT NULL,
   `order_second_id` int(11) NOT NULL,
-  `catatan` varchar(255) DEFAULT NULL,
-  `tanggal_qc` varchar(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -274,9 +290,9 @@ CREATE TABLE `kios_qc_produk_second` (
 -- Dumping data for table `kios_qc_produk_second`
 --
 
-INSERT INTO `kios_qc_produk_second` (`id`, `order_second_id`, `catatan`, `tanggal_qc`, `created_at`, `updated_at`) VALUES
-(7, 7, 'QC Aman', '26-01-2024', '2024-01-15 20:00:36', '2024-01-26 00:45:46'),
-(8, 8, NULL, NULL, '2024-01-16 20:49:06', '2024-01-16 20:49:06');
+INSERT INTO `kios_qc_produk_second` (`id`, `order_second_id`, `created_at`, `updated_at`) VALUES
+(7, 7, '2024-01-15 20:00:36', '2024-01-26 00:45:46'),
+(8, 8, '2024-01-16 20:49:06', '2024-01-16 20:49:06');
 
 -- --------------------------------------------------------
 
@@ -368,7 +384,7 @@ CREATE TABLE `kios_supplier_komplain` (
 --
 
 INSERT INTO `kios_supplier_komplain` (`id`, `validasi_id`, `quantity`, `keterangan`, `bank_transfer`, `status`, `created_at`, `updated_at`) VALUES
-(7, 13, 3, 'Uang belanja menjadi deposit supplier', NULL, 'Refund Deposit', '2024-01-06 02:11:24', '2024-01-09 01:33:22');
+(7, 13, 3, '', NULL, 'Unprocessed', '2024-01-06 02:11:24', '2024-01-09 01:33:22');
 
 -- --------------------------------------------------------
 
@@ -381,10 +397,10 @@ CREATE TABLE `kios_transaksi` (
   `employee_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `metode_pembayaran` varchar(50) NOT NULL,
+  `ongkir` int(11) DEFAULT 0,
   `discount` int(11) DEFAULT 0,
   `tax` int(11) DEFAULT 0,
   `total_harga` int(20) DEFAULT 0,
-  `tanggal_pembelian` varchar(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -393,8 +409,8 @@ CREATE TABLE `kios_transaksi` (
 -- Dumping data for table `kios_transaksi`
 --
 
-INSERT INTO `kios_transaksi` (`id`, `employee_id`, `customer_id`, `metode_pembayaran`, `discount`, `tax`, `total_harga`, `tanggal_pembelian`, `created_at`, `updated_at`) VALUES
-(1, 3, 9, '1', 6, 11, 3832000, '01-02-2024 02:32:22', '2024-01-31 19:32:22', '2024-01-31 19:32:22');
+INSERT INTO `kios_transaksi` (`id`, `employee_id`, `customer_id`, `metode_pembayaran`, `ongkir`, `discount`, `tax`, `total_harga`, `created_at`, `updated_at`) VALUES
+(1, 3, 9, '1', 0, 85000, 421520, 3832000, '2024-01-31 19:32:22', '2024-01-31 19:32:22');
 
 -- --------------------------------------------------------
 
@@ -405,9 +421,9 @@ INSERT INTO `kios_transaksi` (`id`, `employee_id`, `customer_id`, `metode_pembay
 CREATE TABLE `kios_transaksi_detail` (
   `id` int(11) NOT NULL,
   `kios_transaksi_id` int(11) NOT NULL,
+  `jenis_transaksi` varchar(20) NOT NULL,
   `kios_produk_id` int(11) NOT NULL,
   `serial_number_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -416,9 +432,9 @@ CREATE TABLE `kios_transaksi_detail` (
 -- Dumping data for table `kios_transaksi_detail`
 --
 
-INSERT INTO `kios_transaksi_detail` (`id`, `kios_transaksi_id`, `kios_produk_id`, `serial_number_id`, `quantity`, `created_at`, `updated_at`) VALUES
-(1, 1, 11, 3, 2, '2024-01-31 19:32:22', '2024-01-31 19:32:22'),
-(2, 1, 12, 26, 1, '2024-01-31 19:32:22', '2024-01-31 19:32:22');
+INSERT INTO `kios_transaksi_detail` (`id`, `kios_transaksi_id`, `jenis_transaksi`, `kios_produk_id`, `serial_number_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Baru', 11, 3, '2024-01-31 19:32:22', '2024-01-31 19:32:22'),
+(2, 1, 'Baru', 12, 26, '2024-01-31 19:32:22', '2024-01-31 19:32:22');
 
 -- --------------------------------------------------------
 
@@ -460,10 +476,11 @@ CREATE TABLE `metode_pembelian_second` (
 
 INSERT INTO `metode_pembelian_second` (`id`, `metode_pembelian`) VALUES
 (1, 'Offline'),
-(2, 'Online Marketplace'),
 (3, 'Online Direct Transfer'),
 (4, 'Online DP'),
-(5, 'Online Pending Payment');
+(5, 'Online Pending Payment'),
+(6, 'Shopee'),
+(7, 'Tokopedia');
 
 -- --------------------------------------------------------
 
@@ -487,7 +504,7 @@ CREATE TABLE `order` (
 
 INSERT INTO `order` (`id`, `supplier_kios_id`, `invoice`, `link_drive`, `status`, `created_at`, `updated_at`) VALUES
 (9, 1, 'INV/21122023/9', 'https://drive.google.com/drive/folders/1DOgErgV1spUrQ4hSO9fFXBedeQlRg1PU?usp=sharing', 'Tervalidasi', '2023-12-20 01:23:58', '2023-12-20 20:00:11'),
-(20, 1, 'INV/27122023/20', 'https://drive.google.com/drive/folders/1Ig3gBrWF11LdYDjuoUTaKvCu3eZfu9a2?usp=sharing', 'Tervalidasi', '2023-12-26 21:14:30', '2023-12-26 22:01:06'),
+(20, 1, 'INV/27122023/20', 'https://drive.google.com/drive/folders/1Ig3gBrWF11LdYDjuoUTaKvCu3eZfu9a2?usp=sharing', 'Incoming', '2023-12-26 21:14:30', '2024-03-01 21:48:58'),
 (22, 1, NULL, 'https://drive.google.com/drive/folders/10dRbq34fvaT9S2G-DYwW4ltjgBrH8eit?usp=sharing', 'Belum Validasi', '2024-02-17 01:22:48', '2024-02-17 01:22:56');
 
 -- --------------------------------------------------------
@@ -512,7 +529,7 @@ CREATE TABLE `order_list` (
 --
 
 INSERT INTO `order_list` (`id`, `order_id`, `sub_jenis_id`, `quantity`, `nilai`, `status`, `created_at`, `updated_at`) VALUES
-(13, 9, 11, 6, 2666000, 'Done', '2023-12-20 01:24:05', '2024-01-05 21:00:49'),
+(13, 9, 11, 4, 2666000, 'Belum Validasi', '2023-12-20 01:24:05', '2024-01-05 21:00:49'),
 (14, 9, 12, 3, 2000000, 'Done', '2023-12-20 01:24:05', '2024-01-09 01:33:22'),
 (17, 20, 11, 5, 3000000, 'Belum Validasi', '2023-12-26 21:14:38', '2023-12-26 21:56:25'),
 (18, 20, 12, 6, 2000000, 'Belum Validasi', '2023-12-26 21:14:38', '2023-12-26 21:58:20'),
@@ -531,7 +548,7 @@ CREATE TABLE `order_second` (
   `asal_id` int(11) NOT NULL,
   `metode_pembelian_id` int(11) NOT NULL,
   `sub_jenis_id` int(11) NOT NULL,
-  `status_pembayaran_id` int(11) NOT NULL,
+  `status_pembayaran` varchar(50) NOT NULL,
   `biaya_pembelian` int(20) NOT NULL DEFAULT 0,
   `biaya_ongkir` int(11) DEFAULT 0,
   `tanggal_pembelian` varchar(20) NOT NULL,
@@ -544,9 +561,9 @@ CREATE TABLE `order_second` (
 -- Dumping data for table `order_second`
 --
 
-INSERT INTO `order_second` (`id`, `come_from`, `customer_id`, `asal_id`, `metode_pembelian_id`, `sub_jenis_id`, `status_pembayaran_id`, `biaya_pembelian`, `biaya_ongkir`, `tanggal_pembelian`, `status`, `created_at`, `updated_at`) VALUES
-(7, 'Customer', 9, 7, 1, 12, 3, 6666000, 0, '15-01-2024', 'Done QC', '2024-01-15 20:00:36', '2024-01-26 00:45:46'),
-(8, 'Hunting', 11, 6, 2, 11, 2, 3666000, 0, '17-01-2024', 'Belum Dikirim', '2024-01-16 20:49:06', '2024-01-16 20:49:06');
+INSERT INTO `order_second` (`id`, `come_from`, `customer_id`, `asal_id`, `metode_pembelian_id`, `sub_jenis_id`, `status_pembayaran`, `biaya_pembelian`, `biaya_ongkir`, `tanggal_pembelian`, `status`, `created_at`, `updated_at`) VALUES
+(7, 'Customer', 9, 7, 1, 12, 'Unpaid', 6666000, 0, '15-01-2024', 'Proses QC', '2024-01-15 20:00:36', '2024-01-26 00:45:46'),
+(8, 'Hunting', 11, 6, 3, 11, 'Paid', 3666000, 16000, '17-01-2024', 'Belum Dikirim', '2024-01-16 20:49:06', '2024-01-16 20:49:06');
 
 -- --------------------------------------------------------
 
@@ -651,6 +668,12 @@ ALTER TABLE `kios_akun_rd`
 -- Indexes for table `kios_image_paket_baru`
 --
 ALTER TABLE `kios_image_paket_baru`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `kios_image_paket_second`
+--
+ALTER TABLE `kios_image_paket_second`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -781,7 +804,7 @@ ALTER TABLE `supplier_kios`
 -- AUTO_INCREMENT for table `daily_recap`
 --
 ALTER TABLE `daily_recap`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `history_order`
@@ -800,6 +823,12 @@ ALTER TABLE `kios_akun_rd`
 --
 ALTER TABLE `kios_image_paket_baru`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `kios_image_paket_second`
+--
+ALTER TABLE `kios_image_paket_second`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `kios_komplain_second`
@@ -883,7 +912,7 @@ ALTER TABLE `metode_pembayaran_supplier`
 -- AUTO_INCREMENT for table `metode_pembelian_second`
 --
 ALTER TABLE `metode_pembelian_second`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `order`

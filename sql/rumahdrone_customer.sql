@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2024 at 09:43 AM
+-- Generation Time: Mar 02, 2024 at 11:54 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -31,6 +31,7 @@ CREATE TABLE `customer` (
   `id` int(11) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
+  `asal_informasi` varchar(20) NOT NULL,
   `no_telpon` varchar(20) NOT NULL,
   `by_divisi` int(11) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -49,10 +50,11 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`id`, `first_name`, `last_name`, `no_telpon`, `by_divisi`, `email`, `instansi`, `provinsi`, `kota_kabupaten`, `kecamatan`, `kelurahan`, `kode_pos`, `nama_jalan`, `created_at`, `updated_at`) VALUES
-(9, 'Daniel', 'Coba', '6285156519022', 1, 'daniel@gmail.com', NULL, '35', '3573', '3573010', '3573010009', '65139', 'Jalan Danau maninjau Tengah b3 E11', '2023-11-10 20:54:25', '2023-11-23 19:32:24'),
-(10, 'Udin', 'Pertama', '6285156519011', 2, NULL, NULL, '81', '8105', '8105020', '8105020021', '65132', 'Jalannya udin', '2023-11-13 21:10:59', '2023-11-13 21:10:59'),
-(11, 'Coba', 'Coba', '6285156519044', 1, NULL, NULL, '51', '5105', '5105030', '5105030014', '65851', 'Jalan baru ini', '2023-11-23 19:02:20', '2023-11-23 19:02:20');
+INSERT INTO `customer` (`id`, `first_name`, `last_name`, `asal_informasi`, `no_telpon`, `by_divisi`, `email`, `instansi`, `provinsi`, `kota_kabupaten`, `kecamatan`, `kelurahan`, `kode_pos`, `nama_jalan`, `created_at`, `updated_at`) VALUES
+(9, 'Daniel', 'Coba', 'Instagram', '6285156519022', 1, 'daniel@gmail.com', NULL, '35', '3573', '3573010', '3573010009', '65139', 'Jalan Danau maninjau Tengah b3 E11', '2023-11-10 20:54:25', '2023-11-23 19:32:24'),
+(10, 'Udin', 'Pertama', 'Tiktok', '6285156519011', 2, NULL, NULL, '81', '8105', '8105020', '8105020021', '65132', 'Jalannya udin', '2023-11-13 21:10:59', '2023-11-13 21:10:59'),
+(11, 'Coba', 'Coba', 'Lewat Workshop', '6285156519044', 1, NULL, NULL, '51', '5105', '5105030', '5105030014', '65851', 'Jalan baru ini', '2023-11-23 19:02:20', '2023-11-23 19:02:20'),
+(12, 'Oke', 'Gas', 'Google', '6285156519066', 1, NULL, NULL, '35', '3516', '3516120', '3516120012', '65128', 'Jalan Rumahnya sendiri', '2024-02-23 20:16:09', '2024-02-23 20:16:09');
 
 -- --------------------------------------------------------
 
@@ -88535,7 +88537,7 @@ ALTER TABLE `log`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `log`

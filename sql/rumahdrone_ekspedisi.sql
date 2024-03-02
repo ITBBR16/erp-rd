@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2024 at 04:23 AM
+-- Generation Time: Mar 02, 2024 at 11:54 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -106,10 +106,9 @@ CREATE TABLE `pengiriman_ekspedisi` (
   `id` int(11) NOT NULL,
   `divisi_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
-  `jenis_layanan_id` int(11) DEFAULT NULL,
+  `ekspedisi_id` int(11) DEFAULT NULL,
   `no_resi` varchar(100) DEFAULT NULL,
   `no_faktur` varchar(50) DEFAULT NULL,
-  `tanggal_kirim` varchar(20) DEFAULT NULL,
   `status_order` varchar(20) DEFAULT NULL,
   `status` varchar(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -120,10 +119,10 @@ CREATE TABLE `pengiriman_ekspedisi` (
 -- Dumping data for table `pengiriman_ekspedisi`
 --
 
-INSERT INTO `pengiriman_ekspedisi` (`id`, `divisi_id`, `order_id`, `jenis_layanan_id`, `no_resi`, `no_faktur`, `tanggal_kirim`, `status_order`, `status`, `created_at`, `updated_at`) VALUES
-(3, 1, 9, 6, '19LP1703123903446', NULL, '25-12-2023', 'Baru', 'InRD', '2023-12-23 00:29:55', '2024-01-06 02:11:24'),
-(4, 1, 8, NULL, NULL, NULL, NULL, 'Second', 'Unprocess', '2024-01-16 20:49:06', '2024-01-16 20:49:06'),
-(5, 1, 20, NULL, NULL, NULL, NULL, 'Baru', 'Unprocess', '2024-02-19 00:00:40', '2024-02-19 00:00:40');
+INSERT INTO `pengiriman_ekspedisi` (`id`, `divisi_id`, `order_id`, `ekspedisi_id`, `no_resi`, `no_faktur`, `status_order`, `status`, `created_at`, `updated_at`) VALUES
+(3, 1, 9, 6, '19LP1703123903446', NULL, 'Baru', 'Diterima', '2023-12-23 00:29:55', '2024-01-06 02:11:24'),
+(4, 1, 8, NULL, NULL, NULL, 'Second', 'Unprocess', '2024-01-16 20:49:06', '2024-01-16 20:49:06'),
+(6, 1, 20, 3, '19LP1709168361276', 'ini no faktur', 'Baru', 'Incoming', '2024-03-01 21:41:12', '2024-03-01 21:48:58');
 
 -- --------------------------------------------------------
 
@@ -210,7 +209,7 @@ ALTER TABLE `penerimaan_barang`
 -- AUTO_INCREMENT for table `pengiriman_ekspedisi`
 --
 ALTER TABLE `pengiriman_ekspedisi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `validasi_barang`
