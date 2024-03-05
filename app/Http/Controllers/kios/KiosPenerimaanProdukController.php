@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\kios;
 
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
@@ -60,6 +61,7 @@ class KiosPenerimaanProdukController extends Controller
             $response = Http::post($urlApi, $payload);
             $dataResponse = json_decode($response->body(), true);
 
+            $tanggalDiterima = Carbon::createFromFormat('Y-m-d', $request->input('tanggal_diterima'))->format('d/m/Y');
             $statusFile = $dataResponse['status'];
             $paketFile = $dataResponse['url_resi'];
             $kelengkapanFile = $dataResponse['url_paket'];
@@ -76,8 +78,8 @@ class KiosPenerimaanProdukController extends Controller
                     'pengiriman_ekspedisi_id' => $id,
                     'kondisi_barang' => $request->input('kondisi_paket'),
                     'total_paket' => $request->input('total_paket'),
-                    'tanggal_diterima' => $request->input('tanggal_diterima'),
-                    'link_img' => $paketFile,
+                    'tanggal_diterima' => $tanggalDiterima,
+                    'link_img' => $kelengkapanFile,
                 ]);
     
                 return back()->with('success', 'Success Terima Produk.');

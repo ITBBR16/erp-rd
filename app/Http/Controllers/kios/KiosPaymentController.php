@@ -8,6 +8,7 @@ use App\Models\kios\KiosPayment;
 use App\Http\Controllers\Controller;
 use App\Models\ekspedisi\PengirimanEkspedisi;
 use App\Models\kios\KiosMetodePembayaran;
+use App\Models\kios\KiosMetodePembayaranSecond;
 use App\Models\kios\KiosOrder;
 use App\Repositories\kios\KiosRepository;
 use Carbon\Carbon;
@@ -22,7 +23,7 @@ class KiosPaymentController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $payment = KiosPayment::with('order.supplier', 'metodepembayaran')->get();
+        $payment = KiosPayment::with('order.supplier', 'metodepembayaran', 'ordersecond', 'metodepembayaransecond')->get();
 
         return view('kios.shop.payment.payment', [
             'title' => 'Payment',
@@ -66,7 +67,7 @@ class KiosPaymentController extends Controller
                 'divisi' => $divisiName,
                 'no_transaksi' => 'KiosBaru-' . $id,
                 'supplier_kios' => $request->input('supplier_kios'),
-                'invoice' => $request->input('invoice'),
+                'invoice' => '',
                 'media_transaksi' => $request->input('media_transaksi'),
                 'no_rek' => $request->input('no_rek'),
                 'nama_akun' => $request->input('nama_akun'),
@@ -122,18 +123,32 @@ class KiosPaymentController extends Controller
     
             $ongkir = preg_replace("/[^0-9]/", "", $request->input('ongkir'));
             $pajak = preg_replace("/[^0-9]/", "", $request->input('pajak'));
+            $statusOrder = $request->input('status_order');
             
             if($request->has('new-metode-payment-edit')){
-                $validate = $request->validate([
-                                'supplier_id' => 'required',
-                                'media_pembayaran' => 'required',
-                                'no_rek' => ['required', Rule::unique('rumahdrone_kios.metode_pembayaran', 'no_rek')],
-                                'nama_akun' => 'required',
-                            ]);
-    
-                $metodePembayaran = KiosMetodePembayaran::create($validate);
-                $kiosPayment->metode_pembayaran_id = $metodePembayaran->id;
-                $kiosPayment->save();
+                if($statusOrder === 'Baru') {
+                    $validate = $request->validate([
+                                    'supplier_id' => 'required',
+                                    'media_pembayaran' => 'required',
+                                    'no_rek' => ['required', Rule::unique('rumahdrone_kios.metode_pembayaran_supplier', 'no_rek')],
+                                    'nama_akun' => 'required',
+                                ]);
+        
+                    $metodePembayaran = KiosMetodePembayaran::create($validate);
+                    $kiosPayment->metode_pembayaran_id = $metodePembayaran->id;
+                    $kiosPayment->save();
+                } else {
+                    $validate = $request->validate([
+                        'customer_id' => 'required',
+                        'media_pembayaran' => 'required',
+                        'no_rek' => ['required', Rule::unique('rumahdrone_kios.kios_metode_pembayaran_second', 'no_rek')],
+                        'nama_akun' => 'required',
+                    ]);
+
+                    $metodePembayaran = KiosMetodePembayaranSecond::create($validate);
+                    $kiosPayment->metode_pembayaran_id = $metodePembayaran->id;
+                    $kiosPayment->save();
+                }
             }
     
             $jenisPembayaran = [];

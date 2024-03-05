@@ -63,7 +63,7 @@
             <h3 class="my-4 text-gray-900 dark:text-white font-semibold text-xl">Informasi Pembelian</h3>
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
-                    <input type="hidden" id="produk-jenis-id">
+                    <input type="hidden" name="produk_jenis_id" id="produk-jenis-id">
                     <label for="jenis_drone_second" class="sr-only">Jenis Paket Produk</label>
                     <select name="jenis_drone_second" id="jenis_drone_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_drone_second') border-red-600 dark:border-red-500 @enderror" required>
                         <option value="" hidden>-- Jenis Produk --</option>

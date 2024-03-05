@@ -169,6 +169,7 @@ class KiosShopController extends Controller
             }
 
             $payment = new KiosPayment([
+                'order_type' => 'Baru',
                 'order_id' => $id,
                 'nilai' => $totalNilai,
                 'status' => 'Unpaid',

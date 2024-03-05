@@ -53,4 +53,9 @@ class KiosOrderSecond extends Model
         return $this->hasMany(PengirimanEkspedisi::class);
     }
 
+    public function paymentkios()
+    {
+        return $this->hasMany(KiosPayment::class, 'order_id');
+    }
+
 }

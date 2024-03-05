@@ -21,7 +21,7 @@ class KiosPengirimanController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'divisi', 'penerimaan', 'ekspedisi')->get();
+        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'divisi', 'penerimaan', 'ekspedisi', 'ordersecond')->get();
         $ekspedisi = Ekspedisi::all();
 
         return view('kios.pengiriman.index', [
@@ -41,7 +41,7 @@ class KiosPengirimanController extends Controller
         try{
             $pengiriman = PengirimanEkspedisi::findOrFail($id);
             $tanggal = $request->input('tanggal_dikirim');
-            $tanggalKirim = Carbon::parse($tanggal)->format('d-m-Y');
+            $tanggalKirim = Carbon::parse($tanggal)->format('d/m/Y');
             $statusOrder = $request->input('status_order');
             $orderId = $request->input('order_id');
             

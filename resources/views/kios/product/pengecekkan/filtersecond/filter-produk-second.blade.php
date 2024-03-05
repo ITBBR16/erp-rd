@@ -4,17 +4,17 @@
     <div class="flex flex-row justify-between items-center border-b border-gray-400 py-3">
         <div class="flex flex-col my-2 w-2/3">
             <div class="flex flex-row">
-                <a href="/kios/product/pengecekkan-produk-second" class="w-5 mr-3">
+                <a href="/kios/product/filter-product-second" class="w-5 mr-3">
                     <span class="material-symbols-outlined text-red-500">arrow_back</span>
                 </a>
                 <div class="font-semibold mr-4 text-xl text-gray-700 dark:text-gray-300">
-                    Quality Control / {{ $kos->subjenis->produkjenis->jenis_produk }} {{ $kos->subjenis->paket_penjualan }}
+                    Filter Product / {{ $kos->subjenis->produkjenis->jenis_produk }} {{ $kos->subjenis->paket_penjualan }}
                 </div>
             </div>
         </div>
     </div>
 
-    <form action="{{ route('shop-second.update', $kos->id) }}" method="POST" autocomplete="off">
+    <form action="#" method="POST" autocomplete="off">
         @csrf
         @method('PUT')
         <input type="hidden" id="jenis-qc-id" value="{{ $kos->subjenis->produkjenis->id }}">

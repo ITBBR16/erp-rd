@@ -24,6 +24,7 @@ use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\kios\KiosBuatPaketSecondController;
 use App\Http\Controllers\kios\KiosPenerimaanProdukController;
 use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\kios\KiosFilterProdukSecondController;
 use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\kios\KiosPengecekkanSecondController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
@@ -76,9 +77,9 @@ Route::middleware('kios')->group(function () {
             
             Route::resource('/shop', KiosShopController::class);
             Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');
-            Route::resource('/shop-second', KiosShopSecondController::class);
-
+            
             Route::group(['controller' => KiosShopSecondController::class], function () {
+                Route::resource('/shop-second', KiosShopSecondController::class);
                 Route::post('/validasiSecond/{id}', 'validasisecond')->name('validasi-payment-second');
                 Route::get('/get-kelengkapan-second/{jenisId}', 'getKelengkapanSecond');
                 Route::get('/getCustomerbyNomor/{nomor}', 'getCustomerbyNomor');
@@ -114,6 +115,8 @@ Route::middleware('kios')->group(function () {
             Route::resource('/pengecekkan-produk-second', KiosPengecekkanSecondController::class)->names([
                 'edit' => 'shop-second.quality-control',
             ]);
+
+            Route::resource('/filter-product-second', KiosFilterProdukSecondController::class);
             
             Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
             Route::get('/getOrderList/{orderId}', [KiosPengecekkanProdukBaruController::class, 'getOrderList']);

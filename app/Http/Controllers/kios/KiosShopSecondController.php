@@ -5,6 +5,7 @@ namespace App\Http\Controllers\kios;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\kios\KiosPayment;
 use App\Models\customer\Customer;
 use App\Models\produk\ProdukJenis;
 use App\Http\Controllers\Controller;
@@ -66,7 +67,7 @@ class KiosShopSecondController extends Controller
             $kelengkapanSecond = $request->input('kelengkapan_second');
             $tanggal = $request->input('tanggal_pembelian');
             $mpId = $request->input('metode_pembelian');
-            $tanggalPembelian = Carbon::parse($tanggal)->format('d-m-Y');
+            $tanggalPembelian = Carbon::parse($tanggal)->format('d/m/Y');
             $biayaPengambilan = preg_replace("/[^0-9]/", "", $request->input('biaya_pengambilan'));
             $biayaOngkir = preg_replace("/[^0-9]/", "", $request->input('biaya_ongkir'));
             $qtySecond = $request->input('quantity_second');
@@ -74,12 +75,12 @@ class KiosShopSecondController extends Controller
                 return $item !== null;
             });
             $inputStatus = $request->input('status_pembayaran');
-            $statusBayar = ($inputStatus == 'Offline' || $inputStatus == 'Online Pending' ? 'Unpaid' : ($inputStatus == 'Online DP' ? 'DP' : 'Paid'));
+            $statusBayar = ($inputStatus == 'Online DP' ? 'DP' : 'Unpaid');
 
             $comeFrom = $request->input('come_from');
-            $customerInput = $request->input('customer');
+            $customerInput = $request->input('id_customer');
             $asalId = $request->input('marketplace');
-
+            
             $orderSecond = KiosOrderSecond::create([
                 'come_from' => $comeFrom,
                 'customer_id' => $customerInput,
@@ -102,7 +103,7 @@ class KiosShopSecondController extends Controller
                 ]);
                 $statusOrderSecond = 'Belum Dikirim';
             } else {
-                $statusOrderSecond = 'Proses QC';
+                $statusOrderSecond = 'Belum Terbayar';
             }
 
             $orderSecond->status = $statusOrderSecond;
@@ -117,6 +118,36 @@ class KiosShopSecondController extends Controller
                     $qcOrderSecond->kelengkapans()->attach($id, ['status' => 'Not Ready']);
                 }
             }
+            
+            $additionalKelengkapan = $request->input('additional_kelengkapan_second');
+            if($additionalKelengkapan != '') {
+                $jenisProdukId = $request->input('produk_jenis_id');
+                $additionalQty = $request->input('additional_quantity_second');
+                $type = ProdukJenis::findOrFail($jenisProdukId);
+            
+                $jenisKelengkapan = collect($additionalKelengkapan)->map(function ($jk) {
+                    return ['kelengkapan' => ucwords(strtolower($jk))];
+                });
+                
+                $kelengkapanBaru = $type->kelengkapans()->createMany($jenisKelengkapan->toArray());
+                $kelengkapanBaruId = $kelengkapanBaru->pluck('id')->toArray();
+
+                foreach($kelengkapanBaruId as $index => $idBaru) {
+                    for($j = 0; $j < $additionalQty[$index]; $j++) {
+                        $qcOrderSecond->kelengkapans()->attach($idBaru, ['status' => 'Not Ready']);
+                    }
+                }
+            }
+
+            $payment = new KiosPayment([
+                'order_type' => 'Baru',
+                'order_id' => $orderSecond->id,
+                'nilai' => $biayaPengambilan,
+                'ongkir' => $biayaOngkir,
+                'status' => 'Unpaid',
+            ]);
+
+            $payment->save();
 
             return back()->with('success', 'Success Buat Order Belanja Second.');
 

@@ -41,7 +41,7 @@
                     @if ($data->status == 'Diterima' || $data->status == 'InRD')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ ($data->status_order == 'Baru' ? 'K.' . $data->order->id : 'S.' . $data->ordersecond->id) }}
+                                {{ ($data->status_order == 'Baru' ? 'N.' . $data->order->id : 'S.' . $data->ordersecond->id) }}
                             </th>
                             <td class="px-6 py-2">
                                 {{ $data->no_resi }}

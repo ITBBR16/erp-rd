@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="flex text-3xl font-bold mb-8 text-gray-700 border-b border-gray-400 py-3 dark:text-gray-300">
-        <span>Pengecekkan Produk Bekas</span>
+        <span>Filter Produk Bekas</span>
     </div>
 
     @if (session()->has('success'))
@@ -61,7 +61,7 @@
                         Nama Customer
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Tanggal Pembelian
+                        Tanggal QC
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Total Nominal
@@ -98,7 +98,7 @@
                     <td class="px-6 py-2">
                         <div class="flex flex-wrap">
                             <a href="{{ route('shop-second.quality-control', encrypt($os->id)) }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                <i class="material-symbols-outlined text-xl">search_check</i>
+                                <i class="material-symbols-outlined text-xl">filter_center_focus</i>
                             </a>
                         </div>
                     </td>
@@ -107,12 +107,12 @@
             </tbody>
         </table>
     </div>
-    @if (!$orderSecond->contains('status', 'Proses QC'))
+    @if (!$orderSecond->contains('status', 'Proses Filter'))
         <div class="p-4 mt-4">
             <div class="flex datas-center justify-center">
                 <figure class="max-w-lg">
                     <img class="h-auto max-w-full rounded-lg" src="/img/box-empty-3d.png" alt="Not Found" width="200" height="10">
-                    <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Belum ada paket yang dikirim</figcaption>
+                    <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Belum ada data untuk di filter</figcaption>
                 </figure>
             </div>
         </div>

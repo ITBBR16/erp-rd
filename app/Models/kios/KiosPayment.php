@@ -19,10 +19,20 @@ class KiosPayment extends Model
     {
         return $this->belongsTo(KiosOrder::class);
     }
+
+    public function ordersecond()
+    {
+        return $this->belongsTo(KiosOrderSecond::class, 'order_id');
+    }
     
     public function metodepembayaran()
     {
         return $this->belongsTo(KiosMetodePembayaran::class, 'metode_pembayaran_id');
+    }
+    
+    public function metodepembayaransecond()
+    {
+        return $this->belongsTo(KiosMetodePembayaranSecond::class, 'metode_pembayaran_id');
     }
     
 }
