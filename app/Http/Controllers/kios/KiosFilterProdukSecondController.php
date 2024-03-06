@@ -18,7 +18,7 @@ class KiosFilterProdukSecondController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $secondOrder = KiosOrderSecond::with('customer', 'subjenis.produkjenis', 'qcsecond.kelengkapans', 'statuspembayaran', 'buymetodesecond')
-        ->where('status', 'Proses Filter')
+        ->where('status', 'Done QC')
         ->get();
         
         return view('kios.product.pengecekkan.filter-produk-seconds', [

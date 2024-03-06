@@ -22,7 +22,7 @@ class KiosQcProdukSecond extends Model
 
     public function ordersecond()
     {
-        return $this->belongsTo(KiosOrderSecond::class, 'kios_kelengkapan_second_list', 'qc_id', 'kios_produk_second_id')->withPivot('produk_kelengkapan_id');
+        return $this->belongsTo(KiosOrderSecond::class, 'order_second_list');
     }
 
 }

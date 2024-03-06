@@ -192,31 +192,31 @@ $(document).ready(function(){
     });
 
     // Cek nilai pada halaman qc second
-    function cekNilai() {
-        var nilaiSatuanInputs = document.getElementsByName('harga_satuan[]');
-        var totalHargaSatuan = 0;
+    // function cekNilai() {
+    //     var nilaiSatuanInputs = document.getElementsByName('harga_satuan[]');
+    //     var totalHargaSatuan = 0;
     
-        for (var i = 0; i < nilaiSatuanInputs.length; i++) {
-            var nilaiSatuan = parseFloat(nilaiSatuanInputs[i].value.replace(/\./g, ''));
-            totalHargaSatuan += nilaiSatuan;
-        }
+    //     for (var i = 0; i < nilaiSatuanInputs.length; i++) {
+    //         var nilaiSatuan = parseFloat(nilaiSatuanInputs[i].value.replace(/\./g, ''));
+    //         totalHargaSatuan += nilaiSatuan;
+    //     }
     
-        var nilaiTotalInput = parseFloat(document.getElementById('biaya_pengambilan').value.replace(/\./g, ''));
+    //     var nilaiTotalInput = parseFloat(document.getElementById('biaya_pengambilan').value.replace(/\./g, ''));
 
-        if (!isNaN(nilaiTotalInput) && !isNaN(totalHargaSatuan) && nilaiTotalInput.toFixed(2) === totalHargaSatuan.toFixed(2)) {
-            document.getElementById('submit_qc_second').removeAttribute('disabled');
-            document.getElementById('submit_qc_second').classList.remove('cursor-not-allowed');
-            // console.log("Nilai satuan sama dengan nilai total.");
-        } else {
-            // console.log("Nilai satuan tidak sama dengan nilai total.");
-        }
-    }
+    //     if (!isNaN(nilaiTotalInput) && !isNaN(totalHargaSatuan) && nilaiTotalInput.toFixed(2) === totalHargaSatuan.toFixed(2)) {
+    //         document.getElementById('submit_qc_second').removeAttribute('disabled');
+    //         document.getElementById('submit_qc_second').classList.remove('cursor-not-allowed');
+    //         // console.log("Nilai satuan sama dengan nilai total.");
+    //     } else {
+    //         // console.log("Nilai satuan tidak sama dengan nilai total.");
+    //     }
+    // }
 
-    var hargaSatuanInputs = document.querySelectorAll('input[name="harga_satuan[]"]');
-    hargaSatuanInputs.forEach(function(input) {
-        input.addEventListener('change', function() {
-            cekNilai();
-        });
-    });
+    // var hargaSatuanInputs = document.querySelectorAll('input[name="harga_satuan[]"]');
+    // hargaSatuanInputs.forEach(function(input) {
+    //     input.addEventListener('change', function() {
+    //         cekNilai();
+    //     });
+    // });
 
 });

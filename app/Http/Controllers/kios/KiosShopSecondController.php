@@ -53,7 +53,7 @@ class KiosShopSecondController extends Controller
         ]);
     }
 
-    public function store(Request $request) // Kirim Ke akuntan jika Online
+    public function store(Request $request)
     {
         $request->validate([
             'kelengkapan_second' => 'array',
@@ -119,16 +119,16 @@ class KiosShopSecondController extends Controller
                 }
             }
             
-            $additionalKelengkapan = $request->input('additional_kelengkapan_second');
-            if($additionalKelengkapan != '') {
+            if($request->has('additional_kelengkapan_second')) {
+                $additionalKelengkapan = $request->input('additional_kelengkapan_second');
                 $jenisProdukId = $request->input('produk_jenis_id');
                 $additionalQty = $request->input('additional_quantity_second');
                 $type = ProdukJenis::findOrFail($jenisProdukId);
-            
+
                 $jenisKelengkapan = collect($additionalKelengkapan)->map(function ($jk) {
                     return ['kelengkapan' => ucwords(strtolower($jk))];
                 });
-                
+
                 $kelengkapanBaru = $type->kelengkapans()->createMany($jenisKelengkapan->toArray());
                 $kelengkapanBaruId = $kelengkapanBaru->pluck('id')->toArray();
 

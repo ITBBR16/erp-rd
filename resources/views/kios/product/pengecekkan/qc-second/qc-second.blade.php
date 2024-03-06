@@ -14,10 +14,10 @@
         </div>
     </div>
 
-    <form action="{{ route('shop-second.update', $kos->id) }}" method="POST" autocomplete="off">
+    <form action="{{ route('pengecekkan-produk-second.update', $kos->qcsecond->id) }}" method="POST" autocomplete="off">
         @csrf
         @method('PUT')
-        <input type="hidden" id="jenis-qc-id" value="{{ $kos->subjenis->produkjenis->id }}">
+        <input type="hidden" name="produk_jenis_id" id="jenis-qc-id" value="{{ $kos->subjenis->produkjenis->id }}">
         <div class="w-10/12 my-6">
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
@@ -72,7 +72,15 @@
                                 <input type="text" name="nama_kelengkapan[]" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 appearance-none dark:text-white focus:outline-none focus:ring-0" value="{{ $kelengkapan->kelengkapan }}" readonly>
                             </th>
                             <td class="px-6 py-4">
-                                <input type="text" name="kondisi[]" id="kondisi-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                                <label for="kondisi" class="sr-only">Jenis Paket Produk</label>
+                                <select name="kondisi[]" id="kondisi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                    <option value="" hidden>-- Kondisi Kelengkapan --</option>
+                                    <option value="Sangat Baik">Sangat Baik</option>
+                                    <option value="Baik">Baik</option>
+                                    <option value="Cukup">Cukup</option>
+                                    <option value="Kurang">Kurang</option>
+                                    <option value="Hilang">Hilang</option>
+                                </select>
                             </td>
                             <td class="px-6 py-4">
                                 <input type="text" name="serial_number[]" id="serial_number-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
@@ -103,9 +111,9 @@
             </table>
         </div>
         <div id="barang-exclude-qc-second" class="border p-4 rounded-lg shadow-md mt-6 dark:border-gray-800 text-gray-500 dark:text-gray-400 mb-10">
-            <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+            <div class="text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                 Kelengkapan Exclude
-            </caption>
+            </div>
         </div>
         <div class="flex my-4 justify-between text-rose-600">
             <div class="flex cursor-pointer mt-4 hover:text-red-400">
@@ -116,7 +124,7 @@
             </div>
         </div>
         <div class="mt-4 text-end">
-            <button type="submit" id="submit_qc_second" class="cursor-not-allowed text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" disabled>Submit</button>
+            <button type="submit" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
         </div>
     </form>
 

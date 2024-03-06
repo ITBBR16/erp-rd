@@ -1,17 +1,17 @@
 $(document).ready(function(){
     const contaienrQcSecond = $('#additional-kelengkapan-qc-second');
     const ContaienrExcludeBarangQcSecomd = $('#barang-exclude-qc-second');
-    const tambahAdditionalQc = $('#add-second-additional-qc');
+    const tambahAdditionalFilter = $('#add-second-additional-filter');
     const tambahExcludeBarangQcSecond = $('#add-second-exclude-kelengkapan-qc')
     const jenisProdukQcSecond = $('#jenis-qc-id');
     let uniqueCount = 20;
 
-    tambahAdditionalQc.on('click', function () {
+    tambahAdditionalFilter.on('click', function () {
         uniqueCount++
         const jenisId = jenisProdukQcSecond.val();
 
         let addAdditonalForm = `
-            <tr id="additionalKelengkapanQC-${uniqueCount}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr id="additionalKelengkapanFilter-${uniqueCount}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     <label for="kelengkapan_qc_additional${uniqueCount}" class="sr-only">Jenis Paket Produk</label>
                     <select name="kelengkapan_qc_additional[]" id="kelengkapan_qc_additional${uniqueCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
@@ -30,14 +30,17 @@ $(document).ready(function(){
                     </select>
                 </td>
                 <td class="px-6 py-4">
-                    <input type="text" name="additional_serial_number[]" id="serial_number-${uniqueCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
+                    <input type="text" name="additional_serial_number[]" id="serial_number-${uniqueCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                 </td>
                 <td class="px-6 py-4 text-right">
-                    <input type="text" name="additional_keterangan[]" id="keterangan-${uniqueCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
+                    <input type="text" name="additional_keterangan[]" id="keterangan-${uniqueCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <input type="text" name="harga_satuan[]" id="harga_satuan-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                 </td>
                 <td class="px-6 py-4 text-right">
                     <div class="flex justify-center items-center col-span-1">
-                        <button type="button" class="remove-second-qc" data-id="${uniqueCount}">
+                        <button type="button" class="remove-second-filter" data-id="${uniqueCount}">
                             <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                         </button>
                     </div>
@@ -115,9 +118,9 @@ $(document).ready(function(){
         uniqueCount--;
     });
 
-    $(document).on("click", ".remove-second-qc", function() {
+    $(document).on("click", ".remove-second-filter", function() {
         let itemNameId = $(this).data("id");
-        $("#additionalKelengkapanQC-"+itemNameId).remove();
+        $("#additionalKelengkapanFilter-"+itemNameId).remove();
         uniqueCount--;
     });
 

@@ -113,7 +113,7 @@ Route::middleware('kios')->group(function () {
             Route::get('/penerimaan-produk', [KiosPenerimaanProdukController::class, 'index']);
             
             Route::resource('/pengecekkan-produk-second', KiosPengecekkanSecondController::class)->names([
-                'edit' => 'shop-second.quality-control',
+                'edit' => 'pengecekkan-produk-second.quality-control',
             ]);
 
             Route::resource('/filter-product-second', KiosFilterProdukSecondController::class);

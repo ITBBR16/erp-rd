@@ -97,7 +97,7 @@
                     </td>
                     <td class="px-6 py-2">
                         <div class="flex flex-wrap">
-                            <a href="{{ route('shop-second.quality-control', encrypt($os->id)) }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                            <a href="{{ route('pengecekkan-produk-second.quality-control', encrypt($os->id)) }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-xl">search_check</i>
                             </a>
                         </div>

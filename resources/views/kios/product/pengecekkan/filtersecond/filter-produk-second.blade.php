@@ -38,6 +38,24 @@
                     @enderror
                 </div>
             </div>
+            <div class="grid md:grid-cols-2 md:gap-6">
+                <div class="relative z-0 w-full group flex items-center">
+                    <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                    <input type="text" name="biaya_ambil" id="biaya_ambil" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="{{ number_format($kos->biaya_pembelian, 0, ',', '.') }}">
+                    <label for="biaya_ambil" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Ambil</label>
+                </div>
+                @error('biaya_ambil')
+                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+                <div class="relative z-0 w-full group flex items-center">
+                    <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                    <input type="text" name="biaya_cek_filter" id="biaya_cek_filter" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <label for="biaya_cek_filter" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Cek Filter</label>
+                </div>
+                @error('biaya_cek_filter')
+                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -58,6 +76,9 @@
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Keterangan
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Harga Satuan
                         </th>
                         <th scope="col" class="px-6 py-3">
                             
@@ -81,6 +102,9 @@
                                 <input type="text" name="keterangan[]" id="keterangan-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
                             </td>
                             <td class="px-6 py-4 text-right">
+                                <input type="text" name="harga_satuan[]" id="harga_satuan-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
+                            </td>
+                            <td class="px-6 py-4 text-right">
                                 
                             </td>
                         </tr>
@@ -91,7 +115,7 @@
                         <td scope="row" class="px-6 py-3 text-base">
                             <div class="flex justify-between text-rose-600">
                                 <div class="flex cursor-pointer mt-4 hover:text-red-400">
-                                    <button type="button" id="add-second-additional-qc" class="flex flex-row justify-between gap-2">
+                                    <button type="button" id="add-second-additional-" class="flex flex-row justify-between gap-2">
                                         <span class="material-symbols-outlined">add_circle</span>
                                         <span class="">Tambah Additional Kelengkapan</span>
                                     </button>

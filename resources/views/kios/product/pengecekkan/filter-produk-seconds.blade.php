@@ -97,7 +97,7 @@
                     </td>
                     <td class="px-6 py-2">
                         <div class="flex flex-wrap">
-                            <a href="{{ route('shop-second.quality-control', encrypt($os->id)) }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                            <a href="{{ route('filter-product-second.edit', encrypt($os->id)) }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-xl">filter_center_focus</i>
                             </a>
                         </div>
@@ -107,11 +107,11 @@
             </tbody>
         </table>
     </div>
-    @if (!$orderSecond->contains('status', 'Proses Filter'))
+    @if (!$orderSecond->contains('status', 'Done QC'))
         <div class="p-4 mt-4">
             <div class="flex datas-center justify-center">
                 <figure class="max-w-lg">
-                    <img class="h-auto max-w-full rounded-lg" src="/img/box-empty-3d.png" alt="Not Found" width="200" height="10">
+                    <img class="h-auto max-w-full rounded-lg" src="/img/empty.png" alt="Not Found" width="150" height="10">
                     <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Belum ada data untuk di filter</figcaption>
                 </figure>
             </div>
