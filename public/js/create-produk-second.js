@@ -135,7 +135,7 @@ $(document).ready(function(){
         const valSn = $("#sn-second-"+snID).val();
         const priceSatuan = $('#harga_satuan_second-' + snID);
         
-        fetch(`/kios/getPriceSecond/${valSn}`)
+        fetch(`/kios/product/getPriceSecond/${valSn}`)
         .then(response => response.json())
         .then(data => {
             priceSatuan.html('');

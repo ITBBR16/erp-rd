@@ -140,7 +140,9 @@ class KiosBuatPaketSecondController extends Controller
     {
         $data = KiosQcProdukSecond::with(['kelengkapans' => function ($query) {
             $query->wherePivot('status', 'Ready');
-        }])->get();
+        }])
+        ->get()
+        ->unique('produk_kelengkapan_id');
     
         return response()->json($data);
     }
@@ -150,7 +152,8 @@ class KiosBuatPaketSecondController extends Controller
         $data = KiosQcProdukSecond::with(['kelengkapans' => function ($query) use($id) {
             $query->wherePivot('produk_kelengkapan_id', $id)
                   ->wherePivot('status', 'Ready');
-        }])->get();
+        }])
+        ->get();
     
         return response()->json($data);
     }
