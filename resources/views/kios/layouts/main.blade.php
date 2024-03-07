@@ -77,6 +77,7 @@
         {{-- <script src="/js/kasir-kios.js"></script> --}}
         <script src="/js/logistik-validasi.js"></script>
         <script src="/js/qc-second.js"></script>
+        <script src="/js/filter-second.js"></script>
         {{-- <script src="/js/scroll-sidebar.js"></script> --}}
     </body>
 </html>

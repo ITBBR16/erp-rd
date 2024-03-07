@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <form action="#" method="POST" autocomplete="off">
+    <form action="{{ route('filter-product-second.update', $kos->qcsecond->id) }}" method="POST" autocomplete="off">
         @csrf
         @method('PUT')
         <input type="hidden" id="jenis-qc-id" value="{{ $kos->subjenis->produkjenis->id }}">
@@ -41,7 +41,7 @@
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full group flex items-center">
                     <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                    <input type="text" name="biaya_ambil" id="biaya_ambil" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="{{ number_format($kos->biaya_pembelian, 0, ',', '.') }}">
+                    <input type="text" name="biaya_ambil" id="biaya_ambil" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="{{ number_format($kos->biaya_pembelian, 0, ',', '.') }}" readonly>
                     <label for="biaya_ambil" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Ambil</label>
                 </div>
                 @error('biaya_ambil')
@@ -49,7 +49,7 @@
                 @enderror
                 <div class="relative z-0 w-full group flex items-center">
                     <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                    <input type="text" name="biaya_cek_filter" id="biaya_cek_filter" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <input type="text" name="biaya_cek_filter" id="biaya_cek_filter" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " readonly>
                     <label for="biaya_cek_filter" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Cek Filter</label>
                 </div>
                 @error('biaya_cek_filter')
@@ -85,7 +85,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody id="additional-kelengkapan-qc-second">
+                <tbody id="additional-kelengkapan-filter-second">
                     @foreach ($kos->qcsecond->kelengkapans as $index => $kelengkapan)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -93,16 +93,19 @@
                                 <input type="text" name="nama_kelengkapan[]" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 appearance-none dark:text-white focus:outline-none focus:ring-0" value="{{ $kelengkapan->kelengkapan }}" readonly>
                             </th>
                             <td class="px-6 py-4">
-                                <input type="text" name="kondisi[]" id="kondisi-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                                <input type="text" name="kondisi[]" id="kondisi-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" value="{{ $kelengkapan->pivot->kondisi }}" required>
                             </td>
                             <td class="px-6 py-4">
-                                <input type="text" name="serial_number[]" id="serial_number-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
+                                <input type="text" name="serial_number[]" id="serial-number-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" value="{{ $kelengkapan->pivot->serial_number }}" required>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <input type="text" name="keterangan[]" id="keterangan-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
+                                <input type="text" name="keterangan[]" id="keterangan-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" value="{{ $kelengkapan->pivot->keterangan }}" required>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <input type="text" name="harga_satuan[]" id="harga_satuan-{{ $index }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
+                                <div class="relative z-0 w-full group flex items-center">
+                                    <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                                    <input type="text" name="harga_satuan_filter_second[]" id="harga_satuan_filter_second" class="harga_satuan_filter_second block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="0" required>
+                                </div>
                             </td>
                             <td class="px-6 py-4 text-right">
                                 
@@ -115,9 +118,9 @@
                         <td scope="row" class="px-6 py-3 text-base">
                             <div class="flex justify-between text-rose-600">
                                 <div class="flex cursor-pointer mt-4 hover:text-red-400">
-                                    <button type="button" id="add-second-additional-" class="flex flex-row justify-between gap-2">
+                                    <button type="button" id="add-second-additional-filter" class="flex flex-row justify-between gap-2">
                                         <span class="material-symbols-outlined">add_circle</span>
-                                        <span class="">Tambah Additional Kelengkapan</span>
+                                        <span class="text-sm">Tambah Additional Kelengkapan</span>
                                     </button>
                                 </div>
                             </div>
@@ -126,21 +129,22 @@
                 </tfoot>
             </table>
         </div>
-        <div id="barang-exclude-qc-second" class="border p-4 rounded-lg shadow-md mt-6 dark:border-gray-800 text-gray-500 dark:text-gray-400 mb-10">
+        <div id="barang-exclude-filter-second" class="border p-4 rounded-lg shadow-md mt-6 dark:border-gray-800 text-gray-500 dark:text-gray-400 mb-10">
             <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                 Kelengkapan Exclude
             </caption>
+            
         </div>
         <div class="flex my-4 justify-between text-rose-600">
             <div class="flex cursor-pointer mt-4 hover:text-red-400">
-                <button type="button" id="add-second-exclude-kelengkapan-qc" class="flex flex-row justify-between gap-2">
+                <button type="button" id="add-second-exclude-kelengkapan-filter" class="flex flex-row justify-between gap-2">
                     <span class="material-symbols-outlined">add_circle</span>
                     <span class="">Tambah Additional Kelengkapan</span>
                 </button>
             </div>
         </div>
         <div class="mt-4 text-end">
-            <button type="submit" id="submit_qc_second" class="cursor-not-allowed text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" disabled>Submit</button>
+            <button type="submit" id="submit_filter_second" class="cursor-not-allowed text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" disabled>Submit</button>
         </div>
     </form>
 

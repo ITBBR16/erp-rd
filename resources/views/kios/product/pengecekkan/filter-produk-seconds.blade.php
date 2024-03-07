@@ -108,13 +108,11 @@
         </table>
     </div>
     @if (!$orderSecond->contains('status', 'Done QC'))
-        <div class="p-4 mt-4">
-            <div class="flex datas-center justify-center">
-                <figure class="max-w-lg">
-                    <img class="h-auto max-w-full rounded-lg" src="/img/empty.png" alt="Not Found" width="150" height="10">
-                    <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Belum ada data untuk di filter</figcaption>
-                </figure>
-            </div>
+        <div class="p-4 mt-4 flex justify-center items-center">
+            <figure class="max-w-lg">
+                <img class="h-auto ml-4 max-w-full rounded-lg" src="/img/empty.png" alt="Not Found" width="150" height="10">
+                <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Belum ada data untuk di filter</figcaption>
+            </figure>
         </div>
     @endif
 
