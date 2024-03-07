@@ -1,7 +1,7 @@
 @extends('kios.layouts.main')
 
 @section('container')
-    <div class="fixed top-16 z-40 w-full bg-white border-t shadow-sm border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div class="fixed top-16 w-full bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start">
                 <span class="text-3xl font-bold text-gray-700">Dashboard</span>
@@ -173,7 +173,7 @@
     {{-- Analis Chart --}}
     <div class="p-6 mt-6 border bg-white rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
         <div class="grid grid-cols-1 my-3 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white shadow-md border-b-4 border-green-500 rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
@@ -190,7 +190,7 @@
                     </div>
                 </div>
             </button>
-            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white hover:shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
@@ -207,7 +207,7 @@
                     </div>
                 </div>
             </button>
-            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white hover:shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
@@ -224,7 +224,7 @@
                     </div>
                 </div>
             </button>
-            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white hover:shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
@@ -241,7 +241,7 @@
                     </div>
                 </div>
             </button>
-            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+            <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white hover:shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
