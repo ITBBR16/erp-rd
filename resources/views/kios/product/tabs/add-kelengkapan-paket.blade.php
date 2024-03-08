@@ -49,13 +49,25 @@
                             <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="paket_penjualan" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('paket_penjualan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('paket_penjualan') }}" required>
-                        <label for="paket_penjualan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Paket Penjualan</label>
-                        @error('paket_penjualan')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
+                    <div class="flex flex-row border rounded-lg items-center w-full border-gray-300 mb-6">
+                        <input type="text" name="length" placeholder="0" class="input-field py-2.5 mr-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0" oninput="this.value = this.value.replace(/\D/g, '')">
+                        <div class="text-black items-center mr-3 mt-1">
+                            <span class="material-symbols-outlined text-base">close</span>
+                        </div>
+                        <input type="text" name="width" placeholder="0" class="input-field py-2.5 mx-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0" oninput="this.value = this.value.replace(/\D/g, '')">
+                        <div class="text-black items-center mr-3 mt-1">
+                            <span class="material-symbols-outlined text-base">close</span>
+                        </div>
+                        <input type="text" name="height" placeholder="0" class="input-field py-2.5 mx-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0" oninput="this.value = this.value.replace(/\D/g, '')">
+                        <span class="inline-flex items-center px-3 text-base font-semibold rounded-r-lg text-gray-900 bg-gray-100 border-l border-gray-300 dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600 grow h-full">Cm</span>
                     </div>
+                </div>
+                <div class="relative z-0 w-full mb-6 group">
+                    <input type="text" name="paket_penjualan" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('paket_penjualan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('paket_penjualan') }}" required>
+                    <label for="paket_penjualan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Paket Penjualan</label>
+                    @error('paket_penjualan')
+                        <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div class="my-4 border-b-2 border-gray-400 pb-2">
                     <h3 class="text-gray-900 dark:text-white font-semibold text-xl">Kelengkapan</h3>

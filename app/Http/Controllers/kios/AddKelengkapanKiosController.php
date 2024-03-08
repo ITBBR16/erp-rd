@@ -80,6 +80,9 @@ class AddKelengkapanKiosController extends Controller
                 'quantity' => 'required|array',
                 'file_paket_produk' => 'image|mimes:jpeg,png,jpg',
                 'file_kelengkapan_produk.*' => 'image|mimes:jpeg,png,jpg',
+                'length' => 'required',
+                'width' => 'required',
+                'height' => 'required',
             ]);
 
             $validatePenjualan['paket_penjualan'] = strtoupper($validatePenjualan['paket_penjualan']);
@@ -90,6 +93,9 @@ class AddKelengkapanKiosController extends Controller
                     'produk_type_id' => $request->kategori_paket,
                     'paket_penjualan' => $validatePenjualan['paket_penjualan'],
                     'berat' => $request->berat_paket,
+                    'panjang' => $request->length,
+                    'lebar' => $request->width,
+                    'tinggi' => $request->height,
                 ]);
 
                 $kelengkapanId = $request->input('kelengkapan');

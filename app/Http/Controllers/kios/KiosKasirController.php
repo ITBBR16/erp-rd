@@ -56,7 +56,6 @@ class KiosKasirController extends Controller
                 'kasir_sn' => 'required|array|min:1',
                 'item_id' => 'required|array|min:1',
                 'kasir_harga' => 'required|array|min:1',
-                'checkbox_tax'
             ]);
             
             $kasirOngkir = $request->input('kasir_ongkir');
