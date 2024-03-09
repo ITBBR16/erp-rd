@@ -47,6 +47,8 @@ $(document).ready(function(){
         let invoiceContent = "";
 
         $("#kasir-container tr").each(function() {
+            var jenisTransaksiKasir = $(this).find("select[name='jenis_transaksi[]'] option:selected").text();
+            var resultKeteranganProduk = (jenisTransaksiKasir === 'Baru') ? 'Unit Baru, Garansi 1 Tahun Serial Number' : 'Unit Second, Garansi 6 Bulan Serial Number'
             var itemName = $(this).find("[name='item_name[]']").val();
             var kasirSn = $(this).find("select[name='kasir_sn[]'] option:selected").text();
             var price = $(this).find("[name='kasir_harga[]']").val();
@@ -65,7 +67,7 @@ $(document).ready(function(){
             invoiceContent += `
             <tr class="bg-white dark:bg-gray-800">
                 <td class="px-2 py-1">${itemName}</td>
-                <td class="px-2 py-1 text-xs">Unit Baru, Garansi 1 Tahun Serial Number ${kasirSn}</td>
+                <td class="px-2 py-1 text-xs">${resultKeteranganProduk} ${kasirSn}</td>
                 <td class="px-2 py-1">1</td>
                 <td class="px-2 py-1">${price}</td>
                 <td class="px-2 py-1">${totalRupiah}</td>

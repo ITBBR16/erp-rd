@@ -91,8 +91,21 @@ class KiosKasirController extends Controller
                 $detailTransaksi->jenis_transaksi = $kasirJenisTransaksi;
                 $detailTransaksi->kios_produk_id = $item;
                 $detailTransaksi->serial_number_id = $kasirSN[$index];
-                $detailTransaksi->save();
 
+                if($kasirJenisTransaksi =='Baru') {
+                    $dataProduk = KiosProduk::where('sub_jenis_id', $item)->first();
+                    $nilaiPromo = $dataProduk->harga_promo;
+                    $nilaiSrp = $dataProduk->srp;
+
+                    $detailTransaksi->harga_jual = $nilaiSrp;
+                    $detailTransaksi->harga_promo = $nilaiPromo;
+
+                } else {
+                    $detailTransaksi->harga_jual = $kasirSrp[$index];
+                    $detailTransaksi->harga_promo = 0;
+                }
+
+                $detailTransaksi->save();
                 KiosSerialNumber::find($kasirSN[$index])->update(['status' => 'Sold']);
             }
 

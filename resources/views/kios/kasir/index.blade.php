@@ -86,7 +86,7 @@
     
             {{-- Bagian Kanan Kasir --}}
             <div class="col-span-1 my-4 mx-auto flex justify-center">
-                <div class="fixed w-80 text-base bg-white p-4 text-white border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+                <div class="w-80 text-base bg-white p-4 text-white border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                     <div class="flex items-center justify-between">
                         <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Subtotal :</p>
@@ -111,7 +111,7 @@
                             <p id="kasir-box-ongkir" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between border-b-2">
                         <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Tax :</p>
                         </div>
@@ -119,7 +119,7 @@
                             <p id="kasir-box-tax" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between border-t-2">
+                    <div class="flex items-center justify-between mt-2">
                         <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Total :</p>
                         </div>
