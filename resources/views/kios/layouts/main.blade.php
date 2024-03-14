@@ -63,8 +63,7 @@
         <script src="/js/toggle.js"></script>
         <script src="/js/search.js"></script>
         <script src="/js/loader.js"></script>
-        <script src="/js/add-form-kelengkapan.js"></script>
-        <script src="/js/add-form-jk.js"></script>
+        <script src="/js/add-product-baru.js"></script>
         <script src="/js/shop-baru.js"></script>
         <script src="/js/shop-second.js"></script>
         <script src="/js/toggle-payment-kios.js"></script>
@@ -78,6 +77,5 @@
         <script src="/js/logistik-validasi.js"></script>
         <script src="/js/qc-second.js"></script>
         <script src="/js/filter-second.js"></script>
-        {{-- <script src="/js/scroll-sidebar.js"></script> --}}
     </body>
 </html>

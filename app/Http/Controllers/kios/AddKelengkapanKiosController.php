@@ -33,7 +33,7 @@ class AddKelengkapanKiosController extends Controller
             'title' => 'Add Product',
             'active' => 'add-product',
             'navActive' => 'product',
-            'dropdown' => 'add-product',
+            'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'kategori' => $kategori,
@@ -51,24 +51,67 @@ class AddKelengkapanKiosController extends Controller
                 'kategori_id' => 'required',
                 'jenis_produk' => ['required', Rule::unique('rumahdrone_produk.produk_jenis', 'jenis_produk')],
             ]);
-            
+
             $validate['jenis_produk'] = strtoupper($validate['jenis_produk']);
-            
+
             try {
                 $type = ProdukJenis::create($validate);
-            
-                $jenisKelengkapan = collect($request->jenis_kelengkapan)->map(function ($jk) {
-                    return ['kelengkapan' => ucwords(strtolower($jk))];
-                });
-            
-                $type->kelengkapans()->createMany($jenisKelengkapan->toArray());
-            
+
                 return back()->with('success', 'Success Add New Product.');
             
             } catch (Exception $e) {
                 return back()->with('error', $e->getMessage());
             }
+
+        } elseif($request->has('edit_kelengkapan_produk') || $request->has('jenis_kelengkapan')) {
             
+            try {
+                $editKelengkapanProduk = $request->edit_kelengkapan_produk;
+                $addKelengkapanProduk = $request->jenis_kelengkapan;
+                $filterDataEditKelengkapan = array_filter($editKelengkapanProduk, function($value) {
+                                                 return !is_null($value);
+                                             });
+                $filterDataAddKelengkapan = array_filter($addKelengkapanProduk, function($value) {
+                                                 return !is_null($value);
+                                             });
+
+                if(!empty($filterDataAddKelengkapan)) {
+                    $validateKelengkapan = $request->validate([
+                        'jenis_kelengkapan' => ['required', Rule::unique('rumahdrone_produk.produk_kelengkapan', 'kelengkapan')],
+                    ]);
+
+                    $jenisKelengkapan = collect($request->jenis_kelengkapan)->map(function ($jk) {
+                        return ['kelengkapan' => ucwords(strtolower($jk))];
+                    });
+
+                    $addJenisId = $request->add_jenis_id;
+                    
+                    foreach($jenisKelengkapan as $index => $newKelengkapan) {
+                        $kelengkapanBaru = ProdukKelengkapan::create($newKelengkapan);
+                        $kelengkapanBaru->jenisProduks()->attach($addJenisId);
+                    }
+                }
+
+                if(!empty($filterDataEditKelengkapan)) {
+                    $editKelengkapan = $request->edit_kelengkapan_produk;
+                    $editJenis = $request->ek_jenis_id;
+
+                    foreach($editKelengkapan as $index => $ek) {
+                        $findKelengkapan = ProdukKelengkapan::findOrFail($ek);
+                        foreach($editJenis as $jenisId) {
+                            if($findKelengkapan->jenisProduks()->where('produk_jenis_id', $jenisId)->exists()){}
+
+                            $findKelengkapan->jenisProduks()->syncWithoutDetaching($jenisId);
+                        }
+                    }
+                }
+
+                return back()->with('success', 'Success Add or Edit Product.');
+
+            } catch (Exception $e) {
+                return back()->with('error', $e->getMessage());
+            }
+
         } elseif($request->has('paket_penjualan')) {
 
             $validatePenjualan = $request->validate([

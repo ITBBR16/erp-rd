@@ -19,6 +19,10 @@ class ProdukKelengkapan extends Model
         return $this->belongsToMany(ProdukSubJenis::class, 'produk_sub_kelengkapan');
     }
 
+    public function jenisProduks() {
+        return $this->belongsToMany(ProdukJenis::class, 'produk_jenis_kelengkapan');
+    }
+
     public function qcprodukseconds() {
         return $this->belongsToMany(KiosQcProdukSecond::class, 'kios_kelengkapan_second_list', 'produk_kelengkapan_id', 'qc_id')
                     ->withPivot('pivot_qc_id', 'kondisi', 'keterangan', 'serial_number', 'harga_satuan', 'status');

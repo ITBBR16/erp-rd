@@ -31,7 +31,7 @@ class KiosBuatPaketSecondController extends Controller
             'title' => 'Create Paket Second',
             'active' => 'create-paket-second',
             'navActive' => 'product',
-            'dropdown' => 'add-product',
+            'dropdown' => 'pengecekkan-second',
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'kelengkapansecond' => $dataKelengkapan,

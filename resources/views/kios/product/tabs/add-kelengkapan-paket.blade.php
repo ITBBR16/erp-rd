@@ -49,17 +49,17 @@
                             <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="flex flex-row border rounded-lg items-center w-full border-gray-300 mb-6">
-                        <input type="text" name="length" placeholder="0" class="input-field py-2.5 mr-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0" oninput="this.value = this.value.replace(/\D/g, '')">
+                    <div class="flex flex-row border rounded-lg items-center w-full border-gray-300 mb-6 dark:border-gray-400">
+                        <input type="text" name="length" placeholder="0" class="input-field py-2.5 mr-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" oninput="this.value = this.value.replace(/\D/g, '')">
                         <div class="text-black items-center mr-3 mt-1">
-                            <span class="material-symbols-outlined text-base">close</span>
+                            <span class="material-symbols-outlined text-base dark:text-gray-400">close</span>
                         </div>
-                        <input type="text" name="width" placeholder="0" class="input-field py-2.5 mx-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0" oninput="this.value = this.value.replace(/\D/g, '')">
+                        <input type="text" name="width" placeholder="0" class="input-field py-2.5 mx-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" oninput="this.value = this.value.replace(/\D/g, '')">
                         <div class="text-black items-center mr-3 mt-1">
-                            <span class="material-symbols-outlined text-base">close</span>
+                            <span class="material-symbols-outlined text-base dark:text-gray-400">close</span>
                         </div>
-                        <input type="text" name="height" placeholder="0" class="input-field py-2.5 mx-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0" oninput="this.value = this.value.replace(/\D/g, '')">
-                        <span class="inline-flex items-center px-3 text-base font-semibold rounded-r-lg text-gray-900 bg-gray-100 border-l border-gray-300 dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600 grow h-full">Cm</span>
+                        <input type="text" name="height" placeholder="0" class="input-field py-2.5 mx-3 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" oninput="this.value = this.value.replace(/\D/g, '')">
+                        <span class="inline-flex items-center px-3 text-base font-semibold rounded-r-lg text-gray-900 bg-gray-100 border-l border-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:border-gray-600 grow h-full">Cm</span>
                     </div>
                 </div>
                 <div class="relative z-0 w-full mb-6 group">

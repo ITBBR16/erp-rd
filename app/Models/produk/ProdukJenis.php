@@ -24,7 +24,7 @@ class ProdukJenis extends Model
     }
 
     public function kelengkapans(){
-        return $this->hasMany(ProdukKelengkapan::class, 'produk_jenis_id');
+        return $this->belongsToMany(ProdukKelengkapan::class, 'produk_jenis_kelengkapan');
     }
 
 }
