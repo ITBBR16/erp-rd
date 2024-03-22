@@ -52,7 +52,7 @@
                         {{ $os->customer->first_name }} {{ $os->customer->last_name }}
                     </td>
                     <td class="px-6 py-2">
-                        {{ $os->tanggal_pembelian }}
+                        {{ \Carbon\Carbon::parse($os->tanggal_pembelian)->isoFormat('D MMMM YYYY') }}
                     </td>
                     <td class="px-6 py-2">
                         @php
@@ -68,22 +68,14 @@
                         @endif
                     </td>
                     <td class="px-6 py-2">
-                        <span class="bg-{{ ($os->status != 'Done' ? 'orange' : 'green') }}-400 rounded-md px-2 py-0 text-white">{{ $os->status }}</span>
+                        <span class="bg-{{ ($os->status != 'InRD' ? 'orange' : 'green') }}-400 rounded-md px-2 py-0 text-white">{{ $os->status }}</span>
                     </td>
                     <td class="px-6 py-2">
                         <div class="flex flex-wrap">
                             <button type="button" data-modal-target="view-second{{ $os->id }}" data-modal-toggle="view-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-base">visibility</i>
                             </button>
-                            {{-- @if ($os->status == 'Proses QC')
-                                <a href="{{ route('shop-second.quality-control', encrypt($os->id)) }}" target="_blank" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-xl">search_check</i>
-                                </a>
-                            @endif --}}
                             @if ($os->status_pembayaran != 'Paid')
-                                {{-- <button type="button" data-modal-target="validasi-second{{ $os->id }}" data-modal-toggle="validasi-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">add_card</i>
-                                </button> --}}
                                 <button type="button" data-modal-target="delete-second{{ $os->id }}" data-modal-toggle="delete-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">delete</i>
                                 </button>
@@ -97,6 +89,5 @@
     </div>
     {{-- Modal --}}
     @include('kios.shop.modal.view-second')
-    {{-- @include('kios.shop.modal.validasi-second') --}}
     @include('kios.shop.modal.delete-second')
 </div>

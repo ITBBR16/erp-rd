@@ -20,6 +20,11 @@ class ValidasiProduk extends Model
         return $this->belongsTo(KiosOrderList::class, 'order_list_id');
     }
 
+    public function pengirimanbarang()
+    {
+        return $this->belongsTo(PengirimanEkspedisi::class, 'pengiriman_barang_id');
+    }
+
     public function komplainkios()
     {
         return $this->hasOne(KiosKomplainSupplier::class);

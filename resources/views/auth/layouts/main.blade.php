@@ -18,6 +18,6 @@
     </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
-<script src="/js/loader.js"></script>
+<script src="/js/login-loader.js"></script>
 </body>
 </html>

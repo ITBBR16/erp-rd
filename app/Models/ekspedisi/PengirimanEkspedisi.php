@@ -21,9 +21,14 @@ class PengirimanEkspedisi extends Model
         return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
     }
 
+    public function validasibarang()
+    {
+        return $this->hasMany(ValidasiProduk::class);
+    }
+
     public function order()
     {
-        return $this->belongsTo(KiosOrder::class);
+        return $this->belongsTo(KiosOrder::class, 'order_id');
     }
 
     public function divisi()

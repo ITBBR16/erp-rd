@@ -10,6 +10,7 @@ use App\Models\ekspedisi\PengirimanEkspedisi;
 use App\Models\kios\KiosMetodePembayaran;
 use App\Models\kios\KiosMetodePembayaranSecond;
 use App\Models\kios\KiosOrder;
+use App\Models\kios\KiosOrderSecond;
 use App\Repositories\kios\KiosRepository;
 use Carbon\Carbon;
 use Exception;
@@ -56,7 +57,10 @@ class KiosPaymentController extends Controller
             $formattedDate = $tanggal->format('d/m/Y H:i:s');
             $kiosPayment = KiosPayment::findOrFail($id);
             $orderId = $request->input('order_id');
-    
+            $statusOrder = $request->input('status_order');
+            $noTransaksi = ($statusOrder == 'Baru') ? 'KiosBaru-' : 'KiosBekas-';
+            $keteranganFinance = ($statusOrder == 'Baru') ? 'Order Id N.' . $id : 'Order Id S.' . $id;
+
             $totalBelanja = preg_replace("/[^0-9]/", "", $request->input('nilai_belanja'));
             $totalOngkir = preg_replace("/[^0-9]/", "", $request->input('ongkir'));
             $totalPajak = preg_replace("/[^0-9]/", "", $request->input('pajak'));
@@ -65,44 +69,63 @@ class KiosPaymentController extends Controller
             $dataFinance = [
                 'tanggal' => $formattedDate,
                 'divisi' => $divisiName,
-                'no_transaksi' => 'KiosBaru-' . $id,
+                'no_transaksi' => $noTransaksi . $id,
                 'supplier_kios' => $request->input('supplier_kios'),
-                'invoice' => '',
+                'invoice' => '0',
                 'media_transaksi' => $request->input('media_transaksi'),
                 'no_rek' => $request->input('no_rek'),
                 'nama_akun' => $request->input('nama_akun'),
                 'nilai_belanja' => $totalBelanja,
                 'ongkir' => $totalOngkir,
                 'pajak' => $totalPajak,
-                'keterangan' => $request->input('keterangan'),
+                'keterangan' => $keteranganFinance . ", " . $request->input('keterangan'),
             ];
     
             $response = Http::post($urlFinance, $dataFinance);
             
-            $kiosPayment->keterangan = $request->input('keterangan');
-            $kiosPayment->tanggal_request = $formattedDate;
-            $kiosPayment->status = 'Waiting For Payment';
-
-            // Message to finance group
-            $orderBaru = KiosOrder::findOrFail($orderId);
-            $orderBaru->status = 'Waiting For Payment';
-            $totalPembayaran = $totalBelanja + $totalOngkir + $totalPajak;
-            $namaGroup = '';
-            $header = '*Incoming Request Payment Produk Baru*\n\n';
-            $body = 'Order ID : ' . $orderId . '\nRef : KiosBaru-' . $id . '\nTotal Nominal : ' . $totalPembayaran . '\nLink Order ID : ';
-            $footer = 'Ditunggu Paymentnya kakak 😘\nJangan lupa Upload Bukti Transfer di Link Drive yaa';
-            $message = $header . $body . $footer;
-
             if($response->successful()) {
-                $kiosPayment->save();
-                $orderBaru->save();
-                PengirimanEkspedisi::create([
-                    'divisi_id' => $divisiId,
-                    'order_id' => $orderId,
-                    'status_order' => 'Baru',
-                    'status' => 'Unprocess',
-                ]);
+                
+                $kiosPayment->keterangan = $request->input('keterangan');
+                $kiosPayment->tanggal_request = $formattedDate;
+                $kiosPayment->status = 'Waiting For Payment';
     
+                // Message to finance group
+                if($statusOrder == 'Baru') {
+                    $orderBaru = KiosOrder::findOrFail($orderId);
+                    // $orderBaru->status = 'Waiting For Payment';
+                    // $orderBaru->save();
+                    $linkDrive = $orderBaru->link_drive;
+
+                    // $kiosPayment->save();
+                    // PengirimanEkspedisi::create([
+                    //     'divisi_id' => $divisiId,
+                    //     'order_id' => $orderId,
+                    //     'status_order' => 'Baru',
+                    //     'status' => 'Unprocess',
+                    // ]);
+                } else {
+                    // $orderSecond = KiosOrderSecond::findOrFail($orderId);
+                    // $orderSecond->status = 'Waiting For Payment';
+                    // $orderSecond->save();
+                }
+
+                $totalPembayaran = $totalBelanja + $totalOngkir + $totalPajak;
+                $formattedTotal = number_format($totalPembayaran, 0, ',', '.');
+                $msgOrderId = ($statusOrder == 'Baru') ? 'N.' . $orderId : 'S.' . $orderId;
+                $namaGroup = '';
+                $header = "*Incoming Request Payment Produk Baru*\n\n";
+                $body = "Order ID : " . $msgOrderId . "\nRef : " . $noTransaksi . $id . "\nTotal Nominal : Rp. " . $formattedTotal . "\nLink Order ID : ";
+                $footer = "Ditunggu Paymentnya kakak 😘\nJangan lupa Upload Bukti Transfer di Link Drive yaa\n";
+                $message = $header . $body . $footer;
+    
+                $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
+                $messageFinance = [
+                    'no_telp' => '6285156519066',
+                    'pesan' => $message,
+                ];
+    
+                $responseMessage = Http::post($urlMessage, $messageFinance);
+
                 return back()->with('success', 'Success Request Payment.');
     
             } else {

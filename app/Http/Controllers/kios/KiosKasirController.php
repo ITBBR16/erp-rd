@@ -88,11 +88,11 @@ class KiosKasirController extends Controller
                 
                 $detailTransaksi = new KiosTransaksiDetail();
                 $detailTransaksi->kios_transaksi_id = $transaksi->id;
-                $detailTransaksi->jenis_transaksi = $kasirJenisTransaksi;
+                $detailTransaksi->jenis_transaksi = $kasirJenisTransaksi[$index];
                 $detailTransaksi->kios_produk_id = $item;
                 $detailTransaksi->serial_number_id = $kasirSN[$index];
 
-                if($kasirJenisTransaksi =='Baru') {
+                if($kasirJenisTransaksi[$index] =='Baru') {
                     $dataProduk = KiosProduk::where('sub_jenis_id', $item)->first();
                     $nilaiPromo = $dataProduk->harga_promo;
                     $nilaiSrp = $dataProduk->srp;
@@ -124,7 +124,7 @@ class KiosKasirController extends Controller
     {
         if ($jenisTransaksi == 'Baru') {
             // $items = ProdukSubJenis::with('produkjenis')->get();
-            $items = KiosProduk::with('subjenis.produkjenis')->where('status', 'Ready')->get();
+            $items = KiosProduk::with('subjenis.produkjenis')->where('status', 'Ready')->orWhere('status', 'Promo')->get();
         } elseif ($jenisTransaksi == 'Bekas') {
             $items = KiosProdukSecond::with('subjenis.produkjenis')->where('status', 'Ready')->get();
         }

@@ -26,7 +26,7 @@ class KiosPenerimaanProdukController extends Controller
         $historyPenerimaan = PenerimaanProduk::with('pengiriman.order.supplier', 'pengiriman.ekspedisi')->get();
 
         return view('kios.product.pengecekkan.index-pengecekkan-baru', [
-            'title' => 'Unboxing & QC',
+            'title' => 'Penerimaan',
             'active' => 'unboxing-qc',
             'navActive' => 'product',
             'dropdown' => 'pengecekkan-baru',
@@ -60,30 +60,38 @@ class KiosPenerimaanProdukController extends Controller
 
             $response = Http::post($urlApi, $payload);
             $dataResponse = json_decode($response->body(), true);
-
-            $tanggalDiterima = Carbon::createFromFormat('Y-m-d', $request->input('tanggal_diterima'))->format('d/m/Y');
+            
+            $tanggalDiterima = Carbon::createFromFormat('d/m/Y', $request->input('tanggal_diterima'))->format('d/m/Y');
             $statusFile = $dataResponse['status'];
-            $paketFile = $dataResponse['url_resi'];
-            $kelengkapanFile = $dataResponse['url_paket'];
+            $imgResi = $dataResponse['url_resi'];
+            $imgPaket = $dataResponse['url_paket'];
 
             if($statusFile == 'success') {
 
                 $pengiriman = PengirimanEkspedisi::findOrFail($id);
-                $pengiriman->update([
-                    'status' => 'Diterima'
-                ]);
-    
+                $pengiriman->status = 'Diterima';
+
+                $statusOrder = $pengiriman->status_order;
+                
+                if($statusOrder == 'Baru') {
+                    $pengiriman->order()->update(['status' => 'Diterima']);
+                } else {
+                    $pengiriman->ordersecond()->update(['status' => 'Diterima']);
+                }
+                
+                $pengiriman->save();
                 PenerimaanProduk::create([
                     'employee_id' => $userId,
                     'pengiriman_ekspedisi_id' => $id,
                     'kondisi_barang' => $request->input('kondisi_paket'),
                     'total_paket' => $request->input('total_paket'),
                     'tanggal_diterima' => $tanggalDiterima,
-                    'link_img' => $kelengkapanFile,
+                    'link_img_resi' => $imgResi,
+                    'link_img_paket' => $imgPaket,
                 ]);
-    
+
                 return back()->with('success', 'Success Terima Produk.');
-            
+
             } else {
                 return back()->with('error', 'Something Went Wrong.');
             }

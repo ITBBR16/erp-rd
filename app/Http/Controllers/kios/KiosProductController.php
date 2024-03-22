@@ -16,15 +16,40 @@ class KiosProductController extends Controller
 {
     public function __construct(private KiosRepository $suppKiosRepo){}
 
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $produk = KiosProduk::with('subjenis', 'serialnumber')->get()->sortByDesc(function ($produk) {
-            return $produk->status == 'Promo' ? 1 : 0;
-        });;
+
+        $categoriesProduk = $request->input('categories_produk');
+        $categoriesPaket = $request->input('categories_paket');
+
+        $query = KiosProduk::query();
+
+        if ($categoriesProduk) {
+            $query->whereHas('subjenis.produkjenis', function($query) use ($categoriesProduk) {
+                $query->whereIn('kategori_id', $categoriesProduk);
+            });
+        }
+
+        if ($categoriesPaket) {
+            $query->whereHas('subjenis', function($query) use ($categoriesPaket) {
+                $query->whereIn('produk_type_id', $categoriesPaket);
+            });
+        }
+
+        if (!$categoriesProduk && !$categoriesPaket) {
+            $query->with('subjenis', 'serialnumber');
+        }
+
+        $produk = $query->get();
+
         $kategori = ProdukKategori::all();
         $types = ProdukType::all();
+
+        if ($request->ajax()) {
+            return response()->json(view('kios.product.product_table', compact('produk'))->render());
+        }
 
         return view('kios.product.index', [
             'title' => 'Product',

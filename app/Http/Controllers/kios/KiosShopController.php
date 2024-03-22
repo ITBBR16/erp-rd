@@ -5,6 +5,7 @@ namespace App\Http\Controllers\kios;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\kios\KiosOrder;
+use App\Models\kios\KiosPayment;
 use App\Models\kios\SupplierKios;
 use App\Models\kios\KiosOrderList;
 use App\Models\produk\ProdukJenis;
@@ -12,7 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Models\produk\ProdukSubJenis;
 use App\Models\kios\KiosHistoryOrderList;
-use App\Models\kios\KiosPayment;
+use App\Models\kios\KiosMetodePembayaran;
 use App\Repositories\kios\KiosRepository;
 
 class KiosShopController extends Controller
@@ -65,7 +66,8 @@ class KiosShopController extends Controller
             // Send data to api
             $apiUrl = "https://script.google.com/macros/s/AKfycbwFGLi6XLWUKPvxiEqC8jQDJtynpwZWoYTW4Gqc_M2smqiU_nNYyHlalYUq1_jaUlGQOQ/exec";
             $response = Http::post($apiUrl, [
-                'orderId' => 'K.' . $order->id,
+                'statusOrder' => 'Baru',
+                'orderId' => 'N.' . $order->id,
                 'supplier' => $supplierName,
             ]);
 
@@ -105,21 +107,23 @@ class KiosShopController extends Controller
     {
         $request->validate([
             'supplier_kios' => 'required',
-            'invoice' => 'required',
             'jenis_paket' => 'required|array',
             'quantity' => 'required|array',
             'nilai' => 'required|array',
         ]);
         
         try{
+            $suppId = $request->input('supplier_id');
+            $supplier = SupplierKios::findOrFail($suppId);
+            $searchPayment = KiosMetodePembayaran::where('supplier_id', $suppId)->latest()->first();
+            $paymentSupplier = ($searchPayment !== null) ? $searchPayment->id : '';
+            $nilaiBeli = preg_replace("/[^0-9]/", "", $request->input('nilai'));
+            $totalNilai = 0;
+            
             $order = KiosOrder::findOrFail($id);
             $order->status = 'Tervalidasi';
-            $order->invoice = $request->input('invoice');
             $order->save();
-
-            $supplier = SupplierKios::findOrFail($request->input('supplier_id'));
-            $totalNilai = 0;
-
+            
             foreach($request->input('jenis_paket') as $index => $jenisPaket) {
                 $orderList = $order->orderLists()
                             ->where('order_id', $id)
@@ -134,33 +138,35 @@ class KiosShopController extends Controller
                 if($orderList) {
                     $orderList->sub_jenis_id = $request->input('jenis_paket')[$index];
                     $orderList->quantity = $request->input('quantity')[$index];
-                    $orderList->nilai = $request->input('nilai')[$index];
+                    $orderList->nilai = $nilaiBeli[$index];
                     $orderList->status = 'Belum Validasi';
                     $orderList->save();
 
                     $historiOrder->sub_jenis_id = $request->input('jenis_paket')[$index];
                     $historiOrder->quantity = $request->input('quantity')[$index];
-                    $historiOrder->nilai = $request->input('nilai')[$index];
+                    $historiOrder->nilai = $nilaiBeli[$index];
                     $historiOrder->save();
 
-                    $total = $request->input('quantity')[$index] * $request->input('nilai')[$index];
+                    $total = $request->input('quantity')[$index] * $nilaiBeli[$index];
                     $totalNilai += $total;
 
-                    $supplier->subjenis()->attach($jenisPaket, ['nilai' => $request->input('nilai')[$index]]);
+                    $supplier->subjenis()->attach($jenisPaket, ['nilai' => $nilaiBeli[$index]]);
 
                 } else {
                     $newOrderList = new KiosOrderList([
                         'sub_jenis_id' => $request->input('jenis_paket')[$index],
                         'quantity' => $request->input('quantity')[$index],
-                        'nilai' => $request->input('nilai')[$index],
+                        'nilai' => $nilaiBeli[$index],
                         'status' => 'Belum Validasi',
                     ]);
 
                     $newHistory = new KiosHistoryOrderList([
                         'sub_jenis_id' => $request->input('jenis_paket')[$index],
                         'quantity' => $request->input('quantity')[$index],
-                        'nilai' => $request->input('nilai')[$index],
+                        'nilai' => $nilaiBeli[$index],
                     ]);
+
+                    $totalNilai += $request->input('quantity')[$index] * $nilaiBeli[$index];
 
                     $order->orderLists()->save($newOrderList);
                     $order->histories()->save($newHistory);
@@ -171,6 +177,8 @@ class KiosShopController extends Controller
             $payment = new KiosPayment([
                 'order_type' => 'Baru',
                 'order_id' => $id,
+                'metode_pembayaran_id' => $paymentSupplier,
+                'jenis_pembayaran' => 'Pembelian Barang',
                 'nilai' => $totalNilai,
                 'status' => 'Unpaid',
             ]);

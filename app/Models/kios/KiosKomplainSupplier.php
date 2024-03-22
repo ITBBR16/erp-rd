@@ -19,4 +19,9 @@ class KiosKomplainSupplier extends Model
         return $this->belongsTo(ValidasiProduk::class, 'validasi_id');
     }
 
+    public function orderlists()
+    {
+        return $this->belongsTo(KiosOrderList::class, 'order_list_id');
+    }
+
 }

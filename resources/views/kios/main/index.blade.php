@@ -2,23 +2,25 @@
 
 @section('container')
     <div class="fixed top-16 w-full bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center justify-start">
-                <span class="text-3xl font-bold text-gray-700">Dashboard</span>
-            </div>
-            <div class="flex items-center">
-                <div>
-                    <div class="flex items-center">
-                        <div class="relative max-w-sm">
-                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                                </svg>
+        <div class="w-2/3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start">
+                    <span class="text-3xl font-bold text-gray-700">Dashboard</span>
+                </div>
+                {{-- <div class="flex items-center">
+                    <div>
+                        <div class="flex items-center">
+                            <div class="relative max-w-sm">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                    </svg>
+                                </div>
+                                <input datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
                             </div>
-                            <input datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -36,10 +38,15 @@
                                     <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Profit</span>
                                 </div>
                                 <div class="px-3 py-0">
-                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">Rp. 67.500.000 / Rp. 135.000.000</div>
+                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">Rp. {{ number_format($totalProfit, 0, ',', '.') }} / Rp. 135.000.000</div>
                                     <div class="flex-none w-full max-w-full flex items-center">
-                                        <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-700 dark:text-red-500">remove</span>
-                                        <span class="ml-0 text-sm text-red-700 dark:text-red-500">50%</span>
+                                        @if ($profitType == 'Keuntungan')
+                                            <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-700 dark:text-green-500">add</span>
+                                            <span class="ml-0 text-sm text-green-700 dark:text-green-500">{{ $percentage }}%</span>
+                                        @else
+                                            <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-700 dark:text-red-500">remove</span>
+                                            <span class="ml-0 text-sm text-red-700 dark:text-red-500">{{ $percentage }}%</span>
+                                        @endif
                                         <span class="ml-1 text-sm">dari 30 hari terakhir</span>
                                     </div>
                                 </div>
@@ -60,10 +67,15 @@
                                     <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Customer Growth</span>
                                 </div>
                                 <div class="px-3 py-0">
-                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">20 New Customer</div>
+                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">{{ $newCustomer }} New Customer</div>
                                     <div class="flex-none w-full max-w-full flex items-center">
-                                        <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-700 dark:text-green-500">add</span>
-                                        <span class="ml-0 text-sm text-green-700 dark:text-green-500">10%</span>
+                                        @if ($profitType == 'Keuntungan')
+                                            <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-700 dark:text-green-500">add</span>
+                                            <span class="ml-0 text-sm text-green-700 dark:text-green-500">{{ $customerPercentage }}%</span>
+                                        @else
+                                            <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-700 dark:text-red-500">remove</span>
+                                            <span class="ml-0 text-sm text-red-700 dark:text-red-500">{{ $customerPercentage }}%</span>
+                                        @endif
                                         <span class="ml-1 text-sm">dari 30 hari terakhir</span>
                                     </div>
                                 </div>
@@ -180,11 +192,16 @@
                             <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Profit</span>
                         </div>
                         <div class="px-3 font-bold text-xl">
-                            <span class="flex whitespace-nowrap text-slate-900 dark:text-gray-400">Rp. 67.500.000</span>
+                            <span class="flex whitespace-nowrap text-slate-900 dark:text-gray-400">Rp. {{ number_format($totalProfit, 0, ',', '.') }}</span>
                         </div>
                         <div class="px-3 flex items-center">
-                            <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-500 dark:text-green-400">add</span>
-                            <span class="ml-0 text-sm text-green-500 dark:text-green-400">77%</span>
+                            @if ($profitType == 'Keuntungan')
+                                <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-700 dark:text-green-500">add</span>
+                                <span class="ml-0 text-sm text-green-700 dark:text-green-500">{{ $percentage }}%</span>
+                            @else
+                                <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-700 dark:text-red-500">remove</span>
+                                <span class="ml-0 text-sm text-red-700 dark:text-red-500">{{ $percentage }}%</span>
+                            @endif
                             <span class="ml-1 text-sm">dari 30 hari terakhir</span>
                         </div>
                     </div>

@@ -39,15 +39,28 @@
                     </div>
                     <h3 class="mt-6 text-gray-900 dark:text-white font-semibold text-xl">Data File</h3>
                     <div class="mt-3 grid grid-cols-2 gap-4 md:gap-6">
-                        <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">File Barang Datang :</label>
+                        <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">File Resi :</label>
                         <div class="flex items-center justify-center w-full max-w-md">
                             @php
-                                $imageLink = $history->link_img ?? "";
+                                $imageLink = $history->link_img_resi ?? "";
                                 preg_match('/\/file\/d\/(.*?)\/view/', $imageLink, $matches);
                                 $fileId = isset($matches[1]) ? $matches[1] : null;
                             @endphp
                             @if (!empty($imageLink))
-                                <img src="https://drive.google.com/thumbnail?id={{ $fileId }}" alt="" loading="lazy">
+                                <img src="https://drive.google.com/thumbnail?id={{ $fileId }}" class="w-32" alt="File Paket" loading="lazy">
+                            @endif
+                        </div>
+                    </div>
+                    <div class="mt-3 grid grid-cols-2 gap-4 md:gap-6">
+                        <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">File Barang Datang :</label>
+                        <div class="flex items-center justify-center w-full max-w-md">
+                            @php
+                                $imageLink = $history->link_img_paket ?? "";
+                                preg_match('/\/file\/d\/(.*?)\/view/', $imageLink, $matches);
+                                $fileId = isset($matches[1]) ? $matches[1] : null;
+                            @endphp
+                            @if (!empty($imageLink))
+                                <img src="https://drive.google.com/thumbnail?id={{ $fileId }}" class="w-32" alt="File Paket" loading="lazy">
                             @endif
                         </div>
                     </div>

@@ -32,12 +32,6 @@
         </style>
     </head>
     <body>
-        {{-- <div id="loader" class="z-50" style="display: none;">
-            <div class="absolute inset-0 bg-black opacity-50"></div>
-            <div class="loader absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
-            <div class="loader-text font-bold">Loading . . .</div>
-        </div> --}}
-
         @include('kios.layouts.header')
 
         @if (Request::is('kios/analisa/*'))
@@ -62,7 +56,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
         <script src="/js/toggle.js"></script>
         <script src="/js/search.js"></script>
-        <script src="/js/loader.js"></script>
+        <script src="/js/loader-form.js"></script>
         <script src="/js/add-product-baru.js"></script>
         <script src="/js/shop-baru.js"></script>
         <script src="/js/shop-second.js"></script>

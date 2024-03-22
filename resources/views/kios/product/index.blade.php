@@ -48,7 +48,7 @@
                     <input type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search. . .">
                 </div>
                 <div class="relative">
-                    <button id="filterProdukBaruButton" data-dropdown-toggle="filterProdukBaru" data-dropdown-placement="right-start" class="text-slate-500 border-2 bg-transparent hover:bg-slate-50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-700 dark:border-gray-600" type="button">FILTER  
+                    <button id="filterProdukBaruButton" data-dropdown-toggle="filterProdukBaru" data-dropdown-placement="right-start" class="text-slate-500 border-2 bg-transparent hover:bg-slate-50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-700 dark:border-gray-600" type="button">Filter  
                         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                         </svg>
@@ -71,7 +71,7 @@
                         @foreach ($kategoriProduk as $kategori)
                             <li>
                                 <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="checkbox-kategori-baru-{{ $kategori->id }}" name="kategori_baru[]"  type="checkbox" value="{{ $kategori->id }}" class="filter-checkbox-produk-baru w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                    <input name="categories_produk[]" id="checkbox-kategori-baru-{{ $kategori->id }}" data-id="{{ $kategori->id }}" type="checkbox" value="{{ $kategori->id }}" class="category-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                                     <label for="checkbox-kategori-baru-{{ $kategori->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $kategori->nama }}</label>
                                 </div>
                             </li>
@@ -88,7 +88,7 @@
                         @foreach ($typeProduks as $type)
                             <li>
                                 <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="checkbox-paket-baru-{{ $type->id }}" name="paket_baru[]" type="checkbox" value="{{ $type->id }}" class="filter-checkbox-produk-baru w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                    <input name="categories_paket[]" id="checkbox-paket-baru-{{ $type->id }}" name="paket_baru[]" type="checkbox" value="{{ $type->id }}" class="category-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                                     <label for="checkbox-paket-baru-{{ $type->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $type->type }}</label>
                                 </div>
                             </li>
@@ -98,23 +98,23 @@
             </li>
         </ul>
     </div>
-    <div class="mt-2 flex flex-row gap-4">
-        <div id="kategori-filter" class="flex items-center p-4 mb-4 text-gray-400 border border-gray-300 rounded-2xl bg-transparent max-w-fit">
+    <div id="container-filter" class="mt-2 flex flex-row gap-4">
+        <div id="kategori-filter" class="flex items-center p-2 mb-4 text-gray-400 border border-gray-300 rounded-2xl bg-transparent max-w-fit">
             <div class="text-sm font-medium">
                 Agriculture
             </div>
-            <button type="button" class="ml-2 -mx-1.5 -my-1.5 rounded-lg text-gray-400 focus:ring-2 p-1.5 hover:bg-gray-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:hover:bg-gray-700"  data-dismiss-target="#kategori-filter">
+            <button type="button" class="ml-2 -mx-1.5 -my-1.5 rounded-lg text-gray-400 focus:ring-2 p-2 hover:bg-gray-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:hover:bg-gray-700"  data-dismiss-target="#kategori-filter">
                 <span class="sr-only">Dismiss</span>
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
             </button>
         </div>
-        <div id="kategori-filter2" class="flex items-center p-4 mb-4 text-gray-400 border border-gray-300 rounded-2xl bg-transparent max-w-fit">
+        <div id="kategori-filter2" class="flex items-center p-2 mb-4 text-gray-400 border border-gray-300 rounded-2xl bg-transparent max-w-fit">
             <div class="text-sm font-medium">
                 Remote Controller
             </div>
-            <button type="button" class="ml-2 -mx-1.5 -my-1.5 rounded-lg text-gray-400 focus:ring-2 p-1.5 hover:bg-gray-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:hover:bg-gray-700"  data-dismiss-target="#kategori-filter2">
+            <button type="button" class="ml-2 -mx-1.5 -my-1.5 rounded-lg text-gray-400 focus:ring-2 p-2 hover:bg-gray-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:hover:bg-gray-700"  data-dismiss-target="#kategori-filter2">
                 <span class="sr-only">Dismiss</span>
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -124,7 +124,7 @@
     </div>
 
     <div class="relative mt-2 overflow-x-auto">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <table id="produk-table" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
                     <th scope="col" class="px-6 py-3" style="width: 30%;">
@@ -142,7 +142,10 @@
                     <th scope="col" class="px-6 py-3" style="width: 12%;">
                         Status
                     </th>
-                    <th scope="col" class="px-6 py-3" style="width: 18%;">
+                    <th scope="col" class="px-6 py-3" style="width: 9%;">
+                        Tanggal Promo
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="width: 9%;">
                         Action
                     </th>
                 </tr>
@@ -186,6 +189,15 @@
                         <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
                     </td>
                     <td class="px-6 py-2">
+                        @if ($pd->status == 'Promo')
+                            <div class="flex flex-col justify-center items-center font-semibold">
+                                <span>{{ \Carbon\Carbon::parse($pd->start_promo)->format('d/m/Y') }}</span>
+                                <span>-</span>
+                                <span>{{ \Carbon\Carbon::parse($pd->end_promo)->format('d/m/Y') }}</span>
+                            </div>
+                        @endif
+                    </td>
+                    <td class="px-6 py-2">
                         <div class="flex flex-wrap">
                             <button type="button" data-modal-target="view-detail-produk{{ $pd->id }}" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                 <i class="material-symbols-outlined text-base">visibility</i>
@@ -204,8 +216,13 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="mt-4 ">
-            {{-- {{ $dataCustomer->links() }} --}}
+        <div id="no-results" class="hidden p-4">
+            <div class="flex items-center justify-center">
+                <figure class="max-w-lg">
+                    <img class="h-auto max-w-full rounded-lg" src="/img/security-system.png" alt="Not Found" width="250" height="150">
+                    <figcaption class="mt-2 text-lg font-bold text-gray-900 dark:text-white">Oops, Terjadi kesalahan silakan coba lagi nanti.</figcaption>
+                </figure>
+            </div>
         </div>
     </div>
 

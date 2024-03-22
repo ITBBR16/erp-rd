@@ -55,6 +55,47 @@ $(document).ready(function () {
         });
     });
 
+    function getFilterData() {
+        var containerFilter = $('#container-filter');
+        var selectedCategoriesProduk = [];
+        var selectedCategoriesPaket = [];
+
+        $('input[name="categories_produk[]"]:checked').each(function(){
+            selectedCategoriesProduk.push($(this).val());
+        });
+
+        $('input[name="categories_paket[]"]:checked').each(function(){
+            selectedCategoriesPaket.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/kios/product/list-product",
+            type: "GET",
+            data: {
+                categories_produk: selectedCategoriesProduk,
+                categories_paket: selectedCategoriesPaket
+            },
+            success: function(response){
+                $('#produk-table').html(response);
+
+                if ($('#produk-table tbody tr').length == 0) {
+                    $('#no-results').removeClass('hidden');
+                } else {
+                    $('#no-results').addClass('hidden');
+                }
+            },
+            error: function(xhr){
+                $('#produk-table').addClass('hidden');
+                $('#no-results').removeClass('hidden');
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
+    $(document).on('change', '.category-checkbox', function () {
+        getFilterData();
+    });
+
     // Daftar produk bekas
     srpDPS.on('input', function() {
         var inputValue = $(this).val();

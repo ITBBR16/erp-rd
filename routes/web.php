@@ -110,7 +110,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getPriceSecond/{id}', 'getPriceSecond');
             });
             
-            Route::get('/penerimaan-produk', [KiosPenerimaanProdukController::class, 'index']);
+            Route::resource('/penerimaan-produk', KiosPenerimaanProdukController::class)->only(['index', 'update']);
             
             Route::resource('/pengecekkan-produk-second', KiosPengecekkanSecondController::class)->names([
                 'edit' => 'pengecekkan-produk-second.quality-control',

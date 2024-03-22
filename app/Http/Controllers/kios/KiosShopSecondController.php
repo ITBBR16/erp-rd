@@ -65,11 +65,10 @@ class KiosShopSecondController extends Controller
             $divisiId = $user->divisi_id;
 
             $kelengkapanSecond = $request->input('kelengkapan_second');
-            $tanggal = $request->input('tanggal_pembelian');
+            $tanggalPembelian = $request->input('tanggal_pembelian');
             $mpId = $request->input('metode_pembelian');
-            $tanggalPembelian = Carbon::parse($tanggal)->format('d/m/Y');
             $biayaPengambilan = preg_replace("/[^0-9]/", "", $request->input('biaya_pengambilan'));
-            $biayaOngkir = preg_replace("/[^0-9]/", "", $request->input('biaya_ongkir'));
+            $biayaOngkir = ($request->input('biaya_ongkir') != '') ? preg_replace("/[^0-9]/", "", $request->input('biaya_ongkir')) : 0;
             $qtySecond = $request->input('quantity_second');
             $qtyNotNull = array_filter($qtySecond, function ($item) {
                 return $item !== null;
@@ -79,6 +78,7 @@ class KiosShopSecondController extends Controller
 
             $comeFrom = $request->input('come_from');
             $customerInput = $request->input('id_customer');
+            $customerName = $request->input('nama_customer');
             $asalId = $request->input('marketplace');
             
             $orderSecond = KiosOrderSecond::create([
@@ -93,13 +93,25 @@ class KiosShopSecondController extends Controller
                 'biaya_ongkir' => $biayaOngkir,
             ]);
 
+            // Send data to api
+            $apiUrl = "https://script.google.com/macros/s/AKfycbwFGLi6XLWUKPvxiEqC8jQDJtynpwZWoYTW4Gqc_M2smqiU_nNYyHlalYUq1_jaUlGQOQ/exec";
+            $response = Http::post($apiUrl, [
+                'statusOrder' => 'Bekas',
+                'orderId' => 'S.' . $orderSecond->id,
+                'supplier' => $customerName,
+            ]);
+
+            $linkDrive = json_decode($response->body(), true);
+            $orderSecond->link_drive = $linkDrive[0];
+            $orderSecond->save();
+
             $metodePembelian = KiosMetodePembelianSecond::findOrFail($mpId)->metode_pembelian;
             if(strpos(strtolower($metodePembelian), 'online') === 0) {
                 PengirimanEkspedisi::create([
                     'divisi_id' => $divisiId,
                     'order_id' => $orderSecond->id,
-                    'status_order' => 'Second',
-                    'status' => 'Unprocess',
+                    'status_order' => 'Bekas',
+                    'status' => 'Belum Dikirim',
                 ]);
                 $statusOrderSecond = 'Belum Dikirim';
             } else {
@@ -139,9 +151,19 @@ class KiosShopSecondController extends Controller
                 }
             }
 
+            $jenisPembayaran = [];
+            $jenisPembayaran[] = 'Pembelian Barang';
+    
+            if ($biayaOngkir > 0) {
+                $jenisPembayaran[] = 'Ongkir';
+            }
+
+            $jenisPembayaranStr = implode(', ', $jenisPembayaran);
+
             $payment = new KiosPayment([
-                'order_type' => 'Baru',
+                'order_type' => 'Bekas',
                 'order_id' => $orderSecond->id,
+                'jenis_pembayaran' => $jenisPembayaranStr,
                 'nilai' => $biayaPengambilan,
                 'ongkir' => $biayaOngkir,
                 'status' => 'Unpaid',
@@ -209,6 +231,19 @@ class KiosShopSecondController extends Controller
             $qcSecond = KiosQcProdukSecond::findOrFail($id);
             $idOrderSecond = $qcSecond->order_second_id;
 
+            $cekEkspedisi = PengirimanEkspedisi::where('order_id', $idOrderSecond)
+                                                ->where('status_order', 'Bekas')
+                                                ->exists();
+
+            if($cekEkspedisi) {
+                PengirimanEkspedisi::where('order_id', $idOrderSecond)
+                                    ->where('status_order', 'Bekas')
+                                    ->delete();
+            }
+
+            KiosPayment::where('order_id', $idOrderSecond)
+                        ->where('order_type', 'Bekas')
+                        ->delete();
             KiosOrderSecond::findOrFail($idOrderSecond)->delete();
 
             $qcSecond->kelengkapans()->detach();
@@ -235,8 +270,9 @@ class KiosShopSecondController extends Controller
 
     public function getAdditionalKelengkapan($id)
     {
-        $kelengkapanByProduk = ProdukKelengkapan::where('produk_jenis_id', $id)->get();
-        return response()->json($kelengkapanByProduk);
+        $produkSearch = ProdukJenis::findOrFail($id);
+        $dataKelengkapan = $produkSearch->kelengkapans()->get();
+        return response()->json($dataKelengkapan);
     }
 
 }

@@ -29,6 +29,25 @@ $(document).ready(function() {
             newPayment.hide();
         }
     });
+
+    function formatRupiah(angka) {
+        return accounting.formatMoney(angka, "", 0, ".", ",");
+    }
+
+    $(document).on('input', '.ongkir-payment', function () {
+        var inputValue = $(this).val();
+        inputValue = inputValue.replace(/[^\d]/g, '');
+        var parsedValue = parseInt(inputValue, 10);
+        $(this).val(formatRupiah(parsedValue));
+    });
+
+    $(document).on('input', '.pajak-payment', function () {
+        var inputValue = $(this).val();
+        inputValue = inputValue.replace(/[^\d]/g, '');
+        var parsedValue = parseInt(inputValue, 10);
+        $(this).val(formatRupiah(parsedValue));
+    });
+
 });
 
 function toggleFormPayment(formId) {

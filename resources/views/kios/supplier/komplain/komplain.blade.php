@@ -55,9 +55,6 @@
                         Order ID
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Invoice
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         Produk
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -75,11 +72,8 @@
                 @foreach ($dataKomplain as $komplain)
                     <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <th class="px-6 py-2">
-                            K.{{ $komplain->validasi->orderLists->order->id }}
+                            {{ ($komplain->validasi->pengirimanbarang->status_order == 'Baru') ? 'N.' . $komplain->validasi->orderLists->order->id : 'S.' . $komplain->validasi->pengirimanbarang->ordersecond->id }}
                         </th>
-                        <td class="px-6 py-2">
-                            {{ $komplain->validasi->orderLists->order->invoice }}
-                        </td>
                         <td class="px-6 py-2">
                             {{ $komplain->validasi->orderLists->paket->produkjenis->jenis_produk }} {{ $komplain->validasi->orderLists->paket->paket_penjualan }}
                         </td>
@@ -87,7 +81,7 @@
                             {{ $komplain->quantity }}
                         </td>
                         <td class="px-6 py-2">
-                            @if ($komplain->status === 'Unprocessed')
+                            @if ($komplain->status === 'Kurang')
                                 <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $komplain->status }}</span>
                             @else
                                 <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $komplain->status }}</span>
@@ -95,11 +89,11 @@
                         </td>
                         <td class="px-6 py-2">
                             <div class="flex flex-wrap">
-                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="view-complain" data-modal-toggle="view-complain{{ $komplain->id }}">
+                                {{-- <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="view-complain{{ $komplain->id }}" data-modal-toggle="view-complain{{ $komplain->id }}">
                                     <i class="material-symbols-outlined text-base">visibility</i>
-                                </button>
-                                @if ($komplain->status === 'Unprocessed')
-                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="validasi-komplain" data-modal-toggle="validasi-komplain{{ $komplain->id }}">
+                                </button> --}}
+                                @if ($komplain->status === 'Kurang')
+                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300" data-modal-target="validasi-komplain{{ $komplain->id }}" data-modal-toggle="validasi-komplain{{ $komplain->id }}">
                                         <i class="material-symbols-outlined text-base">task_alt</i>
                                     </button>
                                 @endif

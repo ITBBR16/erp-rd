@@ -12,4 +12,9 @@ class KiosTransaksi extends Model
     protected $connection = 'rumahdrone_kios';
     protected $table = 'kios_transaksi';
     protected $guarded = ['id'];
+
+    public function detailtransaksi()
+    {
+        return $this->hasMany(KiosTransaksiDetail::class);
+    }
 }

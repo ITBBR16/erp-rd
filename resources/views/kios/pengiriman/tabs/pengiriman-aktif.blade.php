@@ -38,7 +38,7 @@
             </thead>
             <tbody>
                 @foreach ($dataIncoming as $data)
-                    @if ($data->status == 'Incoming' || $data->status == 'Unprocess' || $data->status == 'Pengiriman Balik')
+                    @if ($data->status == 'Incoming' || $data->status == 'Belum Dikirim' || $data->status == 'Pengiriman Balik')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 {{ ($data->status_order == 'Baru' ? 'N.' . $data->order->id : 'S.' . $data->ordersecond->id) }}
@@ -62,7 +62,7 @@
                                     {{-- <button type="button" data-modal-target="view-order-aktif{{ $data->id }}" data-modal-toggle="view-order-aktif{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
                                     </button> --}}
-                                    @if ($data->status == 'Unprocess')
+                                    @if ($data->status == 'Belum Dikirim')
                                         <button type="button" data-modal-target="input-resi{{ $data->id }}" data-modal-toggle="input-resi{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                             <i class="material-symbols-outlined text-base">receipt_long</i>
                                         </button>
@@ -75,7 +75,7 @@
             </tbody>
         </table>
     </div>
-    @if (!$dataIncoming->contains('status', 'Incoming') && !$dataIncoming->contains('status', 'Unprocess') && !$dataIncoming->contains('status', 'Pengiriman Balik'))
+    @if (!$dataIncoming->contains('status', 'Incoming') && !$dataIncoming->contains('status', 'Belum Dikirim') && !$dataIncoming->contains('status', 'Pengiriman Balik'))
         <div class="p-4 mt-4">
             <div class="flex datas-center justify-center">
                 <figure class="max-w-lg">

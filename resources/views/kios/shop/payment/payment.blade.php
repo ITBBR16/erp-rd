@@ -92,7 +92,7 @@
                                 {{ ($py->order_type == 'Baru') ? 'N.' . $py->order_id : 'S.' . $py->order_id }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ \Carbon\Carbon::parse(($py->order_type == 'Baru') ? $py->order->created_at : $py->ordersecond->tanggal_pembelian)->isoFormat('D MMMM YYYY') }}
+                                {{ \Carbon\Carbon::parse(($py->order_type == 'Baru') ? $py->order->created_at : '')->isoFormat('D MMMM YYYY') }}
                             </td>
                             <td class="px-6 py-2">
                                 {{ $py->jenis_pembayaran }}
@@ -167,10 +167,10 @@
                     @if ($dpy->status == 'Paid')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ ($py->order_type == 'Baru') ? 'N.' . $py->order_id : 'S.' . $py->order_id }}
+                                {{ ($dpy->order_type == 'Baru') ? 'N.' . $dpy->order_id : 'S.' . $dpy->order_id }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ \Carbon\Carbon::parse(($py->order_type == 'Baru') ? $py->order->created_at : $py->ordersecond->tanggal_pembelian)->isoFormat('D MMMM YYYY') }}
+                                {{ \Carbon\Carbon::parse(($dpy->order_type == 'Baru') ? $dpy->order->created_at : $dpy->ordersecond->tanggal_pembelian)->isoFormat('D MMMM YYYY') }}
                             </td>
                             <td class="px-6 py-2">
                                 {{ $dpy->jenis_pembayaran }}
@@ -186,7 +186,7 @@
                             </td>
                             <td class="px-6 py-2">
                                 <div class="flex flex-wrap">
-                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="view-pembayaran{{ $dpy->id }}" data-modal-toggle="view-pembayaran{{ $dpy->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">visibility</i>
                                     </button>
                                 </div>
@@ -215,5 +215,6 @@
     {{-- @include('kios.shop.payment.modal.add-payment') --}}
     @include('kios.shop.payment.modal.validasi-payment')
     @include('kios.shop.payment.modal.edit-payment')
+    @include('kios.shop.payment.modal.view-done-payment')
 
 @endsection
