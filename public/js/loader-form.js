@@ -4,12 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     submitButtons.forEach((button, index) => {
         button.addEventListener('click', function (event) {
-            event.preventDefault();
-            button.style.display = 'none';
-            loaders[index].style.display = 'block';
-
             const form = button.closest('form');
-            form.submit();
+            if (form.checkValidity()) {
+                event.preventDefault();
+                button.style.display = 'none';
+                loaders[index].style.display = 'block';
+                form.submit();
+            } else {
+                form.reportValidity();
+            }
         });
     });
 });

@@ -57,28 +57,31 @@
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="grid grid-cols-3 md:gap-6">
-                            <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="nilai_belanja" id="nilai_belanja{{ $validasiPayment->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nilai_belanja{{ $validasiPayment->id }}') border-red-600 dark:border-red-500 @enderror" placeholder="" value="Rp. {{ number_format($validasiPayment->nilai, 0, ',', '.') }}" readonly required>
-                                <label for="nilai_belanja{{ $validasiPayment->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Total Belanja</label>
-                                @error('nilai_belanja{{ $validasiPayment->id }}')
-                                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
+                        <div class="grid grid-cols-3 md:gap-6 mt-2 mb-6">
+                            <div class="relative z-0 w-full group flex items-center">
+                                <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                                <input type="text" name="nilai_belanja" id="nilai-belanja-{{ $validasiPayment->id }}" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="{{ number_format($validasiPayment->nilai, 0, ',', '.') }}" readonly>
+                                <label for="nilai-belanja-{{ $validasiPayment->id }}" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Total Belanja</label>
                             </div>
-                            <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="ongkir" id="ongkir{{ $validasiPayment->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('ongkir{{ $validasiPayment->id }}') border-red-600 dark:border-red-500 @enderror" placeholder="" value="Rp. {{ number_format($validasiPayment->ongkir, 0, ',', '.') }}" readonly>
-                                <label for="ongkir{{ $validasiPayment->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Ongkir</label>
-                                @error('ongkir{{ $validasiPayment->id }}')
-                                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
+                            @error('nilai-belanja-{{ $validasiPayment->id }}')
+                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                            <div class="relative z-0 w-full group flex items-center">
+                                <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                                <input type="text" name="ongkir" id="ongkir-{{ $validasiPayment->id }}" class="ongkir-payment block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="{{ number_format($validasiPayment->ongkir, 0, ',', '.') }}" readonly>
+                                <label for="ongkir-{{ $validasiPayment->id }}" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Ongkir</label>
                             </div>
-                            <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="pajak" id="pajak{{ $validasiPayment->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('pajak{{ $validasiPayment->id }}') border-red-600 dark:border-red-500 @enderror" placeholder="" value="Rp. {{ number_format($validasiPayment->pajak, 0, ',', '.') }}" readonly>
-                                <label for="pajak{{ $validasiPayment->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Pajak</label>
-                                @error('pajak{{ $validasiPayment->id }}')
-                                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
+                            @error('ongkir-{{ $validasiPayment->id }}')
+                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                            <div class="relative z-0 w-full group flex items-center">
+                                <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                                <input type="text" name="pajak" id="pajak-{{ $validasiPayment->id }}" class="pajak-payment block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value="{{ number_format($validasiPayment->pajak, 0, ',', '.') }}" readonly>
+                                <label for="pajak-{{ $validasiPayment->id }}" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Pajak</label>
                             </div>
+                            @error('pajak-{{ $validasiPayment->id }}')
+                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
                             <input type="text" name="keterangan" id="keterangan{{ $validasiPayment->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('keterangan{{ $validasiPayment->id }}') border-red-600 dark:border-red-500 @enderror" placeholder="" required>

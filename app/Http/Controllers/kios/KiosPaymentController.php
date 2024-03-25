@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\kios;
 
+use Exception;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\kios\KiosOrder;
 use Illuminate\Validation\Rule;
 use App\Models\kios\KiosPayment;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\ekspedisi\PengirimanEkspedisi;
-use App\Models\kios\KiosMetodePembayaran;
-use App\Models\kios\KiosMetodePembayaranSecond;
-use App\Models\kios\KiosOrder;
 use App\Models\kios\KiosOrderSecond;
-use App\Repositories\kios\KiosRepository;
-use Carbon\Carbon;
-use Exception;
 use Illuminate\Support\Facades\Http;
+use App\Models\kios\KiosMetodePembayaran;
+use App\Repositories\kios\KiosRepository;
+use App\Models\ekspedisi\PengirimanEkspedisi;
+use App\Models\kios\KiosMetodePembayaranSecond;
 
 class KiosPaymentController extends Controller
 {
@@ -58,20 +59,18 @@ class KiosPaymentController extends Controller
             $kiosPayment = KiosPayment::findOrFail($id);
             $orderId = $request->input('order_id');
             $statusOrder = $request->input('status_order');
-            $noTransaksi = ($statusOrder == 'Baru') ? 'KiosBaru-' : 'KiosBekas-';
+            $noTransaksi = ($statusOrder == 'Baru') ? 'KiosBaru-' . $id : 'KiosBekas-' . $id;
             $keteranganFinance = ($statusOrder == 'Baru') ? 'Order Id N.' . $id : 'Order Id S.' . $id;
 
             $totalBelanja = preg_replace("/[^0-9]/", "", $request->input('nilai_belanja'));
             $totalOngkir = preg_replace("/[^0-9]/", "", $request->input('ongkir'));
             $totalPajak = preg_replace("/[^0-9]/", "", $request->input('pajak'));
-    
-            $urlFinance = 'https://script.google.com/macros/s/AKfycbzBE9VL6syqbKmLYxur9vffg9uJiNdV-Nu8Vg-RL1aEE7U_0WP6vqzg09FOrlZJD1uTfg/exec';
+
+            $urlFinance = 'https://script.google.com/macros/s/AKfycbwnOPiXx_1ef6O_3krVTxcvA6WW8XrX_A6HwsSxi3vVGjkB_dfoLOBTg05sOA0SCY8Emw/exec';
             $dataFinance = [
                 'tanggal' => $formattedDate,
                 'divisi' => $divisiName,
-                'no_transaksi' => $noTransaksi . $id,
-                'supplier_kios' => $request->input('supplier_kios'),
-                'invoice' => '0',
+                'no_transaksi' => $noTransaksi,
                 'media_transaksi' => $request->input('media_transaksi'),
                 'no_rek' => $request->input('no_rek'),
                 'nama_akun' => $request->input('nama_akun'),
@@ -80,62 +79,63 @@ class KiosPaymentController extends Controller
                 'pajak' => $totalPajak,
                 'keterangan' => $keteranganFinance . ", " . $request->input('keterangan'),
             ];
-    
-            $response = Http::post($urlFinance, $dataFinance);
-            
-            if($response->successful()) {
-                
+
+            $responseFinance = Http::post($urlFinance, $dataFinance);
+            $statusResponse = json_decode($responseFinance->body(), true);
+
+            if($statusResponse != null) {
+
                 $kiosPayment->keterangan = $request->input('keterangan');
-                $kiosPayment->tanggal_request = $formattedDate;
+                $kiosPayment->tanggal_request = $tanggal;
                 $kiosPayment->status = 'Waiting For Payment';
-    
+
                 // Message to finance group
                 if($statusOrder == 'Baru') {
                     $orderBaru = KiosOrder::findOrFail($orderId);
-                    // $orderBaru->status = 'Waiting For Payment';
-                    // $orderBaru->save();
+                    $orderBaru->status = 'Waiting For Payment';
+                    $orderBaru->save();
                     $linkDrive = $orderBaru->link_drive;
 
-                    // $kiosPayment->save();
-                    // PengirimanEkspedisi::create([
-                    //     'divisi_id' => $divisiId,
-                    //     'order_id' => $orderId,
-                    //     'status_order' => 'Baru',
-                    //     'status' => 'Unprocess',
-                    // ]);
+                    PengirimanEkspedisi::create([
+                        'divisi_id' => $divisiId,
+                        'order_id' => $orderId,
+                        'status_order' => 'Baru',
+                        'status' => 'Unprocess',
+                    ]);
                 } else {
-                    // $orderSecond = KiosOrderSecond::findOrFail($orderId);
-                    // $orderSecond->status = 'Waiting For Payment';
-                    // $orderSecond->save();
+                    $orderSecond = KiosOrderSecond::findOrFail($orderId);
+                    $orderSecond->status = 'Waiting For Payment';
+                    $orderSecond->save();
+                    $linkDrive = $orderSecond->link_drive;
                 }
 
+                $kiosPayment->save();
                 $totalPembayaran = $totalBelanja + $totalOngkir + $totalPajak;
                 $formattedTotal = number_format($totalPembayaran, 0, ',', '.');
                 $msgOrderId = ($statusOrder == 'Baru') ? 'N.' . $orderId : 'S.' . $orderId;
                 $namaGroup = '';
-                $header = "*Incoming Request Payment Produk Baru*\n\n";
+                $header = "*Incoming Request Payment Produk " . $statusOrder . "*\n\n";
                 $body = "Order ID : " . $msgOrderId . "\nRef : " . $noTransaksi . $id . "\nTotal Nominal : Rp. " . $formattedTotal . "\nLink Order ID : ";
-                $footer = "Ditunggu Paymentnya kakak 😘\nJangan lupa Upload Bukti Transfer di Link Drive yaa\n";
+                $footer = "Ditunggu Paymentnya kakak 😘\nJangan lupa Upload Bukti Transfer di Link Drive yaa\n" . $linkDrive;
                 $message = $header . $body . $footer;
-    
+
                 $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
                 $messageFinance = [
                     'no_telp' => '6285156519066',
                     'pesan' => $message,
                 ];
-    
+
                 $responseMessage = Http::post($urlMessage, $messageFinance);
 
                 return back()->with('success', 'Success Request Payment.');
-    
+
             } else {
-                return back()->with('error', 'Cant Send To Request Payment.');
+                return back()->with('error', 'Tidak bisa melakukan request payment.');
             }
 
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
         }
-
 
     }
 

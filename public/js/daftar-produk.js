@@ -55,8 +55,27 @@ $(document).ready(function () {
         });
     });
 
-    function getFilterData() {
+    function showFilterData(id, text) {
         var containerFilter = $('#container-filter');
+        let kategoriFilter = `
+            <div id="kategori-filter-${id}" class="flex items-center p-2 mb-4 text-gray-400 border border-gray-300 rounded-2xl bg-transparent max-w-fit">
+                <div class="text-sm font-medium">
+                    ${text}
+                </div>
+                <button type="button" data-id="${id}" class="ml-2 -mx-1.5 -my-1.5 rounded-lg text-gray-400 focus:ring-2 p-2 hover:bg-gray-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#kategori-filter-${id}">
+                    <span class="sr-only">Dismiss</span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                </button>
+            </div>
+        `
+
+        containerFilter.append(kategoriFilter);
+
+    }
+
+    function getFilterData() {
         var selectedCategoriesProduk = [];
         var selectedCategoriesPaket = [];
 
@@ -93,7 +112,10 @@ $(document).ready(function () {
     }
 
     $(document).on('change', '.category-checkbox', function () {
+        var categoryId = $(this).data("id");
+        var categoryText = $(this).next('label').text();
         getFilterData();
+        showFilterData(categoryId, categoryText);
     });
 
     // Daftar produk bekas

@@ -18,6 +18,7 @@ use App\Models\produk\ProdukKelengkapan;
 use App\Models\kios\KiosStatusPembayaran;
 use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
+use App\Models\kios\KiosMetodePembayaranSecond;
 use App\Models\kios\KiosMetodePembelianSecond;
 
 class KiosShopSecondController extends Controller
@@ -34,7 +35,7 @@ class KiosShopSecondController extends Controller
         $marketplace = KiosMarketplace::all();
         $kiosProduk = ProdukJenis::with('subjenis.kelengkapans')->get();
         $kelengkapan = ProdukKelengkapan::all();
-        $secondOrder = KiosOrderSecond::with('customer', 'subjenis.produkjenis', 'qcsecond.kelengkapans', 'statuspembayaran', 'buymetodesecond')->get();
+        $secondOrder = KiosOrderSecond::with('customer', 'subjenis.produkjenis', 'qcsecond.kelengkapans', 'statuspembayaran', 'buymetodesecond')->orderBy('created_at', 'desc')->get();
 
         return view('kios.shop.index-second', [
             'title' => 'Shop Second',
@@ -75,10 +76,13 @@ class KiosShopSecondController extends Controller
             });
             $inputStatus = $request->input('status_pembayaran');
             $statusBayar = ($inputStatus == 'Online DP' ? 'DP' : 'Unpaid');
-
+            
             $comeFrom = $request->input('come_from');
             $customerInput = $request->input('id_customer');
-            $customerName = $request->input('nama_customer');
+            $searchPayment = KiosMetodePembayaranSecond::where('customer_id', $customerInput)->latest()->first();
+            $paymentCustomer = ($searchPayment !== null) ? $searchPayment->id : '';
+            $findCustomer = Customer::findOrFail($customerInput);
+            $customerName = $findCustomer->first_name . " " . $findCustomer->last_name;
             $asalId = $request->input('marketplace');
             
             $orderSecond = KiosOrderSecond::create([
@@ -163,6 +167,7 @@ class KiosShopSecondController extends Controller
             $payment = new KiosPayment([
                 'order_type' => 'Bekas',
                 'order_id' => $orderSecond->id,
+                'metode_pembayaran_id' => $paymentCustomer,
                 'jenis_pembayaran' => $jenisPembayaranStr,
                 'nilai' => $biayaPengambilan,
                 'ongkir' => $biayaOngkir,
