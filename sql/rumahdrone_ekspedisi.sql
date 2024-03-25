@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 02, 2024 at 11:54 AM
+-- Generation Time: Mar 25, 2024 at 10:54 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -84,7 +84,8 @@ CREATE TABLE `penerimaan_barang` (
   `kondisi_barang` varchar(255) NOT NULL,
   `total_paket` int(11) NOT NULL,
   `tanggal_diterima` varchar(20) NOT NULL,
-  `link_img` varchar(255) DEFAULT NULL,
+  `link_img_resi` varchar(255) NOT NULL,
+  `link_img_paket` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -93,8 +94,10 @@ CREATE TABLE `penerimaan_barang` (
 -- Dumping data for table `penerimaan_barang`
 --
 
-INSERT INTO `penerimaan_barang` (`id`, `employee_id`, `pengiriman_ekspedisi_id`, `kondisi_barang`, `total_paket`, `tanggal_diterima`, `link_img`, `created_at`, `updated_at`) VALUES
-(4, 4, 3, 'Peyot dikit gak ngaruh', 1, '2023-12-29', 'https://drive.google.com/file/d/1X8xdDVFtso88J0E3LcMlSpNkom7t2f33/view?usp=drivesdk', '2023-12-29 02:44:20', '2023-12-29 02:44:20');
+INSERT INTO `penerimaan_barang` (`id`, `employee_id`, `pengiriman_ekspedisi_id`, `kondisi_barang`, `total_paket`, `tanggal_diterima`, `link_img_resi`, `link_img_paket`, `created_at`, `updated_at`) VALUES
+(4, 4, 3, 'Peyot dikit gak ngaruh', 1, '2023-12-29', '', 'https://drive.google.com/file/d/1X8xdDVFtso88J0E3LcMlSpNkom7t2f33/view?usp=drivesdk', '2023-12-29 02:44:20', '2023-12-29 02:44:20'),
+(5, 3, 13, 'aman sentosa', 1, '03/06/2024', 'https://drive.google.com/file/d/1EqSmS8QxlEqC2frSKAckh1sIrbX_pd58/view?usp=drivesdk', 'https://drive.google.com/file/d/1VkjbdQ9HfceC8V0eto6MNRrvk2PB95K4/view?usp=drivesdk', '2024-03-18 01:05:36', '2024-03-18 01:05:36'),
+(8, 3, 6, 'Lecet Dikit', 1, '03/07/2024', 'https://drive.google.com/file/d/16eTsKEX1ECZe4P45Uvb-obOE2KAePnCJ/view?usp=drivesdk', 'https://drive.google.com/file/d/1fDsLgEABqsTV-n6pH0GVNEE9dFbWKWMp/view?usp=drivesdk', '2024-03-19 00:19:22', '2024-03-19 00:19:22');
 
 -- --------------------------------------------------------
 
@@ -120,9 +123,10 @@ CREATE TABLE `pengiriman_ekspedisi` (
 --
 
 INSERT INTO `pengiriman_ekspedisi` (`id`, `divisi_id`, `order_id`, `ekspedisi_id`, `no_resi`, `no_faktur`, `status_order`, `status`, `created_at`, `updated_at`) VALUES
-(3, 1, 9, 6, '19LP1703123903446', NULL, 'Baru', 'Diterima', '2023-12-23 00:29:55', '2024-01-06 02:11:24'),
-(4, 1, 8, NULL, NULL, NULL, 'Second', 'Unprocess', '2024-01-16 20:49:06', '2024-01-16 20:49:06'),
-(6, 1, 20, 3, '19LP1709168361276', 'ini no faktur', 'Baru', 'Incoming', '2024-03-01 21:41:12', '2024-03-01 21:48:58');
+(3, 1, 9, 6, '19LP1703123903446', NULL, 'Baru', 'InRD', '2023-12-23 00:29:55', '2024-01-06 02:11:24'),
+(6, 1, 20, 3, '19LP1709168361276', 'ini no faktur', 'Baru', 'InRD', '2024-03-01 21:41:12', '2024-03-19 23:27:32'),
+(13, 1, 22, 3, '19LP1704413347872', NULL, 'Baru', 'InRD', '2024-03-16 01:38:40', '2024-03-18 01:41:00'),
+(15, 1, 23, NULL, NULL, NULL, 'Bekas', 'Belum Dikirim', '2024-03-22 21:09:23', '2024-03-22 21:09:23');
 
 -- --------------------------------------------------------
 
@@ -147,7 +151,11 @@ CREATE TABLE `validasi_barang` (
 
 INSERT INTO `validasi_barang` (`id`, `order_list_id`, `pengiriman_barang_id`, `quantity_received`, `keterangan`, `status`, `created_at`, `updated_at`) VALUES
 (3, 13, 3, 6, NULL, 'Done', '2024-01-05 21:00:48', '2024-01-05 21:00:48'),
-(13, 14, 3, 3, NULL, 'Kurang', '2024-01-06 02:11:24', '2024-01-06 02:11:24');
+(13, 14, 3, 3, NULL, 'Kurang', '2024-01-06 02:11:24', '2024-01-06 02:11:24'),
+(14, 19, 13, 4, NULL, 'Done', '2024-03-18 01:39:52', '2024-03-18 01:39:52'),
+(15, 21, 13, 6, NULL, 'Done', '2024-03-18 01:41:00', '2024-03-18 01:41:00'),
+(16, 18, 6, 6, NULL, 'Done', '2024-03-19 23:27:04', '2024-03-19 23:27:04'),
+(17, 17, 6, 3, NULL, 'Kurang', '2024-03-19 23:27:32', '2024-03-19 23:27:32');
 
 --
 -- Indexes for dumped tables
@@ -203,19 +211,19 @@ ALTER TABLE `jenis_layanan`
 -- AUTO_INCREMENT for table `penerimaan_barang`
 --
 ALTER TABLE `penerimaan_barang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `pengiriman_ekspedisi`
 --
 ALTER TABLE `pengiriman_ekspedisi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `validasi_barang`
 --
 ALTER TABLE `validasi_barang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

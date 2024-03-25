@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 02, 2024 at 11:55 AM
+-- Generation Time: Mar 25, 2024 at 10:54 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -74,7 +74,9 @@ INSERT INTO `history_order` (`id`, `order_id`, `sub_jenis_id`, `quantity`, `nila
 (14, 9, 12, 6, 2000000, '2023-12-20 01:24:05', '2023-12-20 20:00:11'),
 (17, 20, 11, 5, 3000000, '2023-12-26 21:14:38', '2023-12-26 21:56:25'),
 (18, 20, 12, 6, 2000000, '2023-12-26 21:14:38', '2023-12-26 21:58:20'),
-(19, 22, 11, 4, 0, '2024-02-17 01:22:56', '2024-02-17 01:22:56');
+(19, 22, 11, 4, 19300000, '2024-02-17 01:22:56', '2024-03-15 23:50:49'),
+(20, 22, 13, 6, 4200000, '2024-03-15 23:50:49', '2024-03-15 23:50:49'),
+(21, 22, 13, 6, 4200000, '2024-03-15 23:56:27', '2024-03-15 23:56:27');
 
 -- --------------------------------------------------------
 
@@ -182,12 +184,32 @@ CREATE TABLE `kios_marketplace` (
 INSERT INTO `kios_marketplace` (`id`, `nama`) VALUES
 (1, 'Tokopedia'),
 (2, 'Shopee'),
-(3, 'Bukalapak'),
-(4, 'Lazada'),
-(5, 'Blibli'),
-(6, 'Facebook'),
-(7, 'Partner'),
-(8, 'Komunitas');
+(3, 'Facebook'),
+(4, 'Komunitas'),
+(5, 'Partner');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kios_metode_pembayaran_second`
+--
+
+CREATE TABLE `kios_metode_pembayaran_second` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `media_pembayaran` varchar(20) NOT NULL,
+  `no_rek` varchar(30) NOT NULL,
+  `nama_akun` varchar(50) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `kios_metode_pembayaran_second`
+--
+
+INSERT INTO `kios_metode_pembayaran_second` (`id`, `customer_id`, `media_pembayaran`, `no_rek`, `nama_akun`, `created_at`, `updated_at`) VALUES
+(1, 12, 'BCA', '8732812666', 'Oke Gas Aha', '2024-03-20 23:49:54', '2024-03-20 23:49:54');
 
 -- --------------------------------------------------------
 
@@ -197,6 +219,7 @@ INSERT INTO `kios_marketplace` (`id`, `nama`) VALUES
 
 CREATE TABLE `kios_payment` (
   `id` int(11) NOT NULL,
+  `order_type` varchar(20) NOT NULL,
   `order_id` int(11) NOT NULL,
   `metode_pembayaran_id` int(11) DEFAULT NULL,
   `jenis_pembayaran` varchar(50) DEFAULT NULL,
@@ -215,9 +238,11 @@ CREATE TABLE `kios_payment` (
 -- Dumping data for table `kios_payment`
 --
 
-INSERT INTO `kios_payment` (`id`, `order_id`, `metode_pembayaran_id`, `jenis_pembayaran`, `nilai`, `ongkir`, `pajak`, `keterangan`, `status`, `tanggal_request`, `tanggal_payment`, `created_at`, `updated_at`) VALUES
-(1, 9, 1, 'Pembelian Barang, Ongkir', 27996000, 166000, 0, 'Coba Req Payment', 'Paid', '23/12/2023 14:29:51', '2023-12-23 14:30:11', '2023-12-20 20:00:11', '2023-12-23 00:29:55'),
-(2, 20, 1, 'Pembelian Barang, Ongkir', 27000000, 666000, 0, 'Coba beli drone baru', 'Paid', '02/03/2024 11:41:01', NULL, '2023-12-26 21:58:21', '2024-03-01 21:41:11');
+INSERT INTO `kios_payment` (`id`, `order_type`, `order_id`, `metode_pembayaran_id`, `jenis_pembayaran`, `nilai`, `ongkir`, `pajak`, `keterangan`, `status`, `tanggal_request`, `tanggal_payment`, `created_at`, `updated_at`) VALUES
+(1, 'Baru', 9, 1, 'Pembelian Barang, Ongkir', 27996000, 166000, 0, 'Coba Req Payment', 'Paid', '23/12/2023 14:29:51', '2023-12-23 14:30:11', '2023-12-20 20:00:11', '2023-12-23 00:29:55'),
+(2, 'Baru', 20, 1, 'Pembelian Barang, Ongkir', 27000000, 666000, 0, 'Coba beli drone baru', 'Paid', '02/03/2024 11:41:01', '2024-03-03 04:41:11', '2023-12-26 21:58:21', '2024-03-01 21:41:11'),
+(6, 'Baru', 22, 1, 'Pembelian Barang, Ongkir', 102400000, 66000, 0, 'Restock drone baru bulan maret', 'Paid', '16/03/2024 15:38:38', '2024-03-16 14:38:10', '2024-03-16 00:31:47', '2024-03-16 01:38:40'),
+(17, 'Bekas', 23, 1, 'Pembelian Barang, Ongkir', 4300000, 26000, 0, NULL, 'Unpaid', '2024-03-23 13:45:27', NULL, '2024-03-22 21:09:23', '2024-03-22 23:45:30');
 
 -- --------------------------------------------------------
 
@@ -243,9 +268,9 @@ CREATE TABLE `kios_produk` (
 --
 
 INSERT INTO `kios_produk` (`id`, `sub_jenis_id`, `produk_img_id`, `srp`, `harga_promo`, `start_promo`, `end_promo`, `status`, `created_at`, `updated_at`) VALUES
-(1, 11, NULL, 6000000, 0, NULL, NULL, 'Ready', '2024-01-05 21:00:48', '2024-02-23 20:26:00'),
+(1, 11, NULL, 31300000, 0, NULL, NULL, 'Ready', '2024-01-05 21:00:48', '2024-03-18 01:46:46'),
 (8, 12, NULL, 2700000, 0, NULL, NULL, 'Ready', '2024-01-06 02:11:24', '2024-02-19 20:56:12'),
-(9, 13, 1, 0, 0, NULL, NULL, 'Not Ready', '2024-02-21 07:06:27', '2024-02-21 00:14:52');
+(9, 13, 1, 5700000, 0, NULL, NULL, 'Ready', '2024-02-21 07:06:27', '2024-03-18 01:43:50');
 
 -- --------------------------------------------------------
 
@@ -265,14 +290,6 @@ CREATE TABLE `kios_produk_second` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `kios_produk_second`
---
-
-INSERT INTO `kios_produk_second` (`id`, `sub_jenis_id`, `produk_image_id`, `srp`, `cc_produk_second`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
-(1, 11, NULL, 5600000, 66, 'Sec-251163548', 'Ready', '2024-02-13 00:10:54', '2024-02-13 00:57:19'),
-(2, 12, NULL, 2500000, 44, 'Sec-235148875', 'Ready', '2024-02-13 00:56:41', '2024-02-13 00:56:53');
-
 -- --------------------------------------------------------
 
 --
@@ -282,6 +299,8 @@ INSERT INTO `kios_produk_second` (`id`, `sub_jenis_id`, `produk_image_id`, `srp`
 CREATE TABLE `kios_qc_produk_second` (
   `id` int(11) NOT NULL,
   `order_second_id` int(11) NOT NULL,
+  `tanggal_qc` varchar(20) DEFAULT NULL,
+  `tanggal_filter` varchar(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -290,9 +309,9 @@ CREATE TABLE `kios_qc_produk_second` (
 -- Dumping data for table `kios_qc_produk_second`
 --
 
-INSERT INTO `kios_qc_produk_second` (`id`, `order_second_id`, `created_at`, `updated_at`) VALUES
-(7, 7, '2024-01-15 20:00:36', '2024-01-26 00:45:46'),
-(8, 8, '2024-01-16 20:49:06', '2024-01-16 20:49:06');
+INSERT INTO `kios_qc_produk_second` (`id`, `order_second_id`, `tanggal_qc`, `tanggal_filter`, `created_at`, `updated_at`) VALUES
+(7, 7, '06/03/2024 15:12:16', '07/03/2024 10:38:44', '2024-01-15 20:00:36', '2024-03-06 20:38:44'),
+(22, 23, NULL, NULL, '2024-03-22 21:09:23', '2024-03-22 21:09:23');
 
 -- --------------------------------------------------------
 
@@ -384,7 +403,8 @@ CREATE TABLE `kios_supplier_komplain` (
 --
 
 INSERT INTO `kios_supplier_komplain` (`id`, `validasi_id`, `quantity`, `keterangan`, `bank_transfer`, `status`, `created_at`, `updated_at`) VALUES
-(7, 13, 3, '', NULL, 'Unprocessed', '2024-01-06 02:11:24', '2024-01-09 01:33:22');
+(7, 13, 3, '', NULL, 'Refund Deposit', '2024-01-06 02:11:24', '2024-01-09 01:33:22'),
+(8, 17, 2, NULL, NULL, 'Kurang', '2024-03-19 23:27:32', '2024-03-19 23:27:32');
 
 -- --------------------------------------------------------
 
@@ -410,7 +430,7 @@ CREATE TABLE `kios_transaksi` (
 --
 
 INSERT INTO `kios_transaksi` (`id`, `employee_id`, `customer_id`, `metode_pembayaran`, `ongkir`, `discount`, `tax`, `total_harga`, `created_at`, `updated_at`) VALUES
-(1, 3, 9, '1', 0, 85000, 421520, 3832000, '2024-01-31 19:32:22', '2024-01-31 19:32:22');
+(3, 3, 9, '1', NULL, 6999, 957000, 8699999, '2024-03-15 01:08:19', '2024-03-15 01:08:19');
 
 -- --------------------------------------------------------
 
@@ -424,6 +444,8 @@ CREATE TABLE `kios_transaksi_detail` (
   `jenis_transaksi` varchar(20) NOT NULL,
   `kios_produk_id` int(11) NOT NULL,
   `serial_number_id` int(11) NOT NULL,
+  `harga_jual` int(20) NOT NULL,
+  `harga_promo` int(20) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -432,9 +454,9 @@ CREATE TABLE `kios_transaksi_detail` (
 -- Dumping data for table `kios_transaksi_detail`
 --
 
-INSERT INTO `kios_transaksi_detail` (`id`, `kios_transaksi_id`, `jenis_transaksi`, `kios_produk_id`, `serial_number_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Baru', 11, 3, '2024-01-31 19:32:22', '2024-01-31 19:32:22'),
-(2, 1, 'Baru', 12, 26, '2024-01-31 19:32:22', '2024-01-31 19:32:22');
+INSERT INTO `kios_transaksi_detail` (`id`, `kios_transaksi_id`, `jenis_transaksi`, `kios_produk_id`, `serial_number_id`, `harga_jual`, `harga_promo`, `created_at`, `updated_at`) VALUES
+(3, 3, 'Baru', 11, 1, 6000000, 5999999, '2024-03-15 01:08:19', '2024-03-15 01:08:19'),
+(4, 3, 'Baru', 12, 26, 2700000, 0, '2024-03-15 01:08:19', '2024-03-15 01:08:19');
 
 -- --------------------------------------------------------
 
@@ -491,7 +513,6 @@ INSERT INTO `metode_pembelian_second` (`id`, `metode_pembelian`) VALUES
 CREATE TABLE `order` (
   `id` int(11) NOT NULL,
   `supplier_kios_id` int(11) NOT NULL,
-  `invoice` varchar(50) DEFAULT NULL,
   `link_drive` varchar(255) DEFAULT NULL,
   `status` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -502,10 +523,10 @@ CREATE TABLE `order` (
 -- Dumping data for table `order`
 --
 
-INSERT INTO `order` (`id`, `supplier_kios_id`, `invoice`, `link_drive`, `status`, `created_at`, `updated_at`) VALUES
-(9, 1, 'INV/21122023/9', 'https://drive.google.com/drive/folders/1DOgErgV1spUrQ4hSO9fFXBedeQlRg1PU?usp=sharing', 'Tervalidasi', '2023-12-20 01:23:58', '2023-12-20 20:00:11'),
-(20, 1, 'INV/27122023/20', 'https://drive.google.com/drive/folders/1Ig3gBrWF11LdYDjuoUTaKvCu3eZfu9a2?usp=sharing', 'Incoming', '2023-12-26 21:14:30', '2024-03-01 21:48:58'),
-(22, 1, NULL, 'https://drive.google.com/drive/folders/10dRbq34fvaT9S2G-DYwW4ltjgBrH8eit?usp=sharing', 'Belum Validasi', '2024-02-17 01:22:48', '2024-02-17 01:22:56');
+INSERT INTO `order` (`id`, `supplier_kios_id`, `link_drive`, `status`, `created_at`, `updated_at`) VALUES
+(9, 1, 'https://drive.google.com/drive/folders/1DOgErgV1spUrQ4hSO9fFXBedeQlRg1PU?usp=sharing', 'Tervalidasi', '2023-12-20 01:23:58', '2023-12-20 20:00:11'),
+(20, 1, 'https://drive.google.com/drive/folders/1B0fKu_XmsbZScec8W2O9mOgEuRv17RWP?usp=sharing', 'InRD', '2023-12-26 21:14:30', '2024-03-19 23:27:32'),
+(22, 1, 'https://drive.google.com/drive/folders/10dRbq34fvaT9S2G-DYwW4ltjgBrH8eit?usp=sharing', 'InRD', '2024-02-17 01:22:48', '2024-03-18 01:41:00');
 
 -- --------------------------------------------------------
 
@@ -529,11 +550,12 @@ CREATE TABLE `order_list` (
 --
 
 INSERT INTO `order_list` (`id`, `order_id`, `sub_jenis_id`, `quantity`, `nilai`, `status`, `created_at`, `updated_at`) VALUES
-(13, 9, 11, 4, 2666000, 'Belum Validasi', '2023-12-20 01:24:05', '2024-01-05 21:00:49'),
+(13, 9, 11, 4, 2666000, 'Done', '2023-12-20 01:24:05', '2024-01-05 21:00:49'),
 (14, 9, 12, 3, 2000000, 'Done', '2023-12-20 01:24:05', '2024-01-09 01:33:22'),
-(17, 20, 11, 5, 3000000, 'Belum Validasi', '2023-12-26 21:14:38', '2023-12-26 21:56:25'),
-(18, 20, 12, 6, 2000000, 'Belum Validasi', '2023-12-26 21:14:38', '2023-12-26 21:58:20'),
-(19, 22, 11, 4, 0, 'Belum Validasi', '2024-02-17 01:22:56', '2024-02-17 01:22:56');
+(17, 20, 11, 5, 3000000, 'Kurang', '2023-12-26 21:14:38', '2024-03-19 23:27:32'),
+(18, 20, 12, 6, 2000000, 'Done', '2023-12-26 21:14:38', '2024-03-19 23:27:04'),
+(19, 22, 11, 4, 19300000, 'Done', '2024-02-17 01:22:56', '2024-03-18 01:39:52'),
+(21, 22, 13, 6, 4200000, 'Done', '2024-03-15 23:56:27', '2024-03-18 01:41:00');
 
 -- --------------------------------------------------------
 
@@ -552,7 +574,8 @@ CREATE TABLE `order_second` (
   `biaya_pembelian` int(20) NOT NULL DEFAULT 0,
   `biaya_ongkir` int(11) DEFAULT 0,
   `tanggal_pembelian` varchar(20) NOT NULL,
-  `status` varchar(50) NOT NULL,
+  `link_drive` varchar(255) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -561,9 +584,9 @@ CREATE TABLE `order_second` (
 -- Dumping data for table `order_second`
 --
 
-INSERT INTO `order_second` (`id`, `come_from`, `customer_id`, `asal_id`, `metode_pembelian_id`, `sub_jenis_id`, `status_pembayaran`, `biaya_pembelian`, `biaya_ongkir`, `tanggal_pembelian`, `status`, `created_at`, `updated_at`) VALUES
-(7, 'Customer', 9, 7, 1, 12, 'Unpaid', 6666000, 0, '15-01-2024', 'Proses QC', '2024-01-15 20:00:36', '2024-01-26 00:45:46'),
-(8, 'Hunting', 11, 6, 3, 11, 'Paid', 3666000, 16000, '17-01-2024', 'Belum Dikirim', '2024-01-16 20:49:06', '2024-01-16 20:49:06');
+INSERT INTO `order_second` (`id`, `come_from`, `customer_id`, `asal_id`, `metode_pembelian_id`, `sub_jenis_id`, `status_pembayaran`, `biaya_pembelian`, `biaya_ongkir`, `tanggal_pembelian`, `link_drive`, `status`, `created_at`, `updated_at`) VALUES
+(7, 'Customer', 9, 5, 1, 12, 'Paid', 6666000, 0, '15-01-2024', '', 'InRD', '2024-01-15 20:00:36', '2024-03-06 20:38:44'),
+(23, 'Hunting', 12, 1, 3, 13, 'Unpaid', 4300000, 0, '03/23/2024', 'https://drive.google.com/drive/folders/1nOHO9Mr7Y7rIaCP3OXdtA4twaNndoa5C?usp=sharing', 'Waiting For Payment', '2024-03-22 21:09:12', '2024-03-22 21:18:45');
 
 -- --------------------------------------------------------
 
@@ -586,15 +609,34 @@ CREATE TABLE `serial_number` (
 --
 
 INSERT INTO `serial_number` (`id`, `produk_id`, `validasi_id`, `serial_number`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 3, 'sn1', 'Ready', '2024-01-05 21:00:48', '2024-01-05 21:00:48'),
+(1, 1, 3, 'sn1', 'Sold', '2024-01-05 21:00:48', '2024-03-15 01:08:19'),
 (2, 1, 3, 'sn2', 'Ready', '2024-01-05 21:00:48', '2024-01-05 21:00:48'),
-(3, 1, 3, 'sn3', 'Sold', '2024-01-05 21:00:48', '2024-01-31 19:32:22'),
+(3, 1, 3, 'sn3', 'Ready', '2024-01-05 21:00:48', '2024-01-31 19:32:22'),
 (4, 1, 3, 'sn4', 'Ready', '2024-01-05 21:00:49', '2024-01-05 21:00:49'),
 (5, 1, 3, 'sn5', 'Ready', '2024-01-05 21:00:49', '2024-01-05 21:00:49'),
 (6, 1, 3, 'sn6', 'Ready', '2024-01-05 21:00:49', '2024-01-05 21:00:49'),
 (25, 8, 13, 'SN666', 'Ready', '2024-01-06 02:11:24', '2024-01-06 02:11:24'),
-(26, 8, 13, 'DS666', 'Sold', '2024-01-06 02:11:24', '2024-01-31 19:32:22'),
-(27, 8, 13, 'KD666', 'Ready', '2024-01-06 02:11:24', '2024-01-06 02:11:24');
+(26, 8, 13, 'DS666', 'Sold', '2024-01-06 02:11:24', '2024-03-15 01:08:19'),
+(27, 8, 13, 'KD666', 'Ready', '2024-01-06 02:11:24', '2024-01-06 02:11:24'),
+(28, 1, 14, '1581F67QC23B3014K72T', 'Ready', '2024-03-18 01:39:52', '2024-03-18 01:39:52'),
+(29, 1, 14, '1581F6Z9C23B1003E98F', 'Ready', '2024-03-18 01:39:52', '2024-03-18 01:39:52'),
+(30, 1, 14, '1581F6Z9C23A7003A1KE', 'Ready', '2024-03-18 01:39:52', '2024-03-18 01:39:52'),
+(31, 1, 14, '1581F5YHX235Q0021PWN', 'Ready', '2024-03-18 01:39:52', '2024-03-18 01:39:52'),
+(32, 9, 15, '3YTBKCA004020V', 'Ready', '2024-03-18 01:41:00', '2024-03-18 01:41:00'),
+(33, 9, 15, '3YTBKCF00404FQ', 'Ready', '2024-03-18 01:41:00', '2024-03-18 01:41:00'),
+(34, 9, 15, '3YTBKCF00403DK', 'Ready', '2024-03-18 01:41:00', '2024-03-18 01:41:00'),
+(35, 9, 15, '1581F6N8C237S0032G5E', 'Ready', '2024-03-18 01:41:00', '2024-03-18 01:41:00'),
+(36, 9, 15, '1581F6Z9C239P00395BV', 'Ready', '2024-03-18 01:41:00', '2024-03-18 01:41:00'),
+(37, 9, 15, '11UDH13R700382', 'Ready', '2024-03-18 01:41:00', '2024-03-18 01:41:00'),
+(38, 8, 16, '1581F5YHX23BT0027C8M', 'Ready', '2024-03-19 23:27:04', '2024-03-19 23:27:04'),
+(39, 8, 16, '1581F6Z9C23C1003HT0Q', 'Ready', '2024-03-19 23:27:04', '2024-03-19 23:27:04'),
+(40, 8, 16, '1581F6Z9C23B1003EC11', 'Ready', '2024-03-19 23:27:04', '2024-03-19 23:27:04'),
+(41, 8, 16, '1581F5YHX23A40024GX3', 'Ready', '2024-03-19 23:27:04', '2024-03-19 23:27:04'),
+(42, 8, 16, '1581F5YHX23A40024GU6', 'Ready', '2024-03-19 23:27:04', '2024-03-19 23:27:04'),
+(43, 8, 16, '1581F6N8C239J0034GEM', 'Ready', '2024-03-19 23:27:04', '2024-03-19 23:27:04'),
+(44, 1, 17, '3YTBKCF00403VV', 'Ready', '2024-03-19 23:27:32', '2024-03-19 23:27:32'),
+(45, 1, 17, '3YTBKCF00403N5', 'Ready', '2024-03-19 23:27:32', '2024-03-19 23:27:32'),
+(46, 1, 17, '3YTBKCA004020V', 'Ready', '2024-03-19 23:27:32', '2024-03-19 23:27:32');
 
 -- --------------------------------------------------------
 
@@ -686,6 +728,12 @@ ALTER TABLE `kios_komplain_second`
 -- Indexes for table `kios_marketplace`
 --
 ALTER TABLE `kios_marketplace`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `kios_metode_pembayaran_second`
+--
+ALTER TABLE `kios_metode_pembayaran_second`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -810,7 +858,7 @@ ALTER TABLE `daily_recap`
 -- AUTO_INCREMENT for table `history_order`
 --
 ALTER TABLE `history_order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `kios_akun_rd`
@@ -843,10 +891,16 @@ ALTER TABLE `kios_marketplace`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `kios_metode_pembayaran_second`
+--
+ALTER TABLE `kios_metode_pembayaran_second`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `kios_payment`
 --
 ALTER TABLE `kios_payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `kios_produk`
@@ -864,7 +918,7 @@ ALTER TABLE `kios_produk_second`
 -- AUTO_INCREMENT for table `kios_qc_produk_second`
 --
 ALTER TABLE `kios_qc_produk_second`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `kios_recap_keperluan`
@@ -888,19 +942,19 @@ ALTER TABLE `kios_status_komplain`
 -- AUTO_INCREMENT for table `kios_supplier_komplain`
 --
 ALTER TABLE `kios_supplier_komplain`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `kios_transaksi`
 --
 ALTER TABLE `kios_transaksi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kios_transaksi_detail`
 --
 ALTER TABLE `kios_transaksi_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `metode_pembayaran_supplier`
@@ -918,25 +972,25 @@ ALTER TABLE `metode_pembelian_second`
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `order_list`
 --
 ALTER TABLE `order_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `order_second`
 --
 ALTER TABLE `order_second`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `serial_number`
 --
 ALTER TABLE `serial_number`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `status_pembayaran`
