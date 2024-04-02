@@ -5,7 +5,7 @@
         <div class="w-2/3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
-                    <span class="text-3xl font-bold text-gray-700">Dashboard</span>
+                    <span class="text-3xl font-bold text-gray-700 dark:text-white">Dashboard</span>
                 </div>
                 {{-- <div class="flex items-center">
                     <div>
@@ -35,7 +35,7 @@
                             </div>
                             <div>
                                 <div class="flex-none w-2/3 max-w-full px-3">
-                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Profit</span>
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Profit</span>
                                 </div>
                                 <div class="px-3 py-0">
                                     <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">Rp. {{ number_format($totalProfit, 0, ',', '.') }} / Rp. 135.000.000</div>
@@ -47,7 +47,7 @@
                                             <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-700 dark:text-red-500">remove</span>
                                             <span class="ml-0 text-sm text-red-700 dark:text-red-500">{{ $percentage }}%</span>
                                         @endif
-                                        <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                                        <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                             </div>
                             <div>
                                 <div class="flex-none w-2/3 max-w-full px-3">
-                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Customer Growth</span>
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Customer Growth</span>
                                 </div>
                                 <div class="px-3 py-0">
                                     <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">{{ $newCustomer }} New Customer</div>
@@ -76,7 +76,7 @@
                                             <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-700 dark:text-red-500">remove</span>
                                             <span class="ml-0 text-sm text-red-700 dark:text-red-500">{{ $customerPercentage }}%</span>
                                         @endif
-                                        <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                                        <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                                     </div>
                                 </div>
                             </div>
@@ -93,14 +93,14 @@
                             </div>
                             <div>
                                 <div class="flex-none w-2/3 max-w-full px-3">
-                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Customer Satisfaction</span>
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Customer Satisfaction</span>
                                 </div>
                                 <div class="px-3 py-0">
                                     <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">90% 😁</div>
                                     <div class="flex-none w-full max-w-full flex items-center">
                                         <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-700 dark:text-green-500">add</span>
                                         <span class="ml-0 text-sm text-green-700 dark:text-green-500">10%</span>
-                                        <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                                        <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                                     </div>
                                 </div>
                             </div>
@@ -117,14 +117,14 @@
                             </div>
                             <div>
                                 <div class="flex-none w-2/3 max-w-full px-3">
-                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Sales New Drone</span>
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Sales New Drone</span>
                                 </div>
                                 <div class="px-3 py-0">
                                     <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">20 Unit / 30 Unit</div>
                                     <div class="flex-none w-full max-w-full flex items-center">
                                         <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-700 dark:text-red-500">remove</span>
                                         <span class="ml-0 text-sm text-red-700 dark:text-red-500">34%</span>
-                                        <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                                        <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                                     </div>
                                 </div>
                             </div>
@@ -141,14 +141,14 @@
                             </div>
                             <div>
                                 <div class="flex-none w-2/3 max-w-full px-3">
-                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Sales Second Drone</span>
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Sales Second Drone</span>
                                 </div>
                                 <div class="px-3 py-0">
                                     <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">60 Unit / 40 Unit</div>
                                     <div class="flex-none w-full max-w-full flex items-center">
                                         <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-700 dark:text-green-500">add</span>
                                         <span class="ml-0 text-sm text-green-700 dark:text-green-500">50%</span>
-                                        <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                                        <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                                     </div>
                                 </div>
                             </div>
@@ -165,14 +165,14 @@
                             </div>
                             <div>
                                 <div class="flex-none w-2/3 max-w-full px-3">
-                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Sales Enterpise - Agri</span>
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Sales Enterpise - Agri</span>
                                 </div>
                                 <div class="px-3 py-0">
                                     <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">4 Unit / 2 Unit</div>
                                     <div class="flex-none w-full max-w-full flex items-center">
                                         <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-700 dark:text-green-500">add</span>
                                         <span class="ml-0 text-sm text-green-700 dark:text-green-500">50%</span>
-                                        <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                                        <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                                     </div>
                                 </div>
                             </div>
@@ -184,12 +184,12 @@
     </div>
     {{-- Analis Chart --}}
     <div class="p-6 mt-6 border bg-white rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
-        <div class="grid grid-cols-1 my-3 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div class="grid grid-cols-1 mb-3 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white shadow-md border-b-4 border-green-500 rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
-                            <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Profit</span>
+                            <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Profit</span>
                         </div>
                         <div class="px-3 font-bold text-xl">
                             <span class="flex whitespace-nowrap text-slate-900 dark:text-gray-400">Rp. {{ number_format($totalProfit, 0, ',', '.') }}</span>
@@ -202,7 +202,7 @@
                                 <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-700 dark:text-red-500">remove</span>
                                 <span class="ml-0 text-sm text-red-700 dark:text-red-500">{{ $percentage }}%</span>
                             @endif
-                            <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                            <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                         </div>
                     </div>
                 </div>
@@ -211,15 +211,15 @@
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
-                            <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Drone Terjual</span>
+                            <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Drone Terjual</span>
                         </div>
                         <div class="px-3 font-bold text-xl">
-                            <span class="flex whitespace-nowrap text-slate-900 dark:text-gray-400">666 Unit</span>
+                            <span class="flex whitespace-nowrap text-slate-900 dark:text-gray-400">{{ $droneLaku }} Unit</span>
                         </div>
                         <div class="px-3 flex items-center">
                             <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-500 dark:text-green-400">add</span>
                             <span class="ml-0 text-sm text-green-500 dark:text-green-400">77%</span>
-                            <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                            <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                         </div>
                     </div>
                 </div>
@@ -228,7 +228,7 @@
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
-                            <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Konv. Penjualan</span>
+                            <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Konv. Penjualan</span>
                         </div>
                         <div class="px-3 font-bold text-xl">
                             <span class="flex whitespace-nowrap text-slate-900 dark:text-gray-400">666</span>
@@ -236,7 +236,7 @@
                         <div class="px-3 flex items-center">
                             <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-green-500 dark:text-green-400">add</span>
                             <span class="ml-0 text-sm text-green-500 dark:text-green-400">77%</span>
-                            <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                            <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                         </div>
                     </div>
                 </div>
@@ -245,7 +245,7 @@
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
-                            <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Konv. Supply Second</span>
+                            <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Konv. Supply Second</span>
                         </div>
                         <div class="px-3 font-bold text-xl">
                             <span class="flex whitespace-nowrap text-slate-900 dark:text-gray-400">666</span>
@@ -253,7 +253,7 @@
                         <div class="px-3 flex items-center">
                             <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-500 dark:text-red-400">remove</span>
                             <span class="ml-0 text-sm text-red-500 dark:text-red-400">77%</span>
-                            <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                            <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                         </div>
                     </div>
                 </div>
@@ -262,7 +262,7 @@
                 <div class="flex-auto p-4">
                     <div class="flex flex-col -mx-3">
                         <div class="flex-none max-w-full px-3">
-                            <span class="flex whitespace-nowrap text-gray-700 dark:text-gray-400">Kerugian</span>
+                            <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Kerugian</span>
                         </div>
                         <div class="px-3 font-bold text-xl">
                             <span class="flex whitespace-nowrap text-slate-900 dark:text-gray-400">Rp. 2.500.000</span>
@@ -270,7 +270,7 @@
                         <div class="px-3 flex items-center">
                             <span class="material-symbols-outlined flex whitespace-nowrap text-sm text-red-500 dark:text-red-400">remove</span>
                             <span class="ml-0 text-sm text-red-500 dark:text-red-400">77%</span>
-                            <span class="ml-1 text-sm">dari 30 hari terakhir</span>
+                            <span class="ml-1 text-sm dark:text-white">dari 30 hari terakhir</span>
                         </div>
                     </div>
                 </div>

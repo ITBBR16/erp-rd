@@ -115,7 +115,7 @@
                 <div class="flex cursor-pointer mt-4 hover:text-red-400">
                     <button type="button" id="add-second-belanja" class="flex flex-row justify-between gap-2">
                         <span class="material-symbols-outlined">add_circle</span>
-                        <span class="">Tambah Kelengkapan</span>
+                        <span class="">Tambah Kelengkapan Produk</span>
                     </button>
                 </div>
             </div>

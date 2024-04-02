@@ -120,7 +120,7 @@
                                 <div class="flex cursor-pointer mt-4 hover:text-red-400">
                                     <button type="button" id="add-second-additional-filter" class="flex flex-row justify-between gap-2">
                                         <span class="material-symbols-outlined">add_circle</span>
-                                        <span class="text-sm">Tambah Additional Kelengkapan</span>
+                                        <span class="text-sm">Tambah Kelengkapan Produk</span>
                                     </button>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
             <div class="flex cursor-pointer mt-4 hover:text-red-400">
                 <button type="button" id="add-second-exclude-kelengkapan-filter" class="flex flex-row justify-between gap-2">
                     <span class="material-symbols-outlined">add_circle</span>
-                    <span class="">Tambah Additional Kelengkapan</span>
+                    <span class="">Tambah Kelengkapan Exclude</span>
                 </button>
             </div>
         </div>

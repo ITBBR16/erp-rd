@@ -82,8 +82,8 @@ class KiosPaymentController extends Controller
 
             $responseFinance = Http::post($urlFinance, $dataFinance);
             $statusResponse = json_decode($responseFinance->body(), true);
-
-            if($statusResponse != null) {
+            $feedbackStatus = $statusResponse['status'];
+            if($feedbackStatus == 'success') {
 
                 $kiosPayment->keterangan = $request->input('keterangan');
                 $kiosPayment->tanggal_request = $tanggal;
@@ -115,8 +115,8 @@ class KiosPaymentController extends Controller
                 $msgOrderId = ($statusOrder == 'Baru') ? 'N.' . $orderId : 'S.' . $orderId;
                 $namaGroup = '';
                 $header = "*Incoming Request Payment Produk " . $statusOrder . "*\n\n";
-                $body = "Order ID : " . $msgOrderId . "\nRef : " . $noTransaksi . $id . "\nTotal Nominal : Rp. " . $formattedTotal . "\nLink Order ID : ";
-                $footer = "Ditunggu Paymentnya kakak 😘\nJangan lupa Upload Bukti Transfer di Link Drive yaa\n" . $linkDrive;
+                $body = "Order ID : " . $msgOrderId . "\nRef : " . $noTransaksi . "\nTotal Nominal : Rp. " . $formattedTotal . "\nLink Order ID : " . $linkDrive;
+                $footer = "\nDitunggu Paymentnya kakak 😘\nJangan lupa Upload Bukti Transfer di Link Drive yaa\n";
                 $message = $header . $body . $footer;
 
                 $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';

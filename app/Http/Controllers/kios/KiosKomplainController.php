@@ -93,6 +93,7 @@ class KiosKomplainController extends Controller
                 PengirimanEkspedisi::create([
                     'divisi_id' => $divisiId,
                     'order_id' => $orderId,
+                    'status_order' => 'Baru',
                     'status' => $status,
                 ]);
             }

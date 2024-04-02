@@ -76,7 +76,7 @@ class KiosPenerimaanProdukController extends Controller
                 if($statusOrder == 'Baru') {
                     $pengiriman->order()->update(['status' => 'Diterima']);
                 } else {
-                    $pengiriman->ordersecond()->update(['status' => 'Diterima']);
+                    $pengiriman->ordersecond()->update(['status' => 'Proses QC']);
                 }
                 
                 $pengiriman->save();
