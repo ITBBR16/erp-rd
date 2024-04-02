@@ -220,9 +220,9 @@ class AddKelengkapanKiosController extends Controller
 
     public function getKelengkapan($jenisId)
     {
-        $ddKelengkapan = ProdukKelengkapan::where('produk_jenis_id', $jenisId)->get();
-
-        return response()->json($ddKelengkapan);
+        $produkSearch = ProdukJenis::findOrFail($jenisId);
+        $dataKelengkapan = $produkSearch->kelengkapans()->get();
+        return response()->json($dataKelengkapan);
     }
 
 }
