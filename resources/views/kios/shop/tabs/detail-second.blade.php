@@ -19,25 +19,25 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 15%">
                         Metode Pembelian
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 15%">
                         Nama Customer
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 15%">
                         Tanggal Pembelian
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 15%">
                         Total Nominal
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 10%">
                         Status Pembayaran
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 15%">
                         Status Order
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3" style="width: 15%">
                         Action
                     </th>
                 </tr>
@@ -71,18 +71,31 @@
                         <span class="bg-{{ ($os->status != 'InRD' ? 'orange' : 'green') }}-400 rounded-md px-2 py-0 text-white">{{ $os->status }}</span>
                     </td>
                     <td class="px-6 py-2">
-                        <div class="flex flex-wrap">
-                            <button type="button" data-modal-target="view-second{{ $os->id }}" data-modal-toggle="view-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                <i class="material-symbols-outlined text-base">visibility</i>
-                            </button>
-                            @if ($os->status_pembayaran != 'Paid')
-                                <button type="button" data-modal-target="delete-second{{ $os->id }}" data-modal-toggle="delete-second{{ $os->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">delete</i>
-                                </button>
-                            @endif
-                        </div>
+                        <button id="dropdownListBelanjaDroneSecondButton{{ $os->id }}" data-dropdown-toggle="dropdownListBelanjaDroneSecond{{ $os->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                        </button>
                     </td>
                 </tr>
+                <!-- Dropdown menu -->
+                <div id="dropdownListBelanjaDroneSecond{{ $os->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                    <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListBelanjaDroneSecondButton{{ $os->id }}">
+                        <li>
+                            <button type="button" data-modal-target="view-second{{ $os->id }}" data-modal-toggle="view-second{{ $os->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                <i class="material-symbols-outlined text-base">visibility</i>
+                                <span class="whitespace-nowrap">Detail Belanja</span>
+                            </button>
+                        </li>
+                        @if ($os->status_pembayaran != 'Paid')
+                            <li>
+                                <button type="button" data-modal-target="delete-second{{ $os->id }}" data-modal-toggle="delete-second{{ $os->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">delete</i>
+                                    <span class="whitespace-nowrap">Delete Belanja</span>
+                                </button>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
                 @endforeach
             </tbody>
         </table>

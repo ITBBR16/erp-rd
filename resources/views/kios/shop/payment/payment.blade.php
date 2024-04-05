@@ -107,18 +107,31 @@
                                 <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $py->status }}</span>
                             </td>
                             <td class="px-6 py-2">
-                                <div class="flex flex-wrap">
-                                    @if ($py->status != 'Waiting For Payment')
-                                        <button type="button" data-modal-target="konfirmasi-pembayaran{{ $py->id }}" data-modal-toggle="konfirmasi-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base">task_alt</i>
-                                        </button>
-                                        <button type="button" data-modal-target="edit-pembayaran{{ $py->id }}" data-modal-toggle="edit-pembayaran{{ $py->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base">edit</i>
-                                        </button>
-                                    @endif
-                                </div>
+                                <button id="dropdownReqPembayaranButton{{ $py->id }}" data-dropdown-toggle="dropdownReqPembayaran{{ $py->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                                </button>
                             </td>
                         </tr>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownReqPembayaran{{ $py->id }}" class="z-10 hidden bg-white rounded-lg shadow w-auto dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownReqPembayaranButton{{ $py->id }}">
+                                @if ($py->status != 'Waiting For Payment')
+                                    <li>
+                                        <button type="button" data-modal-target="konfirmasi-pembayaran{{ $py->id }}" data-modal-toggle="konfirmasi-pembayaran{{ $py->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base mr-3">task_alt</i>
+                                            <span class="whitespace-nowrap">Konfirmasi Pembayaran</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" data-modal-target="edit-pembayaran{{ $py->id }}" data-modal-toggle="edit-pembayaran{{ $py->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base mr-3">edit</i>
+                                            <span class="whitespace-nowrap">Edit Pembayaran</span>
+                                        </button>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
                     @endif
                 @endforeach
             </tbody>
@@ -185,13 +198,23 @@
                                 <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $dpy->status }}</span>
                             </td>
                             <td class="px-6 py-2">
-                                <div class="flex flex-wrap">
-                                    <button type="button" data-modal-target="view-pembayaran{{ $dpy->id }}" data-modal-toggle="view-pembayaran{{ $dpy->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">visibility</i>
-                                    </button>
-                                </div>
+                                <button id="dropdownDonePembayaranButton{{ $dpy->id }}" data-dropdown-toggle="dropdownDonePembayaran{{ $dpy->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                                </button>
                             </td>
                         </tr>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownDonePembayaran{{ $dpy->id }}" class="z-10 hidden bg-white rounded-lg shadow w-auto dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDonePembayaranButton{{ $dpy->id }}">
+                                <li>
+                                    <button type="button" data-modal-target="view-pembayaran{{ $dpy->id }}" data-modal-toggle="view-pembayaran{{ $dpy->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base mr-3">visibility</i>
+                                        <span class="whitespace-nowrap">Detail Pembayaran</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     @endif
                 @endforeach
             </tbody>

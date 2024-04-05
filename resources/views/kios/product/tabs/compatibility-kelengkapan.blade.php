@@ -50,8 +50,8 @@
                     </button>
                 </div>
             </div>
-            <div class="flex flex-col w-full mt-6">
-                <h3 class="text-gray-900 font-semibold text-lg mb-3 dark:text-white dark:border-gray-200">Add Kelengkapan : </h3>
+            <div class="flex flex-col w-full mt-6 border-t-2 border-gray-600 dark:border-gray-400">
+                <h3 class="text-gray-900 font-semibold text-lg mb-3 dark:text-white dark:border-gray-200 mt-6">Add Kelengkapan : </h3>
                 <div id="jenis-kelengkapan">
                     <div id="jenis-kelengkapan-1" class="grid grid-cols-4 gap-4 md:gap-6">
                         <div class="relative z-0 w-full mb-6 group">

@@ -74,9 +74,11 @@ class KiosShopController extends Controller
             $linkDrive = json_decode($response->body(), true);
             $order->link_drive = $linkDrive[0];
             $order->save();
-            
+
             $quantities = $request->input('quantity');
             $paket_penjualan = $request->input('paket_penjualan');
+            $message = "List Purchase " . $supplierName . " :\n\n";
+
             foreach($paket_penjualan as $key => $item) {
                 $orderList = new KiosOrderList();
                 $orderList->order_id = $order->id;
@@ -90,12 +92,26 @@ class KiosShopController extends Controller
                 $history->sub_jenis_id = $item;
                 $history->quantity = $quantities[$key];
                 $history->save();
+
+                $productPacket = ProdukSubJenis::findOrFail($item);
+                $productName = $productPacket->produkjenis->jenis_produk . " " . $productPacket->paket_penjualan . " * " . $quantities[$key] ."\n";
+                $message .= $productName;
             }
+
+            $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
+            $messageGroupSupplier = [
+                'no_telp' => '6285156519066',
+                'pesan' => $message,
+            ];
+
+            $responseMessage = Http::post($urlMessage, $messageGroupSupplier);
 
             return back()->with('success', 'Success Add New Order List.');
 
         } catch(Exception $e) {
             if(isset($order) && $order->id){
+                $order->orderLists()->delete();
+                $order->histories()->delete();
                 $order->delete();
             }
             return back()->with('error', $e->getMessage());

@@ -47,24 +47,24 @@ class AddKelengkapanKiosController extends Controller
     {
         if($request->has('kategori_id')) {
 
-            $validate = $request->validate([
-                'kategori_id' => 'required',
-                'jenis_produk' => ['required', Rule::unique('rumahdrone_produk.produk_jenis', 'jenis_produk')],
-            ]);
-
-            $validate['jenis_produk'] = strtoupper($validate['jenis_produk']);
-
             try {
-                $type = ProdukJenis::create($validate);
+                $validate = $request->validate([
+                    'kategori_id' => 'required',
+                    'jenis_produk' => ['required', Rule::unique('rumahdrone_produk.produk_jenis', 'jenis_produk')],
+                ]);
+
+                $validate['jenis_produk'] = strtoupper($validate['jenis_produk']);
+
+                ProdukJenis::create($validate);
 
                 return back()->with('success', 'Success Add New Product.');
-            
+
             } catch (Exception $e) {
                 return back()->with('error', $e->getMessage());
             }
 
         } elseif($request->has('edit_kelengkapan_produk') || $request->has('jenis_kelengkapan')) {
-            
+
             try {
                 $editKelengkapanProduk = $request->edit_kelengkapan_produk;
                 $addKelengkapanProduk = $request->jenis_kelengkapan;
@@ -76,7 +76,7 @@ class AddKelengkapanKiosController extends Controller
                                              });
 
                 if(!empty($filterDataAddKelengkapan)) {
-                    $validateKelengkapan = $request->validate([
+                    $request->validate([
                         'jenis_kelengkapan' => ['required', Rule::unique('rumahdrone_produk.produk_kelengkapan', 'kelengkapan')],
                     ]);
 
@@ -84,12 +84,11 @@ class AddKelengkapanKiosController extends Controller
                         return ['kelengkapan' => ucwords(strtolower($jk))];
                     });
 
-                    $addJenisId = $request->add_jenis_id;
-                    
-                    foreach($jenisKelengkapan as $index => $newKelengkapan) {
-                        $kelengkapanBaru = ProdukKelengkapan::create($newKelengkapan);
-                        $kelengkapanBaru->jenisProduks()->attach($addJenisId);
-                    }
+                    $jenisKelengkapan->each(function ($kelengkapan, $index) use ($request) {
+                        $kelengkapanBaru = ProdukKelengkapan::create($kelengkapan);
+                
+                        $kelengkapanBaru->jenisProduks()->attach($request->add_jenis_id[$index]);
+                    });
                 }
 
                 if(!empty($filterDataEditKelengkapan)) {
@@ -113,24 +112,24 @@ class AddKelengkapanKiosController extends Controller
             }
 
         } elseif($request->has('paket_penjualan')) {
-
-            $validatePenjualan = $request->validate([
-                'kategori_paket' => 'required',
-                'jenis_id' => 'required',
-                'berat_paket' => 'required',
-                'paket_penjualan' => 'required',
-                'kelengkapan' => 'required|array',
-                'quantity' => 'required|array',
-                'file_paket_produk' => 'image|mimes:jpeg,png,jpg',
-                'file_kelengkapan_produk.*' => 'image|mimes:jpeg,png,jpg',
-                'length' => 'required',
-                'width' => 'required',
-                'height' => 'required',
-            ]);
-
-            $validatePenjualan['paket_penjualan'] = strtoupper($validatePenjualan['paket_penjualan']);
-
+            
             try{
+                $validatePenjualan = $request->validate([
+                    'kategori_paket' => 'required',
+                    'jenis_id' => 'required',
+                    'berat_paket' => 'required',
+                    'paket_penjualan' => 'required',
+                    'kelengkapan' => 'required|array',
+                    'quantity' => 'required|array',
+                    'file_paket_produk' => 'image|mimes:jpeg,png,jpg',
+                    'file_kelengkapan_produk.*' => 'image|mimes:jpeg,png,jpg',
+                    'length' => 'required',
+                    'width' => 'required',
+                    'height' => 'required',
+                ]);
+    
+                $validatePenjualan['paket_penjualan'] = strtoupper($validatePenjualan['paket_penjualan']);
+    
                 $produkJenis = ProdukSubJenis::create([
                     'jenis_id' => $request->jenis_id,
                     'produk_type_id' => $request->kategori_paket,
