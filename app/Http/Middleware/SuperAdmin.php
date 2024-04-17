@@ -15,21 +15,34 @@ class SuperAdmin
     {
         $token = $request->cookie('jwt_token');
 
+        if (auth()->check()) {
+            return redirect('/');
+        }
+
+        if ($request->path() === '/login') {
+            return $next($request);
+        }
+
         if ($token) {
             try {
                 $user = JWTAuth::setToken($token)->authenticate();
             } catch (\Exception $e) {
                 return $this->redirectAndForgetCookie();
             }
+
+            if ($request->path() === 'login') {
+                return $next($request);
+            }
+
             if($user->is_admin == 1){
                 return $next($request);
             } else {
-                return $this->redirectAndForgetCookie();
+                return back();
             }
         } else{
             return $this->redirectAndForgetCookie();
         }
-        
+
         abort(403, 'Unauthorized action.');
     }
 

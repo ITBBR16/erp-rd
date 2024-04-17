@@ -31,11 +31,8 @@ use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 
-Route::middleware('guest')->group(function (){
-    Route::get('/login', [LoginController::class, 'index'])->name('login');
-    Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
-});
-
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Dependent Dropdown 
@@ -157,7 +154,7 @@ Route::middleware('access')->group(function () {
         Route::get('/add-customer', [AddCustomerController::class, 'index']);
         Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
         
-        Route::middleware('admin.superAdmin')->group(function () {
+        Route::middleware('superAdmin')->group(function () {
             Route::get('/add-user', [EmployeeController::class, 'index']);
             Route::post('/add-user', [EmployeeController::class, 'store'])->name('form-user');
         });

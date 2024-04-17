@@ -10,3 +10,7 @@ Tutorial install tailwind dengan framework laravel :
 
 - Run -> npm run dev ( Untuk mengaktifkan tailwind css )
 - Run -> php artisan serve ( untuk menjalankan server local laravel )
+
+## Menjalankan Reset Data
+
+- Run -> php artisan app:reset-data

@@ -12,9 +12,24 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('auth.login', [
-            'title' => 'Login'
-        ]);
+        if (auth()->check()) {
+
+            if (auth()->user()->is_admin == 1) {
+                return redirect('/');
+            } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 1) {
+                return redirect('/kios/analisa/dashboard');
+            } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 6) {
+                return redirect('/logistik');
+            }
+
+        } else {
+
+            return view('auth.login', [
+                'title' => 'Login'
+            ]);
+
+        }
+
     }
 
     public function authenticate(Request $request)

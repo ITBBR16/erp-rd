@@ -10,14 +10,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MDKios
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->cookie('jwt_token');
+
+        if (auth()->check()) {
+            return redirect('/kios/analisa/dashboard');
+        }
+
+        if ($request->path() === 'login') {
+            return $next($request);
+        }
 
         if ($token) {
             try {
@@ -25,10 +28,15 @@ class MDKios
             } catch (\Exception $e) {
                 return $this->redirectAndForgetCookie();
             }
-            if($user->is_admin == 1 || $user->is_admin == 2 && $user->divisi_id == 1 || $user->is_admin == 3 && $user->divisi_id == 1){
+
+            if ($request->path() === 'login') {
+                return $next($request);
+            }
+
+            if ($user->is_admin == 1 || ($user->is_admin == 2 && $user->divisi_id == 1) || ($user->is_admin == 3 && $user->divisi_id == 1)) {
                 return $next($request);
             } else {
-                return $this->redirectAndForgetCookie();
+                return back();
             }
         }
 
@@ -39,4 +47,5 @@ class MDKios
     {
         return Redirect::to('login')->withCookie(cookie()->forget('jwt_token'));
     }
+
 }

@@ -15,20 +15,37 @@ class AccessControl
     {
         $token = $request->cookie('jwt_token');
 
+        if ($request->path() === 'login') {
+            return $next($request);
+        }
+
         if ($token) {
             try {
                 $user = JWTAuth::setToken($token)->authenticate();
             } catch (\Exception $e) {
                 return $this->redirectAndForgetCookie();
             }
-            if($user->is_admin == 1 || $user->is_admin == 2 && $user->divisi_id == 1 || $user->is_admin == 2 && $user->divisi_id == 2){
+
+            if ($request->path() === 'login') {
                 return $next($request);
-            } else {
-                return $this->redirectAndForgetCookie();
             }
+
+            if ($user->is_admin == 1) {
+                return $next($request);
+            }
+
+            if (in_array($user->is_admin, [2,3]) && $user->divisi_id == 1) {
+                return $next($request);
+            }
+
+            if (in_array($user->is_admin, [2,3]) && $user->divisi_id == 6) {
+                return $next($request);
+            }
+
+        } else {
+            return $this->redirectAndForgetCookie();
         }
 
-        return $this->redirectAndForgetCookie();
     }
 
     private function redirectAndForgetCookie()

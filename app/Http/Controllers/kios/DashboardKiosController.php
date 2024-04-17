@@ -5,7 +5,6 @@ namespace App\Http\Controllers\kios;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\customer\Customer;
-use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksiDetail;
 use App\Repositories\kios\KiosRepository;
 
@@ -41,7 +40,7 @@ class DashboardKiosController extends Controller
 
         $totalProfit = $totalPenjualan - $totalModal;
 
-        if ($totalProfit > 0) {
+        if ($totalProfit >= 0) {
             $profitType = 'Keuntungan';
         } elseif ($totalProfit < 0) {
             $profitType = 'Kerugian';
