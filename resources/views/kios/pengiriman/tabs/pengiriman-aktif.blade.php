@@ -41,13 +41,34 @@
                     @if ($data->status == 'Incoming' || $data->status == 'Belum Dikirim' || $data->status == 'Pengiriman Balik')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ ($data->status_order == 'Baru' ? 'N.' . $data->order->id : 'S.' . $data->ordersecond->id) }}
+                                {{ ($data->status_order == 'Baru' ? 
+                                        ('N.' . ($data->order ? $data->order->id : '')) : 
+                                            (
+                                                $data->status_order == 'Bekas' ? 
+                                                    ('S.' . ($data->ordersecond ? $data->ordersecond->id : '')) : 
+                                                ''
+                                            )
+                                    ) 
+                                }}
                             </th>
                             <td class="px-6 py-2">
                                 {{ $data->no_resi }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ ($data->status_order == 'Baru' ? $data->order->supplier->nama_perusahaan : ($data->ordersecond->come_from == 'Customer' ? $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->first_name : $data->ordersecond->marketplace->nama)) }}
+                                {{ 
+                                    ($data->status_order == 'Baru' && $data->order && $data->order->supplier ? 
+                                        $data->order->supplier->nama_perusahaan : 
+                                        (
+                                            $data->ordersecond && $data->ordersecond->come_from == 'Customer' && $data->ordersecond->customer ? 
+                                                $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->last_name : 
+                                                (
+                                                    $data->ordersecond && $data->ordersecond->marketplace ? 
+                                                        $data->ordersecond->marketplace->nama : 
+                                                        ''
+                                                )
+                                        )
+                                    ) 
+                                }}
                             </td>
                             <td class="px-6 py-2">
                                 @if ($data->ekspedisi_id != '')

@@ -41,13 +41,26 @@
                     @if ($data->status == 'Diterima' || $data->status == 'InRD')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ ($data->status_order == 'Baru' ? 'N.' . $data->order->id : 'S.' . $data->ordersecond->id) }}
+                                {{ ($data->status_order == 'Baru' && $data->order ? 'N.' . $data->order->id : ($data->status_order == 'Bekas' && $data->ordersecond ? 'S.' . $data->ordersecond->id : '')) }}
                             </th>
                             <td class="px-6 py-2">
                                 {{ $data->no_resi }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ ($data->status_order == 'Baru' ? $data->order->supplier->nama_perusahaan : ($data->ordersecond->come_from == 'Customer' ? $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->first_name : $data->ordersecond->marketplace->nama)) }}
+                                {{
+                                    ($data->status_order == 'Baru' && $data->order && $data->order->supplier ? 
+                                        $data->order->supplier->nama_perusahaan : 
+                                        (
+                                            $data->ordersecond && $data->ordersecond->come_from == 'Customer' && $data->ordersecond->customer ? 
+                                                $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->last_name : 
+                                                (
+                                                    $data->ordersecond && $data->ordersecond->marketplace ? 
+                                                        $data->ordersecond->marketplace->nama : 
+                                                        ''
+                                                )
+                                        )
+                                    ) 
+                                 }}
                             </td>
                             <td class="px-6 py-2">
                                 @if ($data->ekspedisi_id != '')
@@ -63,21 +76,18 @@
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                         </svg>
                                     </button>
-                                    {{-- @foreach ($data->penerimaan as $penerimaan)
-                                        @if ($penerimaan->link_img_paket != '') --}}
-                                            <!-- Dropdown menu -->
-                                            <div id="dropdownHistoryPenerimaan{{ $data->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHistoryPenerimaanButton{{ $data->id }}">
-                                                    <li>
-                                                        <button type="button" data-modal-target="view-img-penerimaan{{ $data->id }}" data-modal-toggle="view-img-penerimaan{{ $data->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                                            <i class="material-symbols-outlined text-base mr-3">photo</i>
-                                                            <span class="whitespace-nowrap">Detail Produk</span>
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        {{-- @endif
-                                    @endforeach --}}
+                                    <!-- Dropdown menu -->
+                                    <div id="dropdownHistoryPenerimaan{{ $data->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHistoryPenerimaanButton{{ $data->id }}">
+                                            <li>
+                                                <button type="button" data-modal-target="view-img-penerimaan{{ $data->id }}" data-modal-toggle="view-img-penerimaan{{ $data->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                    <i class="material-symbols-outlined text-base mr-3">photo</i>
+                                                    <span class="whitespace-nowrap">Detail Produk</span>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+
                                 </div>
                             </td>
                         </tr>

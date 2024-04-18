@@ -36,20 +36,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($historyPenerimaan as $history)
-                    @if ($history->pengiriman->status == 'Diterima' || $history->pengiriman->status == 'InRD')
+                @foreach ($dataIncoming as $history)
+                    @if ($history->status == 'Diterima' || $history->status == 'InRD')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ $history->pengiriman->no_resi }}
+                                {{ $history->no_resi }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $history->pengiriman->ekspedisi->ekspedisi }}
+                                {{ $history->ekspedisi->ekspedisi }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $history->tanggal_diterima }}
+                                {{ $history->penerimaan->tanggal_diterima }}
                             </td>
                             <td class="px-6 py-2">
-                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $history->pengiriman->status }}</span>
+                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $history->status }}</span>
                             </td>
                             <td class="px-6 py-2">
                                 <button id="dropdownListDroneBaruButton{{ $history->id }}" data-dropdown-toggle="dropdownListDroneBaru{{ $history->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -77,7 +77,7 @@
             {{-- {{ $suppliers->links() }} --}}
         </div>
     </div>
-    @if ($history->pengiriman->status != 'Diterima' && $history->pengiriman->status != 'InRD')
+    @if (!($historyPenerimaan->contains('status', 'Diterima')) || !($historyPenerimaan->contains('status', 'InRD')))
         <div class="p-4 mt-4">
             <div class="flex justify-center">
                 <figure class="max-w-lg">
