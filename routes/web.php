@@ -128,6 +128,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/autocomplete/{jenisTransaksi}', 'autocomplete');
                 Route::get('/getSerialNumber/{jenisTransaksi}/{id}', 'getSerialNumber');
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
+                Route::post('/generate-pdf', 'downloadInvoice');
             });
         });
 

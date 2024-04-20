@@ -295,4 +295,35 @@ $(document).ready(function(){
         printInvoice();
     });
 
+    function downloadPdf() {
+        var noInvoice = $('#invoice-number').val();
+        var invoiceContent = $('#print-invoice-kios').html();
+
+        var requestData = {
+            no_invoice: noInvoice,
+            content: invoiceContent
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/kios/kasir/generate-pdf',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function(data) {
+                alert('Success Download Invoice.');
+            },
+            error: function(xhr, status, error) {
+                alert('Terjadi kesalahan saat mengunduh invoice : ' + error);
+            }
+        });
+    }
+
+    $('#button-download-invoice').click(function() {
+        downloadPdf();
+    })
+
  });
+ 

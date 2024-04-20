@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\kios;
 
+use Exception;
+use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\customer\Customer;
 use App\Models\kios\KiosAkunRD;
 use App\Models\kios\KiosProduk;
+use App\Models\customer\Customer;
+use App\Models\kios\KiosTransaksi;
+use App\Http\Controllers\Controller;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
-use App\Models\kios\KiosTransaksi;
 use App\Models\kios\KiosTransaksiDetail;
-use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
-use Carbon\Carbon;
-use Exception;
 
 class KiosKasirController extends Controller
 {
@@ -155,6 +157,22 @@ class KiosKasirController extends Controller
     {
         $dataCustomer = Customer::where('id', $customerId)->get();
         return response()->json($dataCustomer);
+    }
+
+    public function downloadInvoice(Request $request)
+    {
+        $html = $request->input('content');
+        $noInvoice = $request->input('no_invoice');
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+
+        $newPdf = new Dompdf();
+        $newPdf->loadHTML($html);
+        $newPdf->setPaper('A5', 'landscape');
+        $newPdf->render();
+
+        return $newPdf->download($noInvoice . ".pdf");
     }
 
 }

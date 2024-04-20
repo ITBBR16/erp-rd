@@ -6,7 +6,7 @@
                     <div class="mx-auto">
                         {{-- Body --}}
                         <div class="text-xs flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-gray-800">
-                            <div id="print-invoice" class="text-xs" style="max-width: 210mm;">
+                            <div id="print-invoice-kios" class="text-xs" style="max-width: 210mm;">
                                 <div class="flex justify-between">
                                     <div class="w-60">
                                         <img src="/img/Logo Rumah Drone Black.png" alt="Logo Rumah Drone Black.png">
@@ -20,6 +20,7 @@
                                           </address>
                                     </div>
                                 </div>
+                                <input type="hidden" id="invoice-number" value="{{ $today->format('Ymd') }}{{ $invoiceid + 1 }}">
                                 <div class="mt-3 grid sm:grid-cols-2 gap-3">
                                     <div>
                                         <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
