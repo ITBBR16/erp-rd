@@ -60,6 +60,7 @@ Route::middleware('kios')->group(function () {
 
         Route::prefix('/product')->group(function () {
             Route::get('/dashboard-produk', [KiosDashboardProduk::class, 'index']);
+            Route::get('/weekly-sales-data', [KiosDashboardProduk::class, 'getWeeklySalesData']);
 
             Route::group(['controller' => KiosProductController::class], function () {
                 Route::resource('/list-product', KiosProductController::class)->only(['index', 'update', 'destroy']);

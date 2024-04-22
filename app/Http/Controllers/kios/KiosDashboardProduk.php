@@ -16,6 +16,10 @@ class KiosDashboardProduk extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $totalSalesThisWeek = array_sum($this->thisWeekSales());
+        $totalSalesLastWeek = array_sum($this->lastWeekSales());
+
+        $percentSales = ($totalSalesLastWeek != 0) ? (($totalSalesThisWeek - $totalSalesLastWeek) / $totalSalesLastWeek) * 100 : 0;
 
         return view('kios.product.dashboard', [
             'title' => 'Dashboard Produk',
@@ -24,10 +28,23 @@ class KiosDashboardProduk extends Controller
             'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
+            'totalSales' => $totalSalesThisWeek,
+            'percentSales' => $percentSales,
         ]);
     }
 
-    public function thisWeekSales()
+    public function getWeeklySalesData()
+    {
+        $thisWeekSales = $this->thisWeekSales();
+        $lastWeekSales = $this->lastWeekSales();
+
+        return response()->json([
+            'this_week' => $thisWeekSales,
+            'last_week' => $lastWeekSales
+        ]);
+    }
+
+    private function thisWeekSales()
     {
         $today = Carbon::now()->startOfWeek();
         $salesThisWeek = [];
@@ -38,21 +55,21 @@ class KiosDashboardProduk extends Controller
             array_push($salesThisWeek, $sales);
         }
 
-        return response()->json($salesThisWeek);
+        return $salesThisWeek;
     }
 
-    public function lastWeekSales()
+    private function lastWeekSales()
     {
-        $today = Carbon::now()->startOfWeek();
-        $salesLastweek = [];
+        $today = Carbon::now()->subWeek()->startOfWeek();
+        $salesLastWeek = [];
 
         for ($i = 0; $i < 7; $i++) {
             $date = $today->copy()->addDays($i);
             $sales = KiosTransaksi::whereDate('created_at', $date)->sum('total_harga');
-            array_push($salesLastweek, $sales);
+            array_push($salesLastWeek, $sales);
         }
 
-        return response()->json($salesLastweek);
+        return $salesLastWeek;
     }
 
 }

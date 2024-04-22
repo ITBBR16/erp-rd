@@ -31,12 +31,12 @@ const options = {
   series: [
       {
           name: "This Week",
-          data: [6000000, 12000000, 6000000, 7000000, 6600000, 9000000, 7800000],
+          data: [],
           color: "#1A56DB",
       },
       {
           name: "Last Week",
-          data: [4750000, 8000000, 7000000, 3000000, 4600000, 8000000, 8800000],
+          data: [],
           color: "#7E3BF2",
       },
   ],
@@ -103,7 +103,15 @@ window.onload = function() {
       }
       options.xaxis.categories = categories;
 
-      const chart = new ApexCharts(document.getElementById("sales-chart"), options);
-      chart.render();
+      fetch('/kios/product/weekly-sales-data')
+          .then(response => response.json())
+          .then(data => {
+              options.series[0].data = data.this_week;
+              options.series[1].data = data.last_week;
+
+              const chart = new ApexCharts(document.getElementById("sales-chart"), options);
+              chart.render();
+          })
+          .catch(error => console.error('Error:', error));
   }
 }
