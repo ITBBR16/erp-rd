@@ -123,9 +123,6 @@ class AddKelengkapanKiosController extends Controller
                     'quantity' => 'required|array',
                     'file_paket_produk' => 'image|mimes:jpeg,png,jpg',
                     'file_kelengkapan_produk.*' => 'image|mimes:jpeg,png,jpg',
-                    'length' => 'required',
-                    'width' => 'required',
-                    'height' => 'required',
                 ]);
     
                 $validatePenjualan['paket_penjualan'] = strtoupper($validatePenjualan['paket_penjualan']);

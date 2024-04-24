@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <div id="unpaid-kios" class="relative overflow-x-auto mt-6" style="display: block">
+    <div id="unpaid-kios" class="relative mt-6" style="display: block">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
@@ -151,7 +151,7 @@
         </div>
     </div>
 
-    <div id="done-payment-kios" class="relative overflow-x-auto mt-6" style="display: none">
+    <div id="done-payment-kios" class="relative mt-6" style="display: none">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>

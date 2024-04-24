@@ -131,16 +131,21 @@ class KiosShopController extends Controller
         try{
             $suppId = $request->input('supplier_id');
             $supplier = SupplierKios::findOrFail($suppId);
+            $supplierName = $supplier->nama_perusahaan;
             $searchPayment = KiosMetodePembayaran::where('supplier_id', $suppId)->latest()->first();
-            $paymentSupplier = ($searchPayment !== null) ? $searchPayment->id : '';
+            $paymentSupplier = $searchPayment ? $searchPayment->id : null;
             $nilaiBeli = preg_replace("/[^0-9]/", "", $request->input('nilai'));
             $totalNilai = 0;
             
             $order = KiosOrder::findOrFail($id);
             $order->status = 'Tervalidasi';
             $order->save();
+            $message = "List Purchase " . $supplierName . " :\n\n";
+
+            $quantities = $request->input('quantity');
+            $paketPenjualan = $request->input('jenis_paket');
             
-            foreach($request->input('jenis_paket') as $index => $jenisPaket) {
+            foreach($paketPenjualan as $index => $jenisPaket) {
                 $orderList = $order->orderLists()
                             ->where('order_id', $id)
                             ->where('sub_jenis_id', $jenisPaket)
@@ -152,37 +157,41 @@ class KiosShopController extends Controller
                             ->first();
 
                 if($orderList) {
-                    $orderList->sub_jenis_id = $request->input('jenis_paket')[$index];
-                    $orderList->quantity = $request->input('quantity')[$index];
+                    $orderList->sub_jenis_id = $jenisPaket;
+                    $orderList->quantity = $quantities[$index];
                     $orderList->nilai = $nilaiBeli[$index];
                     $orderList->status = 'Belum Validasi';
                     $orderList->save();
 
-                    $historiOrder->sub_jenis_id = $request->input('jenis_paket')[$index];
-                    $historiOrder->quantity = $request->input('quantity')[$index];
+                    $historiOrder->sub_jenis_id = $jenisPaket;
+                    $historiOrder->quantity = $quantities[$index];
                     $historiOrder->nilai = $nilaiBeli[$index];
                     $historiOrder->save();
 
-                    $total = $request->input('quantity')[$index] * $nilaiBeli[$index];
+                    $total = $quantities[$index] * $nilaiBeli[$index];
                     $totalNilai += $total;
+
+                    $productPacket = ProdukSubJenis::findOrFail($jenisPaket);
+                    $productName = $productPacket->produkjenis->jenis_produk . " " . $productPacket->paket_penjualan . " * " . $quantities[$index] ."\n";
+                    $message .= $productName;
 
                     $supplier->subjenis()->attach($jenisPaket, ['nilai' => $nilaiBeli[$index]]);
 
                 } else {
                     $newOrderList = new KiosOrderList([
-                        'sub_jenis_id' => $request->input('jenis_paket')[$index],
-                        'quantity' => $request->input('quantity')[$index],
+                        'sub_jenis_id' => $jenisPaket,
+                        'quantity' => $quantities[$index],
                         'nilai' => $nilaiBeli[$index],
                         'status' => 'Belum Validasi',
                     ]);
 
                     $newHistory = new KiosHistoryOrderList([
-                        'sub_jenis_id' => $request->input('jenis_paket')[$index],
-                        'quantity' => $request->input('quantity')[$index],
+                        'sub_jenis_id' => $jenisPaket,
+                        'quantity' => $quantities[$index],
                         'nilai' => $nilaiBeli[$index],
                     ]);
 
-                    $totalNilai += $request->input('quantity')[$index] * $nilaiBeli[$index];
+                    $totalNilai += $quantities[$index] * $nilaiBeli[$index];
 
                     $order->orderLists()->save($newOrderList);
                     $order->histories()->save($newHistory);
@@ -198,6 +207,14 @@ class KiosShopController extends Controller
                 'nilai' => $totalNilai,
                 'status' => 'Unpaid',
             ]);
+
+            $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
+            $messageGroupSupplier = [
+                'no_telp' => '6285156519066',
+                'pesan' => $message,
+            ];
+
+            $responseMessage = Http::post($urlMessage, $messageGroupSupplier);
 
             $payment->save();
 

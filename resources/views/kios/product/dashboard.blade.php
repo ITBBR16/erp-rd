@@ -1,6 +1,94 @@
 @extends('kios.layouts.main')
 
 @section('container')
+    <div class="w-full mx-auto mt-4">
+        <div class="flex flex-wrap -mx-3">
+            {{-- Box Total Modal --}}
+            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-6 xl:w-1/3">
+                <div class="flex flex-col h-24 min-w-0 break-words bg-white shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600 relative">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="px-3 py-3">
+                                <span class="material-symbols-outlined text-green-500 text-4xl dark:text-green-400">monetization_on</span>
+                            </div>
+                            <div>
+                                <div class="flex-none w-2/3 max-w-full px-3">
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Total Modal</span>
+                                </div>
+                                <div class="px-3 py-0">
+                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">Rp. {{ number_format($totalSales, 0, ',', '.') }}</div>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-2 right-2">
+                                <a href="#" class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700">
+                                    Lihat Produk
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Box Total Produk Baru --}}
+            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-6 xl:w-1/3">
+                <div class="flex flex-col h-24 min-w-0 break-words bg-white shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600 relative">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="px-3 py-3">
+                                <span class="material-symbols-outlined text-green-500 text-4xl dark:text-green-400">store</span>
+                            </div>
+                            <div>
+                                <div class="flex-none w-2/3 max-w-full px-3">
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Total Produk Baru</span>
+                                </div>
+                                <div class="px-3 py-0">
+                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">66 Unit</div>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-2 right-2">
+                                <a href="/kios/product/list-product" class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700">
+                                    Lihat Produk
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Box Produk Bekas --}}
+            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-6 xl:w-1/3">
+                <div class="flex flex-col h-24 min-w-0 break-words bg-white shadow-md rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600 relative">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="px-3 py-3">
+                                <span class="material-symbols-outlined text-green-500 text-4xl dark:text-green-400">recycling</span>
+                            </div>
+                            <div>
+                                <div class="flex-none w-2/3 max-w-full px-3">
+                                    <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Total Produk Bekas</span>
+                                </div>
+                                <div class="px-3 py-0">
+                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">66 Unit</div>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-2 right-2">
+                                <a href="/kios/product/list-product-second" class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700">
+                                    Lihat Produk
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3 mt-4">
         {{-- Analytic --}}
         <div class="p-4 border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
