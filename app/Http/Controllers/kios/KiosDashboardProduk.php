@@ -46,12 +46,19 @@ class KiosDashboardProduk extends Controller
 
     private function thisWeekSales()
     {
-        $today = Carbon::now()->startOfWeek();
+        $today = Carbon::now();
         $salesThisWeek = [];
 
-        for ($i = 0; $i < 7; $i++) {
-            $date = $today->copy()->addDays($i);
-            $sales = KiosTransaksi::whereDate('created_at', $date)->sum('total_harga');
+        for ($i = 6; $i >= 0; $i--) {
+            $date = $today->copy()->subDays($i);
+            $sales = KiosTransaksi::whereDate('created_at', $date)
+                ->get()
+                ->sum(function ($transaction) {
+                    return $transaction->detailtransaksi->sum(function ($detail) {
+                        return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual) - $detail->serialnumbers->validasiproduk->orderLists->nilai;
+                    }) + $transaction->tax - $transaction->discount;
+                });
+
             array_push($salesThisWeek, $sales);
         }
 
@@ -60,12 +67,19 @@ class KiosDashboardProduk extends Controller
 
     private function lastWeekSales()
     {
-        $today = Carbon::now()->subWeek()->startOfWeek();
+        $lastWeekStartDate = Carbon::now()->subWeek()->startOfWeek();
+        $lastWeekEndDate = Carbon::now()->subWeek()->endOfWeek();
         $salesLastWeek = [];
 
-        for ($i = 0; $i < 7; $i++) {
-            $date = $today->copy()->addDays($i);
-            $sales = KiosTransaksi::whereDate('created_at', $date)->sum('total_harga');
+        for ($i = 13; $i >= 7; $i--) {
+            $date = $lastWeekStartDate->copy()->addDays($i - 7);
+            $sales = KiosTransaksi::whereBetween('created_at', [$date, $lastWeekEndDate])
+                ->get()
+                ->sum(function ($transaction) {
+                    return $transaction->detailtransaksi->sum(function ($detail) {
+                        return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual) - $detail->serialnumbers->validasiproduk->orderLists->nilai;
+                    }) + $transaction->tax - $transaction->discount;
+                });
             array_push($salesLastWeek, $sales);
         }
 

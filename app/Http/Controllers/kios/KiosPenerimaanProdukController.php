@@ -19,7 +19,7 @@ class KiosPenerimaanProdukController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'ekspedisi')->get();
+        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'ekspedisi', 'penerimaan')->get();
         $historyPenerimaan = PenerimaanProduk::with('pengiriman.order.supplier', 'pengiriman.ekspedisi')->get();
 
         return view('kios.product.pengecekkan.index-pengecekkan-baru', [

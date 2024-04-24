@@ -97,13 +97,13 @@
                     <span class="text-xl font-bold leading-none text-gray-900 sm:text-xl dark:text-white">Rp. {{ number_format($totalSales, 0, ',', '.') }}</span>
                     <h3 class="text-base font-light text-gray-500 dark:text-gray-400">Sales minggu ini</h3>
                 </div>
-                @if ($percentSales > 0)
-                    <div class="flex items-center justify-end flex-1 text-base font-medium text-green-500 dark:text-gray-400">
+                @if ($percentSales >= 0)
+                    <div class="flex items-center justify-end flex-1 text-base font-medium text-green-500 dark:text-green-400">
                         <span>+{{ $percentSales }}%</span>
                         <span class="material-symbols-outlined flex whitespace-nowrap text-sm">north</span>
                     </div>
                 @else
-                    <div class="flex items-center justify-end flex-1 text-base font-medium text-red-500 dark:text-gray-400">
+                    <div class="flex items-center justify-end flex-1 text-base font-medium text-red-500 dark:text-red-400">
                         <span>{{ $percentSales }}%</span>
                         <span class="material-symbols-outlined flex whitespace-nowrap text-sm">south</span>
                     </div>

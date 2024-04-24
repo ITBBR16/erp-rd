@@ -38,7 +38,7 @@ class PengirimanEkspedisi extends Model
 
     public function penerimaan()
     {
-        return $this->hasMany(PenerimaanProduk::class);
+        return $this->hasOne(PenerimaanProduk::class);
     }
 
     public function ordersecond()

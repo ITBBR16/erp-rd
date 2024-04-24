@@ -91,6 +91,7 @@ class KiosPengecekkanProdukBaruController extends Controller
             
             KiosOrderList::where('id', $validasiListProdukId)->update(['status' => $status]);
             $cekJenisPaket = KiosProduk::where('sub_jenis_id', $validasiSubJenisId)->first();
+            $produkId = $cekJenisPaket->id;
             $orderLists = KiosOrderList::where('order_id', $validasiOrderId)->get();
             $allDone = $orderLists->every(function ($orderList) {
                 return $orderList->status == 'Done' || $orderList->status == 'Kurang';
@@ -101,16 +102,8 @@ class KiosPengecekkanProdukBaruController extends Controller
                 KiosOrder::where('id', $validasiOrderId)->update(['status' => 'InRD']);
             }
 
-            if(!$cekJenisPaket) {
-                $newProduk = KiosProduk::create([
-                                'sub_jenis_id' => $validasiSubJenisId,
-                                'status' => 'Ready',
-                            ]);
-
-                $produkId = $newProduk->id;
-            } else {
-                $produkId = $cekJenisPaket->id;
-            }
+            $cekJenisPaket->status = 'Ready';
+            $cekJenisPaket->save();
 
             foreach($serialNumber as $vsn) {
                 $newSN = new KiosSerialNumber();

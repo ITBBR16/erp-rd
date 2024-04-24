@@ -46,7 +46,7 @@
                                 {{ $history->ekspedisi->ekspedisi }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $history->penerimaan->tanggal_diterima }}
+                                {{ \Carbon\Carbon::parse($history->penerimaan->tanggal_diterima)->isoFormat('D MMMM YYYY') }}
                             </td>
                             <td class="px-6 py-2">
                                 <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $history->status }}</span>
