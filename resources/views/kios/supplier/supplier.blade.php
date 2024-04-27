@@ -1,7 +1,7 @@
 @extends('kios.layouts.main')
 
 @section('container')
-    <div class="flex text-3xl font-bold mb-8 text-gray-700 border-b border-gray-400 py-3 dark:text-gray-300">
+    <div class="flex text-3xl font-bold mb-6 text-gray-700 border-b border-gray-400 py-3 dark:text-gray-300">
         <span>Add New Supplier</span>
     </div>
 
@@ -34,8 +34,8 @@
             </button>
         </div>
     @endif
-    <div class="relative overflow-x-auto mt-6">
-        <div class="relative overflow-x-auto mt-6">
+    <div class="relative overflow-x-auto">
+        <div class="relative overflow-x-auto">
             <div class="flex items-center justify-between py-4">
                 <label for="table-search" class="sr-only">Search</label>
                 <div class="relative">

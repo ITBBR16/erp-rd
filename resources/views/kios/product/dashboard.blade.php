@@ -16,7 +16,7 @@
                                     <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Total Modal</span>
                                 </div>
                                 <div class="px-3 py-0">
-                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">Rp. {{ number_format($totalSales, 0, ',', '.') }}</div>
+                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">Rp. {{ number_format($totalmodal, 0, ',', '.') }}</div>
                                 </div>
                             </div>
                             <div class="absolute bottom-2 right-2">
@@ -44,7 +44,7 @@
                                     <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Total Produk Baru</span>
                                 </div>
                                 <div class="px-3 py-0">
-                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">66 Unit</div>
+                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">{{ $totalpbaru }} Unit</div>
                                 </div>
                             </div>
                             <div class="absolute bottom-2 right-2">
@@ -72,7 +72,7 @@
                                     <span class="flex whitespace-nowrap text-gray-700 dark:text-white">Total Produk Bekas</span>
                                 </div>
                                 <div class="px-3 py-0">
-                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">66 Unit</div>
+                                    <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">{{ $totalpbekas }} Unit</div>
                                 </div>
                             </div>
                             <div class="absolute bottom-2 right-2">
@@ -148,190 +148,54 @@
             <div id="statisticTabContent" class="border-t border-gray-200 dark:border-gray-600">
                 <div class="pt-4" id="statistic-produk" role="tabpanel" aria-labelledby="statistic-produk-tab">
                     <ul role="list" class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center min-w-0">
-                                    <img class="flex-shrink-0 w-10 h-10" src="/img/user.png" alt="imac image">
-                                    <div class="ml-3">
-                                        <p class="font-medium text-gray-900 truncate dark:text-white">
-                                            DJI MINI 4 PRO FLY MORE COMBO PLUS WITH RC2
-                                        </p>
+                        @foreach ($topproduct as $tp)
+                            <li class="py-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center min-w-0">
+                                        @php
+                                            $imageLink = $tp->produkKios->imageprodukbaru->link_drive ?? "";
+                                            preg_match('/\/file\/d\/(.*?)\/view/', $imageLink, $matches);
+                                            $fileId = isset($matches[1]) ? $matches[1] : null;
+                                        @endphp
+                                        @if (!empty($imageLink))
+                                            <img class="flex-shrink-0 w-10 h-10" src="https://drive.google.com/thumbnail?id={{ $fileId }}" alt="{{ $tp->produkKios->subjenis->produkjenis->jenis_produk }} {{ $tp->produkKios->subjenis->paket_penjualan }}">
+                                        @endif
+                                        <div class="ml-3">
+                                            <p class="font-medium text-gray-900 truncate dark:text-white">
+                                                {{ $tp->produkKios->subjenis->produkjenis->jenis_produk }} {{ $tp->produkKios->subjenis->paket_penjualan }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                        {{ $tp->total_penjualan }} Unit
                                     </div>
                                 </div>
-                                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    4 Unit
-                                </div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                            <div class="flex items-center min-w-0">
-                                <img class="flex-shrink-0 w-10 h-10" src="/img/user.png" alt="imac image">
-                                <div class="ml-3">
-                                <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    DJI MINI 4 PRO FLY MORE COMBO PLUS WITH RC2
-                                </p>
-                                </div>
-                            </div>
-                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                4 Unit
-                            </div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                            <div class="flex items-center min-w-0">
-                                <img class="flex-shrink-0 w-10 h-10" src="/img/user.png" alt="imac image">
-                                <div class="ml-3">
-                                <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    DJI MINI 4 PRO FLY MORE COMBO PLUS WITH RC2
-                                </p>
-                                </div>
-                            </div>
-                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                4 Unit
-                            </div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                            <div class="flex items-center min-w-0">
-                                <img class="flex-shrink-0 w-10 h-10" src="/img/user.png" alt="imac image">
-                                <div class="ml-3">
-                                <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    DJI MINI 4 PRO FLY MORE COMBO PLUS WITH RC2
-                                </p>
-                                </div>
-                            </div>
-                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                4 Unit
-                            </div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                            <div class="flex items-center min-w-0">
-                                <img class="flex-shrink-0 w-10 h-10" src="/img/user.png" alt="imac image">
-                                <div class="ml-3">
-                                <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    DJI MINI 4 PRO FLY MORE COMBO PLUS WITH RC2
-                                </p>
-                                </div>
-                            </div>
-                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                4 Unit
-                            </div>
-                            </div>
-                        </li>
-                        <li class="py-2">
-                            <div class="flex items-center justify-between">
-                            <div class="flex items-center min-w-0">
-                                <img class="flex-shrink-0 w-10 h-10" src="/img/user.png" alt="imac image">
-                                <div class="ml-3">
-                                <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    DJI MINI 4 PRO FLY MORE COMBO PLUS WITH RC2
-                                </p>
-                                </div>
-                            </div>
-                            <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                4 Unit
-                            </div>
-                            </div>
-                        </li>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="pt-4 hidden" id="statistic-customer" role="tabpanel" aria-labelledby="statistic-customer-tab">
                     <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-                        <li class="py-3">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0">
-                                    <img class="w-8 h-8 rounded-full" src="/img/user.png" alt="Neil image">
+                        @foreach ($topcustomer as $tc)
+                            <li class="py-3">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <img class="w-8 h-8 rounded-full" src="/img/user.png" alt="Neil image">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="font-medium text-gray-900 truncate dark:text-white">
+                                        {{ $tc->customer->first_name }} {{ $tc->customer->last_name }}
+                                        </p>
+                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                        {{ $tc->customer->email }}
+                                        </p>
+                                    </div>
+                                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                                        Rp. {{ number_format($tc->total_transaksi, 0, ',', '.') }}
+                                    </div>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    Daniel Imam
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                    danielimam@gmail.com
-                                    </p>
-                                </div>
-                                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    Rp. 66.666.000
-                                </div>
-                            </div>
-                        </li>
-                        <li class="py-3">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0">
-                                    <img class="w-8 h-8 rounded-full" src="/img/user.png" alt="Neil image">
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    Daniel Imam
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                    danielimam@gmail.com
-                                    </p>
-                                </div>
-                                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    Rp. 66.666.000
-                                </div>
-                            </div>
-                        </li>
-                        <li class="py-3">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0">
-                                    <img class="w-8 h-8 rounded-full" src="/img/user.png" alt="Neil image">
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    Daniel Imam
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                    danielimam@gmail.com
-                                    </p>
-                                </div>
-                                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    Rp. 66.666.000
-                                </div>
-                            </div>
-                        </li>
-                        <li class="py-3">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0">
-                                    <img class="w-8 h-8 rounded-full" src="/img/user.png" alt="Neil image">
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    Daniel Imam
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                    danielimam@gmail.com
-                                    </p>
-                                </div>
-                                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    Rp. 66.666.000
-                                </div>
-                            </div>
-                        </li>
-                        <li class="py-3">
-                            <div class="flex items-center space-x-4">
-                                <div class="flex-shrink-0">
-                                    <img class="w-8 h-8 rounded-full" src="/img/user.png" alt="Neil image">
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="font-medium text-gray-900 truncate dark:text-white">
-                                    Daniel Imam
-                                    </p>
-                                    <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                    danielimam@gmail.com
-                                    </p>
-                                </div>
-                                <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                    Rp. 66.666.000
-                                </div>
-                            </div>
-                        </li>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>

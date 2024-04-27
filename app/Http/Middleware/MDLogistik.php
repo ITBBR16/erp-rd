@@ -33,7 +33,7 @@ class MDLogistik
                 return $next($request);
             }
 
-            if($user->is_admin == 1 || $user->is_admin == 2 && $user->divisi_id == 6 || $user->is_admin == 3 && $user->divisi_id == 6){
+            if ($this->isAdminInDivision($user)) {
                 return $next($request);
             } else {
                 return back();
@@ -41,6 +41,11 @@ class MDLogistik
         }
 
         return $this->redirectAndForgetCookie();
+    }
+
+    private function isAdminInDivision($user)
+    {
+        return $user->is_admin == 1 || ($user->is_admin == 2 && $user->divisi_id == 6) || ($user->is_admin == 3 && $user->divisi_id == 6);
     }
 
     private function redirectAndForgetCookie()

@@ -193,9 +193,15 @@
                                 </li>
                                 @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
                                     <li>
-                                        <button type="button" data-modal-target="update-produk{{ $pd->id }}" data-modal-toggle="update-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <button type="button" data-modal-target="promo-produk{{ $pd->id }}" data-modal-toggle="promo-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base mr-3">sell</i>
+                                            <span class="whitespace-nowrap">Promo</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" {{-- data-modal-target="edit-produk{{ $pd->id }}" data-modal-toggle="edit-produk{{ $pd->id }}" --}} class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <i class="material-symbols-outlined text-base mr-3">edit</i>
-                                            <span class="whitespace-nowrap">Edit Produk</span>
+                                            <span class="whitespace-nowrap">Edit</span>
                                         </button>
                                     </li>
                                     <li>
@@ -224,7 +230,7 @@
 
     {{-- Modal Daftar Produk --}}
     @include('kios.product.modal.modal-view-daftar-produk')
-    @include('kios.product.modal.modal-edit-daftar-produk')
+    @include('kios.product.modal.modal-promo-daftar-produk')
     @include('kios.product.modal.modal-delete-daftar-produk')
     
 @endsection

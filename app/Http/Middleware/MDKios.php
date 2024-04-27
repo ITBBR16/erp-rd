@@ -6,7 +6,10 @@ use Closure;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Redirect;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class MDKios
 {
@@ -18,22 +21,22 @@ class MDKios
             return redirect('/kios/analisa/dashboard');
         }
 
-        if ($request->path() === 'login') {
-            return $next($request);
+        if ($this->shouldBypassAuthentication($request)) {
+            return redirect('/kios/analisa/dashboard');
         }
 
         if ($token) {
             try {
                 $user = JWTAuth::setToken($token)->authenticate();
-            } catch (\Exception $e) {
+            } catch (TokenExpiredException $e) {
+                return $this->redirectAndForgetCookie();
+            } catch (TokenInvalidException $e) {
+                return $this->redirectAndForgetCookie();
+            } catch (JWTException $e) {
                 return $this->redirectAndForgetCookie();
             }
 
-            if ($request->path() === 'login') {
-                return $next($request);
-            }
-
-            if ($user->is_admin == 1 || ($user->is_admin == 2 && $user->divisi_id == 1) || ($user->is_admin == 3 && $user->divisi_id == 1)) {
+            if ($this->isAdminOrHasPermission($user)) {
                 return $next($request);
             } else {
                 return back();
@@ -41,6 +44,16 @@ class MDKios
         }
 
         return $this->redirectAndForgetCookie();
+    }
+
+    private function shouldBypassAuthentication($request)
+    {
+        return $request->path() === 'login';
+    }
+
+    private function isAdminOrHasPermission($user)
+    {
+        return $user->is_admin == 1 || ($user->is_admin == 2 && $user->divisi_id == 1) || ($user->is_admin == 3 && $user->divisi_id == 1);
     }
 
     private function redirectAndForgetCookie()

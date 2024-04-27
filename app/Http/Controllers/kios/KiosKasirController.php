@@ -17,6 +17,7 @@ use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksiDetail;
 use App\Repositories\kios\KiosRepository;
+use Illuminate\Support\Facades\Http;
 
 class KiosKasirController extends Controller
 {
@@ -124,18 +125,40 @@ class KiosKasirController extends Controller
 
     public function autocomplete($jenisTransaksi)
     {
-        if ($jenisTransaksi == 'Baru') {
+        if ($jenisTransaksi == 'drone_baru') {
             // $items = ProdukSubJenis::with('produkjenis')->get();
             $items = KiosProduk::with('subjenis.produkjenis')->where('status', 'Ready')->orWhere('status', 'Promo')->get();
-        } elseif ($jenisTransaksi == 'Bekas') {
+        } elseif ($jenisTransaksi == 'drone_bekas') {
             $items = KiosProdukSecond::with('subjenis.produkjenis')->where('status', 'Ready')->get();
+        } elseif ($jenisTransaksi == 'part_baru' || $jenisTransaksi == 'part_bekas') {
+            
+            $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
+            $response = Http::post($urlApiGudang, [
+                'status' => $jenisTransaksi
+            ]);
+
+            $data = $response->json();
+            $resultData = [];
+            foreach ($data['data'] as $dataNeed) {
+                $neededData = [
+                    'sku' => $dataNeed[0],
+                    'nama_part' => $dataNeed[2],
+                    'srp_part' => $dataNeed[8],
+                ];
+                $resultData[] = $neededData;
+            }
+
+            $items = $resultData;
+
         }
+
         return response()->json($items);
+
     }
 
     public function getSerialNumber($jenisTransaksi, $id)
     {
-        if($jenisTransaksi == 'Baru') {
+        if($jenisTransaksi == 'drone_baru') {
             $produkId = KiosProduk::where('sub_jenis_id', $id)->value('id');
             $dataProduk = KiosProduk::where('sub_jenis_id', $id)->first();
             if ($dataProduk->status === 'Promo') {
@@ -145,7 +168,7 @@ class KiosKasirController extends Controller
             }
     
             $dataSN = KiosSerialNumber::where('produk_id', $produkId)->where('status', 'Ready')->get();
-        } elseif($jenisTransaksi == 'Bekas') {
+        } elseif($jenisTransaksi == 'drone_bekas') {
             $nilai = KiosProdukSecond::where('sub_jenis_id', $id)->value('srp');
             $dataSN = KiosProdukSecond::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
         }

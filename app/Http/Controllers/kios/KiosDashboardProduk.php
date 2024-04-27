@@ -4,7 +4,10 @@ namespace App\Http\Controllers\kios;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosProdukSecond;
+use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksi;
+use App\Models\kios\KiosTransaksiDetail;
 use App\Repositories\kios\KiosRepository;
 use Carbon\Carbon;
 
@@ -18,8 +21,14 @@ class KiosDashboardProduk extends Controller
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $totalSalesThisWeek = array_sum($this->thisWeekSales());
         $totalSalesLastWeek = array_sum($this->lastWeekSales());
+        $totalModal = $this->getTotalModal();
+        $totalPbaru = $this->getTotalProdukBaru();
+        $totalPbekas = $this->getTotalProdukBekas();
+        $topProduct = $this->topProductThisMonth();
+        $topCustomer = $this->topCustomerThisMonth();
 
         $percentSales = ($totalSalesLastWeek != 0) ? (($totalSalesThisWeek - $totalSalesLastWeek) / $totalSalesLastWeek) * 100 : 0;
+        $formattedPercentSales = number_format($percentSales, 2);
 
         return view('kios.product.dashboard', [
             'title' => 'Dashboard Produk',
@@ -29,7 +38,12 @@ class KiosDashboardProduk extends Controller
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'totalSales' => $totalSalesThisWeek,
-            'percentSales' => $percentSales,
+            'percentSales' => $formattedPercentSales,
+            'totalmodal' => $totalModal,
+            'totalpbaru' => $totalPbaru,
+            'totalpbekas' => $totalPbekas,
+            'topproduct' => $topProduct,
+            'topcustomer' => $topCustomer,
         ]);
     }
 
@@ -40,7 +54,7 @@ class KiosDashboardProduk extends Controller
 
         return response()->json([
             'this_week' => $thisWeekSales,
-            'last_week' => $lastWeekSales
+            'last_week' => $lastWeekSales,
         ]);
     }
 
@@ -67,13 +81,12 @@ class KiosDashboardProduk extends Controller
 
     private function lastWeekSales()
     {
-        $lastWeekStartDate = Carbon::now()->subWeek()->startOfWeek();
-        $lastWeekEndDate = Carbon::now()->subWeek()->endOfWeek();
+        $lastWeekStartDate = Carbon::now()->subWeek();;
         $salesLastWeek = [];
 
-        for ($i = 13; $i >= 7; $i--) {
-            $date = $lastWeekStartDate->copy()->addDays($i - 7);
-            $sales = KiosTransaksi::whereBetween('created_at', [$date, $lastWeekEndDate])
+        for ($i = 6; $i >= 0; $i--) {
+            $date = $lastWeekStartDate->copy()->subDays($i);
+            $sales = KiosTransaksi::whereDate('created_at', $date)
                 ->get()
                 ->sum(function ($transaction) {
                     return $transaction->detailtransaksi->sum(function ($detail) {
@@ -84,6 +97,61 @@ class KiosDashboardProduk extends Controller
         }
 
         return $salesLastWeek;
+    }
+
+    private function getTotalModal()
+    {
+        $totalModal = KiosSerialNumber::where('status', 'Ready')
+                      ->get()
+                      ->sum(function ($total) {
+                            return $total->validasiproduk->orderLists->nilai;
+                      });
+
+        return $totalModal;
+    }
+
+    private function getTotalProdukBaru()
+    {
+        $totalProdukBaru = KiosSerialNumber::where('status', 'Ready')->count();
+        return $totalProdukBaru;
+    }
+
+    private function getTotalProdukBekas()
+    {
+        $totalProdukBekas = KiosProdukSecond::where('status', 'Ready')->count();
+        return $totalProdukBekas;
+    }
+
+    private function topProductThisMonth()
+    {
+        $thisYear = date('Y');
+        $thisMonth = date('m');
+
+        $topProducts = KiosTransaksiDetail::select('kios_produk_id')
+                        ->selectRaw('COUNT(*) as total_penjualan')
+                        ->whereRaw('YEAR(created_at) = ? AND MONTH(created_at) = ?', [$thisYear, $thisMonth])
+                        ->groupBy('kios_produk_id')
+                        ->orderByDesc('total_penjualan')
+                        ->limit(5)
+                        ->get();
+
+        return $topProducts;
+    }
+
+    private function topCustomerThisMonth()
+    {
+        $thisYear = date('Y');
+        $thisMonth = date('m');
+
+        $topCustomer = KiosTransaksi::select('customer_id')
+                       ->selectRaw('SUM(total_harga + tax - discount) as total_transaksi')
+                       ->whereRaw('YEAR(created_at) = ? AND MONTH(created_at) = ?', [$thisYear, $thisMonth])
+                       ->groupBy('customer_id')
+                       ->orderByDesc('total_transaksi')
+                       ->limit(5)
+                       ->get();
+
+        return $topCustomer;
     }
 
 }

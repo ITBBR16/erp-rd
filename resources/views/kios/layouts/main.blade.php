@@ -16,10 +16,10 @@
                 body * {
                     visibility: hidden;
                 }
-                #print-invoice, #print-invoice * {
+                #print-invoice-kios, #print-invoice-kios * {
                     visibility: visible;
                 }
-                #print-invoice {
+                #print-invoice-kios {
                     padding: 0px;
                     margin-top: -70px;
                     margin-left: -50px;

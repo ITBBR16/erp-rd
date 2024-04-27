@@ -100,8 +100,10 @@ $(document).ready(function(){
                 <label for="jenis-transaksi-${itemCount}"></label>
                 <select name="jenis_transaksi[]" id="jenis-transaksi-${itemCount}" data-id="${itemCount}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     <option value="" hidden>-- Pilih Jenis Transaksi --</option>
-                    <option value="Baru">Drone Baru</option>
-                    <option value="Bekas">Drone Bekas</option>
+                    <option value="drone_baru">Drone Baru</option>
+                    <option value="drone_bekas">Drone Bekas</option>
+                    <option value="part_baru">Part Baru</option>
+                    <option value="part_bekas">Part Bekas</option>
                 </select>
             </td>
             <td class="px-4 py-4">
@@ -135,40 +137,80 @@ $(document).ready(function(){
     $(document).on('focus', '.item_name', function () {
         let itemNameId = $(this).data("id");
         let jenisTransaksi = $('#jenis-transaksi-'+itemNameId).val();
-        console.log(jenisTransaksi);
-        $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
-            $("#item-name-"+itemNameId).autocomplete({
-                source: function(request, response) {
-                    
-                    var term = request.term.toLowerCase();
-                    var filteredData = data.filter(function(item) {
-                        return (item.subjenis.produkjenis.jenis_produk.toLowerCase().indexOf(term) !== -1) || 
-                                (item.subjenis.paket_penjualan.toLowerCase().indexOf(term) !== -1);
-                    });
 
-                    var formattedData = filteredData.map(function(item) {
-                        return {
-                            label: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
-                            value: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
-                            id: item.subjenis.id
-                        };
-                    });
+        if (jenisTransaksi === 'part_baru' || jenisTransaksi === 'part_bekas') {
+
+            $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
+                console.table(data);
+                $("#item-name-"+itemNameId).autocomplete({
+                    source: function(request, response) {
+                        
+                        var term = request.term.toLowerCase();
+                        var filteredData = data.filter(function (part) {
+                            return(part.nama_part.toLowerCase().indexOf(term) !== -1)
+                        });
+
+                        var formattedData = filteredData.map(function (part) {
+                            return {
+                                label: part.nama_part,
+                                value: part.nama_part,
+                                id: part.sku
+                            };
+                        });
+
+                        response(formattedData);
+                    },
+                    autoFocus: true,
+                    select: function(event, ui) {
+                        var selectedValue = ui.item.value;
+                        var selectedLabel = ui.item.label;
+                        var selectedId = ui.item.id;
     
-                    response(formattedData);
-                },
-                autoFocus: true,
-                select: function(event, ui) {
-                    var selectedValue = ui.item.value;
-                    var selectedLabel = ui.item.label;
-                    var selectedId = ui.item.id;
+                        $("#item-id-"+itemNameId).val(selectedId);
+                    }
+                }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 overflow-y-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
+    
+            }).fail(function(error) {
+                console.error('Error:', error);
+            });
 
-                    $("#item-id-"+itemNameId).val(selectedId);
-                }
-            }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
+        } else {
 
-        }).fail(function(error) {
-            console.error('Error:', error);
-        });
+            $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
+                $("#item-name-"+itemNameId).autocomplete({
+                    source: function(request, response) {
+                        
+                        var term = request.term.toLowerCase();
+                        var filteredData = data.filter(function(item) {
+                            return (item.subjenis.produkjenis.jenis_produk.toLowerCase().indexOf(term) !== -1) || 
+                                    (item.subjenis.paket_penjualan.toLowerCase().indexOf(term) !== -1);
+                        });
+    
+                        var formattedData = filteredData.map(function(item) {
+                            return {
+                                label: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
+                                value: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
+                                id: item.subjenis.id
+                            };
+                        });
+        
+                        response(formattedData);
+                    },
+                    autoFocus: true,
+                    select: function(event, ui) {
+                        var selectedValue = ui.item.value;
+                        var selectedLabel = ui.item.label;
+                        var selectedId = ui.item.id;
+    
+                        $("#item-id-"+itemNameId).val(selectedId);
+                    }
+                }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
+    
+            }).fail(function(error) {
+                console.error('Error:', error);
+            });
+
+        }
     });
 
     $(document).on('change', '.item_name', function () {

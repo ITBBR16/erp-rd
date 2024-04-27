@@ -4,6 +4,7 @@ namespace App\Models\customer;
 
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosOrderSecond;
+use App\Models\kios\KiosTransaksi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +24,11 @@ class Customer extends Model
     public function dailyrecap()
     {
         return $this->hasMany(KiosDailyRecap::class);
+    }
+
+    public function transaksiKios()
+    {
+        return $this->hasMany(KiosTransaksi::class);
     }
 
 }
