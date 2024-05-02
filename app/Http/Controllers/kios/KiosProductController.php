@@ -8,7 +8,9 @@ use Termwind\Components\Raw;
 use App\Models\kios\KiosProduk;
 use App\Models\produk\ProdukType;
 use App\Http\Controllers\Controller;
+use App\Models\produk\ProdukJenis;
 use App\Models\produk\ProdukKategori;
+use App\Models\produk\ProdukKelengkapan;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 
@@ -46,6 +48,8 @@ class KiosProductController extends Controller
 
         $kategori = ProdukKategori::all();
         $types = ProdukType::all();
+        $jenisProduk = ProdukJenis::all();
+        $kelengkapans = ProdukKelengkapan::all();
 
         if ($request->ajax()) {
             return response()->json(view('kios.product.product_table', compact('produk'))->render());
@@ -61,6 +65,8 @@ class KiosProductController extends Controller
             'produks' => $produk,
             'kategoriProduk' => $kategori,
             'typeProduks' => $types,
+            'jenisproduks' => $jenisProduk,
+            'kelengkapans' => $kelengkapans,
         ]);
     }
 
@@ -111,6 +117,39 @@ class KiosProductController extends Controller
         $productSecond = KiosProduk::findOrFail($productSecondId);
         $productSecond->srp = $newSrp;
         $productSecond->save();
+    }
+
+    public function updateProdukBaru(Request $request)
+    {
+        try {
+            $editJenisProduk = $request->input('edit_jenis_produk_baru');
+            $editPaketPenjualanId = $request->input('edit_paket_penjualan_produk_baru_id');
+            $editPaketPenjualan = $request->input('edit_paket_penjualan_produk_baru');
+            $editBeratProduk = $request->input('berat_edit_produk_baru');
+            $editPanjangProduk = $request->input('length');
+            $editLebarProduk = $request->input('width');
+            $editTinggiProduk = $request->input('height');
+    
+            $editKelengkapanProduk = $request->input('edit_kelengkapan_produk_baru');
+            $editQuantityProduk = $request->input('edit_quantity_produk_baru');
+            $subJenisKelengkapan = ProdukSubJenis::findOrFail($editPaketPenjualanId);
+    
+            $subJenisKelengkapan->update([
+                'jenis_id' => $editJenisProduk,
+                'paket_penjualan' => $editPaketPenjualan,
+                'berat' => $editBeratProduk,
+                'panjang' => $editPanjangProduk,
+                'lebar' => $editLebarProduk,
+                'tinggi' => $editTinggiProduk,
+            ]);
+            
+            $subJenisKelengkapan->kelengkapans()->sync([$editKelengkapanProduk => ['quantity' => $editQuantityProduk]]);
+    
+            return back()->with('success', 'Success update detail product.');
+
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function getPaketPenjualan($paketPenjualanId)

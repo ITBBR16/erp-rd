@@ -21,7 +21,8 @@ class ProdukSubJenis extends Model
     protected $guarded = ['id'];
 
     public function kelengkapans(){
-        return $this->belongsToMany(ProdukKelengkapan::class, 'produk_sub_kelengkapan');
+        return $this->belongsToMany(ProdukKelengkapan::class, 'produk_sub_kelengkapan')
+                    ->withPivot('quantity');
     }
 
     public function produkjenis()

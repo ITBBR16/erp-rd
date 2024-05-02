@@ -3,12 +3,51 @@ $(document).ready(function () {
     const hargaPromo = $('.harga_promo');
     const srpDPS = $('.srp-daftar-produk-second');
     const srpDPB = $('.update-srp-baru');
+    const addEditKelengkapanBaru = $('#add-edit-kelengkapan-produk-baru');
     
     function formatRupiah(angka) {
         return accounting.formatMoney(angka, "", 0, ".", ",");
     }
 
-    // Daftar produk baru
+    // Add & Delete kelengkapan
+    addEditKelengkapanBaru.on("click", function() {
+        var countContainerEdit = $(".container-data-kelengkapan-produk-baru").length + 1;
+        let addFormKelengkapan = `
+            <div id="container-data-kelengkapan-produk-baru-${countContainerEdit}" class="container-data-kelengkapan-produk-baru grid grid-cols-4 mb-4 gap-4">
+                <div class="relative col-span-2 w-full">
+                    <select name="edit_kelengkapan_produk_baru[]" id="edit-kelengkapan-produk-bar${countContainerEdit}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                        <option value="" hidden>Kelengkapan Produk</option>`;
+                        dataKelengkapanProdukBaru.forEach(function(item) {
+                            addFormKelengkapan += `<option value="${item.id}" class="dark:bg-gray-700">${item.kelengkapan}</option>`
+                        });
+                        addFormKelengkapan += `
+                    </select>
+                </div>
+                <div class="relative w-full">
+                    <input type="text" name="edit_quantity_produk_baru[]" id="edit-quantity-produk-baru${countContainerEdit}" class="edit-quantity-produk-baru block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                    <label for="edit-quantity-produk-baru${countContainerEdit}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
+                </div>
+                <div class="flex justify-center items-center">
+                    <button type="button" class="remove-edit-kelengkapan-produk-baru" data-id="${countContainerEdit}">
+                        <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                    </button>
+                </div>
+            </div>
+        `
+
+        $('#edit-produk-baru').append(addFormKelengkapan);
+    });
+
+    $(document).on("click", ".remove-edit-kelengkapan-produk-baru", function() {
+        let removeId = $(this).data("id");
+        $("#container-data-kelengkapan-produk-baru-"+removeId).remove();
+    });
+
+    $(document).on('input', '.edit-quantity-produk-baru', function() {
+        $(this).val($(this).val().replace(/[^\d]/g, ''));
+    });
+
+    // Change to rupiah list produk baru
     hargaJual.on('input', function () {
         var srpValue = $(this).val();
         srpValue = srpValue.replace(/[^\d]/g, '');
@@ -30,6 +69,7 @@ $(document).ready(function () {
         $(this).val(formatRupiah(parsedSrpBaru));
     });
 
+    // Change SRP produk baru
     $('input[id^="update-srp-baru-"]').on('input', function() {
         var productId = $(this).data('id');
         var srp = $(this).val();
@@ -55,6 +95,7 @@ $(document).ready(function () {
         });
     });
 
+    // Filter produk baru
     function showFilterData(id, text) {
         var containerFilter = $('#container-filter');
         let kategoriFilter = `
