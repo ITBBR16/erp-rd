@@ -9,6 +9,7 @@ use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
 use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
+use App\Models\customer\CustomerInfoPerusahaan;
 use App\Models\kios\KiosRecapKeperluan;
 use App\Models\kios\KiosRecapStatus;
 use App\Models\produk\ProdukStatus;
@@ -31,6 +32,7 @@ class KiosDailyRecapController extends Controller
         $dailyRecap = KiosDailyRecap::orderByDesc('id')->get();
         $recapStatus = KiosRecapStatus::all();
         $recapKeperluan = KiosRecapKeperluan::all();
+        $infoPerusahaan = CustomerInfoPerusahaan::all();
 
         return view('kios.main.recap', [
             'title' => 'Daily Recap',
@@ -46,6 +48,7 @@ class KiosDailyRecapController extends Controller
             'dailyRecap' => $dailyRecap,
             'statusrecap' => $recapStatus,
             'keperluanrecap' => $recapKeperluan,
+            'infoPerusahaan' => $infoPerusahaan,
         ]);
     }
 

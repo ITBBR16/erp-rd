@@ -31,4 +31,9 @@ class Customer extends Model
         return $this->hasMany(KiosTransaksi::class);
     }
 
+    public function infoperusahaan()
+    {
+        return $this->belongsTo(CustomerInfoPerusahaan::class);
+    }
+
 }

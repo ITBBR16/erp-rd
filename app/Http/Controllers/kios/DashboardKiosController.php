@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\kios;
 
 use Carbon\Carbon;
-use App\Http\Controllers\Controller;
 use App\Models\customer\Customer;
+use App\Models\kios\KiosTransaksi;
+use App\Http\Controllers\Controller;
 use App\Models\kios\KiosTransaksiDetail;
 use App\Repositories\kios\KiosRepository;
+use Illuminate\Http\Client\ResponseSequence;
 
 class DashboardKiosController extends Controller
 {
@@ -18,58 +20,27 @@ class DashboardKiosController extends Controller
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $startDate = Carbon::now()->subDays(30);
         $endDate = Carbon::now();
-        $endDatePrevious = $startDate->copy()->subDay();
-        $startDatePrevious = $endDatePrevious->copy()->subDays(30);
 
         // Count Profit
+        $profitThisMonth = array_sum($this->thisMonthSales());
+        $profitPeriodeSebelumnya = array_sum($this->periodeSebelumnya());
+        $totalProfit = $profitThisMonth - $profitPeriodeSebelumnya;
+        $profitType = ($totalProfit >= 0) ? 'Keuntungan' : 'Kerugian';
+        $profitPercentage = ($totalProfit > 0) ? ($totalProfit / max(1, $profitPeriodeSebelumnya)) * 100 : 0;
+        $profitPercentage = min($profitPercentage, 100);
+        $formattedPercentSales = number_format($profitPercentage, 2);
+
+        // Drone Terjual
         $transaksiTerbaru = KiosTransaksiDetail::with('serialnumbers.validasiproduk.orderLists')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->get();
-            
-        $transaksiCompare = KiosTransaksiDetail::with('serialnumbers.validasiproduk.orderLists')
-            ->whereBetween('created_at', [$startDatePrevious, $endDatePrevious])
-            ->get();
-
-        $totalModal = 0;
-        $totalPenjualan = 0;
-
-        foreach ($transaksiTerbaru as $detail) {
-            $totalModal += $detail->serialnumbers->validasiproduk->orderLists->nilai;
-            $totalPenjualan += $detail->harga_jual;
-        }
-
-        $totalProfit = $totalPenjualan - $totalModal;
-
-        if ($totalProfit >= 0) {
-            $profitType = 'Keuntungan';
-        } elseif ($totalProfit < 0) {
-            $profitType = 'Kerugian';
-        }
-
-        if ($totalPenjualan > 0) {
-            $profitPercentage = round(($totalProfit / $totalPenjualan) * 100, 2);
-        } else {
-            $profitPercentage = 0;
-        }
-
-        // Drone Terjual
         $droneLaku = $transaksiTerbaru->count();
 
         // Count Customer Growth
         $newCustomer = Customer::whereBetween('created_at', [$startDate, $endDate])->count();
         $initialCustomer = Customer::where('created_at', '<', $startDate)->count();
-
-        if($newCustomer >= $initialCustomer) {
-            $typeGrowth = 'Bertambah';
-        } else {
-            $typeGrowth = 'Berkurang';
-        }
-
-        if ($initialCustomer > 0) {
-            $growthPercentage = round(($newCustomer / $initialCustomer) * 100, 2);
-        } else {
-            $growthPercentage = 0;
-        }
+        $typeGrowth = ($newCustomer >= $initialCustomer) ? 'Bertambah' : 'Berkurang';
+        $growthPercentage = ($initialCustomer > 0) ? (($newCustomer - $initialCustomer) / $initialCustomer) * 100 : 0;
 
         return view('kios.main.index', [
             'title' => 'Dashboard Analisa',
@@ -79,7 +50,7 @@ class DashboardKiosController extends Controller
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'totalProfit' => $totalProfit,
-            'percentage' => $profitPercentage,
+            'percentage' => $formattedPercentSales,
             'profitType' => $profitType,
             'customerPercentage' => $growthPercentage,
             'newCustomer' => $newCustomer,
@@ -87,4 +58,63 @@ class DashboardKiosController extends Controller
             'droneLaku' => $droneLaku,
         ]);
     }
+
+    public function analisaChart()
+    {
+        $bulanIni = $this->thisMonthSales();
+        $periodeSebelumnya = $this->periodeSebelumnya();
+
+        return response()->json([
+            'bulan_ini' => $bulanIni,
+            'periode_sebelumnya' => $periodeSebelumnya
+        ]);
+    }
+
+    private function thisMonthSales()
+    {
+        $today = Carbon::now();
+        $salesThisMonth = [];
+
+        $daysInMonth = $today->daysInMonth;
+
+        for ($i = 1; $i <= $daysInMonth; $i++) {
+            $date = $today->copy()->startOfMonth()->addDays($i - 1);
+            $sales = KiosTransaksi::whereDate('created_at', $date)
+                ->get()
+                ->sum(function ($transaction) {
+                    return $transaction->detailtransaksi->sum(function ($detail) {
+                        return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual) - $detail->serialnumbers->validasiproduk->orderLists->nilai;
+                    }) + $transaction->tax - $transaction->discount;
+                });
+
+            array_push($salesThisMonth, $sales);
+        }
+
+        return $salesThisMonth;
+    }
+
+    private function periodeSebelumnya()
+    {
+        $today = Carbon::now();
+        $lastYear = $today->copy()->subYear();
+        $salesLastYearThisMonth = [];
+
+        $daysInMonth = $lastYear->daysInMonth;
+
+        for ($i = 1; $i <= $daysInMonth; $i++) {
+            $date = $lastYear->copy()->startOfMonth()->addDays($i - 1);
+            $sales = KiosTransaksi::whereDate('created_at', $date)
+                ->get()
+                ->sum(function ($transaction) {
+                    return $transaction->detailtransaksi->sum(function ($detail) {
+                        return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual) - $detail->serialnumbers->validasiproduk->orderLists->nilai;
+                    }) + $transaction->tax - $transaction->discount;
+                });
+
+            array_push($salesLastYearThisMonth, $sales);
+        }
+
+        return $salesLastYearThisMonth;
+    }
+
 }

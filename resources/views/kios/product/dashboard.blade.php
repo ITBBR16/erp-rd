@@ -109,7 +109,7 @@
                     </div>
                 @endif
             </div>
-            <div id="main-chart" style="min-height: 385px;">
+            <div style="min-height: 385px;">
                 <div id="sales-chart" style="height: 420;" class="w-full"></div>
             </div>
             <div class="flex items-center justify-end pt-3 mt-5 border-t border-gray-200 sm:pt-6 dark:border-gray-700">

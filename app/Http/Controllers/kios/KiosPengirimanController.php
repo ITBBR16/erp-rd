@@ -40,11 +40,9 @@ class KiosPengirimanController extends Controller
     {
         try{
             $pengiriman = PengirimanEkspedisi::findOrFail($id);
-            $tanggal = $request->input('tanggal_dikirim');
-            $tanggalKirim = Carbon::parse($tanggal)->format('d/m/Y');
             $statusOrder = $request->input('status_order');
             $orderId = $request->input('order_id');
-            
+
             if($statusOrder == 'Baru') {
                 $order = KiosOrder::findOrFail($orderId);
             } else {
@@ -55,9 +53,14 @@ class KiosPengirimanController extends Controller
                 'ekspedisi_id' => $request->input('ekspedisi'),
                 'no_resi' => $request->input('no_resi'),
                 'no_faktur' => $request->input('no_faktur'),
-                'tanggal_kirim' => $tanggalKirim,
                 'status' => 'Incoming'
             ];
+
+            foreach ($dataUpdate as $key => $value) {
+                if (!empty($value)) {
+                    $pengiriman->{$key} = $value;
+                }
+            }
 
             $order->status = 'Incoming';
             $order->save();

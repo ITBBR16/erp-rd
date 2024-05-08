@@ -140,7 +140,7 @@ class KiosShopController extends Controller
             $order = KiosOrder::findOrFail($id);
             $order->status = 'Tervalidasi';
             $order->save();
-            $message = "List Purchase " . $supplierName . " :\n\n";
+            $message = "Fix List Purchase " . $supplierName . " :\n\n";
 
             $quantities = $request->input('quantity');
             $paketPenjualan = $request->input('jenis_paket');
@@ -208,6 +208,7 @@ class KiosShopController extends Controller
                 'status' => 'Unpaid',
             ]);
 
+            $message .= "\nTotal Nominal : Rp. " . number_format($totalNilai, 0, ',', '.');
             $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
             $messageGroupSupplier = [
                 'no_telp' => '6285156519066',

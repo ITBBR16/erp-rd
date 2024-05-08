@@ -48,8 +48,12 @@ $(document).ready(function(){
 
         $("#kasir-container tr").each(function() {
             var jenisTransaksiKasir = $(this).find("select[name='jenis_transaksi[]'] option:selected").text();
-            var resultKeteranganProduk = (jenisTransaksiKasir === 'Baru') ? 'Unit Baru, Garansi 1 Tahun Serial Number' : 'Unit Second, Garansi 6 Bulan Serial Number'
-            var itemName = $(this).find("[name='item_name[]']").val();
+            var resultKeteranganProduk = (jenisTransaksiKasir === 'Drone Baru') ? 
+                                            'Unit Baru, Garansi 1 Tahun Serial Number' : 
+                                                ((jenisTransaksiKasir === 'Drone Bekas') 
+                                                    ? 'Unit Second, Garansi 6 Bulan Serial Number' : '');
+            console.log(jenisTransaksiKasir);
+                                                    var itemName = $(this).find("[name='item_name[]']").val();
             var kasirSn = $(this).find("select[name='kasir_sn[]'] option:selected").text();
             var price = $(this).find("[name='kasir_harga[]']").val();
             var totalRupiah = formatRupiah(parseFloat(price.replace(/\D/g, '')));
@@ -168,7 +172,7 @@ $(document).ready(function(){
     
                         $("#item-id-"+itemNameId).val(selectedId);
                     }
-                }).autocomplete("widget").addClass("max-h-60 overflow-y-auto cursor-pointer px-2 w-64 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
+                }).autocomplete("widget").addClass("max-h-60 max-w-64 overflow-y-auto cursor-pointer px-2 w-64 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
     
             }).fail(function(error) {
                 console.error('Error:', error);
@@ -204,7 +208,7 @@ $(document).ready(function(){
     
                         $("#item-id-"+itemNameId).val(selectedId);
                     }
-                }).autocomplete("widget").addClass("max-h-60 overflow-y-auto cursor-pointer px-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
+                }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
     
             }).fail(function(error) {
                 console.error('Error:', error);
@@ -318,14 +322,7 @@ $(document).ready(function(){
         return accounting.formatMoney(angka, "", 0, ".", ",");
     }
     
-    $(document).on("input", "#kasir-discount", function () {
-        var inputValue = $(this).val();
-        inputValue = inputValue.replace(/[^\d]/g, '');
-        var parsedValue = parseInt(inputValue, 10);
-        $(this).val(formatAngka(parsedValue));
-    });
-    
-    $(document).on("input", "#kasir-ongkir", function () {
+    $(document).on("input", ".kasir-formated-rupiah", function () {
         var inputValue = $(this).val();
         inputValue = inputValue.replace(/[^\d]/g, '');
         var parsedValue = parseInt(inputValue, 10);

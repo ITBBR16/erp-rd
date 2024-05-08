@@ -277,8 +277,8 @@
             </button>
         </div>
         {{-- Chart --}}
-        <div class="bg-white border shadow-md h-64 rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
-            
+        <div class="bg-white p-2 border shadow-md h-64 rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600" style="min-height: 385px;">
+            <div id="analisa-profit-chart" style="height: 420;" class="w-full"></div>
         </div>
     </div>
 @endsection

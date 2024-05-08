@@ -100,7 +100,7 @@ class KiosPaymentController extends Controller
                         'divisi_id' => $divisiId,
                         'order_id' => $orderId,
                         'status_order' => 'Baru',
-                        'status' => 'Unprocess',
+                        'status' => 'Belum Dikirim',
                     ]);
                 } else {
                     $orderSecond = KiosOrderSecond::findOrFail($orderId);

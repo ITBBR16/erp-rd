@@ -24,7 +24,9 @@ use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\kios\KiosBuatPaketSecondController;
 use App\Http\Controllers\kios\KiosPenerimaanProdukController;
 use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\kios\DashboardTechnicalSupportController;
 use App\Http\Controllers\kios\KiosFilterProdukSecondController;
+use App\Http\Controllers\kios\KiosInputTSController;
 use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\kios\KiosPengecekkanSecondController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
@@ -51,6 +53,7 @@ Route::middleware('kios')->group(function () {
 
         Route::prefix('/analisa')->group(function () {
             Route::get('/dashboard', [DashboardKiosController::class, 'index']);
+            Route::get('/analisa-chart', [DashboardKiosController::class, 'analisaChart']);
         });
 
         Route::prefix('/customer')->group(function () {
@@ -119,7 +122,7 @@ Route::middleware('kios')->group(function () {
             Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
             Route::get('/getOrderList/{orderId}', [KiosPengecekkanProdukBaruController::class, 'getOrderList']);
             Route::get('/getQtyOrderList/{orderListId}', [KiosPengecekkanProdukBaruController::class, 'getQtyOrderList']);
-            
+
             Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);
         });
 
@@ -131,6 +134,12 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
                 Route::post('/generate-pdf', 'downloadInvoice');
             });
+        });
+
+        Route::prefix('/technical-support')->group(function () {
+            Route::get('/dashboard', [DashboardTechnicalSupportController::class, 'index']);
+
+            Route::resource('/input', KiosInputTSController::class);
         });
 
     });

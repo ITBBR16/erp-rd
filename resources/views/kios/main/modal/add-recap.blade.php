@@ -19,7 +19,7 @@
                             <select name="nama_customer" id="nama_customer" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nama_customer') border-red-600 dark:border-red-500 @enderror" required>
                                 <option value="" hidden>-- Nama Customer --</option>
                                 @foreach ($customer as $cs)
-                                <option value="{{ $cs->id }}" class="dark:bg-gray-700">{{ $cs->first_name }} {{ $cs->last_name }}</option>
+                                    <option value="{{ $cs->id }}" class="dark:bg-gray-700">{{ $cs->first_name }} {{ $cs->last_name }}</option>
                                 @endforeach
                             </select>
                             @error('nama_customer')

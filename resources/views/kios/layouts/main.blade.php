@@ -42,6 +42,8 @@
             @include('kios.layouts.sidebarProduct')
         @elseif (Request::is('kios/kasir/*'))
             @include('kios.layouts.sidebarKasir')
+        @elseif (Request::is('kios/technical-support/*'))
+            @include('kios.layouts.sidebarTechnicalSupport')
         @endif
 
         <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-y-scroll scrollbar-none">
@@ -73,5 +75,6 @@
         <script src="/js/qc-second.js"></script>
         <script src="/js/filter-second.js"></script>
         <script src="/js/dashboard-produk.js"></script>
+        <script src="/js/chart-analisa.js"></script>
     </body>
 </html>
