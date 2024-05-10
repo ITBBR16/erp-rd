@@ -4,6 +4,7 @@ namespace App\Models\kios;
 
 use App\Models\customer\Customer;
 use App\Models\employee\Employee;
+use App\Models\produk\ProdukJenis;
 use App\Models\produk\ProdukStatus;
 use App\Models\produk\ProdukSubJenis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,24 +28,19 @@ class KiosDailyRecap extends Model
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
-    public function subjenisproduk()
+    public function produkjenis()
     {
-        return $this->belongsTo(ProdukSubJenis::class, 'sub_jenis_id');
-    }
-
-    public function produkstatus()
-    {
-        return $this->belongsTo(ProdukStatus::class, 'jenis_id');
-    }
-
-    public function recapstatus()
-    {
-        return $this->belongsTo(KiosRecapStatus::class, 'status_id');
+        return $this->belongsTo(ProdukJenis::class, 'jenis_produk_id');
     }
 
     public function keperluan()
     {
         return $this->belongsTo(KiosRecapKeperluan::class, 'keperluan_id');
+    }
+
+    public function kategoripermasalahan()
+    {
+        return $this->belongsTo(KiosKategoriPermasalahan::class, 'kategori_permasalahan_id');
     }
 
 }

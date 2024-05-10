@@ -10,10 +10,11 @@ use App\Models\customer\Customer;
 use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
 use App\Models\customer\CustomerInfoPerusahaan;
+use App\Models\kios\KiosKategoriPermasalahan;
 use App\Models\kios\KiosRecapKeperluan;
+use App\Models\kios\KiosRecapPermasalahan;
 use App\Models\kios\KiosRecapStatus;
-use App\Models\produk\ProdukStatus;
-use App\Models\produk\ProdukSubJenis;
+use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\kios\KiosRepository;
 
@@ -27,12 +28,12 @@ class KiosDailyRecapController extends Controller
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $provinsi = Provinsi::all();
         $customer = Customer::all();
-        $statusProduk = ProdukStatus::all();
-        $subjenisProduk = ProdukSubJenis::all();
         $dailyRecap = KiosDailyRecap::orderByDesc('id')->get();
-        $recapStatus = KiosRecapStatus::all();
-        $recapKeperluan = KiosRecapKeperluan::all();
+        $produkJenis = ProdukJenis::all();
         $infoPerusahaan = CustomerInfoPerusahaan::all();
+        $recapKeperluan = KiosRecapKeperluan::all();
+        $kategoriPermasalahan = KiosKategoriPermasalahan::all();
+        $permasalahan = KiosRecapPermasalahan::all();
 
         return view('kios.main.recap', [
             'title' => 'Daily Recap',
@@ -43,12 +44,12 @@ class KiosDailyRecapController extends Controller
             'divisi' => $divisiName,
             'provinsi' => $provinsi,
             'customer' => $customer,
-            'statusProduk' => $statusProduk,
-            'subjenisProduk' => $subjenisProduk,
+            'produkJenis' => $produkJenis,
             'dailyRecap' => $dailyRecap,
-            'statusrecap' => $recapStatus,
             'keperluanrecap' => $recapKeperluan,
             'infoPerusahaan' => $infoPerusahaan,
+            'kategoriPermasalahan' => $kategoriPermasalahan,
+            'permasalahan' => $permasalahan,
         ]);
     }
 
@@ -58,27 +59,30 @@ class KiosDailyRecapController extends Controller
         $divisiId = auth()->user()->divisi_id;
 
         if($request->has('nama_customer')) {
-            
+
             try{
                 $dailyRecap = new KiosDailyRecap([
                     'employee_id' => $picId,
                     'customer_id' => $request->input('nama_customer'),
-                    'jenis_id' => $request->input('jenis_produk'),
-                    'sub_jenis_id' => $request->input('sub_jenis_produk'),
+                    'jenis_produk_id' => $request->input('jenis_produk'),
+                    'permasalahan_id' => $request->input('permasalahan'),
                     'keperluan_id' => $request->input('keperluan_recap'),
-                    'barang_cari' => $request->input('barang_cari'),
+                    'link_permasalahan' => $request->input('link_permasalahan'),
                     'keterangan' => $request->input('keterangan'),
-                    'status_id' => $request->input('status_recap'),
+                    'kategori_permasalahan_id' => $request->input('kategori_permasalahan'),
                 ]);
-    
+
+                $status = ($request->input('permasalahan') == 1) ? 'Unprocessed' : 'Done Case';
+                $dailyRecap->status = $status;
+
                 $dailyRecap->save();
-    
+
                 return back()->with('success', 'Success Add Daily Recap.');
-    
+
             } catch (Exception $e) {
                 return back()->with('error', $e->getMessage());
             }
-        
+
         } elseif($request->has('first_name')) {
             
             $validate = $request->validate([
@@ -89,15 +93,11 @@ class KiosDailyRecapController extends Controller
                 'email' => 'nullable|email:dns',
                 'instansi' => 'max:50',
                 'provinsi' => 'required',
-                'kota_kabupaten' => 'required',
-                'kecamatan' => 'required',
-                'kelurahan' => 'required',
-                'kode_pos' => 'required|numeric|digits:5',
                 'nama_jalan' => 'required|max:255'
             ]);
-    
+
             $validate['by_divisi'] = $divisiId;
-    
+
             $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
             $response = Http::post($appScriptUrl, [
                 'first_name' => $validate['first_name'],
@@ -105,14 +105,14 @@ class KiosDailyRecapController extends Controller
                 'email' => $validate['email'],
                 'no_telpon' => $validate['no_telpon'],
             ]);
-    
+
             if($response->successful()) {
                 Customer::create($validate);
                 return back()->with('success', 'Success Add New Customer.');
             } else {
                 return back()->with('error', 'Failed to Save Contact. Please try again.');
             }
-        
+
         }
 
     }

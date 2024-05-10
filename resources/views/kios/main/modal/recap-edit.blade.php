@@ -21,7 +21,7 @@
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="edit_recap_nama_customer"></label>
                                 <select name="edit_recap_nama_customer" id="edit_recap_nama_customer" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" readonly>
-                                    <option value="" hidden>-- Nama Customer --</option>
+                                    <option value="" hidden>Nama Customer</option>
                                     @foreach ($customer as $cs)
                                         @if ($dr->customer_id == $cs->id)
                                             <option value="{{ $cs->id }}" selected class="dark:bg-gray-700">{{ $cs->first_name }} {{ $cs->last_name }}</option>
@@ -34,22 +34,7 @@
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="edit_recap_jenis_produk"></label>
                                 <select name="edit_recap_jenis_produk" id="edit_recap_jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                                    <option value="" hidden>-- Jenis Produk --</option>
-                                    @foreach ($statusProduk as $stp)
-                                        @if ($dr->jenis_id == $stp->id)
-                                            <option value="{{ $stp->id }}" selected class="dark:bg-gray-700">{{ $stp->status_produk }}</option>
-                                        @else
-                                            <option value="{{ $stp->id }}" class="dark:bg-gray-700">{{ $stp->status_produk }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="grid md:grid-cols-2 md:gap-6">
-                            <div class="relative z-0 w-full mb-6 group">
-                                <label for="edit_recap_keperluan"></label>
-                                <select name="edit_recap_keperluan" id="edit_recap_keperluan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                                    <option value="" hidden>-- Keperluan --</option>
+                                    <option value="" hidden>Keperluan</option>
                                     @foreach ($keperluanrecap as $keperluan)
                                         @if ($dr->keperluan_id == $keperluan->id)
                                             <option value="{{ $keperluan->id }}" selected class="dark:bg-gray-700">{{ $keperluan->nama }}</option>
@@ -59,15 +44,30 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 md:gap-6">
+                            <div class="relative z-0 w-full mb-6 group">
+                                <label for="edit_recap_keperluan"></label>
+                                <select name="edit_recap_keperluan" id="edit_recap_keperluan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                    <option value="" hidden>Jenis Produk</option>
+                                    @foreach ($produkJenis as $jenis)
+                                        @if ($dr->jenis_produk_id == $jenis->id)
+                                            <option value="{{ $jenis->id }}" selected class="dark:bg-gray-700">{{ $jenis->jenis_produk }}</option>
+                                        @else
+                                            <option value="{{ $jenis->id }}" class="dark:bg-gray-700">{{ $jenis->jenis_produk }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="edit_recap_status"></label>
                                 <select name="edit_recap_status" id="edit_recap_status" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                                    <option value="" hidden>-- Status --</option>
-                                    @foreach ($statusrecap as $status)
-                                        @if ($dr->status_id == $status->id)
-                                            <option value="{{ $status->id }}" selected class="dark:bg-gray-700">{{ $status->nama }}</option>
+                                    <option value="" hidden>Kategori Permasalahan</option>
+                                    @foreach ($kategoriPermasalahan as $kategori)
+                                        @if ($dr->kategori_permasalahan_id == $kategori->id)
+                                            <option value="{{ $kategori->id }}" selected class="dark:bg-gray-700">{{ $kategori->nama }}</option>
                                         @else
-                                            <option value="{{ $status->id }}" class="dark:bg-gray-700">{{ $status->nama }}</option>
+                                            <option value="{{ $kategori->id }}" class="dark:bg-gray-700">{{ $kategori->nama }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -77,23 +77,23 @@
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="edit_recap_sub_jenis_produk"></label>
                                 <select name="edit_recap_sub_jenis_produk" id="edit_recap_sub_jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                                    <option value="" hidden>-- Seri Produk --</option>
-                                    @foreach ($subjenisProduk as $seri)
-                                        @if ($dr->sub_jenis_id == $seri->id)
-                                            <option value="{{ $seri->id }}" selected class="dark:bg-gray-700">{{ $seri->produkjenis->jenis_produk }} {{ $seri->paket_penjualan }}</option>
+                                    <option value="" hidden>Permasalahan</option>
+                                    @foreach ($permasalahan as $masalah)
+                                        @if ($dr->permasalahan_id == $masalah->id)
+                                            <option value="{{ $masalah->id }}" selected class="dark:bg-gray-700">{{ $masalah->nama }}</option>
                                         @else
-                                            <option value="{{ $seri->id }}" class="dark:bg-gray-700">{{ $seri->produkjenis->jenis_produk }} {{ $seri->paket_penjualan }}</option>
+                                            <option value="{{ $masalah->id }}" class="dark:bg-gray-700">{{ $masalah->nama }}</option>
                                         @endif
                                     @endforeach
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="text" name="edit_recap_barang_cari" id="edit_recap_barang_cari" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ old('edit_recap_barang_cari', $dr->barang_cari) }}" required>
-                                <label for="edit_recap_barang_cari" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Barang yang dicari</label>
+                                <input type="text" name="edit_link_permasalahan" id="edit_link_permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $dr->link_permasalahan ?? '' }}" readonly>
+                                <label for="edit_link_permasalahan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Link Permsaalahan</label>
                             </div>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" name="edit_recap_keterangan" id="edit_recap_keterangan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ old('edit_recap_keterangan', $dr->keterangan) }}" required>
+                            <input type="text" name="edit_recap_keterangan" id="edit_recap_keterangan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $dr->keterangan ?? '' }}" required>
                             <label for="edit_recap_keterangan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Keterangan</label>
                         </div>
                         <div class="mt-4 text-end">

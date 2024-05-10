@@ -31,7 +31,7 @@
                         Jenis Produk
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Nama Produk
+                        Kategori Permasalahan
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status
@@ -51,13 +51,13 @@
                             {{ $recap->keperluan->nama }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $recap->produkstatus->status_produk }}
+                            {{ $recap->produkjenis->jenis_produk }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $recap->subjenisproduk->produkjenis->jenis_produk }}
+                            {{ $recap->kategoripermasalahan->nama }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $recap->recapstatus->nama }}
+                            {{ $recap->status }}
                         </td>
                         <td class="px-6 py-2">
                             <button id="dropdownDailyRecapButton{{ $recap->id }}" data-dropdown-toggle="dropdownDailyRecap{{ $recap->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
