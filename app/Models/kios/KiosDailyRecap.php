@@ -43,4 +43,9 @@ class KiosDailyRecap extends Model
         return $this->belongsTo(KiosKategoriPermasalahan::class, 'kategori_permasalahan_id');
     }
 
+    public function permasalahan()
+    {
+        return $this->belongsTo(KiosRecapPermasalahan::class, 'permasalahan_id');
+    }
+
 }

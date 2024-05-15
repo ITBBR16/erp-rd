@@ -37,23 +37,21 @@
                     </div>
                     <div class="grid grid-cols-2 gap-6 mb-4">
                         <div class="grid-rows-2">
-                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Jenis Produk</h3>
-                            <h3 class="text-base text-gray-900 dark:text-white"></h3>
+                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Kategori Permasalahan</h3>
+                            <h3 class="text-base text-gray-900 dark:text-white">{{ $dr->kategoripermasalahan->nama }}</h3>
                         </div>
                         <div class="grid-rows-2">
-                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Kategori Permasalahan</h3>
-                            <h3 class="text-base text-gray-900 dark:text-white"></h3>
+                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Permasalahan</h3>
+                            <h3 class="text-base text-gray-900 dark:text-white">{{ $dr->permasalahan->nama }}</h3>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-6 mb-4">
-                        <div class="grid-rows-2 mt-2">
-                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Permasalahan</h3>
-                            <h3 class="text-base text-gray-900 dark:text-white"></h3>
-                        </div>
-                        <div class="grid-rows-2 mt-2">
-                            <h3 class="text-base font-medium text-gray-900 dark:text-white">Link Permasalahan</h3>
-                            <h3 class="text-base text-gray-900 dark:text-white"></h3>
-                        </div>
+                    <div class="grid-rows-2 mb-4">
+                        <h3 class="text-base font-medium text-gray-900 dark:text-white">Link Permasalahan</h3>
+                        @if ($dr->link_permasalahan != '')
+                            <a href="{{ $dr->link_permasalahan }}" class="text-base text-blue-500" target="__blank">{{ $dr->link_permasalahan }}</a>
+                        @else
+                            <h3 class="text-base text-gray-900 dark:text-white">-</h3>
+                        @endif
                     </div>
                     <div class="grid-rows-2">
                         <h3 class="text-base font-medium text-gray-900 dark:text-white">Deskripsi</h3>
