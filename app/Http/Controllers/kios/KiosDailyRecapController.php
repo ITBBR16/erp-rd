@@ -106,7 +106,10 @@ class KiosDailyRecapController extends Controller
                 'no_telpon' => $validate['no_telpon'],
             ]);
 
-            if($response->successful()) {
+            $payloadContact = json_decode($response->body(), true);
+            $statusContact = $payloadContact['status'];
+
+            if($statusContact === 'success') {
                 Customer::create($validate);
                 return back()->with('success', 'Success Add New Customer.');
             } else {
