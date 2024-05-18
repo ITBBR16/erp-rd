@@ -46,13 +46,10 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-<<<<<<< HEAD
             'host' => env('DB_HOST', '103.184.19.45'),
             'port' => env('DB_PORT', '3306'),
-=======
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),
->>>>>>> origin/main
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
@@ -71,11 +68,8 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
-<<<<<<< HEAD
             'host' => env('DB_HOST', '103.184.19.45'),
-=======
             'host' => env('DB_HOST'),
->>>>>>> origin/main
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
@@ -107,17 +101,14 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),
-<<<<<<< HEAD
             'database' => env('DB_DATABASE_EMPLOYEE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-=======
             'database' => env('DB_DATABASE_EMPLOYEE'),
             'username' => env('DB_USERNAME'),
             'password' => env('DB_PASSWORD'),
             'unix_socket' => env('DB_SOCKET'),
->>>>>>> origin/main
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
@@ -134,17 +125,14 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),
-<<<<<<< HEAD
             'database' => env('DB_DATABASE_CUSTOMER', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-=======
             'database' => env('DB_DATABASE_CUSTOMER'),
             'username' => env('DB_USERNAME'),
             'password' => env('DB_PASSWORD'),
             'unix_socket' => env('DB_SOCKET'),
->>>>>>> origin/main
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
@@ -161,17 +149,14 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),
-<<<<<<< HEAD
             'database' => env('DB_DATABASE_PRODUK', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-=======
             'database' => env('DB_DATABASE_PRODUK'),
             'username' => env('DB_USERNAME'),
             'password' => env('DB_PASSWORD'),
             'unix_socket' => env('DB_SOCKET'),
->>>>>>> origin/main
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
@@ -188,17 +173,14 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),
-<<<<<<< HEAD
             'database' => env('DB_DATABASE_KIOS', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-=======
             'database' => env('DB_DATABASE_KIOS'),
             'username' => env('DB_USERNAME'),
             'password' => env('DB_PASSWORD'),
             'unix_socket' => env('DB_SOCKET'),
->>>>>>> origin/main
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
@@ -215,17 +197,14 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),
-<<<<<<< HEAD
             'database' => env('DB_DATABASE_EKSPEDISI', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-=======
             'database' => env('DB_DATABASE_EKSPEDISI'),
             'username' => env('DB_USERNAME'),
             'password' => env('DB_PASSWORD'),
             'unix_socket' => env('DB_SOCKET'),
->>>>>>> origin/main
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
