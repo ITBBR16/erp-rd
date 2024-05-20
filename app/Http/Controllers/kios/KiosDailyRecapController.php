@@ -67,7 +67,6 @@ class KiosDailyRecapController extends Controller
                     'jenis_produk_id' => $request->input('jenis_produk'),
                     'permasalahan_id' => $request->input('permasalahan'),
                     'keperluan_id' => $request->input('keperluan_recap'),
-                    'link_permasalahan' => $request->input('link_permasalahan'),
                     'keterangan' => $request->input('keterangan'),
                     'kategori_permasalahan_id' => $request->input('kategori_permasalahan'),
                 ]);
@@ -106,14 +105,10 @@ class KiosDailyRecapController extends Controller
                 'no_telpon' => $validate['no_telpon'],
             ]);
 
-<<<<<<< HEAD
-            if($response->successful()) {
-=======
             $payloadContact = json_decode($response->body(), true);
             $statusContact = $payloadContact['status'];
 
             if($statusContact === 'success') {
->>>>>>> origin/main
                 Customer::create($validate);
                 return back()->with('success', 'Success Add New Customer.');
             } else {

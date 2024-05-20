@@ -47,8 +47,8 @@
                     </div>
                     <div class="grid-rows-2 mb-4">
                         <h3 class="text-base font-medium text-gray-900 dark:text-white">Link Permasalahan</h3>
-                        @if ($dr->link_permasalahan != '')
-                            <a href="{{ $dr->link_permasalahan }}" class="text-base text-blue-500" target="__blank">{{ $dr->link_permasalahan }}</a>
+                        @if ($dr->permasalahan->link_permasalahan != '-')
+                            <a href="{{ $dr->permasalahan->link_permasalahan }}" class="text-base text-blue-500" target="__blank">{{ $dr->permasalahan->link_permasalahan }}</a>
                         @else
                             <h3 class="text-base text-gray-900 dark:text-white">-</h3>
                         @endif

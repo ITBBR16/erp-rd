@@ -29,6 +29,7 @@ use App\Http\Controllers\kios\KiosFilterProdukSecondController;
 use App\Http\Controllers\kios\KiosInputTSController;
 use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\kios\KiosPengecekkanSecondController;
+use App\Http\Controllers\kios\KiosPODPController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
@@ -134,6 +135,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
                 Route::post('/generate-pdf', 'downloadInvoice');
             });
+            Route::resource('/dp-po', KiosPODPController::class)->only(['index', 'store']);
         });
 
         Route::prefix('/technical-support')->group(function () {

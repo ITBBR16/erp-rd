@@ -18,6 +18,11 @@ class KiosDailyRecap extends Model
     protected $table = 'daily_recap';
     protected $guarded = ['id'];
 
+    public function permasalahanproduk()
+    {
+        return $this->belongsToMany(ProdukJenis::class, 'permasalahan_produk', 'permasalahan_id', 'jenis_id');
+    }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');

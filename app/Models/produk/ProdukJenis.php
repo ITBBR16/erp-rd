@@ -2,6 +2,7 @@
 
 namespace App\Models\produk;
 
+use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosOrderList;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,11 @@ class ProdukJenis extends Model
 
     public function kelengkapans(){
         return $this->belongsToMany(ProdukKelengkapan::class, 'produk_jenis_kelengkapan');
+    }
+
+    public function produkpermasalahan()
+    {
+        return $this->belongsToMany(KiosDailyRecap::class, 'permasalahan_produk', 'jenis_id', 'permasalahan_id');
     }
 
 }
