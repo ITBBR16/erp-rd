@@ -7,16 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
+use App\Models\produk\ProdukJenis;
+use Illuminate\Support\Facades\DB;
 use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
-use App\Models\customer\CustomerInfoPerusahaan;
-use App\Models\kios\KiosKategoriPermasalahan;
-use App\Models\kios\KiosRecapKeperluan;
-use App\Models\kios\KiosRecapPermasalahan;
 use App\Models\kios\KiosRecapStatus;
-use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\Http;
+use App\Models\kios\KiosRecapKeperluan;
 use App\Repositories\kios\KiosRepository;
+use App\Models\kios\KiosRecapPermasalahan;
+use App\Models\kios\KiosKategoriPermasalahan;
+use App\Models\customer\CustomerInfoPerusahaan;
 
 class KiosDailyRecapController extends Controller
 {
@@ -59,7 +60,8 @@ class KiosDailyRecapController extends Controller
         $divisiId = auth()->user()->divisi_id;
 
         if($request->has('nama_customer')) {
-
+            $connectionKios = DB::connection('rumahdrone_kios');
+            $connectionKios->beginTransaction();
             try{
                 $dailyRecap = new KiosDailyRecap([
                     'employee_id' => $picId,
@@ -75,15 +77,20 @@ class KiosDailyRecapController extends Controller
                 $dailyRecap->status = $status;
 
                 $dailyRecap->save();
+                $connectionKios->commit();
 
                 return back()->with('success', 'Success Add Daily Recap.');
 
             } catch (Exception $e) {
+                $connectionKios->rollBack();
                 return back()->with('error', $e->getMessage());
             }
 
         } elseif($request->has('first_name')) {
             
+            $connectionCustomer = DB::connection('rumahdrone_kios');
+            $connectionCustomer->beginTransaction();
+
             $validate = $request->validate([
                 'first_name' => 'required|max:50',
                 'last_name' => 'required|max:50',
@@ -97,9 +104,10 @@ class KiosDailyRecapController extends Controller
 
             $validate['by_divisi'] = $divisiId;
 
+            $dataCustomer = Customer::create($validate);
             $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
             $response = Http::post($appScriptUrl, [
-                'first_name' => $validate['first_name'],
+                'first_name' => $validate['first_name'] . ' - ' . $dataCustomer->id,
                 'last_name' => $validate['last_name'],
                 'email' => $validate['email'],
                 'no_telpon' => $validate['no_telpon'],
@@ -107,11 +115,12 @@ class KiosDailyRecapController extends Controller
 
             $payloadContact = json_decode($response->body(), true);
             $statusContact = $payloadContact['status'];
-
+            
             if($statusContact === 'success') {
-                Customer::create($validate);
+                $connectionCustomer->commit();
                 return back()->with('success', 'Success Add New Customer.');
             } else {
+                $connectionCustomer->rollBack();
                 return back()->with('error', 'Failed to Save Contact. Please try again.');
             }
 

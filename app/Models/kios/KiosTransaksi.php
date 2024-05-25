@@ -23,4 +23,9 @@ class KiosTransaksi extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
+
+    public function transaksidp()
+    {
+        return $this->hasOne(KiosTransaksiDPPO::class);
+    }
 }

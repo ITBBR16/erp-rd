@@ -1,100 +1,130 @@
+function formatRupiah(angka) {
+    return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
+}
+
+function printInvoice() {
+    window.print();
+}
+
+function formatAngka(angka) {
+    return accounting.formatMoney(angka, "", 0, ".", ",");
+}
+
+function updateSubtotalBox() {
+    let kasirSubtotal = 0;
+    let totalTax = 0;
+    let kasirDiscount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
+    let kasirOngkir = parseFloat($("#kasir-ongkir").val().replace(/\./g, '')) || 0;
+
+    $("#kasir-container tr").each(function() {
+        var kasirPrice = $(this).find("[name='kasir_harga[]']").val();
+        var nilai = parseFloat(kasirPrice.replace(/\D/g, ''));
+        kasirSubtotal += nilai;
+
+        var isChecked = $(this).find("[name='checkbox_tax[]']").prop('checked');
+        
+        if(isChecked) {
+            var taxNilai = nilai * 11 / 100;
+            totalTax += taxNilai;
+        }
+    });
+
+    var totalPayment = kasirSubtotal - kasirDiscount + kasirOngkir + totalTax;
+    var showDiscount = formatRupiah(kasirDiscount);
+    var showOngkir = formatRupiah(kasirOngkir);
+    var showTax = formatRupiah(totalTax);
+
+    inputTax.val(totalTax);
+    $("#kasir-box-subtotal").text(formatRupiah(kasirSubtotal));
+    $("#kasir-box-discount").text(showDiscount);
+    $("#kasir-box-ongkir").text(showOngkir);
+    $("#kasir-box-tax").text(showTax);
+    $("#kasir-box-total").text(formatRupiah(totalPayment));
+}
+
+function updateInvoice() {
+    let subTotal = 0;
+    let totalTax = 0;
+    let discount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
+    let ongkir = parseFloat($("#kasir-ongkir").val().replace(/\./g, '')) || 0;
+    let invoiceContent = "";
+
+    $("#kasir-container tr").each(function() {
+        var jenisTransaksiKasir = $(this).find("select[name='jenis_transaksi[]'] option:selected").text();
+        var resultKeteranganProduk = (jenisTransaksiKasir === 'Drone Baru') ? 
+                                        'Unit Baru, Garansi 1 Tahun Serial Number' : 
+                                            ((jenisTransaksiKasir === 'Drone Bekas') 
+                                                ? 'Unit Second, Garansi 6 Bulan Serial Number' : '');
+
+        var itemName = $(this).find("[name='item_name[]']").val();
+        var kasirSn = $(this).find("select[name='kasir_sn[]'] option:selected").text();
+        var price = $(this).find("[name='kasir_harga[]']").val();
+        var totalRupiah = formatRupiah(parseFloat(price.replace(/\D/g, '')));
+        var nilai = parseFloat(price.replace(/\D/g, ''));
+        
+        subTotal += nilai;
+
+        var isChecked = $(this).find("[name='checkbox_tax[]']").prop('checked');
+        
+        if(isChecked) {
+            var taxNilai = nilai * 11 / 100;
+            totalTax += taxNilai;
+        }
+
+        invoiceContent += `
+        <tr class="bg-white dark:bg-gray-800">
+            <td class="px-2 py-1">${itemName}</td>
+            <td class="px-2 py-1 text-xs">${resultKeteranganProduk} ${kasirSn}</td>
+            <td class="px-2 py-1">1</td>
+            <td class="px-2 py-1">${price}</td>
+            <td class="px-2 py-1">${totalRupiah}</td>
+        </tr>
+        `;
+    });
+
+    var totalPayment = subTotal - discount + ongkir + totalTax;
+    var showDiscount = formatRupiah(discount);
+    var showOngkir = formatRupiah(ongkir);
+    var showTax = formatRupiah(totalTax);
+
+    $("#invoice-subtotal").text(formatRupiah(subTotal));
+    $("#invoice-discount").text(showDiscount);
+    $("#invoice-ongkir").text(showOngkir);
+    $("#invoice-tax").text(showTax);
+    $("#invoice-total").text(formatRupiah(totalPayment));
+    $("#invoice-kasir-container").html(invoiceContent);
+}
+
+function downloadPdf() {
+    var noInvoice = $('#invoice-number').val();
+    var invoiceContent = $('#print-invoice-kios').html();
+
+    var requestData = {
+        no_invoice: noInvoice,
+        content: invoiceContent
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/kios/kasir/generate-pdf',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(requestData),
+        success: function(data) {
+            alert('Success Download Invoice.');
+        },
+        error: function(xhr, status, error) {
+            alert('Terjadi kesalahan saat mengunduh invoice : ' + error);
+        }
+    });
+}
+
 $(document).ready(function(){
     const kasirContainer = $("#kasir-container");
     const inputTax = $("#kasir-tax");
     let itemCount = $("#kasir-container tr").length;
-
-    function formatRupiah(angka) {
-        return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
-    }
-
-    function updateSubtotalBox() {
-        let kasirSubtotal = 0;
-        let totalTax = 0;
-        let kasirDiscount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
-        let kasirOngkir = parseFloat($("#kasir-ongkir").val().replace(/\./g, '')) || 0;
-
-        $("#kasir-container tr").each(function() {
-            var kasirPrice = $(this).find("[name='kasir_harga[]']").val();
-            var nilai = parseFloat(kasirPrice.replace(/\D/g, ''))
-            kasirSubtotal += nilai;
-
-            var isChecked = $(this).find("[name='checkbox_tax[]']").prop('checked');
-            
-            if(isChecked) {
-                var taxNilai = nilai * 11 / 100;
-                totalTax += taxNilai;
-            }
-        });
-
-        var totalPayment = kasirSubtotal - kasirDiscount + kasirOngkir + totalTax;
-        var showDiscount = formatRupiah(kasirDiscount);
-        var showOngkir = formatRupiah(kasirOngkir);
-        var showTax = formatRupiah(totalTax);
-
-        inputTax.val(totalTax);
-        $("#kasir-box-subtotal").text(formatRupiah(kasirSubtotal));
-        $("#kasir-box-discount").text(showDiscount);
-        $("#kasir-box-ongkir").text(showOngkir);
-        $("#kasir-box-tax").text(showTax);
-        $("#kasir-box-total").text(formatRupiah(totalPayment));
-    }
-
-    function updateInvoice() {
-        let subTotal = 0;
-        let totalTax = 0;
-        let discount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
-        let ongkir = parseFloat($("#kasir-ongkir").val().replace(/\./g, '')) || 0;
-        let invoiceContent = "";
-
-        $("#kasir-container tr").each(function() {
-            var jenisTransaksiKasir = $(this).find("select[name='jenis_transaksi[]'] option:selected").text();
-            var resultKeteranganProduk = (jenisTransaksiKasir === 'Drone Baru') ? 
-                                            'Unit Baru, Garansi 1 Tahun Serial Number' : 
-                                                ((jenisTransaksiKasir === 'Drone Bekas') 
-                                                    ? 'Unit Second, Garansi 6 Bulan Serial Number' : '');
-            console.log(jenisTransaksiKasir);
-                                                    var itemName = $(this).find("[name='item_name[]']").val();
-            var kasirSn = $(this).find("select[name='kasir_sn[]'] option:selected").text();
-            var price = $(this).find("[name='kasir_harga[]']").val();
-            var totalRupiah = formatRupiah(parseFloat(price.replace(/\D/g, '')));
-            var nilai = parseFloat(price.replace(/\D/g, ''));
-            
-            subTotal += nilai;
-
-            var isChecked = $(this).find("[name='checkbox_tax[]']").prop('checked');
-            
-            if(isChecked) {
-                var taxNilai = nilai * 11 / 100;
-                totalTax += taxNilai;
-            }
-
-            invoiceContent += `
-            <tr class="bg-white dark:bg-gray-800">
-                <td class="px-2 py-1">${itemName}</td>
-                <td class="px-2 py-1 text-xs">${resultKeteranganProduk} ${kasirSn}</td>
-                <td class="px-2 py-1">1</td>
-                <td class="px-2 py-1">${price}</td>
-                <td class="px-2 py-1">${totalRupiah}</td>
-            </tr>
-            `;
-        });
-
-        var totalPayment = subTotal - discount + ongkir + totalTax;
-        var showDiscount = formatRupiah(discount);
-        var showOngkir = formatRupiah(ongkir);
-        var showTax = formatRupiah(totalTax);
-
-        $("#invoice-subtotal").text(formatRupiah(subTotal));
-        $("#invoice-discount").text(showDiscount);
-        $("#invoice-ongkir").text(showOngkir);
-        $("#invoice-tax").text(showTax);
-        $("#invoice-total").text(formatRupiah(totalPayment));
-        $("#invoice-kasir-container").html(invoiceContent);
-    }
-
-    function printInvoice() {
-        window.print();
-    }
 
     $("#add-item-kasir").on("click", function () {
          itemCount++
@@ -318,10 +348,6 @@ $(document).ready(function(){
         updateInvoice();
     });
 
-    function formatAngka(angka) {
-        return accounting.formatMoney(angka, "", 0, ".", ",");
-    }
-    
     $(document).on("input", ".kasir-formated-rupiah", function () {
         var inputValue = $(this).val();
         inputValue = inputValue.replace(/[^\d]/g, '');
@@ -334,35 +360,8 @@ $(document).ready(function(){
         printInvoice();
     });
 
-    function downloadPdf() {
-        var noInvoice = $('#invoice-number').val();
-        var invoiceContent = $('#print-invoice-kios').html();
-
-        var requestData = {
-            no_invoice: noInvoice,
-            content: invoiceContent
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: '/kios/kasir/generate-pdf',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            contentType: 'application/json',
-            data: JSON.stringify(requestData),
-            success: function(data) {
-                alert('Success Download Invoice.');
-            },
-            error: function(xhr, status, error) {
-                alert('Terjadi kesalahan saat mengunduh invoice : ' + error);
-            }
-        });
-    }
-
     $('#button-download-invoice').click(function() {
         downloadPdf();
     })
 
  });
- 

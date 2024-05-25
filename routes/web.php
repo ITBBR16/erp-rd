@@ -135,7 +135,10 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
                 Route::post('/generate-pdf', 'downloadInvoice');
             });
-            Route::resource('/dp-po', KiosPODPController::class)->only(['index', 'store']);
+            Route::group(['controller' => KiosPODPController::class], function () {
+                Route::resource('/dp-po', KiosPODPController::class)->only(['index', 'store']);
+                Route::get('/getSrpProduk/{jenisTransaksi}/{id}', 'getSrpProduk');
+            });
         });
 
         Route::prefix('/technical-support')->group(function () {
