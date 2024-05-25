@@ -80,6 +80,14 @@ class DashboardKiosController extends Controller
         for ($i = 1; $i <= $daysInMonth; $i++) {
             $date = $today->copy()->startOfMonth()->addDays($i - 1);
             $sales = KiosTransaksi::whereDate('created_at', $date)
+                ->where(function ($query) {
+                    $query->where('status_dp', '')
+                        ->orWhere('status_dp', 'Lunas');
+                })
+                ->where(function ($query) {
+                    $query->where('status_po', '')
+                        ->orWhere('status_po', 'Lunas');
+                })
                 ->get()
                 ->sum(function ($transaction) {
                     return $transaction->detailtransaksi->sum(function ($detail) {
@@ -104,6 +112,14 @@ class DashboardKiosController extends Controller
         for ($i = 1; $i <= $daysInMonth; $i++) {
             $date = $lastYear->copy()->startOfMonth()->addDays($i - 1);
             $sales = KiosTransaksi::whereDate('created_at', $date)
+                ->where(function ($query) {
+                    $query->where('status_dp', '')
+                        ->orWhere('status_dp', 'Lunas');
+                })
+                ->where(function ($query) {
+                    $query->where('status_po', '')
+                        ->orWhere('status_po', 'Lunas');
+                })
                 ->get()
                 ->sum(function ($transaction) {
                     return $transaction->detailtransaksi->sum(function ($detail) {
