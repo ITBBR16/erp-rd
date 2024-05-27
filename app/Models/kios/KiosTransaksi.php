@@ -3,6 +3,7 @@
 namespace App\Models\kios;
 
 use App\Models\customer\Customer;
+use App\Models\employee\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,6 +14,11 @@ class KiosTransaksi extends Model
     protected $connection = 'rumahdrone_kios';
     protected $table = 'kios_transaksi';
     protected $guarded = ['id'];
+
+    public function metodepembayaran()
+    {
+        return $this->belongsTo(KiosAkunRD::class, 'metode_pembayaran');
+    }
 
     public function detailtransaksi()
     {
@@ -27,5 +33,10 @@ class KiosTransaksi extends Model
     public function transaksidp()
     {
         return $this->hasOne(KiosTransaksiDPPO::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 }

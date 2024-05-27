@@ -92,7 +92,7 @@ $(document).ready(function () {
                 <td class="px-4 py-4">
                     <label for="dppo-jenis-transaksi-${itemBodyCount}"></label>
                     <select name="dppo_jenis_transaksi[]" id="dppo-jenis-transaksi-${itemBodyCount}" data-id="${itemBodyCount}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                        <option value="" hidden>-- Apaa Hayooo --</option>
+                        <option value="" hidden>-- Jenis Transaksi --</option>
                         <option value="drone_baru">Drone Baru</option>
                         <option value="drone_bekas">Drone Bekas</option>
                         <option value="part_baru">Part Baru</option>
@@ -104,7 +104,7 @@ $(document).ready(function () {
                     <input type="text" name="dppo_nama_produk[]" id="nama-produk-${itemBodyCount}" data-id="${itemBodyCount}" class="dppo_nama_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
                 </td>
                 <td class="px-4 py-4">
-                <input type="text" name="dppo_qty_produk[]" id="qty-produk-${itemBodyCount}" data-id="${itemBodyCount}" class="dppo_qty_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Jumlah Produk" required>
+                    <input type="text" name="dppo_qty_produk[]" id="qty-produk-${itemBodyCount}" data-id="${itemBodyCount}" class="dppo_qty_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Jumlah Produk" required>
                 </td>
                 <td class="px-4 py-4">
                     <input type="text" name="dppo_harga[]" id="dppo-harga-${itemBodyCount}" data-id="${itemBodyCount}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>

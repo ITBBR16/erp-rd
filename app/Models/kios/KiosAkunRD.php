@@ -12,4 +12,9 @@ class KiosAkunRD extends Model
     protected $connection = 'rumahdrone_kios';
     protected $table = 'kios_akun_rd';
     protected $guarded = ['id'];
+
+    public function transaksi()
+    {
+        return $this->hasMany(KiosTransaksi::class);
+    }
 }

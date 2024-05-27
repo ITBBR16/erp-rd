@@ -26,6 +26,9 @@
                         Total DP
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Sisa Pembayaran
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Status
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -47,20 +50,20 @@
                                 Rp. {{ number_format($item->transaksidp->jumlah_pembayaran, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-2">
-                                @if ($item->status_dp == 'Lunas' && $item->status_po == 'Lunas')
-                                    <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Lunas</span>
-                                @elseif($item->status_dp == 'Lunas' && $item->status_po == 'PO')
-                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">DP Lunas</span>
-                                @elseif($item->status_dp == 'DP' && $item->status_po == 'Lunas')
-                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">DP & PO</span>
+                                @php
+                                    $totalSisa = $item->total_harga - $item->transaksidp->jumlah_pembayaran;
+                                @endphp
+                                Rp. {{ number_format($totalSisa, 0, ',', '.') }}
+                            </td>
+                            <td class="px-6 py-2">
+                                @if ($item->status_dp == 'Lunas' || $item->status_po == 'Lunas')
+                                    <span class="bg-green-100 text-green-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Lunas</span>
                                 @elseif($item->status_dp == 'DP' && $item->status_po == '')
-                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">DP & PO</span>
-                                @elseif($item->status_dp == 'Lunas' && $item->status_po == 'PO')
-                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">DP & PO</span>
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Down Payment</span>
                                 @elseif($item->status_dp == '' && $item->status_po == 'PO')
-                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">DP & PO</span>
+                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Pre Order</span>
                                 @elseif($item->status_dp == 'DP' && $item->status_po == 'PO')
-                                    <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">DP & PO</span>
+                                    <span class="bg-red-100 text-red-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">DP & PO</span>
                                 @endif
                             </td>
                             <td class="px-6 py-2">
@@ -74,16 +77,16 @@
                         <div id="dropdownListBelanjaBaru{{ $item->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListBelanjaBaruButton{{ $item->id }}">
                                 <li>
-                                    <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="dppo-views-{{ $item->id }}" data-modal-toggle="dppo-views-{{ $item->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base mr-3">visibility</i>
                                         <span class="whitespace-nowrap">Detail DP / PO</span>
                                     </button>
                                 </li>
                                 <li>
-                                    <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('dp-po.edit', encrypt($item->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base mr-3">task_alt</i>
                                         <span class="whitespace-nowrap">Pelunasan</span>
-                                    </button>
+                                    </a>
                                 </li>
                                 <li>
                                     <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
@@ -98,4 +101,6 @@
             </tbody>
         </table>
     </div>
+    {{-- Modal List DP PO --}}
+    @include('kios.kasir.modal.dppo-views-modal')
 </div>

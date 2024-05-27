@@ -136,7 +136,7 @@ Route::middleware('kios')->group(function () {
                 Route::post('/generate-pdf', 'downloadInvoice');
             });
             Route::group(['controller' => KiosPODPController::class], function () {
-                Route::resource('/dp-po', KiosPODPController::class)->only(['index', 'store']);
+                Route::resource('/dp-po', KiosPODPController::class);
                 Route::get('/getSrpProduk/{jenisTransaksi}/{id}', 'getSrpProduk');
             });
         });

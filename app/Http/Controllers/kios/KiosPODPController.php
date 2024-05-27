@@ -48,6 +48,26 @@ class KiosPODPController extends Controller
         ]);
     }
 
+    public function edit($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $dataTransaksi = KiosTransaksi::findOrFail($id);
+        $akunRd = KiosAkunRD::all();
+
+        return view('kios.kasir.editpage.pelunasan-dppo', [
+            'title' => 'Pelunasan DP / PO Kios',
+            'active' => 'dp-po-kios',
+            'navActive' => 'kasir',
+            'divisi' => $divisiName,
+            'dropdown' => '',
+            'dropdownShop' => '',
+            'dataTransaksi' => $dataTransaksi,
+            'akunrd' => $akunRd,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $connectionKios = DB::connection('rumahdrone_kios');
