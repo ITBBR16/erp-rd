@@ -72,6 +72,7 @@
         <script src="/js/create-produk-second.js"></script>
         <script src="/js/kasir-kios.js"></script>
         <script src="/js/kasir-dppo.js"></script>
+        <script src="/js/kasir-pelunasan.js"></script>
         <script src="/js/logistik-validasi.js"></script>
         <script src="/js/qc-second.js"></script>
         <script src="/js/filter-second.js"></script>

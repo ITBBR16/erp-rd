@@ -26,7 +26,7 @@ class KiosPODPController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $today = Carbon::now();
-        $dueDate = $today->copy()->addMonth(3);
+        $dueDate = $today->copy()->addMonth(2);
         $customerData = Customer::all();
         $akunRd = KiosAkunRD::all();
         $dataTransaksi = KiosTransaksi::orderBy('id', 'desc')->get();
@@ -52,6 +52,8 @@ class KiosPODPController extends Controller
     {
         $id = decrypt($encryptId);
         $user = auth()->user();
+        $today = Carbon::now();
+        $dueDate = $today->copy()->addMonth(2);
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $dataTransaksi = KiosTransaksi::findOrFail($id);
         $akunRd = KiosAkunRD::all();
@@ -63,6 +65,8 @@ class KiosPODPController extends Controller
             'divisi' => $divisiName,
             'dropdown' => '',
             'dropdownShop' => '',
+            'today' => $today,
+            'duedate' => $dueDate,
             'dataTransaksi' => $dataTransaksi,
             'akunrd' => $akunRd,
         ]);

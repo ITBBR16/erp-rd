@@ -1,56 +1,76 @@
-function formatRupiah(angka) {
-    return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
-}
+function updateBoxPelunasan() {
+    const inputTax = $("#pelunasan-tax");
+    let pelunasanSubtotal = 0;
+    let pelunasanTotalTax = 0;
+    let pelunasanDp = $("#nominal_dp").val();
+    let pelunasanDiscount = parseFloat($("#pelunasan-discount").val().replace(/\./g, '')) || 0;
+    let pelunasanOngkir = parseFloat($("#pelunasan-ongkir").val().replace(/\./g, '')) || 0;
 
-function printInvoice() {
-    window.print();
-}
-
-function formatAngka(angka) {
-    return accounting.formatMoney(angka, "", 0, ".", ",");
-}
-
-function updateSubtotalBox() {
-    const inputTax = $("#kasir-tax");
-    let kasirSubtotal = 0;
-    let totalTax = 0;
-    let kasirDiscount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
-    let kasirOngkir = parseFloat($("#kasir-ongkir").val().replace(/\./g, '')) || 0;
-
-    $("#kasir-container tr").each(function() {
+    $("#pelunasan-container tr").each(function() {
         var kasirPrice = $(this).find("[name='kasir_harga[]']").val();
         var nilai = parseFloat(kasirPrice.replace(/\D/g, ''));
-        kasirSubtotal += nilai;
+        pelunasanSubtotal += nilai;
 
-        var isChecked = $(this).find("[name='checkbox_tax[]']").prop('checked');
+        var isChecked = $(this).find("[name='checkbox_tax_pelunasan[]']").prop('checked');
         
         if(isChecked) {
             var taxNilai = nilai * 11 / 100;
-            totalTax += taxNilai;
+            pelunasanTotalTax += taxNilai;
         }
     });
 
-    var totalPayment = kasirSubtotal - kasirDiscount + kasirOngkir + totalTax;
-    var showDiscount = formatRupiah(kasirDiscount);
-    var showOngkir = formatRupiah(kasirOngkir);
-    var showTax = formatRupiah(totalTax);
+    var totalPayment = pelunasanSubtotal - pelunasanDp - pelunasanDiscount + pelunasanOngkir + pelunasanTotalTax;
+    var showDiscount = formatRupiah(pelunasanDiscount);
+    var showOngkir = formatRupiah(pelunasanOngkir);
+    var showTax = formatRupiah(pelunasanTotalTax);
 
-    inputTax.val(totalTax);
-    $("#kasir-box-subtotal").text(formatRupiah(kasirSubtotal));
-    $("#kasir-box-discount").text(showDiscount);
-    $("#kasir-box-ongkir").text(showOngkir);
-    $("#kasir-box-tax").text(showTax);
-    $("#kasir-box-total").text(formatRupiah(totalPayment));
+    inputTax.val(pelunasanTotalTax);
+    $("#pelunasan-box-subtotal").text(formatRupiah(pelunasanSubtotal));
+    $("#pelunasan-box-discount").text(showDiscount);
+    $("#pelunasan-box-ongkir").text(showOngkir);
+    $("#pelunasan-box-tax").text(showTax);
+    $("#pelunasan-box-total").text(formatRupiah(totalPayment));
 }
 
-function updateInvoice() {
+function getSNPelunasan(jenisTransaksi, itemId, index) {
+
+    fetch(`/kios/kasir/getSerialNumber/${jenisTransaksi}/${itemId}`)
+    .then(response => response.json())
+    .then(data => {
+        var formSN = $('#kasir_sn-' + index);
+        formSN.empty();
+
+            const defaultOption = $('<option>', {
+                text: '-- Pilih SN --',
+                value: '',
+                hidden: true
+            });
+            formSN.append(defaultOption);
+
+            data.data_sn.forEach(serialnumber => {
+                const option = $('<option>', {
+                    value: serialnumber.id,
+                    text: serialnumber.serial_number
+                })
+                .addClass('dark:bg-gray-700');
+                formSN.append(option);
+            });
+
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+}
+
+function updatePelunasanInvoice() {
     let subTotal = 0;
     let totalTax = 0;
-    let discount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
-    let ongkir = parseFloat($("#kasir-ongkir").val().replace(/\./g, '')) || 0;
+    let dp = $("#nominal_dp").val() || 0;
+    let discount = parseFloat($("#pelunasan-discount").val().replace(/\./g, '')) || 0;
+    let ongkir = parseFloat($("#pelunasan-ongkir").val().replace(/\./g, '')) || 0;
     let invoiceContent = "";
 
-    $("#kasir-container tr").each(function() {
+    $("#pelunasan-container tr").each(function() {
         var jenisTransaksiKasir = $(this).find("select[name='jenis_transaksi[]'] option:selected").text();
         var resultKeteranganProduk = (jenisTransaksiKasir === 'Drone Baru') ? 
                                         'Unit Baru, Garansi 1 Tahun Serial Number' : 
@@ -65,7 +85,7 @@ function updateInvoice() {
         
         subTotal += nilai;
 
-        var isChecked = $(this).find("[name='checkbox_tax[]']").prop('checked');
+        var isChecked = $(this).find("[name='checkbox_tax_pelunasan[]']").prop('checked');
         
         if(isChecked) {
             var taxNilai = nilai * 11 / 100;
@@ -83,53 +103,36 @@ function updateInvoice() {
         `;
     });
 
-    var totalPayment = subTotal - discount + ongkir + totalTax;
+    var totalPayment = subTotal - dp - discount + ongkir + totalTax;
     var showDiscount = formatRupiah(discount);
     var showOngkir = formatRupiah(ongkir);
     var showTax = formatRupiah(totalTax);
 
     $("#invoice-subtotal").text(formatRupiah(subTotal));
+    $("#invoice-dp").text(formatRupiah(dp));
     $("#invoice-discount").text(showDiscount);
     $("#invoice-ongkir").text(showOngkir);
     $("#invoice-tax").text(showTax);
     $("#invoice-total").text(formatRupiah(totalPayment));
-    $("#invoice-kasir-container").html(invoiceContent);
-}
-
-function downloadPdf() {
-    var noInvoice = $('#invoice-number').val();
-    var invoiceContent = $('#print-invoice-kios').html();
-
-    var requestData = {
-        no_invoice: noInvoice,
-        content: invoiceContent
-    };
-
-    $.ajax({
-        type: 'POST',
-        url: '/kios/kasir/generate-pdf',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        contentType: 'application/json',
-        data: JSON.stringify(requestData),
-        success: function(data) {
-            alert('Success Download Invoice.');
-        },
-        error: function(xhr, status, error) {
-            alert('Terjadi kesalahan saat mengunduh invoice : ' + error);
-        }
-    });
+    $("#invoice-pelunasan-container").html(invoiceContent);
 }
 
 $(document).ready(function(){
-    const kasirContainer = $("#kasir-container");
-    let itemCount = $("#kasir-container tr").length;
+    const pelunasanContainer = $("#pelunasan-container");
+    let itemCount = $("#pelunasan-container tr").length;
 
-    $("#add-item-kasir").on("click", function () {
+    $('.item_name').each(function() {
+        let index = $(this).data("id");
+        let jenisTransaksi = $('#jenis-transaksi-'+index).val();
+        var itemId = $('#item-id-'+index).val();
+
+        getSNPelunasan(jenisTransaksi, itemId, index);
+    });
+
+    $("#add-item-pelunasan").on("click", function () {
          itemCount++
          let itemForm = `
-         <tr id="kasir-item-${itemCount}" class="bg-white dark:bg-gray-800">
+         <tr id="pelunasan-item-${itemCount}" class="bg-white dark:bg-gray-800">
             <td class="px-4 py-4">
                 <label for="jenis-transaksi-${itemCount}"></label>
                 <select name="jenis_transaksi[]" id="jenis-transaksi-${itemCount}" data-id="${itemCount}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
@@ -154,17 +157,17 @@ $(document).ready(function(){
                 <input type="text" name="kasir_harga[]" id="kasir-harga-${itemCount}" data-id="${itemCount}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
             </td>
             <td class="px-4 py-4">
-                <input type="checkbox" name="checkbox_tax[]" id="checkbox-tax-${itemCount}" data-id="${itemCount}" class="checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
+                <input type="checkbox" name="checkbox_tax_pelunasan[]" id="checkbox-tax-${itemCount}" data-id="${itemCount}" class="pelunasan-checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
             </td>
             <td class="px-4 py-4">
-                <button type="button" class="remove-kasir-item" data-id="${itemCount}">
+                <button type="button" class="remove-pelunasan-item" data-id="${itemCount}">
                     <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                 </button>
             </td>
         </tr>
          `;
-         kasirContainer.append(itemForm);
-         updateInvoice();
+         pelunasanContainer.append(itemForm);
+         updatePelunasanInvoice();
 
     });
 
@@ -294,7 +297,7 @@ $(document).ready(function(){
             var harga = formatRupiah(data.nilai);
             formHarga.val(harga);
             
-            updateSubtotalBox();
+            updateBoxPelunasan();
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -302,24 +305,24 @@ $(document).ready(function(){
 
     });
 
-    $(document).on('change', '.checkbox-tax', function() {
-        updateInvoice();
-        updateSubtotalBox();
+    $(document).on('change', '.pelunasan-checkbox-tax', function() {
+        updatePelunasanInvoice();
+        updateBoxPelunasan();
     });
  
-    $(document).on("click", ".remove-kasir-item", function() {
+    $(document).on("click", ".remove-pelunasan-item", function() {
          let itemNameId = $(this).data("id");
-         $("#kasir-item-"+itemNameId).remove();
+         $("#pelunasan-item-"+itemNameId).remove();
          itemCount--;
-         updateInvoice()
-         updateSubtotalBox();
+         updatePelunasanInvoice()
+         updateBoxPelunasan();
     });
  
-    $(document).on("click", ".review-invoice", function () {
+    $(document).on("click", "#pelunasan-review-invoice", function () {
         var invoiceNamaCus = $('#invoice-nama-customer');
         var invoiceTlp = $('#invoice-no-tlp');
         var invoiceJalan = $('#invoice-jalan');
-        var namaCustomer = $('#nama_customer').val();
+        var namaCustomer = $('#id_customer').val();
         fetch(`/kios/kasir/getCustomer/${namaCustomer}`)
         .then(response => response.json())
         .then(data => {
@@ -333,20 +336,20 @@ $(document).ready(function(){
         })
         .catch(error => console.error('Error:', error));
 
-        updateInvoice();
+        updatePelunasanInvoice();
     });
 
-    $(document).on("change", "#kasir-discount", function () {
-        updateSubtotalBox();
-        updateInvoice();
+    $(document).on("change", "#pelunasan-discount", function () {
+        updateBoxPelunasan();
+        updatePelunasanInvoice();
     });
 
-    $(document).on("change", "#kasir-ongkir", function () {
-        updateSubtotalBox();
-        updateInvoice();
+    $(document).on("change", "#pelunasan-ongkir", function () {
+        updateBoxPelunasan();
+        updatePelunasanInvoice();
     });
 
-    $(document).on("input", ".kasir-formated-rupiah", function () {
+    $(document).on("input", ".pelunasan-formated-rupiah", function () {
         var inputValue = $(this).val();
         inputValue = inputValue.replace(/[^\d]/g, '');
         var parsedValue = parseInt(inputValue, 10);
