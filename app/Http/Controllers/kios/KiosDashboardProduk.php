@@ -65,7 +65,7 @@ class KiosDashboardProduk extends Controller
 
         for ($i = 6; $i >= 0; $i--) {
             $date = $today->copy()->subDays($i);
-            $sales = KiosTransaksi::whereDate('created_at', $date)
+            $sales = KiosTransaksi::whereDate('updated_at', $date)
                     ->where(function ($query) {
                         $query->where('status_dp', '')
                             ->orWhere('status_dp', 'Lunas');
@@ -93,7 +93,7 @@ class KiosDashboardProduk extends Controller
 
         for ($i = 6; $i >= 0; $i--) {
             $date = $lastWeekStartDate->copy()->subDays($i);
-            $sales = KiosTransaksi::whereDate('created_at', $date)
+            $sales = KiosTransaksi::whereDate('updated_at', $date)
                 ->where(function ($query) {
                     $query->where('status_dp', '')
                         ->orWhere('status_dp', 'Lunas');
@@ -144,7 +144,7 @@ class KiosDashboardProduk extends Controller
 
         $topProducts = KiosTransaksiDetail::select('kios_produk_id')
                         ->selectRaw('COUNT(*) as total_penjualan')
-                        ->whereRaw('YEAR(created_at) = ? AND MONTH(created_at) = ?', [$thisYear, $thisMonth])
+                        ->whereRaw('YEAR(updated_at) = ? AND MONTH(updated_at) = ?', [$thisYear, $thisMonth])
                         ->whereNotNull('serial_number_id')
                         ->groupBy('kios_produk_id')
                         ->orderByDesc('total_penjualan')
@@ -161,7 +161,7 @@ class KiosDashboardProduk extends Controller
 
         $topCustomer = KiosTransaksi::select('customer_id')
                        ->selectRaw('SUM(total_harga + tax - discount) as total_transaksi')
-                       ->whereRaw('YEAR(created_at) = ? AND MONTH(created_at) = ?', [$thisYear, $thisMonth])
+                       ->whereRaw('YEAR(updated_at) = ? AND MONTH(updated_at) = ?', [$thisYear, $thisMonth])
                        ->where(function ($query) {
                             $query->where('status_dp', '')
                                 ->orWhere('status_dp', 'Lunas');

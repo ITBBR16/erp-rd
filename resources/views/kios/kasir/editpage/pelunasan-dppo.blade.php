@@ -20,8 +20,9 @@
     </ol>
 </nav>
 
-<form action="#" id="pelunasan-dppo-form" method="POST" autocomplete="off">
+<form action="{{ route('dp-po.update', $dataTransaksi->id) }}" id="pelunasan-dppo-form" method="POST" autocomplete="off">
     @csrf
+    @method('PUT')
     <div class="grid grid-cols-3 w-full mt-4">
         <div class="col-span-2 my-4">
             <div class="flex items-center justify-between mb-4 pb-2 border-b-2">
@@ -170,13 +171,14 @@
                 @foreach ($dataTransaksi->detailtransaksi as $index => $detail)
                     <tr id="pelunasan-item-{{ $index }}" class="bg-white dark:bg-gray-800">
                         <td class="px-4 py-4">
+                            <input type="hidden" name="id_detail_transaksi[]" value="{{ $detail->id }}">
                             <label for="jenis-transaksi-{{ $index }}"></label>
                             <select name="jenis_transaksi[]" id="jenis-transaksi-{{ $index }}" data-id="{{ $index }}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" hidden>-- Pilih Jenis Transaksi --</option>
-                                <option value="drone_baru" selected>Drone Baru</option>
-                                <option value="drone_bekas">Drone Bekas</option>
-                                <option value="part_baru">Part Baru</option>
-                                <option value="part_bekas">Part Bekas</option>
+                                <option value="drone_baru" {{ ($detail->jenis_transaksi == 'drone_baru') ? 'selected' : '' }}>Drone Baru</option>
+                                <option value="drone_bekas" {{ ($detail->jenis_transaksi == 'drone_bekas') ? 'selected' : '' }}>Drone Bekas</option>
+                                <option value="part_baru" {{ ($detail->jenis_transaksi == 'part_baru') ? 'selected' : '' }}>Part Baru</option>
+                                <option value="part_bekas" {{ ($detail->jenis_transaksi == 'part_bekas') ? 'selected' : '' }}>Part Bekas</option>
                             </select>
                         </td>
                         <td class="px-4 py-4">

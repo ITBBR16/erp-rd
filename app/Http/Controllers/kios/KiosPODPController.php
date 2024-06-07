@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosProdukSecond;
+use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksiDPPO;
 use App\Models\kios\KiosTransaksiDetail;
 use App\Repositories\kios\KiosRepository;
+use Illuminate\Support\Facades\Http;
+use PhpParser\Node\Expr\Empty_;
 
 class KiosPODPController extends Controller
 {
@@ -72,6 +75,149 @@ class KiosPODPController extends Controller
         ]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $connectionPelunasan = DB::connection('rumahdrone_kios');
+        $connectionPelunasan->beginTransaction();
+
+        try {
+            $request->validate([
+                'nama_customer' => 'required',
+                'metode_pembayaran_pelunasan' => 'required',
+                'pelunasan_nominal' => 'required|min:1',
+                'jenis_transaksi' => 'required|array|min:1',
+                'item_id' => 'required|array|min:1',
+                'kasir_sn' => 'required|array|min:1',
+                'kasir_harga' => 'required|array|min:1',
+            ]);
+
+            $pelunasanNamaCustomer = $request->input('nama_customer');
+            $pelunasanIdCustomer = $request->input('id_customer');
+            $pelunasanMetodePembayaran = $request->input('metode_pembayaran_pelunasan');
+            $pelunasanDiscount = $this->sanitizeNominal($request->input('pelunasan_discount'));
+            $pelunasanOngkir = $this->sanitizeNominal($request->input('pelunasan_ongkir'));
+            $pelunasanNominalPembayaran = $this->sanitizeNominal($request->input('pelunasan_nominal'));
+            $pelunasanTax = $request->input('pelunasan_tax');
+
+            // Ambil semua sub jenis yang diperlukan
+            $subJenisIds = array_unique($request->input('item_id'));
+            $dataProduk = KiosProduk::whereIn('sub_jenis_id', $subJenisIds)->get();
+
+            // Detial Transaksi
+            $pelunasanIdDetailTransaksi = $request->input('id_detail_transaksi');
+            $pelunasanJenisTransaksi = $request->input('jenis_transaksi');
+            $pelunasanItem = $request->input('item_id');
+            $pelunasanSerialNumber = $request->input('kasir_sn');
+            $pelunasanSRP = $this->sanitizeNominal($request->input('kasir_harga'));
+            $totalHarga = 0;
+            $modalKios = 0;
+
+            if(count(array_unique($pelunasanSerialNumber)) !== count($pelunasanSerialNumber)) {
+                return back()->with('error', 'Serial Number tidak boleh ada yang sama.');
+            }
+
+            $transaksi = KiosTransaksi::findOrFail($id);
+            $dpCustomer = $transaksi->transaksidp->jumlah_pembayaran ?? 0;
+            $namaMetodePembayaran = $transaksi->metodepembayaran->nama_akun;
+
+            if(!empty($transaksi->status_dp)) {
+                $transaksi->status_dp = 'Lunas';
+            }
+
+            if(!empty($transaksi->status_po)) {
+                $transaksi->status_po = 'Lunas';
+            }
+
+            $transaksi->metode_pembayaran = $pelunasanMetodePembayaran;
+            $transaksi->ongkir = $pelunasanOngkir;
+            $transaksi->discount = $pelunasanDiscount;
+            $transaksi->tax = $pelunasanTax;
+            $transaksi->save();
+
+            foreach($pelunasanItem as $index => $item) {
+                $totalHarga += $pelunasanSRP[$index];
+
+                $produk = $dataProduk->where('sub_jenis_id', $item)->first();
+                $findSN = KiosSerialNumber::find($pelunasanSerialNumber[$index]);
+
+                if(!empty($pelunasanIdDetailTransaksi[$index])) {
+                    $detailTransaksi = KiosTransaksiDetail::findOrFail($pelunasanIdDetailTransaksi[$index]);
+                } else {
+                    $detailTransaksi = new KiosTransaksiDetail();
+                    $detailTransaksi->kios_transaksi_id = $id;
+                }
+
+                $detailTransaksi->jenis_transaksi = $pelunasanJenisTransaksi[$index];
+                $detailTransaksi->kios_produk_id = $item;
+                $detailTransaksi->serial_number_id = $pelunasanSerialNumber[$index];
+
+                if($pelunasanJenisTransaksi[$index] == 'drone_baru') {
+                    $modalKios += $findSN->validasiproduk->orderLists->nilai;
+                    $detailTransaksi->harga_jual = $produk->srp;
+                    $detailTransaksi->harga_promo = $produk->harga_promo;
+                } else {
+                    $detailTransaksi->harga_jual = $pelunasanSRP[$index];
+                    $detailTransaksi->harga_promo = 0;
+                }
+
+                $detailTransaksi->save();
+                KiosSerialNumber::find($pelunasanSerialNumber[$index])->update(['status' => 'Sold']);
+            }
+
+            KiosTransaksiDetail::where('kios_transaksi_id', $id)
+                                ->whereNotIn('id', $pelunasanIdDetailTransaksi)
+                                ->delete();
+
+            $transaksi->total_harga = $totalHarga;
+            $transaksi->save();
+
+            $decisionLR = $totalHarga - $modalKios + $pelunasanTax;
+            $labaKios = 0;
+            $rugiKios = 0;
+            if($decisionLR > 0) {
+                $labaKios = $decisionLR;
+            } else {
+                $rugiKios = abs($decisionLR);
+            }
+
+            $urlFinance = 'https://script.google.com/macros/s/AKfycby_XodelnakZ1ZSi6tnR2vPgQRQ4iFeXY6ZJDyBRSE_dHAZNIxAauYmDu-KWRQcZm8_/exec';
+            $payload = [
+                'status' => 'Pelunasan',
+                'idTransaksi' => $id,
+                'dpCustomer' => $dpCustomer,
+                'namaAkun' => $namaMetodePembayaran,
+                'namaCustomer' => $pelunasanNamaCustomer . '-' . $pelunasanIdCustomer,
+                'nominalPembayaran' => $pelunasanNominalPembayaran,
+                'discount' => $pelunasanDiscount,
+                'kerugianKios' => $rugiKios,
+                'kerugianGudang' => 0,
+                'labaKiosBaru' => $labaKios,
+                'labaKiosBekas' => 0,
+                'modalKiosBaru' => $modalKios,
+                'modalKiosBekas' => 0,
+                'pendapatanGudang' => 0,
+                'modalGudang' => 0,
+                'ongkir' => $pelunasanOngkir,
+            ];
+
+            $sentData = Http::post($urlFinance, $payload);
+            $response = json_decode($sentData->body(), true);
+            $responseStatus = $response['status'];
+
+            if($responseStatus == 'success') {
+                $connectionPelunasan->commit();
+                return redirect()->route('dp-po.index')->with('success', 'Success melakukan transaksi.');
+            } else {
+                $connectionPelunasan->rollBack();
+                return back()->with('error', 'Something Went Wrong.');
+            }
+
+        } catch (Exception $e) {
+            $connectionPelunasan->rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
     public function store(Request $request)
     {
         $connectionKios = DB::connection('rumahdrone_kios');
@@ -103,6 +249,22 @@ class KiosPODPController extends Controller
             }
 
             $this->updateStatusTransaksi($dppoTransaksi, $dppoStatus, $dppoNominal, $totalNominal);
+
+            $namaAkun = $dppoTransaksi->metodepembayaran->nama_akun;
+            $getDataCustomer = Customer::findOrFail($dppoCustomer);
+            $namaCustomer = $getDataCustomer->first_name . ' ' . $getDataCustomer->id;
+            $urlFinance = 'https://script.google.com/macros/s/AKfycby_XodelnakZ1ZSi6tnR2vPgQRQ4iFeXY6ZJDyBRSE_dHAZNIxAauYmDu-KWRQcZm8_/exec';
+            $payload = [
+                'status' => 'DP',
+                'idTransaksi' => $dppoTransaksi->id,
+                'dpCustomer' => $dppoNominal,
+                'namaAkun' => $namaAkun,
+                'namaCustomer' => $namaCustomer,
+            ];
+
+            $sentData = Http::post($urlFinance, $payload);
+            $response = json_decode($sentData->body(), true);
+            $responseStatus = $response['status'];
 
             $connectionKios->commit();
             return back()->with('success', 'Berhasil membuat ' . $dppoStatus);
@@ -154,7 +316,7 @@ class KiosPODPController extends Controller
         $detailTransaksi->kios_produk_id = $produkId;
         $detailTransaksi->serial_number_id = null;
 
-        if ($jenisTransaksi == 'Baru') {
+        if ($jenisTransaksi == 'drone_baru') {
             $dataProduk = KiosProduk::where('sub_jenis_id', $produkId)->first();
             $nilaiPromo = $dataProduk->harga_promo;
             $nilaiSrp = $dataProduk->srp;

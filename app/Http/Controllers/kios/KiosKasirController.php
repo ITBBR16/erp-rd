@@ -95,7 +95,7 @@ class KiosKasirController extends Controller
                 $detailTransaksi->kios_produk_id = $item;
                 $detailTransaksi->serial_number_id = $kasirSN[$index];
 
-                if($kasirJenisTransaksi[$index] =='Baru') {
+                if($kasirJenisTransaksi[$index] =='drone_baru') {
                     $dataProduk = KiosProduk::where('sub_jenis_id', $item)->first();
                     $nilaiPromo = $dataProduk->harga_promo;
                     $nilaiSrp = $dataProduk->srp;
@@ -115,7 +115,7 @@ class KiosKasirController extends Controller
             $transaksi->total_harga = $totalHarga;
             $transaksi->save();
 
-            return back()->with('success', 'Success Do Transaction.');
+            return back()->with('success', 'Success melakukan transaksi.');
 
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());

@@ -38,7 +38,7 @@
             </thead>
             <tbody>
                 @foreach ($dataTransaksi as $item)
-                    @if ($item->status_dp != '' || $item->status_po != '')
+                    @if ($item->status_dp == 'DP' || $item->status_po == 'PO')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 {{ $item->customer->first_name }} {{ $item->customer->last_name }}
