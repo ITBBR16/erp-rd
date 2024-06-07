@@ -67,11 +67,11 @@ class KiosDashboardProduk extends Controller
             $date = $today->copy()->subDays($i);
             $sales = KiosTransaksi::whereDate('updated_at', $date)
                     ->where(function ($query) {
-                        $query->where('status_dp', '')
+                        $query->where('status_dp', null)
                             ->orWhere('status_dp', 'Lunas');
                     })
                     ->where(function ($query) {
-                        $query->where('status_po', '')
+                        $query->where('status_po', null)
                             ->orWhere('status_po', 'Lunas');
                     })
                     ->get()
@@ -95,11 +95,11 @@ class KiosDashboardProduk extends Controller
             $date = $lastWeekStartDate->copy()->subDays($i);
             $sales = KiosTransaksi::whereDate('updated_at', $date)
                 ->where(function ($query) {
-                    $query->where('status_dp', '')
+                    $query->where('status_dp', null)
                         ->orWhere('status_dp', 'Lunas');
                 })
                 ->where(function ($query) {
-                    $query->where('status_po', '')
+                    $query->where('status_po', null)
                         ->orWhere('status_po', 'Lunas');
                 })
                 ->get()
@@ -160,14 +160,15 @@ class KiosDashboardProduk extends Controller
         $thisMonth = date('m');
 
         $topCustomer = KiosTransaksi::select('customer_id')
-                       ->selectRaw('SUM(total_harga + tax - discount) as total_transaksi')
-                       ->whereRaw('YEAR(updated_at) = ? AND MONTH(updated_at) = ?', [$thisYear, $thisMonth])
+                       ->selectRaw('SUM(total_harga + tax + ongkir - discount + COALESCE(dp.jumlah_pembayaran, 0)) as total_transaksi')
+                       ->leftJoin('kios_transaksi_dp as dp', 'dp.kios_transaksi_id', '=', 'kios_transaksi.id')
+                       ->whereRaw('YEAR(kios_transaksi.updated_at) = ? AND MONTH(kios_transaksi.updated_at) = ?', [$thisYear, $thisMonth])
                        ->where(function ($query) {
-                            $query->where('status_dp', '')
+                            $query->where('status_dp', null)
                                 ->orWhere('status_dp', 'Lunas');
                         })
                         ->where(function ($query) {
-                            $query->where('status_po', '')
+                            $query->where('status_po', null)
                                 ->orWhere('status_po', 'Lunas');
                         })
                        ->groupBy('customer_id')
