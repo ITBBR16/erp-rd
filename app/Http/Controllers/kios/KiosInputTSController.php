@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\kios;
 
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\produk\ProdukJenis;
+use Illuminate\Support\Facades\DB;
 use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
 use App\Repositories\kios\KiosRepository;
 use App\Models\kios\KiosRecapPermasalahan;
-use Exception;
-use Illuminate\Validation\Rule;
 
 class KiosInputTSController extends Controller
 {
@@ -41,6 +42,9 @@ class KiosInputTSController extends Controller
 
     public function store(Request $request)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
+
         try {
             $request->validate([
                 'add_permasalahan' => ['required', Rule::unique('rumahdrone_kios.kios_recap_permasalahan', 'nama')],
@@ -59,9 +63,11 @@ class KiosInputTSController extends Controller
 
             $recapPermasalahan->permasalahanproduk()->sync($jenisProduk);
 
+            $connectionKios->commit();
             return back()->with('success', 'Success add new data technical support.');
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

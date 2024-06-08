@@ -6,6 +6,7 @@ use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\produk\ProdukJenis;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosQcProdukSecond;
@@ -54,6 +55,11 @@ class KiosFilterProdukSecondController extends Controller
 
     public function update(Request $request, $id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionProduk = DB::connection('rumahdrone_produk');
+        $connectionKios->beginTransaction();
+        $connectionProduk->beginTransaction();
+
         try {
             $statusQc = 'Ready';
             $pivotIds = $request->input('pivot_id');
@@ -136,8 +142,13 @@ class KiosFilterProdukSecondController extends Controller
             $kiosQcPS->tanggal_filter = $formattedDate;
             $kiosQcPS->save();
 
+            $connectionKios->commit();
+            $connectionProduk->commit();
             return redirect()->route('filter-product-second.index')->with('success', 'Success Input Filter Result.');
+
         } catch (Exception $e) {
+            $connectionKios->rollBack();
+            $connectionProduk->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

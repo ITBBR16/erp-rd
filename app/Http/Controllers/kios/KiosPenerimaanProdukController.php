@@ -5,6 +5,7 @@ namespace App\Http\Controllers\kios;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\kios\KiosRepository;
@@ -36,6 +37,8 @@ class KiosPenerimaanProdukController extends Controller
 
     public function update(Request $request, $id)
     {
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionEkspedisi->beginTransaction();
         $user = auth()->user();
         $userId = $user->id;
         try {
@@ -87,13 +90,16 @@ class KiosPenerimaanProdukController extends Controller
                     'link_img_paket' => $imgPaket,
                 ]);
 
+                $connectionEkspedisi->commit();
                 return back()->with('success', 'Success Terima Produk.');
 
             } else {
+                $connectionEkspedisi->rollBack();
                 return back()->with('error', 'Something Went Wrong.');
             }
 
         } catch (Exception $e) {
+            $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

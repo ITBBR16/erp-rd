@@ -5,13 +5,14 @@ namespace App\Http\Controllers\kios;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\kios\KiosOrder;
+use Illuminate\Support\Facades\DB;
 use App\Models\ekspedisi\Ekspedisi;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosOrderSecond;
 use App\Models\ekspedisi\JenisPelayanan;
 use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
-use App\Models\kios\KiosOrder;
-use App\Models\kios\KiosOrderSecond;
 
 class KiosPengirimanController extends Controller
 {
@@ -38,6 +39,11 @@ class KiosPengirimanController extends Controller
 
     public function update(Request $request, $id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionKios->beginTransaction();
+        $connectionEkspedisi->beginTransaction();
+
         try{
             $pengiriman = PengirimanEkspedisi::findOrFail($id);
             $statusOrder = $request->input('status_order');
@@ -66,9 +72,13 @@ class KiosPengirimanController extends Controller
             $order->save();
             $pengiriman->update($dataUpdate);
 
+            $connectionKios->commit();
+            $connectionEkspedisi->commit();
             return back()->with('success', 'Success Update Data.');
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
+            $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

@@ -4,16 +4,17 @@ namespace App\Http\Controllers\kios;
 
 use Exception;
 use Illuminate\Http\Request;
+use App\Models\kios\KiosOrder;
 use App\Models\kios\KiosProduk;
 use Illuminate\Validation\Rule;
 use App\Models\kios\KiosOrderList;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\ekspedisi\ValidasiProduk;
 use App\Models\kios\KiosKomplainSupplier;
 use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
-use App\Models\kios\KiosOrder;
 
 class KiosPengecekkanProdukBaruController extends Controller
 {
@@ -40,6 +41,11 @@ class KiosPengecekkanProdukBaruController extends Controller
 
     public function store(Request $request)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionKios->beginTransaction();
+        $connectionEkspedisi->beginTransaction();
+
         try {
             $request->validate([
                 'validasi-sn' => ['required', 'array', 'min:1', Rule::unique('rumahdrone_kios.serial_number', 'serial_number')],
@@ -114,9 +120,13 @@ class KiosPengecekkanProdukBaruController extends Controller
                 $newSN->save();
             }
 
+            $connectionKios->commit();
+            $connectionEkspedisi->commit();
             return back()->with('success', 'Success Validasi Data.');
 
         } catch(Exception $e) {
+            $connectionKios->rollBack();
+            $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

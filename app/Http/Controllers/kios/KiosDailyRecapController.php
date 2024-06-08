@@ -56,11 +56,13 @@ class KiosDailyRecapController extends Controller
 
     public function store(Request $request)
     {
+        $connectionCustomer = DB::connection('rumahdrone_customer');
+        $connectionKios = DB::connection('rumahdrone_kios');
+
         $picId = auth()->user()->id;
         $divisiId = auth()->user()->divisi_id;
 
         if($request->has('nama_customer')) {
-            $connectionKios = DB::connection('rumahdrone_kios');
             $connectionKios->beginTransaction();
             try{
                 $dailyRecap = new KiosDailyRecap([
@@ -87,8 +89,7 @@ class KiosDailyRecapController extends Controller
             }
 
         } elseif($request->has('first_name')) {
-            
-            $connectionCustomer = DB::connection('rumahdrone_kios');
+
             $connectionCustomer->beginTransaction();
 
             $validate = $request->validate([
@@ -130,6 +131,9 @@ class KiosDailyRecapController extends Controller
 
     public function update(Request $request, $id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
+
         try {
             $dataRecap = KiosDailyRecap::findOrFail($id);
             $dataRecap->update([
@@ -142,20 +146,27 @@ class KiosDailyRecapController extends Controller
                 'status_id' => $request->input('edit_recap_status'),
             ]);
 
+            $connectionKios->commit();
             return back()->with('success', 'Success Update Data Recap.');
         } catch(Exception $e) {
+            $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }
 
     public function destroy($id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
+
         try{
             $dailyRecapId = KiosDailyRecap::findOrFail($id);
             $dailyRecapId->delete();
 
+            $connectionKios->commit();
             return back()->with('success', 'Success Delete Data Recap.');
         } catch(Exception $e) {
+            $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\kios\KiosProduk;
 use Illuminate\Validation\Rule;
 use App\Models\kios\KiosOrderList;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\ekspedisi\ValidasiProduk;
@@ -36,6 +37,11 @@ class LogistikValidasiProdukController extends Controller
 
     public function store(Request $request)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionKios->beginTransaction();
+        $connectionEkspedisi->beginTransaction();
+
         try {
             $request->validate([
                 'validasi-sn' => ['required', 'array', 'min:1', Rule::unique('rumahdrone_kios.serial_number', 'serial_number')],
@@ -84,7 +90,7 @@ class LogistikValidasiProdukController extends Controller
                 }
                 return back()->with('error', 'Serial Number Tidak Boleh Sama.');
             }
-            
+
             KiosOrderList::where('id', $validasiListProdukId)->update(['status' => $status]);
             $cekJenisPaket = KiosProduk::where('sub_jenis_id', $validasiSubJenisId)->first();
             $orderLists = KiosOrderList::where('order_id', $validasiOrderId)->get();
@@ -116,10 +122,13 @@ class LogistikValidasiProdukController extends Controller
                 $newSN->save();
             }
 
-
+            $connectionKios->commit();
+            $connectionEkspedisi->commit();
             return back()->with('success', 'Success Validasi Data.');
 
         } catch(Exception $e) {
+            $connectionKios->rollBack();
+            $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

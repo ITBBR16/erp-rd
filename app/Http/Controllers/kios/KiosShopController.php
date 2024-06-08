@@ -9,6 +9,7 @@ use App\Models\kios\KiosPayment;
 use App\Models\kios\SupplierKios;
 use App\Models\kios\KiosOrderList;
 use App\Models\produk\ProdukJenis;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Models\produk\ProdukSubJenis;
@@ -45,13 +46,18 @@ class KiosShopController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'supplier_kios' => 'required',
-            'paket_penjualan' => 'required|array',
-            'quantity' => 'required|array'
-        ]);
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionProduct = DB::connection('rumahdrone_produk');
+        $connectionKios->beginTransaction();
+        $connectionProduct->beginTransaction();
 
         try{
+            $request->validate([
+                'supplier_kios' => 'required',
+                'paket_penjualan' => 'required|array',
+                'quantity' => 'required|array'
+            ]);
+
             // Identifikasi Supplier
             $supplierId = $request->input('supplier_kios');
             $searchSupplier = SupplierKios::findOrFail($supplierId);
@@ -106,14 +112,13 @@ class KiosShopController extends Controller
 
             $responseMessage = Http::post($urlMessage, $messageGroupSupplier);
 
+            $connectionKios->commit();
+            $connectionProduct->commit();
             return back()->with('success', 'Success Add New Order List.');
 
         } catch(Exception $e) {
-            if(isset($order) && $order->id){
-                $order->orderLists()->delete();
-                $order->histories()->delete();
-                $order->delete();
-            }
+            $connectionKios->rollBack();
+            $connectionProduct->rollBack();
             return back()->with('error', $e->getMessage());
         }
 
@@ -121,14 +126,17 @@ class KiosShopController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'supplier_kios' => 'required',
-            'jenis_paket' => 'required|array',
-            'quantity' => 'required|array',
-            'nilai' => 'required|array',
-        ]);
-        
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
+
         try{
+            $request->validate([
+                'supplier_kios' => 'required',
+                'jenis_paket' => 'required|array',
+                'quantity' => 'required|array',
+                'nilai' => 'required|array',
+            ]);
+            
             $suppId = $request->input('supplier_id');
             $supplier = SupplierKios::findOrFail($suppId);
             $supplierName = $supplier->nama_perusahaan;
@@ -218,10 +226,12 @@ class KiosShopController extends Controller
             $responseMessage = Http::post($urlMessage, $messageGroupSupplier);
 
             $payment->save();
+            $connectionKios->commit();
 
             return back()->with('success', 'Success Validasi Order.');
             
         } catch(Exception $e) {
+            $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
         

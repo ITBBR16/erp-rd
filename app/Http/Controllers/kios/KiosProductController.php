@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use Termwind\Components\Raw;
 use App\Models\kios\KiosProduk;
 use App\Models\produk\ProdukType;
-use App\Http\Controllers\Controller;
 use App\Models\produk\ProdukJenis;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Models\produk\ProdukKategori;
-use App\Models\produk\ProdukKelengkapan;
 use App\Models\produk\ProdukSubJenis;
+use App\Models\produk\ProdukKelengkapan;
 use App\Repositories\kios\KiosRepository;
 
 class KiosProductController extends Controller
@@ -72,6 +73,8 @@ class KiosProductController extends Controller
 
     public function update(Request $request, $id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
         try{
             $srp = preg_replace("/[^0-9]/", "", $request->input('harga_jual'));
             $harga_promo = preg_replace("/[^0-9]/", "", $request->input('harga_promo'));
@@ -81,7 +84,7 @@ class KiosProductController extends Controller
             $product = KiosProduk::find($id);
             $product->srp = $srp;
 
-            if($end_promo != '') {
+            if($start_promo != '' && $end_promo != '') {
                 $product->harga_promo = $harga_promo;
                 $product->start_promo = $start_promo;
                 $product->end_promo = $end_promo;
@@ -90,9 +93,11 @@ class KiosProductController extends Controller
 
             $product->save();
 
+            $connectionKios->commit();
             return back()->with('success', 'Success Update Product.');
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

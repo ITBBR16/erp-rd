@@ -4,6 +4,7 @@ namespace App\Http\Controllers\logistik;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
@@ -35,9 +36,12 @@ class LogistikPenerimaanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = auth()->user();
-        $userId = $user->id;
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionEkspedisi->beginTransaction();
+
         try {
+            $user = auth()->user();
+            $userId = $user->id;
 
             // Send data to api upload file unboxing
             $urlApi = 'https://script.google.com/macros/s/AKfycbwEGIug4RlkPWDKZLjwZKQYughyiNIaYveGRKR4WXD3y-HM6jRcrsvfBkXjFJNR7V1o/exec';
@@ -69,9 +73,11 @@ class LogistikPenerimaanController extends Controller
                 'link_img' => $linkFile[0],
             ]);
 
+            $connectionEkspedisi->commit();
             return back()->with('success', 'Success Terima Produk.');
 
         } catch (Exception $e) {
+            $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

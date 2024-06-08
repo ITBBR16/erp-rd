@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\kios\KiosPayment;
 use App\Models\customer\Customer;
 use App\Models\produk\ProdukJenis;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosMarketplace;
 use App\Models\kios\KiosOrderSecond;
@@ -18,8 +19,8 @@ use App\Models\produk\ProdukKelengkapan;
 use App\Models\kios\KiosStatusPembayaran;
 use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
-use App\Models\kios\KiosMetodePembayaranSecond;
 use App\Models\kios\KiosMetodePembelianSecond;
+use App\Models\kios\KiosMetodePembayaranSecond;
 
 class KiosShopSecondController extends Controller
 {
@@ -56,12 +57,17 @@ class KiosShopSecondController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'kelengkapan_second' => 'array',
-            'quantity_second' => 'array',
-        ]);
-        
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionProduct = DB::connection('rumahdrone_produk');
+        $connectionKios->beginTransaction();
+        $connectionProduct->beginTransaction();
+
         try{
+            $request->validate([
+                'kelengkapan_second' => 'array',
+                'quantity_second' => 'array',
+            ]);
+
             $user = auth()->user();
             $divisiId = $user->divisi_id;
 
@@ -84,7 +90,7 @@ class KiosShopSecondController extends Controller
             $findCustomer = Customer::findOrFail($customerInput);
             $customerName = $findCustomer->first_name . " " . $findCustomer->last_name;
             $asalId = $request->input('marketplace');
-            
+
             $orderSecond = KiosOrderSecond::create([
                 'come_from' => $comeFrom,
                 'customer_id' => $customerInput,
@@ -175,10 +181,14 @@ class KiosShopSecondController extends Controller
             ]);
 
             $payment->save();
+            $connectionKios->commit();
+            $connectionProduct->commit();
 
             return back()->with('success', 'Success Buat Order Belanja Second.');
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
+            $connectionProduct->rollBack();
             return back()->with('error', $e->getMessage());
         }
 
@@ -186,8 +196,10 @@ class KiosShopSecondController extends Controller
 
     public function validasisecond(Request $request, $id)
     {
-        try {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
 
+        try {
             $user = auth()->user();
             $divisiId = $user->divisi_id;
             $divisi = $this->suppKiosRepo->getDivisi($user);
@@ -219,13 +231,17 @@ class KiosShopSecondController extends Controller
                 $kiosOrderSecond = KiosOrderSecond::findOrFail($id);
                 $kiosOrderSecond->status_pembarayan = 'Waiting For Payment';
                 $kiosOrderSecond->save();
+
+                $connectionKios->commit();
                 return back()->with('success', 'Success Request Payment.');
 
             } else {
+                $connectionKios->rollBack();
                 return back()->with('error', 'Something Went Wrong.');
             }
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

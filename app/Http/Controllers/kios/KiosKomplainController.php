@@ -40,6 +40,11 @@ class KiosKomplainController extends Controller
 
     public function update(Request $request, $id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionKios->beginTransaction();
+        $connectionEkspedisi->beginTransaction();
+
         try {
             $user = auth()->user();
             $divisiId = $user->divisi_id;
@@ -102,12 +107,15 @@ class KiosKomplainController extends Controller
             $komplainSupplier->status = $status;
             $komplainSupplier->save();
 
+            $connectionKios->commit();
+            $connectionEkspedisi->commit();
             return back()->with('success', 'Success Validasi Komplain.');
 
         } catch(Exception $e) {
+            $connectionKios->rollBack();
+            $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
-
 
     }
 }

@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\produk\ProdukJenis;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosQcProdukSecond;
@@ -53,6 +54,11 @@ class KiosPengecekkanSecondController extends Controller
 
     public function update(Request $request, $id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionProduk = DB::connection('rumahdrone_produk');
+        $connectionKios->beginTransaction();
+        $connectionProduk->beginTransaction();
+
         try {
             $statusQc = 'Done QC';
             $pivotIds = $request->input('pivot_id');
@@ -134,9 +140,13 @@ class KiosPengecekkanSecondController extends Controller
                 }
             }
 
+            $connectionKios->commit();
+            $connectionProduk->commit();
             return redirect()->route('pengecekkan-produk-second.index')->with('success', 'Success Input QC Result.');
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
+            $connectionProduk->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

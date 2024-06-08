@@ -12,12 +12,13 @@ use App\Models\kios\KiosAkunRD;
 use App\Models\kios\KiosProduk;
 use App\Models\customer\Customer;
 use App\Models\kios\KiosTransaksi;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksiDetail;
 use App\Repositories\kios\KiosRepository;
-use Illuminate\Support\Facades\Http;
 
 class KiosKasirController extends Controller
 {
@@ -50,6 +51,9 @@ class KiosKasirController extends Controller
 
     public function store(Request $request)
     {
+        $connectionTransaksiKios = DB::connection('rumahdrone_kios');
+        $connectionTransaksiKios->beginTransaction();
+
         try{
             $userId = auth()->user()->id;
             $request->validate([
@@ -72,6 +76,7 @@ class KiosKasirController extends Controller
             $kasirSN = $request->input('kasir_sn');
             $kasirSrp = preg_replace("/[^0-9]/", "", $request->input('kasir_harga'));
             $totalHarga = 0;
+            $modalKios = 0;
 
             if(count(array_unique($kasirSN)) !== count($kasirSN)) {
                 return back()->with('error', 'Serial Number tidak boleh ada yang sama.');
@@ -89,6 +94,7 @@ class KiosKasirController extends Controller
             foreach($kasirItem as $index => $item) {
                 $totalHarga += $kasirSrp[$index];
                 
+                $findSN = KiosSerialNumber::find($kasirSN[$index]);
                 $detailTransaksi = new KiosTransaksiDetail();
                 $detailTransaksi->kios_transaksi_id = $transaksi->id;
                 $detailTransaksi->jenis_transaksi = $kasirJenisTransaksi[$index];
@@ -96,6 +102,7 @@ class KiosKasirController extends Controller
                 $detailTransaksi->serial_number_id = $kasirSN[$index];
 
                 if($kasirJenisTransaksi[$index] =='drone_baru') {
+                    $modalKios += $findSN->validasiproduk->orderLists->nilai;
                     $dataProduk = KiosProduk::where('sub_jenis_id', $item)->first();
                     $nilaiPromo = $dataProduk->harga_promo;
                     $nilaiSrp = $dataProduk->srp;
@@ -115,9 +122,52 @@ class KiosKasirController extends Controller
             $transaksi->total_harga = $totalHarga;
             $transaksi->save();
 
-            return back()->with('success', 'Success melakukan transaksi.');
+            $namaMetodePembayaran = $transaksi->metodepembayaran->nama_akun;
+            $namaCustomer = $transaksi->customer->first_name;
+
+            $decisionLR = $totalHarga - $modalKios + $kasirTax;
+            $labaKios = 0;
+            $rugiKios = 0;
+            if($decisionLR > 0) {
+                $labaKios = $decisionLR;
+            } else {
+                $rugiKios = abs($decisionLR);
+            }
+
+            $urlFinance = 'https://script.google.com/macros/s/AKfycby_XodelnakZ1ZSi6tnR2vPgQRQ4iFeXY6ZJDyBRSE_dHAZNIxAauYmDu-KWRQcZm8_/exec';
+            $payload = [
+                'status' => 'Pelunasan',
+                'idTransaksi' => $transaksi->id,
+                'dpCustomer' => 0,
+                'namaAkun' => $namaMetodePembayaran,
+                'namaCustomer' => $namaCustomer . '-' . $kasirCustomer,
+                'nominalPembayaran' => $totalHarga,
+                'discount' => $kasirDiscount,
+                'kerugianKios' => $rugiKios,
+                'kerugianGudang' => 0,
+                'labaKiosBaru' => $labaKios,
+                'labaKiosBekas' => 0,
+                'modalKiosBaru' => $modalKios,
+                'modalKiosBekas' => 0,
+                'pendapatanGudang' => 0,
+                'modalGudang' => 0,
+                'ongkir' => $kasirOngkir,
+            ];
+
+            $sentData = Http::post($urlFinance, $payload);
+            $response = json_decode($sentData->body(), true);
+            $responseStatus = $response['status'];
+
+            if($responseStatus == 'success') {
+                $connectionTransaksiKios->commit();
+                return back()->with('success', 'Success melakukan transaksi.');
+            } else {
+                $connectionTransaksiKios->rollBack();
+                return back()->with('error', 'Something Went Wrong.');
+            }
 
         } catch (Exception $e) {
+            $connectionTransaksiKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
 

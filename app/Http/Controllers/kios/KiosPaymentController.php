@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\kios\KiosOrder;
 use Illuminate\Validation\Rule;
 use App\Models\kios\KiosPayment;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosOrderSecond;
@@ -40,14 +41,17 @@ class KiosPaymentController extends Controller
 
     public function validasi(Request $request, $id)
     {
-
-        $request->validate([
-            'media_transaksi' => 'required',
-            'no_rek' => 'required',
-            'nama_akun' => 'required',
-        ]);
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionKios->beginTransaction();
+        $connectionEkspedisi->beginTransaction();
 
         try {
+            $request->validate([
+                'media_transaksi' => 'required',
+                'no_rek' => 'required',
+                'nama_akun' => 'required',
+            ]);
 
             $user = auth()->user();
             $divisiId = $user->divisi_id;
@@ -83,6 +87,7 @@ class KiosPaymentController extends Controller
             $responseFinance = Http::post($urlFinance, $dataFinance);
             $statusResponse = json_decode($responseFinance->body(), true);
             $feedbackStatus = $statusResponse['status'];
+
             if($feedbackStatus == 'success') {
 
                 $kiosPayment->keterangan = $request->input('keterangan');
@@ -116,7 +121,7 @@ class KiosPaymentController extends Controller
                 $namaGroup = '';
                 $header = "*Incoming Request Payment Produk " . $statusOrder . "*\n\n";
                 $body = "Order ID : " . $msgOrderId . "\nRef : " . $noTransaksi . "\nTotal Nominal : Rp. " . $formattedTotal . "\nLink Order ID : " . $linkDrive;
-                $footer = "\nDitunggu Paymentnya kakak 😘\nJangan lupa Upload Bukti Transfer di Link Drive yaa\n";
+                $footer = "\nDitunggu paymentnya kakak 😘\nJangan lupa upload bukti transfer di link drive yaa\n";
                 $message = $header . $body . $footer;
 
                 $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
@@ -127,13 +132,20 @@ class KiosPaymentController extends Controller
 
                 $responseMessage = Http::post($urlMessage, $messageFinance);
 
+                $connectionKios->commit();
+                $connectionEkspedisi->commit();
+
                 return back()->with('success', 'Success Request Payment.');
 
             } else {
+                $connectionKios->rollBack();
+                $connectionEkspedisi->rollBack();
                 return back()->with('error', 'Tidak bisa melakukan request payment.');
             }
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
+            $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
 
@@ -141,6 +153,9 @@ class KiosPaymentController extends Controller
 
     public function update(Request $request, $id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
+
         try {
             $kiosPayment = KiosPayment::findOrFail($id);
     
@@ -192,10 +207,12 @@ class KiosPaymentController extends Controller
                 'ongkir' => $ongkir,
                 'pajak' => $pajak,
             ]);
-    
+
+            $connectionKios->commit();
             return back()->with('success', 'Success Update Data Payment.');
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
 

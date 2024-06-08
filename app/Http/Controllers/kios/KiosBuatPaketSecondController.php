@@ -41,15 +41,18 @@ class KiosBuatPaketSecondController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'paket_penjualan_produk_second' => 'required',
-            'cc_produk_second' => 'required',
-            'modal_produk_second' => 'required|min:1',
-            'harga_jual_produk_second' => 'required',
-            'kelengkapan_second' => 'required|array',
-        ]);
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
 
         try {
+            $request->validate([
+                'paket_penjualan_produk_second' => 'required',
+                'cc_produk_second' => 'required',
+                'modal_produk_second' => 'required|min:1',
+                'harga_jual_produk_second' => 'required',
+                'kelengkapan_second' => 'required|array',
+            ]);
+
             $srpSecond = preg_replace("/[^0-9]/", "", $request->input('harga_jual_produk_second'));
             $snSecond = $request->input('sn_second');
 
@@ -126,12 +129,17 @@ class KiosBuatPaketSecondController extends Controller
                             ->where('pivot_qc_id', $item)
                             ->update(['kios_produk_second_id' => $produkSecond->id, 'status' => 'On Sell']);
                 }
-    
+
+                $connectionKios->commit();
                 return back()->with('success', 'Success Created Product Second.');
+            } else {
+                $connectionKios->rollBack();
+                return back()->with('error', 'Something went wrong.');
             }
 
 
         } catch (Exception $e) {
+            $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

@@ -4,12 +4,13 @@ namespace App\Http\Controllers\kios;
 
 use Exception;
 use Illuminate\Http\Request;
+use App\Models\kios\KiosProduk;
 use Illuminate\Validation\Rule;
 use App\Models\produk\ProdukType;
 use App\Models\produk\ProdukJenis;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosImageProduk;
-use App\Models\kios\KiosProduk;
 use Illuminate\Support\Facades\Http;
 use App\Models\produk\ProdukKategori;
 use App\Models\produk\ProdukSubJenis;
@@ -45,6 +46,11 @@ class AddKelengkapanKiosController extends Controller
 
     public function store(Request $request)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionProduk = DB::connection('rumahdrone_produk');
+        $connectionKios->beginTransaction();
+        $connectionProduk->beginTransaction();
+
         if($request->has('kategori_id')) {
 
             try {
@@ -57,9 +63,11 @@ class AddKelengkapanKiosController extends Controller
 
                 ProdukJenis::create($validate);
 
+                $connectionProduk->commit();
                 return back()->with('success', 'Success Add New Product.');
 
             } catch (Exception $e) {
+                $connectionProduk->rollBack();
                 return back()->with('error', $e->getMessage());
             }
 
@@ -105,9 +113,11 @@ class AddKelengkapanKiosController extends Controller
                     }
                 }
 
+                $connectionProduk->commit();
                 return back()->with('success', 'Success Add or Edit Product.');
 
             } catch (Exception $e) {
+                $connectionProduk->rollBack();
                 return back()->with('error', $e->getMessage());
             }
 
@@ -203,9 +213,13 @@ class AddKelengkapanKiosController extends Controller
 
                 }
 
+                $connectionKios->commit();
+                $connectionProduk->commit();
                 return back()->with('success', 'Success Add Paket Penjualan.');
 
             } catch(Exception $e){
+                $connectionKios->rollBack();
+                $connectionProduk->rollBack();
                 return back()->with('error', $e->getMessage());
             }
 
