@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="flex text-3xl font-bold mb-6 text-gray-700 border-b border-gray-400 py-3 dark:text-gray-300">
-        <span>Add New Supplier</span>
+        <span>List Supplier Rumah Drone</span>
     </div>
 
     @if (session()->has('success'))
@@ -121,6 +121,12 @@
                                             <span class="material-symbols-outlined text-base mr-3">visibility</span>
                                             <span class="whitespace-nowrap">Detail Supplier</span>
                                         </button>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('supplier.edit', encrypt($sp->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300" target="__blank">
+                                            <i class="material-symbols-outlined text-base mr-3">shield_person</i>
+                                            <span class="whitespace-nowrap">Support Supplier</span>
+                                        </a>
                                     </li>
                                     <li>
                                         <button type="button" data-modal-target="edit-supplier{{ $sp->id }}" data-modal-toggle="edit-supplier{{ $sp->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">

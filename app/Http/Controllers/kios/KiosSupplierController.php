@@ -9,6 +9,7 @@ use App\Models\kios\SupplierKios;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosProduk;
 use App\Models\produk\ProdukKategori;
 use App\Repositories\kios\KiosRepository;
 
@@ -35,6 +36,27 @@ class KiosSupplierController extends Controller
             'suppliers' => $suppliers,
         ]);
     }
+
+    public function edit($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $suppliers = SupplierKios::findOrFail($id);
+        $product = KiosProduk::all();
+
+        return view('kios.supplier.modal.support-supp', [
+            'title' => 'Support Supplier',
+            'active' => 'supplier',
+            'navActive' => 'product',
+            'divisi' => $divisiName,
+            'dropdown' => '',
+            'dropdownShop' => '',
+            'suppliers' => $suppliers,
+            'products' => $product,
+        ]);
+    }
+
 
     public function store(Request $request)
     {
