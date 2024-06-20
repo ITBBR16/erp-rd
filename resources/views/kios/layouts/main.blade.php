@@ -6,9 +6,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ $title }} | RD</title>
         <link rel="icon" href="{{ asset('/img/RD Tab Icon.png') }}" sizes="16x16 32x32" type="image/png">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-        <link rel="stylesheet" href="/css/style.css">
-        <link rel="stylesheet" href="/css/loading.css">
         @vite('resources/css/app.css')
         <style>
             @media print {

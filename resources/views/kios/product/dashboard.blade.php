@@ -242,17 +242,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                            <th class="px-6 py-2">
-                                
-                            </th>
-                            <td class="px-6 py-2">
-                                
-                            </td>
-                            <td class="px-6 py-2">
-                                
-                            </td>
-                        </tr>
+                        @foreach ($listBelanja as $belanja)
+                            <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                <th class="px-6 py-2">
+                                    N.{{ $belanja->id }}
+                                </th>
+                                <td class="px-6 py-2">
+                                    {{ $belanja->supplier->nama_perusahaan }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $belanja->status }}
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -297,17 +299,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                            <th class="px-6 py-2">
-                                
-                            </th>
-                            <td class="px-6 py-2">
-                                
-                            </td>
-                            <td class="px-6 py-2">
-                                
-                            </td>
-                        </tr>
+                        @foreach ($produkPromo as $promo)
+                            <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                <th class="px-6 py-2">
+                                    {{ $promo->subjenis->produkjenis->jenis_produk }} {{ $promo->subjenis->paket_penjualan }}
+                                </th>
+                                <td class="px-6 py-2">
+                                    Rp. {{ number_format($promo->harga_promo, 0, ',', '.') }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    <span class="bg-red-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $promo->status }}</span>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -352,17 +356,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                            <th class="px-6 py-2">
-                                
-                            </th>
-                            <td class="px-6 py-2">
-                                
-                            </td>
-                            <td class="px-6 py-2">
-                                
-                            </td>
-                        </tr>
+                        @foreach ($listTransaksi as $transaksi)
+                            <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                <th class="px-6 py-2">
+                                    K-{{ $transaksi->created_at }}{{ $transaksi->id }}
+                                </th>
+                                <td class="px-6 py-2">
+                                    {{ $transaksi->customer->first_name }} {{ $transaksi->customer->last_name }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $transaksi->total_transaksi }}
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\kios;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosOrder;
+use App\Models\kios\KiosProduk;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksi;
@@ -26,6 +28,9 @@ class KiosDashboardProduk extends Controller
         $totalPbekas = $this->getTotalProdukBekas();
         $topProduct = $this->topProductThisMonth();
         $topCustomer = $this->topCustomerThisMonth();
+        $listBelanja = $this->listBelanjaBulanIni();
+        $produkPromo = $this->listProdukPromo();
+        $listTransaksi = $this->listTransaksiBulanIni();
 
         $percentSales = ($totalSalesLastWeek != 0) ? (($totalSalesThisWeek - $totalSalesLastWeek) / $totalSalesLastWeek) * 100 : 0;
         $formattedPercentSales = number_format($percentSales, 2);
@@ -44,6 +49,9 @@ class KiosDashboardProduk extends Controller
             'totalpbekas' => $totalPbekas,
             'topproduct' => $topProduct,
             'topcustomer' => $topCustomer,
+            'listBelanja' => $listBelanja,
+            'produkPromo' => $produkPromo,
+            'listTransaksi' => $listTransaksi,
         ]);
     }
 
@@ -177,6 +185,50 @@ class KiosDashboardProduk extends Controller
                        ->get();
 
         return $topCustomer;
+    }
+
+    private function listBelanjaBulanIni()
+    {
+        $thisYear = date('Y');
+        $thisMonth = date('m');
+
+        $listBelanjaBulanIni = KiosOrder::whereRaw('YEAR(order.created_at) = ? AND MONTH(order.created_at) = ?', [$thisYear, $thisMonth])
+                                  ->orderBy('created_at', 'desc')
+                                  ->limit(5)
+                                  ->get();
+
+        return $listBelanjaBulanIni;
+    }
+
+    private function listProdukPromo()
+    {
+        $produkPromo = KiosProduk::where('status', 'Promo')->get();
+        return $produkPromo;
+    }
+
+    private function listTransaksiBulanIni()
+    {
+        $thisYear = date('Y');
+        $thisMonth = date('m');
+
+        $listTransaksiBulanIni = KiosTransaksi::select('customer_id')
+                       ->selectRaw('SUM(total_harga + tax + ongkir - discount + COALESCE(dp.jumlah_pembayaran, 0)) as total_transaksi')
+                       ->leftJoin('kios_transaksi_dp as dp', 'dp.kios_transaksi_id', '=', 'kios_transaksi.id')
+                       ->whereRaw('YEAR(kios_transaksi.updated_at) = ? AND MONTH(kios_transaksi.updated_at) = ?', [$thisYear, $thisMonth])
+                       ->where(function ($query) {
+                            $query->where('status_dp', null)
+                                ->orWhere('status_dp', 'Lunas');
+                        })
+                        ->where(function ($query) {
+                            $query->where('status_po', null)
+                                ->orWhere('status_po', 'Lunas');
+                        })
+                       ->groupBy('customer_id')
+                       ->orderByDesc('total_transaksi')
+                       ->limit(5)
+                       ->get();
+
+        return $listTransaksiBulanIni;
     }
 
 }
