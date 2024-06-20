@@ -108,13 +108,14 @@ class KiosDailyRecapController extends Controller
             $dataCustomer = Customer::create($validate);
             $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
             $response = Http::post($appScriptUrl, [
-                'first_name' => $validate['first_name'] . ' - ' . $dataCustomer->id,
-                'last_name' => $validate['last_name'],
+                'first_name' => $validate['first_name'],
+                'last_name' => $validate['last_name'] . ' - ' . $dataCustomer->id,
                 'email' => $validate['email'],
                 'no_telpon' => $validate['no_telpon'],
             ]);
 
             $payloadContact = json_decode($response->body(), true);
+            dd($payloadContact);
             $statusContact = $payloadContact['status'];
             
             if($statusContact === 'success') {

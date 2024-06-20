@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    $('#table-search').on('input', function () {
+    $('#customer-search').on('input', function () {
         const query = $(this).val();
         const dataNotFound = document.getElementById('dataNotFound');
 
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             $('.customer-row').hide();
 
-            fetch('/customer/data-customer/search?query=' + encodeURIComponent(query), {
+            fetch('/kios/customer/list-customer/search?query=' + encodeURIComponent(query), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

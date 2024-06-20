@@ -5,9 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ $title }} | RD</title>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
         <link rel="icon" href="{{ asset('/img/RD Tab Icon.png') }}" sizes="16x16 32x32" type="image/png">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
         <link rel="stylesheet" href="/css/style.css">
         <link rel="stylesheet" href="/css/loading.css">
         @vite('resources/css/app.css')
@@ -50,6 +49,7 @@
             @yield('container')
         </div>
 
+        @vite('resources/js/app.js')
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/datepicker.min.js"></script>
@@ -57,26 +57,5 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-        <script src="/js/toggle.js"></script>
-        <script src="/js/search.js"></script>
-        <script src="/js/loader-form.js"></script>
-        <script src="/js/add-product-baru.js"></script>
-        <script src="/js/shop-baru.js"></script>
-        <script src="/js/shop-second.js"></script>
-        <script src="/js/toggle-payment-kios.js"></script>
-        <script src="/js/dropdown_wilayah.js"></script>
-        <script src="/js/dd-daily-recap.js"></script>
-        <script src="/js/dd-komplain-supplier.js"></script>
-        <script src="/js/daftar-produk.js"></script>
-        <script src="/js/file-upload.js"></script>
-        <script src="/js/create-produk-second.js"></script>
-        <script src="/js/kasir-kios.js"></script>
-        <script src="/js/kasir-dppo.js"></script>
-        <script src="/js/kasir-pelunasan.js"></script>
-        <script src="/js/logistik-validasi.js"></script>
-        <script src="/js/qc-second.js"></script>
-        <script src="/js/filter-second.js"></script>
-        <script src="/js/dashboard-produk.js"></script>
-        <script src="/js/chart-analisa.js"></script>
     </body>
 </html>

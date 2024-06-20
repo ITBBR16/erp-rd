@@ -34,4 +34,9 @@ class KiosProduk extends Model
         return $this->hasMany(KiosTransaksiDetail::class);
     }
 
+    public function historySupportSupplier()
+    {
+        return $this->hasMany(KiosHistorySupportSupplier::class);
+    }
+
 }

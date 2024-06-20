@@ -60,6 +60,8 @@ Route::middleware('kios')->group(function () {
         Route::prefix('/customer')->group(function () {
             Route::resource('/daily-recap', KiosDailyRecapController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::post('/daily-recap', [KiosDailyRecapController::class, 'store'])->name('form-daily-recap');
+            Route::resource('/list-customer', DataCustomerController::class)->only('index', 'update', 'delete');
+            Route::get('/list-customer/search', [DataCustomerController::class, 'search']);
         });
 
         Route::prefix('/product')->group(function () {
@@ -96,8 +98,11 @@ Route::middleware('kios')->group(function () {
 
             Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);
             Route::get('/getLayanan/{ekspedisiId}', [KiosPengirimanController::class, 'getLayanan']);
-            
-            Route::resource('/supplier', KiosSupplierController::class);
+
+            Route::group(['controller' => KiosSupplierController::class], function () {
+                Route::resource('/supplier', KiosSupplierController::class);
+                Route::put('/supplier/update-support', 'supportSupplier')->name('support-supplier');
+            });
 
             Route::group(['controller' => AddKelengkapanKiosController::class], function () {
                 Route::get('/add-product', 'index');

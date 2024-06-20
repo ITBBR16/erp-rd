@@ -1,4 +1,4 @@
-@extends('customer.layouts.main')
+@extends('kios.layouts.main')
 
 @section('container')
     <div class="grid grid-cols-2 gap-8 mb-8 border-b border-gray-400 py-3">
@@ -46,7 +46,7 @@
                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
-                <input type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search. . .">
+                <input type="text" id="customer-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search. . .">
             </div>
         </div>
     </div>
@@ -95,14 +95,14 @@
                         </td>
                         <td class="px-6 py-2">
                             <div class="flex flex-wrap">
-                                <button type="button" data-modal-target="view-customer" data-modal-toggle="view-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="view-customer{{ $dc->id }}" data-modal-toggle="view-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                     <i class="material-symbols-outlined text-base">visibility</i>
                                 </button>
                                 @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
-                                    <button type="button" data-modal-target="update-customer" data-modal-toggle="update-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="update-customer{{ $dc->id }}" data-modal-toggle="update-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">edit</i>
                                     </button>
-                                    <button type="button" data-modal-target="delete-customer" data-modal-toggle="delete-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="delete-customer{{ $dc->id }}" data-modal-toggle="delete-customer{{ $dc->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base">delete</i>
                                     </button>
                                 @endif

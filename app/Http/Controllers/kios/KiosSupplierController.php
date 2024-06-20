@@ -9,6 +9,7 @@ use App\Models\kios\SupplierKios;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosHistorySupportSupplier;
 use App\Models\kios\KiosProduk;
 use App\Models\produk\ProdukKategori;
 use App\Repositories\kios\KiosRepository;
@@ -43,7 +44,7 @@ class KiosSupplierController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $suppliers = SupplierKios::findOrFail($id);
-        $product = KiosProduk::all();
+        $product = KiosProduk::with('subjenis.produkjenis')->get();
 
         return view('kios.supplier.modal.support-supp', [
             'title' => 'Support Supplier',
@@ -57,6 +58,57 @@ class KiosSupplierController extends Controller
         ]);
     }
 
+    public function supportSupplier(Request $request, $id)
+    {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
+
+        try {
+            $request->validate([
+                'nama_produk' => 'required|array|min:1',
+                'start_promo' => 'required|array|min:1',
+                'end_promo' => 'required|array|min:1',
+                'nominal_promo' => 'required|array|min:1',
+                'nominal_support' => 'required|array|min:1',
+            ]);
+
+            $namaProduk = $request->input('nama_produk');
+            $startPromo = $request->input('start_promo');
+            $endPromo = $request->input('end_promo');
+            $nominalPromo = $this->sanitizeNominal($request->input('nominal_promo'));
+            $nominalSupport = $this->sanitizeNominal($request->input('nominal_support'));
+
+            $historyData = [];
+
+            foreach ($namaProduk as $index => $produk) {
+                $findProduk = KiosProduk::findOrFail($produk);
+                $findProduk->update([
+                    'harga_promo' => $nominalPromo[$index],
+                    'support_supplier' => $nominalSupport[$index],
+                    'start_promo' => $startPromo[$index],
+                    'end_promo' => $endPromo[$index],
+                    'status' => 'Promo',
+                ]);
+
+                $historyData[] = [
+                    'supplier_id' => $id,
+                    'product_id' => $produk,
+                    'nominal_promo' => $nominalPromo[$index],
+                    'nominal_support' => $nominalSupport[$index],
+                    'start_promo' => $startPromo[$index],
+                    'end_promo' => $endPromo[$index],
+                ];
+            }
+
+            KiosHistorySupportSupplier::insert($historyData);
+
+            $connectionKios->commit();
+            return back()->with('success', 'Success update support ses.');
+        } catch (Exception $e) {
+            $connectionKios->rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+    }
 
     public function store(Request $request)
     {
@@ -72,6 +124,7 @@ class KiosSupplierController extends Controller
                 'alamat_lengkap' => 'required',
                 'kategori' => 'required|array|min:1',
             ]);
+
             $supplier = SupplierKios::create([
                 'pic_name' => $request->pic_name,
                 'nama_perusahaan' => $request->nama_perusahaan,
@@ -155,5 +208,11 @@ class KiosSupplierController extends Controller
 
         return response()->json($dataCustomer);
     }
+
+    private function sanitizeNominal($nominal)
+    {
+        return preg_replace("/[^0-9]/", "", $nominal);
+    }
+
 
 }

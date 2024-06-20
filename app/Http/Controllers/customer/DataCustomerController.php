@@ -33,6 +33,9 @@ class DataCustomerController extends Controller
         return view('customer.main.data-customer', [
             'title' => 'Detail Customer',
             'active' => 'detail-customer',
+            'navActive' => 'customer',
+            'dropdown' => '',
+            'dropdownShop' => '',
             'dataCustomer' => $dataCustomer,
             'dataKota' => $dataKota,
             'dataKecamatan' => $dataKecamatan,
