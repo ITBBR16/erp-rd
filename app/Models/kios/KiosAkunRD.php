@@ -2,6 +2,7 @@
 
 namespace App\Models\kios;
 
+use App\Models\repair\RepairTransaksiPembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,5 +17,10 @@ class KiosAkunRD extends Model
     public function transaksi()
     {
         return $this->hasMany(KiosTransaksi::class);
+    }
+
+    public function transaksiPembayaranRepair()
+    {
+        return $this->hasMany(RepairTransaksiPembayaran::class);
     }
 }

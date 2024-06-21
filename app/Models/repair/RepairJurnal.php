@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models\repair;
+
+use App\Models\employee\Employee;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class RepairJurnal extends Model
+{
+    use HasFactory;
+
+    public function case()
+    {
+        return $this->belongsTo(RepairCase::class, 'case_id');
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function jenisStatus()
+    {
+        return $this->belongsTo(RepairJenisStatus::class, 'jenis_status_id');
+    }
+}

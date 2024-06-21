@@ -4,6 +4,10 @@ namespace App\Models\employee;
 
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosTransaksi;
+use App\Models\repair\RepairCase;
+use App\Models\repair\RepairEstimasi;
+use App\Models\repair\RepairJurnal;
+use App\Models\repair\RepairTransaksiPembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,4 +29,23 @@ class Employee extends Model
         return $this->hasMany(KiosTransaksi::class);
     }
 
+    public function repairCase()
+    {
+        return $this->hasMany(RepairCase::class);
+    }
+
+    public function repairJurnal()
+    {
+        return $this->hasMany(RepairJurnal::class);
+    }
+
+    public function repairEstimasi()
+    {
+        return $this->hasMany(RepairEstimasi::class);
+    }
+
+    public function repairTransaksiPembayaran()
+    {
+        return $this->hasMany(RepairTransaksiPembayaran::class);
+    }
 }

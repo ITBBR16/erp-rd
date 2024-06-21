@@ -5,6 +5,8 @@ namespace App\Models\customer;
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosTransaksi;
+use App\Models\repair\RepairCase;
+use App\Models\repair\RepairTransaksi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,4 +38,13 @@ class Customer extends Model
         return $this->belongsTo(CustomerInfoPerusahaan::class);
     }
 
+    public function repairCase()
+    {
+        return $this->hasMany(RepairCase::class);
+    }
+
+    public function repairTransaksi()
+    {
+        return $this->hasMany(RepairTransaksi::class);
+    }
 }

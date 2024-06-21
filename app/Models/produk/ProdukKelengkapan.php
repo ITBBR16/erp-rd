@@ -2,8 +2,11 @@
 
 namespace App\Models\produk;
 
+use App\Models\produk\ProdukJenis;
 use App\Models\kios\KiosProdukSecond;
+use App\Models\produk\ProdukSubJenis;
 use App\Models\kios\KiosQcProdukSecond;
+use App\Models\repair\RepairKelengkapan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,4 +36,10 @@ class ProdukKelengkapan extends Model
     {
         return $this->belongsToMany(KiosProdukSecond::class, 'kios_kelengkapan_second_list', 'produk_kelengkapan_id', 'kios_produk_second_id')->withPivot('qc_id');
     }
+
+    public function repairKelengkapan()
+    {
+        return $this->hasMany(RepairKelengkapan::class);
+    }
+
 }
