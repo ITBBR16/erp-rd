@@ -7,6 +7,7 @@
         <title>{{ $title }} | RD</title>
         <link rel="icon" href="{{ asset('/img/RD Tab Icon.png') }}" sizes="16x16 32x32" type="image/png">
         @vite('resources/css/app.css')
+        @vite('resources/js/app.js')
         <style>
             @media print {
                 body * {
@@ -46,7 +47,6 @@
             @yield('container')
         </div>
 
-        @vite('resources/js/app.js')
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/datepicker.min.js"></script>

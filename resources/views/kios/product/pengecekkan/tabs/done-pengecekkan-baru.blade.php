@@ -77,7 +77,7 @@
             {{-- {{ $suppliers->links() }} --}}
         </div>
     </div>
-    @if (!($historyPenerimaan->contains('status', 'Diterima')) || !($historyPenerimaan->contains('status', 'InRD')))
+    @if (!$dataIncoming->contains('status', 'Diterima') && !$dataIncoming->contains('status', 'InRD'))
         <div class="p-4 mt-4">
             <div class="flex justify-center">
                 <figure class="max-w-lg">

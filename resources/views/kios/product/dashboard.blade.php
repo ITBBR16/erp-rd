@@ -251,7 +251,7 @@
                                     {{ $belanja->supplier->nama_perusahaan }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $belanja->status }}
+                                    <span class="bg-{{ ($belanja->status == 'InRD') ? 'green' : 'orange' }}-400 rounded-md px-2 py-0 text-white">{{ $belanja->status }}</span>
                                 </td>
                             </tr>
                         @endforeach
@@ -359,13 +359,13 @@
                         @foreach ($listTransaksi as $transaksi)
                             <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                 <th class="px-6 py-2">
-                                    K-{{ $transaksi->created_at }}{{ $transaksi->id }}
+                                    K-{{ $transaksi->created_at->format('Ymd') }}{{ $transaksi->id }}
                                 </th>
                                 <td class="px-6 py-2">
                                     {{ $transaksi->customer->first_name }} {{ $transaksi->customer->last_name }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $transaksi->total_transaksi }}
+                                    Rp. {{ number_format($transaksi->total_transaksi, 0, ',', '.') }}
                                 </td>
                             </tr>
                         @endforeach
