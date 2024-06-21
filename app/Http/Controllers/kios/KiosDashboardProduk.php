@@ -211,22 +211,22 @@ class KiosDashboardProduk extends Controller
         $thisYear = date('Y');
         $thisMonth = date('m');
 
-        $listTransaksiBulanIni = KiosTransaksi::select('customer_id')
-                       ->selectRaw('SUM(total_harga + tax + ongkir - discount + COALESCE(dp.jumlah_pembayaran, 0)) as total_transaksi')
-                       ->leftJoin('kios_transaksi_dp as dp', 'dp.kios_transaksi_id', '=', 'kios_transaksi.id')
-                       ->whereRaw('YEAR(kios_transaksi.updated_at) = ? AND MONTH(kios_transaksi.updated_at) = ?', [$thisYear, $thisMonth])
-                       ->where(function ($query) {
-                            $query->where('status_dp', null)
-                                ->orWhere('status_dp', 'Lunas');
-                        })
-                        ->where(function ($query) {
-                            $query->where('status_po', null)
-                                ->orWhere('status_po', 'Lunas');
-                        })
-                       ->groupBy('customer_id')
-                       ->orderByDesc('total_transaksi')
-                       ->limit(5)
-                       ->get();
+        $listTransaksiBulanIni = KiosTransaksi::select('customer_id', 'kios_transaksi.id', 'kios_transaksi.created_at')
+            ->selectRaw('SUM(kios_transaksi.total_harga + kios_transaksi.tax + kios_transaksi.ongkir - kios_transaksi.discount + COALESCE(dp.jumlah_pembayaran, 0)) as total_transaksi')
+            ->leftJoin('kios_transaksi_dp as dp', 'dp.kios_transaksi_id', '=', 'kios_transaksi.id')
+            ->whereRaw('YEAR(kios_transaksi.updated_at) = ? AND MONTH(kios_transaksi.updated_at) = ?', [$thisYear, $thisMonth])
+            ->where(function ($query) {
+                $query->where('kios_transaksi.status_dp', null)
+                    ->orWhere('kios_transaksi.status_dp', 'Lunas');
+            })
+            ->where(function ($query) {
+                $query->where('kios_transaksi.status_po', null)
+                    ->orWhere('kios_transaksi.status_po', 'Lunas');
+            })
+            ->groupBy('kios_transaksi.id', 'kios_transaksi.customer_id', 'kios_transaksi.created_at')
+            ->orderByDesc('total_transaksi')
+            ->limit(5)
+            ->get();
 
         return $listTransaksiBulanIni;
     }
