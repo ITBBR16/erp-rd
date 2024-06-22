@@ -12,6 +12,12 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
+                    <th scope="col" class="p-4">
+                        <div class="flex items-center">
+                            <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkbox-all" class="sr-only">checkbox all</label>
+                        </div>
+                    </th>
                     <th scope="col" class="px-6 py-3">
                         Tanggal Input
                     </th>
@@ -32,6 +38,12 @@
             <tbody>
                 @foreach ($dataTS as $recap)
                     <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <td class="p-4">
+                            <div class="flex items-center">
+                                <input name="checkboxSelect[]" id="checkbox-{{ $recap->id }}" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="checkbox-{{ $recap->id }}" class="sr-only">checkbox all</label>
+                            </div>
+                        </td>
                         <td class="px-6 py-2">
                             {{ \Carbon\Carbon::parse($recap->created_at)->isoFormat('D MMMM YYYY') }}
                         </td>
