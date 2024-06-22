@@ -23,12 +23,8 @@ class DataCustomerController extends Controller
         $dataKelurahan = $this->customerRepo->getSelectKelurahan();
         $provinsi = Provinsi::all();
 
-        $divisiId = auth()->user()->divisi_id;
-        if($divisiId != 0){
-            $divisiName = Divisi::find($divisiId);
-        } else {
-            $divisiName = 'Super Admin';
-        }
+        $user = auth()->user();
+        $divisiName = $this->customerRepo->getDivisi($user);
 
         return view('customer.main.data-customer', [
             'title' => 'Detail Customer',
