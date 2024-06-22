@@ -20,6 +20,8 @@ class LoginController extends Controller
                 return redirect('/kios/analisa/dashboard');
             } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 6) {
                 return redirect('/logistik');
+            } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 2) {
+                return redirect('/repair/dashboard');
             }
 
         } else {
@@ -45,6 +47,8 @@ class LoginController extends Controller
                 return redirect()->intended('/kios/analisa/dashboard')->withCookie($cookie);
             } elseif($user->is_admin == 2 && $user->divisi_id == 6){
                 return redirect()->intended('/logistik')->withCookie($cookie);
+            } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 2) {
+                return redirect('/repair/dashboard')->withCookie($cookie);
             }
 
         }

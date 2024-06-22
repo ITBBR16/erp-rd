@@ -2,10 +2,11 @@
 
 namespace App\Repositories\customer;
 
+use App\Models\wilayah\Kota;
+use App\Models\divisi\Divisi;
 use App\Models\customer\Customer;
 use App\Models\wilayah\Kecamatan;
 use App\Models\wilayah\Kelurahan;
-use App\Models\wilayah\Kota;
 
 class CustomerRepository implements CustomerInterface
 {
@@ -57,6 +58,17 @@ class CustomerRepository implements CustomerInterface
     public function updateCustomer($customerId, array $validate)
     {
         return Customer::whereId($customerId)->update($validate);
+    }
+
+    public function getDivisi($user){
+        $divisiId = $user->divisi_id;
+        if($divisiId != 0){
+            $divisiName = Divisi::find($divisiId);
+        } else {
+            $divisiName = 'Super Admin';
+        }
+
+        return $divisiName;
     }
 
 }
