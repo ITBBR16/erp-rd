@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="border-l-2 border-gray-900 dark:border-gray-200 pl-2 dark:text-white">
+                        <div class="border-l-2 border-gray-900 dark:border-gray-200 pl-2 dark:text-white">
                             <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
                                 <div>
                                     <h3>Provinsi :</h3>
@@ -119,7 +119,7 @@
                                     <h3>{{ $customer->email }}</h3>
                                 </div>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
