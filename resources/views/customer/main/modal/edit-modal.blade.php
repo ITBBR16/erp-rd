@@ -14,10 +14,10 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <div class="px-6 py-6 lg:px-8">
-                    <form action="{{ url('customer/data-customer/'.$item->id) }}" method="POST" autocomplete="off">
-                        @method('PUT')
-                        @csrf
+                <form action="{{ url('customer/data-customer/'.$item->id) }}" method="POST" autocomplete="off">
+                    @method('PUT')
+                    @csrf
+                    <div class="px-6 py-6 lg:px-8">
                         <div class="grid md:grid-cols-2 md:gap-6 pt">
                             <div class="relative z-0 w-full mb-6 group">
                                 <input type="text" name="first_name" id="first_name-{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('first_name') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('first_name', $item->first_name) }}">
@@ -132,11 +132,11 @@
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="flex text-end items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="flex text-end items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

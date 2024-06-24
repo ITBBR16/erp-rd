@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stagging Repair</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ $title }} | RD</title>
+    <link rel="icon" href="{{ asset('/img/RD Tab Icon.png') }}" sizes="16x16 32x32" type="image/png">
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
 
 </head>
 <body>
 
-@include('repair.layouts.header')
-@include('repair.layouts.sidebar')
+    @include('repair.layouts.header')
+    @include('repair.layouts.sidebar')
 
-<div class="p-4 sm:ml-64 mt-14">
-    @yield('container')
-</div>
+    <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 scrollbar-none">
+        @yield('container')
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
-<script src="/js/toggle.js"></script>
 </body>
 </html>

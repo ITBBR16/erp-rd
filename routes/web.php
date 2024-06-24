@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
+use App\Http\Controllers\kios\KiosPODPController;
 use App\Http\Controllers\kios\KiosShopController;
 use App\Http\Controllers\kios\KiosDashboardProduk;
 use App\Http\Controllers\kios\KiosKasirController;
+use App\Http\Controllers\kios\KiosInputTSController;
 use App\Http\Controllers\kios\KiosPaymentController;
 use App\Http\Controllers\kios\KiosProductController;
 use App\Http\Controllers\employee\EmployeeController;
@@ -24,15 +26,14 @@ use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\kios\KiosBuatPaketSecondController;
 use App\Http\Controllers\kios\KiosPenerimaanProdukController;
 use App\Http\Controllers\customer\DashboardCustomerController;
-use App\Http\Controllers\kios\DashboardTechnicalSupportController;
-use App\Http\Controllers\kios\KiosFilterProdukSecondController;
-use App\Http\Controllers\kios\KiosInputTSController;
-use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\kios\KiosPengecekkanSecondController;
-use App\Http\Controllers\kios\KiosPODPController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
+use App\Http\Controllers\kios\KiosFilterProdukSecondController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
+use App\Http\Controllers\kios\DashboardTechnicalSupportController;
+use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
+use App\Http\Controllers\repair\RepairCustomerListController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -148,7 +149,6 @@ Route::middleware('kios')->group(function () {
 
         Route::prefix('/technical-support')->group(function () {
             Route::get('/dashboard', [DashboardTechnicalSupportController::class, 'index']);
-
             Route::resource('/input', KiosInputTSController::class);
         });
 
@@ -184,9 +184,8 @@ Route::middleware('access')->group(function () {
 
 Route::middleware('repair')->group(function () {
     Route::prefix('/repair')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('repair.main.index');
-        });
+        Route::resource('/list-customer', RepairCustomerListController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::get('/list-customer/search', [RepairCustomerListController::class, 'search']);
     });
 });
 

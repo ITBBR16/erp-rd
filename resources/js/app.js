@@ -4,6 +4,8 @@ import 'flowbite';
 import './../../public/js/loader-form';
 import './../../public/js/login-loader';
 import './../../public/js/toggle';
+
+// Kios
 import './../../public/js/kios/add-product-baru';
 import './../../public/js/kios/chart-analisa';
 import './../../public/js/kios/create-produk-second';
@@ -26,3 +28,6 @@ import './../../public/js/kios/shop-second';
 import './../../public/js/kios/support-supplier';
 import './../../public/js/kios/toggle-payment-kios';
 import './../../public/js/logistik/logistik-validasi';
+
+// Repair
+import './../../public/js/repair/search';
