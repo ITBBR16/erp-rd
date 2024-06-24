@@ -12,6 +12,10 @@ class RepairTransaksiPembayaran extends Model
 {
     use HasFactory;
 
+    protected $connection = 'rumahdrone_repair';
+    protected $table = 'repair_transaksi_pembayaran';
+    protected $guarded = ['id'];
+
     public function transaksi()
     {
         return $this->belongsTo(RepairTransaksi::class, 'transaksi_id');

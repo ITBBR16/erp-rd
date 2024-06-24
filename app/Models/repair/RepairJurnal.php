@@ -10,6 +10,10 @@ class RepairJurnal extends Model
 {
     use HasFactory;
 
+    protected $connection = 'rumahdrone_repair';
+    protected $table = 'repair_jurnal';
+    protected $guarded = ['id'];
+
     public function case()
     {
         return $this->belongsTo(RepairCase::class, 'case_id');

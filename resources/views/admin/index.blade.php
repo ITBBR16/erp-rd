@@ -24,7 +24,7 @@
                 </a>
             </div>
             <div class="rounded-lg shadow-lg overflow-hidden mb-10 sm:w-64 bg-white">
-                <a href="#" target="_blank">
+                <a href="/repair" target="_blank">
                     <img src="https://source.unsplash.com/600x400?repair" alt="Repair" class="w-full">
                     <div class="px-6 py-4">
                         <div class="font-bold text-xl mb-2 text-slate-700">Dashboard Repair</div>

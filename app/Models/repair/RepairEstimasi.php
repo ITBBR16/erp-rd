@@ -11,6 +11,10 @@ class RepairEstimasi extends Model
 {
     use HasFactory;
 
+    protected $connection = 'rumahdrone_repair';
+    protected $table = 'repair_estimasi';
+    protected $guarded = ['id'];
+
     public function case()
     {
         return $this->belongsTo(RepairCase::class, 'case_id');
@@ -19,5 +23,10 @@ class RepairEstimasi extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function estimasiChat()
+    {
+        return $this->hasMany(RepairEstimasiChat::class);
     }
 }

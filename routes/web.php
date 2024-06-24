@@ -182,6 +182,9 @@ Route::middleware('access')->group(function () {
     });
 });
 
+Route::get('/repair', function () {
+    return view('repair.main.index');
+});
 
 
 // Route::get('/gudang', function () {
@@ -231,9 +234,6 @@ Route::middleware('access')->group(function () {
 // });
 
 
-// Route::get('/repair', function () {
-//     return view('repair.main.index');
-// });
 
 
 // Route::get('/logistik', function () {
