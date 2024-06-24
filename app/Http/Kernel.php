@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'superadmin' => \App\Http\Middleware\SuperAdmin::class,
         'kios' => \App\Http\Middleware\MDKios::class,
         'logistik' => \App\Http\Middleware\MDLogistik::class,
+        'repair' => \App\Http\Middleware\MDRepair::class,
     ];
 
 }

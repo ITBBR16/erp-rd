@@ -175,17 +175,20 @@ Route::middleware('access')->group(function () {
         Route::get('/add-customer', [AddCustomerController::class, 'index']);
         Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
         
-        Route::middleware('superAdmin')->group(function () {
+        Route::middleware('superadmin')->group(function () {
             Route::get('/add-user', [EmployeeController::class, 'index']);
             Route::post('/add-user', [EmployeeController::class, 'store'])->name('form-user');
         });
     });
 });
 
-Route::get('/repair', function () {
-    return view('repair.main.index');
+Route::middleware('repair')->group(function () {
+    Route::prefix('/repair')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('repair.main.index');
+        });
+    });
 });
-
 
 // Route::get('/gudang', function () {
 //     return view('gudang.main.index');
@@ -232,9 +235,6 @@ Route::get('/repair', function () {
 // Route::get('/content', function () {
 //     return view('content.main.index');
 // });
-
-
-
 
 // Route::get('/logistik', function () {
 //     return view('logistik.main.index');

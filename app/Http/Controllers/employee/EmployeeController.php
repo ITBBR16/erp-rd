@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers\employee;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\divisi\Divisi;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use App\Repositories\customer\CustomerRepository;
 
 class EmployeeController extends Controller
 {
+    public function __construct(private CustomerRepository $customerRepo){}
+    
     public function index()
     {
         $divisi = Divisi::all();
-        $divisiId = auth()->user()->divisi_id;
-        if($divisiId != 0){
-            $divisiName = Divisi::find($divisiId);
-        } else {
-            $divisiName = 'Super Admin';
-        }
+        $user = auth()->user();
+        $divisiName = $this->customerRepo->getDivisi($user);
         $status = DB::connection('rumahdrone_employee')->table('status')->get();
 
         return view('customer.main.add-user' , [
