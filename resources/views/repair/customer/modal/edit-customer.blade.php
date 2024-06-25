@@ -43,48 +43,48 @@
                             <div class="relative z-0 w-full mb-6 group">
                                 <select name="provinsi" id="provinsi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
                                     <option hidden>Provinsi</option>
-                                    @foreach ($provinsi as $prov)
+                                    {{-- @foreach ($provinsi as $prov)
                                         @if ($customer->provinsi == $prov->id)
                                             <option value="{{ $prov['id'] }}" selected class="dark:bg-gray-700">{{ $prov['name'] }}</option>
                                         @else
                                             <option value="{{ $prov['id'] }}" class="dark:bg-gray-700">{{ $prov['name'] }}</option>
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
                                 <select name="kota_kabupaten" id="kota_kabupaten" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
-                                    @foreach ($dataKota as $kota)
+                                    {{-- @foreach ($dataKota as $kota)
                                         @if ($customer->kota_kabupaten == $kota->id)
                                             <option value="{{ $kota->id }}" selected class="dark:bg-gray-700">{{ $kota->name }}</option>
                                         @else
                                             <option value="{{ $kota->id }}" class="dark:bg-gray-700">{{ $kota->name }}</option>
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
                         <div class="grid md:grid-cols-3 md:gap-6">
                             <div class="relative z-0 w-full mb-6 group">
                                 <select name="kecamatan" id="kecamatan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
-                                    @foreach ($dataKecamatan as $kec)
+                                    {{-- @foreach ($dataKecamatan as $kec)
                                         @if ($customer->kecamatan == $kec->id)
                                             <option value="{{ $kec->id }}" selected class="dark:bg-gray-700">{{ $kec->name }}</option>
                                         @else
                                             <option value="{{ $kec->id }}" class="dark:bg-gray-700">{{ $kec->name }}</option>
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
                                 <select name="kelurahan" id="kelurahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
-                                    @foreach ($dataKelurahan as $kel)
+                                    {{-- @foreach ($dataKelurahan as $kel)
                                         @if ($customer->kelurahan == $kel->id)
                                             <option value="{{ $kel->id }}" selected class="dark:bg-gray-700">{{ $kel->name }}</option>
                                         @else
                                             <option value="{{ $kel->id }}" class="dark:bg-gray-700">{{ $kel->name }}</option>
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">

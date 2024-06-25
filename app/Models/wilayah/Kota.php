@@ -10,11 +10,17 @@ class Kota extends Model
     use HasFactory;
 
     protected $connection = 'rumahdrone_customer';
-
     protected $table = 'kabupaten';
+    protected $guarded = ['id'];
 
     public function kecamatan()
     {
-        return $this->hasMany(Kecamatan::class, 'kabupaten_id', 'id');
+        return $this->hasMany(Kecamatan::class);
     }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'provinsi_id');
+    }
+
 }

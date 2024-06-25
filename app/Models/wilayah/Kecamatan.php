@@ -10,11 +10,17 @@ class Kecamatan extends Model
     use HasFactory;
 
     protected $connection = 'rumahdrone_customer';
-
     protected $table = 'kecamatan';
+    protected $guarded = ['id'];
 
     public function kelurahan()
     {
-        return $this->hasMany(Kelurahan::class, 'kecamatan_id', 'id');
+        return $this->hasMany(Kelurahan::class);
     }
+
+    public function kota()
+    {
+        return $this->belongsTo(Kota::class, 'kabupaten_id');
+    }
+
 }
