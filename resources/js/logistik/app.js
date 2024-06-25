@@ -1,1 +1,1 @@
-import './../../public/js/logistik/logistik-validasi';
+import '../../../public/js/logistik/logistik-validasi';

@@ -8,5 +8,20 @@
     "file": "assets/app-dfb225d3.js",
     "isEntry": true,
     "src": "resources/js/app.js"
+  },
+  "resources/js/kios/app.js": {
+    "file": "assets/app-5adddf2d.js",
+    "isEntry": true,
+    "src": "resources/js/kios/app.js"
+  },
+  "resources/js/logistik/app.js": {
+    "file": "assets/app-1e740a58.js",
+    "isEntry": true,
+    "src": "resources/js/logistik/app.js"
+  },
+  "resources/js/repair/app.js": {
+    "file": "assets/app-cbee9389.js",
+    "isEntry": true,
+    "src": "resources/js/repair/app.js"
   }
 }
