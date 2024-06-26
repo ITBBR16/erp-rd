@@ -13,7 +13,20 @@
 <body>
 
     @include('repair.layouts.header')
-    @include('repair.layouts.sidebar')
+
+    @if (Request::is('repair/analisa/*'))
+        @include('repair.layouts.sidebarCustomer')
+    @elseif (Request::is('repair/customer/*'))
+        @include('repair.layouts.sidebarCustomer')
+    @elseif (Request::is('repair/csr/*'))
+        @include('repair.layouts.sidebarCustomer')
+    @elseif (Request::is('repair/teknisi/*'))
+        @include('repair.layouts.sidebarCustomer')
+    @elseif (Request::is('repair/estimasi/*'))
+        @include('repair.layouts.sidebarCustomer')
+    @elseif (Request::is('repair/quality-control/*'))
+        @include('repair.layouts.sidebarCustomer')
+    @endif
 
     <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 scrollbar-none">
         @yield('container')

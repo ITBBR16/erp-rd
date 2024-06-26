@@ -28,8 +28,6 @@ class RepairCustomerListController extends Controller
             'title' => 'Customer List',
             'active' => 'list-customer',
             'navActive' => 'customer',
-            'dropdown' => '',
-            'dropdownShop' => '',
             'divisi' => $divisiName,
             'dataCustomer' => $dataCustomer,
             // 'dataKota' => $dataKota,
