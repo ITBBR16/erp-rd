@@ -81,12 +81,26 @@
                             <input type="text" name="kasir_ongkir" id="kasir-ongkir" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
                         </div>
                     </div>
+                    <div>
+                        <label for="kasir-nominal-bayar" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="kasir_nominal_pembayaran" id="kasir-nominal-pembayaran" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="keterangan-pembayaran">Keterangan :</label>
+                        <input type="text" name="keterangan_pembayaran" id="keterangan-pembayaran" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Keterangan . . .">
+                    </div>
                 </div>
             </div>
     
             {{-- Bagian Kanan Kasir --}}
             <div class="col-span-1 my-4 mx-auto flex justify-center">
-                <div class="w-80 text-base bg-white p-4 text-white border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+                <div class="w-80 text-base bg-white p-4 text-white border-2 border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+                    <div class="mb-4 text-center justify-center">
+                        <p class="text-lg font-semibold text-gray-600 dark:text-white">Resume Tagihan</p>
+                    </div>
                     <div class="flex items-center justify-between">
                         <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Subtotal :</p>
