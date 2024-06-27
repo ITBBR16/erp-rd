@@ -11,6 +11,7 @@ interface RepairCustomerInterface
     // public function getKecamatan();
     // public function getKelurahan();
 
+    public function createCustomer(array $validate);
     public function deleteCustomer($customerId);
     public function updateCustomer($customerId, array $validate);
 }
