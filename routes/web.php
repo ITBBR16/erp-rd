@@ -191,6 +191,7 @@ Route::middleware('repair')->group(function () {
 
         Route::prefix('/customer')->group(function () {
             Route::resource('/case-list', RepairListCaseController::class)->only(['index']);
+            Route::get('/getKelengkapan/{id}', [RepairListCaseController::class, 'getKelengkapan']);
 
             Route::resource('/list-customer', RepairCustomerListController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::get('/list-customer/search', [RepairCustomerListController::class, 'search']);

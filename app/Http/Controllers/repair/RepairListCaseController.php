@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Repositories\umum\UmumRepository;
 use App\Models\customer\CustomerInfoPerusahaan;
+use App\Models\produk\ProdukJenis;
 use App\Repositories\repair\repository\RepairCustomerRepository;
 
 class RepairListCaseController extends Controller
@@ -63,5 +64,12 @@ class RepairListCaseController extends Controller
         }
     }
 
+    public function getKelengkapan($id)
+    {
+        $productSearch = ProdukJenis::findOrFail($id);
+        $dataKelengkapan = $productSearch->kelengkapans()->get();
+
+        return response()->json($dataKelengkapan);
+    }
 
 }
