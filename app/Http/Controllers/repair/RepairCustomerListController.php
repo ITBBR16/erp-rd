@@ -3,37 +3,38 @@
 namespace App\Http\Controllers\repair;
 
 use Illuminate\Http\Request;
-use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Repositories\umum\UmumRepository;
-use App\Repositories\customer\CustomerRepository;
+use App\Repositories\repair\repository\RepairCustomerRepository;
+use Exception;
 
 class RepairCustomerListController extends Controller
 {
-    public function __construct(private UmumRepository $nameDivisi, private CustomerRepository $customerRepo){}
+    public function __construct(private UmumRepository $nameDivisi, private RepairCustomerRepository $repairCustomer){}
 
     public function index()
     {
         $user = auth()->user();
         $divisiName = $this->nameDivisi->getDivisi($user);
-        $dataCustomer = $this->customerRepo->getAll();
-        $dataKota = $this->customerRepo->getSelectKota();
-        $dataKecamatan = $this->customerRepo->getSelectKecamatan();
-        $dataKelurahan = $this->customerRepo->getSelectKelurahan();
-        $provinsi = Provinsi::all();
+        $dataCustomer = $this->repairCustomer->getAll();
+        $provinsi = $this->repairCustomer->getProvinsi();
+        // $dataKota = $this->repairCustomer->getKota();
+        // $dataKecamatan = $this->repairCustomer->getKecamatan();
+        // $dataKelurahan = $this->repairCustomer->getKelurahan();
+
+        // return response()->json($dataCustomer);
 
         return view('repair.customer.list-customer', [
             'title' => 'Customer List',
             'active' => 'list-customer',
             'navActive' => 'customer',
-            'dropdown' => '',
-            'dropdownShop' => '',
             'divisi' => $divisiName,
             'dataCustomer' => $dataCustomer,
-            'dataKota' => $dataKota,
-            'dataKecamatan' => $dataKecamatan,
-            'dataKelurahan' => $dataKelurahan,
+            // 'dataKota' => $dataKota,
+            // 'dataKecamatan' => $dataKecamatan,
+            // 'dataKelurahan' => $dataKelurahan,
             'provinsi' => $provinsi,
         ]);
 

@@ -33,7 +33,7 @@
                                     :
                                 </div>
                                 <div class="col-span-2">
-                                    <h3>{{ $customer->first_name }}</h3>
+                                    <h3>{{ $customer->last_name }}</h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-4 gap-4 md:gap-6 mb-4">
@@ -66,7 +66,7 @@
                                     :
                                 </div>
                                 <div class="col-span-2">
-                                    <h3>{{ $customer->instansi }}</h3>
+                                    <h3>{{ ($customer->instansi) ?? '-' }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                                     <h3>Provinsi :</h3>
                                 </div>
                                 <div>
-                                    <h3>{{ $customer->first_name }}</h3>
+                                    <h3></h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">

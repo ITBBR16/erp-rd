@@ -34,6 +34,7 @@ use App\Http\Controllers\kios\DashboardTechnicalSupportController;
 use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\RepairCustomerListController;
+use App\Http\Controllers\repair\RepairListCaseController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -184,8 +185,34 @@ Route::middleware('access')->group(function () {
 
 Route::middleware('repair')->group(function () {
     Route::prefix('/repair')->group(function () {
-        Route::resource('/list-customer', RepairCustomerListController::class)->only(['index', 'store', 'update', 'destroy']);
-        Route::get('/list-customer/search', [RepairCustomerListController::class, 'search']);
+        Route::prefix('/analisa')->group(function () {
+            // Rute analisis
+        });
+
+        Route::prefix('/customer')->group(function () {
+            Route::resource('/case-list', RepairListCaseController::class)->only(['index']);
+            Route::get('/getKelengkapan/{id}', [RepairListCaseController::class, 'getKelengkapan']);
+
+            Route::resource('/list-customer', RepairCustomerListController::class)->only(['index', 'store', 'update', 'destroy']);
+            Route::get('/list-customer/search', [RepairCustomerListController::class, 'search']);
+        });
+
+        Route::prefix('/csr')->group(function () {
+            // Rute csr
+        });
+
+        Route::prefix('/teknisi')->group(function () {
+            // Rute teknisi
+        });
+
+        Route::prefix('/estimasi')->group(function () {
+            // Rute estimasi
+        });
+
+        Route::prefix('/quality-control')->group(function () {
+            // Rute quality-control
+        });
+
     });
 });
 

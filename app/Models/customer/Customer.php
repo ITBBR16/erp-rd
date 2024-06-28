@@ -7,6 +7,7 @@ use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosTransaksi;
 use App\Models\repair\RepairCase;
 use App\Models\repair\RepairTransaksi;
+use App\Models\wilayah\Provinsi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,11 @@ class Customer extends Model
     protected $connection = 'rumahdrone_customer';
     protected $table = 'customer';
     protected $guarded = ['id'];
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class, 'provinsi');
+    }
 
     public function suppliersecond()
     {
