@@ -14,7 +14,7 @@ use App\Repositories\repair\repository\RepairCustomerRepository;
 class RepairListCaseController extends Controller
 {
     public function __construct(private UmumRepository $nameDivisi, private RepairCustomerRepository $repairCustomer){}
-
+ 
     public function index()
     {
         $user = auth()->user();
@@ -39,21 +39,21 @@ class RepairListCaseController extends Controller
         $connectionCustomer->beginTransaction();
 
         try {
-            $divisiId = auth()->user()->divisi_id;
+            // $divisiId = auth()->user()->divisi_id;
 
-            $validate = $request->validate([
-                'first_name' => 'required',
-                'lats_name' => 'required',
-                'asal_informasi' => 'required',
-                'no_telpon' => ['required' , 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
-                'email' => 'required|email:dns',
-                'instansi' => 'max:255',
-                'provinsi' => 'required',
-                'nama_jalan' => 'required',
-            ]);
+            // $validate = $request->validate([
+            //     'first_name' => 'required',
+            //     'last_name' => 'required',
+            //     'asal_informasi' => 'required',
+            //     'no_telpon' => ['required' , 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
+            //     'email' => 'required|email:dns',
+            //     'instansi' => 'max:255',
+            //     'provinsi' => 'required',
+            //     'nama_jalan' => 'required',
+            // ]);
 
-            $validate['by_divisi'] = $divisiId;
-            $this->repairCustomer->createCustomer($validate);
+            // $validate['by_divisi'] = $divisiId;
+            $this->repairCustomer->createCustomer($request);
 
             $connectionCustomer->commit();
             return back()->with('success', 'Success Save New Contact!');

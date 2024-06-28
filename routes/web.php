@@ -190,7 +190,7 @@ Route::middleware('repair')->group(function () {
         });
 
         Route::prefix('/customer')->group(function () {
-            Route::resource('/case-list', RepairListCaseController::class)->only(['index']);
+            Route::resource('/case-list', RepairListCaseController::class)->only(['index','store']);
 
             Route::resource('/list-customer', RepairCustomerListController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::get('/list-customer/search', [RepairCustomerListController::class, 'search']);
@@ -199,7 +199,7 @@ Route::middleware('repair')->group(function () {
         Route::prefix('/csr')->group(function () {
             // Rute csr
         });
-
+ 
         Route::prefix('/teknisi')->group(function () {
             // Rute teknisi
         });
