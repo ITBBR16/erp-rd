@@ -41,6 +41,11 @@ class RepairCustomerRepository implements RepairCustomerInterface
     //     return $dataKelurahan;
     // }
 
+    public function createCustomer(array $validate)
+    {
+        Customer::create($validate);
+    }
+
     public function deleteCustomer($customerId)
     {
         Customer::destroy($customerId);

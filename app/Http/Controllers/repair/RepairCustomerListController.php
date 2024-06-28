@@ -4,9 +4,11 @@ namespace App\Http\Controllers\repair;
 
 use Illuminate\Http\Request;
 use App\Models\customer\Customer;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Repositories\umum\UmumRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
+use Exception;
 
 class RepairCustomerListController extends Controller
 {
