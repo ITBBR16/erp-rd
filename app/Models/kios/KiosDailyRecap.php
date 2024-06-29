@@ -5,8 +5,6 @@ namespace App\Models\kios;
 use App\Models\customer\Customer;
 use App\Models\employee\Employee;
 use App\Models\produk\ProdukJenis;
-use App\Models\produk\ProdukStatus;
-use App\Models\produk\ProdukSubJenis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -51,6 +49,16 @@ class KiosDailyRecap extends Model
     public function permasalahan()
     {
         return $this->belongsTo(KiosRecapPermasalahan::class, 'permasalahan_id');
+    }
+
+    public function kiosWtb()
+    {
+        return $this->belongsTo(KiosWTB::class, 'table_id');
+    }
+
+    public function kiosWts()
+    {
+        return $this->belongsTo(KiosWTS::class, 'table_id');
     }
 
 }

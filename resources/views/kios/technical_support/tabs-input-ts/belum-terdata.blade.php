@@ -36,7 +36,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($dataTS as $recap)
+                {{-- @foreach ($dataTS as $recap)
                     <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <td class="p-4">
                             <div class="flex items-center">
@@ -80,7 +80,7 @@
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @endforeach --}}
             </tbody>
         </table>
         <div class="mt-4 ">

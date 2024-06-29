@@ -42,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($dailyRecap as $recap)
+                {{-- @foreach ($dailyRecap as $recap)
                     <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <td class="px-6 py-2">
                             {{ $recap->customer->first_name }} {{ $recap->customer->last_name }}
@@ -89,7 +89,7 @@
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @endforeach --}}
             </tbody>
         </table>
         <div class="mt-4 ">
@@ -99,8 +99,8 @@
 
     {{-- Modal --}}
     @include('kios.main.modal.add-recap')
-    @include('kios.main.modal.recap-view')
+    {{-- @include('kios.main.modal.recap-view')
     @include('kios.main.modal.recap-edit')
-    @include('kios.main.modal.recap-delete')
+    @include('kios.main.modal.recap-delete') --}}
     
 </div>

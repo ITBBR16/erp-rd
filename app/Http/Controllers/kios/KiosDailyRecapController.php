@@ -92,38 +92,43 @@ class KiosDailyRecapController extends Controller
 
             $connectionCustomer->beginTransaction();
 
-            $validate = $request->validate([
-                'first_name' => 'required|max:50',
-                'last_name' => 'required|max:50',
-                'asal_informasi' => 'required',
-                'no_telpon' => ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
-                'email' => 'nullable|email:dns',
-                'instansi' => 'max:50',
-                'provinsi' => 'required',
-                'nama_jalan' => 'required|max:255'
-            ]);
+            try {
+                $validate = $request->validate([
+                    'first_name' => 'required|max:50',
+                    'last_name' => 'required|max:50',
+                    'asal_informasi' => 'required',
+                    'no_telpon' => ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
+                    'email' => 'nullable|email:dns',
+                    'instansi' => 'max:50',
+                    'provinsi' => 'required',
+                    'nama_jalan' => 'required|max:255'
+                ]);
+    
+                $validate['by_divisi'] = $divisiId;
+    
+                $dataCustomer = Customer::create($validate);
+                $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
+                $response = Http::post($appScriptUrl, [
+                    'first_name' => $validate['first_name'],
+                    'last_name' => $validate['last_name'] . ' - ' . $dataCustomer->id,
+                    'email' => $validate['email'],
+                    'no_telpon' => $validate['no_telpon'],
+                ]);
+    
+                $payloadContact = json_decode($response->body(), true);
+                $statusContact = $payloadContact['status'];
+                
+                if($statusContact === 'success') {
+                    $connectionCustomer->commit();
+                    return back()->with('success', 'Success Add New Customer.');
+                } else {
+                    $connectionCustomer->rollBack();
+                    return back()->with('error', 'Failed to Save Contact. Please try again.');
+                }
 
-            $validate['by_divisi'] = $divisiId;
-
-            $dataCustomer = Customer::create($validate);
-            $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
-            $response = Http::post($appScriptUrl, [
-                'first_name' => $validate['first_name'],
-                'last_name' => $validate['last_name'] . ' - ' . $dataCustomer->id,
-                'email' => $validate['email'],
-                'no_telpon' => $validate['no_telpon'],
-            ]);
-
-            $payloadContact = json_decode($response->body(), true);
-            dd($payloadContact);
-            $statusContact = $payloadContact['status'];
-            
-            if($statusContact === 'success') {
-                $connectionCustomer->commit();
-                return back()->with('success', 'Success Add New Customer.');
-            } else {
+            } catch (Exception $e) {
                 $connectionCustomer->rollBack();
-                return back()->with('error', 'Failed to Save Contact. Please try again.');
+                return back()->with('error', $e->getMessage());
             }
 
         }

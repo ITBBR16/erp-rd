@@ -11,7 +11,7 @@ class KiosRecapPermasalahan extends Model
     use HasFactory;
 
     protected $connection = 'rumahdrone_kios';
-    protected $table = 'kios_recap_permasalahan';
+    protected $table = 'kios_technical_support';
     protected $guarded = ['id'];
 
     public function dailyrecap()

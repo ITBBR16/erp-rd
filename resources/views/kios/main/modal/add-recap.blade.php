@@ -1,5 +1,5 @@
 <div id="add-daily-recap" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative w-full max-w-lg max-h-full">
+    <div class="relative w-full max-w-xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-xl font-medium text-gray-900 dark:text-white">Daily Recap</h3>
@@ -13,86 +13,93 @@
             <div class="px-6 py-6 lg:px-8">
                 <form action="{{ route('form-daily-recap') }}" method="POST" autocomplete="off">
                     @csrf
+                    {{-- Semua Keperluan --}}
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div class="relative z-0 w-full mb-6 group">
                             <label for="nama_customer"></label>
-                            <select name="nama_customer" id="nama_customer" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nama_customer') border-red-600 dark:border-red-500 @enderror" required>
+                            <select name="nama_customer" id="nama_customer" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                                 <option value="" hidden>Nama Customer</option>
                                 @foreach ($customer as $cs)
                                     <option value="{{ $cs->id }}" class="dark:bg-gray-700">{{ $cs->first_name }} {{ $cs->last_name }}</option>
                                 @endforeach
                             </select>
-                            @error('nama_customer')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
                             <label for="keperluan_recap"></label>
-                            <select name="keperluan_recap" id="keperluan_recap" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('keperluan_recap') border-red-600 dark:border-red-500 @enderror" required>
+                            <select name="keperluan_recap" id="keperluan_recap" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                                 <option value="" hidden>Keperluan</option>
                                 @foreach ($keperluanrecap as $keperluan)
                                     <option value="{{ $keperluan->id }}" class="dark:bg-gray-700">{{ $keperluan->nama }}</option>
                                 @endforeach
                             </select>
-                            @error('keperluan_recap')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
                         </div>
                     </div>
-                    <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-6 group">
-                            <label for="jenis_produk"></label>
-                            <select name="jenis_produk" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_produk') border-red-600 dark:border-red-500 @enderror" required>
-                                <option value="" hidden>Jenis Produk</option>
-                                @foreach ($produkJenis as $jenis)
-                                    <option value="{{ $jenis->id }}" class="dark:bg-gray-700">{{ $jenis->jenis_produk }}</option>
-                                @endforeach
-                            </select>
-                            @error('jenis_produk')
-                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
+                    {{-- Technical Support --}}
+                    <div class="container-input-dr">
+                        
+
+                        <div id="input-wtb" style="display: none">
+                            <div class="grid md:grid-cols-2 md:gap-6">
+                                <div class="relative z-0 w-full mb-6 group">
+                                    <label for="kondisi_produk"></label>
+                                    <select name="kondisi_produk" id="kondisi_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                        <option value="" hidden>Kondisi Produk</option>
+                                        <option value="Drone Baru">Drone Baru</option>
+                                        <option value="Drone Bekas">Drone Bekas</option>
+                                        <option value="Part Baru">Part Baru</option>
+                                        <option value="Part Bekas">Part Bekas</option>
+                                    </select>
+                                </div>
+                                <div class="relative z-0 w-full mb-6 group">
+                                    <label for="jenis_produk"></label>
+                                    <select name="jenis_produk" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                        <option value="" hidden>Jenis Produk</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid md:grid-cols-2 md:gap-6">
+                                <div class="relative z-0 w-full mb-6 group">
+                                    <label for="paket_penjualan"></label>
+                                    <select name="paket_penjualan" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                        <option value="" hidden>Paket Penjualan</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center mb-6">
+                                    <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Ready</span>
+                                </div>
+                            </div>
+                            <h2 class="my-2 text-lg font-semibold text-gray-900 dark:text-white">List Produk Tersedia :</h2>
+                            <ul class="max-w-full space-y-1 text-gray-500 list-inside dark:text-gray-400">
+                                <li class="flex items-center">
+                                    <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                    </svg>
+                                    DJI AVATA AIRCRAFT ONLY
+                                </li>
+                            </ul>
                         </div>
-                        <div class="relative z-0 w-full mb-6 group">
-                            <label for="kategori_permasalahan"></label>
-                            <select name="kategori_permasalahan" id="kategori_permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_permasalahan') border-red-600 dark:border-red-500 @enderror" required>
-                                <option value="" hidden>Kategori Permasalahan</option>
-                                @foreach ($kategoriPermasalahan as $kategori)
-                                    <option value="{{ $kategori->id }}" class="dark:bg-gray-700">{{ $kategori->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('kategori_permasalahan')
-                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
+
+                        <div id="input-wts" style="display: none">
+                            <div class="grid md:grid-cols-2 md:gap-6">
+                                <div class="relative z-0 w-full mb-6 group">
+                                    <label for="jenis_produk"></label>
+                                    <select name="jenis_produk" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                        <option value="" hidden>Jenis Produk</option>
+                                    </select>
+                                </div>
+                                <div class="relative z-0 w-full mb-6 group">
+                                    <label for="paket_penjualan"></label>
+                                    <select name="paket_penjualan" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                        <option value="" hidden>Paket Penjualan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex items-center mb-6">
+                                <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Ready</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-6 group">
-                            <label for="permasalahan"></label>
-                            <select name="permasalahan" id="permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('permasalahan') border-red-600 dark:border-red-500 @enderror" required>
-                                <option value="" hidden>Permasalahan</option>
-                                @foreach ($permasalahan as $permasalahan)
-                                    <option value="{{ $permasalahan->id }}" class="dark:bg-gray-700">{{ $permasalahan->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('permasalahan')
-                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" name="link_permasalahan" id="link_permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('link_permasalahan') border-red-600 dark:border-red-500 @enderror" placeholder="" readonly>
-                            <label for="link_permasalahan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Link Permsaalahan</label>
-                            @error('link_permasalahan')
-                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="keterangan" id="keterangan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('keterangan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('keterangan') }}" required>
-                        <label for="keterangan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Keterangan</label>
-                        @error('keterangan')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
+
                     <div class="mt-4 text-end">
                         <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
                         <div class="loader-button-form" style="display: none">
