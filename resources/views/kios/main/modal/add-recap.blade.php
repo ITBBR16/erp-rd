@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     {{-- Technical Support --}}
-                    <div class="container-input-dr">
+                    <div id="container-input-dr">
                         
 
                         <div id="input-wtb" style="display: none">

@@ -13,7 +13,7 @@ $(document).ready(function () {
 
     function inputTs(container) {
         let itemForm = `
-            <div id="input-ts" style="display: none">
+            <div id="input-ts">
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="jenis_produk"></label>
@@ -45,7 +45,7 @@ $(document).ready(function () {
             </div>`
 
         container.append(itemForm)
-
+        
     }
 
 });
