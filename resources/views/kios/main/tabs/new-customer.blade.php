@@ -1,5 +1,5 @@
 <div class="hidden p-4" id="new-customer" role="tabpanel" aria-labelledby="new-customer-tab">
-    <form action="{{ route('form-daily-recap') }}" method="POST" autocomplete="off">
+    <form action="{{ route('newCustomer') }}" method="POST" autocomplete="off">
         @csrf
         <div class="grid md:grid-cols-2 md:gap-6">
             <div class="relative z-0 w-full mb-6 group">

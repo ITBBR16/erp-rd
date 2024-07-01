@@ -35,6 +35,7 @@ use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\RepairCustomerListController;
 use App\Http\Controllers\repair\RepairListCaseController;
+use App\Models\kios\KiosDailyRecap;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -61,7 +62,9 @@ Route::middleware('kios')->group(function () {
 
         Route::prefix('/customer')->group(function () {
             Route::resource('/daily-recap', KiosDailyRecapController::class)->only(['index', 'store', 'update', 'destroy']);
-            Route::post('/daily-recap', [KiosDailyRecapController::class, 'store'])->name('form-daily-recap');
+            Route::post('/new-customer', [KiosDailyRecapController::class, 'newCustomer'])->name('newCustomer');
+            Route::get('/getJenisProduk/{kondisiProduk}', [KiosDailyRecapController::class, 'getProduk']);
+            Route::get('/getSubJenisProduk/{kondisiProduk}/{id}', [KiosDailyRecapController::class, 'getSubjenis']);
             Route::resource('/list-customer', DataCustomerController::class)->only('index', 'update', 'delete');
             Route::get('/list-customer/search', [DataCustomerController::class, 'search']);
         });

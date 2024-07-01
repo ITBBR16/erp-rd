@@ -2,15 +2,16 @@
 
 namespace App\Models\produk;
 
+use App\Models\kios\KiosProduk;
+use App\Models\kios\SupplierKios;
+use App\Models\kios\KiosOrderList;
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosImageProduk;
 use App\Models\kios\KiosImageSecond;
-use App\Models\kios\KiosOrderList;
 use App\Models\kios\KiosOrderSecond;
-use App\Models\kios\KiosProduk;
-use App\Models\kios\SupplierKios;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\kios\KiosProdukSecond;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProdukSubJenis extends Model
 {
@@ -48,6 +49,11 @@ class ProdukSubJenis extends Model
     public function kiosproduk()
     {
         return $this->hasMany(KiosProduk::class, 'sub_jenis_id');
+    }
+
+    public function kiosproduksecond()
+    {
+        return $this->hasMany(KiosProdukSecond::class, 'sub_jenis_id');
     }
 
     public function produktype()

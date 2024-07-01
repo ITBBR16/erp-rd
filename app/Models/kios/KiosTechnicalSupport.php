@@ -6,7 +6,7 @@ use App\Models\produk\ProdukJenis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KiosRecapPermasalahan extends Model
+class KiosTechnicalSupport extends Model
 {
     use HasFactory;
 
@@ -14,9 +14,9 @@ class KiosRecapPermasalahan extends Model
     protected $table = 'kios_technical_support';
     protected $guarded = ['id'];
 
-    public function dailyrecap()
+    public function recapTs()
     {
-        return $this->hasMany(KiosDailyRecap::class);
+        return $this->hasMany(KiosRecapTechnicalSupport::class);
     }
 
     public function permasalahanproduk()
