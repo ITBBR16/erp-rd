@@ -62,9 +62,13 @@ Route::middleware('kios')->group(function () {
 
         Route::prefix('/customer')->group(function () {
             Route::resource('/daily-recap', KiosDailyRecapController::class)->only(['index', 'store', 'update', 'destroy']);
-            Route::post('/new-customer', [KiosDailyRecapController::class, 'newCustomer'])->name('newCustomer');
-            Route::get('/getJenisProduk/{kondisiProduk}', [KiosDailyRecapController::class, 'getProduk']);
-            Route::get('/getSubJenisProduk/{kondisiProduk}/{id}', [KiosDailyRecapController::class, 'getSubjenis']);
+            Route::group(['controller' => KiosDailyRecapController::class], function () {
+                Route::post('/new-customer', 'newCustomer')->name('newCustomer');
+                Route::get('/getJenisProduk/{kondisiProduk}', 'getProduk');
+                Route::get('/getSubJenisProduk/{kondisiProduk}/{id}', 'getSubjenis');
+                Route::get('/getPaketPenjualan/{id}', 'getPaketPenjualan');
+                Route::get('/getPermasalahan/{id}', 'getPermasalahan');
+            });
             Route::resource('/list-customer', DataCustomerController::class)->only('index', 'update', 'delete');
             Route::get('/list-customer/search', [DataCustomerController::class, 'search']);
         });

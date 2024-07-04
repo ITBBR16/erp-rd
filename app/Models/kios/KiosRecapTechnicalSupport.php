@@ -2,8 +2,9 @@
 
 namespace App\Models\kios;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\produk\ProdukJenis;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KiosRecapTechnicalSupport extends Model
 {
@@ -22,4 +23,15 @@ class KiosRecapTechnicalSupport extends Model
     {
         return $this->hasOne(KiosDailyRecap::class);
     }
+
+    public function produkJenis()
+    {
+        return $this->belongsTo(ProdukJenis::class, 'jenis_id');
+    }
+
+    public function kategoriPermasalahan()
+    {
+        return $this->belongsTo(KiosKategoriPermasalahan::class, 'kategori_permasalahan_id');
+    }
+
 }

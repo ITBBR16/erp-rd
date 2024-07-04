@@ -19,9 +19,14 @@ class KiosTechnicalSupport extends Model
         return $this->hasMany(KiosRecapTechnicalSupport::class);
     }
 
+    public function kategoriPermasalahan()
+    {
+        return $this->belongsTo(KiosKategoriPermasalahan::class, 'kategori_permasalahan_id');
+    }
+
     public function permasalahanproduk()
     {
-        return $this->belongsToMany(ProdukJenis::class, 'permasalahan_produk', 'permasalahan_id', 'jenis_id');
+        return $this->belongsToMany(ProdukJenis::class, 'rumahdrone_kios.kios_recap_ts_produk', 'ts_id', 'produk_id');
     }
 
 }

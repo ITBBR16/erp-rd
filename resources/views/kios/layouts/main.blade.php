@@ -56,5 +56,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script src="{{ asset('js/kios/daily-recap.js') }}"></script>
+        <script src="{{ asset('js/kios/technical-support.js') }}"></script>
     </body>
 </html>

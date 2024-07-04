@@ -39,6 +39,7 @@ class KiosDailyRecapController extends Controller
         $infoPerusahaan = CustomerInfoPerusahaan::all();
         $recapKeperluan = KiosRecapKeperluan::all();
         $kategoriPermasalahan = KiosKategoriPermasalahan::all();
+        $permasalahan = KiosTechnicalSupport::all();
 
         return view('kios.main.recap', [
             'title' => 'Daily Recap',
@@ -54,6 +55,7 @@ class KiosDailyRecapController extends Controller
             'keperluanrecap' => $recapKeperluan,
             'infoPerusahaan' => $infoPerusahaan,
             'kategoriPermasalahan' => $kategoriPermasalahan,
+            'permasalahan' => $permasalahan,
         ]);
     }
 
@@ -68,44 +70,50 @@ class KiosDailyRecapController extends Controller
             $idKeperluan = $request->input('keperluan_recap');
             $keperluanRecap = KiosRecapKeperluan::findOrFail($idKeperluan);
             $inputStatus = $request->input('status_produk');
-            $keperluanTsId = $request->input('permasalahan');
-            $keperluanTs = KiosTechnicalSupport::findOrFail($keperluanTsId);
+            $keterangan = $request->input('keterangan');
 
-            if ($keperluanRecap == 'Want to Buy')
-            {
+            if ($keperluanRecap->nama == 'Want to Buy') {
                 $tableKeperluan = KiosWTB::create([
-                    'kondisi_produk' => '',
-                    'paket_penjualan_id' => '',
+                    'kondisi_produk' => $request->input('kondisi_produk'),
+                    'paket_penjualan_id' => $request->input('paket_penjualan'),
+                    'keterangan' => $keterangan,
                 ]);
 
-                $status = ($inputStatus == 'Ready') ? 'Sudah Ditawari Produk' : 'Produk Tidak Tersedia';
+                $status = ($inputStatus == 'Ready' || $inputStatus == 'Promo') ? 'Sudah Ditawari Produk' : 'Produk Tidak Tersedia';
 
-            } elseif ($keperluanRecap == 'Want to Sell')
-            {
+            } elseif ($keperluanRecap->nama == 'Want to Sell') {
                 $tableKeperluan = KiosWTS::create([
-                    'paket_penjualan_id' => '',
-                    'produk_worth' => '',
+                    'paket_penjualan_id' => $request->input('paket_penjualan'),
+                    'produk_worth' => $request->input('produk_worth'),
+                    'keterangan' => $keterangan,
                 ]);
 
                 $status = ($inputStatus == 'Ready') ? 'Produk dibutuhkan' : 'Produk tidak dibutuhkan';
 
-            } elseif ($keperluanRecap == 'Technical Support')
-            {
+            } elseif ($keperluanRecap->nama == 'Technical Support') {
+                $keperluanTsId = $request->input('permasalahan');
+                $keperluanTs = KiosKategoriPermasalahan::findOrFail($keperluanTsId);
+
                 $tableKeperluan = KiosRecapTechnicalSupport::create([
-                    'jenis_id' => '',
-                    'keterangan' => '',
+                    'kategori_permasalahan_id' => $request->input('kategori_permasalahan'),
+                    'kios_ts_id' => $request->input('permasalahan'),
+                    'jenis_id' => $request->input('jenis_produk'),
+                    'keterangan' => $keterangan,
                 ]);
                 
                 $status = ($keperluanTs == 'Belum Terdata') ? 'Unprocess' : 'Case Done';
                 
+            } else {
+                $connectionKios->rollBack();
+                return back()->with('error', 'Something went wrong.');
             }
 
             $dailyRecap = new KiosDailyRecap([
                 'employee_id' => $picId,
                 'customer_id' => $request->input('nama_customer'),
                 'keperluan_id' => $request->input('keperluan_recap'),
-                'table_id' => $tableKeperluan,
-                'status' => 'Unprocessed',
+                'table_id' => $tableKeperluan->id,
+                'status' => $status,
             ]);
 
             $dailyRecap->save();
@@ -192,14 +200,27 @@ class KiosDailyRecapController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $connectionKios = DB::connection('rumahdrone_kios');
         $connectionKios->beginTransaction();
 
         try{
-            $dailyRecapId = KiosDailyRecap::findOrFail($id);
-            $dailyRecapId->delete();
+            $keperluanName = $request->input('keperluan_id');
+            $dailyRecapSearch = KiosDailyRecap::findOrFail($id);
+
+            if ($keperluanName == 'Want to Buy') {
+                $dailyRecapSearch->kiosWtb()->delete();
+            } elseif ($keperluanName == 'Want to Sell') {
+                $dailyRecapSearch->kiosWts()->delete();
+            } elseif ($keperluanName == 'Technical Support') {
+                $dailyRecapSearch->technicalSupport()->delete();
+            } else {
+                $connectionKios->rollBack();
+                return back()->with('error', 'Something Went Wrong.');
+            }
+
+            $dailyRecapSearch->delete();
 
             $connectionKios->commit();
             return back()->with('success', 'Success Delete Data Recap.');
@@ -273,6 +294,18 @@ class KiosDailyRecapController extends Controller
 
     }
 
+    public function getPaketPenjualan($id)
+    {
+        $items = ProdukJenis::with('subjenis')->where('id', $id)->get();
+        return response()->json($items);
+    }
+
+    public function getPermasalahan($jenisId)
+    {
+        $produkSearch = ProdukJenis::findOrFail($jenisId);
+        $dataPermasalahan = $produkSearch->produkpermasalahan()->get();
+        return response()->json($dataPermasalahan);
+    }
 
 
 }

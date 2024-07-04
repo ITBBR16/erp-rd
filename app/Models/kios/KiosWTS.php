@@ -2,8 +2,9 @@
 
 namespace App\Models\kios;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\produk\ProdukSubJenis;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KiosWTS extends Model
 {
@@ -16,6 +17,11 @@ class KiosWTS extends Model
     public function kiosDR()
     {
         return $this->hasOne(KiosDailyRecap::class);
+    }
+
+    public function subjenis()
+    {
+        return $this->belongsTo(ProdukSubJenis::class, 'paket_penjualan_id');
     }
 
 }

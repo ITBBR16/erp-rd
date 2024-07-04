@@ -10,6 +10,8 @@ use App\Models\kios\KiosImageProduk;
 use App\Models\kios\KiosImageSecond;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosProdukSecond;
+use App\Models\kios\KiosWTB;
+use App\Models\kios\KiosWTS;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -74,6 +76,16 @@ class ProdukSubJenis extends Model
     public function imagekiossecond()
     {
         return $this->hasMany(KiosImageSecond::class);
+    }
+
+    public function kiosRecapWtb()
+    {
+        return $this->hasMany(KiosWTB::class);
+    }
+
+    public function kiosRecapWts()
+    {
+        return $this->hasMany(KiosWTS::class);
     }
 
 }
