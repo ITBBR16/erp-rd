@@ -33,36 +33,40 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($permasalahans as $permasalahan)
-                    @if ($permasalahan->nama !== 'Belum Terdata')
+                @foreach ($dataTs as $dataTs)
+                    @if ($dataTs->nama != 'Belum Terdata')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                            @foreach ($permasalahan->permasalahanproduk as $item)
-                                <td class="px-6 py-2">
-                                    {{ $item->jenis_produk }}
-                                </td>
-                            @endforeach
                             <td class="px-6 py-2">
-                                
+                                @foreach ($dataTs->permasalahanproduk as $item)
+                                    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+                                        <li>
+                                            {{ $item->jenis_produk }}
+                                        </li>
+                                    </ul>
+                                @endforeach
                             </td>
                             <td class="px-6 py-2">
-                                {{ $permasalahan->nama }}
+                                {{ $dataTs->kategoriPermasalahan->nama }}
                             </td>
                             <td class="px-6 py-2">
-                                <button id="dropdownDailyRecapButton{{ $permasalahan->id }}" data-dropdown-toggle="dropdownDailyRecap{{ $permasalahan->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                {{ $dataTs->nama }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <button id="dropdownDailyRecapButton{{ $dataTs->id }}" data-dropdown-toggle="dropdownDailyRecap{{ $dataTs->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                                 <!-- Dropdown menu -->
-                                <div id="dropdownDailyRecap{{ $permasalahan->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                                    <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDailyRecapButton{{ $permasalahan->id }}">
+                                <div id="dropdownDailyRecap{{ $dataTs->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                                    <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDailyRecapButton{{ $dataTs->id }}">
                                         <li>
-                                            <a href="{{ $permasalahan->link_permasalahan }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300" target="__blank">
+                                            <a href="{{ $dataTs->link_video }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300" target="__blank">
                                                 <span class="material-symbols-outlined text-base mr-3">linked_services</span>
                                                 <span class="whitespace-nowrap">Link Doc</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <button type="button" data-modal-target="recap-edit{{ $permasalahan->id }}" data-modal-toggle="recap-edit{{ $permasalahan->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <button type="button" data-modal-target="recap-edit{{ $dataTs->id }}" data-modal-toggle="recap-edit{{ $dataTs->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                                 <span class="material-symbols-outlined text-base mr-3">edit</span>
                                                 <span class="whitespace-nowrap">Edit</span>
                                             </button>

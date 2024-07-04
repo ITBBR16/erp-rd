@@ -5,6 +5,7 @@
                 <form action="{{ route('daily-recap.destroy', $dr->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
+                    <input type="hidden" name="keperluan_id" value="{{ $dr->keperluan->nama }}">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg"

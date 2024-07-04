@@ -2,15 +2,18 @@
 
 namespace App\Models\produk;
 
+use App\Models\kios\KiosProduk;
+use App\Models\kios\SupplierKios;
+use App\Models\kios\KiosOrderList;
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosImageProduk;
 use App\Models\kios\KiosImageSecond;
-use App\Models\kios\KiosOrderList;
 use App\Models\kios\KiosOrderSecond;
-use App\Models\kios\KiosProduk;
-use App\Models\kios\SupplierKios;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\kios\KiosProdukSecond;
+use App\Models\kios\KiosWTB;
+use App\Models\kios\KiosWTS;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProdukSubJenis extends Model
 {
@@ -50,6 +53,11 @@ class ProdukSubJenis extends Model
         return $this->hasMany(KiosProduk::class, 'sub_jenis_id');
     }
 
+    public function kiosproduksecond()
+    {
+        return $this->hasMany(KiosProdukSecond::class, 'sub_jenis_id');
+    }
+
     public function produktype()
     {
         return $this->belongsTo(ProdukType::class, 'produk_type_id');
@@ -68,6 +76,16 @@ class ProdukSubJenis extends Model
     public function imagekiossecond()
     {
         return $this->hasMany(KiosImageSecond::class);
+    }
+
+    public function kiosRecapWtb()
+    {
+        return $this->hasMany(KiosWTB::class);
+    }
+
+    public function kiosRecapWts()
+    {
+        return $this->hasMany(KiosWTS::class);
     }
 
 }
