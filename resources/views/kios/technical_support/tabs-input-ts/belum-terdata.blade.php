@@ -4,7 +4,7 @@
         <div class="relative overflow-x-auto">
             <div class="flex justify-between items-center py-4">
                 <button type="button" data-modal-target="add-data-ts" data-modal-toggle="add-data-ts" class="flex text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 dark:focus:ring-indigo-800">Add Data TS</button>
-                <button type="button" id="button-checkbox" class="cursor-not-allowed flex text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 dark:focus:ring-indigo-800" disabled>Submit Checkbox</button>
+                <button type="button" id="button-checkbox" class="cursor-not-allowed flex text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 dark:focus:ring-indigo-800" disabled>Review</button>
             </div>
         </div>
         <div class="relative">
@@ -64,13 +64,13 @@
                                 <div id="dropdownITS{{ $recap->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
                                     <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInputTS{{ $recap->id }}">
                                         <li>
-                                            <button type="button" data-modal-target="recap-view{{ $recap->id }}" data-modal-toggle="recap-view{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <button type="button" data-modal-target="lanjut-ts-{{ $recap->id }}" data-modal-toggle="lanjut-ts-{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                                 <span class="material-symbols-outlined text-base mr-3">keyboard_tab</span>
                                                 <span class="whitespace-nowrap">Lanjut</span>
                                             </button>
                                         </li>
                                         <li>
-                                            <button type="button" data-modal-target="recap-edit{{ $recap->id }}" data-modal-toggle="recap-edit{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <button type="button" data-modal-target="cancel-ts-{{ $recap->id }}" data-modal-toggle="cancel-ts-{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                                 <span class="material-symbols-outlined text-base mr-3">cancel</span>
                                                 <span class="whitespace-nowrap">Cancel</span>
                                             </button>
@@ -89,5 +89,7 @@
     </form>
     {{-- Modal --}}
     @include('kios.technical_support.modal-ts.new-data-ts')
+    @include('kios.technical_support.modal-ts.lanjut-ts')
+    @include('kios.technical_support.modal-ts.cancel-ts')
 
 </div>

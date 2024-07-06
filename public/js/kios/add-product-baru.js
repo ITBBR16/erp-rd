@@ -118,7 +118,7 @@ $(document).ready(function(){
                     </select>
                 </div>
                 <div class="col-span-2 grid grid-cols-5" style="grid-template-columns: 5fr 5fr 5fr 5fr 1fr">
-                    <div id="box-add-kelengkapan-${kelengkapanCount}" class="col-span-4 flex flex-row border rounded-lg items-center w-full border-gray-300 mb-6 gap-3 p-2 text-sm">
+                    <div id="box-add-kelengkapan-${kelengkapanCount}" class="col-span-4 flex flex-wrap border rounded-lg items-start w-full h-10 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
                         
                     </div>
                     <div class="flex mb-6 justify-center items-center">
@@ -159,7 +159,7 @@ $(document).ready(function(){
                     </select>
                 </div>
                 <div class="col-span-2 grid grid-cols-5" style="grid-template-columns: 5fr 5fr 5fr 5fr 1fr">
-                    <div id="box-edit-kelengkapan-${kelengkapanCount}" class="col-span-4 flex flex-row border rounded-lg items-center w-full border-gray-300 mb-6 gap-3 p-2 text-sm">
+                    <div id="box-edit-kelengkapan-${kelengkapanCount}" class="col-span-4 flex flex-wrap border rounded-lg items-start w-full h-10 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
                         
                     </div>
                     <div class="flex mb-6 justify-center items-center">
@@ -203,7 +203,7 @@ $(document).ready(function(){
                 </div>
                 <button type="button" data-id="${countJenisProduk}" class="button-delete-ek ml-auto -mx-1.5 -my-1.5 text-gray-500 rounded-lg focus:ring-2 focus:ring-gray-400 p-1.5 hover:bg-gray-200 inline-flex items-center justify-center h-7 w-7 bg-transparent dark:text-gray-400 dark:hover:bg-gray-700" data-dismiss-target="#jp-1" aria-label="Close">
                     <span class="sr-only">Dismiss</span>
-                    <svg class="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
                 </button>
@@ -229,7 +229,7 @@ $(document).ready(function(){
                 </div>
                 <button type="button" data-id="${countJenisProduk}" class="button-delete-aj ml-auto -mx-1.5 -my-1.5 text-gray-500 rounded-lg focus:ring-2 focus:ring-gray-400 p-1.5 hover:bg-gray-200 inline-flex items-center justify-center h-7 w-7 bg-transparent dark:text-gray-400 dark:hover:bg-gray-700" data-dismiss-target="#jp-1" aria-label="Close">
                     <span class="sr-only">Dismiss</span>
-                    <svg class="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
                 </button>
