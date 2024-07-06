@@ -37,7 +37,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div id="box-edit-kelengkapan-1" class="flex flex-row col-span-2 border rounded-lg items-center w-full border-gray-300 mb-6 gap-3 p-2 text-sm">
+                    <div id="box-edit-kelengkapan-1" class="flex flex-wrap col-span-2 border rounded-lg items-center w-full h-10 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
                         
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                             </select>
                         </div>
                         <div class="col-span-2 grid grid-cols-5" style="grid-template-columns: 5fr 5fr 5fr 5fr 1fr">
-                            <div id="box-add-kelengkapan-1" class="col-span-4 flex flex-row border rounded-lg items-center w-full border-gray-300 mb-6 gap-3 p-2 text-sm">
+                            <div id="box-add-kelengkapan-1" class="flex flex-wrap col-span-4 border rounded-lg items-center w-full h-10 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
                                 
                             </div>
                         </div>

@@ -14,13 +14,16 @@
                 <form action="{{ route('input.store') }}" method="POST" autocomplete="off">
                     @csrf
                     <div class="relative w-full mb-6">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="add_jenisProduk">List Produk : </label>
-                        <select multiple name="add_jenis_produk[]" id="add_jenisProduk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="add-jenis-produk-ts">List Produk : </label>
+                        <select name="add_jenis_produk[]" id="add-jenis-produk-ts" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Jenis Produk</option>
                             @foreach ($jenisProduk as $produk)
                                 <option value="{{ $produk->id }}">{{ $produk->jenis_produk }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div id="box-selected-jenis-ts" class="flex flex-wrap border rounded-lg items-start w-full h-16 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
+                        
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <div class="relative z-0 w-full mb-6 group">
