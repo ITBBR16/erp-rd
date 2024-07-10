@@ -34,9 +34,9 @@ class KiosShopSecondController extends Controller
         $statusPembayaran = KiosStatusPembayaran::all();
         $customer = Customer::all();
         $marketplace = KiosMarketplace::all();
-        $kiosProduk = ProdukJenis::with('subjenis.kelengkapans')->get();
+        $kiosProduk = ProdukSubJenis::all();
         $kelengkapan = ProdukKelengkapan::all();
-        $secondOrder = KiosOrderSecond::with('customer', 'subjenis.produkjenis', 'qcsecond.kelengkapans', 'statuspembayaran', 'buymetodesecond')->orderBy('created_at', 'desc')->get();
+        $secondOrder = KiosOrderSecond::orderBy('created_at', 'desc')->get();
 
         return view('kios.shop.index-second', [
             'title' => 'Shop Second',
@@ -248,6 +248,11 @@ class KiosShopSecondController extends Controller
 
     public function destroy($id)
     {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionKios->beginTransaction();
+        $connectionEkspedisi->beginTransaction();
+
         try {
             $qcSecond = KiosQcProdukSecond::findOrFail($id);
             $idOrderSecond = $qcSecond->order_second_id;
@@ -270,8 +275,12 @@ class KiosShopSecondController extends Controller
             $qcSecond->kelengkapans()->detach();
             $qcSecond->delete();
 
+            $connectionKios->commit();
+            $connectionEkspedisi->commit();
             return back()->with('success', 'Success Delete Order Second.');
         } catch (\Exception $e) {
+            $connectionKios->rollBack();
+            $connectionEkspedisi->rollBack();
             return back()->with('error', 'Error deleting order: ' . $e->getMessage());
         }
     }

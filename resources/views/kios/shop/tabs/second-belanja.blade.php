@@ -68,9 +68,7 @@
                     <select name="jenis_drone_second" id="jenis_drone_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_drone_second') border-red-600 dark:border-red-500 @enderror" required>
                         <option value="" hidden>-- Jenis Produk --</option>
                         @foreach ($produkKios as $pk)
-                            @foreach ($pk->subjenis as $sj)
-                                <option value="{{ $sj->id }}" class="dark:bg-gray-700">{{ $pk->jenis_produk }} {{ $sj->paket_penjualan }}</option>
-                            @endforeach
+                            <option value="{{ $pk->id }}" class="dark:bg-gray-700">{{ $pk->paket_penjualan }}</option>
                         @endforeach
                     </select>
                     @error('jenis_drone_second')
@@ -89,7 +87,7 @@
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full group flex items-center">
                     <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                    <input type="text" name="biaya_pengambilan" id="biaya_pengambilan" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <input type="text" name="biaya_pengambilan" id="biaya_pengambilan" class="biaya_satuan block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                     <label for="biaya_pengambilan" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Pengambilan</label>
                 </div>
                 @error('biaya_pengambilan')
@@ -97,7 +95,7 @@
                 @enderror
                 <div class="relative z-0 w-full group flex items-center">
                     <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                    <input type="text" name="biaya_ongkir" id="biaya_ongkir" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <input type="text" name="biaya_ongkir" id="biaya_ongkir" class="biaya_satuan block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                     <label for="biaya_ongkir" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Ongkir</label>
                 </div>
                 @error('biaya_ongkir')

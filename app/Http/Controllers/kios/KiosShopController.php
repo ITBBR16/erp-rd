@@ -100,7 +100,7 @@ class KiosShopController extends Controller
                 $history->save();
 
                 $productPacket = ProdukSubJenis::findOrFail($item);
-                $productName = $productPacket->produkjenis->jenis_produk . " " . $productPacket->paket_penjualan . " * " . $quantities[$key] ."\n";
+                $productName = $productPacket->paket_penjualan . " * " . $quantities[$key] ."\n";
                 $message .= $productName;
             }
 
@@ -180,7 +180,7 @@ class KiosShopController extends Controller
                     $totalNilai += $total;
 
                     $productPacket = ProdukSubJenis::findOrFail($jenisPaket);
-                    $productName = $productPacket->produkjenis->jenis_produk . " " . $productPacket->paket_penjualan . " * " . $quantities[$index] ."\n";
+                    $productName = $productPacket->paket_penjualan . " * " . $quantities[$index] ."\n";
                     $message .= $productName;
 
                     $supplier->subjenis()->attach($jenisPaket, ['nilai' => $nilaiBeli[$index]]);

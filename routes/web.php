@@ -92,7 +92,6 @@ Route::middleware('kios')->group(function () {
             });
 
             Route::resource('/shop', KiosShopController::class);
-            Route::post('/shop', [KiosShopController::class, 'store'])->name('form-belanja');
 
             Route::group(['controller' => KiosShopSecondController::class], function () {
                 Route::resource('/shop-second', KiosShopSecondController::class);

@@ -1,5 +1,5 @@
 <div class="hidden p-4" id="new-product" role="tabpanel" aria-labelledby="new-product-tab">
-    <form action="{{ route('form-belanja') }}" method="POST" autocomplete="off">
+    <form action="{{ route('shop.store') }}" method="POST" autocomplete="off">
         @csrf
         <div class="w-full px-3 py-3 mx-auto">
             <div class="flex flex-nowrap -mx-3">
@@ -18,11 +18,11 @@
                     <div id="form-new-belanja" class="flex flex-wrap -mx-3 md:px-3">
                         <div id="data-form-belanja-baru" class="grid md:w-full md:grid-cols-5 md:gap-4">
                             <div class="col-span-2">
-                                <label for="paket_penjualan" class="sr-only"></label>
-                                <select name="paket_penjualan[]" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
-                                    <option value="" hidden>-- Paket Penjualan --</option>
+                                <label for="paket-penjualan-z" class="sr-only"></label>
+                                <select name="paket_penjualan[]" id="paket-penjualan-z" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
+                                    <option value="" hidden>Select Paket Penjualan</option>
                                     @foreach ($paketPenjualan as $pp)
-                                        <option value="{{ $pp->id }}" class="dark:bg-gray-700">{{ $pp->produkjenis->jenis_produk }} {{ $pp->paket_penjualan }}</option>
+                                        <option value="{{ $pp->id }}" class="dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -19,3 +19,5 @@ import '../../../public/js/kios/shop-baru';
 import '../../../public/js/kios/shop-second';
 import '../../../public/js/kios/support-supplier';
 import '../../../public/js/kios/toggle-payment-kios';
+import '../../../public/js/kios/daily-recap';
+import '../../../public/js/kios/technical-support';

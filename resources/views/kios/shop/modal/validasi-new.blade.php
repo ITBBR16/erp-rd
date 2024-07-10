@@ -26,13 +26,15 @@
                         <h3 class="my-3 font-semibold text-gray-900 dark:text-white">Daftar Barang</h3>
                         <div id="form-validasi-{{ $item->id }}">
                             @foreach ($item->orderLists as $key => $ol)
-                            <div class="grid grid-cols-5 mb-4 gap-4">
+                            <div class="grid grid-cols-5 mb-4 gap-4" style="grid-template-columns: 5fr 5fr 4fr 5fr 1fr">
                                 <div class="relative col-span-2 z-0 w-full group">
                                     <select name="jenis_paket[]" id="jenis_paket{{ $key }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                                         <option value="" hidden>-- Seri Drone --</option>
                                         @foreach ($paketPenjualan as $pp)
                                             @if ($ol->sub_jenis_id == $pp->id)
-                                                <option value="{{ $pp->id }}" selected class="dark:bg-gray-700">{{ $pp->produkjenis->jenis_produk }} {{ $pp->paket_penjualan }}</option>
+                                                <option value="{{ $pp->id }}" selected class="dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
+                                            @else
+                                                <option value="{{ $pp->id }}" class="dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -41,9 +43,10 @@
                                     <input type="text" name="quantity[]" id="val-qty-buy-baru{{ $key }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $ol->quantity }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
                                     <label for="val-qty-buy-baru{{ $key }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
                                 </div>
-                                <div class="relative z-0 w-full group">
-                                    <input type="text" name="nilai[]" id="val-nilai-buy-baru{{ $key }}" class="val-nilai-buy-baru block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $ol->nilai }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
-                                    <label for="val-nilai-buy-baru{{ $key }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Harga /pcs</label>
+                                <div class="relative z-0 w-full group flex items-center">
+                                    <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
+                                    <input type="text" name="nilai[]" id="val-nilai-buy-baru{{ $key }}" class="val-nilai-buy-baru block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $ol->nilai }}" required>
+                                    <label for="val-nilai-buy-baru{{ $key }}" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Harga /pcs</label>
                                 </div>
                             </div>
                             @endforeach

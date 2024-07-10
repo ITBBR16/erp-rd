@@ -108,5 +108,5 @@
     {{-- Modal Action --}}
     @include('kios.shop.modal.view-new')
     @include('kios.shop.modal.validasi-new')
-    @include('kios.shop.modal.delete-new')
+    {{-- @include('kios.shop.modal.delete-new') --}}
 </div>

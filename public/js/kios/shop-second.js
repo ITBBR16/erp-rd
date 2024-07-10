@@ -1,8 +1,6 @@
 $(document).ready(function(){
     const jenisDroneSecond = $('#jenis_drone_second');
     const container = $('#kelengkapan-second');
-    const biayaPengambilan = $('#biaya_pengambilan');
-    const biayaOngkir = $('#biaya_ongkir');
     const biayaSatuan = $('.biaya_satuan');
     const nomorCustomer = $('#no_customer_second');
     const idCustmer = $('#id_customer');
@@ -13,10 +11,10 @@ $(document).ready(function(){
     const buttonAddAdditionalKelengkapan = $('#add-second-additional-belanja');
     const containerAdditional = $('#additional-kelengkapan-second');
     let uniqueNumberId = 20;
-    
+
     jenisDroneSecond.on('change', function() {
         const subJenisId = jenisDroneSecond.val();
-        
+
         if(subJenisId){
             fetch(`/kios/product/get-kelengkapan-second/${subJenisId}`)
             .then(response => response.json())
@@ -49,7 +47,7 @@ $(document).ready(function(){
     nomorCustomer.on('change', function() {
         const idValue = nomorCustomer.val();
         const nomor = idValue.replace(/\D/g, "");
-        
+
         if(nomor != '') {
             fetch(`/kios/product/getCustomerbyNomor/${nomor}`)
             .then(response => response.json())
@@ -73,7 +71,7 @@ $(document).ready(function(){
             namaCustomer.val('').removeClass('border-red-500 text-red-500');
             $('#nama_customer_label').removeClass('text-red-500')
         }
-        
+
     });
 
     buttonAddKelengkapan.on('click', function () {
@@ -166,30 +164,16 @@ $(document).ready(function(){
         uniqueNumberId--;
    });
 
-    function formatRupiah(angka) {
-        return accounting.formatMoney(angka, "", 0, ".", ",");
-    }
-    
-    biayaPengambilan.on('input', function () {
-        var inputValue = $(this).val();
-        inputValue = inputValue.replace(/[^\d]/g, '');
-        var parsedValue = parseInt(inputValue, 10);
-        $(this).val(formatRupiah(parsedValue));
-    });
-
-    biayaOngkir.on('input', function () {
-        var inputValue = $(this).val();
-        inputValue = inputValue.replace(/[^\d]/g, '');
-        var parsedValue = parseInt(inputValue, 10);
-        $(this).val(formatRupiah(parsedValue));
-    });
-
     biayaSatuan.on('input', function () {
         var inputValue = $(this).val();
         inputValue = inputValue.replace(/[^\d]/g, '');
         var parsedValue = parseInt(inputValue, 10);
         $(this).val(formatRupiah(parsedValue));
     });
+
+    function formatRupiah(angka) {
+        return accounting.formatMoney(angka, "", 0, ".", ",");
+    }
 
     // Cek nilai pada halaman qc second
     // function cekNilai() {
