@@ -52,9 +52,9 @@
                         </td>
                         <td class="px-6 py-2">
                             @if ($recap->keperluan->nama == 'Want to Buy')
-                                {{ $recap->kiosWtb->subjenis->produkjenis->jenis_produk }} {{ $recap->kiosWtb->subjenis->paket_penjualan }}
+                                {{ $recap->kiosWtb->subjenis->paket_penjualan }}
                             @elseif($recap->keperluan->nama == 'Want to Sell')
-                                {{ $recap->kiosWts->subjenis->produkjenis->jenis_produk }} {{ $recap->kiosWts->subjenis->paket_penjualan }}
+                                {{ $recap->kiosWts->subjenis->paket_penjualan }}
                             @elseif($recap->keperluan->nama == 'Technical Support')
                                 {{ $recap->recapTs->produkjenis->jenis_produk }}
                             @endif
@@ -63,7 +63,7 @@
                             @if ($recap->keperluan->nama == 'Want to Buy')
                                 {{ $recap->kiosWtb->kondisi_produk }}
                             @elseif($recap->keperluan->nama == 'Want to Sell')
-                                {{ $recap->kiosWts->produk_worth }}
+                                Produk Worth : {{ $recap->kiosWts->produk_worth }}
                             @elseif($recap->keperluan->nama == 'Technical Support')
                                 {{ $recap->recapTs->kategoriPermasalahan->nama }}
                             @endif

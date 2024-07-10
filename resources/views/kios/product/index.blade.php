@@ -141,11 +141,11 @@
                             @endphp
                             @if (!empty($imageLink))
                                 <div class="w-14 -h-10 mr-4">
-                                    <img src="https://drive.google.com/thumbnail?id={{ $fileId }}" alt="{{ $pd->subjenis->produkjenis->jenis_produk }} {{ $pd->subjenis->paket_penjualan }}">
+                                    <img src="https://drive.google.com/thumbnail?id={{ $fileId }}" alt="{{ $pd->subjenis->paket_penjualan }}">
                                 </div>
                             @endif
                             <span>
-                                {{ $pd->subjenis->produkjenis->jenis_produk }} {{ $pd->subjenis->paket_penjualan }}
+                                {{ $pd->subjenis->paket_penjualan }}
                             </span>
                         </div>
                     </td>
@@ -204,12 +204,12 @@
                                             <span class="whitespace-nowrap">Edit</span>
                                         </button>
                                     </li>
-                                    <li>
+                                    {{-- <li>
                                         <button type="button" data-modal-target="delete-produk{{ $pd->id }}" data-modal-toggle="delete-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <i class="material-symbols-outlined text-base mr-3">delete</i>
                                             <span class="whitespace-nowrap">Hapus Produk</span>
                                         </button>
-                                    </li>
+                                    </li> --}}
                                 @endif
                             </ul>
                         </div>
@@ -232,6 +232,6 @@
     @include('kios.product.modal.modal-view-daftar-produk')
     @include('kios.product.modal.modal-promo-daftar-produk')
     @include('kios.product.modal.modal-edit-produk-baru')
-    @include('kios.product.modal.modal-delete-daftar-produk')
+    {{-- @include('kios.product.modal.modal-delete-daftar-produk') --}}
     
 @endsection

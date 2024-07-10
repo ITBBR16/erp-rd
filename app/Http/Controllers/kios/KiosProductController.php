@@ -4,7 +4,6 @@ namespace App\Http\Controllers\kios;
 
 use Exception;
 use Illuminate\Http\Request;
-use Termwind\Components\Raw;
 use App\Models\kios\KiosProduk;
 use App\Models\produk\ProdukType;
 use App\Models\produk\ProdukJenis;
@@ -159,11 +158,19 @@ class KiosProductController extends Controller
 
     public function getPaketPenjualan($paketPenjualanId)
     {
-        $ddPaketPenjualan = ProdukSubJenis::where('jenis_id', $paketPenjualanId)->get();
+        $ddPaketPenjualan = ProdukSubJenis::where('id', $paketPenjualanId)->get();
 
         if(count($ddPaketPenjualan) > 0) {
             return response()->json($ddPaketPenjualan);
         }
+    }
+
+    public function getKelengkapans($id)
+    {
+        $searchSub = ProdukSubJenis::find($id);
+        $kelengkapans = $searchSub->allKelengkapans();
+
+        return $kelengkapans;
     }
 
 }

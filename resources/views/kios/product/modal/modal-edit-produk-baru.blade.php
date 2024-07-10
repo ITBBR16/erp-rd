@@ -1,11 +1,11 @@
 @foreach ($produks as $produk)
     <div id="edit-produk{{ $produk->id }}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-full max-w-xl max-h-full">
+        <div class="relative w-full max-w-3xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 {{-- Header Modal --}}
                 <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                        Edit Produk {{ $produk->subjenis->produkjenis->jenis_produk }} {{ $produk->subjenis->paket_penjualan }}
+                        Edit Produk {{ $produk->subjenis->paket_penjualan }}
                     </h3>
                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="edit-produk{{ $produk->id }}">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -24,13 +24,6 @@
                                 <label for="edit-jenis-produk-baru{{ $produk->id }}" class="absolute text-xs text-gray-500 dark:text-gray-400 -translate-y-6 top-3 z-10">Jenis Produk</label>
                                 <select name="edit_jenis_produk_baru" id="edit-jenis-produk-baru{{ $produk->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                                     <option value="" hidden>Jenis Produk</option>
-                                    @foreach ($jenisproduks as $produkJenis)
-                                        @if ($produk->subjenis->produkjenis->id == $produkJenis->id)
-                                            <option value="{{ $produkJenis->id }}" selected class="dark:bg-gray-700">{{ $produkJenis->jenis_produk }}</option>
-                                        @else
-                                            <option value="{{ $produkJenis->id }}" class="dark:bg-gray-700">{{ $produkJenis->jenis_produk }}</option>
-                                        @endif
-                                    @endforeach
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
@@ -72,11 +65,15 @@
                             </div>
                         </div>
                         <div id="edit-produk-baru">
+                            {{-- @foreach ($produk->subjenis->allKelengkapans as $aww)
+                                {{ $aww }}
+                            @endforeach --}}
                             @foreach ($produk->subjenis->kelengkapans as $number => $kelengkapan)
-                                <div id="container-data-kelengkapan-produk-baru-{{ $number }}" class="container-data-kelengkapan-produk-baru grid grid-cols-4 mb-4 gap-4">
+                                {{-- <div id="container-data-kelengkapan-produk-baru-{{ $number }}" class="container-data-kelengkapan-produk-baru grid grid-cols-4 mb-4 gap-4">
                                     <div class="relative col-span-2 w-full">
                                         <select name="edit_kelengkapan_produk_baru[]" id="edit-kelengkapan-produk-bar{{ $number }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                                             <option value="" hidden>Kelengkapan Produk</option>
+                                            
                                             @foreach ($produk->subjenis->produkjenis->kelengkapans as $kelengkapanJenis)
                                                 @if ($kelengkapanJenis->id == $kelengkapan->id)
                                                 <option value="{{ $kelengkapanJenis->id }}" selected class="dark:bg-gray-700">{{ $kelengkapanJenis->kelengkapan }}</option>
@@ -95,7 +92,7 @@
                                             <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                                         </button>
                                     </div>
-                                </div>
+                                </div> --}}
                             @endforeach
                         </div>
                         <div class="flex justify-between mb-4 text-rose-600">
@@ -125,7 +122,7 @@
         </div>
     </div>
 
-    <script>
-        let dataKelengkapanProdukBaru = @json($produk->subjenis->produkjenis->kelengkapans);
-    </script>
+    {{-- <script>
+        let dataKelengkapanProdukBaru = @json($typeProduks->kelengkapans);
+    </script> --}}
 @endforeach

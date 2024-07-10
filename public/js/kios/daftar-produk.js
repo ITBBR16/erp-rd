@@ -11,16 +11,13 @@ $(document).ready(function () {
 
     // Add & Delete kelengkapan
     addEditKelengkapanBaru.on("click", function() {
+        var idPaketPenjualan = $('#edit_paket_penjualan_produk_baru_id').val();
         var countContainerEdit = $(".container-data-kelengkapan-produk-baru").length + 1;
         let addFormKelengkapan = `
             <div id="container-data-kelengkapan-produk-baru-${countContainerEdit}" class="container-data-kelengkapan-produk-baru grid grid-cols-4 mb-4 gap-4">
                 <div class="relative col-span-2 w-full">
-                    <select name="edit_kelengkapan_produk_baru[]" id="edit-kelengkapan-produk-bar${countContainerEdit}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
-                        <option value="" hidden>Kelengkapan Produk</option>`;
-                        dataKelengkapanProdukBaru.forEach(function(item) {
-                            addFormKelengkapan += `<option value="${item.id}" class="dark:bg-gray-700">${item.kelengkapan}</option>`
-                        });
-                        addFormKelengkapan += `
+                    <select name="edit_kelengkapan_produk_baru[]" id="edit-kelengkapan-produk-baru-${countContainerEdit}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                        <option value="" hidden>Kelengkapan Produk</option>
                     </select>
                 </div>
                 <div class="relative w-full">
@@ -36,6 +33,31 @@ $(document).ready(function () {
         `
 
         $('#edit-produk-baru').append(addFormKelengkapan);
+
+        var ddEditKelengkapan = $('#edit-kelengkapan-produk-baru-' + countContainerEdit);
+        fetch(`/kios/product/getKelengkapans/${idPaketPenjualan}`)
+        .then(response => response.json())
+        .then(data => {
+            ddEditKelengkapan.empty();
+            console.table(data);
+            const defaultOption = $('<option>', {
+                text: 'Kelengkapan Produk',
+                hidden: true
+            })
+            ddEditKelengkapan.append(defaultOption);
+
+            data.forEach(function(item) {
+                const option = $('<option>', {
+                    value: item.id,
+                    text: item.kelengkapan
+                }).addClass('dark:bg-gray-700');
+
+                ddEditKelengkapan.append(option);
+            });
+        })
+        .catch(error => {
+            alert('Error Fetching Data : ' + error);
+        });
     });
 
     $(document).on("click", ".remove-edit-kelengkapan-produk-baru", function() {
@@ -78,6 +100,46 @@ $(document).ready(function () {
 
         $.ajax({
             url: '/kios/product/update-srp-baru',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            data: {
+                productId: productId,
+                newSrp: newSrp
+            },
+            success: function(response) {
+                // console.log(response);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $(document).on('change', '.category-checkbox', function () {
+        var categoryId = $(this).data("id");
+        var categoryText = $(this).next('label').text();
+        getFilterData();
+        showFilterData(categoryId, categoryText);
+    });
+
+    // Daftar produk bekas
+    srpDPS.on('input', function() {
+        var inputValue = $(this).val();
+        inputValue = inputValue.replace(/[^\d]/g, '');
+        var parsedValue = parseInt(inputValue, 10);
+        $(this).val(formatRupiah(parsedValue));
+    });
+
+    $('input[id^="srp-daftar-produk-second-"]').on('input', function() {
+        var productId = $(this).data('id');
+        var srp = $(this).val();
+        var newSrp = srp.replace(/[^\d]/g, '');
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            url: '/kios/product/update-srp-second',
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': csrfToken
@@ -151,45 +213,4 @@ $(document).ready(function () {
             }
         });
     }
-
-    $(document).on('change', '.category-checkbox', function () {
-        var categoryId = $(this).data("id");
-        var categoryText = $(this).next('label').text();
-        getFilterData();
-        showFilterData(categoryId, categoryText);
-    });
-
-    // Daftar produk bekas
-    srpDPS.on('input', function() {
-        var inputValue = $(this).val();
-        inputValue = inputValue.replace(/[^\d]/g, '');
-        var parsedValue = parseInt(inputValue, 10);
-        $(this).val(formatRupiah(parsedValue));
-    });
-
-    $('input[id^="srp-daftar-produk-second-"]').on('input', function() {
-        var productId = $(this).data('id');
-        var srp = $(this).val();
-        var newSrp = srp.replace(/[^\d]/g, '');
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-        $.ajax({
-            url: '/kios/product/update-srp-second',
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            data: {
-                productId: productId,
-                newSrp: newSrp
-            },
-            success: function(response) {
-                // console.log(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
-
 });

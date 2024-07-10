@@ -265,11 +265,12 @@ class KiosDailyRecapController extends Controller
     public function getSubjenis($kondisiProduk, $id)
     {
         if ($kondisiProduk == 'Drone Baru') {
-            $items = ProdukSubJenis::with('kiosproduk', 'produkjenis')->where('jenis_id', $id)->get();
+            $itemSearch = ProdukJenis::findOrFail($id);
+            $items = $itemSearch->subjenis()->with('kiosproduk')->get();
         } elseif ($kondisiProduk == 'Drone Bekas') {
             $items = ProdukSubJenis::with('kiosproduksecond', 'produkjenis')->where('jenis_id', $id)->get();
         } elseif ($kondisiProduk == 'Part Baru' || $kondisiProduk == 'Part Bekas') {
-            
+
             $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
             $response = Http::post($urlApiGudang, [
                 'status' => $kondisiProduk
@@ -296,16 +297,22 @@ class KiosDailyRecapController extends Controller
 
     public function getPaketPenjualan($id)
     {
-        $items = ProdukJenis::with('subjenis')->where('id', $id)->get();
+        $itemSearch = ProdukJenis::findOrFail($id);
+        $items = $itemSearch->subjenis()->get();
         return response()->json($items);
     }
 
-    public function getPermasalahan($jenisId)
+    public function getPermasalahan($jenisId, $kategoriId)
     {
         $produkSearch = ProdukJenis::findOrFail($jenisId);
-        $dataPermasalahan = $produkSearch->produkpermasalahan()->get();
+        $dataPermasalahan = $produkSearch->produkpermasalahan()->where('kategori_permasalahan_id', $kategoriId)->get();
         return response()->json($dataPermasalahan);
     }
 
+    public function getDeskripsiPermasalahan($id)
+    {
+        $deskripsi = KiosTechnicalSupport::findOrFail($id);
+        return response()->json($deskripsi);
+    }
 
 }

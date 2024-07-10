@@ -15,8 +15,8 @@
                     @csrf
                     <div class="px-6 py-6 lg:px-8">
                         <div class="relative col-span-2 w-full mb-6">
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="add-jenis-produk-ts">List Produk : </label>
-                            <select name="add_jenis_produk[]" id="add-jenis-produk-ts" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="add-jenis-produk-ts-{{ $recap->id }}">List Produk : </label>
+                            <select name="add_jenis_produk[]" id="add-jenis-produk-ts-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                                 <option value="" hidden>Jenis Produk</option>
                                 @foreach ($jenisProduk as $produk)
                                     <option value="{{ $produk->id }}">{{ $produk->jenis_produk }}</option>
@@ -25,12 +25,12 @@
                         </div>
                         <div class="flex">
                             <label class="relative inline-flex items-center me-5 mb-4 cursor-pointer">
-                                <input type="checkbox" name="new_permasalahan" id="new_permasalahan" data-id="{{ $recap->id }}" value="" class="sr-only peer">
+                                <input type="checkbox" name="check_permasalahan_lanjut" id="check-permasalahan-lanjut-{{ $recap->id }}" data-id="{{ $recap->id }}" value="" class="new-permasalahan sr-only peer">
                                 <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-600 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
                                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Input Permasalahan Baru</span>
                             </label>
                         </div>
-                        <div id="form-ts-lanjut-" class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6">
                             <div class="relative z-0 w-full mb-6 group">
                                 <label for="keperluan_ts"></label>
                                 <select name="keperluan_ts" id="keperluan_ts" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
@@ -40,11 +40,18 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="relative z-0 w-full mb-6 group">
+                            <div id="dd-permasalahan-{{ $recap->id }}" class="relative z-0 w-full mb-6 group">
                                 <label for="permasalahan-lanjut-{{ $recap->id }}"></label>
                                 <select name="permasalahan_lanjut" id="permasalahan-lanjut-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                                     <option value="" hidden>Permasalahan</option>
+                                    @foreach ($dataTs as $ts)
+                                        <option value="{{ $ts->id }}">{{ $ts->nama }}</option>
+                                    @endforeach
                                 </select>
+                            </div>
+                            <div id="new-permasalahan-{{ $recap->id }}" class="relative z-0 w-full mb-6 group" style="display: none">
+                                <input type="text" name="add_permasalahan" id="add-permasalahan-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
+                                <label for="add_link_video" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Permasalahan</label>
                             </div>
                         </div>
                         <div class="mb-6">

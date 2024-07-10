@@ -29,11 +29,15 @@ $(document).ready(function () {
 
         if(kondisiProduk == 'Part Baru' || kondisiProduk == 'Part Bekas') {
             alert('Fitur belum tersedia.');
+            jenisProduk.empty();
+            $("#kondisi_produk").val("");
         } else {
             fetch(`/kios/customer/getJenisProduk/${kondisiProduk}`)
             .then(response => response.json())
             .then(data => {
                 jenisProduk.empty();
+                const addedProductIds = new Set(); // Menyimpan id produk yang sudah di tambahkan
+                const fragment = $(document.createDocumentFragment()); // Menampung semua elemen option yang di tambahkan
 
                 const defaultOption = $('<option>', {
                     text: 'Hayooo',
@@ -42,13 +46,20 @@ $(document).ready(function () {
                 jenisProduk.append(defaultOption);
 
                 data.forEach(jenis => {
-                    const option = $('<option>', {
-                        value: jenis.subjenis.produkjenis.id,
-                        text: jenis.subjenis.produkjenis.jenis_produk
-                    })
-                    .addClass('dark:bg-gray-700');
-                    jenisProduk.append(option);
+                    jenis.subjenis.produkjenis.forEach(produk => {
+                        if (!addedProductIds.has(produk.id)) {
+                            addedProductIds.add(produk.id);
+                
+                            const option = $('<option>', {
+                                value: produk.id,
+                                text: produk.jenis_produk
+                            }).addClass('dark:bg-gray-700');
+                            
+                            fragment.append(option);
+                        }
+                    });
                 });
+                jenisProduk.append(fragment);
             })
             .catch(error => {
                 alert('Error Fetching Data : ', error);
@@ -72,6 +83,8 @@ $(document).ready(function () {
                 paketPenjualan.empty();
                 (listProdukTersedia) ? listProdukTersedia.remove() : '';
                 (statusPaketPenjualan) ? statusPaketPenjualan.remove() : '';
+                const addedProductIds = new Set(); // Menyimpan id produk yang sudah di tambahkan
+                const fragment = $(document.createDocumentFragment()); // Menampung semua elemen option yang di tambahkan
 
                 const defaultOption = $('<option>', {
                     text: 'Hayooo',
@@ -80,16 +93,17 @@ $(document).ready(function () {
                 paketPenjualan.append(defaultOption);
 
                 data.forEach(jenis => {
+                    jenis
                     const option = $('<option>', {
                         value: jenis.id,
-                        text: jenis.produkjenis.jenis_produk + " " + jenis.paket_penjualan
+                        text: jenis.paket_penjualan
                     })
                     .addClass('dark:bg-gray-700');
                     paketPenjualan.append(option);
                 });
             })
             .catch(error => {
-                alert('Error Fetching Data : ', error);
+                alert('Error Fetching Data : ' + error);
             });
         }
     });
@@ -134,7 +148,7 @@ $(document).ready(function () {
                         <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
                         </svg>
-                        ${jenis.produkjenis.jenis_produk} ${jenis.paket_penjualan}
+                        ${jenis.paket_penjualan}
                     </li>
                     `;
                     listProduk.append(dataList);
@@ -164,14 +178,12 @@ $(document).ready(function () {
                 paketPenjualan.append(defaultOption);
 
                 data.forEach(jenis => {
-                    jenis.subjenis.forEach(sub => {
-                        const option = $('<option>', {
-                            value: sub.id,
-                            text: jenis.jenis_produk + " " + sub.paket_penjualan
-                        })
-                        .addClass('dark:bg-gray-700');
-                        paketPenjualan.append(option);
+                    const option = $('<option>', {
+                        value: jenis.id,
+                        text: jenis.paket_penjualan
                     })
+                    .addClass('dark:bg-gray-700');
+                    paketPenjualan.append(option);
                 });
             })
             .catch(error => {
@@ -188,45 +200,60 @@ $(document).ready(function () {
         const statusItem = `
             <span id="status-sell" class="my-2 bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Need</span>
         `
-
         containerStatusSell.append(statusItem);
 
     });
 
     // Keperluan TS
     $(document).on('change', '#permasalahan', function () {
+        var idPermasalahan = $(this).val();
         var permasalahan = $(this).find("option:selected").text();
         var keterangan = $('#keterangan');
+        var deskripsiTs = $('#deskripsi-ts');
 
         if(permasalahan == 'Belum Terdata') {
             keterangan.removeAttr('readonly', true);
         } else {
             keterangan.attr("readonly", "readonly");
         }
+
+        fetch(`/kios/customer/getDeskripsiPermasalahan/${idPermasalahan}`)
+        .then(response => response.json())
+        .then(data => {
+            deskripsiTs.empty();
+            deskripsiTs.append(data.deskripsi)
+        })
+        .catch(error => {
+            alert('Error Fetching Data : ', error);
+        });
+
     })
 
-    $(document).on('change', '#jenis-produk-ts', function () {
-        var jenisId = $(this).val();
+    $(document).on('change', '#kategori_permasalahan', function () {
+        var kategoriPermasalahanId = $(this).val();
+        var jenisId = $('#jenis-produk-ts').val();
         var permasalahan = $('#permasalahan');
+        var deskripsiTs = $('#deskripsi-ts');
 
-        fetch(`/kios/customer/getPermasalahan/${jenisId}`)
+        fetch(`/kios/customer/getPermasalahan/${jenisId}/${kategoriPermasalahanId}`)
         .then(response => response.json())
         .then(data => {
             permasalahan.empty();
+            deskripsiTs.empty();
 
             const defaultOption = [
-                {value: '', text: 'Permasalahan'},
+                {value: '', text: 'Permasalahan', hidden: true},
                 {value: 1, text: 'Belum Terdata'},
             ];
 
             defaultOption.forEach(option => {
                 const newDefaultOption = $('<option>', {
                     value: option.value,
-                    text: option.text
+                    text: option.text,
+                    hidden : option.hidden
                 });
                 permasalahan.append(newDefaultOption);
             })
-
 
             data.forEach(pml => {
                 const option = $('<option>', {

@@ -35,7 +35,6 @@ use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\RepairCustomerListController;
 use App\Http\Controllers\repair\RepairListCaseController;
-use App\Models\kios\KiosDailyRecap;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -67,20 +66,24 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getJenisProduk/{kondisiProduk}', 'getProduk');
                 Route::get('/getSubJenisProduk/{kondisiProduk}/{id}', 'getSubjenis');
                 Route::get('/getPaketPenjualan/{id}', 'getPaketPenjualan');
-                Route::get('/getPermasalahan/{id}', 'getPermasalahan');
+                Route::get('/getPermasalahan/{jenisId}/{kategoriId}', 'getPermasalahan');
+                Route::get('/getDeskripsiPermasalahan/{id}', 'getDeskripsiPermasalahan');
             });
             Route::resource('/list-customer', DataCustomerController::class)->only('index', 'update', 'delete');
             Route::get('/list-customer/search', [DataCustomerController::class, 'search']);
         });
 
         Route::prefix('/product')->group(function () {
-            Route::get('/dashboard-produk', [KiosDashboardProduk::class, 'index']);
-            Route::get('/weekly-sales-data', [KiosDashboardProduk::class, 'getWeeklySalesData']);
+            Route::group(['controller' => KiosDashboardProduk::class], function () {
+                Route::get('/dashboard-produk', 'index');
+                Route::get('/weekly-sales-data', 'getWeeklySalesData');
+            });
 
             Route::group(['controller' => KiosProductController::class], function () {
                 Route::resource('/list-product', KiosProductController::class)->only(['index', 'update', 'destroy']);
                 Route::post('/update-srp-baru', 'updateSrpBaru');
                 Route::get('/get-paket-penjualan/{paketPenjualanId}', 'getPaketPenjualan');
+                Route::get('/getKelengkapans/{id}', 'getKelengkapans');
             });
 
             Route::group(['controller' => KiosProductSecondController::class], function () {
