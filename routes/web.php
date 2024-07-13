@@ -96,9 +96,8 @@ Route::middleware('kios')->group(function () {
             Route::group(['controller' => KiosShopSecondController::class], function () {
                 Route::resource('/shop-second', KiosShopSecondController::class);
                 Route::post('/validasiSecond/{id}', 'validasisecond')->name('validasi-payment-second');
-                Route::get('/get-kelengkapan-second/{jenisId}', 'getKelengkapanSecond');
                 Route::get('/getCustomerbyNomor/{nomor}', 'getCustomerbyNomor');
-                Route::get('/getAdditionalKelengkapan/{id}', 'getAdditionalKelengkapan');
+                Route::get('/getKelengkapanSecond/{id}', 'getKelengkapanSecond');
             });
 
             Route::group(['controller' => KiosPaymentController::class], function () {

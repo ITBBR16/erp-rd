@@ -1,10 +1,8 @@
 $(document).ready(function(){
-    const jenisDroneSecond = $('#jenis_drone_second');
-    const container = $('#kelengkapan-second');
+    const paketPenjualanSecond = $('#paket_penjualan_second');
     const biayaSatuan = $('.biaya_satuan');
     const nomorCustomer = $('#no_customer_second');
     const idCustmer = $('#id_customer');
-    const produkJenisId = $('#produk-jenis-id');
     const namaCustomer = $('#nama_customer');
     const tambahKelengkapan = $('#tambah-kelengkapan');
     const buttonAddKelengkapan = $('#add-second-belanja');
@@ -12,35 +10,25 @@ $(document).ready(function(){
     const containerAdditional = $('#additional-kelengkapan-second');
     let uniqueNumberId = 20;
 
-    jenisDroneSecond.on('change', function() {
-        const subJenisId = jenisDroneSecond.val();
+    $(document).on('change', '#come_from', function () {
+        var statusCome = $(this).val();
+        var containerMpl = $('#marketplaceContainer');
+        var asalBeli = $('#asal-jual');
+        var marketPlace = $('#shop-second-marketplace');
+        var alasanJual = $('#alasan-container');
+        var inputAlasan = $('#alasan-jual');
 
-        if(subJenisId){
-            fetch(`/kios/product/get-kelengkapan-second/${subJenisId}`)
-            .then(response => response.json())
-            .then(data => {
-                container.html('');
-
-                data.kelengkapans.forEach(function (kelengkapan) {
-                    container.append(`
-                        <div class="grid md:grid-cols-5 md:gap-6">
-                            <div class="flex col-span-2 items-center mb-6">
-                                <input name="kelengkapan_second[]" id="kelengkapan_second${kelengkapan.id}" type="checkbox" value="${kelengkapan.id}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="kelengkapan_second${kelengkapan.id}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${kelengkapan.kelengkapan}</label>
-                            </div>
-                            <div class="relative col-span-2 z-0 w-full mb-6 group">
-                                <input type="number" name="quantity_second[]" id="quantity_second${kelengkapan.id}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
-                                <label for="quantity_second${kelengkapan.id}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
-                            </div>
-                        </div>
-                    `);
-                });
-
-                produkJenisId.val(data.idJenisProduk);
-            })
-            .catch(error => console.error('Error:', error));
+        containerMpl.show();
+        if(statusCome == 'Customer') {
+            asalBeli.hide();
+            marketPlace.prop('required', false);
+            alasanJual.show();
+            inputAlasan.prop('required', true).val("");
         } else {
-            container.html('');
+            asalBeli.show();
+            marketPlace.prop('required', true).val("");
+            alasanJual.hide();
+            inputAlasan.prop('required', false);
         }
     });
 
@@ -74,58 +62,41 @@ $(document).ready(function(){
 
     });
 
+    paketPenjualanSecond.on('change', function () {
+        const idPaket = $(this).val();
+        tambahKelengkapanSecond(idPaket);
+    });
+
     buttonAddKelengkapan.on('click', function () {
-        uniqueNumberId++
-        const jenisId = produkJenisId.val();
+        const paketId = paketPenjualanSecond.val();
 
-        let addKelengkapan = `
-            <div id="tambah-kelengkapan-${uniqueNumberId}" class="grid md:grid-cols-5 md:gap-6">
-                <div class="relative col-span-2 z-0 w-full mb-6 group">
-                    <label for="kelengkapan_second${uniqueNumberId}" class="sr-only">Jenis Paket Produk</label>
-                    <select name="kelengkapan_second[]" id="kelengkapan_second${uniqueNumberId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                        <option value="" hidden>-- Kelengkapan --</option>
-                    </select>
+        if(paketId){
+            uniqueNumberId++
+            let addKelengkapan = `
+                <div id="tambah-kelengkapan-${uniqueNumberId}" class="grid md:grid-cols-5 md:gap-6">
+                    <div class="relative col-span-2 z-0 w-full mb-6 group">
+                        <label for="kelengkapan_second${uniqueNumberId}" class="sr-only">Jenis Paket Produk</label>
+                        <select name="kelengkapan_second[]" id="kelengkapan_second${uniqueNumberId}" class="kelengkapan_second block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                            <option value="" hidden>Pilih Kelengkapan</option>
+                        </select>
+                    </div>
+                    <div class="relative col-span-2 z-0 w-full mb-6 group">
+                        <input type="number" name="quantity_second[]" id="quantity_second${uniqueNumberId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
+                        <label for="quantity_second${uniqueNumberId}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
+                    </div>
+                    <div class="flex justify-center items-center col-span-1">
+                        <button type="button" class="remove-second-belanja" data-id="${uniqueNumberId}">
+                            <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="relative col-span-2 z-0 w-full mb-6 group">
-                    <input type="number" name="quantity_second[]" id="quantity_second${uniqueNumberId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
-                    <label for="quantity_second${uniqueNumberId}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
-                </div>
-                <div class="flex justify-center items-center col-span-1">
-                    <button type="button" class="remove-second-belanja" data-id="${uniqueNumberId}">
-                        <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
-                    </button>
-                </div>
-            </div>
-        `;
+            `;
 
-        tambahKelengkapan.append(addKelengkapan);
+            tambahKelengkapan.append(addKelengkapan);
+            tambahKelengkapanSecond(paketId);
 
-        if(jenisId){
-            const ddJdDrone = $('#kelengkapan_second' + uniqueNumberId);
-            fetch(`/kios/product/getAdditionalKelengkapan/${jenisId}`)
-            .then(response => response.json())
-            .then(data => {
-                ddJdDrone.empty();
-
-                const defaultOption = $('<option>', {
-                    text: '-- Tambahan Kelengkapan --',
-                    value: '',
-                    hidden: true
-                });
-                ddJdDrone.append(defaultOption);
-
-                data.forEach(kelengkapan => {
-                    const option = $('<option>', {
-                        value: kelengkapan.id,
-                        text: kelengkapan.kelengkapan
-                    })
-                    .addClass('dark:bg-gray-700');
-                    ddJdDrone.append(option);
-                });
-            })
-            .catch(error => console.error('Error:', error));
         } else {
-            ddJdDrone.html('');
+            alert('Silahkan pilih paket penjualan terlebih dahulu.')
         }
     });
 
@@ -173,6 +144,32 @@ $(document).ready(function(){
 
     function formatRupiah(angka) {
         return accounting.formatMoney(angka, "", 0, ".", ",");
+    }
+
+    function tambahKelengkapanSecond(id) {
+        const ddKelengkapanSecond = $('.kelengkapan_second');
+            fetch(`/kios/product/getKelengkapanSecond/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                ddKelengkapanSecond.empty();
+
+                const defaultOption = $('<option>', {
+                    text: 'Pilih Kelengkapan',
+                    value: '',
+                    hidden: true
+                });
+                ddKelengkapanSecond.append(defaultOption);
+
+                data.forEach(kelengkapan => {
+                    const option = $('<option>', {
+                        value: kelengkapan.id,
+                        text: kelengkapan.kelengkapan
+                    })
+                    .addClass('dark:bg-gray-700');
+                    ddKelengkapanSecond.append(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     // Cek nilai pada halaman qc second

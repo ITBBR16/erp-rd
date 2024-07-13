@@ -65,21 +65,19 @@
                             </div>
                         </div>
                         <div id="edit-produk-baru">
-                            {{-- @foreach ($produk->subjenis->allKelengkapans as $aww)
-                                {{ $aww }}
-                            @endforeach --}}
                             @foreach ($produk->subjenis->kelengkapans as $number => $kelengkapan)
-                                {{-- <div id="container-data-kelengkapan-produk-baru-{{ $number }}" class="container-data-kelengkapan-produk-baru grid grid-cols-4 mb-4 gap-4">
+                                <div id="container-data-kelengkapan-produk-baru-{{ $number }}" class="container-data-kelengkapan-produk-baru grid grid-cols-4 mb-4 gap-4">
                                     <div class="relative col-span-2 w-full">
                                         <select name="edit_kelengkapan_produk_baru[]" id="edit-kelengkapan-produk-bar{{ $number }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                                             <option value="" hidden>Kelengkapan Produk</option>
-                                            
-                                            @foreach ($produk->subjenis->produkjenis->kelengkapans as $kelengkapanJenis)
-                                                @if ($kelengkapanJenis->id == $kelengkapan->id)
-                                                <option value="{{ $kelengkapanJenis->id }}" selected class="dark:bg-gray-700">{{ $kelengkapanJenis->kelengkapan }}</option>
-                                                @else
-                                                <option value="{{ $kelengkapanJenis->id }}" class="dark:bg-gray-700">{{ $kelengkapanJenis->kelengkapan }}</option>
-                                                @endif
+                                            @foreach ($produk->subjenis->jeniskelengkapan as $item)
+                                                @foreach ($item->kelengkapans->unique('kelengkapan') as $jenisKelengkapan)
+                                                    @if ($jenisKelengkapan->id == $kelengkapan->id)
+                                                        <option value="{{ $jenisKelengkapan->id }}" selected class="dark:bg-gray-700">{{ $jenisKelengkapan->kelengkapan }}</option>
+                                                    @else
+                                                        <option value="{{ $jenisKelengkapan->id }}" class="dark:bg-gray-700">{{ $jenisKelengkapan->kelengkapan }}</option>
+                                                    @endif
+                                                @endforeach
                                             @endforeach
                                         </select>
                                     </div>
@@ -92,7 +90,7 @@
                                             <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                                         </button>
                                     </div>
-                                </div> --}}
+                                </div>
                             @endforeach
                         </div>
                         <div class="flex justify-between mb-4 text-rose-600">

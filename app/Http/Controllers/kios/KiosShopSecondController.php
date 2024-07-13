@@ -97,7 +97,7 @@ class KiosShopSecondController extends Controller
                 'asal_id' => $asalId,
                 'metode_pembelian_id' => $mpId,
                 'tanggal_pembelian' => $tanggalPembelian,
-                'sub_jenis_id' => $request->input('jenis_drone_second'),
+                'sub_jenis_id' => $request->input('paket_penjualan_second'),
                 'status_pembayaran' => $statusBayar,
                 'biaya_pembelian' => $biayaPengambilan,
                 'biaya_ongkir' => $biayaOngkir,
@@ -143,7 +143,7 @@ class KiosShopSecondController extends Controller
             
             if($request->has('additional_kelengkapan_second')) {
                 $additionalKelengkapan = $request->input('additional_kelengkapan_second');
-                $jenisProdukId = $request->input('produk_jenis_id');
+                $jenisProdukId = $request->input('produk_jenis_id'); // ganti karna many to many
                 $additionalQty = $request->input('additional_quantity_second');
                 $type = ProdukJenis::findOrFail($jenisProdukId);
 
@@ -285,24 +285,18 @@ class KiosShopSecondController extends Controller
         }
     }
 
-    public function getKelengkapanSecond($jenisId)
-    {
-        $idJenisProduk = ProdukSubJenis::where('id', $jenisId)->value('jenis_id');
-        $subJenis = ProdukSubJenis::findOrFail($jenisId);
-        return response()->json(['kelengkapans' => $subJenis->kelengkapans, 'idJenisProduk' => $idJenisProduk]);
-    }
-
     public function getCustomerbyNomor($nomor)
     {
         $dataCustomer = Customer::where('no_telpon', $nomor)->get();
         return response()->json($dataCustomer);
     }
 
-    public function getAdditionalKelengkapan($id)
+    public function getKelengkapanSecond($id)
     {
-        $produkSearch = ProdukJenis::findOrFail($id);
-        $dataKelengkapan = $produkSearch->kelengkapans()->get();
-        return response()->json($dataKelengkapan);
+        $searchSub = ProdukSubJenis::find($id);
+        $kelengkapans = $searchSub->allKelengkapans();
+
+        return $kelengkapans;
     }
 
 }

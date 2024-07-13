@@ -16,22 +16,28 @@
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="relative z-0 w-full mb-6 group" id="marketplaceContainer">
-                    <label for="marketplace" class="sr-only">Nama Marketplace</label>
-                    <select name="marketplace" id="marketplace" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('marketplace') border-red-600 dark:border-red-500 @enderror">
-                        <option value="" hidden>-- Asal --</option>
-                        @foreach ($marketplace as $market)
-                            <option value="{{ $market->id }}" class="dark:bg-gray-700">{{ $market->nama }}</option>
-                        @endforeach
-                    </select>
-                    @error('marketplace')
-                        <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
+                <div class="relative z-0 w-full mb-6 group" id="marketplaceContainer" style="display: none">
+                    <div id="asal-jual" style="display: none">
+                        <label for="shop-second-marketplace" class="sr-only">Nama Marketplace</label>
+                        <select name="marketplace" id="shop-second-marketplace" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('shop-second-marketplace') border-red-600 dark:border-red-500 @enderror">
+                            <option value="" hidden>Pilih Asal</option>
+                            @foreach ($marketplace as $market)
+                                <option value="{{ $market->id }}" class="dark:bg-gray-700">{{ $market->nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('shop-second-marketplace')
+                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div id="alasan-container" style="display: none">
+                        <input type="text" name="alasan_jual" id="alasan-jual" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
+                        <label for="alasan-jual" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Alasan Jual</label>
+                    </div>
                 </div>
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="metode_pembelian" class="sr-only">Metode Pembelian</label>
                     <select name="metode_pembelian" id="metode_pembelian" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('metode_pembelian') border-red-600 dark:border-red-500 @enderror" required>
-                        <option value="" hidden>-- Metode Pembelian --</option>
+                        <option value="" hidden>Metode Pembelian</option>
                         @foreach ($metodePembelian as $mp)
                             <option value="{{ $mp->id }}" class="dark:bg-gray-700">{{ $mp->metode_pembelian }}</option>
                         @endforeach
@@ -48,7 +54,7 @@
                             <path d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z"/>
                         </svg>
                     </span>
-                    <input type="text" name="no_customer_second" id="no_customer_second" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('no_customer_second') border-red-600 dark:border-red-500 @enderror" placeholder=" " oninput="this.value = this.value.replace(/\D/g, '')">
+                    <input type="text" name="no_customer_second" id="no_customer_second" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('no_customer_second') border-red-600 dark:border-red-500 @enderror" placeholder=" " oninput="this.value = this.value.replace(/\D/g, '')" required>
                     <label for="no_customer_second" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Nomor Customer</label>
                 </div>
                 @error('no_customer_second')
@@ -63,15 +69,14 @@
             <h3 class="my-4 text-gray-900 dark:text-white font-semibold text-xl">Informasi Pembelian</h3>
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
-                    <input type="hidden" name="produk_jenis_id" id="produk-jenis-id">
-                    <label for="jenis_drone_second" class="sr-only">Jenis Paket Produk</label>
-                    <select name="jenis_drone_second" id="jenis_drone_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_drone_second') border-red-600 dark:border-red-500 @enderror" required>
-                        <option value="" hidden>-- Jenis Produk --</option>
+                    <label for="paket_penjualan_second" class="sr-only">Jenis Paket Produk</label>
+                    <select name="paket_penjualan_second" id="paket_penjualan_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('paket_penjualan_second') border-red-600 dark:border-red-500 @enderror" required>
+                        <option value="" hidden>Pilih Paket Penjualan</option>
                         @foreach ($produkKios as $pk)
                             <option value="{{ $pk->id }}" class="dark:bg-gray-700">{{ $pk->paket_penjualan }}</option>
                         @endforeach
                     </select>
-                    @error('jenis_drone_second')
+                    @error('paket_penjualan_second')
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
@@ -87,7 +92,7 @@
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full group flex items-center">
                     <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                    <input type="text" name="biaya_pengambilan" id="biaya_pengambilan" class="biaya_satuan block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <input type="text" name="biaya_pengambilan" id="biaya_pengambilan" class="biaya_satuan block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required>
                     <label for="biaya_pengambilan" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Biaya Pengambilan</label>
                 </div>
                 @error('biaya_pengambilan')
