@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "flowbite": "^2.2.0",
+        "preline": "^2.3.0",
         "tailwindcss-autocomplete": "^0.5.10"
     }
 }

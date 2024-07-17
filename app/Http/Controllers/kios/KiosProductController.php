@@ -125,6 +125,8 @@ class KiosProductController extends Controller
 
     public function updateProdukBaru(Request $request)
     {
+        $connectionProduk = DB::connection('rumahdrone_produk');
+        $connectionProduk->beginTransaction();
         try {
             $editJenisProduk = $request->input('edit_jenis_produk_baru');
             $editPaketPenjualanId = $request->input('edit_paket_penjualan_produk_baru_id');
@@ -133,25 +135,45 @@ class KiosProductController extends Controller
             $editPanjangProduk = $request->input('length');
             $editLebarProduk = $request->input('width');
             $editTinggiProduk = $request->input('height');
-    
             $editKelengkapanProduk = $request->input('edit_kelengkapan_produk_baru');
             $editQuantityProduk = $request->input('edit_quantity_produk_baru');
+
             $subJenisKelengkapan = ProdukSubJenis::findOrFail($editPaketPenjualanId);
-    
             $subJenisKelengkapan->update([
-                'jenis_id' => $editJenisProduk,
                 'paket_penjualan' => $editPaketPenjualan,
                 'berat' => $editBeratProduk,
                 'panjang' => $editPanjangProduk,
                 'lebar' => $editLebarProduk,
                 'tinggi' => $editTinggiProduk,
             ]);
-            
-            $subJenisKelengkapan->kelengkapans()->sync([$editKelengkapanProduk => ['quantity' => $editQuantityProduk]]);
-    
+
+            $syncData = [];
+            foreach ($editKelengkapanProduk as $index => $kelengkapan) {
+                $syncData[$kelengkapan] = ['quantity' => $editQuantityProduk[$index]];
+            }
+
+            $subJenisKelengkapan->kelengkapans()->sync($syncData);
+
+            $currentProdukJenis = $subJenisKelengkapan->produkjenis->pluck('id')->toArray();
+            $removedJenis = array_diff($currentProdukJenis, $editJenisProduk);
+
+            if (!empty($removedJenis)) {
+                ProdukJenis::whereIn('id', $removedJenis)->each(function ($jenis) use ($editKelengkapanProduk) {
+                    $jenis->kelengkapans()->detach($editKelengkapanProduk);
+                });
+            }
+
+            $subJenisKelengkapan->produkjenis()->sync($editJenisProduk);
+
+            foreach ($editJenisProduk as $jenisId) {
+                ProdukJenis::find($jenisId)->kelengkapans()->sync($editKelengkapanProduk);
+            }
+
+            $connectionProduk->commit();
             return back()->with('success', 'Success update detail product.');
 
         } catch (Exception $e) {
+            $connectionProduk->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

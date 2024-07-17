@@ -1,5 +1,5 @@
 @foreach ($produks as $produk)
-    <div id="edit-produk{{ $produk->id }}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div id="edit-produk{{ $produk->id }}" tabindex="-1" class="modal fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-3xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 {{-- Header Modal --}}
@@ -16,26 +16,46 @@
                 </div>
                 {{-- Body Modal --}}
                 <div class="px-6 py-6 lg:px-8">
-                    <form action="#" method="POST" autocomplete="off">
+                    <form action="{{ route('updateProdukBaru') }}" method="POST" autocomplete="off">
                         @csrf
                         @method('PUT')
+                        <div id="box-jenis-produk-baru-{{ $produk->id }}" class="flex flex-wrap border rounded-lg items-center w-full h-10 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
+                            @foreach ($produk->subjenis->produkjenis as $jenis)
+                                <div id="container-jenis-{{ $produk->id }}{{ $jenis->id }}" class="flex items-center text-gray-800 border-gray-300 bg-transparent dark:text-white dark:border-gray-800">
+                                    <div class="text-sm">
+                                        <input type="hidden" name="edit_jenis_produk_baru[]" id="selected-jenis-{{ $produk->id }}{{ $jenis->id }}" value="{{ $jenis->id }}">
+                                        <input type="hidden" id="selected-text-jenis-{{ $produk->id }}{{ $jenis->id }}" value="{{ $jenis->jenis_produk }}">
+                                        <input type="hidden" id="selected-id-jenis-{{ $produk->id }}{{ $jenis->id }}" value="{{ $jenis->id }}">
+                                        {{ $jenis->jenis_produk }}
+                                    </div>
+                                    <button type="button" data-id="{{ $produk->id }}{{ $jenis->id }}" class="button-delete-selected-jenis ml-auto -mx-1.5 -my-1.5 text-gray-500 rounded-lg focus:ring-2 focus:ring-gray-400 p-1.5 hover:bg-gray-200 inline-flex items-center justify-center h-7 w-7 bg-transparent dark:text-gray-400 dark:hover:bg-gray-700" aria-label="Close">
+                                        <span class="sr-only">Dismiss</span>
+                                        <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
                         <div class="grid grid-cols-2 mb-4 gap-4">
                             <div class="relative w-full mb-6 group">
-                                <label for="edit-jenis-produk-baru{{ $produk->id }}" class="absolute text-xs text-gray-500 dark:text-gray-400 -translate-y-6 top-3 z-10">Jenis Produk</label>
-                                <select name="edit_jenis_produk_baru" id="edit-jenis-produk-baru{{ $produk->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                                <select id="edit-jenis-produk-baru-{{ $produk->id }}" data-id="{{ $produk->id }}" class="list-jenis-produk-baru block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                                     <option value="" hidden>Jenis Produk</option>
+                                    @foreach ($jenisproduks as $jenis)
+                                        <option value="{{ $jenis->id }}">{{ $jenis->jenis_produk }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
-                                <input type="hidden" name="edit_paket_penjualan_produk_baru_id" id="edit_paket_penjualan_produk_baru_id" value="{{ $produk->subjenis->id }}">
-                                <input type="text" name="edit_paket_penjualan_produk_baru" id="edit_paket_penjualan_produk_baru" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $produk->subjenis->paket_penjualan }}" required>
-                                <label for="edit_paket_penjualan_produk_baru" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Paket Penjualan</label>
+                                <input type="hidden" name="edit_paket_penjualan_produk_baru_id" id="edit-pppb-id-{{ $produk->id }}" value="{{ $produk->sub_jenis_id }}">
+                                <input type="text" name="edit_paket_penjualan_produk_baru" id="edit-paket-penjualan-baru-{{ $produk->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $produk->subjenis->paket_penjualan }}" required>
+                                <label for="edit-paket-penjualan-baru-{{ $produk->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Paket Penjualan</label>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 mb-4 gap-4">
                             <div class="relative z-0 w-full group">
-                                <input type="text" name="berat_edit_produk_baru" id="berat_edit_produk_baru" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $produk->subjenis->berat }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
-                                <label for="berat_edit_produk_baru" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Berat Produk</label>
+                                <input type="text" name="berat_edit_produk_baru" id="edit-berat-produk-baru-{{ $produk->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $produk->subjenis->berat }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                                <label for="edit-berat-produk-baru-{{ $produk->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Berat Produk</label>
                                 <span class="absolute bottom-8 end-0 font-bold text-gray-500 dark:text-gray-400">Kg</span>
                             </div>
                             <div class="flex flex-row border rounded-lg items-center w-full border-gray-300 mb-6 dark:border-gray-400">
@@ -64,7 +84,7 @@
                                 <p class="text-base font-medium text-gray-900 dark:text-white">Action</p>
                             </div>
                         </div>
-                        <div id="edit-produk-baru">
+                        <div id="edit-produk-baru-{{ $produk->id }}">
                             @foreach ($produk->subjenis->kelengkapans as $number => $kelengkapan)
                                 <div id="container-data-kelengkapan-produk-baru-{{ $number }}" class="container-data-kelengkapan-produk-baru grid grid-cols-4 mb-4 gap-4">
                                     <div class="relative col-span-2 w-full">
@@ -95,7 +115,7 @@
                         </div>
                         <div class="flex justify-between mb-4 text-rose-600">
                             <div class="flex cursor-pointer mt-4 hover:text-red-400">
-                                <button type="button" id="add-edit-kelengkapan-produk-baru" class="flex flex-row justify-between gap-2">
+                                <button type="button" data-id="{{ $produk->id }}" class="add-edit-kelengkapan-produk-baru flex flex-row justify-between gap-2">
                                     <span class="material-symbols-outlined">add_circle</span>
                                     <span class="">Tambah Kelengkapan</span>
                                 </button>

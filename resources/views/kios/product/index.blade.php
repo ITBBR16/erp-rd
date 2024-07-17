@@ -199,7 +199,7 @@
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" data-modal-target="edit-produk{{ $pd->id }}" data-modal-toggle="edit-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <button type="button" data-id="{{ $pd->id }}" data-modal-target="edit-produk{{ $pd->id }}" data-modal-toggle="edit-produk{{ $pd->id }}" class="edit-list-produk-baru flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <i class="material-symbols-outlined text-base mr-3">edit</i>
                                             <span class="whitespace-nowrap">Edit</span>
                                         </button>

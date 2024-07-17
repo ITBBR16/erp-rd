@@ -3,15 +3,12 @@ $(document).ready(function () {
     const hargaPromo = $('.harga_promo');
     const srpDPS = $('.srp-daftar-produk-second');
     const srpDPB = $('.update-srp-baru');
-    const addEditKelengkapanBaru = $('#add-edit-kelengkapan-produk-baru');
-    
-    function formatRupiah(angka) {
-        return accounting.formatMoney(angka, "", 0, ".", ",");
-    }
+    const addEditKelengkapanBaru = $('.add-edit-kelengkapan-produk-baru');
 
     // Add & Delete kelengkapan
     addEditKelengkapanBaru.on("click", function() {
-        var idPaketPenjualan = $('#edit_paket_penjualan_produk_baru_id').val();
+        let addId = $(this).data("id");
+        let idPaketPenjualan = $('#edit-pppb-id-' + addId).val();
         var countContainerEdit = $(".container-data-kelengkapan-produk-baru").length + 1;
         let addFormKelengkapan = `
             <div id="container-data-kelengkapan-produk-baru-${countContainerEdit}" class="container-data-kelengkapan-produk-baru grid grid-cols-4 mb-4 gap-4">
@@ -32,16 +29,17 @@ $(document).ready(function () {
             </div>
         `
 
-        $('#edit-produk-baru').append(addFormKelengkapan);
+        $('#edit-produk-baru-'+addId).append(addFormKelengkapan);
 
         var ddEditKelengkapan = $('#edit-kelengkapan-produk-baru-' + countContainerEdit);
         fetch(`/kios/product/getKelengkapans/${idPaketPenjualan}`)
         .then(response => response.json())
         .then(data => {
             ddEditKelengkapan.empty();
-            console.table(data);
+
             const defaultOption = $('<option>', {
                 text: 'Kelengkapan Produk',
+                value: "",
                 hidden: true
             })
             ddEditKelengkapan.append(defaultOption);
@@ -68,6 +66,43 @@ $(document).ready(function () {
     $(document).on('input', '.edit-quantity-produk-baru', function() {
         $(this).val($(this).val().replace(/[^\d]/g, ''));
     });
+
+    $(document).on('change', '.list-jenis-produk-baru', function () {
+        let selectIdForm = $(this).data("id");
+        addJenisProduk(selectIdForm);
+        checkJenisID(selectIdForm);
+        $(this).find('option:selected').remove();
+    });
+
+    $(document).on('click', '.button-delete-selected-jenis', function () {
+        let idSelectedBox = $(this).data("id");
+        var modalId = $(this).closest('.modal').attr('id').match(/\d+/);
+        let selectedJenisText = $('#selected-text-jenis-' + idSelectedBox).val();
+        let selectedJenisId = $('#selected-id-jenis-' + idSelectedBox).val();
+
+        $('#edit-jenis-produk-baru-' + modalId).append($('<option>', {
+            value: selectedJenisId,
+            text: selectedJenisText
+        })
+        .addClass('dark:bg-gray-700'));
+
+        $('#container-jenis-' + idSelectedBox).remove();
+
+        checkJenisID(modalId);
+
+    });
+
+    $(document).on('click', '.edit-list-produk-baru', function () {
+        var idModalProduk = $(this).data("id");
+        $("#box-jenis-produk-baru-" + idModalProduk + " input[id^='selected-id-jenis-']").each(function () {
+            var data = $(this).val();
+            $('#edit-jenis-produk-baru-' + idModalProduk + ' option').each(function () {
+                if($(this).val() === data) {
+                    $(this).remove();
+                }
+            })
+        })
+    })
 
     // Change to rupiah list produk baru
     hargaJual.on('input', function () {
@@ -213,4 +248,44 @@ $(document).ready(function () {
             }
         });
     }
+
+    function formatRupiah(angka) {
+        return accounting.formatMoney(angka, "", 0, ".", ",");
+    }
+
+    function addJenisProduk(id) {
+        var boxAddJenisProduk = $('#box-jenis-produk-baru-' + id);
+        var valueSelected = $('#edit-jenis-produk-baru-' + id + ' option:selected').val();
+        var selectedText = $('#edit-jenis-produk-baru-' + id + ' option:selected').text();
+
+        let addFormJenisProduk = `
+            <div id="container-jenis-${id}${valueSelected}" class="flex items-center text-gray-800 border-gray-300 bg-transparent dark:text-white dark:border-gray-800">
+                <div class="text-sm">
+                    <input type="hidden" name="edit_jenis_produk_baru[]" id="selected-jenis-${id}${valueSelected}" value="${valueSelected}">
+                    <input type="hidden" id="selected-text-jenis-${id}${valueSelected}" value="${selectedText}">
+                    <input type="hidden" id="selected-id-jenis-${id}${valueSelected}" value="${valueSelected}">
+                    ${selectedText}
+                </div>
+                <button type="button" data-id="${id}${valueSelected}" class="button-delete-selected-jenis ml-auto -mx-1.5 -my-1.5 text-gray-500 rounded-lg focus:ring-2 focus:ring-gray-400 p-1.5 hover:bg-gray-200 inline-flex items-center justify-center h-7 w-7 bg-transparent dark:text-gray-400 dark:hover:bg-gray-700" aria-label="Close">
+                    <span class="sr-only">Dismiss</span>
+                    <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </button>
+            </div>
+        `
+
+        boxAddJenisProduk.append(addFormJenisProduk);
+    }
+
+    function checkJenisID(id) {
+        let boxEditValue = $('#box-jenis-produk-baru-' + id).find('input[name="edit_jenis_produk_baru[]"]')
+        if (boxEditValue.length === 0) {
+            $('#edit-jenis-produk-baru-' + id).attr('required', 'required');
+        } else {
+            $('#edit-jenis-produk-baru-' + id).removeAttr('required', true);
+        }
+
+    }
+
 });
