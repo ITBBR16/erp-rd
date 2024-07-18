@@ -2,7 +2,7 @@
     <form action="{{ route('shop-second.store') }}" method="POST" autocomplete="off">
         @csrf
         <h3 class="mt-3 text-gray-900 dark:text-white font-semibold text-xl">Data Supplier</h3>
-        <h5 class="mb-3 text-gray-900 dark:text-white font-semibold text-xs">Jika Belum Ada Data Customer <a href="/customer/add-customer" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline" target="_blank">Tekan Disini</a></h5>
+        <h5 class="mb-3 text-gray-900 dark:text-white font-semibold text-xs">Jika Belum Ada Data Customer <a href="/kios/customer/daily-recap" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline" target="_blank">Tekan Disini</a></h5>
         <div class="w-10/12">
             <div class="grid md:grid-cols-3 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">

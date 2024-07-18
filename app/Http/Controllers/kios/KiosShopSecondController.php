@@ -90,11 +90,13 @@ class KiosShopSecondController extends Controller
             $findCustomer = Customer::findOrFail($customerInput);
             $customerName = $findCustomer->first_name . " " . $findCustomer->last_name;
             $asalId = $request->input('marketplace');
+            $alasanJual = $request->input('alasan_jual');
 
             $orderSecond = KiosOrderSecond::create([
                 'come_from' => $comeFrom,
                 'customer_id' => $customerInput,
                 'asal_id' => $asalId,
+                'alasan_jual' => $alasanJual,
                 'metode_pembelian_id' => $mpId,
                 'tanggal_pembelian' => $tanggalPembelian,
                 'sub_jenis_id' => $request->input('paket_penjualan_second'),

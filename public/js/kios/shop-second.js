@@ -93,7 +93,7 @@ $(document).ready(function(){
             `;
 
             tambahKelengkapan.append(addKelengkapan);
-            tambahKelengkapanSecond(paketId);
+            tambahKelengkapanSecond(paketId, uniqueNumberId);
 
         } else {
             alert('Silahkan pilih paket penjualan terlebih dahulu.')
@@ -146,8 +146,8 @@ $(document).ready(function(){
         return accounting.formatMoney(angka, "", 0, ".", ",");
     }
 
-    function tambahKelengkapanSecond(id) {
-        const ddKelengkapanSecond = $('.kelengkapan_second');
+    function tambahKelengkapanSecond(id, dataId) {
+        const ddKelengkapanSecond = $('#kelengkapan_second' + dataId);
             fetch(`/kios/product/getKelengkapanSecond/${id}`)
             .then(response => response.json())
             .then(data => {
@@ -171,33 +171,5 @@ $(document).ready(function(){
             })
             .catch(error => console.error('Error:', error));
     }
-
-    // Cek nilai pada halaman qc second
-    // function cekNilai() {
-    //     var nilaiSatuanInputs = document.getElementsByName('harga_satuan[]');
-    //     var totalHargaSatuan = 0;
-    
-    //     for (var i = 0; i < nilaiSatuanInputs.length; i++) {
-    //         var nilaiSatuan = parseFloat(nilaiSatuanInputs[i].value.replace(/\./g, ''));
-    //         totalHargaSatuan += nilaiSatuan;
-    //     }
-    
-    //     var nilaiTotalInput = parseFloat(document.getElementById('biaya_pengambilan').value.replace(/\./g, ''));
-
-    //     if (!isNaN(nilaiTotalInput) && !isNaN(totalHargaSatuan) && nilaiTotalInput.toFixed(2) === totalHargaSatuan.toFixed(2)) {
-    //         document.getElementById('submit_qc_second').removeAttribute('disabled');
-    //         document.getElementById('submit_qc_second').classList.remove('cursor-not-allowed');
-    //         // console.log("Nilai satuan sama dengan nilai total.");
-    //     } else {
-    //         // console.log("Nilai satuan tidak sama dengan nilai total.");
-    //     }
-    // }
-
-    // var hargaSatuanInputs = document.querySelectorAll('input[name="harga_satuan[]"]');
-    // hargaSatuanInputs.forEach(function(input) {
-    //     input.addEventListener('change', function() {
-    //         cekNilai();
-    //     });
-    // });
 
 });

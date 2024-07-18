@@ -4,11 +4,10 @@ $(document).ready(function() {
     const containerFormBelanjaBaru = $('#form-new-belanja');
     const tambahFormBelanjaBaru = $('#add-new-belanja');
     const tambahFormValidasi = $('#add-form-validasi-belanja');
-    const validasiNilaiBuyBaru = $('.val-nilai-buy-baru');
 
-    function formatAngka(angka) {
-        return accounting.formatMoney(angka, "", 0, ".", ",");
-    }
+    $(document).on('change', '.select-new-belanja', function () {
+        updateOptionNewBelanja();
+    });
 
     tambahFormBelanjaBaru.on('click', function () {
         nomorFormBelanja++
@@ -16,8 +15,8 @@ $(document).ready(function() {
             <div id="data-form-belanja-baru-${nomorFormBelanja}" class="grid md:w-full md:grid-cols-5 md:gap-4">
                 <div class="col-span-2">
                     <label for="paket-penjualan-${nomorFormBelanja}" class="sr-only"></label>
-                    <select name="paket_penjualan[]" id="paket-penjualan-${nomorFormBelanja}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
-                        <option value="" hidden>-- Paket Penjualan --</option>`;
+                    <select name="paket_penjualan[]" id="paket-penjualan-${nomorFormBelanja}" class="select-new-belanja block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
+                        <option value="" hidden>Select Paket Penjualan</option>`;
                         paketPenjualan.forEach(function(item) {
                             newFormBelanja += `<option value="${item.id}" class="dark:bg-gray-700">${item.paket_penjualan}</option>`;
                         });
@@ -25,7 +24,7 @@ $(document).ready(function() {
                     </select>
                 </div>
                 <div class="relative z-0 w-full mb-4 group col-span-2">
-                    <input type="number" name="quantity[]" id="quantity${nomorFormBelanja}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                    <input type="text" name="quantity[]" id="quantity${nomorFormBelanja}" class="format-angka block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
                     <label for="quantity${nomorFormBelanja}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
                 </div>
                 <div class="flex justify-center items-center col-span-1">
@@ -36,6 +35,8 @@ $(document).ready(function() {
             </div>
         `
         containerFormBelanjaBaru.append(newFormBelanja);
+
+        updateOptionNewBelanja();
     });
 
     $(document).on("click", ".remove-form-pembelian", function() {
@@ -96,5 +97,27 @@ $(document).ready(function() {
         inputAngka = inputAngka.replace(/\D/g, '');
         $(this).val(inputAngka);
     });
+
+    function formatAngka(angka) {
+        return accounting.formatMoney(angka, "", 0, ".", ",");
+    }
+
+    function updateOptionNewBelanja() {
+        var selectedValue = [];
+        $('.select-new-belanja').each(function () {
+            selectedValue.push($(this).val());
+        })
+
+        $('.select-new-belanja').each(function () {
+            var currentSelect = $(this);
+            currentSelect.find('option').each(function () {
+                if (selectedValue.includes($(this).val())) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            })
+        })
+    }
 
 });
