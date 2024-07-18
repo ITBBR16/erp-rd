@@ -13,7 +13,7 @@ class KiosQcProdukSecond extends Model
 
     protected $connection = 'rumahdrone_kios';
     protected $table = 'kios_qc_produk_second';
-    protected $guarded = ['id'];
+    protected $guarded = ['pivot_qc_id'];
 
     public function kelengkapans() {
         return $this->belongsToMany(ProdukKelengkapan::class, 'kios_kelengkapan_second_list', 'qc_id', 'produk_kelengkapan_id')

@@ -82,15 +82,15 @@
                     <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListBelanjaDroneSecondButton{{ $os->id }}">
                         <li>
                             <button type="button" data-modal-target="view-second{{ $os->id }}" data-modal-toggle="view-second{{ $os->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                <i class="material-symbols-outlined text-base">visibility</i>
-                                <span class="whitespace-nowrap">Detail Belanja</span>
+                                <i class="material-symbols-outlined text-base mr-3">visibility</i>
+                                <span class="whitespace-nowrap">Detail</span>
                             </button>
                         </li>
                         @if ($os->status_pembayaran != 'Paid')
                             <li>
                                 <button type="button" data-modal-target="delete-second{{ $os->id }}" data-modal-toggle="delete-second{{ $os->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">delete</i>
-                                    <span class="whitespace-nowrap">Delete Belanja</span>
+                                    <i class="material-symbols-outlined text-base mr-3">delete</i>
+                                    <span class="whitespace-nowrap">Hapus</span>
                                 </button>
                             </li>
                         @endif

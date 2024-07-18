@@ -18,13 +18,13 @@
                             <label for="customer_second_view{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nama Supplier</label>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" id="asal_second_view{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->marketplace->nama }}" disabled>
-                            <label for="asal_second_view{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Asal Pembelian</label>
+                            <input type="text" id="asal_second_view{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ ($item->asal_id != '') ? $item->marketplace->nama : $item->alasan_jual }}" disabled>
+                            <label for="asal_second_view{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Asal Pembelian / Alasan Jual</label>
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 md:gap-6 pt">
                         <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" id="tipe_drone_view{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->subjenis->produkjenis->jenis_produk }} {{ $item->subjenis->paket_penjualan }}" disabled>
+                            <input type="text" id="tipe_drone_view{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->subjenis->paket_penjualan }}" disabled>
                             <label for="tipe_drone_view{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tipe Drone</label>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </li>
-                        @foreach ($item->qcsecond->kelengkapans->unique('kelengkapan') as $kelengkapan)
+                        {{-- @foreach ($item->qcsecond->kelengkapans->unique('kelengkapan') as $kelengkapan)
                             <li class="py-3 sm:py-4">
                                 <div class="flex items-center space-x-4 rtl:space-x-reverse">
                                     <div class="flex-1 min-w-0">
@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                             </li>
-                        @endforeach
+                        @endforeach --}}
                     </ul>
                 </div>
                 <div class="flex items-center justify-between p-5 border-t rounded-b dark:border-gray-600"></div>

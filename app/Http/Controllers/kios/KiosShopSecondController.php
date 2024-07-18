@@ -61,16 +61,13 @@ class KiosShopSecondController extends Controller
         $connectionProduct = DB::connection('rumahdrone_produk');
         $connectionKios->beginTransaction();
         $connectionProduct->beginTransaction();
-
         try{
             $request->validate([
                 'kelengkapan_second' => 'array',
                 'quantity_second' => 'array',
             ]);
-
             $user = auth()->user();
             $divisiId = $user->divisi_id;
-
             $kelengkapanSecond = $request->input('kelengkapan_second');
             $tanggalPembelian = $request->input('tanggal_pembelian');
             $mpId = $request->input('metode_pembelian');
@@ -104,7 +101,6 @@ class KiosShopSecondController extends Controller
                 'biaya_pembelian' => $biayaPengambilan,
                 'biaya_ongkir' => $biayaOngkir,
             ]);
-
             // Send data to api
             $apiUrl = "https://script.google.com/macros/s/AKfycbwFGLi6XLWUKPvxiEqC8jQDJtynpwZWoYTW4Gqc_M2smqiU_nNYyHlalYUq1_jaUlGQOQ/exec";
             $response = Http::post($apiUrl, [
@@ -133,9 +129,7 @@ class KiosShopSecondController extends Controller
             $orderSecond->status = $statusOrderSecond;
             $orderSecond->save();
 
-            $qcOrderSecond = new KiosQcProdukSecond();
-            $qcOrderSecond->order_second_id = $orderSecond->id;
-            $qcOrderSecond->save();
+            $qcOrderSecond = KiosQcProdukSecond::create(['order_second_id' => $orderSecond->id]);
 
             foreach($kelengkapanSecond as $index => $id) {
                 for($i = 0; $i < $qtyNotNull[$index]; $i++ ) {
@@ -148,14 +142,11 @@ class KiosShopSecondController extends Controller
                 $jenisProdukId = $request->input('produk_jenis_id'); // ganti karna many to many
                 $additionalQty = $request->input('additional_quantity_second');
                 $type = ProdukJenis::findOrFail($jenisProdukId);
-
                 $jenisKelengkapan = collect($additionalKelengkapan)->map(function ($jk) {
                     return ['kelengkapan' => ucwords(strtolower($jk))];
                 });
-
                 $kelengkapanBaru = $type->kelengkapans()->createMany($jenisKelengkapan->toArray());
                 $kelengkapanBaruId = $kelengkapanBaru->pluck('id')->toArray();
-
                 foreach($kelengkapanBaruId as $index => $idBaru) {
                     for($j = 0; $j < $additionalQty[$index]; $j++) {
                         $qcOrderSecond->kelengkapans()->attach($idBaru, ['status' => 'Not Ready']);
@@ -163,15 +154,13 @@ class KiosShopSecondController extends Controller
                 }
             }
 
-            $jenisPembayaran = [];
-            $jenisPembayaran[] = 'Pembelian Barang';
-    
+            $jenisPembayaran = ['Pembelian Barang'];
+
             if ($biayaOngkir > 0) {
                 $jenisPembayaran[] = 'Ongkir';
             }
 
             $jenisPembayaranStr = implode(', ', $jenisPembayaran);
-
             $payment = new KiosPayment([
                 'order_type' => 'Bekas',
                 'order_id' => $orderSecond->id,
@@ -185,7 +174,6 @@ class KiosShopSecondController extends Controller
             $payment->save();
             $connectionKios->commit();
             $connectionProduct->commit();
-
             return back()->with('success', 'Success Buat Order Belanja Second.');
 
         } catch (Exception $e) {
@@ -193,7 +181,6 @@ class KiosShopSecondController extends Controller
             $connectionProduct->rollBack();
             return back()->with('error', $e->getMessage());
         }
-
     }
 
     public function validasisecond(Request $request, $id)
