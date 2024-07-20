@@ -4,6 +4,7 @@ namespace App\Models\repair;
 
 use App\Models\customer\Customer;
 use App\Models\employee\Employee;
+use App\Models\produk\ProdukJenis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,11 @@ class RepairCase extends Model
     protected $guarded = ['id'];
 
     //relasi terhadap subjenis belum dibuatkan
+    
+    public function produkJenis()
+    {
+        return $this->belongsTo(ProdukJenis::class, 'produk_jenis_id');
+    }
     
     public function jenisFungsional()
     {
@@ -52,11 +58,6 @@ class RepairCase extends Model
         return $this->hasMany(RepairKelengkapan::class);
     }
 
-    public function jurnal()
-    {
-        return $this->hasMany(RepairJurnal::class);
-    }
-
     public function estimasi()
     {
         return $this->hasMany(RepairEstimasi::class);
@@ -65,5 +66,15 @@ class RepairCase extends Model
     public function transaksi()
     {
         return $this->hasOne(RepairTransaksi::class);
+    }
+
+    public function timestampStatus()
+    {
+        return $this->hasMany(RepairCase::class);
+    }
+
+    public function requestPart()
+    {
+        return $this->hasMany(RepairRequestPart::class);
     }
 }

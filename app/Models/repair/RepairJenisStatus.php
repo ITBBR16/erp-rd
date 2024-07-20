@@ -18,8 +18,13 @@ class RepairJenisStatus extends Model
         return $this->hasMany(RepairCase::class);
     }
 
-    public function jurnal()
+    public function timestampStatus()
     {
-        return $this->hasMany(RepairJurnal::class);
+        return $this->hasMany(RepairTimestampStatus::class);
+    }
+
+    public function jenisSubStatus()
+    {
+        return $this->hasMany(RepairJenisSubStatus::class);
     }
 }

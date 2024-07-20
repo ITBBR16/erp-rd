@@ -20,12 +20,7 @@ class RepairTransaksi extends Model
     {
         return $this->belongsTo(RepairCase::class, 'case_id');
     }
-
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class, 'customer_id');
-    }
-
+    
     public function transaksiPembayaran()
     {
         return $this->hasMany(RepairTransaksiPembayaran::class);

@@ -2,26 +2,24 @@
 
 namespace App\Models\repair;
 
-use App\Models\produk\ProdukKelengkapan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RepairKelengkapan extends Model
+class RepairRequestPart extends Model
 {
     use HasFactory;
 
     protected $connection = 'rumahdrone_repair';
-    protected $table = 'repair_kelengkapan';
+    protected $table = 'repair_request_part';
     protected $guarded = ['id'];
 
     public function case()
     {
         return $this->belongsTo(RepairCase::class, 'case_id');
     }
-
-    public function itemKelengkapan()
+    
+    public function estimasi()
     {
-        return $this->belongsTo(ProdukKelengkapan::class, 'item_kelengkapan_id');
+        return $this->hasMany(RepairEstimasi::class);
     }
-
 }

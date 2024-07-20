@@ -25,8 +25,23 @@ class RepairEstimasi extends Model
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 
-    public function estimasiChat()
+    public function requestPart()
     {
-        return $this->hasMany(RepairEstimasiChat::class);
+        return $this->belongsTo(RepairRequestPart::class, 'request_part_id');
+    }
+
+    public function estimasiJrr()
+    {
+        return $this->hasMany(RepairEstimasiJrr::class);
+    }
+
+    public function estimasiPart()
+    {
+        return $this->hasMany(RepairEstimasiPart::class);
+    }
+
+    public function chatEstimasi()
+    {
+        return $this->hasMany(RepairChatEstimasi::class);
     }
 }

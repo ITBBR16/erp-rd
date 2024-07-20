@@ -5,6 +5,7 @@ namespace App\Models\repair;
 use App\Models\employee\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use PhpParser\Node\Expr\FuncCall;
 
 class RepairJurnal extends Model
 {
@@ -14,18 +15,18 @@ class RepairJurnal extends Model
     protected $table = 'repair_jurnal';
     protected $guarded = ['id'];
 
-    public function case()
-    {
-        return $this->belongsTo(RepairCase::class, 'case_id');
-    }
-
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
     }
 
-    public function jenisStatus()
+    public function jenisSubStatus()
     {
-        return $this->belongsTo(RepairJenisStatus::class, 'jenis_status_id');
+        return $this->belongsTo(RepairJenisSubStatus::class, 'jenis_substatus_id');
+    }
+
+    public function timestampStatus()
+    {
+        return $this->belongsTo(RepairTimestampStatus::class, 'timestamp_status_id');
     }
 }
