@@ -1,5 +1,5 @@
 <div id="add-daily-recap" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative w-full max-w-lg max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="text-xl font-medium text-gray-900 dark:text-white">Daily Recap</h3>
@@ -11,90 +11,36 @@
                 </button>
             </div>
             <div class="px-6 py-6 lg:px-8">
-                <form action="{{ route('form-daily-recap') }}" method="POST" autocomplete="off">
+                <form action="{{ route('daily-recap.store') }}" method="POST" autocomplete="off">
                     @csrf
+                    {{-- Semua Keperluan --}}
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div class="relative z-0 w-full mb-6 group">
                             <label for="nama_customer"></label>
-                            <select name="nama_customer" id="nama_customer" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nama_customer') border-red-600 dark:border-red-500 @enderror" required>
+                            <select name="nama_customer" id="nama_customer" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                                 <option value="" hidden>Nama Customer</option>
                                 @foreach ($customer as $cs)
                                     <option value="{{ $cs->id }}" class="dark:bg-gray-700">{{ $cs->first_name }} {{ $cs->last_name }}</option>
                                 @endforeach
                             </select>
-                            @error('nama_customer')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
                             <label for="keperluan_recap"></label>
-                            <select name="keperluan_recap" id="keperluan_recap" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('keperluan_recap') border-red-600 dark:border-red-500 @enderror" required>
+                            <select name="keperluan_recap" id="keperluan_recap" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                                 <option value="" hidden>Keperluan</option>
                                 @foreach ($keperluanrecap as $keperluan)
                                     <option value="{{ $keperluan->id }}" class="dark:bg-gray-700">{{ $keperluan->nama }}</option>
                                 @endforeach
                             </select>
-                            @error('keperluan_recap')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
                         </div>
                     </div>
-                    <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-6 group">
-                            <label for="jenis_produk"></label>
-                            <select name="jenis_produk" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_produk') border-red-600 dark:border-red-500 @enderror" required>
-                                <option value="" hidden>Jenis Produk</option>
-                                @foreach ($produkJenis as $jenis)
-                                    <option value="{{ $jenis->id }}" class="dark:bg-gray-700">{{ $jenis->jenis_produk }}</option>
-                                @endforeach
-                            </select>
-                            @error('jenis_produk')
-                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="relative z-0 w-full mb-6 group">
-                            <label for="kategori_permasalahan"></label>
-                            <select name="kategori_permasalahan" id="kategori_permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_permasalahan') border-red-600 dark:border-red-500 @enderror" required>
-                                <option value="" hidden>Kategori Permasalahan</option>
-                                @foreach ($kategoriPermasalahan as $kategori)
-                                    <option value="{{ $kategori->id }}" class="dark:bg-gray-700">{{ $kategori->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('kategori_permasalahan')
-                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
+
+                    <div id="container-input-dr">
+                        
                     </div>
-                    <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-6 group">
-                            <label for="permasalahan"></label>
-                            <select name="permasalahan" id="permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('permasalahan') border-red-600 dark:border-red-500 @enderror" required>
-                                <option value="" hidden>Permasalahan</option>
-                                @foreach ($permasalahan as $permasalahan)
-                                    <option value="{{ $permasalahan->id }}" class="dark:bg-gray-700">{{ $permasalahan->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('permasalahan')
-                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" name="link_permasalahan" id="link_permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('link_permasalahan') border-red-600 dark:border-red-500 @enderror" placeholder="" readonly>
-                            <label for="link_permasalahan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Link Permsaalahan</label>
-                            @error('link_permasalahan')
-                                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="keterangan" id="keterangan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('keterangan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('keterangan') }}" required>
-                        <label for="keterangan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Keterangan</label>
-                        @error('keterangan')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
+
                     <div class="mt-4 text-end">
-                        <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
+                        <button type="submit" id="button-new-dr" class="cursor-not-allowed submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" disabled>Submit</button>
                         <div class="loader-button-form" style="display: none">
                             <button type="submit" class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>
                                 <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -110,3 +56,8 @@
         </div>
     </div>
 </div>
+
+<script>
+    let jenisProduk = @json($produkJenis);
+    let jenisPermasalahan = @json($kategoriPermasalahan);
+</script>

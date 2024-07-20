@@ -28,10 +28,10 @@
                         Keperluan
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Jenis Produk
+                        Produk
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Kategori Permasalahan
+                        Keterangan
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Status
@@ -51,10 +51,22 @@
                             {{ $recap->keperluan->nama }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $recap->produkjenis->jenis_produk }}
+                            @if ($recap->keperluan->nama == 'Want to Buy')
+                                {{ $recap->kiosWtb->subjenis->produkjenis->jenis_produk }} {{ $recap->kiosWtb->subjenis->paket_penjualan }}
+                            @elseif($recap->keperluan->nama == 'Want to Sell')
+                                {{ $recap->kiosWts->subjenis->produkjenis->jenis_produk }} {{ $recap->kiosWts->subjenis->paket_penjualan }}
+                            @elseif($recap->keperluan->nama == 'Technical Support')
+                                {{ $recap->recapTs->produkjenis->jenis_produk }}
+                            @endif
                         </td>
                         <td class="px-6 py-2">
-                            {{ $recap->kategoripermasalahan->nama }}
+                            @if ($recap->keperluan->nama == 'Want to Buy')
+                                {{ $recap->kiosWtb->kondisi_produk }}
+                            @elseif($recap->keperluan->nama == 'Want to Sell')
+                                {{ $recap->kiosWts->produk_worth }}
+                            @elseif($recap->keperluan->nama == 'Technical Support')
+                                {{ $recap->recapTs->kategoriPermasalahan->nama }}
+                            @endif
                         </td>
                         <td class="px-6 py-2">
                             {{ $recap->status }}
@@ -99,8 +111,8 @@
 
     {{-- Modal --}}
     @include('kios.main.modal.add-recap')
-    @include('kios.main.modal.recap-view')
-    @include('kios.main.modal.recap-edit')
+    {{-- @include('kios.main.modal.recap-view')
+    @include('kios.main.modal.recap-edit') --}}
     @include('kios.main.modal.recap-delete')
     
 </div>

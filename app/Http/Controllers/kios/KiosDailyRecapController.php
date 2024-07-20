@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\kios;
 
 use Exception;
+use App\Models\kios\KiosWTB;
+use App\Models\kios\KiosWTS;
 use Illuminate\Http\Request;
+use App\Models\kios\KiosProduk;
 use Illuminate\Validation\Rule;
 use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
@@ -11,12 +14,14 @@ use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\DB;
 use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
-use App\Models\kios\KiosRecapStatus;
 use Illuminate\Support\Facades\Http;
+use App\Models\kios\KiosProdukSecond;
+use App\Models\produk\ProdukSubJenis;
 use App\Models\kios\KiosRecapKeperluan;
+use App\Models\kios\KiosTechnicalSupport;
 use App\Repositories\kios\KiosRepository;
-use App\Models\kios\KiosRecapPermasalahan;
 use App\Models\kios\KiosKategoriPermasalahan;
+use App\Models\kios\KiosRecapTechnicalSupport;
 use App\Models\customer\CustomerInfoPerusahaan;
 
 class KiosDailyRecapController extends Controller
@@ -34,7 +39,7 @@ class KiosDailyRecapController extends Controller
         $infoPerusahaan = CustomerInfoPerusahaan::all();
         $recapKeperluan = KiosRecapKeperluan::all();
         $kategoriPermasalahan = KiosKategoriPermasalahan::all();
-        $permasalahan = KiosRecapPermasalahan::all();
+        $permasalahan = KiosTechnicalSupport::all();
 
         return view('kios.main.recap', [
             'title' => 'Daily Recap',
@@ -56,78 +61,118 @@ class KiosDailyRecapController extends Controller
 
     public function store(Request $request)
     {
-        $connectionCustomer = DB::connection('rumahdrone_customer');
         $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
 
         $picId = auth()->user()->id;
-        $divisiId = auth()->user()->divisi_id;
 
-        if($request->has('nama_customer')) {
-            $connectionKios->beginTransaction();
-            try{
-                $dailyRecap = new KiosDailyRecap([
-                    'employee_id' => $picId,
-                    'customer_id' => $request->input('nama_customer'),
-                    'jenis_produk_id' => $request->input('jenis_produk'),
-                    'permasalahan_id' => $request->input('permasalahan'),
-                    'keperluan_id' => $request->input('keperluan_recap'),
-                    'keterangan' => $request->input('keterangan'),
-                    'kategori_permasalahan_id' => $request->input('kategori_permasalahan'),
+        try{
+            $idKeperluan = $request->input('keperluan_recap');
+            $keperluanRecap = KiosRecapKeperluan::findOrFail($idKeperluan);
+            $inputStatus = $request->input('status_produk');
+            $keterangan = $request->input('keterangan');
+
+            if ($keperluanRecap->nama == 'Want to Buy') {
+                $tableKeperluan = KiosWTB::create([
+                    'kondisi_produk' => $request->input('kondisi_produk'),
+                    'paket_penjualan_id' => $request->input('paket_penjualan'),
+                    'keterangan' => $keterangan,
                 ]);
 
-                $status = ($request->input('permasalahan') == 1) ? 'Unprocessed' : 'Done Case';
-                $dailyRecap->status = $status;
+                $status = ($inputStatus == 'Ready' || $inputStatus == 'Promo') ? 'Sudah Ditawari Produk' : 'Produk Tidak Tersedia';
 
-                $dailyRecap->save();
-                $connectionKios->commit();
+            } elseif ($keperluanRecap->nama == 'Want to Sell') {
+                $tableKeperluan = KiosWTS::create([
+                    'paket_penjualan_id' => $request->input('paket_penjualan'),
+                    'produk_worth' => $request->input('produk_worth'),
+                    'keterangan' => $keterangan,
+                ]);
 
-                return back()->with('success', 'Success Add Daily Recap.');
+                $status = ($inputStatus == 'Ready') ? 'Produk dibutuhkan' : 'Produk tidak dibutuhkan';
 
-            } catch (Exception $e) {
-                $connectionKios->rollBack();
-                return back()->with('error', $e->getMessage());
-            }
+            } elseif ($keperluanRecap->nama == 'Technical Support') {
+                $keperluanTsId = $request->input('permasalahan');
+                $keperluanTs = KiosKategoriPermasalahan::findOrFail($keperluanTsId);
 
-        } elseif($request->has('first_name')) {
-
-            $connectionCustomer->beginTransaction();
-
-            $validate = $request->validate([
-                'first_name' => 'required|max:50',
-                'last_name' => 'required|max:50',
-                'asal_informasi' => 'required',
-                'no_telpon' => ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
-                'email' => 'nullable|email:dns',
-                'instansi' => 'max:50',
-                'provinsi' => 'required',
-                'nama_jalan' => 'required|max:255'
-            ]);
-
-            $validate['by_divisi'] = $divisiId;
-
-            $dataCustomer = Customer::create($validate);
-            $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
-            $response = Http::post($appScriptUrl, [
-                'first_name' => $validate['first_name'],
-                'last_name' => $validate['last_name'] . ' - ' . $dataCustomer->id,
-                'email' => $validate['email'],
-                'no_telpon' => $validate['no_telpon'],
-            ]);
-
-            $payloadContact = json_decode($response->body(), true);
-            dd($payloadContact);
-            $statusContact = $payloadContact['status'];
-            
-            if($statusContact === 'success') {
-                $connectionCustomer->commit();
-                return back()->with('success', 'Success Add New Customer.');
+                $tableKeperluan = KiosRecapTechnicalSupport::create([
+                    'kategori_permasalahan_id' => $request->input('kategori_permasalahan'),
+                    'kios_ts_id' => $request->input('permasalahan'),
+                    'jenis_id' => $request->input('jenis_produk'),
+                    'keterangan' => $keterangan,
+                ]);
+                
+                $status = ($keperluanTs == 'Belum Terdata') ? 'Unprocess' : 'Case Done';
+                
             } else {
-                $connectionCustomer->rollBack();
-                return back()->with('error', 'Failed to Save Contact. Please try again.');
+                $connectionKios->rollBack();
+                return back()->with('error', 'Something went wrong.');
             }
 
+            $dailyRecap = new KiosDailyRecap([
+                'employee_id' => $picId,
+                'customer_id' => $request->input('nama_customer'),
+                'keperluan_id' => $request->input('keperluan_recap'),
+                'table_id' => $tableKeperluan->id,
+                'status' => $status,
+            ]);
+
+            $dailyRecap->save();
+            $connectionKios->commit();
+
+            return back()->with('success', 'Success Add Daily Recap.');
+
+        } catch (Exception $e) {
+            $connectionKios->rollBack();
+            return back()->with('error', $e->getMessage());
         }
 
+    }
+
+    public function newCustomer(Request $request)
+    {
+        $connectionCustomer = DB::connection('rumahdrone_customer');
+        $connectionCustomer->beginTransaction();
+
+        $divisiId = auth()->user()->divisi_id;
+
+            try {
+                $validate = $request->validate([
+                    'first_name' => 'required|max:50',
+                    'last_name' => 'required|max:50',
+                    'asal_informasi' => 'required',
+                    'no_telpon' => ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
+                    'email' => 'nullable|email:dns',
+                    'instansi' => 'max:50',
+                    'provinsi' => 'required',
+                    'nama_jalan' => 'required|max:255'
+                ]);
+    
+                $validate['by_divisi'] = $divisiId;
+    
+                $dataCustomer = Customer::create($validate);
+                $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
+                $response = Http::post($appScriptUrl, [
+                    'first_name' => $validate['first_name'],
+                    'last_name' => $validate['last_name'] . ' - ' . $dataCustomer->id,
+                    'email' => $validate['email'],
+                    'no_telpon' => $validate['no_telpon'],
+                ]);
+    
+                $payloadContact = json_decode($response->body(), true);
+                $statusContact = $payloadContact['status'];
+                
+                if($statusContact === 'success') {
+                    $connectionCustomer->commit();
+                    return back()->with('success', 'Success Add New Customer.');
+                } else {
+                    $connectionCustomer->rollBack();
+                    return back()->with('error', 'Failed to Save Contact. Please try again.');
+                }
+
+            } catch (Exception $e) {
+                $connectionCustomer->rollBack();
+                return back()->with('error', $e->getMessage());
+            }
     }
 
     public function update(Request $request, $id)
@@ -155,14 +200,27 @@ class KiosDailyRecapController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $connectionKios = DB::connection('rumahdrone_kios');
         $connectionKios->beginTransaction();
 
         try{
-            $dailyRecapId = KiosDailyRecap::findOrFail($id);
-            $dailyRecapId->delete();
+            $keperluanName = $request->input('keperluan_id');
+            $dailyRecapSearch = KiosDailyRecap::findOrFail($id);
+
+            if ($keperluanName == 'Want to Buy') {
+                $dailyRecapSearch->kiosWtb()->delete();
+            } elseif ($keperluanName == 'Want to Sell') {
+                $dailyRecapSearch->kiosWts()->delete();
+            } elseif ($keperluanName == 'Technical Support') {
+                $dailyRecapSearch->technicalSupport()->delete();
+            } else {
+                $connectionKios->rollBack();
+                return back()->with('error', 'Something Went Wrong.');
+            }
+
+            $dailyRecapSearch->delete();
 
             $connectionKios->commit();
             return back()->with('success', 'Success Delete Data Recap.');
@@ -171,4 +229,83 @@ class KiosDailyRecapController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
+    public function getProduk($kondisiProduk)
+    {
+        if ($kondisiProduk == 'Drone Baru') {
+            $items = KiosProduk::with('subjenis.produkjenis')->get();
+        } elseif ($kondisiProduk == 'Drone Bekas') {
+            $items = KiosProdukSecond::with('subjenis.produkjenis')->get();
+        } elseif ($kondisiProduk == 'Part Baru' || $kondisiProduk == 'Part Bekas') {
+            
+            $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
+            $response = Http::post($urlApiGudang, [
+                'status' => $kondisiProduk
+            ]);
+
+            $data = $response->json();
+            $resultData = [];
+            foreach ($data['data'] as $dataNeed) {
+                $neededData = [
+                    'sku' => $dataNeed[0],
+                    'nama_part' => $dataNeed[2],
+                    'srp_part' => $dataNeed[8],
+                ];
+                $resultData[] = $neededData;
+            }
+
+            $items = $resultData;
+
+        }
+
+        return response()->json($items);
+
+    }
+
+    public function getSubjenis($kondisiProduk, $id)
+    {
+        if ($kondisiProduk == 'Drone Baru') {
+            $items = ProdukSubJenis::with('kiosproduk', 'produkjenis')->where('jenis_id', $id)->get();
+        } elseif ($kondisiProduk == 'Drone Bekas') {
+            $items = ProdukSubJenis::with('kiosproduksecond', 'produkjenis')->where('jenis_id', $id)->get();
+        } elseif ($kondisiProduk == 'Part Baru' || $kondisiProduk == 'Part Bekas') {
+            
+            $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
+            $response = Http::post($urlApiGudang, [
+                'status' => $kondisiProduk
+            ]);
+
+            $data = $response->json();
+            $resultData = [];
+            foreach ($data['data'] as $dataNeed) {
+                $neededData = [
+                    'sku' => $dataNeed[0],
+                    'nama_part' => $dataNeed[2],
+                    'srp_part' => $dataNeed[8],
+                ];
+                $resultData[] = $neededData;
+            }
+
+            $items = $resultData;
+
+        }
+
+        return response()->json($items);
+
+    }
+
+    public function getPaketPenjualan($id)
+    {
+        $items = ProdukJenis::with('subjenis')->where('id', $id)->get();
+        return response()->json($items);
+    }
+
+    public function getPermasalahan($jenisId)
+    {
+        $produkSearch = ProdukJenis::findOrFail($jenisId);
+        $dataPermasalahan = $produkSearch->produkpermasalahan()->get();
+        return response()->json($dataPermasalahan);
+    }
+
+
 }

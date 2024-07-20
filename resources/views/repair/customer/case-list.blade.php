@@ -1,19 +1,19 @@
 @extends('repair.layouts.main')
 
 @section('container')
-<div class="mb-4 border-b border-gray-200">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="caseList" data-tabs-toggle="#caseListContent" role="tablist">
-        <li class="mr-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="listCase-tab" data-tabs-target="#listCase" type="button" role="tab" aria-controls="listCase" aria-selected="false">List Case</button>
-        </li>
-        <li class="mr-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="newCase-tab" data-tabs-target="#newCase" type="button" role="tab" aria-controls="newCase" aria-selected="false">New Case</button>
-        </li>
-        <li class="mr-2" role="presentation">
-            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="newCustomer-tab" data-tabs-target="#newCustomer" type="button" role="tab" aria-controls="newCustomer" aria-selected="false">New Customer</button>
-        </li>
-    </ul>
-</div>
+    <div class="mb-4 border-b border-gray-200">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="caseList" data-tabs-toggle="#caseListContent" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="listCase-tab" data-tabs-target="#listCase" type="button" role="tab" aria-controls="listCase" aria-selected="false">List Case</button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="newCase-tab" data-tabs-target="#newCase" type="button" role="tab" aria-controls="newCase" aria-selected="false">New Case</button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="newCustomer-tab" data-tabs-target="#newCustomer" type="button" role="tab" aria-controls="newCustomer" aria-selected="false">New Customer</button>
+            </li>
+        </ul>
+    </div>
 
     @if (session()->has('success'))
         <div id="alert-success-input" class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800" role="alert">

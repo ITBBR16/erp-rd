@@ -59,6 +59,7 @@ class KiosKasirController extends Controller
             $request->validate([
                 'nama_customer' => 'required',
                 'kasir_metode_pembayaran' => 'required',
+                'kasir_nominal_pembayaran' => 'required',
                 'jenis_transaksi' => 'required|array|min:1',
                 'kasir_sn' => 'required|array|min:1',
                 'item_id' => 'required|array|min:1',

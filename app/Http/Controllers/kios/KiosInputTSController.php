@@ -9,8 +9,9 @@ use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\DB;
 use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosTechnicalSupport;
 use App\Repositories\kios\KiosRepository;
-use App\Models\kios\KiosRecapPermasalahan;
+use App\Models\kios\KiosKategoriPermasalahan;
 
 class KiosInputTSController extends Controller
 {
@@ -20,12 +21,13 @@ class KiosInputTSController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $dailyRecap = KiosDailyRecap::where('keperluan_id', 3)
-                      ->where('status', 'Unprocessed')
+        $dataRecapTS = KiosDailyRecap::where('keperluan_id', 3)
+                      ->where('status', 'Unprocess')
                       ->orderByDesc('id')
                       ->get();
-        $permasalahans = KiosRecapPermasalahan::all();
+        $dataTs = KiosTechnicalSupport::all();
         $produkJenis = ProdukJenis::all();
+        $kategoriPermasalahan = KiosKategoriPermasalahan::all();
 
         return view('kios.technical_support.input-technical-support', [
             'title' => 'Input TS',
@@ -34,9 +36,10 @@ class KiosInputTSController extends Controller
             'divisi' => $divisiName,
             'dropdown' => '',
             'dropdownShop' => '',
-            'dataTS' => $dailyRecap,
-            'permasalahans' => $permasalahans,
+            'dataRecapTs' => $dataRecapTS,
+            'dataTs' => $dataTs,
             'jenisProduk' => $produkJenis,
+            'kategoriPermasalahan' => $kategoriPermasalahan,
         ]);
     }
 
@@ -47,21 +50,28 @@ class KiosInputTSController extends Controller
 
         try {
             $request->validate([
-                'add_permasalahan' => ['required', Rule::unique('rumahdrone_kios.kios_recap_permasalahan', 'nama')],
+                'add_permasalahan' => ['required', Rule::unique('rumahdrone_kios.kios_technical_support', 'nama')],
             ]);
 
             $picId = auth()->user()->id;
+            $kategoriPermasalahan = $request->input('keperluan_ts');
             $jenisProduk = $request->input('add_jenis_produk');
-            $permasalahan = ucwords($request->input('add_permasalahan'));
-            $linkPermasalahan = $request->input('add_link_permasalahan');
+            $namaPermasalahan = ucwords($request->input('add_permasalahan'));
+            $deskripsi = $request->input('deskrisi_ts');
+            $linkVideo = $request->input('add_link_video');
 
-            $recapPermasalahan = KiosRecapPermasalahan::create([
+            $recapPermasalahan = KiosTechnicalSupport::create([
                 'employee_id' => $picId,
-                'nama' => $permasalahan,
-                'link_permasalahan' => $linkPermasalahan,
+                'kategori_permasalahan_id' => $kategoriPermasalahan,
+                'nama' => $namaPermasalahan,
+                'deskripsi' => $deskripsi,
+                'link_video' => $linkVideo,
             ]);
 
-            $recapPermasalahan->permasalahanproduk()->sync($jenisProduk);
+            foreach($jenisProduk as $jenis) {
+                $searchJenisProduk = ProdukJenis::findOrFail($jenis);
+                $searchJenisProduk->produkpermasalahan()->sync($recapPermasalahan->id);
+            }
 
             $connectionKios->commit();
             return back()->with('success', 'Success add new data technical support.');

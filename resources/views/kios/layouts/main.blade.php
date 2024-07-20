@@ -45,7 +45,7 @@
             @include('kios.layouts.sidebarTechnicalSupport')
         @endif
 
-        <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 scrollbar-none">
+        <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-y-auto scrollbar-none">
             @yield('container')
         </div>
 
@@ -55,5 +55,7 @@
         <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script src="{{ asset('js/kios/daily-recap.js') }}"></script>
+        <script src="{{ asset('js/kios/technical-support.js') }}"></script>
     </body>
 </html>

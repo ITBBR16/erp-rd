@@ -18,4 +18,14 @@ class KiosKategoriPermasalahan extends Model
         return $this->hasMany(KiosDailyRecap::class);
     }
 
+    public function kiosTS()
+    {
+        return $this->hasMany(KiosTechnicalSupport::class);
+    }
+
+    public function kiosRecapTs()
+    {
+        return $this->hasMany(KiosRecapTechnicalSupport::class);
+    }
+
 }

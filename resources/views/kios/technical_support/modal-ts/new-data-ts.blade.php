@@ -13,24 +13,40 @@
             <div class="px-6 py-6 lg:px-8">
                 <form action="{{ route('input.store') }}" method="POST" autocomplete="off">
                     @csrf
+                    <div class="relative w-full mb-6">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="add-jenis-produk-ts">List Produk : </label>
+                        <select name="add_jenis_produk[]" id="add-jenis-produk-ts" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                            <option value="" hidden>Jenis Produk</option>
+                            @foreach ($jenisProduk as $produk)
+                                <option value="{{ $produk->id }}">{{ $produk->jenis_produk }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div id="box-selected-jenis-ts" class="flex flex-wrap border rounded-lg items-start w-full h-16 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
+                        
+                    </div>
                     <div class="grid grid-cols-2 gap-6">
-                        <div class="relative w-full mb-6">
-                            <label for="add_jenisProduk"></label>
-                            <select name="add_jenis_produk" id="add_jenisProduk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600" required>
-                                <option value="" hidden>Jenis Produk</option>
-                                @foreach ($jenisProduk as $produk)
-                                    <option value="{{ $produk->id }}">{{ $produk->jenis_produk }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="relative z-0 w-full mb-6 group">
                             <input type="text" name="add_permasalahan" id="add_permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
                             <label for="add_permasalahan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Permsaalahan</label>
                         </div>
+                        <div class="relative z-0 w-full mb-6 group">
+                            <label for="keperluan_ts"></label>
+                            <select name="keperluan_ts" id="keperluan_ts" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                <option value="" hidden>Keperluan</option>
+                                @foreach ($kategoriPermasalahan as $keperluan)
+                                    <option value="{{ $keperluan->id }}" class="dark:bg-gray-700">{{ $keperluan->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="deskripsi-ts" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi : </label>
+                        <textarea name="deskrisi_ts" id="deskripsi-ts" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tulis deskripsi . . ." required></textarea>
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="add_link_permasalahan" id="add_link_permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                        <label for="add_link_permasalahan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Link Permsaalahan</label>
+                        <input type="text" name="add_link_video" id="add_link_video" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                        <label for="add_link_video" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Link Video</label>
                     </div>
                     <div class="mt-4 text-end">
                         <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>

@@ -2,9 +2,8 @@
 
 namespace App\Models\produk;
 
-use App\Models\kios\KiosDailyRecap;
-use App\Models\kios\KiosOrderList;
-use App\Models\repair\RepairCase;
+use App\Models\kios\KiosRecapTechnicalSupport;
+use App\Models\kios\KiosTechnicalSupport;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,14 +30,12 @@ class ProdukJenis extends Model
 
     public function produkpermasalahan()
     {
-        return $this->belongsToMany(KiosDailyRecap::class, 'permasalahan_produk', 'jenis_id', 'permasalahan_id');
+        return $this->belongsToMany(KiosTechnicalSupport::class, 'rumahdrone_kios.kios_recap_ts_produk', 'produk_id', 'ts_id');
     }
 
-    //relasi repair
-
-    public function repairCase()
+    public function kiosRecapTs()
     {
-        return $this->hasMany(RepairCase::class);
+        return $this->hasMany(KiosRecapTechnicalSupport::class);
     }
 
 }
