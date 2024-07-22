@@ -39,7 +39,6 @@ use App\Http\Controllers\repair\RepairListCaseController;
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::post('/api/updatePayment', [KiosPaymentController::class, 'updatePayment']);
 
 // Dependent Dropdown 
 Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
