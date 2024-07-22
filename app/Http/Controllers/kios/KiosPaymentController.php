@@ -218,12 +218,18 @@ class KiosPaymentController extends Controller
 
     }
 
-    public function updatePayment($id)
+    public function updatePayment(Request $request)
     {
-        $paymentKios = KiosPayment::findOrFail($id);
-        $paymentKios->status = 'Paid';
+        $idTransaksi = $request->input('id');
+        $statusTransaksi = $request->input('status');
+        $paymentKios = KiosPayment::findOrFail($idTransaksi);
 
-        return response()->json(['message' => 'Product status updated successfully']);
+        if ($paymentKios) {
+            $paymentKios->update($statusTransaksi);
+            return response()->json(['status' => 'success', 'message' => 'Product status updated successfully']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Data not found'], 404);
+        }
     }
 
 }

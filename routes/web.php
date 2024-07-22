@@ -39,6 +39,7 @@ use App\Http\Controllers\repair\RepairListCaseController;
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/api/updatePayment', [KiosPaymentController::class, 'updatePayment']);
 
 // Dependent Dropdown 
 Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
@@ -104,7 +105,6 @@ Route::middleware('kios')->group(function () {
             Route::group(['controller' => KiosPaymentController::class], function () {
                 Route::resource('/pembayaran', KiosPaymentController::class)->only(['index', 'update']);
                 Route::post('/pembayaran/{id}', 'validasi')->name('form-validasi-payment');
-                Route::put('/api/updatePayment/{id}', 'updatePayment');
             });
 
             Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);

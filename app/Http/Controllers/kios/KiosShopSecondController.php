@@ -131,12 +131,18 @@ class KiosShopSecondController extends Controller
 
             $qcOrderSecond = KiosQcProdukSecond::create(['order_second_id' => $orderSecond->id]);
 
+            $pivotData = [];
             foreach($kelengkapanSecond as $index => $id) {
                 for($i = 0; $i < $qtyNotNull[$index]; $i++ ) {
-                    $qcOrderSecond->kelengkapans()->attach($id, ['status' => 'Not Ready']);
+                    $pivotData[] = [
+                        'produk_kelengkapan_id' => $id,
+                        'qc_id' => 5,
+                        'status' => 'Not Ready',
+                    ];
                 }
             }
-            
+            $qcOrderSecond->kelengkapans()->attach($pivotData);
+
             if($request->has('additional_kelengkapan_second')) {
                 $additionalKelengkapan = $request->input('additional_kelengkapan_second');
                 $jenisProdukId = $request->input('produk_jenis_id'); // ganti karna many to many
@@ -147,11 +153,13 @@ class KiosShopSecondController extends Controller
                 });
                 $kelengkapanBaru = $type->kelengkapans()->createMany($jenisKelengkapan->toArray());
                 $kelengkapanBaruId = $kelengkapanBaru->pluck('id')->toArray();
+                $pivotDataBaru = [];
                 foreach($kelengkapanBaruId as $index => $idBaru) {
                     for($j = 0; $j < $additionalQty[$index]; $j++) {
-                        $qcOrderSecond->kelengkapans()->attach($idBaru, ['status' => 'Not Ready']);
+                        $pivotDataBaru[$idBaru] = ['status' => 'Not Ready'];
                     }
                 }
+                $qcOrderSecond->kelengkapans()->attach($pivotDataBaru);
             }
 
             $jenisPembayaran = ['Pembelian Barang'];
