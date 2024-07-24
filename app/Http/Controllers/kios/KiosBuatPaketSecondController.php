@@ -5,14 +5,12 @@ namespace App\Http\Controllers\kios;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosImageSecond;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosQcProdukSecond;
-use App\Models\produk\ProdukKelengkapan;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 
@@ -25,8 +23,8 @@ class KiosBuatPaketSecondController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $dataKelengkapan = KiosQcProdukSecond::with('kelengkapans')->get();
-        $kiosProduks = ProdukJenis::with('subjenis.kelengkapans')->get();
-        
+        $kiosProduks = ProdukSubJenis::all();
+
         return view('kios.product.add-produk-second', [
             'title' => 'Create Paket Second',
             'active' => 'create-paket-second',

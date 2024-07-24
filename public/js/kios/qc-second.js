@@ -2,13 +2,13 @@ $(document).ready(function(){
     const contaienrQcSecond = $('#additional-kelengkapan-qc-second');
     const ContaienrExcludeBarangQcSecomd = $('#barang-exclude-qc-second');
     const tambahAdditionalQc = $('#add-second-additional-qc');
-    const tambahExcludeBarangQcSecond = $('#add-second-exclude-kelengkapan-qc')
-    const jenisProdukQcSecond = $('#jenis-qc-id');
+    const tambahExcludeBarangQcSecond = $('#add-second-exclude-kelengkapan-qc');
+    const paketPenjualanQcSecond = $('#paket-penjualan-qc-id');
     let uniqueCount = 20;
 
     tambahAdditionalQc.on('click', function () {
         uniqueCount++
-        const jenisId = jenisProdukQcSecond.val();
+        const paketId = paketPenjualanQcSecond.val();
 
         let addAdditonalForm = `
             <tr id="additionalKelengkapanQC-${uniqueCount}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -21,7 +21,7 @@ $(document).ready(function(){
                 <td class="px-6 py-4">
                     <label for="kondisi-${uniqueCount}" class="sr-only">Jenis Paket Produk</label>
                     <select name="additional_kondisi[]" id="kondisi-${uniqueCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                        <option value="" hidden>-- Kondisi Kelengkapan --</option>
+                        <option value="" hidden>Kondisi Kelengkapan</option>
                         <option value="Sangat Baik">Sangat Baik</option>
                         <option value="Baik">Baik</option>
                         <option value="Cukup">Cukup</option>
@@ -47,30 +47,32 @@ $(document).ready(function(){
 
         contaienrQcSecond.append(addAdditonalForm);
 
-        if(jenisId){
+        if(paketId){
             const ddQcKelengkapan = $('#kelengkapan_qc_additional' + uniqueCount);
-            fetch(`/kios/product/getAdditionalKelengkapan/${jenisId}`)
+            fetch(`/kios/product/getKelengkapans/${paketId}`)
             .then(response => response.json())
             .then(data => {
                 ddQcKelengkapan.empty();
 
                 const defaultOption = $('<option>', {
-                    text: '-- Tambahan Kelengkapan --',
+                    text: 'Tambahan Kelengkapan',
                     value: '',
                     hidden: true
                 });
                 ddQcKelengkapan.append(defaultOption);
 
-                data.forEach(kelengkapan => {
+                data.forEach(function(item) {
                     const option = $('<option>', {
-                        value: kelengkapan.id,
-                        text: kelengkapan.kelengkapan
-                    })
-                    .addClass('dark:bg-gray-700');
+                        value: item.id,
+                        text: item.kelengkapan
+                    }).addClass('dark:bg-gray-700');
+
                     ddQcKelengkapan.append(option);
                 });
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                alert('Error Fetching Data : ' + error);
+            });
         } else {
             ddQcKelengkapan.html('');
         }
@@ -78,7 +80,6 @@ $(document).ready(function(){
 
     tambahExcludeBarangQcSecond.on('click', function () {
         uniqueCount++
-        const jenisId = jenisProdukQcSecond.val();
 
         let addAdditonalForm = `
         <div id="exclude-barang-qc-${uniqueCount}" class="mt-4 grid md:grid-cols-5 md:gap-6">

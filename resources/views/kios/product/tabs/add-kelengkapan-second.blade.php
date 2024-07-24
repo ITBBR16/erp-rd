@@ -6,13 +6,11 @@
             <div class="bg-white p-4 text-white border-0 border-transparent border-solid shadow-md rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
-                        <label for="paket_penjualan_produk_second" class="sr-only">Jenis Paket Produk</label>
+                        <label for="paket_penjualan_produk_second" class="sr-only">Nama Paket Penjualan</label>
                         <select name="paket_penjualan_produk_second" id="paket_penjualan_produk_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('paket_penjualan_produk_second') border-red-600 dark:border-red-500 @enderror" required>
-                            <option value="" hidden>-- Jenis Produk --</option>
+                            <option value="" hidden>Nama Paket Penjualan</option>
                             @foreach ($kiosproduks as $produk)
-                                @foreach ($produk->subjenis as $sj)
-                                    <option value="{{ $sj->id }}" class="dark:bg-gray-700">{{ $produk->jenis_produk }} {{ $sj->paket_penjualan }}</option>
-                                @endforeach
+                                <option value="{{ $produk->id }}" class="dark:bg-gray-700">{{ $produk->paket_penjualan }}</option>
                             @endforeach
                         </select>
                         @error('paket_penjualan_produk_second')
@@ -93,7 +91,7 @@
                     </div>
                 </div>
                 <div class="mt-6 text-end">
-                    <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
+                    <button type="submit" id="btn-create-paket-second" class="cursor-not-allowed submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" disabled>Submit</button>
                     <div class="loader-button-form" style="display: none">
                         <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>
                             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

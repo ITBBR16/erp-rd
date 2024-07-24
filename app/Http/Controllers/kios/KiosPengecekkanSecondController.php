@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosQcProdukSecond;
+use App\Models\produk\ProdukKelengkapan;
+use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 
 class KiosPengecekkanSecondController extends Controller
@@ -20,10 +22,8 @@ class KiosPengecekkanSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $secondOrder = KiosOrderSecond::with('customer', 'subjenis.produkjenis', 'qcsecond.kelengkapans', 'statuspembayaran', 'buymetodesecond')
-        ->where('status', 'Proses QC')
-        ->get();
-        
+        $secondOrder = KiosOrderSecond::where('status', 'Proses QC')->get();
+
         return view('kios.product.pengecekkan.index-pengecekkan-second', [
             'title' => 'Pengecekkan Second',
             'active' => 'pengecekkan-second',
@@ -112,8 +112,9 @@ class KiosPengecekkanSecondController extends Controller
             $kiosQcPS->save();
 
             if($request->has('exclude_kelengkapan_qc_additional')) {
-                $produkJenisId = $request->input('produk_jenis_id');
-                $type = ProdukJenis::findOrFail($produkJenisId);
+                $subJenisId = $request->input('paket_penjualan_id');
+                $searchSubjenis = ProdukSubJenis::findOrFail($subJenisId);
+                $produkJenisList = $searchSubjenis->produkjenis;
 
                 $excludeKelengkapan = $request->input('exclude_kelengkapan_qc_additional');
                 $excludeKondisi = $request->input('exclude_kondisi');
@@ -124,11 +125,10 @@ class KiosPengecekkanSecondController extends Controller
                     return ['kelengkapan' => ucwords(strtolower($jk))];
                 });
 
-                $kelengkapanBaru = $type->kelengkapans()->createMany($formatedKelengkapan->toArray());
+                $kelengkapanBaru = ProdukKelengkapan::createMany($formatedKelengkapan->toArray());
                 $kelengkapanBaruId = $kelengkapanBaru->pluck('id')->toArray();
 
-                
-                foreach($kelengkapanBaruId as $index => $idBaru) {
+                foreach ($kelengkapanBaruId as $index => $idBaru) {
                     $dataExclude = [
                         'kondisi' => $excludeKondisi[$index],
                         'keterangan' => $excludeKeterangan[$index],
@@ -137,6 +137,9 @@ class KiosPengecekkanSecondController extends Controller
                         'status' => $statusQc
                     ];
                     $kiosQcPS->kelengkapans()->attach($idBaru, $dataExclude);
+                    foreach ($produkJenisList as $produkJenis) {
+                        $produkJenis->kelengkapans()->attach($idBaru);
+                    }
                 }
             }
 

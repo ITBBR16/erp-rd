@@ -135,9 +135,11 @@ Route::middleware('kios')->group(function () {
 
             Route::resource('/filter-product-second', KiosFilterProdukSecondController::class);
 
-            Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
-            Route::get('/getOrderList/{orderId}', [KiosPengecekkanProdukBaruController::class, 'getOrderList']);
-            Route::get('/getQtyOrderList/{orderListId}', [KiosPengecekkanProdukBaruController::class, 'getQtyOrderList']);
+            Route::group(['controller' => KiosPengecekkanProdukBaruController::class], function () {
+                Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
+                Route::get('/getOrderList/{orderId}', 'getOrderList');
+                Route::get('/getQtyOrderList/{orderListId}', 'getQtyOrderList');
+            });
 
             Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);
         });

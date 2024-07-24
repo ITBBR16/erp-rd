@@ -18,25 +18,26 @@
                         @php
                             $totalNilai = $item->validasi->orderLists->nilai * $item->quantity
                         @endphp
-                        <input type="hidden" name="order-id" id="order-id" value="{{ $item->validasi->orderLists->order_id }}">
-                        <input type="hidden" name="order-list-id" id="order-list-id" value="{{ $item->validasi->orderLists->id }}">
-                        <input type="hidden" name="nilai-kurang" id="nilai-kurang" value="{{ $totalNilai }}">
-                        <input type="hidden" name="id-supplier" id="id-supplier" value="{{ $item->validasi->orderLists->order->supplier_kios_id }}">
+                        <input type="hidden" name="order_id" id="order-id" value="{{ $item->validasi->orderLists->order_id }}">
+                        <input type="hidden" name="order_list_id" id="order-list-id" value="{{ $item->validasi->orderLists->id }}">
+                        <input type="hidden" name="nilai_kurang" id="nilai-kurang" value="{{ $totalNilai }}">
+                        <input type="hidden" name="id_supplier" id="id-supplier" value="{{ $item->validasi->orderLists->order->supplier_kios_id }}">
                         <div class="flex flex-row gap-6">
                             <div class="relative z-0 w-full mb-6 group">
-                                <select name="status-komplain" id="status-komplain-{{ $item->id }}" data-id="{{ $item->id }}" class="status-komplain block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
-                                    <option value="" hidden>-- Pilih Proses --</option>
+                                <select name="status_komplain" id="status-komplain-{{ $item->id }}" data-id="{{ $item->id }}" class="status-komplain block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                                    <option value="" hidden>Pilih Proses</option>
                                     @foreach ($statusKomplain as $sk)
-                                        <option value="{{ $sk->nama }}" class="dark:bg-gray-700">{{ $sk->nama }}</option>
+                                        <option value="{{ $sk->id }}" class="dark:bg-gray-700">{{ $sk->nama }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             @error('status-komplain-{{ $item->id }}')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
+                            {{-- Hidden --}}
                             <div id="bank-transfer-id-{{ $item->id }}" class="relative z-0 w-full mb-6 group" style="display: none">
                                 <select name="bank-transfer" id="bank-transfer-{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
-                                    <option value="" hidden>-- Bank Transfer --</option>
+                                    <option value="" hidden>Bank Transfer</option>
                                     @foreach ($bankAkun as $bank)
                                         <option value="{{ $bank->id }}" class="dark:bg-gray-700">{{ $bank->nama_akun }}</option>
                                     @endforeach
@@ -45,6 +46,10 @@
                             @error('bank-transfer-{{ $item->id }}')
                                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
+                            <div id="container-komplain-supplier-{{ $item->id }}" class="relative z-0 w-full mb-4 group" style="display: none">
+                                <input type="text" id="komplain-supplier-{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->validasi->orderlists->order->supplier->nama_perusahaan }}" readonly>
+                                <label for="komplain-supplier-{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Supplier Kios</label>
+                            </div>
                         </div>
                         <div class="relative z-0 w-full mb-4 group">
                             <input type="text" name="keterangan" id="keterangan-{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>

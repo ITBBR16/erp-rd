@@ -50,7 +50,7 @@
             </div>
         </div>
     </div>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="relative shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -105,7 +105,7 @@
                                 <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFilterSecondButton{{ $os->id }}">
                                     <li>
                                         <a href="{{ route('filter-product-second.edit', encrypt($os->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-xl">filter_center_focus</i>
+                                            <i class="material-symbols-outlined text-xl mr-3">filter_center_focus</i>
                                             <span class="whitespace-nowrap">Filter Produk</span>
                                         </a>
                                     </li>

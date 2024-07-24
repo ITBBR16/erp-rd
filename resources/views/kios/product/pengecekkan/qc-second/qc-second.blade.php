@@ -8,7 +8,7 @@
                     <span class="material-symbols-outlined text-red-500">arrow_back</span>
                 </a>
                 <div class="font-semibold mr-4 text-xl text-gray-700 dark:text-gray-300">
-                    Quality Control / {{ $kos->subjenis->produkjenis->jenis_produk }} {{ $kos->subjenis->paket_penjualan }}
+                    Quality Control / {{ $kos->subjenis->paket_penjualan }}
                 </div>
             </div>
         </div>
@@ -17,7 +17,10 @@
     <form action="{{ route('pengecekkan-produk-second.update', $kos->qcsecond->id) }}" method="POST" autocomplete="off">
         @csrf
         @method('PUT')
-        <input type="hidden" name="produk_jenis_id" id="jenis-qc-id" value="{{ $kos->subjenis->produkjenis->id }}">
+        @foreach ($kos->subjenis->produkjenis as $jenisProduk)
+            <input type="hidden" name="produk_jenis_id[]" id="jenis-qc-id" value="{{ $jenisProduk->id }}">
+        @endforeach
+        <input type="hidden" name="paket_penjualan_id" id="paket-penjualan-qc-id" value="{{ $kos->subjenis->id }}">
         <div class="w-10/12 my-6">
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
@@ -30,8 +33,8 @@
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="status_qc_second" class="sr-only">Status QC Produk</label>
                     <select name="status_qc_second" id="status_qc_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('status_qc_second') border-red-600 dark:border-red-500 @enderror">
-                        <option value="" hidden>-- Status QC Produk --</option>
-                        <option value="Negoisasi Ulang" class="dark:bg-gray-700">Negoisasi Ulang</option>
+                        <option value="" hidden>Status QC Produk</option>
+                        {{-- <option value="Negosiasi Ulang" class="dark:bg-gray-700">Negosiasi Ulang</option> --}}
                     </select>
                     @error('status_qc_second')
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -74,7 +77,7 @@
                             <td class="px-6 py-4">
                                 <label for="kondisi" class="sr-only">Jenis Paket Produk</label>
                                 <select name="kondisi[]" id="kondisi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                                    <option value="" hidden>-- Kondisi Kelengkapan --</option>
+                                    <option value="" hidden>Kondisi Kelengkapan</option>
                                     <option value="Sangat Baik">Sangat Baik</option>
                                     <option value="Baik">Baik</option>
                                     <option value="Cukup">Cukup</option>

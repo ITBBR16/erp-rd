@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosQcProdukSecond;
+use App\Models\produk\ProdukKelengkapan;
+use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 use Symfony\Component\Console\Input\Input;
 
@@ -105,8 +107,9 @@ class KiosFilterProdukSecondController extends Controller
             }
 
             if($request->has('exclude_kelengkapan_filter_additional')) {
-                $produkJenisId = $request->input('produk_jenis_id');
-                $type = ProdukJenis::findOrFail($produkJenisId);
+                $subJenisId = $request->input('paket_penjualan_filter_id');
+                $searchSubJenis = ProdukSubJenis::findOrFail($subJenisId);
+                $produkJenisList = $searchSubJenis->produkjenis;
 
                 $excludeKelengkapan = $request->input('exclude_kelengkapan_filter_additional');
                 $excludeKondisi = $request->input('exclude_kondisi');
@@ -118,10 +121,9 @@ class KiosFilterProdukSecondController extends Controller
                     return ['kelengkapan' => ucwords(strtolower($jk))];
                 });
 
-                $kelengkapanBaru = $type->kelengkapans()->createMany($formatedKelengkapan->toArray());
+                $kelengkapanBaru = ProdukKelengkapan::createMany($formatedKelengkapan->toArray());
                 $kelengkapanBaruId = $kelengkapanBaru->pluck('id')->toArray();
 
-                
                 foreach($kelengkapanBaruId as $index => $idBaru) {
                     $dataExclude = [
                         'kondisi' => $excludeKondisi[$index],
@@ -131,6 +133,10 @@ class KiosFilterProdukSecondController extends Controller
                         'status' => $statusQc
                     ];
                     $kiosQcPS->kelengkapans()->attach($idBaru, $dataExclude);
+
+                    foreach ($produkJenisList as $produkJenis) {
+                        $produkJenis->kelengkapans()->attach($idBaru);
+                    }
                 }
             }
 

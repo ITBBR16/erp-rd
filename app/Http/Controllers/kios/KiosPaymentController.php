@@ -105,7 +105,7 @@ class KiosPaymentController extends Controller
                         'divisi_id' => $divisiId,
                         'order_id' => $orderId,
                         'status_order' => 'Baru',
-                        'status' => 'Belum Dikirim',
+                        'status' => 'Belum Terverifikasi',
                     ]);
                 } else {
                     $orderSecond = KiosOrderSecond::findOrFail($orderId);
@@ -218,15 +218,40 @@ class KiosPaymentController extends Controller
 
     }
 
-    public function updatePayment(Request $request)
+    public function updatePayment(Request $request, $id)
     {
         $idTransaksi = $request->input('id');
         $statusTransaksi = $request->input('status');
-        $paymentKios = KiosPayment::findOrFail($idTransaksi);
+        $paymentKios = KiosPayment::findOrFail($id);
 
         if ($paymentKios) {
-            $paymentKios->update($statusTransaksi);
-            return response()->json(['status' => 'success', 'message' => 'Product status updated successfully']);
+
+            if ($paymentKios->order_type == 'Baru') {
+                $updateStatus = $paymentKios->order;
+                $updateStatus->status->update('Belum Dikirim');
+                return response()->json(['status' => 'success', 'message' => 'Success verification']);
+
+            } elseif ($paymentKios->order_type == 'Bekas') {
+                $updateStatus = $paymentKios->ordersecond;
+
+                if ($paymentKios->ongkir > 0) {
+                    PengirimanEkspedisi::create([
+                        'divisi_id' => 1,
+                        'order_id' => $id,
+                        'status_order' => 'Bekas',
+                        'status' => 'Belum Dikirim',
+                    ]);
+                    $updateStatus->status->update('Belum Dikirim');
+                } else {
+                    $updateStatus->status->update('Proses QC');
+                }
+
+                return response()->json(['status' => 'success', 'message' => 'Success verification']);
+
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Data not found'], 404);
+            }
+
         } else {
             return response()->json(['status' => 'error', 'message' => 'Data not found'], 404);
         }

@@ -8,6 +8,7 @@ use App\Models\ekspedisi\PengirimanEkspedisi;
 use App\Models\kios\KiosAkunRD;
 use App\Models\kios\KiosKomplainSupplier;
 use App\Models\kios\KiosOrderList;
+use App\Models\kios\KiosStatusKomplain;
 use App\Models\kios\SupplierKios;
 use App\Repositories\kios\KiosRepository;
 use Exception;
@@ -21,8 +22,8 @@ class KiosKomplainController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $statusKomplain = DB::connection('rumahdrone_kios')->table('kios_status_komplain')->get();
-        $dataKomplain = KiosKomplainSupplier::with('validasi.orderLists.order', 'validasi.orderLists.paket.produkjenis')->get();
+        $statusKomplain = KiosStatusKomplain::all();
+        $dataKomplain = KiosKomplainSupplier::all();
         $bankAkun = KiosAkunRD::all();
 
         return view('kios.supplier.komplain.komplain', [
@@ -49,23 +50,23 @@ class KiosKomplainController extends Controller
             $user = auth()->user();
             $divisiId = $user->divisi_id;
             $rules = [
-                'status-komplain' => 'required',
+                'status_komplain' => 'required',
                 'keterangan' => 'required|min:1|max:255',
             ];
             
-            if($request->input('status-komplain') == 'Refund Transfer') {
+            if($request->input('status_komplain') == 'Refund Transfer') {
                 $rules['bank-transfer'] = ['required'];
             }
             
             $request->validate($rules);
             
-            $status = $request->input('status-komplain');
+            $status = $request->input('status_komplain');
             $keterangan = $request->input('keterangan');
             $bankReturn = $request->input('bank');
-            $supplierId = $request->input('id-supplier');
-            $deposit = $request->input('nilai-kurang');
-            $orderId = $request->input('order-id');
-            $orderListId = $request->input('order-list-id');
+            $supplierId = $request->input('id_supplier');
+            $deposit = $request->input('nilai_kurang');
+            $orderId = $request->input('order_id');
+            $orderListId = $request->input('order_list_id');
 
             $komplainSupplier = KiosKomplainSupplier::findOrFail($id);
             $orderList = KiosOrderList::findOrFail($orderListId);

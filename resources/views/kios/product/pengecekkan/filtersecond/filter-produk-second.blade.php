@@ -8,7 +8,7 @@
                     <span class="material-symbols-outlined text-red-500">arrow_back</span>
                 </a>
                 <div class="font-semibold mr-4 text-xl text-gray-700 dark:text-gray-300">
-                    Filter Product / {{ $kos->subjenis->produkjenis->jenis_produk }} {{ $kos->subjenis->paket_penjualan }}
+                    Filter Product / {{ $kos->subjenis->paket_penjualan }}
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
     <form action="{{ route('filter-product-second.update', $kos->qcsecond->id) }}" method="POST" autocomplete="off">
         @csrf
         @method('PUT')
-        <input type="hidden" id="jenis-qc-id" value="{{ $kos->subjenis->produkjenis->id }}">
+        <input type="hidden" name="paket_penjualan_filter_id" id="paket-penjualan-filter-id" value="{{ $kos->subjenis->id }}">
         <div class="w-10/12 my-6">
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
@@ -30,8 +30,8 @@
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="status_qc_second" class="sr-only">Status QC Produk</label>
                     <select name="status_qc_second" id="status_qc_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('status_qc_second') border-red-600 dark:border-red-500 @enderror">
-                        <option value="" hidden>-- Status QC Produk --</option>
-                        <option value="Negoisasi Ulang" class="dark:bg-gray-700">Negoisasi Ulang</option>
+                        <option value="" hidden>Status QC Produk</option>
+                        {{-- <option value="Negosiasi Ulang" class="dark:bg-gray-700">Negosiasi Ulang</option> --}}
                     </select>
                     @error('status_qc_second')
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -65,19 +65,19 @@
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3" style="width: 30%">
                             Nama Kelengkapan
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3" style="width: 15%">
                             Kondisi
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3" style="width: 15%">
                             Serial Number
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3" style="width: 20%">
                             Keterangan
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3" style="width: 15%">
                             Harga Satuan
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -144,7 +144,7 @@
             </div>
         </div>
         <div class="mt-4 text-end">
-            <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
+            <button type="submit" id="btn-filter-second" class="cursor-not-allowed submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" disabled>Submit</button>
             <div class="loader-button-form" style="display: none">
                 <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>
                     <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

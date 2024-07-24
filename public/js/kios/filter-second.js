@@ -3,25 +3,25 @@ $(document).ready(function(){
     const containerFilterExclude = $('#barang-exclude-filter-second');
     const tambahAdditionalFilter = $('#add-second-additional-filter');
     const tambahExcludeBarangQcSecond = $('#add-second-exclude-kelengkapan-filter')
-    const jenisProdukQcSecond = $('#jenis-qc-id');
+    const paketPenjualanQcSecond = $('#paket-penjualan-filter-id');
     let uniqueCount = 20;
 
     tambahAdditionalFilter.on('click', function () {
         uniqueCount++
-        const jenisId = jenisProdukQcSecond.val();
+        const paketId = paketPenjualanQcSecond.val();
 
         let addAdditonalForm = `
             <tr id="additionalKelengkapanFilter-${uniqueCount}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     <label for="kelengkapan_filter_additional${uniqueCount}" class="sr-only">Jenis Paket Produk</label>
                     <select name="kelengkapan_filter_additional[]" id="kelengkapan_filter_additional${uniqueCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                        <option value="" hidden>-- Tambahan Kelengkapan --</option>
+                        <option value="" hidden>Tambahan Kelengkapan</option>
                     </select>
                 </th>
                 <td class="px-6 py-4">
                     <label for="kondisi-${uniqueCount}" class="sr-only">Jenis Paket Produk</label>
                     <select name="additional_kondisi[]" id="kondisi-${uniqueCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                        <option value="" hidden>-- Kondisi Kelengkapan --</option>
+                        <option value="" hidden>Kondisi Kelengkapan</option>
                         <option value="Sangat Baik">Sangat Baik</option>
                         <option value="Baik">Baik</option>
                         <option value="Cukup">Cukup</option>
@@ -38,7 +38,7 @@ $(document).ready(function(){
                 <td class="px-6 py-4 text-right">
                     <div class="relative z-0 w-full group flex items-center">
                         <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                        <input type="text" name="harga_satuan_filter_second[]" id="harga_satuan_filter_second-${uniqueCount}" class="harga_satuan_filter_second block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                        <input type="text" name="harga_satuan_filter_second[]" id="harga_satuan_filter_second-${uniqueCount}" class="harga_satuan_filter_second block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="0" required>
                     </div>
                 </td>
                 <td class="px-6 py-4 text-right">
@@ -53,32 +53,32 @@ $(document).ready(function(){
 
         containerFilterSecond.append(addAdditonalForm);
 
-        if(jenisId){
-            const ddQcKelengkapan = $('#kelengkapan_qc_additional' + uniqueCount);
-            fetch(`/kios/product/getAdditionalKelengkapan/${jenisId}`)
+        if(paketId){
+            const ddFilterKelengkapan = $('#kelengkapan_filter_additional' + uniqueCount);
+            fetch(`/kios/product/getKelengkapans/${paketId}`)
             .then(response => response.json())
             .then(data => {
-                ddQcKelengkapan.empty();
+                ddFilterKelengkapan.empty();
 
                 const defaultOption = $('<option>', {
-                    text: '-- Tambahan Kelengkapan --',
+                    text: 'Tambahan Kelengkapan',
                     value: '',
                     hidden: true
                 });
-                ddQcKelengkapan.append(defaultOption);
+                ddFilterKelengkapan.append(defaultOption);
 
-                data.forEach(kelengkapan => {
+                data.forEach(function(item) {
                     const option = $('<option>', {
-                        value: kelengkapan.id,
-                        text: kelengkapan.kelengkapan
-                    })
-                    .addClass('dark:bg-gray-700');
-                    ddQcKelengkapan.append(option);
+                        value: item.id,
+                        text: item.kelengkapan
+                    }).addClass('dark:bg-gray-700');
+
+                    ddFilterKelengkapan.append(option);
                 });
             })
             .catch(error => console.error('Error:', error));
         } else {
-            ddQcKelengkapan.html('');
+            ddFilterKelengkapan.html('');
         }
     });
 
@@ -133,13 +133,23 @@ $(document).ready(function(){
         uniqueCount--;
     });
 
+    $(document).on('input', '.harga_satuan_filter_second', function () {
+        var inputValue = $(this).val();
+        inputValue = inputValue.replace(/[^\d]/g, '');
+        var parsedValue = parseInt(inputValue, 10);
+        $(this).val(formatRupiah(parsedValue));
+    });
+
+    $(document).on('change', '.harga_satuan_filter_second', function () {
+        updateCekBiayaFilter();
+    });
+
     function formatRupiah(angka) {
         return accounting.formatMoney(angka, "", 0, ".", ",");
     }
 
     function updateCekBiayaFilter() {
         let totalNilai = 0;
-        let buttonFilter = $("#submit_filter_second");
         let biayaAwal = $("#biaya_ambil").val();
         let parsedBiayaAwal = parseFloat(biayaAwal.replace(/\D/g, ''));
 
@@ -154,21 +164,11 @@ $(document).ready(function(){
         $("#biaya_cek_filter").val(showNilai);
 
         if( parsedBiayaAwal === totalNilai ) {
-            buttonFilter.removeClass('cursor-not-allowed');
-            buttonFilter.prop("disabled", false);
+            $("#btn-filter-second").removeClass('cursor-not-allowed').removeAttr('disabled', true);
+        } else {
+            $("#btn-filter-second").addClass('cursor-not-allowed').prop('disabled', true);
         }
 
     }
-
-    $(document).on('input', '.harga_satuan_filter_second', function () {
-        var inputValue = $(this).val();
-        inputValue = inputValue.replace(/[^\d]/g, '');
-        var parsedValue = parseInt(inputValue, 10);
-        $(this).val(formatRupiah(parsedValue));
-    });
-
-    $(document).on('change', '.harga_satuan_filter_second', function () {
-        updateCekBiayaFilter();
-    });
 
 });

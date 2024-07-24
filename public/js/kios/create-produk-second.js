@@ -5,22 +5,6 @@ $(document).ready(function(){
     const kelengkapanSecondContainer = $('#kelengkapan-jual-second');
     let nomorKelengkapan = 1;
 
-    function formatRupiah(angka) {
-        return accounting.formatMoney(angka, "", 0, ".", ",");
-    }
-
-    function hitungModal() {
-        var nilaiSatuanInputs = document.getElementsByName('harga_satuan_second[]');
-        var totalHargaSatuan = 0;
-    
-        for (var i = 0; i < nilaiSatuanInputs.length; i++) {
-            var nilaiSatuan = parseFloat(nilaiSatuanInputs[i].value.replace(/\./g, ''));
-            totalHargaSatuan += nilaiSatuan;
-        }
-
-        hargaModal.val(formatRupiah(totalHargaSatuan));
-    }
-
     hargaJual.on('input', function () {
         var inputValue = $(this).val();
         inputValue = inputValue.replace(/[^\d]/g, '');
@@ -35,13 +19,13 @@ $(document).ready(function(){
             <div class="relative z-0 col-span-2 w-full mb-6 group">
                 <label for="kelengkapan-second-${nomorKelengkapan}"></label>
                 <select name="kelengkapan_second[]" id="kelengkapan-second-${nomorKelengkapan}" data-id="${nomorKelengkapan}" class="kelengkapan-second block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                    <option value="" hidden>-- Kelengkapan Produk --</option>
+                    <option value="" hidden>Kelengkapan Produk</option>
                 </select>
             </div>
             <div class="relative z-0 col-span-2 w-full mb-6 group">
                 <label for="sn-second-${nomorKelengkapan}"></label>
                 <select name="sn_second[]" id="sn-second-${nomorKelengkapan}" data-id="${nomorKelengkapan}" class="sn-second block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                    <option value="" hidden>-- SN Produk --</option>
+                    <option value="" hidden>SN Produk</option>
                 </select>
             </div>
             <div class="relative z-0 col-span-2 w-full group items-center">
@@ -66,17 +50,23 @@ $(document).ready(function(){
             data.forEach(entry => {
                 if (entry.kelengkapans && entry.kelengkapans.length > 0) {
                     const defaultOption = $('<option>', {
-                        text: '-- Kelengkapan Produk --',
+                        text: 'Kelengkapan Produk',
                         hidden: true
                     });
                     $('#kelengkapan-second-' + nomorKelengkapan).append(defaultOption);
-    
+
+                    const kelengkapanUnique = new Set();
+
                     entry.kelengkapans.forEach(kelengkapan => {
-                        const option = $('<option>', {
-                            value: kelengkapan.pivot.produk_kelengkapan_id,
-                            text: kelengkapan.kelengkapan
-                        });
-                        $('#kelengkapan-second-' + nomorKelengkapan).append(option);
+                        if (!kelengkapanUnique.has(kelengkapan.kelengkapan)) {
+                            kelengkapanUnique.add(kelengkapan.kelengkapan);
+
+                            const option = $('<option>', {
+                                value: kelengkapan.pivot.produk_kelengkapan_id,
+                                text: kelengkapan.kelengkapan
+                            });
+                            $('#kelengkapan-second-' + nomorKelengkapan).append(option);
+                        }
                     });
                 } else {
                     console.log('Data kelengkapans kosong untuk entri dengan id ' + entry.id);
@@ -92,8 +82,9 @@ $(document).ready(function(){
         let formId = $(this).data("id");
         $("#form-kelengkapan-second-"+formId).remove();
         nomorKelengkapan--;
-        hitungModal()
-   });
+        hitungModal();
+        checkHarga();
+    });
 
     $(document).on("change", ".kelengkapan-second", function() {
         let ksId = $(this).data("id");
@@ -107,7 +98,7 @@ $(document).ready(function(){
             data.forEach(entry => {
                 if (entry.kelengkapans && entry.kelengkapans.length > 0) {
                     const defaultOption = $('<option>', {
-                        text: '-- SN Produk --',
+                        text: 'SN Produk',
                         hidden: true
                     });
                     $('#sn-second-' + ksId).append(defaultOption);
@@ -128,7 +119,7 @@ $(document).ready(function(){
             console.error('Error fetching data:', error);
         });
 
-   });
+    });
 
     $(document).on("change", ".sn-second", function() {
         let snID = $(this).data("id");
@@ -143,12 +134,45 @@ $(document).ready(function(){
             priceSatuan.val(formatRupiah(data));
 
             hitungModal();
+            checkHarga();
         })
         .catch(error => {
             console.error('Error fetching data:', error);
         });
 
-   });
+    });
 
+    $(document).on('change', '#harga_jual_produk_second', function () {
+            checkHarga();
+    })
+
+    function checkHarga() {
+        let hargaJualSecond = $('#harga_jual_produk_second').val();
+        let hargaModalSecond = $('#modal_produk_second').val();
+        let parsedSrp = parseFloat(hargaJualSecond.replace(/\D/g, ''));
+        let parsedModal = parseFloat(hargaModalSecond.replace(/\D/g, ''));
+
+        if (parsedModal == parsedSrp) {
+            $('#btn-create-paket-second').removeClass('cursor-not-allowed').removeAttr('disabled', true);
+        } else {
+            $('#btn-create-paket-second').addClass('cursor-not-allowed').prop('disabled', true);
+        }
+    }
+
+   function formatRupiah(angka) {
+        return accounting.formatMoney(angka, "", 0, ".", ",");
+    }
+
+    function hitungModal() {
+        var nilaiSatuanInputs = document.getElementsByName('harga_satuan_second[]');
+        var totalHargaSatuan = 0;
+
+        for (var i = 0; i < nilaiSatuanInputs.length; i++) {
+            var nilaiSatuan = parseFloat(nilaiSatuanInputs[i].value.replace(/\./g, ''));
+            totalHargaSatuan += nilaiSatuan;
+        }
+
+        hargaModal.val(formatRupiah(totalHargaSatuan));
+    }
 
  });

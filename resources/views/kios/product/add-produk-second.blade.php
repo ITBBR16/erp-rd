@@ -3,7 +3,7 @@
 @section('container')
 
     <div class="mb-4 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="createPaketSecond" data-tabs-toggle="#createPaketSecondContent" role="tablist">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="addPS" data-tabs-toggle="#addPSTabContent" role="tablist">
             <li class="mr-2" role="presentation">
                 <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dataSecond-tab" data-tabs-target="#dataSecond" type="button" role="tab" aria-controls="dataSecond" aria-selected="false">Data Kelengkapan Second</button>
             </li>
@@ -44,6 +44,8 @@
     @endif
 
     {{-- Tabs --}}
-    @include('kios.product.tabs.data-kelengkapan-second')
-    @include('kios.product.tabs.add-kelengkapan-second')
+    <div class="addPSTabContent">
+        @include('kios.product.tabs.data-kelengkapan-second')
+        @include('kios.product.tabs.add-kelengkapan-second')
+    </div>
 @endsection

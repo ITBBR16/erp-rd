@@ -136,7 +136,7 @@ class KiosShopSecondController extends Controller
                 for($i = 0; $i < $qtyNotNull[$index]; $i++ ) {
                     $pivotData[] = [
                         'produk_kelengkapan_id' => $id,
-                        'qc_id' => 5,
+                        'qc_id' => $qcOrderSecond->id,
                         'status' => 'Not Ready',
                     ];
                 }
