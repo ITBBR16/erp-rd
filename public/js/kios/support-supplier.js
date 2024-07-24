@@ -9,7 +9,7 @@ $(document).ready(function () {
                     <select name="nama_produk[]" id="nama-produk-${itemTrCount}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Select Produk</option>`;
                         products.forEach(function(item) {
-                            addSSForm += `<option value="${item.id}">${item.subjenis.produkjenis.jenis_produk} ${item.subjenis.paket_penjualan}</option>`
+                            addSSForm += `<option value="${item.id}">${item.subjenis.paket_penjualan}</option>`
                         });
                         addSSForm += `
                     </select>

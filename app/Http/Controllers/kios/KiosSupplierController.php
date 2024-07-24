@@ -44,7 +44,7 @@ class KiosSupplierController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $suppliers = SupplierKios::findOrFail($id);
-        $product = KiosProduk::with('subjenis.produkjenis')->get();
+        $product = KiosProduk::all();
 
         return view('kios.supplier.modal.support-supp', [
             'title' => 'Support Supplier',

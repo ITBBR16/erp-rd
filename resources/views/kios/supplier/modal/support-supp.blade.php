@@ -50,7 +50,7 @@
                             <select name="nama_produk[]" id="nama-produk-1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" hidden>Select Produk</option>
                                 @foreach ($products as $produk)
-                                    <option value="{{ $produk->id }}">{{ $produk->subjenis->produkjenis->jenis_produk }} {{ $produk->subjenis->paket_penjualan }}</option>
+                                    <option value="{{ $produk->id }}">{{ $produk->subjenis->paket_penjualan }}</option>
                                 @endforeach
                             </select>
                         </td>
@@ -78,16 +78,14 @@
                             </div>
                         </td>
                         <td class="px-4 py-4">
-                            {{-- <button type="button" class="remove-form-ss" data-id="1">
-                                <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
-                            </button> --}}
+                            
                         </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr class="font-semibold text-gray-900 dark:text-white">
                         <td class="px-4 py-3" colspan="4">
-                            <div class="flex justify-between">
+                            <div class="flex justify-between text-rose-600">
                                 <div class="flex cursor-pointer mt-4 hover:text-red-400">
                                     <button type="button" id="add-ss-form" class="flex flex-row justify-between gap-2">
                                         <span class="material-symbols-outlined">add_circle</span>
