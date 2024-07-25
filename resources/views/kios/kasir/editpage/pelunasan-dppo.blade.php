@@ -183,12 +183,12 @@
                         </td>
                         <td class="px-4 py-4">
                             <input type="hidden" name="item_id[]" id="item-id-{{ $index }}" value="{{ $detail->produkKios->subjenis->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
-                            <input type="text" name="item_name[]" id="item-name-{{ $index }}" value="{{ $detail->produkKios->subjenis->produkjenis->jenis_produk }} {{ $detail->produkKios->subjenis->paket_penjualan }}" data-id="{{ $index }}" class="item_name bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                            <input type="text" name="item_name[]" id="item-name-{{ $index }}" value="{{ $detail->produkKios->subjenis->produkjenis->jenis_produk }} {{ $detail->produkKios->subjenis->paket_penjualan }}" data-id="{{ $index }}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
                         </td>
                         <td class="px-4 py-4">
-                            <label for="kasir_sn-{{ $index }}"></label>
-                            <select name="kasir_sn[]" id="kasir_sn-{{ $index }}" data-id="{{ $index }}" class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                <option value="" hidden>-- Pilih SN --</option>
+                            <label for="pelunasan-sn-{{ $index }}"></label>
+                            <select name="kasir_sn[]" id="pelunasan-sn-{{ $index }}" data-id="{{ $index }}" class="pelunasan-sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <option value="" hidden>Pilih SN</option>
                             </select>
                         </td>
                         <td class="px-4 py-4">

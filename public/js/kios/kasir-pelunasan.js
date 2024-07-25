@@ -37,11 +37,11 @@ function getSNPelunasan(jenisTransaksi, itemId, index) {
     fetch(`/kios/kasir/getSerialNumber/${jenisTransaksi}/${itemId}`)
     .then(response => response.json())
     .then(data => {
-        var formSN = $('#kasir_sn-' + index);
+        var formSN = $('#pelunasan-sn-' + index);
         formSN.empty();
 
             const defaultOption = $('<option>', {
-                text: '-- Pilih SN --',
+                text: 'Pilih SN',
                 value: '',
                 hidden: true
             });
@@ -121,7 +121,7 @@ $(document).ready(function(){
     const pelunasanContainer = $("#pelunasan-container");
     let itemCount = $("#pelunasan-container tr").length;
 
-    $('.item_name').each(function() {
+    $('.item-pelunasan').each(function() {
         let index = $(this).data("id");
         let jenisTransaksi = $('#jenis-transaksi-'+index).val();
         var itemId = $('#item-id-'+index).val();
@@ -136,7 +136,7 @@ $(document).ready(function(){
             <td class="px-4 py-4">
                 <label for="jenis-transaksi-${itemCount}"></label>
                 <select name="jenis_transaksi[]" id="jenis-transaksi-${itemCount}" data-id="${itemCount}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                    <option value="" hidden>-- Pilih Jenis Transaksi --</option>
+                    <option value="" hidden>Pilih Jenis Transaksi</option>
                     <option value="drone_baru">Drone Baru</option>
                     <option value="drone_bekas">Drone Bekas</option>
                     <option value="part_baru">Part Baru</option>
@@ -145,12 +145,12 @@ $(document).ready(function(){
             </td>
             <td class="px-4 py-4">
                 <input type="hidden" name="item_id[]" id="item-id-${itemCount}" class="item_id bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
-                <input type="text" name="item_name[]" id="item-name-${itemCount}" data-id="${itemCount}" class="item_name bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                <input type="text" name="item_name[]" id="item-name-${itemCount}" data-id="${itemCount}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
             </td>
             <td class="px-4 py-4">
-                <label for="kasir_sn-${itemCount}"></label>
-                <select name="kasir_sn[]" id="kasir_sn-${itemCount}" data-id="${itemCount}" class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                    <option value="" hidden>-- Pilih SN --</option>
+                <label for="pelunasan-sn-${itemCount}"></label>
+                <select name="kasir_sn[]" id="pelunasan-sn-${itemCount}" data-id="${itemCount}" class="pelunasan-sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <option value="" hidden>Pilih SN</option>
                 </select>
             </td>
             <td class="px-4 py-4">
@@ -171,7 +171,7 @@ $(document).ready(function(){
 
     });
 
-    $(document).on('focus', '.item_name', function () {
+    $(document).on('focus', '.item-pelunasan', function () {
         let itemNameId = $(this).data("id");
         let jenisTransaksi = $('#jenis-transaksi-'+itemNameId).val();
 
@@ -250,9 +250,9 @@ $(document).ready(function(){
         }
     });
 
-    $(document).on('change', '.item_name', function () {
+    $(document).on('change', '.item-pelunasan', function () {
         let formIdItem = $(this).data("id");
-        var formSN = $('#kasir_sn-'+formIdItem);
+        var formSN = $('#pelunasan-sn-'+formIdItem);
         let jenisTransaksi = $('#jenis-transaksi-'+formIdItem).val();
         var idItem = $('#item-id-'+formIdItem).val();
         fetch(`/kios/kasir/getSerialNumber/${jenisTransaksi}/${idItem}`)
@@ -262,7 +262,7 @@ $(document).ready(function(){
             formSN.empty();
 
             const defaultOption = $('<option>', {
-                text: '-- Pilih SN --',
+                text: 'Pilih SN',
                 value: '',
                 hidden: true
             });
@@ -283,9 +283,9 @@ $(document).ready(function(){
         });
     });
 
-    $(document).on('change', '.kasir_sn', function () {
+    $(document).on('change', '.pelunasan-sn', function () {
         let formIdItem = $(this).data("id");
-        var formSN = $('#kasir_sn-'+formIdItem);
+        var formSN = $('#pelunasan-sn-'+formIdItem);
         var formHarga = $('#kasir-harga-'+formIdItem);
         let jenisTransaksi = $('#jenis-transaksi-'+formIdItem).val();
         var idItem = $('#item-id-'+formIdItem).val();
@@ -363,6 +363,6 @@ $(document).ready(function(){
 
     $('#button-download-invoice').click(function() {
         downloadPdf();
-    })
+    });
 
  });

@@ -177,10 +177,9 @@ class KiosKasirController extends Controller
     public function autocomplete($jenisTransaksi)
     {
         if ($jenisTransaksi == 'drone_baru') {
-            // $items = ProdukSubJenis::with('produkjenis')->get();
-            $items = KiosProduk::with('subjenis.produkjenis')->where('status', 'Ready')->orWhere('status', 'Promo')->get();
+            $items = KiosProduk::with('subjenis')->where('status', 'Ready')->orWhere('status', 'Promo')->get();
         } elseif ($jenisTransaksi == 'drone_bekas') {
-            $items = KiosProdukSecond::with('subjenis.produkjenis')->where('status', 'Ready')->get();
+            $items = KiosProdukSecond::with('subjenis')->where('status', 'Ready')->get();
         } elseif ($jenisTransaksi == 'part_baru' || $jenisTransaksi == 'part_bekas') {
             
             $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
@@ -195,7 +194,7 @@ class KiosKasirController extends Controller
                     'sku' => $dataNeed[0],
                     'nama_part' => $dataNeed[2],
                     'srp_part' => $dataNeed[8],
-                ];
+                ];    
                 $resultData[] = $neededData;
             }
 
@@ -217,13 +216,32 @@ class KiosKasirController extends Controller
             } else {
                 $nilai = $dataProduk->srp;
             }
-    
+
             $dataSN = KiosSerialNumber::where('produk_id', $produkId)->where('status', 'Ready')->get();
         } elseif($jenisTransaksi == 'drone_bekas') {
             $nilai = KiosProdukSecond::where('sub_jenis_id', $id)->value('srp');
             $dataSN = KiosProdukSecond::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
+        } elseif ($jenisTransaksi == 'part_baru' || $jenisTransaksi == 'part_bekas') {
+
+            $urlApiGudang = 'https://script.google.com/macros/s/AKfycbzWFWbEhcdIyslBXQQ4QjZ9DI_nn1JYcjHHZYoHgwyDGFV7Izs3WOf11fBdW6YysPpYOQ/exec';
+            $response = Http::post($urlApiGudang, [
+                'sku' => $id
+            ]);
+
+            $data = $response->json();
+            $resultData = [];
+            foreach ($data['data'] as $dataNeed) {
+                $dataII = [
+                    'idItem' => $dataNeed,
+                ];
+                $resultData[] = $dataII;
+            }
+
+            $dataSN = $resultData;
+            $nilai = $data['nilai'];
+
         }
-        
+
         return response()->json(['data_sn' => $dataSN, 'nilai' => $nilai]);
     }
 
