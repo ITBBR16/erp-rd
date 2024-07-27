@@ -49,9 +49,9 @@
                 </div>
                 <div class="grid grid-cols-2 w-full gap-6">
                     <div>
-                        <label for="nama_customer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Customer :</label>
-                        <select name="nama_customer" id="nama_customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>-- Select Customer --</option>
+                        <label for="kasir-nama-customer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Customer :</label>
+                        <select name="nama_customer" id="kasir-nama-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <option value="" hidden>Select Customer</option>
                             @foreach ($customerdata as $customer)
                                 <option value="{{ $customer->id }}">{{ $customer->first_name }} {{ $customer->last_name }}</option>
                             @endforeach
@@ -60,7 +60,7 @@
                     <div>
                         <label for="kasir_metode_pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
                         <select name="kasir_metode_pembayaran" id="kasir_metode_pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>-- Select Metode Pembayaran --</option>
+                            <option value="" hidden>Select Metode Pembayaran</option>
                             @foreach ($akunrd as $akun)
                                 <option value="{{ $akun->id }}">{{ $akun->nama_akun }}</option>
                             @endforeach
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div>
-                        <label for="keterangan-pembayaran">Keterangan :</label>
+                        <label for="keterangan-pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan :</label>
                         <input type="text" name="keterangan_pembayaran" id="keterangan-pembayaran" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Keterangan . . .">
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                         </div>
                     </div>
                     <button type="button" data-modal-target="kasir-invoice" data-modal-toggle="kasir-invoice" class="review-invoice text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full">Review Invoice</button>
-                    <button type="button" class="review-invoice text-white mt-4 bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full">Hold Payment</button>
+                    <button type="submit" name="status_kasir" value="Hold" class="review-invoice text-white mt-4 bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full">Hold Payment</button>
                 </div>
             </div>
         </div>

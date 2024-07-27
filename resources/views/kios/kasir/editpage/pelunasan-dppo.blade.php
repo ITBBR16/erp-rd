@@ -65,7 +65,7 @@
                 <div>
                     <label for="pelunasan-discount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Discount :</label>
                     <div class="flex">
-                        <input type="hidden" name="nominal_dp" id="nominal_dp" value="{{ $dataTransaksi->transaksidp->jumlah_pembayaran }}">
+                        <input type="hidden" name="nominal_dp" id="nominal_dp" value="{{ $dataTransaksi->transaksidp->jumlah_pembayaran ?? 0 }}">
                         <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
                         <input type="text" name="pelunasan_discount" id="pelunasan-discount" class="pelunasan-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
                     </div>
@@ -104,7 +104,7 @@
                         <p class="font-semibold text-gray-900 dark:text-white">DP :</p>
                     </div>
                     <div class="flex justify-end ml-auto">
-                        <p id="pelunasan-box-dp" class="text-gray-900 font-normal dark:text-white">Rp. {{ number_format($dataTransaksi->transaksidp->jumlah_pembayaran, 0, ',', '.') }}</p>
+                        <p id="pelunasan-box-dp" class="text-gray-900 font-normal dark:text-white">Rp. {{ number_format($dataTransaksi->transaksidp->jumlah_pembayaran ?? 0, 0, ',', '.') }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -137,7 +137,7 @@
                     </div>
                     <div class="flex justify-end ml-auto">
                         @php
-                            $totalNilai = $dataTransaksi->total_harga - $dataTransaksi->transaksidp->jumlah_pembayaran;
+                            $totalNilai = $dataTransaksi->total_harga + $dataTransaksi->tax - ($dataTransaksi->transaksidp->jumlah_pembayaran ?? 0);
                         @endphp
                         <p id="pelunasan-box-total" class="text-gray-900 font-normal dark:text-white">Rp. {{ number_format($totalNilai, 0, ',', '.') }}</p>
                     </div>
@@ -182,8 +182,8 @@
                             </select>
                         </td>
                         <td class="px-4 py-4">
-                            <input type="hidden" name="item_id[]" id="item-id-{{ $index }}" value="{{ $detail->produkKios->subjenis->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
-                            <input type="text" name="item_name[]" id="item-name-{{ $index }}" value="{{ $detail->produkKios->subjenis->produkjenis->jenis_produk }} {{ $detail->produkKios->subjenis->paket_penjualan }}" data-id="{{ $index }}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                            <input type="hidden" name="item_id[]" id="item-id-pelunasan-{{ $index }}" value="{{ $detail->produkKios->subjenis->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                            <input type="text" name="item_name[]" id="item-name-pelunasan-{{ $index }}" value="{{ $detail->produkKios->subjenis->paket_penjualan }}" data-id="{{ $index }}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
                         </td>
                         <td class="px-4 py-4">
                             <label for="pelunasan-sn-{{ $index }}"></label>
@@ -192,7 +192,8 @@
                             </select>
                         </td>
                         <td class="px-4 py-4">
-                            <input type="text" name="kasir_harga[]" id="kasir-harga-{{ $index }}" value="Rp. {{ number_format($detail->harga_jual, 0, ',', '.') }}" data-id="{{ $index }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
+                            <input type="hidden" name="kasir_modal_part[]" id="pelunasan-modal-part-{{ $index }}">
+                            <input type="text" name="kasir_harga[]" id="pelunasan-harga-{{ $index }}" value="Rp. {{ number_format($detail->harga_jual, 0, ',', '.') }}" data-id="{{ $index }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
                         </td>
                         <td class="px-4 py-4">
                             <input type="checkbox" name="checkbox_tax_pelunasan[]" id="checkbox-tax-{{ $index }}" data-id="{{ $index }}" class="pelunasan-checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">

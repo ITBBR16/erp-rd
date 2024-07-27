@@ -100,7 +100,8 @@ class KiosPODPController extends Controller
             $pelunasanTax = $request->input('pelunasan_tax');
 
             // Ambil semua sub jenis yang diperlukan
-            $subJenisIds = array_unique($request->input('item_id'));
+            $itemIdProduk = $request->input('item_id');
+            $subJenisIds = array_unique($itemIdProduk);
             $dataProduk = KiosProduk::whereIn('sub_jenis_id', $subJenisIds)->get();
 
             // Detial Transaksi
@@ -109,8 +110,16 @@ class KiosPODPController extends Controller
             $pelunasanItem = $request->input('item_id');
             $pelunasanSerialNumber = $request->input('kasir_sn');
             $pelunasanSRP = $this->sanitizeNominal($request->input('kasir_harga'));
+            $pelunasanModalPart = $request->input('kasir_modal_part');
+            $statusTransaksi = $request->input('status_pelunasan');
+
+            $totalHargaKiosBaru = 0;
+            $totalHargaKiosBekas = 0;
+            $totalHargaGudang = 0;
             $totalHarga = 0;
             $modalKios = 0;
+            $modalKiosBekas = 0;
+            $modalGudang = 0;
 
             if(count(array_unique($pelunasanSerialNumber)) !== count($pelunasanSerialNumber)) {
                 return back()->with('error', 'Serial Number tidak boleh ada yang sama.');

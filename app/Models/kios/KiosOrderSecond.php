@@ -58,4 +58,9 @@ class KiosOrderSecond extends Model
         return $this->hasMany(KiosPayment::class, 'order_id');
     }
 
+    public function alasanJual()
+    {
+        return $this->belongsTo(KiosAlasanJual::class, 'alasan_jual_id');
+    }
+
 }

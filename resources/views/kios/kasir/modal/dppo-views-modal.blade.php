@@ -33,18 +33,21 @@
                             </div>
                             <div class="grid-rows-2">
                                 <h3 class="text-base font-medium text-gray-900 dark:text-white">Total Nominal Belanja</h3>
-                                <h3 class="text-base text-gray-900 dark:text-white">Rp. {{ number_format($transaksi->total_harga, 0, ',', '.') }}</h3>
+                                @php
+                                    $totalBelanja = $transaksi->total_harga + $transaksi->ongkir + $transaksi->tax - $transaksi->discount;
+                                @endphp
+                                <h3 class="text-base text-gray-900 dark:text-white">Rp. {{ number_format($totalBelanja, 0, ',', '.') }}</h3>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-6 mb-4 pb-4 border-b-2">
                             <div class="grid-rows-2">
                                 <h3 class="text-base font-medium text-gray-900 dark:text-white">Total DP Customer</h3>
-                                <h3 class="text-base text-gray-900 dark:text-white">Rp. {{ number_format($transaksi->transaksidp->jumlah_pembayaran, 0, ',', '.') }}</h3>
+                                <h3 class="text-base text-gray-900 dark:text-white">Rp. {{ number_format($transaksi->transaksidp->jumlah_pembayaran ?? 0, 0, ',', '.') }}</h3>
                             </div>
                             <div class="grid-rows-2">
                                 <h3 class="text-base font-medium text-gray-900 dark:text-white">Sisa Pembayaran</h3>
                                 @php
-                                    $totalSisa = $transaksi->total_harga - $transaksi->transaksidp->jumlah_pembayaran;
+                                    $totalSisa = $transaksi->total_harga + $transaksi->ongkir + $transaksi->tax - $transaksi->discount - ($transaksi->transaksidp->jumlah_pembayaran ?? 0);
                                 @endphp
                                 <h3 class="text-base text-gray-900 dark:text-white">Rp. {{ number_format($totalSisa, 0, ',', '.') }}</h3>
                             </div>
@@ -60,8 +63,11 @@
                             <li class="py-3 sm:py-4">
                                 @foreach ($transaksi->detailtransaksi->unique('kios_produk_id') as $detail)
                                     <div class="grid grid-cols-7 gap-4 mb-4">
-                                        <div class="col-span-2 text-sm text-gray-900 dark:text-white">{{ $detail->jenis_transaksi }}</div>
-                                        <div class="col-span-4 text-sm text-gray-900 dark:text-white">{{ $detail->produkKios->subjenis->produkjenis->jenis_produk }} {{ $detail->produkKios->subjenis->paket_penjualan }}</div>
+                                        @php
+                                            $parsedString = ucwords(str_replace('_', ' ', $detail->jenis_transaksi));
+                                        @endphp
+                                        <div class="col-span-2 text-sm text-gray-900 dark:text-white">{{ $parsedString }}</div>
+                                        <div class="col-span-4 text-sm text-gray-900 dark:text-white">{{ $detail->produkKios->subjenis->paket_penjualan }}</div>
                                         <div class="text-sm text-gray-900 dark:text-white">{{ $transaksi->detailtransaksi->where('kios_produk_id', $detail->kios_produk_id)->count() }}</div>
                                     </div>
                                 @endforeach

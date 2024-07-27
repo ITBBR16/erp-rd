@@ -1,3 +1,11 @@
+function formatRupiah(angka) {
+    return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
+}
+
+function formatAngka(angka) {
+    return accounting.formatMoney(angka, "", 0, ".", ",");
+}
+
 function updateBoxDPPO() {
     let dppoSubtotal = 0;
     let dppoNominal = parseFloat($("#dppo-nominal").val().replace(/\./g, '')) || 0;
@@ -92,11 +100,9 @@ $(document).ready(function () {
                 <td class="px-4 py-4">
                     <label for="dppo-jenis-transaksi-${itemBodyCount}"></label>
                     <select name="dppo_jenis_transaksi[]" id="dppo-jenis-transaksi-${itemBodyCount}" data-id="${itemBodyCount}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                        <option value="" hidden>-- Jenis Transaksi --</option>
+                        <option value="" hidden>Jenis Transaksi</option>
                         <option value="drone_baru">Drone Baru</option>
                         <option value="drone_bekas">Drone Bekas</option>
-                        <option value="part_baru">Part Baru</option>
-                        <option value="part_bekas">Part Bekas</option>
                     </select>
                 </td>
                 <td class="px-4 py-4">
@@ -131,77 +137,40 @@ $(document).ready(function () {
         let produkNameId = $(this).data("id");
         let jenisTransaksi = $('#dppo-jenis-transaksi-'+produkNameId).val();
 
-        if (jenisTransaksi === 'part_baru' || jenisTransaksi === 'part_bekas') {
-            $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
-                console.table(data);
-                $("#nama-produk-"+produkNameId).autocomplete({
-                    source: function(request, response) {
-                        
-                        var term = request.term.toLowerCase();
-                        var filteredData = data.filter(function (part) {
-                            return(part.nama_part.toLowerCase().indexOf(term) !== -1)
-                        });
+        $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
+            $("#nama-produk-"+produkNameId).autocomplete({
+                source: function(request, response) {
+                    
+                    var term = request.term.toLowerCase();
+                    var filteredData = data.filter(function(item) {
+                        return (item.subjenis.produkjenis.jenis_produk.toLowerCase().indexOf(term) !== -1) || 
+                                (item.subjenis.paket_penjualan.toLowerCase().indexOf(term) !== -1);
+                    });
 
-                        var formattedData = filteredData.map(function (part) {
-                            return {
-                                label: part.nama_part,
-                                value: part.nama_part,
-                                id: part.sku
-                            };
-                        });
+                    var formattedData = filteredData.map(function(item) {
+                        return {
+                            label: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
+                            value: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
+                            id: item.subjenis.id
+                        };
+                    });
+    
+                    response(formattedData);
+                },
+                autoFocus: true,
+                select: function(event, ui) {
+                    var selectedValue = ui.item.value;
+                    var selectedLabel = ui.item.label;
+                    var selectedId = ui.item.id;
 
-                        response(formattedData);
-                    },
-                    autoFocus: true,
-                    select: function(event, ui) {
-                        var selectedValue = ui.item.value;
-                        var selectedLabel = ui.item.label;
-                        var selectedId = ui.item.id;
-    
-                        $("#dppo-item-id-"+produkNameId).val(selectedId);
-                    }
-                }).autocomplete("widget").addClass("max-h-60 max-w-64 overflow-y-auto cursor-pointer px-2 w-64 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
-    
-            }).fail(function(error) {
-                console.error('Error:', error);
-            });
+                    $("#dppo-item-id-"+produkNameId).val(selectedId);
+                }
+            }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
 
-        } else {
-            $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
-                $("#nama-produk-"+produkNameId).autocomplete({
-                    source: function(request, response) {
-                        
-                        var term = request.term.toLowerCase();
-                        var filteredData = data.filter(function(item) {
-                            return (item.subjenis.produkjenis.jenis_produk.toLowerCase().indexOf(term) !== -1) || 
-                                    (item.subjenis.paket_penjualan.toLowerCase().indexOf(term) !== -1);
-                        });
-    
-                        var formattedData = filteredData.map(function(item) {
-                            return {
-                                label: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
-                                value: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
-                                id: item.subjenis.id
-                            };
-                        });
-        
-                        response(formattedData);
-                    },
-                    autoFocus: true,
-                    select: function(event, ui) {
-                        var selectedValue = ui.item.value;
-                        var selectedLabel = ui.item.label;
-                        var selectedId = ui.item.id;
-    
-                        $("#dppo-item-id-"+produkNameId).val(selectedId);
-                    }
-                }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
-    
-            }).fail(function(error) {
-                console.error('Error:', error);
-            });
+        }).fail(function(error) {
+            console.error('Error:', error);
+        });
 
-        }
    });
 
    $(document).on("click", "#dppo-review-invoice", function () {
@@ -224,7 +193,6 @@ $(document).ready(function () {
         
         updateInvoiceDppo();
     });
-
 
    $(document).on('change', '.dppo_nama_produk', function () {
         let idItem = $(this).data("id");

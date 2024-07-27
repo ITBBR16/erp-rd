@@ -5,7 +5,6 @@ export default {
     "./resources/**/*.js",
     "./resources/**/*.vue",
     "./node_modules/flowbite/**/*.js",
-    "node_modules/preline/dist/*.js",
   ],
   theme: {
     extend: {},
@@ -13,7 +12,6 @@ export default {
   plugins: [
     require('flowbite/plugin'),
     require('tailwind-scrollbar'),
-    require('preline/plugin'),
   ],
 }
 

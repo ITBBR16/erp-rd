@@ -19,6 +19,7 @@ use App\Models\produk\ProdukKelengkapan;
 use App\Models\kios\KiosStatusPembayaran;
 use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
+use App\Models\kios\KiosAlasanJual;
 use App\Models\kios\KiosMetodePembelianSecond;
 use App\Models\kios\KiosMetodePembayaranSecond;
 
@@ -36,6 +37,7 @@ class KiosShopSecondController extends Controller
         $marketplace = KiosMarketplace::all();
         $kiosProduk = ProdukSubJenis::all();
         $kelengkapan = ProdukKelengkapan::all();
+        $alasanJual = KiosAlasanJual::all();
         $secondOrder = KiosOrderSecond::orderBy('created_at', 'desc')->get();
 
         return view('kios.shop.index-second', [
@@ -52,6 +54,7 @@ class KiosShopSecondController extends Controller
             'statusPembayaran' => $statusPembayaran,
             'orderSecond' => $secondOrder,
             'marketplace' => $marketplace,
+            'alasanJual' => $alasanJual,
         ]);
     }
 
@@ -93,7 +96,7 @@ class KiosShopSecondController extends Controller
                 'come_from' => $comeFrom,
                 'customer_id' => $customerInput,
                 'asal_id' => $asalId,
-                'alasan_jual' => $alasanJual,
+                'alasan_jual_id' => $alasanJual,
                 'metode_pembelian_id' => $mpId,
                 'tanggal_pembelian' => $tanggalPembelian,
                 'sub_jenis_id' => $request->input('paket_penjualan_second'),

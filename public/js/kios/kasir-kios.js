@@ -164,7 +164,7 @@ $(document).ready(function(){
                 </select>
             </td>
             <td class="px-4 py-4">
-                <input type="hidden" name="item_id[]" id="item-id-${itemCount}" class="item_id bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                <input type="hidden" name="item_id[]" id="item-id-${itemCount}" class="item_id" required>
                 <input type="text" name="item_name[]" id="item-name-${itemCount}" data-id="${itemCount}" class="item_name bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
             </td>
             <td class="px-4 py-4">
@@ -174,6 +174,7 @@ $(document).ready(function(){
                 </select>
             </td>
             <td class="px-4 py-4">
+                <input type="hidden" name="kasir_modal_part[]" id="kasir-modal-part-${itemCount}">
                 <input type="text" name="kasir_harga[]" id="kasir-harga-${itemCount}" data-id="${itemCount}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
             </td>
             <td class="px-4 py-4">
@@ -250,6 +251,8 @@ $(document).ready(function(){
 
     $(document).on('change', '.item_name', function () {
         let formIdItem = $(this).data("id");
+        var formHarga = $('#kasir-harga-'+formIdItem);
+        var formModalPart = $('#kasir-modal-part-'+formIdItem);
         var formSN = $('#kasir_sn-'+formIdItem);
         let jenisTransaksi = $('#jenis-transaksi-'+formIdItem).val();
         var idItem = $('#item-id-'+formIdItem).val();
@@ -275,6 +278,13 @@ $(document).ready(function(){
                     .addClass('dark:bg-gray-700');
                     formSN.append(option);
                 });
+
+                var nilaiPart = formatRupiah(data.nilai.nilai);
+                formHarga.val(nilaiPart);
+                formModalPart.val(data.nilai.modal);
+
+                updateSubtotalBox();
+
             } else {
                 data.data_sn.forEach(serialnumber => {
                     const option = $('<option>', {
@@ -288,7 +298,7 @@ $(document).ready(function(){
 
         })
         .catch(error => {
-            console.error('Error fetching data:', error);
+            alert('Error fetching data:' + error);
         });
     });
 
@@ -301,22 +311,26 @@ $(document).ready(function(){
         fetch(`/kios/kasir/getSerialNumber/${jenisTransaksi}/${idItem}`)
         .then(response => response.json())
         .then(data => {
-            var harga = formatRupiah(data.nilai);
-            formHarga.val(harga);
-            
+            if (jenisTransaksi == 'part_baru' || jenisTransaksi == 'part_bekas') {
+                
+            } else {
+                var nilaiDrone = formatRupiah(data.nilai);
+                formHarga.val(nilaiDrone);
+            }
+
             updateSubtotalBox();
         })
         .catch(error => {
             console.error('Error fetching data:', error);
         });
-
+ 
     });
 
     $(document).on('change', '.checkbox-tax', function() {
         updateInvoice();
         updateSubtotalBox();
     });
- 
+
     $(document).on("click", ".remove-kasir-item", function() {
          let itemNameId = $(this).data("id");
          $("#kasir-item-"+itemNameId).remove();
@@ -324,12 +338,12 @@ $(document).ready(function(){
          updateInvoice()
          updateSubtotalBox();
     });
- 
+
     $(document).on("click", ".review-invoice", function () {
         var invoiceNamaCus = $('#invoice-nama-customer');
         var invoiceTlp = $('#invoice-no-tlp');
         var invoiceJalan = $('#invoice-jalan');
-        var namaCustomer = $('#nama_customer').val();
+        var namaCustomer = $('#kasir-nama-customer').val();
         fetch(`/kios/kasir/getCustomer/${namaCustomer}`)
         .then(response => response.json())
         .then(data => {

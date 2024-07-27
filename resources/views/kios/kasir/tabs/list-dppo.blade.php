@@ -47,11 +47,11 @@
                                 {{ \Carbon\Carbon::parse($item->created_at)->isoFormat('D MMMM YYYY') }}
                             </td>
                             <td class="px-6 py-2">
-                                Rp. {{ number_format($item->transaksidp->jumlah_pembayaran, 0, ',', '.') }}
+                                Rp. {{ number_format($item->transaksidp->jumlah_pembayaran ?? 0, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-2">
                                 @php
-                                    $totalSisa = $item->total_harga - $item->transaksidp->jumlah_pembayaran;
+                                    $totalSisa = $item->total_harga + $item->ongkir + $item->tax - $item->discount - ($item->transaksidp->jumlah_pembayaran ?? 0);
                                 @endphp
                                 Rp. {{ number_format($totalSisa, 0, ',', '.') }}
                             </td>
@@ -96,11 +96,12 @@
                                 </li>
                             </ul>
                         </div>
+                        {{-- Modal List DP PO --}}
+                        @include('kios.kasir.modal.dppo-views-modal')
                     @endif
                 @endforeach
             </tbody>
         </table>
     </div>
-    {{-- Modal List DP PO --}}
-    @include('kios.kasir.modal.dppo-views-modal')
+    
 </div>

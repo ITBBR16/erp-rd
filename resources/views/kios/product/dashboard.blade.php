@@ -158,11 +158,11 @@
                                             $fileId = isset($matches[1]) ? $matches[1] : null;
                                         @endphp
                                         @if (!empty($imageLink))
-                                            <img class="flex-shrink-0 w-10 h-10" src="https://drive.google.com/thumbnail?id={{ $fileId }}" alt="{{ $tp->produkKios->subjenis->produkjenis->jenis_produk }} {{ $tp->produkKios->subjenis->paket_penjualan }}">
+                                            <img class="flex-shrink-0 w-10 h-10" src="https://drive.google.com/thumbnail?id={{ $fileId }}" alt="{{ $tp->produkKios->subjenis->paket_penjualan }}">
                                         @endif
                                         <div class="ml-3">
                                             <p class="font-medium text-gray-900 truncate dark:text-white">
-                                                {{ $tp->produkKios->subjenis->produkjenis->jenis_produk }} {{ $tp->produkKios->subjenis->paket_penjualan }}
+                                                {{ $tp->produkKios->subjenis->paket_penjualan }}
                                             </p>
                                         </div>
                                     </div>
@@ -302,7 +302,7 @@
                         @foreach ($produkPromo as $promo)
                             <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                 <th class="px-6 py-2">
-                                    {{ $promo->subjenis->produkjenis->jenis_produk }} {{ $promo->subjenis->paket_penjualan }}
+                                    {{ $promo->subjenis->paket_penjualan }}
                                 </th>
                                 <td class="px-6 py-2">
                                     Rp. {{ number_format($promo->harga_promo, 0, ',', '.') }}

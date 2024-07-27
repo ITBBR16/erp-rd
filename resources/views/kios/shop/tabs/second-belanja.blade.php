@@ -1,8 +1,8 @@
 <div class="hidden p-4" id="second-product" role="tabpanel" aria-labelledby="second-product-tab">
     <form action="{{ route('shop-second.store') }}" method="POST" autocomplete="off">
         @csrf
-        <h3 class="mt-3 text-gray-900 dark:text-white font-semibold text-xl">Data Supplier</h3>
-        <h5 class="mb-3 text-gray-900 dark:text-white font-semibold text-xs">Jika Belum Ada Data Customer <a href="/kios/customer/daily-recap" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline" target="_blank">Tekan Disini</a></h5>
+        <h3 class="mt-3 text-gray-900 dark:text-white font-semibold text-xl">Data Penjual</h3>
+        <h5 class="mb-3 text-gray-900 dark:text-white font-semibold text-xs">Jika belum ada Data Penjual, <a href="/kios/customer/daily-recap" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline" target="_blank">Tekan Disini</a></h5>
         <div class="w-10/12">
             <div class="grid md:grid-cols-3 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
@@ -30,8 +30,13 @@
                         @enderror
                     </div>
                     <div id="alasan-container" style="display: none">
-                        <input type="text" name="alasan_jual" id="alasan-jual" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
-                        <label for="alasan-jual" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Alasan Jual</label>
+                        <label for="alasan-jual" class="sr-only">Alasan Jual</label>
+                        <select name="alasan_jual" id="alasan-jual" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                            <option value="" hidden>Pilih Alasan Jual</option>
+                            @foreach ($alasanJual as $alasan)
+                                <option value="{{ $alasan->id }}">{{ $alasan->alasan }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="relative z-0 w-full mb-6 group">

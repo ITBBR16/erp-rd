@@ -77,7 +77,7 @@
                 @foreach ($produkseconds as $key => $pd)
                 <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
                     <td class="px-6 py-2">
-                        {{ $pd->subjenis->produkjenis->jenis_produk }} {{ $pd->subjenis->paket_penjualan }}
+                        {{ $pd->subjenis->paket_penjualan }}
                     </td>
                     <td class="px-6 py-2">
                         {{ $pd->serial_number }}

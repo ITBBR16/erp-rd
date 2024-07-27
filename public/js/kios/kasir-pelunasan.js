@@ -1,3 +1,11 @@
+function formatRupiah(angka) {
+    return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
+}
+
+function formatAngka(angka) {
+    return accounting.formatMoney(angka, "", 0, ".", ",");
+}
+
 function updateBoxPelunasan() {
     const inputTax = $("#pelunasan-tax");
     let pelunasanSubtotal = 0;
@@ -117,17 +125,43 @@ function updatePelunasanInvoice() {
     $("#invoice-pelunasan-container").html(invoiceContent);
 }
 
+function setupAutocomplete(data, itemNameId) {
+    $(`#item-name-pelunasan-${itemNameId}`).autocomplete({
+        source: (request, response) => {
+            const term = request.term.toLowerCase();
+            const filteredData = data.filter(part => part.nama_part.toLowerCase().includes(term));
+
+            const formattedData = filteredData.map(part => ({
+                label: part.nama_part,
+                value: part.nama_part,
+                id: part.sku
+            }));
+
+            response(formattedData);
+        },
+        autoFocus: true,
+        select: (event, ui) => {
+            const { id } = ui.item;
+            $(`#item-id-pelunasan-${itemNameId}`).val(id);
+        }
+    }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
+}
+
+function initializeSnPelunasan() {
+    $('.item-pelunasan').each(function() {
+        let index = $(this).data("id");
+        let jenisTransaksi = $('#jenis-transaksi-'+index).val();
+        var itemId = $('#item-id-pelunasan-'+index).val();
+
+        getSNPelunasan(jenisTransaksi, itemId, index);
+    });
+}
+
 $(document).ready(function(){
     const pelunasanContainer = $("#pelunasan-container");
     let itemCount = $("#pelunasan-container tr").length;
 
-    $('.item-pelunasan').each(function() {
-        let index = $(this).data("id");
-        let jenisTransaksi = $('#jenis-transaksi-'+index).val();
-        var itemId = $('#item-id-'+index).val();
-
-        getSNPelunasan(jenisTransaksi, itemId, index);
-    });
+    initializeSnPelunasan();
 
     $("#add-item-pelunasan").on("click", function () {
          itemCount++
@@ -144,8 +178,8 @@ $(document).ready(function(){
                 </select>
             </td>
             <td class="px-4 py-4">
-                <input type="hidden" name="item_id[]" id="item-id-${itemCount}" class="item_id bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
-                <input type="text" name="item_name[]" id="item-name-${itemCount}" data-id="${itemCount}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                <input type="hidden" name="item_id[]" id="item-id-pelunasan-${itemCount}" class="item_id bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                <input type="text" name="item_name[]" id="item-name-pelunasan-${itemCount}" data-id="${itemCount}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
             </td>
             <td class="px-4 py-4">
                 <label for="pelunasan-sn-${itemCount}"></label>
@@ -154,7 +188,8 @@ $(document).ready(function(){
                 </select>
             </td>
             <td class="px-4 py-4">
-                <input type="text" name="kasir_harga[]" id="kasir-harga-${itemCount}" data-id="${itemCount}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
+                <input type="hidden" name="kasir_modal_part[]" id="pelunasan-modal-part-${itemCount}">
+                <input type="text" name="kasir_harga[]" id="pelunasan-harga-${itemCount}" data-id="${itemCount}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
             </td>
             <td class="px-4 py-4">
                 <input type="checkbox" name="checkbox_tax_pelunasan[]" id="checkbox-tax-${itemCount}" data-id="${itemCount}" class="pelunasan-checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
@@ -174,55 +209,36 @@ $(document).ready(function(){
     $(document).on('focus', '.item-pelunasan', function () {
         let itemNameId = $(this).data("id");
         let jenisTransaksi = $('#jenis-transaksi-'+itemNameId).val();
+        let autocompleteData = [];
 
         if (jenisTransaksi === 'part_baru' || jenisTransaksi === 'part_bekas') {
 
-            $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
-                console.table(data);
-                $("#item-name-"+itemNameId).autocomplete({
-                    source: function(request, response) {
-                        
-                        var term = request.term.toLowerCase();
-                        var filteredData = data.filter(function (part) {
-                            return(part.nama_part.toLowerCase().indexOf(term) !== -1)
-                        });
-
-                        var formattedData = filteredData.map(function (part) {
-                            return {
-                                label: part.nama_part,
-                                value: part.nama_part,
-                                id: part.sku
-                            };
-                        });
-
-                        response(formattedData);
-                    },
-                    autoFocus: true,
-                    select: function(event, ui) {
-                        var selectedValue = ui.item.value;
-                        var selectedLabel = ui.item.label;
-                        var selectedId = ui.item.id;
-    
-                        $("#item-id-"+itemNameId).val(selectedId);
-                    }
-                }).autocomplete("widget").addClass("max-h-60 max-w-64 overflow-y-auto cursor-pointer px-2 w-64 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
-    
-            }).fail(function(error) {
-                console.error('Error:', error);
-            });
+            if (autocompleteData[jenisTransaksi]) {
+                setupAutocomplete(autocompleteData[jenisTransaksi], itemNameId);
+            } else {
+                $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`)
+                    .done((data) => {
+                        console.table(data);
+                        autocompleteData[jenisTransaksi] = data;
+                        setupAutocomplete(data, itemNameId);
+                    })
+                    .fail((error) => {
+                        alert('Error : ' + error);
+                    });
+            }
 
         } else {
 
             $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
-                $("#item-name-"+itemNameId).autocomplete({
+                $("#item-name-pelunasan-"+itemNameId).autocomplete({
                     source: function(request, response) {
-                        
+
                         var term = request.term.toLowerCase();
                         var filteredData = data.filter(function(item) {
                             return (item.subjenis.produkjenis.jenis_produk.toLowerCase().indexOf(term) !== -1) || 
                                     (item.subjenis.paket_penjualan.toLowerCase().indexOf(term) !== -1);
                         });
-    
+
                         var formattedData = filteredData.map(function(item) {
                             return {
                                 label: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
@@ -230,7 +246,7 @@ $(document).ready(function(){
                                 id: item.subjenis.id
                             };
                         });
-        
+
                         response(formattedData);
                     },
                     autoFocus: true,
@@ -238,11 +254,11 @@ $(document).ready(function(){
                         var selectedValue = ui.item.value;
                         var selectedLabel = ui.item.label;
                         var selectedId = ui.item.id;
-    
-                        $("#item-id-"+itemNameId).val(selectedId);
+
+                        $("#item-id-pelunasan-"+itemNameId).val(selectedId);
                     }
                 }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
-    
+
             }).fail(function(error) {
                 console.error('Error:', error);
             });
@@ -253,8 +269,10 @@ $(document).ready(function(){
     $(document).on('change', '.item-pelunasan', function () {
         let formIdItem = $(this).data("id");
         var formSN = $('#pelunasan-sn-'+formIdItem);
+        var formHarga = $('#pelunasan-harga-'+formIdItem);
+        var formModalPart = $('#pelunasan-modal-part-'+formIdItem);
         let jenisTransaksi = $('#jenis-transaksi-'+formIdItem).val();
-        var idItem = $('#item-id-'+formIdItem).val();
+        var idItem = $('#item-id-pelunasan-'+formIdItem).val();
         fetch(`/kios/kasir/getSerialNumber/${jenisTransaksi}/${idItem}`)
         .then(response => response.json())
         .then(data => {
@@ -268,14 +286,35 @@ $(document).ready(function(){
             });
             formSN.append(defaultOption);
 
-            data.data_sn.forEach(serialnumber => {
-                const option = $('<option>', {
-                    value: serialnumber.id,
-                    text: serialnumber.serial_number
-                })
-                .addClass('dark:bg-gray-700');
-                formSN.append(option);
-            });
+            if (jenisTransaksi == 'part_baru' || jenisTransaksi == 'part_bekas') {
+                data.data_sn.forEach(dataII => {
+                    const option = $('<option>', {
+                        value: dataII.idItem,
+                        text: dataII.idItem,
+                    })
+                    .addClass('dark:bg-gray-700');
+                    formSN.append(option);
+                });
+
+                var nilaiPart = formatRupiah(data.nilai.nilai);
+                formHarga.val(nilaiPart);
+                formModalPart.val(data.nilai.modal);
+
+                updateSubtotalBox();
+
+            } else {
+                data.data_sn.forEach(serialnumber => {
+                    const option = $('<option>', {
+                        value: serialnumber.id,
+                        text: serialnumber.serial_number
+                    })
+                    .addClass('dark:bg-gray-700');
+                    formSN.append(option);
+                });
+
+            }
+
+            updateBoxPelunasan();
 
         })
         .catch(error => {
@@ -286,9 +325,9 @@ $(document).ready(function(){
     $(document).on('change', '.pelunasan-sn', function () {
         let formIdItem = $(this).data("id");
         var formSN = $('#pelunasan-sn-'+formIdItem);
-        var formHarga = $('#kasir-harga-'+formIdItem);
+        var formHarga = $('#pelunasan-harga-'+formIdItem);
         let jenisTransaksi = $('#jenis-transaksi-'+formIdItem).val();
-        var idItem = $('#item-id-'+formIdItem).val();
+        var idItem = $('#item-id-pelunasan-'+formIdItem).val();
         let cekSn = formSN.find('option:selected').text();
 
         fetch(`/kios/kasir/getSerialNumber/${jenisTransaksi}/${idItem}`)
