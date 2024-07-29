@@ -220,7 +220,6 @@ class KiosPaymentController extends Controller
 
     public function updatePayment(Request $request, $id)
     {
-        $idTransaksi = $request->input('id');
         $statusTransaksi = $request->input('status');
         $paymentKios = KiosPayment::findOrFail($id);
 
