@@ -220,40 +220,41 @@ class KiosPaymentController extends Controller
 
     public function updatePayment(Request $request, $id)
     {
-        $statusTransaksi = $request->input('status');
         $paymentKios = KiosPayment::findOrFail($id);
 
         if ($paymentKios) {
-
             if ($paymentKios->order_type == 'Baru') {
                 $updateStatus = $paymentKios->order;
-                $updateStatus->status->update('Belum Dikirim');
-                return response()->json(['status' => 'success', 'message' => 'Success verification']);
+
+                if ($updateStatus) {
+                    $updateStatus->update(['status' => 'Belum Dikirim']);
+                    return response()->json(['status' => 'success', 'message' => 'Success verification']);
+                }
 
             } elseif ($paymentKios->order_type == 'Bekas') {
                 $updateStatus = $paymentKios->ordersecond;
 
-                if ($paymentKios->ongkir > 0) {
-                    PengirimanEkspedisi::create([
-                        'divisi_id' => 1,
-                        'order_id' => $id,
-                        'status_order' => 'Bekas',
-                        'status' => 'Belum Dikirim',
-                    ]);
-                    $updateStatus->status->update('Belum Dikirim');
-                } else {
-                    $updateStatus->status->update('Proses QC');
+                if ($updateStatus) {
+                    if ($paymentKios->ongkir > 0) {
+                        PengirimanEkspedisi::create([
+                            'divisi_id' => 1,
+                            'order_id' => $id,
+                            'status_order' => 'Bekas',
+                            'status' => 'Belum Dikirim',
+                        ]);
+                        $updateStatus->update(['status' => 'Belum Dikirim']);
+                    } else {
+                        $updateStatus->update(['status' => 'Proses QC']);
+                    }
+
+                    return response()->json(['status' => 'success', 'message' => 'Success verification']);
                 }
+            } 
 
-                return response()->json(['status' => 'success', 'message' => 'Success verification']);
-
-            } else {
-                return response()->json(['status' => 'error', 'message' => 'Data not found'], 404);
-            }
-
-        } else {
-            return response()->json(['status' => 'error', 'message' => 'Data not found'], 404);
+            return response()->json(['status' => 'error', 'message' => 'Order data not found'], 404);
         }
+
+        return response()->json(['status' => 'error', 'message' => 'Payment data not found'], 404);
     }
 
 }
