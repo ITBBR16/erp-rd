@@ -34,6 +34,7 @@ class KiosKasirController extends Controller
         $customerData = Customer::all();
         $akunRd = KiosAkunRD::all();
         $invoiceId = KiosTransaksi::latest()->value('id');
+        $dataHoldKasir = KiosTransaksi::where('status', 'Hold')->get();
 
         return view('kios.kasir.index', [
             'title' => 'Kasir Kios',
@@ -47,7 +48,47 @@ class KiosKasirController extends Controller
             'customerdata' => $customerData,
             'akunrd' => $akunRd,
             'invoiceid' => $invoiceId,
+            'dataHold' => $dataHoldKasir,
         ]);
+    }
+
+    public function edit($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $today = Carbon::now();
+        $dueDate = $today->copy()->addMonth(2);
+        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $dataTransaksi = KiosTransaksi::findOrFail($id);
+        $akunRd = KiosAkunRD::all();
+
+        return view('kios.kasir.editpage.pelunasan-kasir', [
+            'title' => 'Pelunasan Kasir',
+            'active' => 'kasir-kios',
+            'navActive' => 'kasir',
+            'divisi' => $divisiName,
+            'dropdown' => '',
+            'dropdownShop' => '',
+            'today' => $today,
+            'duedate' => $dueDate,
+            'dataTransaksi' => $dataTransaksi,
+            'akunrd' => $akunRd,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
+
+        try {
+
+            $connectionKios->commit();
+            return redirect()->route('kasir.index')->with('success', 'Berhasil melakukan pelunasan.');
+        } catch (Exception $e) {
+            $connectionKios->rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function store(Request $request)

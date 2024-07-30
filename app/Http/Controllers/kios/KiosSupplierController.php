@@ -113,7 +113,9 @@ class KiosSupplierController extends Controller
     public function store(Request $request)
     {
         $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionProduk = DB::connection('rumahdrone_produk');
         $connectionKios->beginTransaction();
+        $connectionProduk->beginTransaction();
 
         try {
             $request->validate([
@@ -132,14 +134,19 @@ class KiosSupplierController extends Controller
                 'no_telpon' => $request->no_telpon,
                 'alamat_lengkap' => $request->alamat_lengkap,
             ]);
-    
-            $supplier->kategoris()->sync($request->input('kategori'));
-            
+
+            $kategoris = $request->input('kategori');
+            foreach ($kategoris as $kategori) {
+                $supplier->kategoris()->sync($kategori);
+            }
+
             $connectionKios->commit();
+            $connectionProduk->commit();
             return back()->with('success', 'Success Add New Supplier.');
 
         } catch(Exception $e) {
             $connectionKios->rollBack();
+            $connectionProduk->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

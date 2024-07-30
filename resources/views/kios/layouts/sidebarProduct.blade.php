@@ -9,7 +9,7 @@
             </li>
         </ul>
         <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-            <li class="text-sm text-gray-700 dark:text-white">List Product</li>
+            <li class="text-sm text-gray-700 dark:text-white">List Produl</li>
             <button type="button" class="flex items-center w-full text-left p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" aria-controls="dropdown-chek" data-collapse-toggle="dropdown-produk">
                 <span class="material-symbols-outlined w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">inventory_2</span>
                 <span class="flex-1 ml-3 whitespace-nowrap">Produk</span>
@@ -104,7 +104,7 @@
             </li>
         </ul>
         <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-            <li class="text-sm text-gray-700 dark:text-white">Add Supplier & Product</li>
+            <li class="text-sm text-gray-700 dark:text-white">Tambah Supplier & Produk</li>
             <li>
                 <a href="/kios/product/supplier" class="{{ ($active === 'supplier') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <span class="material-symbols-outlined w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">account_box</span>

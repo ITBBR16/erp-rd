@@ -42,6 +42,6 @@ class KiosTransaksi extends Model
 
     public function transaksiPart()
     {
-        return $this->hasMany(KiosTransaksiPart::class);
+        return $this->hasMany(KiosTransaksiPart::class, 'transaksi_id');
     }
 }

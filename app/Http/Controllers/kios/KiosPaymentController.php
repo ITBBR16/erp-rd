@@ -220,41 +220,60 @@ class KiosPaymentController extends Controller
 
     public function updatePayment(Request $request, $id)
     {
-        $paymentKios = KiosPayment::findOrFail($id);
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionEkspedisi = DB::connection('rumahdrone_ekspedisi');
+        $connectionKios->beginTransaction();
+        $connectionEkspedisi->beginTransaction();
 
-        if ($paymentKios) {
-            if ($paymentKios->order_type == 'Baru') {
-                $updateStatus = $paymentKios->order;
+        try {
+            $paymentKios = KiosPayment::findOrFail($id);
 
-                if ($updateStatus) {
-                    $updateStatus->update(['status' => 'Belum Dikirim']);
-                    return response()->json(['status' => 'success', 'message' => 'Success verification']);
-                }
+            if ($paymentKios) {
+                if ($paymentKios->order_type == 'Baru') {
+                    $updateStatus = $paymentKios->order;
 
-            } elseif ($paymentKios->order_type == 'Bekas') {
-                $updateStatus = $paymentKios->ordersecond;
-
-                if ($updateStatus) {
-                    if ($paymentKios->ongkir > 0) {
-                        PengirimanEkspedisi::create([
-                            'divisi_id' => 1,
-                            'order_id' => $id,
-                            'status_order' => 'Bekas',
-                            'status' => 'Belum Dikirim',
-                        ]);
+                    if ($updateStatus) {
                         $updateStatus->update(['status' => 'Belum Dikirim']);
                     } else {
-                        $updateStatus->update(['status' => 'Proses QC']);
+                        throw new \Exception('Order not found');
                     }
 
-                    return response()->json(['status' => 'success', 'message' => 'Success verification']);
+                } elseif ($paymentKios->order_type == 'Bekas') {
+                    $updateStatus = $paymentKios->ordersecond;
+
+                    if ($updateStatus) {
+                        if ($paymentKios->ongkir > 0) {
+                            PengirimanEkspedisi::create([
+                                'divisi_id' => 1,
+                                'order_id' => $id,
+                                'status_order' => 'Bekas',
+                                'status' => 'Belum Dikirim',
+                            ]);
+                            $updateStatus->update(['status' => 'Belum Dikirim']);
+                        } else {
+                            $updateStatus->update(['status' => 'Proses QC']);
+                        }
+                    } else {
+                        throw new \Exception('OrderSecond not found');
+                    }
+                } else {
+                    throw new \Exception('Invalid order type');
                 }
-            } 
 
-            return response()->json(['status' => 'error', 'message' => 'Order data not found'], 404);
+                // Update paymentKios status to Paid
+                $paymentKios->update(['status' => 'Paid']);
+
+                $connectionKios->commit();
+                $connectionEkspedisi->commit();
+                return response()->json(['status' => 'success', 'message' => 'Success verification']);
+            } else {
+                throw new \Exception('PaymentKios data not found');
+            }
+        } catch (\Exception $e) {
+            $connectionKios->rollBack();
+            $connectionEkspedisi->rollBack();
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
-
-        return response()->json(['status' => 'error', 'message' => 'Payment data not found'], 404);
     }
 
 }
