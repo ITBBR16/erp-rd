@@ -30,7 +30,7 @@ class DashboardKiosController extends Controller
         $formattedPercentSales = number_format($profitPercentage, 2);
 
         // Drone Terjual
-        $transaksiTerbaru = KiosTransaksiDetail::with('serialnumbers.validasiproduk.orderLists')
+        $transaksiTerbaru = KiosTransaksiDetail::with('kiosSerialnumbers.validasiproduk.orderLists')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->get();
         $droneLaku = $transaksiTerbaru->count();

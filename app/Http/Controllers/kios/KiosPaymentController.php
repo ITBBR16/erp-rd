@@ -52,7 +52,6 @@ class KiosPaymentController extends Controller
                 'no_rek' => 'required',
                 'nama_akun' => 'required',
             ]);
-
             $user = auth()->user();
             $divisiId = $user->divisi_id;
             $divisi = $this->suppKiosRepo->getDivisi($user);
@@ -65,11 +64,11 @@ class KiosPaymentController extends Controller
             $statusOrder = $request->input('status_order');
             $noTransaksi = ($statusOrder == 'Baru') ? 'KiosBaru-' . $id : 'KiosBekas-' . $id;
             $keteranganFinance = ($statusOrder == 'Baru') ? 'Order Id N.' . $id : 'Order Id S.' . $id;
-
+            
             $totalBelanja = preg_replace("/[^0-9]/", "", $request->input('nilai_belanja'));
             $totalOngkir = preg_replace("/[^0-9]/", "", $request->input('ongkir'));
             $totalPajak = preg_replace("/[^0-9]/", "", $request->input('pajak'));
-
+            
             $urlFinance = 'https://script.google.com/macros/s/AKfycbwnOPiXx_1ef6O_3krVTxcvA6WW8XrX_A6HwsSxi3vVGjkB_dfoLOBTg05sOA0SCY8Emw/exec';
             $dataFinance = [
                 'tanggal' => $formattedDate,
@@ -83,7 +82,7 @@ class KiosPaymentController extends Controller
                 'pajak' => $totalPajak,
                 'keterangan' => $keteranganFinance . ", " . $request->input('keterangan'),
             ];
-
+            
             $responseFinance = Http::post($urlFinance, $dataFinance);
             $statusResponse = json_decode($responseFinance->body(), true);
             $feedbackStatus = $statusResponse['status'];
@@ -233,6 +232,12 @@ class KiosPaymentController extends Controller
                     $updateStatus = $paymentKios->order;
 
                     if ($updateStatus) {
+                        PengirimanEkspedisi::create([
+                            'divisi_id' => 1,
+                            'order_id' => $id,
+                            'status_order' => 'Bekas',
+                            'status' => 'Belum Dikirim',
+                        ]);
                         $updateStatus->update(['status' => 'Belum Dikirim']);
                     } else {
                         throw new \Exception('Order not found');

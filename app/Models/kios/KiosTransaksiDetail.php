@@ -18,7 +18,7 @@ class KiosTransaksiDetail extends Model
         return $this->belongsTo(KiosTransaksi::class, 'kios_transaksi_id');
     }
 
-    public function serialnumbers()
+    public function kiosSerialnumbers()
     {
         return $this->belongsTo(KiosSerialNumber::class, 'serial_number_id');
     }

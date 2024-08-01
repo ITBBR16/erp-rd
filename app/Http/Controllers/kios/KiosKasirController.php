@@ -35,6 +35,7 @@ class KiosKasirController extends Controller
         $akunRd = KiosAkunRD::all();
         $invoiceId = KiosTransaksi::latest()->value('id');
         $dataHoldKasir = KiosTransaksi::where('status', 'Hold')->get();
+        $dataTransaksi = '';
 
         return view('kios.kasir.index', [
             'title' => 'Kasir Kios',
@@ -49,6 +50,7 @@ class KiosKasirController extends Controller
             'akunrd' => $akunRd,
             'invoiceid' => $invoiceId,
             'dataHold' => $dataHoldKasir,
+            'dataTransaksi' => $dataTransaksi,
         ]);
     }
 
@@ -78,16 +80,77 @@ class KiosKasirController extends Controller
 
     public function update(Request $request, $id)
     {
-        $connectionKios = DB::connection('rumahdrone_kios');
-        $connectionKios->beginTransaction();
+        // $connectionKios = DB::connection('rumahdrone_kios');
+        // $connectionKios->beginTransaction();
+
+        $userId =auth()->user()->id;
 
         try {
 
-            $connectionKios->commit();
-            return redirect()->route('kasir.index')->with('success', 'Berhasil melakukan pelunasan.');
+            $request->validate([
+                'nama_customer' => 'required',
+                'kasir_metode_pembayaran' => 'required',
+                'kasir_nominal_pembayaran' => 'required',
+                'jenis_transaksi' => 'required|array|min:1',
+                'kasir_sn' => 'required|array|min:1',
+                'item_id' => 'required|array|min:1',
+                'kasir_harga' => 'required|array|min:1',
+            ]);
+
+            $pelunasanCustomerId = $request->input('id_customer');
+            $pelunasanMetodePembayaran = $request->input('kasir_metode_pembayaran');
+            $pelunasanDiscount = $request->input('kasir_discount');
+            $pelunasanOngkir = preg_replace("/[^0-9]/", "",$request->input('kasir_ongkir'));
+            $pelunasanTax = preg_replace("/[^0-9]/", "",$request->input('kasir_tax'));
+            $pelunasanNominalPembayaran = preg_replace("/[^0-9]/", "",$request->input('kasir_nominal_pembayaran'));
+            $pelunasanKeterangan = $request->input('keterangan_pembayaran');
+
+            $pelunasanJenisTransaksi = $request->input('jenis_transaksi');
+            $pelunasanItem = $request->input('item_id');
+            $pelunasanSN = $request->input('kasir_sn');
+            $pelunasanSrp = preg_replace("/[^0-9]/", "", $request->input('kasir_harga'));
+            $pelunasanModalPart = $request->input('kasir_modal_part');
+
+            $totalHargaKiosBaru = 0;
+            $totalHargaKiosBekas = 0;
+            $totalHargaGudang = 0;
+            $totalHarga = 0;
+            $modalKiosBaru = 0;
+            $modalKiosBekas = 0;
+            $modalGudang = 0;
+
+            if (count(array_unique($pelunasanSN)) != count($pelunasanSN)) {
+                return back()->with('error', 'Serial Number / Id Item tidak boleh ada yang sama');
+            }
+
+            // $searchTransaksi = KiosTransaksi::findOrFail($id);
+            // $searchTransaksi->update([
+            //     'metode_pembayaran' => $pelunasanMetodePembayaran,
+            //     'ongkir' => $pelunasanOngkir,
+            //     'discount' => $pelunasanDiscount,
+            //     'tax' => $pelunasanTax,
+            //     'nominal_pembayaran' => $pelunasanNominalPembayaran,
+            //     'keterangan' => $pelunasanKeterangan,
+            //     'status' => 'Done',
+            // ]);
+
+            $existingDT = KiosTransaksiDetail::where('kios_transaksi_id', $id)->get()->keyBy('id');
+            // foreach ($pelunasanItem as $index => $item) {
+            //     $jenisTransaksi = $pelunasanJenisTransaksi[$index];
+            //     $serialNumber = $pelunasanSN[$index];
+            //     $srp = $pelunasanSrp[$index];
+            //     $totalHarga += $srp;
+
+            //     if ($jenisTransaksi != 'part_baru' || $jenisTransaksi != 'part_bekas') {
+                    
+            //     }
+            // }
+
+            // $connectionKios->commit();
+            // return redirect()->route('kasir.index')->with('success', 'Berhasil melakukan pelunasan.');
         } catch (Exception $e) {
-            $connectionKios->rollBack();
-            return back()->with('error', $e->getMessage());
+            // $connectionKios->rollBack();
+            // return back()->with('error', $e->getMessage());
         }
     }
 
@@ -131,7 +194,7 @@ class KiosKasirController extends Controller
             $modalGudang = 0;
 
             if(count(array_unique($kasirSN)) !== count($kasirSN)) {
-                return back()->with('error', 'Serial Number tidak boleh ada yang sama.');
+                return back()->with('error', 'Serial Number / Id Item tidak boleh ada yang sama.');
             }
 
             $transaksi = new KiosTransaksi();
@@ -178,7 +241,8 @@ class KiosKasirController extends Controller
                     }
 
                     $detailTransaksi->save();
-                    KiosSerialNumber::find($serialNumber)->update(['status' => 'Sold']);
+                    $statusSN = ($statusTransaksi == 'Done') ? 'Sold' : 'Hold';
+                    KiosSerialNumber::find($serialNumber)->update(['status' => $statusSN]);
                 } else {
                     $totalHargaGudang += $srp;
                     $modalGudang += $kasirModalPart[$index];

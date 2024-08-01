@@ -44,4 +44,9 @@ class KiosTransaksi extends Model
     {
         return $this->hasMany(KiosTransaksiPart::class, 'transaksi_id');
     }
+
+    public function recapBuy()
+    {
+        return $this->hasOne(KiosRecapBuy::class);
+    }
 }

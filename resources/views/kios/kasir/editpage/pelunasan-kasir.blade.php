@@ -20,7 +20,7 @@
         </ol>
     </nav>
 
-    <form action="{{ route('kasir.update', $dataTransaksi->id) }}" id="kasir-form" method="POST" autocomplete="off">
+    <form action="{{ route('kasir.update', $dataTransaksi->id) }}" id="kasir-pelunasan-form" method="POST" autocomplete="off">
         @csrf
         @method('PUT')
         <div class="grid grid-cols-3 w-full">
@@ -30,7 +30,7 @@
                         <p class="text-base font-semibold text-gray-900 dark:text-white">Current Date : <span class="text-gray-900 font-normal dark:text-white">{{ $today->format('d/m/Y') }}</span></p>
                     </div>
                     <div class="flex justify-end">
-                        <p class="text-base font-semibold text-gray-900 dark:text-white">Invoice Number : <span class="text-gray-900 font-normal dark:text-white">{{ $dataTransaksi->created_at->format('Ymd') }}{{ $dataTransaksi->id }}</span></p>
+                        <p class="text-base font-semibold text-gray-900 dark:text-white">Invoice Number : <span class="text-gray-900 font-normal dark:text-white">{{ $dataTransaksi->created_at->format('Ymd').$dataTransaksi->id }}</span></p>
                     </div>
                 </div>
                 <div class="my-4 pt-2 border-t-2 text-center justify-center">
@@ -40,8 +40,8 @@
                     <div>
                         <label for="kasir-nama-customer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Customer :</label>
                         <div class="flex">
-                            <input type="hidden" name="id_customer" id="id_customer" value="{{ $dataTransaksi->customer_id }}">
-                            <input type="text" name="nama_customer" id="kasir-nama-customer" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ $dataTransaksi->customer->first_name }} {{ $dataTransaksi->customer->last_name }}" readonly>
+                            <input type="hidden" name="id_customer" id="kasir-nama-customer" value="{{ $dataTransaksi->customer_id }}">
+                            <input type="text" name="nama_customer" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ $dataTransaksi->customer->first_name }} {{ $dataTransaksi->customer->last_name }}" readonly>
                         </div>
                     </div>
                     <div>
@@ -135,7 +135,7 @@
                             <p id="kasir-box-total" class="text-gray-900 font-normal dark:text-white">Rp. {{ number_format($totalTransaksi, 0, ',', '.') }}</p>
                         </div>
                     </div>
-                    <button type="button" data-modal-target="kasir-invoice" data-modal-toggle="kasir-invoice" class="review-invoice text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full">Review Invoice</button>
+                    <button type="button" data-modal-target="kasir-pelunasan-invoice" data-modal-toggle="kasir-pelunasan-invoice" class="review-invoice text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full">Review Invoice</button>
                 </div>
             </div>
         </div>
@@ -166,7 +166,7 @@
                 <tbody id="kasir-container">
                     @if ($dataTransaksi->detailtransaksi->isNotEmpty())
                         @foreach ($dataTransaksi->detailtransaksi as $index => $detail)
-                            <tr id="pelunasan-item-{{ $index }}" class="bg-white dark:bg-gray-800">
+                            <tr id="kasir-item-{{ $index }}" class="bg-white dark:bg-gray-800">
                                 <td class="px-4 py-4">
                                     <input type="hidden" name="id_detail_transaksi[]" value="{{ $detail->id }}">
                                     <label for="jenis-transaksi-{{ $index }}"></label>
@@ -179,24 +179,24 @@
                                     </select>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <input type="hidden" name="item_id[]" id="item-id-pelunasan-{{ $index }}" value="{{ $detail->produkKios->subjenis->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
-                                    <input type="text" name="item_name[]" id="item-name-pelunasan-{{ $index }}" value="{{ $detail->produkKios->subjenis->paket_penjualan }}" data-id="{{ $index }}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                                    <input type="hidden" name="item_id[]" id="item-id{{ $index }}" value="{{ $detail->produkKios->subjenis->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                                    <input type="text" name="item_name[]" id="item-name{{ $index }}" value="{{ $detail->produkKios->subjenis->paket_penjualan }}" data-id="{{ $index }}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <label for="pelunasan-sn-{{ $index }}"></label>
-                                    <select name="kasir_sn[]" id="pelunasan-sn-{{ $index }}" data-id="{{ $index }}" class="pelunasan-sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <label for="kasir_sn-{{ $index }}"></label>
+                                    <select name="kasir_sn[]" id="kasir_sn-{{ $index }}" data-id="{{ $index }}" class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                         <option value="" hidden>Pilih SN</option>
+                                        <option value="{{ $detail->serial_number_id }}" selected>{{ $detail->kiosSerialnumbers->serial_number }}</option>
                                     </select>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <input type="hidden" name="kasir_modal_part[]" id="pelunasan-modal-part-{{ $index }}">
-                                    <input type="text" name="kasir_harga[]" id="pelunasan-harga-{{ $index }}" value="Rp. {{ number_format($detail->harga_jual, 0, ',', '.') }}" data-id="{{ $index }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
+                                    <input type="text" name="kasir_harga[]" id="kasir-harga-{{ $index }}" value="Rp. {{ number_format($detail->harga_jual, 0, ',', '.') }}" data-id="{{ $index }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <input type="checkbox" name="checkbox_tax_pelunasan[]" id="checkbox-tax-{{ $index }}" data-id="{{ $index }}" class="pelunasan-checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
+                                    <input type="checkbox" name="checkbox_tax[]" id="checkbox-tax-{{ $index }}" data-id="{{ $index }}" class="checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
                                 </td>
                                 <td class="px-4 py-4">
-                                    <button type="button" class="remove-pelunasan-item" data-id="{{ $index }}">
+                                    <button type="button" class="remove-kasir-item" data-id="{{ $index }}">
                                         <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                                     </button>
                                 </td>
@@ -205,12 +205,12 @@
                     @endif
 
                     @if ($dataTransaksi->transaksiPart->isNotEmpty())
-                        @foreach ($dataTransaksi->transaksiPart as $index => $part)
-                            <tr id="pelunasan-item-{{ $index }}" class="bg-white dark:bg-gray-800">
+                        @foreach ($dataTransaksi->transaksiPart as $part)
+                            <tr id="kasir-item-{{ $part->sku_part }}{{ $part->id }}" class="bg-white dark:bg-gray-800">
                                 <td class="px-4 py-4">
                                     <input type="hidden" name="id_detail_transaksi[]" value="{{ $part->id }}">
-                                    <label for="jenis-transaksi-{{ $index }}"></label>
-                                    <select name="jenis_transaksi[]" id="jenis-transaksi-{{ $index }}" data-id="{{ $index }}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <label for="jenis-transaksi-{{ $part->sku_part }}{{ $part->id }}"></label>
+                                    <select name="jenis_transaksi[]" id="jenis-transaksi-{{ $part->sku_part }}{{ $part->id }}" data-id="{{ $part->sku_part }}{{ $part->id }}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                         <option value="" hidden>Pilih Jenis Transaksi</option>
                                         <option value="drone_baru" {{ ($part->jenis_transaksi_part == 'drone_baru') ? 'selected' : '' }}>Drone Baru</option>
                                         <option value="drone_bekas" {{ ($part->jenis_transaksi_part == 'drone_bekas') ? 'selected' : '' }}>Drone Bekas</option>
@@ -219,24 +219,25 @@
                                     </select>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <input type="hidden" name="item_id[]" id="item-id-pelunasan-{{ $index }}" value="{{ $part->sku_part }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
-                                    <input type="text" name="item_name[]" id="item-name-pelunasan-{{ $index }}" value="{{ $part->nama_part }}" data-id="{{ $index }}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                                    <input type="hidden" name="item_id[]" id="item-id-{{ $part->sku_part }}{{ $part->id }}" value="{{ $part->sku_part }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                                    <input type="text" name="item_name[]" id="item-name-{{ $part->sku_part }}{{ $part->id }}" value="{{ $part->nama_part }}" data-id="{{ $part->sku_part }}{{ $part->id }}" class="item-pelunasan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <label for="pelunasan-sn-{{ $index }}"></label>
-                                    <select name="kasir_sn[]" id="pelunasan-sn-{{ $index }}" data-id="{{ $index }}" class="pelunasan-sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <label for="kasir_sn-{{ $part->sku_part }}{{ $part->id }}"></label>
+                                    <select name="kasir_sn[]" id="kasir_sn-{{ $part->sku_part }}{{ $part->id }}" data-id="{{ $part->sku_part }}{{ $part->id }}" class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                         <option value="" hidden>Pilih SN</option>
+                                        <option value="{{ $part->id_item_part }}" selected>{{ $part->id_item_part }}</option>
                                     </select>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <input type="hidden" name="kasir_modal_part[]" id="pelunasan-modal-part-{{ $index }}">
-                                    <input type="text" name="kasir_harga[]" id="pelunasan-harga-{{ $index }}" value="Rp. {{ number_format($part->harga_jual_part, 0, ',', '.') }}" data-id="{{ $index }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
+                                    <input type="hidden" name="kasir_modal_part[]" id="kasir-modal-part-{{ $part->sku_part }}{{ $part->id }}" value="{{ $part->harga_modal_part }}">
+                                    <input type="text" name="kasir_harga[]" id="kasir-harga-{{ $part->sku_part }}{{ $part->id }}" value="Rp. {{ number_format($part->harga_jual_part, 0, ',', '.') }}" data-id="{{ $part->sku_part }}{{ $part->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <input type="checkbox" name="checkbox_tax_pelunasan[]" id="checkbox-tax-{{ $index }}" data-id="{{ $index }}" class="pelunasan-checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
+                                    <input type="checkbox" name="checkbox_tax[]" id="checkbox-tax-{{ $part->sku_part }}{{ $part->id }}" data-id="{{ $part->sku_part }}{{ $part->id }}" class="checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
                                 </td>
                                 <td class="px-4 py-4">
-                                    <button type="button" class="remove-pelunasan-item" data-id="{{ $index }}">
+                                    <button type="button" class="remove-kasir-item" data-id="{{ $part->sku_part }}{{ $part->id }}">
                                         <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                                     </button>
                                 </td>
@@ -262,5 +263,5 @@
         </div>
     </form>
     {{-- Modal --}}
-    
+    @include('kios.kasir.editpage.invoice.invoice-pelunasan-hold')
 @endsection
