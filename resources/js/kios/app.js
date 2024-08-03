@@ -7,6 +7,7 @@ import '../../../public/js/kios/dd-daily-recap';
 import '../../../public/js/kios/dd-komplain-supplier';
 import '../../../public/js/kios/dd-layanan-pengiriman';
 import '../../../public/js/kios/dropdown_wilayah';
+import '../../../public/js/kios/dropdown-edit-wilayah';
 import '../../../public/js/kios/file-upload';
 import '../../../public/js/kios/filter-second';
 import '../../../public/js/kios/kasir-dppo';

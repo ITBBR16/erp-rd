@@ -214,7 +214,7 @@ class KiosDailyRecapController extends Controller
             } elseif ($keperluanName == 'Want to Sell') {
                 $dailyRecapSearch->kiosWts()->delete();
             } elseif ($keperluanName == 'Technical Support') {
-                $dailyRecapSearch->technicalSupport()->delete();
+                $dailyRecapSearch->recapTs()->delete();
             } else {
                 $connectionKios->rollBack();
                 return back()->with('error', 'Something Went Wrong.');
@@ -232,10 +232,8 @@ class KiosDailyRecapController extends Controller
 
     public function getProduk($kondisiProduk)
     {
-        if ($kondisiProduk == 'Drone Baru') {
-            $items = KiosProduk::with('subjenis.produkjenis')->get();
-        } elseif ($kondisiProduk == 'Drone Bekas') {
-            $items = KiosProdukSecond::with('subjenis.produkjenis')->get();
+        if ($kondisiProduk == 'Drone Baru' || $kondisiProduk == 'Drone Bekas') {
+            $items = ProdukJenis::all();
         } elseif ($kondisiProduk == 'Part Baru' || $kondisiProduk == 'Part Bekas') {
             
             $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
@@ -264,11 +262,8 @@ class KiosDailyRecapController extends Controller
 
     public function getSubjenis($kondisiProduk, $id)
     {
-        if ($kondisiProduk == 'Drone Baru') {
-            $itemSearch = ProdukJenis::findOrFail($id);
-            $items = $itemSearch->subjenis()->with('kiosproduk')->get();
-        } elseif ($kondisiProduk == 'Drone Bekas') {
-            $items = ProdukSubJenis::with('kiosproduksecond', 'produkjenis')->where('jenis_id', $id)->get();
+        if ($kondisiProduk == 'Drone Baru' || $kondisiProduk == 'Drone Bekas') {
+            $items = ProdukJenis::findOrFail($id)->subjenis()->get();
         } elseif ($kondisiProduk == 'Part Baru' || $kondisiProduk == 'Part Bekas') {
 
             $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
@@ -293,6 +288,38 @@ class KiosDailyRecapController extends Controller
 
         return response()->json($items);
 
+    }
+
+    public function getListProduk($kondisiProduk, $id)
+    {
+        $itemSearch = ProdukJenis::findOrFail($id);
+        if ($kondisiProduk == 'Drone Baru') {
+            $items = $itemSearch->subjenis()->with('kiosproduk')->get();
+        } elseif ($kondisiProduk == 'Drone Bekas') {
+            $items = $itemSearch->subjenis()->with('kiosproduksecond')->get();
+        } elseif ($kondisiProduk == 'Part Baru' || $kondisiProduk == 'Part Bekas') {
+
+            $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
+            $response = Http::post($urlApiGudang, [
+                'status' => $kondisiProduk
+            ]);
+
+            $data = $response->json();
+            $resultData = [];
+            foreach ($data['data'] as $dataNeed) {
+                $neededData = [
+                    'sku' => $dataNeed[0],
+                    'nama_part' => $dataNeed[2],
+                    'srp_part' => $dataNeed[8],
+                ];
+                $resultData[] = $neededData;
+            }
+
+            $items = $resultData;
+
+        }
+
+        return response()->json($items);
     }
 
     public function getPaketPenjualan($id)

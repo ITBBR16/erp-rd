@@ -65,12 +65,16 @@ Route::middleware('kios')->group(function () {
                 Route::post('/new-customer', 'newCustomer')->name('newCustomer');
                 Route::get('/getJenisProduk/{kondisiProduk}', 'getProduk');
                 Route::get('/getSubJenisProduk/{kondisiProduk}/{id}', 'getSubjenis');
+                Route::get('/getListProduk/{kondisiProduk}/{id}', 'getListProduk');
                 Route::get('/getPaketPenjualan/{id}', 'getPaketPenjualan');
                 Route::get('/getPermasalahan/{jenisId}/{kategoriId}', 'getPermasalahan');
                 Route::get('/getDeskripsiPermasalahan/{id}', 'getDeskripsiPermasalahan');
             });
-            Route::resource('/list-customer', DataCustomerController::class)->only('index', 'update', 'delete');
-            Route::get('/list-customer/search', [DataCustomerController::class, 'search']);
+            Route::group(['controller' => DataCustomerController::class], function () {
+                Route::resource('/list-customer', DataCustomerController::class)->only('index', 'update', 'delete');
+                Route::get('/getDataCustomer/{id}', 'getDataCustomer');
+                Route::get('/list-customer/search', [DataCustomerController::class, 'search']);
+            });
         });
 
         Route::prefix('/product')->group(function () {

@@ -235,7 +235,7 @@ class KiosPaymentController extends Controller
                         PengirimanEkspedisi::create([
                             'divisi_id' => 1,
                             'order_id' => $id,
-                            'status_order' => 'Bekas',
+                            'status_order' => 'Baru',
                             'status' => 'Belum Dikirim',
                         ]);
                         $updateStatus->update(['status' => 'Belum Dikirim']);

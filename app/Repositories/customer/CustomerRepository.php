@@ -23,33 +23,6 @@ class CustomerRepository implements CustomerInterface
         return $dataCustomer;
     }
 
-    public function getSelectKota()
-    {
-        $dataKota = Kota::select('kabupaten.*')
-                    ->join('customer', 'kabupaten.provinsi_id', '=', 'customer.provinsi')
-                    ->get();
-
-        return $dataKota;
-    }
-
-    public function getSelectKecamatan()
-    {
-        $dataKecamatan = Kecamatan::select('kecamatan.*')
-                    ->join('customer', 'kecamatan.kabupaten_id', '=', 'customer.kota_kabupaten')
-                    ->get();
-
-        return $dataKecamatan;
-    }
-
-    public function getSelectKelurahan()
-    {
-        $dataKelurahan = Kelurahan::select('kelurahan.*')
-                    ->join('customer', 'kelurahan.kecamatan_id', '=', 'customer.kecamatan')
-                    ->get();
-
-        return $dataKelurahan;
-    }
-
     public function deleteCustomer($customerId)
     {
         Customer::destroy($customerId);

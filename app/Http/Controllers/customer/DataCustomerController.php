@@ -8,6 +8,9 @@ use Illuminate\Validation\Rule;
 use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
 use App\Http\Controllers\Controller;
+use App\Models\wilayah\Kecamatan;
+use App\Models\wilayah\Kelurahan;
+use App\Models\wilayah\Kota;
 use App\Repositories\customer\CustomerRepository;
 use Illuminate\Support\Facades\Http;
 
@@ -18,10 +21,10 @@ class DataCustomerController extends Controller
     public function index() 
     {
         $dataCustomer = $this->customerRepo->getAll();
-        $dataKota = $this->customerRepo->getSelectKota();
-        $dataKecamatan = $this->customerRepo->getSelectKecamatan();
-        $dataKelurahan = $this->customerRepo->getSelectKelurahan();
         $provinsi = Provinsi::all();
+        $kota = Kota::all();
+        $kecamatan = Kecamatan::all();
+        $kelurahan = Kelurahan::all();
 
         $user = auth()->user();
         $divisiName = $this->customerRepo->getDivisi($user);
@@ -33,10 +36,10 @@ class DataCustomerController extends Controller
             'dropdown' => '',
             'dropdownShop' => '',
             'dataCustomer' => $dataCustomer,
-            'dataKota' => $dataKota,
-            'dataKecamatan' => $dataKecamatan,
-            'dataKelurahan' => $dataKelurahan,
             'provinsi' => $provinsi,
+            'kota' => $kota,
+            'kecamatan' => $kecamatan,
+            'kelurahan' => $kelurahan,
             'divisi' => $divisiName,
         ]);
     }
@@ -101,6 +104,13 @@ class DataCustomerController extends Controller
             })
             ->orWhere('no_telpon', 'like', "%$query%")
             ->paginate(10);
+
+        return response()->json($dataCustomer);
+    }
+
+    public function getDataCustomer($id)
+    {
+        $dataCustomer = Customer::findOrFail($id);
 
         return response()->json($dataCustomer);
     }

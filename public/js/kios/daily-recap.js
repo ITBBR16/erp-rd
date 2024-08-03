@@ -26,6 +26,9 @@ $(document).ready(function () {
     $(document).on('change', '#kondisi_produk', function () {
         var kondisiProduk = $("#kondisi_produk").val();
         var jenisProduk = $("#jenis_produk");
+        var paketPenjualan = $("#paket_penjualan");
+        var listProdukTersedia = $('#list-produk-dr li');
+        var statusPaketPenjualan = $('#status-paket-penjualan');
 
         if(kondisiProduk == 'Part Baru' || kondisiProduk == 'Part Bekas') {
             alert('Fitur belum tersedia.');
@@ -36,30 +39,23 @@ $(document).ready(function () {
             .then(response => response.json())
             .then(data => {
                 jenisProduk.empty();
-                const addedProductIds = new Set(); // Menyimpan id produk yang sudah di tambahkan
-                const fragment = $(document.createDocumentFragment()); // Menampung semua elemen option yang di tambahkan
+                paketPenjualan.empty();
+                (listProdukTersedia) ? listProdukTersedia.remove() : '';
+                (statusPaketPenjualan) ? statusPaketPenjualan.remove() : '';
 
                 const defaultOption = $('<option>', {
-                    text: 'Hayooo',
+                    text: 'Pilih Jenis Produk',
                     hidden: true
                 });
                 jenisProduk.append(defaultOption);
 
-                data.forEach(jenis => {
-                    jenis.subjenis.produkjenis.forEach(produk => {
-                        if (!addedProductIds.has(produk.id)) {
-                            addedProductIds.add(produk.id);
-                
-                            const option = $('<option>', {
-                                value: produk.id,
-                                text: produk.jenis_produk
-                            }).addClass('dark:bg-gray-700');
-                            
-                            fragment.append(option);
-                        }
-                    });
+                data.forEach(produk => {
+                    const option = $('<option>', {
+                        value: produk.id,
+                        text: produk.jenis_produk
+                    }).addClass('dark:bg-gray-700');
+                    jenisProduk.append(option);
                 });
-                jenisProduk.append(fragment);
             })
             .catch(error => {
                 alert('Error Fetching Data : ', error);
@@ -71,7 +67,7 @@ $(document).ready(function () {
         var jenisProdukId = $(this).val();
         var kondisiProduk = $("#kondisi_produk").val();
         var paketPenjualan = $("#paket_penjualan");
-        var listProdukTersedia = $('#list-produk-tersedia');
+        var listProdukTersedia = $('#list-produk-dr li');
         var statusPaketPenjualan = $('#status-paket-penjualan');
 
         if(kondisiProduk == 'Part Baru' || kondisiProduk == 'Part Bekas') {
@@ -83,17 +79,14 @@ $(document).ready(function () {
                 paketPenjualan.empty();
                 (listProdukTersedia) ? listProdukTersedia.remove() : '';
                 (statusPaketPenjualan) ? statusPaketPenjualan.remove() : '';
-                const addedProductIds = new Set(); // Menyimpan id produk yang sudah di tambahkan
-                const fragment = $(document.createDocumentFragment()); // Menampung semua elemen option yang di tambahkan
 
                 const defaultOption = $('<option>', {
-                    text: 'Hayooo',
+                    text: 'Pilih Paket Penjualan',
                     hidden: true
                 });
                 paketPenjualan.append(defaultOption);
 
                 data.forEach(jenis => {
-                    jenis
                     const option = $('<option>', {
                         value: jenis.id,
                         text: jenis.paket_penjualan
@@ -118,31 +111,37 @@ $(document).ready(function () {
         var kondisiProduk = $("#kondisi_produk").val();
         var paketPenjualan = $("#paket_penjualan").val();
 
-        fetch(`/kios/customer/getSubJenisProduk/${kondisiProduk}/${jenisProdukId}`)
+        fetch(`/kios/customer/getListProduk/${kondisiProduk}/${jenisProdukId}`)
             .then(response => response.json())
             .then(data => {
                 listProdukTersedia.remove();
                 statusPaketPenjualan.remove();
                 data.forEach(jenis => {
-                    jenis.kiosproduk.forEach(item => {
-                        let dataStatus = ``;
-                        let namaStatus = ``;
-                        if (paketPenjualan == jenis.id) {
-                            if (item.status == 'Ready' || item.status == 'Promo') {
-                                dataStatus += `
-                                    <span id="status-paket-penjualan" class="my-2 bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Ready</span>
-                                `
-                                namaStatus += item.status
-                            } else {
-                                dataStatus += `
-                                    <span id="status-paket-penjualan" class="my-2 bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Sold</span>
-                                `
-                                namaStatus += item.status
+                    let dataStatus = ``;
+                    let namaStatus = ``;
+                    if (kondisiProduk == 'Drone Baru') {
+                        jenis.kiosproduk.forEach(item => {
+                            if (paketPenjualan == jenis.id) {
+                                if (item.status == 'Ready' || item.status == 'Promo') {
+                                    dataStatus += `
+                                        <span id="status-paket-penjualan" class="my-2 bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Ready</span>
+                                    `
+                                    namaStatus += item.status
+                                } else {
+                                    dataStatus += `
+                                        <span id="status-paket-penjualan" class="my-2 bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Sold</span>
+                                    `
+                                    namaStatus += item.status
+                                }
+                                containerStatusId.append(dataStatus);
+                                statusProduk.val(namaStatus);
                             }
-                            containerStatusId.append(dataStatus);
-                            statusProduk.val(namaStatus);
-                        }
-                    })
+                        });
+                    } else {
+                        jenis.kiosproduksecond.forEach(itemSec => {
+                            console.log(itemSec);
+                        })
+                    }
                     const dataList = `
                     <li id="list-produk-tersedia" class="flex items-center">
                         <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -172,7 +171,7 @@ $(document).ready(function () {
                 statusSell.remove();
 
                 const defaultOption = $('<option>', {
-                    text: 'Hayooo',
+                    text: 'Pilih Paket Penjualan',
                     hidden: true
                 });
                 paketPenjualan.append(defaultOption);

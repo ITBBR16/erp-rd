@@ -13,7 +13,7 @@ $(document).ready(function () {
                     jenisProduk.empty();
 
                     const defaultOption = $('<option>', {
-                        text: '-- Jenis Paket --',
+                        text: 'Pilih Jenis Paket',
                         hidden: true
                     });
                     jenisProduk.append(defaultOption);
