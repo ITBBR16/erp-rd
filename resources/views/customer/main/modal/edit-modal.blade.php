@@ -14,7 +14,7 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form action="{{ url('customer/data-customer/'.$item->id) }}" method="POST" autocomplete="off">
+                <form action="{{ route('data-customer.update', $item->id) }}" method="POST" autocomplete="off">
                     @method('PUT')
                     @csrf
                     <div class="px-6 py-6 lg:px-8">

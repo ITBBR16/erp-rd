@@ -164,6 +164,10 @@ class KiosShopController extends Controller
                             ->where('sub_jenis_id', $jenisPaket)
                             ->first();
 
+                $productPacket = ProdukSubJenis::findOrFail($jenisPaket);
+                $productName = $productPacket->paket_penjualan . " * " . $quantities[$index] ."\n";
+                $message .= $productName;
+
                 if($orderList) {
                     $orderList->sub_jenis_id = $jenisPaket;
                     $orderList->quantity = $quantities[$index];
@@ -178,10 +182,6 @@ class KiosShopController extends Controller
 
                     $total = $quantities[$index] * $nilaiBeli[$index];
                     $totalNilai += $total;
-
-                    $productPacket = ProdukSubJenis::findOrFail($jenisPaket);
-                    $productName = $productPacket->paket_penjualan . " * " . $quantities[$index] ."\n";
-                    $message .= $productName;
 
                     $supplier->subjenis()->attach($jenisPaket, ['nilai' => $nilaiBeli[$index]]);
 

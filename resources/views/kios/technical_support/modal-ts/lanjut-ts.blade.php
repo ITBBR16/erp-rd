@@ -3,7 +3,7 @@
         <div class="relative w-full max-w-lg max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-medium text-gray-900 dark:text-white">Lanjut New Thecnical Support</h3>
+                    <h3 class="text-xl font-medium text-gray-900 dark:text-white">Lanjut New Thecnical Support / {{ $recap->recapTs->produkjenis->jenis_produk }}</h3>
                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="lanjut-ts-{{ $recap->id }}">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -11,36 +11,48 @@
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <form action="#" method="POST" autocomplete="off">
+                <form action="{{ route('input.update', $recap->id) }}" method="POST" autocomplete="off">
                     @csrf
+                    @method('PUT')
                     <div class="px-6 py-6 lg:px-8">
+                        <div class="mb-6">
+                            <label for="lanjut-keterangan-{{ $recap->id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan : </label>
+                            <textarea id="lanjut-keterangan-{{ $recap->id }}" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tulis deskripsi . . ." readonly>{{ $recap->recapTs->keterangan }}</textarea>
+                        </div>
                         <div class="relative col-span-2 w-full mb-6">
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="add-jenis-produk-ts-{{ $recap->id }}">List Produk : </label>
-                            <select name="add_jenis_produk[]" id="add-jenis-produk-ts-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="lanjut-jenis-produk-ts-{{ $recap->id }}">List Produk : </label>
+                            <select name="lanjut_ts_jenis_produk[]" id="lanjut-jenis-produk-ts-{{ $recap->id }}" data-id="{{ $recap->id }}" class="lanjut-jp-ts block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                                 <option value="" hidden>Jenis Produk</option>
                                 @foreach ($jenisProduk as $produk)
                                     <option value="{{ $produk->id }}">{{ $produk->jenis_produk }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="flex">
+                        <div id="box-selected-lanjut-jenis-ts-{{ $recap->id }}" class="flex flex-wrap border rounded-lg items-start w-full h-16 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
+                        
+                        </div>
+                        {{-- <div class="flex">
                             <label class="relative inline-flex items-center me-5 mb-4 cursor-pointer">
                                 <input type="checkbox" name="check_permasalahan_lanjut" id="check-permasalahan-lanjut-{{ $recap->id }}" data-id="{{ $recap->id }}" value="" class="new-permasalahan sr-only peer">
                                 <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-600 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600"></div>
                                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Input Permasalahan Baru</span>
                             </label>
-                        </div>
+                        </div> --}}
                         <div class="grid grid-cols-2 gap-6">
                             <div class="relative z-0 w-full mb-6 group">
-                                <label for="keperluan_ts"></label>
-                                <select name="keperluan_ts" id="keperluan_ts" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                                <label for="lanjut-keperluan-ts-{{ $recap->id }}"></label>
+                                <select name="lanjut_keperluan_ts" id="lanjut-keperluan-ts-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                                     <option value="" hidden>Keperluan</option>
                                     @foreach ($kategoriPermasalahan as $keperluan)
-                                        <option value="{{ $keperluan->id }}" class="dark:bg-gray-700">{{ $keperluan->nama }}</option>
+                                        @if ($keperluan->id == $recap->recapTs->kategoriPermasalahan->id)
+                                            <option value="{{ $keperluan->id }}" selected class="dark:bg-gray-700">{{ $keperluan->nama }}</option>
+                                        @else
+                                            <option value="{{ $keperluan->id }}" class="dark:bg-gray-700">{{ $keperluan->nama }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
-                            <div id="dd-permasalahan-{{ $recap->id }}" class="relative z-0 w-full mb-6 group">
+                            {{-- <div id="dd-permasalahan-{{ $recap->id }}" class="relative z-0 w-full mb-6 group">
                                 <label for="permasalahan-lanjut-{{ $recap->id }}"></label>
                                 <select name="permasalahan_lanjut" id="permasalahan-lanjut-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                                     <option value="" hidden>Permasalahan</option>
@@ -48,19 +60,19 @@
                                         <option value="{{ $ts->id }}">{{ $ts->nama }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div id="new-permasalahan-{{ $recap->id }}" class="relative z-0 w-full mb-6 group" style="display: none">
-                                <input type="text" name="add_permasalahan" id="add-permasalahan-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
-                                <label for="add_link_video" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Permasalahan</label>
+                            </div> --}}
+                            <div id="new-permasalahan-{{ $recap->id }}" class="relative z-0 w-full mb-6 group">
+                                <input type="text" name="lanjut_permasalahan" id="add-permasalahan-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                                <label for="add-permasalahan-{{ $recap->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Permasalahan</label>
                             </div>
                         </div>
                         <div class="mb-6">
-                            <label for="deskripsi-ts" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi : </label>
-                            <textarea name="deskrisi_ts" id="deskripsi-ts" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tulis deskripsi . . ." required></textarea>
+                            <label for="deskripsi-ts-{{ $recap->id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi : </label>
+                            <textarea name="lanjut_deskrisi_ts" id="deskripsi-ts-{{ $recap->id }}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tulis deskripsi . . ." required></textarea>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" name="add_link_video" id="add_link_video" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                            <label for="add_link_video" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Link Video</label>
+                            <input type="text" name="lanjut_link_video" id="lanjut-link-video-{{ $recap->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                            <label for="lanjut-link-video-{{ $recap->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Link Video</label>
                         </div>
                     </div>
                     <div class="mt-4 text-end border-t p-3">

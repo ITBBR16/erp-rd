@@ -92,7 +92,7 @@ class KiosDailyRecapController extends Controller
 
             } elseif ($keperluanRecap->nama == 'Technical Support') {
                 $keperluanTsId = $request->input('permasalahan');
-                $keperluanTs = KiosKategoriPermasalahan::findOrFail($keperluanTsId);
+                $keperluanTs = KiosTechnicalSupport::findOrFail($keperluanTsId);
 
                 $tableKeperluan = KiosRecapTechnicalSupport::create([
                     'kategori_permasalahan_id' => $request->input('kategori_permasalahan'),
@@ -100,9 +100,9 @@ class KiosDailyRecapController extends Controller
                     'jenis_id' => $request->input('jenis_produk'),
                     'keterangan' => $keterangan,
                 ]);
-                
+
                 $status = ($keperluanTs == 'Belum Terdata') ? 'Unprocess' : 'Case Done';
-                
+
             } else {
                 $connectionKios->rollBack();
                 return back()->with('error', 'Something went wrong.');

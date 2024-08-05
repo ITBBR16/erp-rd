@@ -69,16 +69,17 @@
                                                 <span class="whitespace-nowrap">Lanjut</span>
                                             </button>
                                         </li>
-                                        <li>
+                                        {{-- <li>
                                             <button type="button" data-modal-target="cancel-ts-{{ $recap->id }}" data-modal-toggle="cancel-ts-{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                                 <span class="material-symbols-outlined text-base mr-3">cancel</span>
                                                 <span class="whitespace-nowrap">Cancel</span>
                                             </button>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </div>
                             </td>
                         </tr>
+                        
                     @endforeach
                 </tbody>
             </table>
@@ -88,8 +89,7 @@
         </div>
     </form>
     {{-- Modal --}}
-    @include('kios.technical_support.modal-ts.new-data-ts')
     @include('kios.technical_support.modal-ts.lanjut-ts')
-    @include('kios.technical_support.modal-ts.cancel-ts')
-
+    {{-- @include('kios.technical_support.modal-ts.cancel-ts') --}}
+    @include('kios.technical_support.modal-ts.new-data-ts')
 </div>

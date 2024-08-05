@@ -80,7 +80,7 @@ class DataCustomerController extends Controller
         if($response->successful()) {
             $customer->update($validate);
             
-            return redirect('/customer/data-customer')->with('success', 'Success Update Customer Data.');
+            return back()->with('success', 'Success Update Customer Data.');
         } else {
             return back()->with('error', 'Failed to Update Customer Data.');
         }

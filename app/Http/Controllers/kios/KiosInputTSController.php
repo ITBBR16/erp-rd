@@ -55,7 +55,7 @@ class KiosInputTSController extends Controller
 
             $picId = auth()->user()->id;
             $kategoriPermasalahan = $request->input('keperluan_ts');
-            $jenisProduk = $request->input('add_jenis_produk');
+            $jenisProduk = $request->input('add_jenis_ts_id');
             $namaPermasalahan = ucwords($request->input('add_permasalahan'));
             $deskripsi = $request->input('deskrisi_ts');
             $linkVideo = $request->input('add_link_video');
@@ -68,14 +68,46 @@ class KiosInputTSController extends Controller
                 'link_video' => $linkVideo,
             ]);
 
-            foreach($jenisProduk as $jenis) {
-                $searchJenisProduk = ProdukJenis::findOrFail($jenis);
-                $searchJenisProduk->produkpermasalahan()->sync($recapPermasalahan->id);
-            }
+            $recapPermasalahan->permasalahanproduk()->attach($jenisProduk);
 
             $connectionKios->commit();
             return back()->with('success', 'Success add new data technical support.');
 
+        } catch (Exception $e) {
+            $connectionKios->rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $connectionKios = DB::connection('rumahdrone_kios');
+        $connectionKios->beginTransaction();
+
+        try {
+            $picId = auth()->user()->id;
+            $kategoriPermasalahan = $request->input('lanjut_keperluan_ts');
+            $jenisProduk = $request->input('lanjut_jenis_ts_id');
+            $namaPermasalahan = ucwords($request->input('lanjut_permasalahan'));
+            $deskripsi = $request->input('lanjut_deskrisi_ts');
+            $linkVideo = $request->input('lanjut_link_video');
+
+            $lanjutPermasalahan = KiosTechnicalSupport::create([
+                'employee_id' => $picId,
+                'kategori_permasalahan_id' => $kategoriPermasalahan,
+                'nama' => $namaPermasalahan,
+                'deskripsi' => $deskripsi,
+                'link_video' => $linkVideo,
+            ]);
+
+            $lanjutPermasalahan->permasalahanproduk()->attach($jenisProduk);
+
+            $dailyRecap = KiosDailyRecap::findOrFail($id);
+            $dailyRecap->update(['status' => 'Case Done']);
+            $dailyRecap->recapTs()->update(['kios_ts_id' => $lanjutPermasalahan->id]);
+
+            $connectionKios->commit();
+            return back()->with('success', 'Success input new technical support.');
         } catch (Exception $e) {
             $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());

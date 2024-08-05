@@ -31,7 +31,7 @@
                     <a href="#" class="{{ ($navActive === 'aftersales') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Aftersales</a>
                 </div>
                 <div>
-                    <a href="/kios/technical-support/dashboard" class="{{ ($navActive === 'technical-support') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Technical Support</a>
+                    <a href="/kios/technical-support/input" class="{{ ($navActive === 'technical-support') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Technical Support</a>
                 </div>
                 <div>
                     <a href="#" class="{{ ($navActive === 'management') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Management</a>

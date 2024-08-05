@@ -65,12 +65,12 @@
                                                 <span class="whitespace-nowrap">Link Doc</span>
                                             </a>
                                         </li>
-                                        <li>
+                                        {{-- <li>
                                             <button type="button" data-modal-target="recap-edit{{ $dataTs->id }}" data-modal-toggle="recap-edit{{ $dataTs->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                                 <span class="material-symbols-outlined text-base mr-3">edit</span>
                                                 <span class="whitespace-nowrap">Edit</span>
                                             </button>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </div>
                             </td>
