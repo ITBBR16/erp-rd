@@ -4,6 +4,7 @@ namespace App\Models\repair;
 
 use App\Models\customer\Customer;
 use App\Models\employee\Employee;
+use App\Models\produk\ProdukJenis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +33,11 @@ class RepairCase extends Model
         return $this->belongsTo(RepairJenisCase::class, 'jenis_case_id');
     }
 
+    public function jenisProduk()
+    {
+        return $this->belongsTo(ProdukJenis::class, 'produk_jenis_id');
+    }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
@@ -47,9 +53,9 @@ class RepairCase extends Model
         return $this->belongsTo(Employee::class, 'teknisi_id');
     }
 
-    public function kelengkapan()
+    public function detailKelengkapan()
     {
-        return $this->hasMany(RepairKelengkapan::class);
+        return $this->hasMany(RepairKelengkapan::class, 'case_id');
     }
 
     public function jurnal()

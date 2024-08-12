@@ -4,6 +4,7 @@ namespace App\Models\produk;
 
 use App\Models\kios\KiosRecapTechnicalSupport;
 use App\Models\kios\KiosTechnicalSupport;
+use App\Models\repair\RepairCase;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,6 +37,11 @@ class ProdukJenis extends Model
     public function kiosRecapTs()
     {
         return $this->hasMany(KiosRecapTechnicalSupport::class);
+    }
+
+    public function repiarCase()
+    {
+        return $this->hasMany(RepairCase::class);
     }
 
 }

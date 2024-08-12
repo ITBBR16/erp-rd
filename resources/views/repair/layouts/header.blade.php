@@ -19,10 +19,10 @@
                     <a href="#" class="{{ ($navActive === '') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Analisa</a>
                 </div>
                 <div>
-                    <a href="#" class="{{ ($navActive === 'customer') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Customer</a>
+                    <a href="{{ route('list-customer-repair.index') }}" class="{{ ($navActive === 'customer') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Customer</a>
                 </div>
                 <div>
-                    <a href="#" class="{{ ($navActive === '') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">CSR</a>
+                    <a href="{{ route('case-list.index') }}" class="{{ ($navActive === 'csr') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">CSR</a>
                 </div>
                 <div>
                     <a href="#" class="{{ ($navActive === '') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Teknisi</a>
@@ -70,9 +70,9 @@
                             </p>
                         </div>
                         <ul class="py-1" role="none">
-                            <li>
+                            {{-- <li>
                                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf

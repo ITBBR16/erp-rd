@@ -33,8 +33,12 @@ use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\kios\DashboardTechnicalSupportController;
 use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
+use App\Http\Controllers\repair\KasirRepairController;
 use App\Http\Controllers\repair\RepairCustomerListController;
+use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairListCaseController;
+use App\Http\Controllers\repair\RepairProdukSedangDikirim;
+use App\Http\Controllers\repair\RepairRequestSparepartController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -204,15 +208,25 @@ Route::middleware('repair')->group(function () {
         });
 
         Route::prefix('/customer')->group(function () {
-            Route::resource('/case-list', RepairListCaseController::class)->only(['index']);
-            Route::get('/getKelengkapan/{id}', [RepairListCaseController::class, 'getKelengkapan']);
+
+            Route::get('/produk-dikirim', [RepairProdukSedangDikirim::class, 'index'])->name('index-produk-dikirim');
 
             Route::resource('/list-customer-repair', RepairCustomerListController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::get('/list-customer-repair/search', [RepairCustomerListController::class, 'search']);
         });
 
         Route::prefix('/csr')->group(function () {
-            // Rute csr
+            Route::group(['controller' => RepairListCaseController::class], function () {
+                Route::resource('/case-list', RepairListCaseController::class)->only(['index', 'edit', 'store']);
+                Route::post('/create-nc', 'createNC')->name('createNC');
+                Route::get('/getKelengkapan/{id}', 'getKelengkapan');
+            });
+
+            Route::resource('/kasir-repair', KasirRepairController::class)->only(['index', 'edit']);
+
+            Route::resource('/konfirmasi-qc', RepairKonfirmasiQCController::class)->only(['index']);
+
+            Route::resource('/request-sparepart', RepairRequestSparepartController::class)->only(['index']);
         });
 
         Route::prefix('/teknisi')->group(function () {

@@ -2,65 +2,84 @@
 
 namespace App\Http\Controllers\repair;
 
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Repositories\umum\UmumRepository;
 use App\Models\customer\CustomerInfoPerusahaan;
 use App\Models\produk\ProdukJenis;
-use App\Repositories\repair\repository\RepairCustomerRepository;
+use App\Services\repair\CustomerService;
+use App\Services\repair\RepairCaseService;
 
 class RepairListCaseController extends Controller
 {
-    public function __construct(private UmumRepository $nameDivisi, private RepairCustomerRepository $repairCustomer){}
+    protected $customerService, $repairCaseService;
+    public function __construct(private UmumRepository $nameDivisi, CustomerService $customerService, RepairCaseService $repairCaseService)
+    {
+        $this->customerService = $customerService;
+        $this->repairCaseService = $repairCaseService;
+    }
 
     public function index()
     {
         $user = auth()->user();
+        $caseService = $this->repairCaseService->getDataDropdown();
         $divisiName = $this->nameDivisi->getDivisi($user);
-        $dataProvinsi = $this->repairCustomer->getProvinsi();
+        $dataCase = $caseService['data_case'];
+        $dataCustomer = $caseService['data_customer'];
+        $dataProvinsi = $caseService['data_provinsi'];
+        $dataJenisCase = $caseService['jenis_case'];
+        $dataJenisDrone = $caseService['jenis_drone'];
+        $dataFungsionalDrone = $caseService['fungsional_drone'];
         $infoPerusahaan = CustomerInfoPerusahaan::all();
 
-        return view('repair.customer.case-list', [
+        return view('repair.csr.case-list', [
             'title' => 'Case List',
             'active' => 'list-case',
-            'navActive' => 'customer',
+            'navActive' => 'csr',
             'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+            'dataCustomer' => $dataCustomer,
             'dataProvinsi' => $dataProvinsi,
             'infoPerusahaan' => $infoPerusahaan,
+            'jenisCase' => $dataJenisCase,
+            'jenisDrone' => $dataJenisDrone,
+            'fungsionalDrone' => $dataFungsionalDrone,
         ]);
 
     }
 
+    public function edit()
+    {
+        $user = auth()->user();
+        $divisiName = $this->nameDivisi->getDivisi($user);
+
+        return view('repair.csr.invoice.invoice-penerimaan', [
+            'title' => 'Case List',
+            'active' => 'list-case',
+            'navActive' => 'csr',
+            'divisi' => $divisiName,
+        ]);
+    }
+
+    public function createNC(Request $request)
+    {
+        $result = $this->customerService->createNewCustomer($request);
+
+        if ($result['status'] === 'success') {
+            return back()->with('success', $result['message']);
+        } else {
+            return back()->with('error', $result['message']);
+        }
+    }
+
     public function store(Request $request)
     {
-        $connectionCustomer = DB::connection('rumahdrone_customer');
-        $connectionCustomer->beginTransaction();
+        $resultCase = $this->repairCaseService->createNewCase($request);
 
-        try {
-            $divisiId = auth()->user()->divisi_id;
-
-            $validate = $request->validate([
-                'first_name' => 'required',
-                'lats_name' => 'required',
-                'asal_informasi' => 'required',
-                'no_telpon' => ['required' , 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
-                'email' => 'required|email:dns',
-                'instansi' => 'max:255',
-                'provinsi' => 'required',
-                'nama_jalan' => 'required',
-            ]);
-
-            $validate['by_divisi'] = $divisiId;
-            $this->repairCustomer->createCustomer($validate);
-
-            $connectionCustomer->commit();
-            return back()->with('success', 'Success Save New Contact!');
-        } catch(Exception $e){
-            $connectionCustomer->rollBack();
-            return back()->with('error', $e->getMessage());
+        if ($resultCase['status'] === 'success') {
+            return back()->with('success', $resultCase['message']);
+        } else {
+            return back()->with('error', $resultCase['message']);
         }
     }
 

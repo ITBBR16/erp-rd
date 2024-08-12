@@ -21,7 +21,7 @@ class RepairKelengkapan extends Model
 
     public function itemKelengkapan()
     {
-        return $this->belongsTo(ProdukKelengkapan::class, 'kelengkapan_id');
+        return $this->belongsTo(ProdukKelengkapan::class, 'item_kelengkapan_id');
     }
 
 }

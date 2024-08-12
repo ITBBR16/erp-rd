@@ -102,9 +102,6 @@
                             </div>
                         </td>
                     </tr>
-                    {{-- @include('kios.main.modal.recap-view') --}}
-                    {{-- @include('kios.main.modal.recap-edit') --}}
-                    @include('kios.main.modal.recap-delete')
                 @endforeach
             </tbody>
         </table>
@@ -115,5 +112,8 @@
 
     {{-- Modal --}}
     @include('kios.main.modal.add-recap')
+    {{-- @include('kios.main.modal.recap-view') --}}
+    {{-- @include('kios.main.modal.recap-edit') --}}
+    @include('kios.main.modal.recap-delete')
     
 </div>

@@ -7,6 +7,7 @@ use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosTransaksi;
 use App\Models\repair\RepairCase;
 use App\Models\repair\RepairTransaksi;
+use App\Models\wilayah\Kota;
 use App\Models\wilayah\Provinsi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,11 @@ class Customer extends Model
     public function provinsi()
     {
         return $this->belongsTo(Provinsi::class, 'provinsi');
+    }
+
+    public function kota()
+    {
+        return $this->belongsTo(Kota::class, 'kota_kabupaten');
     }
 
     public function suppliersecond()

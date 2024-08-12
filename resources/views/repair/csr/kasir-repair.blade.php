@@ -2,15 +2,12 @@
 
 @section('container')
     <div class="mb-4 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="caseList" data-tabs-toggle="#caseListContent" role="tablist">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="kasirRepair" data-tabs-toggle="#kasirRepairContent" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="listCase-tab" data-tabs-target="#listCase" type="button" role="tab" aria-controls="listCase" aria-selected="false">List Case</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="listKasir-tab" data-tabs-target="#listKasir" type="button" role="tab" aria-controls="listKasir" aria-selected="false">List Belum Lunas</button>
             </li>
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="newCase-tab" data-tabs-target="#newCase" type="button" role="tab" aria-controls="newCase" aria-selected="false">New Case</button>
-            </li>
-            <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="newCustomer-tab" data-tabs-target="#newCustomer" type="button" role="tab" aria-controls="newCustomer" aria-selected="false">New Customer</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="doneKasir-tab" data-tabs-target="#doneKasir" type="button" role="tab" aria-controls="doneKasir" aria-selected="false">List Sudah Lunas</button>
             </li>
         </ul>
     </div>
@@ -45,10 +42,9 @@
         </div>
     @endif
 
-    <div class="caseListContent">
-        @include('repair.customer.tabs.list-case')
-        @include('repair.customer.tabs.new-case')
-        @include('repair.customer.tabs.new-customer')
+    <div class="kasirRepairContent">
+        @include('repair.csr.tabs.list-belum-lunas')
+        @include('repair.csr.tabs.list-sudah-lunas')
     </div>
 
 @endsection

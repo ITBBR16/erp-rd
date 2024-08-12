@@ -1,5 +1,5 @@
 <div class="hidden p-4" id="newCase" role="tabpanel" aria-labelledby="newCase-tab">
-    <form action="#" method="POST" autocomplete="off">
+    <form action="{{ route('case-list.store') }}" method="POST" autocomplete="off">
         @csrf
         <div class="grid grid-cols-2 gap-8">
             {{-- Form Data Customer --}}
@@ -14,6 +14,9 @@
                     <div class="col-span-2 text-start">
                         <select name="case_customer" id="case-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Select Customer</option>
+                            @foreach ($dataCustomer as $customer)
+                                <option value="{{ $customer->id }}">{{ $customer->first_name }} {{ $customer->last_name }} - {{ $customer->id }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -24,7 +27,9 @@
                     <div class="col-span-2 text-start">
                         <select name="case_jenis_drone" id="case-jenis-drone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Select Jenis Drone</option>
-                            <option value="1" selected>Example</option>
+                            @foreach ($jenisDrone as $drone)
+                                <option value="{{ $drone->id }}">{{ $drone->jenis_produk }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -35,6 +40,9 @@
                     <div class="col-span-2 text-start">
                         <select name="case_fungsional" id="case-fungsional" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Select Fungsional Drone</option>
+                            @foreach ($fungsionalDrone as $fungsional)
+                                <option value="{{ $fungsional->id }}">{{ $fungsional->jenis_fungsional }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -45,6 +53,9 @@
                     <div class="col-span-2 text-start">
                         <select name="case_jenis" id="case-jenis" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Select Jenis Case</option>
+                            @foreach ($jenisCase as $jc)
+                                <option value="{{ $jc->id }}">{{ $jc->jenis_case }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

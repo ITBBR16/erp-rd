@@ -2,19 +2,50 @@
 
 namespace App\Repositories\repair\repository;
 
-use App\Models\wilayah\Kota;
 use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
-use App\Models\wilayah\Kecamatan;
-use App\Models\wilayah\Kelurahan;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\repair\interface\RepairCustomerInterface;
 
 class RepairCustomerRepository implements RepairCustomerInterface
 {
-    public function getAll()
+
+    protected $model, $connection;
+
+    public function __construct(Customer $customer)
     {
-        $dataCustomer = Customer::with('provinsi')->orderBy('id', 'desc')->paginate(10);
-        return $dataCustomer;
+        $this->model = $customer;
+        $this->connection = DB::connection('rumahdrone_customer');
+    }
+
+    public function beginTransaction()
+    {
+        $this->connection->beginTransaction();
+    }
+
+    public function commitTransaction()
+    {
+        $this->connection->commit();
+    }
+
+    public function rollbackTransaction()
+    {
+        $this->connection->rollBack();
+    }
+
+    public function createCustomer(array $validate)
+    {
+        return $this->model->create($validate);
+    }
+
+    public function getDataCustomer()
+    {
+        return $this->model->all();
+    }
+
+    public function findCustomer($id)
+    {
+        return $this->model->findOrFail($id);
     }
 
     public function getProvinsi()
@@ -23,37 +54,23 @@ class RepairCustomerRepository implements RepairCustomerInterface
         return $dataProvinsi;
     }
 
-    // public function getKota()
-    // {
-    //     $dataKota = Kota::all();
-    //     return $dataKota;
-    // }
-
-    // public function getKecamatan()
-    // {
-    //     $dataKecamatan = Kecamatan::all();
-    //     return $dataKecamatan;
-    // }
-
-    // public function getKelurahan()
-    // {
-    //     $dataKelurahan = Kelurahan::all();
-    //     return $dataKelurahan;
-    // }
-
-    public function createCustomer(array $validate)
+    public function updateCustomer($customerId, array $validate)
     {
-        Customer::create($validate);
+        $customerSearch = $this->model->findOrFail($customerId);
+        $customerSearch->update($validate);
+        return $customerSearch;
     }
 
+    // Butuh atau tidak belum tau
     public function deleteCustomer($customerId)
     {
         Customer::destroy($customerId);
     }
 
-    public function updateCustomer($customerId, array $validate)
+    public function getAll()
     {
-        return Customer::whereId($customerId)->update($validate);
+        $dataCustomer = Customer::with('provinsi')->orderBy('id', 'desc')->paginate(10);
+        return $dataCustomer;
     }
 
 }
