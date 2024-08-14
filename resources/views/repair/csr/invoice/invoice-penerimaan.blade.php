@@ -112,15 +112,15 @@
                             </div>
                             {{-- End Invoice --}}
                             <div class="p-4 flex justify-end gap-x-3">
-                                <button id="ddPrintButton" data-dropdown-toggle="ddPrint" data-dropdown-placement="bottom" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                <button id="ddPrintButton{{ $case->id }}" data-dropdown-toggle="ddPrint{{ $case->id }}" data-dropdown-placement="bottom" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                                     Action
                                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                             </div>
-                            <div id="ddPrint" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
-                                <ul class="h-24 py-2 overflow-y-auto text-gray-700 dark:text-gray-200" aria-labelledby="ddPrintButton">
+                            <div id="ddPrint{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+                                <ul class="h-24 py-2 overflow-y-auto text-gray-700 dark:text-gray-200" aria-labelledby="ddPrintButton{{ $case->id }}">
                                     <li>
                                         <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                             <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>

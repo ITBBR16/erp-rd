@@ -18,7 +18,7 @@
                 visibility: visible;
             }
             #coba-print-repair {
-                margin-top: -115px;
+                margin-top: -215px;
                 padding: 0;
                 width: 100%;
                 max-width: none;
@@ -42,7 +42,7 @@
     @elseif (Request::is('repair/csr/*'))
         @include('repair.layouts.sidebarCsr')
     @elseif (Request::is('repair/teknisi/*'))
-        @include('repair.layouts.sidebarCustomer')
+        @include('repair.layouts.sidebarTeknisi')
     @elseif (Request::is('repair/estimasi/*'))
         @include('repair.layouts.sidebarCustomer')
     @elseif (Request::is('repair/quality-control/*'))

@@ -6,8 +6,10 @@ use App\Repositories\customer\CustomerInterface;
 use App\Repositories\customer\CustomerRepository;
 use App\Repositories\repair\interface\RepairCaseInterface;
 use App\Repositories\repair\interface\RepairCustomerInterface;
+use App\Repositories\repair\interface\RepairTeknisiInterface;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
+use App\Repositories\repair\repository\RepairTeknisiRepository;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         // Repair
         $this->app->bind(RepairCustomerInterface::class, RepairCustomerRepository::class);
         $this->app->bind(RepairCaseInterface::class, RepairCaseRepository::class);
+        $this->app->bind(RepairTeknisiInterface::class, RepairTeknisiRepository::class);
     }
 
     /**

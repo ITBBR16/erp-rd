@@ -28,11 +28,15 @@ class CustomerService
         $divisiId = auth()->user()->divisi_id;
 
         try {
+            $request->merge([
+                'no_telpon' => preg_replace('/^0/', '62', $request->input('no_telpon')),
+            ]);
+
             $validate = $request->validate([
                 'first_name' => 'required|max:50',
                 'last_name' => 'required|max:50',
                 'asal_informasi' => 'required',
-                'no_telpon' => ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
+                'no_telpon' => ['required', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
                 'email' => 'nullable|email:dns',
                 'instansi' => 'max:50',
                 'provinsi' => 'required',

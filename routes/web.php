@@ -39,6 +39,9 @@ use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairListCaseController;
 use App\Http\Controllers\repair\RepairProdukSedangDikirim;
 use App\Http\Controllers\repair\RepairRequestSparepartController;
+use App\Http\Controllers\repair\RepairTeknisiLCController;
+use App\Http\Controllers\repair\RepairTeknisiNCController;
+use App\Http\Controllers\repair\RepairTroubleshootingController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -230,7 +233,9 @@ Route::middleware('repair')->group(function () {
         });
 
         Route::prefix('/teknisi')->group(function () {
-            // Rute teknisi
+            Route::get('/list-cases', [RepairTeknisiLCController::class, 'index'])->name('listCaseTeknisi');
+            Route::resource('/new-case-teknisi', RepairTeknisiNCController::class)->only(['index', 'update']);
+            Route::resource('/troubleshooting', RepairTroubleshootingController::class)->only(['index', 'update']);
         });
 
         Route::prefix('/estimasi')->group(function () {
