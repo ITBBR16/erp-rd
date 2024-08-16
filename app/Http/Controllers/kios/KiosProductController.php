@@ -44,7 +44,7 @@ class KiosProductController extends Controller
             $query->with('subjenis', 'serialnumber');
         }
 
-        $produk = $query->get();
+        $produk = $query->paginate(25);
 
         $kategori = ProdukKategori::all();
         $types = ProdukType::all();

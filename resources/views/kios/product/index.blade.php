@@ -165,7 +165,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-2">
-                        <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
+                        <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'orange') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
                     </td>
                     <td class="px-6 py-2">
                         @if ($pd->status == 'Promo')
@@ -218,6 +218,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4 ">
+            {{ $produks->links() }}
+        </div>
         <div id="no-results" class="hidden p-4">
             <div class="flex items-center justify-center">
                 <figure class="max-w-lg">
