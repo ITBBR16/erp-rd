@@ -136,6 +136,11 @@ class KiosDailyRecapController extends Controller
         $divisiId = auth()->user()->divisi_id;
 
             try {
+
+                $request->merge([
+                    'no_telpon' => preg_replace('/^0/', '62', $request->input('no_telpon')),
+                ]);
+
                 $validate = $request->validate([
                     'first_name' => 'required|max:50',
                     'last_name' => 'required|max:50',
