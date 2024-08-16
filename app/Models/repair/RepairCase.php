@@ -58,11 +58,6 @@ class RepairCase extends Model
         return $this->hasMany(RepairKelengkapan::class, 'case_id');
     }
 
-    public function jurnal()
-    {
-        return $this->hasMany(RepairJurnal::class);
-    }
-
     public function estimasi()
     {
         return $this->hasMany(RepairEstimasi::class);
@@ -71,5 +66,10 @@ class RepairCase extends Model
     public function transaksi()
     {
         return $this->hasOne(RepairTransaksi::class);
+    }
+
+    public function timestampStatus()
+    {
+        return $this->hasMany(RepairTimestampStatus::class, 'case_id');
     }
 }

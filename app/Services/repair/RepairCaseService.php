@@ -33,6 +33,11 @@ class RepairCaseService
         ];
     }
 
+    public function findCase($id)
+    {
+        return $this->repairCase->findCase($id);
+    }
+
     public function createNewCase(Request $request)
     {
         $this->repairCase->beginTransaction();

@@ -44,7 +44,7 @@
     @elseif (Request::is('repair/teknisi/*'))
         @include('repair.layouts.sidebarTeknisi')
     @elseif (Request::is('repair/estimasi/*'))
-        @include('repair.layouts.sidebarCustomer')
+        @include('repair.layouts.sidebarEstimasi')
     @elseif (Request::is('repair/quality-control/*'))
         @include('repair.layouts.sidebarCustomer')
     @endif

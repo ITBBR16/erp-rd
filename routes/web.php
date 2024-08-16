@@ -35,6 +35,7 @@ use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\KasirRepairController;
 use App\Http\Controllers\repair\RepairCustomerListController;
+use App\Http\Controllers\repair\RepairEstimasiBiayaController;
 use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairListCaseController;
 use App\Http\Controllers\repair\RepairProdukSedangDikirim;
@@ -236,10 +237,11 @@ Route::middleware('repair')->group(function () {
             Route::get('/list-cases', [RepairTeknisiLCController::class, 'index'])->name('listCaseTeknisi');
             Route::resource('/new-case-teknisi', RepairTeknisiNCController::class)->only(['index', 'update']);
             Route::resource('/troubleshooting', RepairTroubleshootingController::class)->only(['index', 'update']);
+            Route::put('/change-to-estimasi/{id}', [RepairTroubleshootingController::class, 'changeStatus'])->name('change-to-estimasi');
         });
 
         Route::prefix('/estimasi')->group(function () {
-            // Rute estimasi
+            Route::resource('/estimasi-biaya', RepairEstimasiBiayaController::class)->only(['index', 'update', 'edit']);
         });
 
         Route::prefix('/quality-control')->group(function () {

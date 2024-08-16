@@ -29,4 +29,14 @@ class RepairEstimasi extends Model
     {
         return $this->hasMany(RepairEstimasiChat::class);
     }
+
+    public function estimasiPart()
+    {
+        return $this->hasMany(RepairEstimasiPart::class);
+    }
+
+    public function estimasiJrr()
+    {
+        return $this->hasMany(RepairEstimasiJRR::class);
+    }
 }

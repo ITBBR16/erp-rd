@@ -28,7 +28,10 @@ class ResetData extends Command
     {
         $databases = ['rumahdrone_ekspedisi', 'rumahdrone_kios', 'rumahdrone_produk'];
 
-        $protectedTables = ['ekspedisi', 'jenis_layanan', 'produk_kategori', 'kios_akun_rd', 'kios_marketplace', 'status_pembayaran', 'produk_kategori', 'produk_status', 'produk_type'];
+        $protectedTables = [
+            'ekspedisi', 'jenis_layanan', 
+            'kios_akun_rd', 'kios_alasan_jual', 'kios_kategori_permasalahan', 'kios_marketplace', 'kios_recap_keperluan', 'kios_status_komplain', 'metode_pembelian_second', 'status_pembayaran',
+            'produk_kategori', 'produk_status', 'produk_type'];
 
         foreach ($databases as $database) {
 

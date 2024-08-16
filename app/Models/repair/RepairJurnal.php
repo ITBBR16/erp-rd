@@ -28,4 +28,9 @@ class RepairJurnal extends Model
     {
         return $this->belongsTo(RepairJenisStatus::class, 'jenis_status_id');
     }
+
+    public function timestamp()
+    {
+        return $this->belongsTo(RepairTimestampStatus::class, 'timestamps_status_id');
+    }
 }

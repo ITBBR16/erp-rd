@@ -3,7 +3,7 @@
 @section('container')
     <div class="grid grid-cols-2 gap-8 mb-8 border-b border-gray-400 py-3">
         <div class="flex text-3xl font-bold text-gray-700 dark:text-gray-300">
-            List Troubleshooting
+            List Estimasi Biaya
         </div>
     </div>
 
@@ -77,7 +77,7 @@
             </thead>
             <tbody>
                 @foreach ($dataCase as $case)
-                    @if ($case->jenisStatus->jenis_status == 'Proses Troubleshooting')
+                    @if ($case->jenisStatus->jenis_status == 'Proses Estimasi Biaya')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
                                 {{ \Carbon\Carbon::parse($case->created_at)->isoFormat('D MMMM YYYY') }}
@@ -111,16 +111,10 @@
                                     </button>
                                 </li>
                                 <li>
-                                    <button type="button" data-modal-target="add-jurnal-{{ $case->id }}" data-modal-toggle="add-jurnal-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">menu_book</span>
-                                        <span class="whitespace-nowrap">Add Jurnal</span>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" data-modal-target="lanjut-estimasi-{{ $case->id }}" data-modal-toggle="lanjut-estimasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">find_replace</span>
-                                        <span class="whitespace-nowrap">Lanjut Estimasi</span>
-                                    </button>
+                                    <a href="{{ route('estimasi-biaya.edit', encrypt($case->id)) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-xl mr-3">playlist_add_check_circle</i>
+                                        <span class="whitespace-nowrap">Estimasi</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -132,9 +126,5 @@
             {{-- {{ $dataCustomer->links() }} --}}
         </div>
     </div>
-
-    {{-- Modal --}}
-    @include('repair.teknisi.modal.add-jurnal-ts')
-    @include('repair.teknisi.modal.lanjut-estimasi')
 
 @endsection

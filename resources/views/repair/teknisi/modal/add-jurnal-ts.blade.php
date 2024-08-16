@@ -1,12 +1,12 @@
 @foreach ($dataCase as $case)
-    @if ($case->jenis_status_id == 2)
+    @if ($case->jenisStatus->jenis_status == 'Proses Troubleshooting')
         <div id="add-jurnal-{{ $case->id }}" tabindex="-1" class="modal fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative w-full max-w-xl max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     {{-- Header Modal --}}
                     <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                            Input Jurnal
+                            Input Jurnal / <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $case->jenisStatus->jenis_status }}</span>
                         </h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="add-jurnal-{{ $case->id }}">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -16,7 +16,7 @@
                         </button>
                     </div>
                     {{-- Body Modal --}}
-                    <form action="#" method="POST" autocomplete="off">
+                    <form action="{{ route('troubleshooting.update', $case->id) }}" method="POST" autocomplete="off">
                         <div class="px-6 py-6 lg:px-8">
                             @csrf
                             @method('PUT')
@@ -36,20 +36,20 @@
                             </div>
                             <div class="mb-6">
                                 <label for="jurnal-ts-{{ $case->id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jurnal</label>
-                                <textarea id="jurnal-ts-{{ $case->id }}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Isi Jurnal . . ."></textarea>
+                                <textarea name="jurnal_troubleshooting" id="jurnal-ts-{{ $case->id }}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Isi Jurnal . . ."></textarea>
                             </div>
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Files Troubleshooting :</label>
                             <div class="flex items-center justify-center w-full">
                                 <label for="files-troubleshooting-{{ $case->id }}" class="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <div id="image-ts-{{ $case->id }}" class="flex flex-col items-center justify-center pt-5 pb-6">
                                         <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
                                     </div>
-                                    <div id="selected_images_kelengkapan" class="flex flex-wrap justify-evenly" style="display: none"></div>
-                                    <input name="files_troubleshooting[]" id="files-troubleshooting-{{ $case->id }}" type="file" class="hidden" multiple>
+                                    <div id="selected-files-ts-{{ $case->id }}" class="flex flex-wrap justify-evenly" style="display: none"></div>
+                                    <input name="files_troubleshooting[]" id="files-troubleshooting-{{ $case->id }}" data-id="{{ $case->id }}" type="file" class="hidden file-upload" multiple>
                                 </label>
                             </div>
                         </div>

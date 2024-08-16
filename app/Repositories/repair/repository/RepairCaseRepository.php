@@ -42,6 +42,11 @@ class RepairCaseRepository implements RepairCaseInterface
         return $this->modelCase->create($data);
     }
 
+    public function findCase($id)
+    {
+        return $this->modelCase->findOrFail($id);
+    }
+
     public function updateCase($id, array $data)
     {
         $case = $this->modelCase->find($id);

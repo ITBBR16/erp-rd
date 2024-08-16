@@ -1,11 +1,11 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-72689e67.css",
+    "file": "assets/app-1fab7925.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
   "resources/js/app.js": {
-    "file": "assets/app-d52bae56.js",
+    "file": "assets/app-2091d46c.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
@@ -20,7 +20,7 @@
     "src": "resources/js/logistik/app.js"
   },
   "resources/js/repair/app.js": {
-    "file": "assets/app-a4a65b4f.js",
+    "file": "assets/app-89d34cde.js",
     "isEntry": true,
     "src": "resources/js/repair/app.js"
   }

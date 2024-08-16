@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
             e.preventDefault();
         }
     });

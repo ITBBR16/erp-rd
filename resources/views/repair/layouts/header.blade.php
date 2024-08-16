@@ -9,7 +9,7 @@
                     </svg>
                 </button>
                 <a href="/repair/dashboard" class="flex ml-2 md:mr-24">
-                    <img src="/img/home-repair-3d.png" class="h-8 mr-3" alt="FlowBite Logo" />
+                    <img src="/img/Logo Repair.png" class="h-8 mr-3" alt="FlowBite Logo" />
                     <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Repair RD</span>
                 </a>
             </div>
@@ -28,7 +28,7 @@
                     <a href="{{ route('listCaseTeknisi') }}" class="{{ ($navActive === 'teknisi') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Teknisi</a>
                 </div>
                 <div>
-                    <a href="#" class="{{ ($navActive === '') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Estimator</a>
+                    <a href="{{ route('estimasi-biaya.index') }}" class="{{ ($navActive === 'estimasi') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Estimator</a>
                 </div>
                 <div>
                     <a href="#" class="{{ ($navActive === '') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Quality Control</a>
