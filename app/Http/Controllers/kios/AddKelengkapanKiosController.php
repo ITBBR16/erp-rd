@@ -155,9 +155,7 @@ class AddKelengkapanKiosController extends Controller
                 }
 
                 $urlApiProdukBaru = 'https://script.google.com/macros/s/AKfycbwzPkDQn1MbdVOHLRfozYviDzoIl3UwfvTeCLyIuLo--_azk7oqNitRFBt6XAlhpKB3bg/exec';
-                $idProdukBaru = $request->jenis_id;
-                $findNama = ProdukJenis::findOrFail($idProdukBaru);
-                $namaProdukBaru = $findNama->jenis_produk . " " . $validatePenjualan['paket_penjualan'];
+                $namaProdukBaru = $validatePenjualan['paket_penjualan'];
 
                 $fileData = base64_encode($request->file('file_paket_produk')->get());
                 $filesDataKelengkapan = $request->file('file_kelengkapan_produk');

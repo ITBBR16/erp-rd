@@ -56,19 +56,19 @@
                             <div class="relative z-0 w-full group">
                                 <input type="text" name="berat_edit_produk_baru" id="edit-berat-produk-baru-{{ $produk->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $produk->subjenis->berat }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
                                 <label for="edit-berat-produk-baru-{{ $produk->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Berat Produk</label>
-                                <span class="absolute bottom-8 end-0 font-bold text-gray-500 dark:text-gray-400">Kg</span>
+                                <span class="absolute bottom-8 end-0 font-bold text-gray-500 dark:text-gray-400">g</span>
                             </div>
                             <div class="flex flex-row border rounded-lg items-center w-full border-gray-300 mb-6 dark:border-gray-400">
                                 <label class="absolute ml-2 mt-1 -translate-y-6 text-xs font-medium text-gray-500 bg-white dark:text-gray-400 dark:bg-gray-700">Dimensions (P x L x T)</label>
-                                <input type="text" name="length" placeholder="0" class="input-field py-2.5 mr-1 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" oninput="this.value = this.value.replace(/\D/g, '')">
+                                <input type="text" name="length" placeholder="0" class="input-field py-2.5 mr-1 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" value="{{ $produk->subjenis->panjang }}" oninput="this.value = this.value.replace(/\D/g, '')">
                                 <div class="text-black items-center">
                                     <span class="material-symbols-outlined text-base dark:text-gray-400">close</span>
                                 </div>
-                                <input type="text" name="width" placeholder="0" class="input-field py-2.5 mx-1 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" oninput="this.value = this.value.replace(/\D/g, '')">
+                                <input type="text" name="width" placeholder="0" class="input-field py-2.5 mx-1 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" value="{{ $produk->subjenis->lebar }}" oninput="this.value = this.value.replace(/\D/g, '')">
                                 <div class="text-black items-center">
                                     <span class="material-symbols-outlined text-base dark:text-gray-400">close</span>
                                 </div>
-                                <input type="text" name="height" placeholder="0" class="input-field py-2.5 mx-1 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" oninput="this.value = this.value.replace(/\D/g, '')">
+                                <input type="text" name="height" placeholder="0" class="input-field py-2.5 mx-1 px-3 w-full text-sm text-gray-900 bg-transparent border-none focus:outline-none focus:border-transparent focus:ring-0 dark:text-white" value="{{ $produk->subjenis->tinggi }}" oninput="this.value = this.value.replace(/\D/g, '')">
                                 <span class="inline-flex items-center px-3 text-base font-semibold rounded-r-lg text-gray-900 bg-gray-100 border-l border-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:border-gray-600 grow h-full">Cm</span>
                             </div>
                         </div>
@@ -119,6 +119,43 @@
                                     <span class="material-symbols-outlined">add_circle</span>
                                     <span class="">Tambah Kelengkapan</span>
                                 </button>
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <h3 class="text-gray-900 dark:text-white font-bold text-xl">Data File Upload</h3>
+                        </div>
+                        <div class="bg-white p-4 text-white border border-solid shadow-md rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+                            <div class=" mt-3 grid grid-cols-2 gap-4 md:gap-6">
+                                <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">File Utama Produk :</label>
+                                <div class="flex items-center justify-center w-full">
+                                    <label for="edit-file-paket-produk-{{ $produk->id }}" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                        <div id="default-img-edit-paket-{{ $produk->id }}" class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                            </svg>
+                                            <p class="mb-2 w text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
+                                        </div>
+                                        <div id="selected-img-paktet-{{ $produk->id }}" class="flex flex-col items-center justify-center pt-5 pb-6" style="display: none"></div>
+                                        <input name="file_paket_produk" id="edit-file-paket-produk-{{ $produk->id }}" data-id="{{ $produk->id }}" type="file" class="hidden files-paket-penjualan">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 md:gap-6 mt-4">
+                                <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Files Kelengkapan :</label>
+                                <div class="flex items-center justify-center w-full">
+                                    <label for="edit-file-kelengkapan-{{ $produk->id }}" class="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                        <div id="default-img-edit-kelengkapan-{{ $produk->id }}" class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                            </svg>
+                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
+                                        </div>
+                                        <div id="selected-img-kelengkapan-{{ $produk->id }}" class="flex flex-wrap justify-evenly" style="display: none"></div>
+                                        <input name="file_kelengkapan_produk[]" id="edit-file-kelengkapan-{{ $produk->id }}" data-id="{{ $produk->id }}" type="file" class="hidden files-kelengkapan-produk" multiple>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         {{-- Footer Modal --}}

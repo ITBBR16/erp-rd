@@ -30,7 +30,7 @@ class ProdukSubJenis extends Model
 
     public function produkjenis()
     {
-        return $this->belongsToMany(ProdukJenis::class, 'produk_jenis_paket_penjualan', 'paket_penjualan_id', 'jenis_id');
+        return $this->belongsToMany(ProdukJenis::class, 'produk_jenis_paket_penjualan');
     }
 
     public function jeniskelengkapan()
