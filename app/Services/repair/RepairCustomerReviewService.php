@@ -35,7 +35,7 @@ class RepairCustomerReviewService
             ]);
 
             $dataReview = [
-                'no_increment_cs' => $request->input('no_telpon'),
+                'case_id' => $request->input('no_telpon'),
                 'problem_solved' => $validation['rating_tingkat_ps'],
                 'kecepatan_respon' => $validation['rating_kecepatan_respon'],
                 'kecepatan_ts' => $validation['rating_kecepatan_ts'],

@@ -25,14 +25,13 @@ class ReviewCustomerController extends Controller
         $pos = strpos($increment, 'RD');
 
         if ($pos !== false) {
-            $noIncrement = substr($increment, $pos + 2);
+            $noCase = substr($increment, $pos + 2);
         } else {
-            $noIncrement = $increment;
+            $noCase = $increment;
         }
-        $noIncrement = $increment;
         return view('repair.review.review-customer', [
             'title' => 'Customer Review',
-            'noIncrement' => $noIncrement,
+            'noCase' => $noCase,
         ]);
     }
 
