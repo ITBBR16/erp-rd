@@ -56,7 +56,7 @@ class ReviewCustomerController extends Controller
             $noTelpon = $request->input('noTelpon');
             $tanggal = Carbon::now();
             $tanggal->setTimezone('Asia/Jakarta');
-            $formattedDate = $tanggal->format('d/m/Y H:i:s');
+            $formattedDate = $tanggal->format('dmYHis');
             $formatUrl = $formattedDate . 'RD' . $noNota;
     
             $message = 'https://stagging.rumahdrone.id/review-customer/' . $formatUrl . '/edit';
