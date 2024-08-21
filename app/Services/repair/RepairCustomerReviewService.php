@@ -38,7 +38,7 @@ class RepairCustomerReviewService
             $existingReview = $this->customerReview->findReviewByCaseIdAndDate($request->input('no_case'), $today);
 
             if ($existingReview) {
-                return ['status' => 'error', 'message' => 'Review untuk case ini sudah ada pada hari ini.'];
+                return ['status' => 'error', 'message' => 'Terimakasih review sudah terisi.'];
             }
 
             $dataReview = [
