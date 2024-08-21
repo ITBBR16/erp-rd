@@ -47,7 +47,7 @@ class ReviewCustomerController extends Controller
             $noTelpon = $request->input('noTelpon');
             $encryptNoTelp = Crypt::encrypt($noTelpon);
     
-            $message = 'https://stagging.rumahdrone.id/' . $encryptNoTelp . '/edit';
+            $message = 'https://stagging.rumahdrone.id/review-customer/' . $encryptNoTelp . '/edit';
             $urlWaApi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
             $dataWa = [
                 'no_telpon' => $noTelpon,
