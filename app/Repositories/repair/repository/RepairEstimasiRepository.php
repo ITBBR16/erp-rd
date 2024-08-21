@@ -9,7 +9,7 @@ use App\Models\repair\RepairEstimasiJRR;
 use App\Models\repair\RepairEstimasiPart;
 use App\Repositories\repair\interface\RepairEstimasiInterface;
 
-class RepairTeknisiRepository implements RepairEstimasiInterface
+class RepairEstimasiRepository implements RepairEstimasiInterface
 {
     protected $connection, $modelCase, $modelEstimasi, $modelEstimasiPart, $modelEstimasiJrr;
     public function __construct(RepairCase $repairCase, RepairEstimasi $repairEstimasi, RepairEstimasiPart $repairEstimasiPart, RepairEstimasiJRR $repairEstimasiJRR)

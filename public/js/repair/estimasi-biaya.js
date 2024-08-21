@@ -86,4 +86,9 @@ $(document).ready(function () {
         $(this).val(formatAngka(parsedNumber));
     });
 
+    $('.estimasi-jt').on('change', function () {
+        let formId = $(this).data("id");
+        
+    });
+
 });

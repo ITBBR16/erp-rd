@@ -6,6 +6,7 @@ use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosTransaksi;
 use App\Models\repair\RepairCase;
+use App\Models\repair\RepairReviewCustomer;
 use App\Models\repair\RepairTransaksi;
 use App\Models\wilayah\Kota;
 use App\Models\wilayah\Provinsi;
@@ -58,5 +59,10 @@ class Customer extends Model
     public function repairTransaksi()
     {
         return $this->hasMany(RepairTransaksi::class);
+    }
+
+    public function customerReviewRepair()
+    {
+        return $this->hasMany(RepairReviewCustomer::class);
     }
 }

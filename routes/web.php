@@ -43,6 +43,7 @@ use App\Http\Controllers\repair\RepairRequestSparepartController;
 use App\Http\Controllers\repair\RepairTeknisiLCController;
 use App\Http\Controllers\repair\RepairTeknisiNCController;
 use App\Http\Controllers\repair\RepairTroubleshootingController;
+use App\Http\Controllers\repair\ReviewCustomerController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -52,6 +53,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
 Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
 Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);
+
+Route::resource('/review-customer', ReviewCustomerController::class)->only(['edit', 'store']);
 
 Route::middleware('superadmin')->group(function () {
     Route::get('/', function() {
