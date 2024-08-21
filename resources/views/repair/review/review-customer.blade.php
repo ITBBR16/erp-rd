@@ -53,8 +53,8 @@
                 @endif
 
                 <div class="my-4">
-                    <h1 class="text-xl font-bold">INI JUDUL</h1>
-                    <p class="text-gray-500">Ini nanti deskripsinya gatau apa yang mau ditulis disini nanti</p>
+                    <h1 class="text-xl font-bold">Berikan Penilaian dan Ulasan Anda</h1>
+                    <p class="text-gray-500">Mohon luangkan beberapa menit untuk berbagi pengalaman Anda dengan kami. Penilaian dan ulasan Anda akan membantu kami meningkatkan layanan kami dan memberikan pengalaman yang lebih baik di masa depan.</p>
                 </div>
             </div>
             
