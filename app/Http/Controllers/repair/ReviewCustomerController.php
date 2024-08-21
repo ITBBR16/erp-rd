@@ -21,8 +21,7 @@ class ReviewCustomerController extends Controller
 
     public function edit($encryptTelp)
     {
-        $decompressedNoTelp = Crypt::decrypt($encryptTelp);
-        $notelpon = gzuncompress($decompressedNoTelp);
+        $notelpon = decrypt($encryptTelp);
         return view('repair.review.review-customer', [
             'title' => 'Customer Review',
             'noTelpon' => $notelpon,
@@ -46,8 +45,7 @@ class ReviewCustomerController extends Controller
         try {
 
             $noTelpon = $request->input('noTelpon');
-            $compressedNoTelp = gzcompress($noTelpon);
-            $encryptNoTelp = Crypt::encryptString($compressedNoTelp);
+            $encryptNoTelp = Crypt::encrypt($noTelpon);
     
             $message = 'https://stagging.rumahdrone.id/review-customer/' . $encryptNoTelp . '/edit';
             $urlWaApi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
