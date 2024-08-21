@@ -34,8 +34,15 @@ class RepairCustomerReviewService
                 'saran' => 'required',
             ]);
 
+            $today = date('Y-m-d');
+            $existingReview = $this->customerReview->findReviewByCaseIdAndDate($request->input('no_case'), $today);
+
+            if ($existingReview) {
+                return ['status' => 'error', 'message' => 'Review untuk case ini sudah ada pada hari ini.'];
+            }
+
             $dataReview = [
-                'case_id' => $request->input('no_telpon'),
+                'case_id' => $request->input('no_case'),
                 'problem_solved' => $validation['rating_tingkat_ps'],
                 'kecepatan_respon' => $validation['rating_kecepatan_respon'],
                 'kecepatan_ts' => $validation['rating_kecepatan_ts'],

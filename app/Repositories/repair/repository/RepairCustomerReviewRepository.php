@@ -31,6 +31,13 @@ class RepairCustomerReviewRepository implements RepairCustomerReviewInterface
         $this->connection->rollBack();
     }
 
+    public function findReviewByCaseIdAndDate($caseId, $date)
+    {
+        return $this->modelReview->where('case_id', $caseId)
+                            ->whereDate('created_at', $date)
+                            ->first();
+    }
+
     public function storeReview(array $data)
     {
         return $this->modelReview->create($data);
