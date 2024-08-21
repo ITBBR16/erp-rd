@@ -21,7 +21,7 @@ class ReviewCustomerController extends Controller
 
     public function edit($encryptTelp)
     {
-        $decompressedNoTelp = decrypt($encryptTelp);
+        $decompressedNoTelp = Crypt::decrypt($encryptTelp);
         $notelpon = gzuncompress($decompressedNoTelp);
         return view('repair.review.review-customer', [
             'title' => 'Customer Review',
