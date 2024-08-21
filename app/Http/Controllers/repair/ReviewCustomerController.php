@@ -23,16 +23,29 @@ class ReviewCustomerController extends Controller
     public function edit($increment)
     {
         $pos = strpos($increment, 'RD');
+        $today = date('Y-m-d');
 
         if ($pos !== false) {
             $noCase = substr($increment, $pos + 2);
         } else {
             $noCase = $increment;
         }
-        return view('repair.review.review-customer', [
-            'title' => 'Customer Review',
-            'noCase' => $noCase,
-        ]);
+
+        $resultFind = $this->customerReview->findReview($noCase, $today);
+
+        if ($resultFind['status'] == 'ada') {
+            return view('repair.review.done-review', [
+                'title' => 'Customer Review',
+                'noCase' => $noCase,
+            ]);
+        } else {
+            return view('repair.review.review-customer', [
+                'title' => 'Customer Review',
+                'noCase' => $noCase,
+            ]);
+
+        }
+
     }
 
     public function store(Request $request)

@@ -67,4 +67,17 @@ class RepairCustomerReviewService
         }
 
     }
+
+    public function findReview($noCase, $today)
+    {
+        $existingReview = $this->customerReview->findReviewByCaseIdAndDate($noCase, $today);
+
+        if ($existingReview) {
+            return ['status' => 'ada'];
+        } else {
+            return ['status' => 'belum'];
+        }
+
+    }
+
 }
