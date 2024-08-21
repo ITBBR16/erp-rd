@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Services\repair\RepairCustomerReviewService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
@@ -19,12 +20,19 @@ class ReviewCustomerController extends Controller
         $this->customerReview = $repairCustomerReviewService;
     }
 
-    public function edit($encryptTelp)
+    public function edit($increment)
     {
-        $notelpon = decrypt($encryptTelp);
+        $pos = strpos($increment, 'RD');
+
+        if ($pos !== false) {
+            $noIncrement = substr($increment, $pos + 2);
+        } else {
+            $noIncrement = $increment;
+        }
+        $noIncrement = $increment;
         return view('repair.review.review-customer', [
             'title' => 'Customer Review',
-            'noTelpon' => $notelpon,
+            'noIncrement' => $noIncrement,
         ]);
     }
 
@@ -44,10 +52,14 @@ class ReviewCustomerController extends Controller
     {
         try {
 
+            $noNota = $request->input('noNota');
             $noTelpon = $request->input('noTelpon');
-            $encryptNoTelp = Crypt::encrypt($noTelpon);
+            $tanggal = Carbon::now();
+            $tanggal->setTimezone('Asia/Jakarta');
+            $formattedDate = $tanggal->format('d/m/Y H:i:s');
+            $formatUrl = $formattedDate . 'RD' . $noNota;
     
-            $message = 'https://stagging.rumahdrone.id/review-customer/' . $encryptNoTelp . '/edit';
+            $message = 'https://stagging.rumahdrone.id/review-customer/' . $formatUrl . '/edit';
             $urlWaApi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
             $dataWa = [
                 'no_telpon' => $noTelpon,
