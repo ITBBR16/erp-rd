@@ -16,7 +16,7 @@
         <form action="{{ route('review-customer.store') }}" method="POST" autocomplete="off">
             @csrf
 
-            <input type="hidden" value="{{ $noTelpon }}">
+            <input type="hidden" name="no_telpon" value="{{ $noTelpon }}">
             <div class="border-b-2">
                 <div class="border rounded-full p-2 absolute inset-x-0 -translate-y-20 bg-white mx-auto w-20">
                     <img src="{{ asset('/img/RD Tab Icon.png') }}" alt="Logo RD">
