@@ -10,7 +10,7 @@ class RepairEstimasiChat extends Model
     use HasFactory;
 
     protected $connection = 'rumahdrone_repair';
-    protected $table = 'repair_estimasi_chat';
+    protected $table = 'repair_chat_estimasi';
     protected $guarded = ['id'];
 
     public function estimasi()

@@ -3,17 +3,19 @@
 namespace App\Services\repair;
 
 use App\Repositories\repair\repository\RepairTeknisiRepository;
+use App\Repositories\repair\repository\RepairTimeJurnalRepository;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
 class RepairTeknisiService
 {
-    protected $repairTeknisi;
+    protected $repairTeknisi, $repairTimeJurnal;
 
-    public function __construct(RepairTeknisiRepository $repairTeknisiRepository)
+    public function __construct(RepairTeknisiRepository $repairTeknisiRepository, RepairTimeJurnalRepository $repairTimeJurnal)
     {
         $this->repairTeknisi = $repairTeknisiRepository;
+        $this->repairTimeJurnal = $repairTimeJurnal;
     }
 
     public function ambilCase($id)
@@ -47,7 +49,7 @@ class RepairTeknisiService
             $jurnalTS = $request->input('jurnal_troubleshooting');
             $imgTS = $request->input('files_troubleshooting');
 
-            $checkTimestamp = $this->repairTeknisi->findTimestime($id, 2);
+            $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 2);
 
             if ($checkTimestamp) {
                 $timestamp = $checkTimestamp;
@@ -58,7 +60,7 @@ class RepairTeknisiService
                     'tanggal_waktu' => $tglWaktu,
                 ];
     
-                $timestamp = $this->repairTeknisi->createTimestamp($dataTimestamp);
+                $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
             }
 
             $dataJurnal = [
@@ -68,7 +70,7 @@ class RepairTeknisiService
                 'isi_jurnal' => $jurnalTS,
             ];
 
-            $this->repairTeknisi->addJurnal($dataJurnal);
+            $this->repairTimeJurnal->addJurnal($dataJurnal);
 
             $this->repairTeknisi->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil membuat jurnal baru.'];
@@ -92,7 +94,7 @@ class RepairTeknisiService
                 'jenis_status_id' => 3,
                 'tanggal_waktu' => $tglWaktu,
             ];
-            $timestamp = $this->repairTeknisi->createTimestamp($dataTimestamp);
+            $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
 
             $dataJurnal = [
                 'employee_id' => $employeeId,
@@ -101,7 +103,7 @@ class RepairTeknisiService
                 'isi_jurnal' => 'Ganti status to Estimasi',
             ];
 
-            $this->repairTeknisi->addJurnal($dataJurnal);
+            $this->repairTimeJurnal->addJurnal($dataJurnal);
 
             $dataUpdate = [
                 'jenis_status_id' => 3,

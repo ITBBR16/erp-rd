@@ -27,16 +27,16 @@ class RepairEstimasi extends Model
 
     public function estimasiChat()
     {
-        return $this->hasMany(RepairEstimasiChat::class);
+        return $this->hasOne(RepairEstimasiChat::class, 'estimasi_id');
     }
 
     public function estimasiPart()
     {
-        return $this->hasMany(RepairEstimasiPart::class);
+        return $this->hasMany(RepairEstimasiPart::class, 'estimasi_id');
     }
 
     public function estimasiJrr()
     {
-        return $this->hasMany(RepairEstimasiJRR::class);
+        return $this->hasMany(RepairEstimasiJRR::class, 'estimasi_id');
     }
 }

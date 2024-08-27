@@ -60,7 +60,7 @@ class RepairCase extends Model
 
     public function estimasi()
     {
-        return $this->hasMany(RepairEstimasi::class);
+        return $this->hasOne(RepairEstimasi::class, 'case_id');
     }
 
     public function transaksi()

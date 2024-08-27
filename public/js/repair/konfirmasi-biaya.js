@@ -3,12 +3,12 @@ function formatAngka(angka) {
 }
 
 $(document).ready(function () {
-    let countForm = 1;
+    let countForm =$('#container-estimasi-active tr').length;
 
-    $('#add-item-estimasi').on('click', function () {
+    $('#add-ubah-estimasi').on('click', function () {
         countForm++;
-        const containerEstimasi = $('#container-input-estimasi');
-        const containerGudang = $('#container-data-gudang');
+        const containerEstimasi = $('#container-estimasi-active');
+        const containerGudang = $('#container-data-gudang-active');
         let itemForm = `
             <tr id="input-estimasi-${countForm}" class="bg-white dark:bg-gray-800">
                 <td class="px-2 py-4">
@@ -164,6 +164,41 @@ $(document).ready(function () {
         }
     });
 
+    
+    $(document).on('click', '.deactive-form-estimasi', function() {
+        var index = $(this).data("id");
+        var estimasiActive = $('#input-estimasi-' + index);
+        var gudangActive = $('#data-gudang-' + index);
+        var statusActive = $('#status-active-' + index);
+        var deactiveContainerEstimasi = $('#container-estimasi-deactive');
+        var deactiveContainerGudang = $('#container-data-gudang-deactive');
+
+        estimasiActive.appendTo(deactiveContainerEstimasi);
+        statusActive.val('Deactive');
+
+        $(this).removeClass('deactive-form-estimasi').addClass('activate-button');
+        $(this).find('span').text('add_circle');
+
+        gudangActive.appendTo(deactiveContainerGudang);
+    });
+
+    $(document).on('click', '.activate-button', function() {
+        var index = $(this).data("id");
+        var deactiveEstimasi = $('#input-estimasi-' + index);
+        var deactiveGudang = $('#data-gudang-' + index);
+        var statusActive = $('#status-active-' + index);
+        var activeContainerEstimasi = $('#container-estimasi-active');
+        var activeContainerGudang = $('#container-data-gudang-active');
+
+        deactiveEstimasi.appendTo(activeContainerEstimasi);
+        statusActive.val('Active');
+
+        $(this).removeClass('activate-button').addClass('deactive-form-estimasi');
+        $(this).find('span').text('delete');
+
+        deactiveGudang.appendTo(activeContainerGudang);
+    });
+
     function getJenisDroneGudang(jenisTransaksi, formId) {
         var inputJP = $('#estimasi-jp-' + formId);
         fetch(`/repair/estimasi/jenisDroneGudang/${jenisTransaksi}`)
@@ -237,12 +272,12 @@ $(document).ready(function () {
     }
 
     function buttonCheckbox() {
-        var anyChecked = $('#container-input-estimasi tr').length > 0;
+        var anyChecked = $('#container-estimasi-active tr').length > 0;
 
         if (!anyChecked) {
-            $("#estimasi-button").addClass('cursor-not-allowed').prop('disabled', true);
+            $("#ubah-estimasi").addClass('cursor-not-allowed').prop('disabled', true);
         } else {
-            $("#estimasi-button").removeClass('cursor-not-allowed').removeAttr('disabled', true);
+            $("#ubah-estimasi").removeClass('cursor-not-allowed').removeAttr('disabled', true);
         }
     }
 

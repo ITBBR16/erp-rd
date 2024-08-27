@@ -36,6 +36,7 @@ use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\KasirRepairController;
 use App\Http\Controllers\repair\RepairCustomerListController;
 use App\Http\Controllers\repair\RepairEstimasiBiayaController;
+use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairListCaseController;
 use App\Http\Controllers\repair\RepairProdukSedangDikirim;
@@ -244,7 +245,18 @@ Route::middleware('repair')->group(function () {
         });
 
         Route::prefix('/estimasi')->group(function () {
-            Route::resource('/estimasi-biaya', RepairEstimasiBiayaController::class)->only(['index', 'update', 'edit']);
+            Route::group(['controller' => RepairEstimasiBiayaController::class], function () {
+                Route::resource('/estimasi-biaya', RepairEstimasiBiayaController::class)->only(['index', 'update', 'edit']);
+                Route::post('/addJurnalEstimasi', 'inputJurnalEstimasi')->name('addJurnalEstimasi');
+                Route::get('/jenisDroneGudang/{jenisTransaksi}', 'getJenisDrone');
+                Route::get('/getPartGudang/{jenisTransaksi}/{jenisDrone}', 'getPartGudang');
+                Route::get('/getDetailGudang/{jenisTransaksi}/{sku}', 'getDetailGudang');
+            });
+
+            Route::group(['controller' => RepairKonfirmasiEstimasiController::class], function () {
+                Route::resource('/konfirmasi-estimasi', RepairKonfirmasiEstimasiController::class)->only(['index', 'edit', 'update']);
+                
+            });
         });
 
         Route::prefix('/quality-control')->group(function () {
