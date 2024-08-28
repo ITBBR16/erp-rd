@@ -100,15 +100,8 @@ class RepairEstimasiRepository implements RepairEstimasiInterface
 
     public function createEstimasiJrr(array $data)
     {
-        if (isset($data['estimasi_id'])) {
-            $data = [$data];
-        }
-    
-        foreach ($data as &$entry) {
-            $entry['created_at'] = Carbon::now();
-            $entry['updated_at'] = Carbon::now();
-        }
-    
+        $data['created_at'] = Carbon::now();
+        $data['updated_at'] = Carbon::now();
         return $this->modelEstimasiJrr->insert($data);
     }
 

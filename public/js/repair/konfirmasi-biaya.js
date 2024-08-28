@@ -199,6 +199,14 @@ $(document).ready(function () {
         deactiveGudang.appendTo(activeContainerGudang);
     });
 
+    document.querySelectorAll('.submit-konfirmasi-estimasi').forEach(button => {
+        button.addEventListener('click', function (event) {
+            const form = button.closest('form');
+            const hiddenInput = form.querySelector('#konfirmasi-customer');
+            hiddenInput.value = button.value;
+        });
+    });
+
     function getJenisDroneGudang(jenisTransaksi, formId) {
         var inputJP = $('#estimasi-jp-' + formId);
         fetch(`/repair/estimasi/jenisDroneGudang/${jenisTransaksi}`)

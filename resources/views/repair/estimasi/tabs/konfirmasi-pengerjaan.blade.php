@@ -1,42 +1,4 @@
-@extends('repair.layouts.main')
-
-@section('container')
-    <div class="grid grid-cols-2 gap-8 mb-8 border-b border-gray-400 py-3">
-        <div class="flex text-3xl font-bold text-gray-700 dark:text-gray-300">
-            List Konfirmas Estiamasi
-        </div>
-    </div>
-
-    @if (session()->has('success'))
-        <div id="alert-success-input" class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800" role="alert">
-            <span class="material-symbols-outlined flex-shrink-0 w-4 h-4">task_alt</span>
-            <div class="ml-3 text-sm font-medium">
-                {{ session('success') }}
-            </div>
-            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-success-input" aria-label="Close">
-            <span class="sr-only">Dismiss</span>
-            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-            </svg>
-            </button>
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div id="alert-failed-input" class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800" role="alert">
-            <span class="material-symbols-outlined flex-shrink-0 w-5 h-5">info</span>
-            <div class="ml-3 text-sm font-medium">
-                {{ session('error') }}
-            </div>
-            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-failed-input" aria-label="Close">
-                <span class="sr-only">Dismiss</span>
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                </svg>
-            </button>
-        </div>
-    @endif
-
+<div class="hidden p-4" id="KonPen" role="tabpanel" aria-labelledby="KonPen-tab">
     <div class="relative overflow-x-auto">
         <div class="flex items-center justify-between py-4">
             <label for="table-search" class="sr-only">Search</label>
@@ -77,7 +39,7 @@
             </thead>
             <tbody>
                 @foreach ($dataCase as $case)
-                    @if ($case->jenisStatus->jenis_status == 'Proses Konfirmasi Estimasi Biaya')
+                    @if ($case->jenisStatus->jenis_status == 'Proses Menunggu Konfirmasi')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
                                 {{ \Carbon\Carbon::parse($case->created_at)->isoFormat('D MMMM YYYY') }}
@@ -102,7 +64,7 @@
                             </td>
                         </tr>
                         <!-- Dropdown menu -->
-                        <div id="dropdownTS{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
+                        <div id="dropdownTS{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-auto min-w-44 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTroubleshooting{{ $case->id }}">
                                 <li>
                                     <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
@@ -111,13 +73,13 @@
                                     </button>
                                 </li>
                                 <li>
-                                    <a href="{{ route('konfirmasi-estimasi.edit', encrypt($case->id)) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-xl mr-3">playlist_add_check_circle</i>
-                                        <span class="whitespace-nowrap">Ubah Estimasi</span>
-                                    </a>
+                                    <button type="button" data-modal-target="add-jurnal-konfirmasi-{{ $case->id }}" data-modal-toggle="add-jurnal-konfirmasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">menu_book</span>
+                                        <span class="whitespace-nowrap">Add Jurnal</span>
+                                    </button>
                                 </li>
                                 <li>
-                                    <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <button data-modal-target="lanjut-pengerjaan-{{ $case->id }}" data-modal-toggle="lanjut-pengerjaan-{{ $case->id }}" type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">find_replace</span>
                                         <span class="whitespace-nowrap">Lanjut Pengerjaan</span>
                                     </button>
@@ -133,4 +95,7 @@
         </div>
     </div>
 
-@endsection
+    {{-- Modal --}}
+    @include('repair.estimasi.modal.jurnal-konfirmasi')
+    @include('repair.estimasi.modal.lanjut-pengerjaan')
+</div>

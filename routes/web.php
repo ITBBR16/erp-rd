@@ -255,7 +255,10 @@ Route::middleware('repair')->group(function () {
 
             Route::group(['controller' => RepairKonfirmasiEstimasiController::class], function () {
                 Route::resource('/konfirmasi-estimasi', RepairKonfirmasiEstimasiController::class)->only(['index', 'edit', 'update']);
-                
+                Route::post('/kirimPesanEstimasi', 'kirimPesanEstimasi')->name('kirimPesanEstimasi');
+                Route::put('/konfirmasiEstimasi/{id}', 'konfirmasiEstimasi')->name('konfirmasiEstimasi');
+                Route::post('/addJurnalKonfirmasi', 'addJurnalKonfirmasi')->name('addJurnalKonfirmasi');
+                Route::put('/konfirmasiPengerjaan/{id}', 'konfirmasiPengerjaan')->name('konfirmasiPengerjaan');
             });
         });
 

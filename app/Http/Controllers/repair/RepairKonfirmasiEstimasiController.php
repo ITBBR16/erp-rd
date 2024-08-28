@@ -22,14 +22,16 @@ class RepairKonfirmasiEstimasiController extends Controller
         $user = auth()->user();
         $caseService = $this->repairCaseService->getDataDropdown();
         $divisiName = $this->nameDivisi->getDivisi($user);
+        $greeting = $this->showTimeForChat();
         $dataCase = $caseService['data_case'];
 
-        return view('repair.estimasi.konfirmasi-estimasi', [
+        return view('repair.estimasi.konfirmasi', [
             'title' => 'List Konfirmasi Estimasi',
             'active' => 'konfirmasi-estimasi',
             'navActive' => 'estimasi',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
+            'greeting' => $greeting,
         ]);
 
     }
@@ -57,11 +59,74 @@ class RepairKonfirmasiEstimasiController extends Controller
     {
         $resultUpdate = $this->serviceEstimasi->ubahEstimasi($request, $id);
 
-        if ($resultUpdate == 'success') {
-            return redirect()->route('konfirmasi-biaya.index')->with('success', $resultUpdate['message']);
+        if ($resultUpdate['status'] == 'success') {
+            return redirect()->route('konfirmasi-estimasi.index')->with('success', $resultUpdate['message']);
         } else {
             return back()->with('error', $resultUpdate['message']);
         }
+    }
+
+    public function addJurnalKonfirmasi(Request $request)
+    {
+        $resultJurnal = $this->serviceEstimasi->addJurnalKonfirmasi($request);
+
+        if ($resultJurnal['status'] == 'success') {
+            return back()->with('success', $resultJurnal['message']);
+        } else {
+            return back()->with('error', $resultJurnal['message']);
+        }
+    }
+
+    public function konfirmasiEstimasi(Request $request, $id)
+    {
+        $resultKE = $this->serviceEstimasi->konfirmasiEstimasi($request, $id);
+
+        if ($resultKE['status'] == 'success') {
+            return back()->with('success', $resultKE['message']);
+        } else {
+            return back()->with('error', $resultKE['message']);
+        }
+    }
+
+    public function konfirmasiPengerjaan($id)
+    {
+        $resultKP = $this->serviceEstimasi->konfirmasiPengerjaan($id);
+
+        if ($resultKP['status'] == 'success') {
+            return back()->with('success', $resultKP['message']);
+        } else {
+            return back()->with('error', $resultKP['message']);
+        }
+    }
+
+    public function kirimPesanEstimasi(Request $request)
+    {
+        $greeting = $this->showTimeForChat();
+        $resultPesan = $this->serviceEstimasi->kirimPesanKonfirmasiEstimasi($request, $greeting);
+
+        if ($resultPesan['status'] == 'success') {
+            return back()->with('success', $resultPesan['message']);
+        } else {
+            return back()->with('error', $resultPesan['message']);
+        }
+    }
+
+    public function showTimeForChat()
+    {
+        $hour = date('H');
+        $greeting = '';
+
+        if ($hour >= 5 && $hour < 11) {
+            $greeting = 'Pagi';
+        } elseif ($hour >= 11 && $hour < 15) {
+            $greeting = 'Siang';
+        } elseif ($hour >= 15 && $hour < 18) {
+            $greeting = 'Sore';
+        } else {
+            $greeting = 'Malam';
+        }
+
+        return $greeting;
     }
 
 }
