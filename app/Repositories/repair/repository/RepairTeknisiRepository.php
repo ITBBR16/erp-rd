@@ -3,6 +3,7 @@
 namespace App\Repositories\repair\repository;
 
 use App\Models\repair\RepairCase;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\repair\interface\RepairTeknisiInterface;
 
 class RepairTeknisiRepository implements RepairTeknisiInterface
@@ -12,6 +13,7 @@ class RepairTeknisiRepository implements RepairTeknisiInterface
     public function __construct(RepairCase $case)
     {
         $this->model = $case;
+        $this->connection = DB::connection('rumahdrone_repair');
     }
 
     public function beginTransaction()

@@ -3,7 +3,7 @@
 @section('container')
     <div class="grid grid-cols-2 gap-8 mb-8 border-b border-gray-400 py-3">
         <div class="flex text-3xl font-bold text-gray-700 dark:text-gray-300">
-            List Troubleshooting
+            List Pengecekkan Fisik
         </div>
     </div>
 
@@ -77,7 +77,7 @@
             </thead>
             <tbody>
                 @foreach ($dataCase as $case)
-                    @if ($case->jenisStatus->jenis_status == 'Proses Pengerjaan')
+                    @if ($case->jenisStatus->jenis_status == 'Proses Quality Control')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
                                 {{ \Carbon\Carbon::parse($case->created_at)->isoFormat('D MMMM YYYY') }}
@@ -95,15 +95,15 @@
                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $case->jenisStatus->jenis_status }}</span>
                             </td>
                             <td class="px-6 py-2">
-                                <button id="dropdownPengerjaan{{ $case->id }}" data-dropdown-toggle="ddp{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <button id="dropdownCekFisik{{ $case->id }}" data-dropdown-toggle="ddCF{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
                             </td>
                         </tr>
                         <!-- Dropdown menu -->
-                        <div id="ddp{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
-                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownPengerjaan{{ $case->id }}">
+                        <div id="ddCF{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCekFisik{{ $case->id }}">
                                 <li>
                                     <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">visibility</span>
@@ -117,9 +117,27 @@
                                     </button>
                                 </li>
                                 <li>
-                                    <button type="button" data-modal-target="lanjut-qc-{{ $case->id }}" data-modal-toggle="lanjut-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">find_replace</span>
-                                        <span class="whitespace-nowrap">Lanjut QC</span>
+                                    <button type="button" data-modal-target="qc-cek-fisik-{{ $case->id }}" data-modal-toggle="qc-cek-fisik-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">minor_crash</span>
+                                        <span class="whitespace-nowrap">Cek Fisik</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" data-modal-target="qc-cek-calibrasi-{{ $case->id }}" data-modal-toggle="qc-cek-calibrasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">compass_calibration</span>
+                                        <span class="whitespace-nowrap">Cek Calibrasi</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" data-modal-target="qc-test-fly-{{ $case->id }}" data-modal-toggle="qc-test-fly-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">flight_takeoff</span>
+                                        <span class="whitespace-nowrap">Test Flight</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" data-modal-target="konfirmasi-qc-{{ $case->id }}" data-modal-toggle="konfirmasi-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">recommend</span>
+                                        <span class="whitespace-nowrap">Konfirmasi QC</span>
                                     </button>
                                 </li>
                             </ul>
@@ -134,7 +152,9 @@
     </div>
 
     {{-- Modal --}}
-    @include('repair.teknisi.modal.add-jurnal-pengerjaan')
-    @include('repair.teknisi.modal.lanjut-qc')
+    @include('repair.qc.modal.cek-fisik')
+    @include('repair.qc.modal.cek-calibrasi')
+    @include('repair.qc.modal.cek-test-fly')
+    @include('repair.qc.modal.konfirmasi-qc')
 
 @endsection

@@ -39,6 +39,8 @@ use App\Http\Controllers\repair\RepairEstimasiBiayaController;
 use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairListCaseController;
+use App\Http\Controllers\repair\RepairQCController;
+use App\Http\Controllers\repair\RepairPengerjaanController;
 use App\Http\Controllers\repair\RepairProdukSedangDikirim;
 use App\Http\Controllers\repair\RepairRequestSparepartController;
 use App\Http\Controllers\repair\RepairTeknisiLCController;
@@ -242,6 +244,9 @@ Route::middleware('repair')->group(function () {
             Route::resource('/new-case-teknisi', RepairTeknisiNCController::class)->only(['index', 'update']);
             Route::resource('/troubleshooting', RepairTroubleshootingController::class)->only(['index', 'update']);
             Route::put('/change-to-estimasi/{id}', [RepairTroubleshootingController::class, 'changeStatus'])->name('change-to-estimasi');
+
+            Route::resource('/pengerjaan', RepairPengerjaanController::class)->only(['index', 'update']);
+            Route::put('/changeStatusPengerjaan/{id}', [RepairPengerjaanController::class, 'changeStatusPengerjaan'])->name('changeStatusPengerjaan');
         });
 
         Route::prefix('/estimasi')->group(function () {
@@ -263,7 +268,12 @@ Route::middleware('repair')->group(function () {
         });
 
         Route::prefix('/quality-control')->group(function () {
-            // Rute quality-control
+            Route::group(['controller' => RepairQCController::class], function () {
+                Route::resource('/pengecekkan', RepairQCController::class)->only(['index', 'update']);
+                Route::post('/createQcFisik', 'createQcFisik')->name('createQcFisik');
+                Route::post('/createQcCalibrasi', 'createQcCalibrasi')->name('createQcCalibrasi');
+                Route::post('/createTestFly', 'createTestFly')->name('createTestFly');
+            });
         });
 
     });

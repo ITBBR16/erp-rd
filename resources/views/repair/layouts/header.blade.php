@@ -31,7 +31,7 @@
                     <a href="{{ route('estimasi-biaya.index') }}" class="{{ ($navActive === 'estimasi') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Estimator</a>
                 </div>
                 <div>
-                    <a href="#" class="{{ ($navActive === '') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Quality Control</a>
+                    <a href="{{ route('pengecekkan.index') }}" class="{{ ($navActive === 'qc') ? 'text-blue-700 dark:text-blue-500' : 'text-gray-900 dark:text-white' }} block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Quality Control</a>
                 </div>
             </div>
             <div class="flex items-center">

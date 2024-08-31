@@ -46,7 +46,7 @@
     @elseif (Request::is('repair/estimasi/*'))
         @include('repair.layouts.sidebarEstimasi')
     @elseif (Request::is('repair/quality-control/*'))
-        @include('repair.layouts.sidebarCustomer')
+        @include('repair.layouts.sidebarQC')
     @endif
 
     <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-y-auto scrollbar-none">
