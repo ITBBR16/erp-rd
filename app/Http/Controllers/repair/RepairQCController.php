@@ -31,6 +31,7 @@ class RepairQCController extends Controller
             'title' => 'Pengecekkan',
             'active' => 'pengecekkan',
             'navActive' => 'qc',
+            'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
             'kategoris' => $kategori,

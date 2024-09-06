@@ -13,6 +13,11 @@ class RepairQualityControl extends Model
     protected $table = 'repair_quality_control';
     protected $guarded = ['id'];
 
+    public function case()
+    {
+        return $this->belongsTo(RepairCase::class, 'case_id');
+    }
+
     public function cekFisik()
     {
         return $this->hasMany(RepairQCFisik::class, 'qc_id');

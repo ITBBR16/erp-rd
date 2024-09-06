@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-07549079.css",
+    "file": "assets/app-281fc9ca.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
@@ -20,7 +20,7 @@
     "src": "resources/js/logistik/app.js"
   },
   "resources/js/repair/app.js": {
-    "file": "assets/app-8ee7b074.js",
+    "file": "assets/app-3f5537ba.js",
     "isEntry": true,
     "src": "resources/js/repair/app.js"
   }

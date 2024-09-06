@@ -14,7 +14,7 @@
                     <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
-                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Pelunasan Nama Customer</span>
+                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Pelunasan {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}-{{ $dataCase->customer->id }}</span>
                 </div>
             </li>
         </ol>
@@ -35,36 +35,36 @@
                 </div>
                 <div class="flex justify-between my-4">
                     <div class="text-start">
-                        <h2 class="text-lg font-semibold dark:text-white">Detail Transaksi / <span class="text-lg text-gray-600 dark:text-gray-400">R-6666 <span class="text-red-500 bg-red-100 px-2 py-1 rounded-full text-xs">Belum Bayar</span></span></h2>
+                        <h2 class="text-lg font-semibold dark:text-white">Detail Transaksi / <span class="text-lg text-gray-600 dark:text-gray-400">R-{{ $dataCase->id }} <span class="text-red-500 bg-red-100 px-2 py-1 rounded-full text-xs">{{ $dataCase->jenisStatus->jenis_status }}</span></span></h2>
                     </div>
                     <div class="text-end">
-                        <h2 class="text-lg font-semibold dark:text-white">DJI Mavic Pro</h2>
+                        <h2 class="text-lg font-semibold dark:text-white">{{ $dataCase->jenisProduk->jenis_produk }}</h2>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Nama Customer</p>
-                        <h3 class="text-sm font-semibold dark:text-white">Young Lex</h3>
+                        <h3 class="text-sm font-semibold dark:text-white">{{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">No Telpon</p>
-                        <h3 class="text-sm font-semibold dark:text-white">6285156519066</h3>
+                        <h3 class="text-sm font-semibold dark:text-white">{{ $dataCase->customer->no_telpon }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Alamat</p>
-                        <h3 class="text-sm font-semibold dark:text-white">Kota Malang</h3>
+                        <h3 class="text-sm font-semibold dark:text-white">{{ $dataCase->customer->kota->name }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Status Case</p>
-                        <h3 class="text-sm font-semibold dark:text-white">Express Offline</h3>
+                        <h3 class="text-sm font-semibold dark:text-white">{{ $dataCase->jenisCase->jenis_case }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Masuk</p>
-                        <h3 class="text-sm font-semibold dark:text-white">8 Agustus 2024</h3>
+                        <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Keluar</p>
-                        <h3 class="text-sm font-semibold dark:text-white">17 Agustus 2024</h3>
+                        <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::now()->isoFormat('D MMMM YYYY') }}</h3>
                     </div>
                 </div>
 
@@ -80,14 +80,23 @@
                         </tr>
                     </thead>
                     <tbody class="text-gray-700 dark:text-gray-300">
-                        <tr class="border-t">
-                            <td class="p-2">
-                                Repair Controller Gimbal
-                            </td>
-                            <td class="p-2">
-                                Rp. 1.255.000
-                            </td>
-                        </tr>
+                        @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $index => $estimasi)
+                            @if ($estimasi->active == 'Active')
+                                <tr class="border-t">
+                                    <td class="p-2">
+                                        {{ 
+                                            (isset($estimasi->sku)) ? 
+                                                ($estimasi->nama_alias != '' ? $estimasi->nama_alias :
+                                                    $estimasi->nama_produk) :
+                                                            $estimasi->nama_jasa 
+                                        }}
+                                    </td>
+                                    <td class="p-2">
+                                        {{ number_format($estimasi->harga_customer, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
                     </tbody>
                 </table>
 
@@ -109,57 +118,29 @@
                         </tr>
                     </thead>
                     <tbody class="text-gray-700 dark:text-gray-300">
-                        <tr class="border-t">
-                            <td class="p-2">
-                                Kelengkapan 1
-                            </td>
-                            <td class="p-2">
-                                1
-                            </td>
-                            <td class="p-2">
-                                3N3BH66L020050
-                            </td>
-                            <td class="p-2">
-                                Mantap
-                            </td>
-                        </tr>
-                        <tr class="border-t">
-                            <td class="p-2">
-                                Kelengkapan 2
-                            </td>
-                            <td class="p-2">
-                                1
-                            </td>
-                            <td class="p-2">
-                                3N3BH6U0020050
-                            </td>
-                            <td class="p-2">
-                                Mantap
-                            </td>
-                        </tr>
-                        <tr class="border-t">
-                            <td class="p-2">
-                                Kelengkapan 3
-                            </td>
-                            <td class="p-2">
-                                1
-                            </td>
-                            <td class="p-2">
-                                3N3BH6U0020666
-                            </td>
-                            <td class="p-2">
-                                Mantap
-                            </td>
-                        </tr>
+                        @foreach ($dataCase->detailKelengkapan as $kelengkapan)
+                            <tr class="border-t">
+                                <td class="p-2">
+                                    {{ $kelengkapan->itemKelengkapan->kelengkapan }}
+                                </td>
+                                <td class="p-2">
+                                    {{ $kelengkapan->quantity }}
+                                </td>
+                                <td class="p-2">
+                                    {{ $kelengkapan->serial_number }}
+                                </td>
+                                <td class="p-2">
+                                    {{ ($kelengkapan->keterangan) ? $kelengkapan->keterangan : '-' }}
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
                 <div class="grid grid-cols-3 mt-4">
                     <div class="col-span-2 text-sm border p-3">
                         <div class="border-b font-semibold">Keluhan Kerusakan</div>
-                        <div>
-                            After crash gedung, jatuh dari ketinggian sekitar 4m. Engsel depan kiri patah, Body bawah renggang.
-                        </div>
+                        <div>{{ $dataCase->keluhan }}</div>
                     </div>
                     <div class="col-span-1">
                         <div class="text-sm w-full max-w-2xl pl-3">
@@ -202,7 +183,7 @@
                 <div class="grid grid-cols-2 mt-4 text-center">
                     <div>
                         <h3 class="text-sm font-semibold mb-12">Penerima</h3>
-                        <p class="text-xs">( Young Lex )</p>
+                        <p class="text-xs">( {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }} )</p>
                     </div>
                     <div>
                         <h3 class="text-sm font-semibold mb-12">Hormat Kami</h3>

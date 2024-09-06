@@ -29,6 +29,7 @@ class RepairTeknisiNCController extends Controller
             'title' => 'New Case List',
             'active' => 'new-case',
             'navActive' => 'teknisi',
+            'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
         ]);

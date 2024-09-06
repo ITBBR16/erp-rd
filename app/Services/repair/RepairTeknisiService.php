@@ -49,7 +49,24 @@ class RepairTeknisiService
         try {
             $tglWaktu = Carbon::now();
             $jurnalTS = $request->input('jurnal_troubleshooting');
+            $linkDrive = $request->input('link_doc');
             $imgTS = $request->input('files_troubleshooting');
+            $encodedFiles = [];
+
+            foreach ($imgTS as $file) {
+                $encodedFiles[] = base64_encode($file->get());
+            }
+
+            $payload = [
+                'status' => 'Troubleshooting',
+                'link_drive' => $linkDrive,
+                'files' => $encodedFiles,
+            ];
+
+            $urlApi = 'https://script.google.com/macros/s/AKfycbygVDxzRgXbmbMBgCl3G5MZU7ZGMuMP9HO2xARk3_GQXI19JVflcUeQK6kLnXN31o6F/exec';
+            $response = Http::post($urlApi, $payload);
+            $dataResponse = json_decode($response->body(), true);
+            $status = $dataResponse['status'];
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 2);
 
@@ -149,37 +166,31 @@ class RepairTeknisiService
             $response = Http::post($urlApi, $payload);
             $dataResponse = json_decode($response->body(), true);
             $status = $dataResponse['status'];
-            
-            if ($status == 'success') {
 
-                $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 6);
-                if ($checkTimestamp) {
-                    $timestamp = $checkTimestamp;
-                } else {
-                    $dataTimestamp = [
-                        'case_id' => $id,
-                        'jenis_status_id' => 6,
-                        'tanggal_waktu' => $tglWaktu,
-                    ];
-        
-                    $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
-                }
-    
-                $dataJurnal = [
-                    'employee_id' => $employeeId,
-                    'jenis_substatus_id' => 1,
-                    'timestamps_status_id' => $timestamp->id,
-                    'isi_jurnal' => $jurnalTS,
+            $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 6);
+            if ($checkTimestamp) {
+                $timestamp = $checkTimestamp;
+            } else {
+                $dataTimestamp = [
+                    'case_id' => $id,
+                    'jenis_status_id' => 6,
+                    'tanggal_waktu' => $tglWaktu,
                 ];
     
-                $this->repairTimeJurnal->addJurnal($dataJurnal);
-    
-                $this->repairTeknisi->commitTransaction();
-                return ['status' => 'success', 'message' => 'Berhasil membuat jurnal baru.'];
-
-            } else {
-                return ['status' => 'error', 'message' => 'Terjadi kesalahan ketika upload gambar.'];
+                $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
             }
+
+            $dataJurnal = [
+                'employee_id' => $employeeId,
+                'jenis_substatus_id' => 1,
+                'timestamps_status_id' => $timestamp->id,
+                'isi_jurnal' => $jurnalTS,
+            ];
+
+            $this->repairTimeJurnal->addJurnal($dataJurnal);
+
+            $this->repairTeknisi->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil membuat jurnal baru.'];
 
         } catch (Exception $e) {
             $this->repairTeknisi->rollBackTransaction();
@@ -219,6 +230,45 @@ class RepairTeknisiService
 
             $this->repairTeknisi->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil lanjut ke quality control.'];
+
+        } catch (Exception $e) {
+            $this->repairTeknisi->rollBackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    // Request Sparepart
+    public function createReqPartTeknisi(Request $request, $id)
+    {
+        $this->repairTeknisi->beginTransaction();
+
+        try {
+            $tglRequest = Carbon::now();
+            $statusCaseId = $request->input('status_case_id');
+            $jenisProduk = $request->input('jenis_produk');
+            $namaPart = $request->input('nama_part');
+            $skuPart = $request->input('sku_part');
+            $qtyReq = $request->input('qty_req');
+
+            foreach ($jenisProduk as $index => $produk) {
+                $qtyItem = $qtyReq[$index];
+                for ($i = 0; $i < $qtyItem; $i++) {
+                    $dataSend = [
+                        'case_id' => $id,
+                        'sku' => $skuPart[$index],
+                        'jenis_produk' => $produk,
+                        'nama_produk' => $namaPart[$index],
+                        'status_proses_id' => $statusCaseId,
+                        'tanggal_request' => $tglRequest,
+                        'status' => 'Request',
+                    ];
+
+                    $this->repairTeknisi->createRequestPart($dataSend);
+                }
+            }
+
+            $this->repairTeknisi->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil melakukan request sparepart.'];
 
         } catch (Exception $e) {
             $this->repairTeknisi->rollBackTransaction();

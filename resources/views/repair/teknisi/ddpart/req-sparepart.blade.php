@@ -3,7 +3,7 @@
 @section('container')
     <div class="grid grid-cols-2 gap-8 mb-8 border-b border-gray-400 py-3">
         <div class="flex text-3xl font-bold text-gray-700 dark:text-gray-300">
-            Konfirmasi Quality Control
+            Request Sparepart
         </div>
     </div>
 
@@ -80,7 +80,7 @@
             </thead>
             <tbody>
                 @foreach ($dataCase as $case)
-                    @if ($case->jenisStatus->jenis_status == 'Proses Konfirmasi Hasil QC')
+                    @if (auth()->user()->id == $case->teknisi_id)
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
                                 R-{{ $case->id }}
@@ -111,21 +111,15 @@
                         <div id="dropdownKQC{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="ddKQC{{ $case->id }}">
                                 <li>
-                                    <button type="button" data-modal-target="view-hasil-qc-{{ $case->id }}" data-modal-toggle="view-hasil-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">visibility</span>
                                         <span class="whitespace-nowrap">Detail</span>
                                     </button>
                                 </li>
                                 <li>
-                                    <button type="button" data-modal-target="send-whatsapp-{{ $case->id }}" data-modal-toggle="send-whatsapp-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">forward_to_inbox</span>
-                                        <span class="whitespace-nowrap">Kirim Whatsapp</span>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" data-modal-target="caution-qc-{{ $case->id }}" data-modal-toggle="caution-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">task_alt</span>
-                                        <span class="whitespace-nowrap">Konfirmasi QC</span>
+                                    <button type="button" data-modal-target="req-sparepart-teknisi-{{ $case->id }}" data-modal-toggle="req-sparepart-teknisi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">live_help</span>
+                                        <span class="whitespace-nowrap">Req. Sparepart</span>
                                     </button>
                                 </li>
                             </ul>
@@ -140,8 +134,6 @@
     </div>
 
     {{-- Modal --}}
-    @include('repair.csr.modal.detail-konf-qc')
-    @include('repair.csr.modal.caution-konf-qc')
-    @include('repair.csr.modal.caution-sent-wa')
+    @include('repair.teknisi.modal.req-part')
 
 @endsection

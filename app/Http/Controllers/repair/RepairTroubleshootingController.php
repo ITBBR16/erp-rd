@@ -28,6 +28,7 @@ class RepairTroubleshootingController extends Controller
             'title' => 'List Troubleshooting',
             'active' => 'troubleshooting',
             'navActive' => 'teknisi',
+            'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
         ]);

@@ -29,6 +29,7 @@ class RepairKonfirmasiEstimasiController extends Controller
             'title' => 'List Konfirmasi Estimasi',
             'active' => 'konfirmasi-estimasi',
             'navActive' => 'estimasi',
+            'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
             'greeting' => $greeting,

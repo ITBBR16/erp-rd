@@ -72,17 +72,19 @@
                     <div id="dropdownLC{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
                         <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListCase{{ $case->id }}">
                             <li>
-                                <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="detail-list-case-{{ $case->id }}" data-modal-toggle="detail-list-case-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                     <span class="material-symbols-outlined text-base mr-3">visibility</span>
                                     <span class="whitespace-nowrap">Detail</span>
                                 </button>
                             </li>
-                            <li>
-                                <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">edit</span>
-                                    <span class="whitespace-nowrap">Edit</span>
-                                </button>
-                            </li>
+                            @if ($case->jenisStatus->jenis_status == 'New Case')
+                                <li>
+                                    <a href="{{ route('case-list.edit', encrypt($case->id)) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-xl mr-3">edit</i>
+                                        <span class="whitespace-nowrap">Edit</span>
+                                    </a>
+                                </li>
+                            @endif
                             <li>
                                 <button type="button" data-modal-target="tanda-terima-{{ $case->id }}" data-modal-toggle="tanda-terima-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                     <span class="material-symbols-outlined text-base mr-3">receipt_long</span>
@@ -105,5 +107,6 @@
         </div>
     </div>
     {{-- Modal --}}
+    @include('repair.csr.modal.detail-list-case')
     @include('repair.csr.invoice.invoice-penerimaan')
 </div>

@@ -28,6 +28,7 @@ class RepairPengerjaanController extends Controller
             'title' => 'List Pengerjaan',
             'active' => 'pengerjaan',
             'navActive' => 'teknisi',
+            'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
         ]);

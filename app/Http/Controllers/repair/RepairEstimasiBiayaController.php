@@ -28,6 +28,7 @@ class RepairEstimasiBiayaController extends Controller
             'title' => 'List Estimasi Biaya',
             'active' => 'estimasi-biaya',
             'navActive' => 'estimasi',
+            'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
         ]);

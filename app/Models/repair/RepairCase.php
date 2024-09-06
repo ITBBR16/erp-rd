@@ -72,4 +72,9 @@ class RepairCase extends Model
     {
         return $this->hasMany(RepairTimestampStatus::class, 'case_id');
     }
+
+    public function qualityControl()
+    {
+        return $this->hasOne(RepairQualityControl::class, 'case_id');
+    }
 }

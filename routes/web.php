@@ -39,12 +39,14 @@ use App\Http\Controllers\repair\RepairEstimasiBiayaController;
 use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairListCaseController;
+use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\repair\RepairQCController;
 use App\Http\Controllers\repair\RepairPengerjaanController;
 use App\Http\Controllers\repair\RepairProdukSedangDikirim;
 use App\Http\Controllers\repair\RepairRequestSparepartController;
 use App\Http\Controllers\repair\RepairTeknisiLCController;
 use App\Http\Controllers\repair\RepairTeknisiNCController;
+use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
 use App\Http\Controllers\repair\RepairTroubleshootingController;
 use App\Http\Controllers\repair\ReviewCustomerController;
 
@@ -230,13 +232,22 @@ Route::middleware('repair')->group(function () {
                 Route::resource('/case-list', RepairListCaseController::class)->only(['index', 'edit', 'store']);
                 Route::post('/create-nc', 'createNC')->name('createNC');
                 Route::get('/getKelengkapan/{id}', 'getKelengkapan');
+                Route::get('/reviewPdfTandaTerima/{id}', 'reviewPdfTandaTerima');
+                Route::get('/downloadPdf/{id}', 'downloadPdf')->name('downloadPdf');
+                Route::post('/kirimTandaTerima/{id}', 'kirimTandaTerimaCustomer')->name('kirimTandaTerima');
             });
 
             Route::resource('/kasir-repair', KasirRepairController::class)->only(['index', 'edit']);
 
-            Route::resource('/konfirmasi-qc', RepairKonfirmasiQCController::class)->only(['index']);
+            Route::group(['controller' => RepairKonfirmasiQCController::class], function () {
+                Route::resource('/konfirmasi-qc', RepairKonfirmasiQCController::class)->only(['index', 'update']);
+                Route::post('/sendKonfQc/{id}', 'sendKonfirmasiQC')->name('sendKonfirmasiQC');
+                Route::get('/preview-qc/{id}', 'previewPdfQc');
+            });
 
-            Route::resource('/request-sparepart', RepairRequestSparepartController::class)->only(['index']);
+            Route::resource('/request-sparepart', RepairRequestSparepartController::class)->only(['index', 'update']);
+
+            Route::resource('/penerimaan-sparepart', RepairPenerimaanSparepartController::class)->only(['index']);
         });
 
         Route::prefix('/teknisi')->group(function () {
@@ -247,6 +258,8 @@ Route::middleware('repair')->group(function () {
 
             Route::resource('/pengerjaan', RepairPengerjaanController::class)->only(['index', 'update']);
             Route::put('/changeStatusPengerjaan/{id}', [RepairPengerjaanController::class, 'changeStatusPengerjaan'])->name('changeStatusPengerjaan');
+
+            Route::resource('/req-sparepart-teknisi', RepairTeknisiRequestSparepartController::class)->only(['index', 'update']);
         });
 
         Route::prefix('/estimasi')->group(function () {

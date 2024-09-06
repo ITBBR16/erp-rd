@@ -3,23 +3,28 @@
 namespace App\Services\repair;
 
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\repository\ProdukRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
+use App\Repositories\repair\repository\RepairTimeJurnalRepository;
 
 class RepairCaseService
 {
-    protected $customerRepository, $repairCase, $product;
+    protected $customerRepository, $repairCase, $product, $repairTimeJurnal;
 
-    public function __construct(RepairCustomerRepository $customerRepository, RepairCaseRepository $repairCase, ProdukRepository $product)
+    public function __construct(RepairCustomerRepository $customerRepository, RepairCaseRepository $repairCase, ProdukRepository $product, RepairTimeJurnalRepository $repairTimeJurnalRepository)
     {
+        $this->repairTimeJurnal = $repairTimeJurnalRepository;
         $this->customerRepository = $customerRepository;
         $this->repairCase = $repairCase;
         $this->product = $product;
     }
 
+    // Input New Case
     public function getDataDropdown()
     {
         $dataDD = $this->repairCase->getAllDataNeededNewCase();
@@ -116,4 +121,232 @@ class RepairCaseService
         }
     }
 
+    public function reviewPdfTandaTerima($id)
+    {
+        $user = auth()->user();
+        $employee = $user->first_name . " " . $user->last_name;
+        $dataCase = $this->repairCase->findCase($id);
+        $dataView = [
+            'title' => 'Preview Tanda Terima',
+            'case' => $dataCase,
+            'employee' => $employee,
+        ];
+
+        $pdf = Pdf::loadView('repair.csr.preview.preview-tt', $dataView)
+                    ->setPaper('a5', 'portrait');
+
+        return $pdf;
+    }
+
+    public function downloadPdfTandaTerima($id)
+    {
+        $user = auth()->user();
+        $employee = $user->first_name . " " . $user->last_name;
+        $dataCase = $this->repairCase->findCase($id);
+        $namaCustomer = $dataCase->customer->first_name . " " . $dataCase->customer->last_name . "-" . $dataCase->customer->id . "-" . $id;
+        $dataView = [
+            'title' => 'Tanda Terima',
+            'case' => $dataCase,
+            'employee' => $employee,
+        ];
+
+        $pdf = Pdf::loadView('repair.csr.preview.preview-tt', $dataView)
+                    ->setPaper('a5', 'portrait');
+
+        return ['pdf' => $pdf, 'namaCustomer' => $namaCustomer];
+    }
+
+    public function kirimTandaTerimaCustomer($id)
+    {
+        try {
+            $user = auth()->user();
+            $employee = $user->first_name . " " . $user->last_name;
+            $dataCase = $this->repairCase->findCase($id);
+
+            if (!$dataCase || !$dataCase->customer) {
+                throw new Exception('Data case atau customer tidak ditemukan.');
+            }
+
+            $greeting = $this->showTimeForChat();
+            $namaCustomer = "{$dataCase->customer->first_name} {$dataCase->customer->last_name}-{$dataCase->customer->id}-{$id}";
+            $linkDrive = $dataCase->link_doc;
+            $notelpon = 6285156519066; //$dataCase->customer->no_telpon
+
+            $tanggalMasuk = Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY');
+            $namaReal = $dataCase->customer->first_name . " " . $dataCase->customer->last_name;
+            $pesan = "{$greeting} {$namaReal}\nBerikut adalah invoice tanda terima untuk transaksi pada tanggal {$tanggalMasuk}.";
+
+            $dataView = [
+                'title' => 'Tanda Terima',
+                'case' => $dataCase,
+                'employee' => $employee,
+            ];
+
+            $pdf = Pdf::loadView('repair.csr.preview.preview-tt', $dataView)
+                        ->setPaper('a5', 'portrait');
+            $pdfContent = $pdf->output();
+            $pdfEncode = base64_encode($pdfContent);
+
+            $payload = [
+                'nama_customer' => $namaCustomer,
+                'link_drive' => $linkDrive,
+                'pesan' => $pesan,
+                'pdf' => $pdfEncode,
+                'no_telpon' => $notelpon,
+            ];
+
+            $url = 'https://script.google.com/macros/s/AKfycbw27RdAKxTIrfoCVCsZtXfZwJqz4uEL92BL-KA_pXtkjyI-2fb-1evPXTfpYoIF1Fblrw/exec';
+            $response = Http::post($url, $payload);
+
+            if ($response->failed()) {
+                throw new Exception('Gagal mengirim tanda terima. Error: ' . $response->body());
+            }
+
+            return ['status' => 'success', 'message' => 'Tanda terima berhasil dikirim.'];
+
+        } catch (Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+
+    // Konfirmasi QC
+    public function sendKonfirmasiQC($id)
+    {
+        try {
+            $user = auth()->user();
+            $employee = $user->first_name . " " . $user->last_name;
+            $dataCase = $this->repairCase->findCase($id);
+
+            if (!$dataCase || !$dataCase->customer) {
+                throw new Exception('Data case atau customer tidak ditemukan.');
+            }
+
+            $greeting = $this->showTimeForChat();
+            $namaCustomer = "{$dataCase->customer->first_name} {$dataCase->customer->last_name}-{$dataCase->customer->id}-{$id}";
+            $linkDrive = $dataCase->link_doc;
+            $notelpon = 6285156519066; //$dataCase->customer->no_telpon
+
+            $namaReal = $dataCase->customer->first_name . " " . $dataCase->customer->last_name;
+            $pesan = "{$greeting} {$namaReal}\nBerikut adalah hasil quality control : ";
+
+            $dataView = [
+                'title' => 'Tanda Terima',
+                'case' => $dataCase,
+                'employee' => $employee,
+            ];
+
+            $pdf = Pdf::loadView('repair.csr.preview.preview-qc', $dataView);
+            $pdfContent = $pdf->output();
+            $pdfEncode = base64_encode($pdfContent);
+
+            $payload = [
+                'nama_customer' => $namaCustomer,
+                'link_drive' => $linkDrive,
+                'pesan' => $pesan,
+                'pdf' => $pdfEncode,
+                'no_telpon' => $notelpon,
+            ];
+
+            $url = 'https://script.google.com/macros/s/AKfycbw3dvbe6445EH1suz3tiLmHxM823CQd9P6Yj_ZeR8QpmYRVjVewgxz0nlm14NeHKwWq7w/exec';
+            $response = Http::post($url, $payload);
+
+            if ($response->failed()) {
+                throw new Exception('Gagal mengirim hasil quality control. Error: ' . $response->body());
+            }
+
+            return ['status' => 'success', 'message' => 'Hasil quality control berhasil dikirim.'];
+
+        } catch (Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function konfirmasiQc($id)
+    {
+        $this->repairCase->beginTransaction();
+        $employeeId = auth()->user()->id;
+
+        try {
+            $tglWaktu = Carbon::now();
+            
+            $dataTimestamp = [
+                'case_id' => $id,
+                'jenis_status_id' => 9,
+                'tanggal_waktu' => $tglWaktu,
+            ];
+            $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
+
+            $dataJurnal = [
+                'employee_id' => $employeeId,
+                'jenis_substatus_id' => 1,
+                'timestamps_status_id' => $timestamp->id,
+                'isi_jurnal' => 'Sudah konfirmasi QC Menunggu Pembayaran',
+            ];
+            $this->repairTimeJurnal->addJurnal($dataJurnal);
+
+            $dataUpdateCase = ['jenis_status_id' => 9];
+            $this->repairCase->updateCase($id, $dataUpdateCase);
+
+            $this->repairCase->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil pindah status to menunggu pembayaran.'];
+
+        } catch (Exception $e) {
+            $this->repairCase->rollBackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function showTimeForChat()
+    {
+        $hour = date('H');
+        $greeting = '';
+
+        if ($hour >= 5 && $hour < 11) {
+            $greeting = 'Selamat Pagi';
+        } elseif ($hour >= 11 && $hour < 15) {
+            $greeting = 'Selamat Siang';
+        } elseif ($hour >= 15 && $hour < 18) {
+            $greeting = 'Selamat Sore';
+        } else {
+            $greeting = 'Selamat Malam';
+        }
+
+        return $greeting;
+    }
+
+    // Sparepart
+    public function createReqSparepart(Request $request, $id)
+    {
+        try {
+            $tglRequest = Carbon::now();
+            $statusCaseId = $request->input('status_case_id');
+            $jenisProduk = $request->input('jenis_produk');
+            $namaPart = $request->input('nama_part');
+            $skuPart = $request->input('sku_part');
+            $qtyReq = $request->input('qty_req');
+            $dataSendGudang = [];
+
+            foreach ($jenisProduk as $index => $produk) {
+                $qtyItem = $qtyReq[$index];
+                for ($i = 0; $i < $qtyItem; $i++) {
+                    $dataSendGudang[] = [
+                        'case_id' => $id,
+                        'sku' => $skuPart[$index],
+                        'jenis_produk' => $produk,
+                        'nama_produk' => $namaPart[$index],
+                        'status_proses_id' => $statusCaseId,
+                        'tanggal_request' => $tglRequest,
+                        'status' => 'Request',
+                    ];
+
+                }
+            }
+
+            return ['status' => 'success', 'message' => 'Berhasil melakukan request sparepart.'];
+
+        } catch (Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
 }

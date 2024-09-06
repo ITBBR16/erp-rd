@@ -4,15 +4,17 @@ namespace App\Repositories\repair\repository;
 
 use App\Models\repair\RepairCase;
 use Illuminate\Support\Facades\DB;
+use App\Models\repair\RepairReqSpareparts;
 use App\Repositories\repair\interface\RepairTeknisiInterface;
 
 class RepairTeknisiRepository implements RepairTeknisiInterface
 {
-    protected $model, $connection;
+    protected $model, $connection, $modelReqPart;
 
-    public function __construct(RepairCase $case)
+    public function __construct(RepairCase $case, RepairReqSpareparts $repairReqSpareparts)
     {
         $this->model = $case;
+        $this->modelReqPart = $repairReqSpareparts;
         $this->connection = DB::connection('rumahdrone_repair');
     }
 
@@ -51,6 +53,11 @@ class RepairTeknisiRepository implements RepairTeknisiInterface
         }
 
         throw new \Exception('Case Not Found');
+    }
+
+    public function createRequestPart(array $data)
+    {
+        return $this->modelReqPart->create($data);
     }
 
 }

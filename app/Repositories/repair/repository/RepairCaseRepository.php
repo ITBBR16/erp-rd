@@ -6,19 +6,21 @@ use App\Models\repair\RepairCase;
 use App\Models\repair\RepairJenisCase;
 use App\Models\repair\RepairJenisFungsional;
 use App\Models\repair\RepairKelengkapan;
+use App\Models\repair\RepairReqSpareparts;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\repair\interface\RepairCaseInterface;
 
 class RepairCaseRepository implements RepairCaseInterface
 {
-    protected $modelCase, $modelFungsional, $modelJenisCase, $modelRepairKelengkapan, $connection;
+    protected $modelCase, $modelFungsional, $modelJenisCase, $modelRepairKelengkapan, $modelReqPart, $connection;
 
-    public function __construct(RepairCase $case, RepairJenisFungsional $repairJenisFungsional, RepairJenisCase $repairJenisCase, RepairKelengkapan $repairKelengkapan)
+    public function __construct(RepairCase $case, RepairJenisFungsional $repairJenisFungsional, RepairJenisCase $repairJenisCase, RepairKelengkapan $repairKelengkapan, RepairReqSpareparts $repairReqSpareparts)
     {
         $this->modelCase = $case;
         $this->modelFungsional = $repairJenisFungsional;
         $this->modelJenisCase = $repairJenisCase;
         $this->modelRepairKelengkapan = $repairKelengkapan;
+        $this->modelReqPart = $repairReqSpareparts;
         $this->connection = DB::connection('rumahdrone_repair');
     }
 
