@@ -3,30 +3,26 @@
 namespace App\Repositories\repair\repository;
 
 use Carbon\Carbon;
-use App\Models\repair\RepairCase;
 use Illuminate\Support\Facades\DB;
-use App\Models\repair\RepairJurnal;
 use App\Models\repair\RepairEstimasi;
 use App\Models\repair\RepairEstimasiJRR;
 use App\Models\repair\RepairEstimasiChat;
 use App\Models\repair\RepairEstimasiPart;
 use App\Models\repair\RepairJenisTransaksi;
-use App\Models\repair\RepairTimestampStatus;
+use App\Models\repair\RepairReqSpareparts;
 use App\Repositories\repair\interface\RepairEstimasiInterface;
 
 class RepairEstimasiRepository implements RepairEstimasiInterface
 {
-    protected $connection, $modelCase, $modelTimestamp, $modelJurnal, $modelEstimasi, $modelEstimasiPart, $modelEstimasiJrr, $modelEstimasiChat, $modelJenisTransaksi;
-    public function __construct(RepairCase $repairCase, RepairJurnal $jurnal, RepairTimestampStatus $repairTimestampStatus, RepairEstimasi $repairEstimasi, RepairEstimasiPart $repairEstimasiPart, RepairEstimasiJRR $repairEstimasiJRR, RepairEstimasiChat $repairEstimasiChat, RepairJenisTransaksi $repairJenisTransaksi)
+    protected $connection, $modelEstimasi, $modelEstimasiPart, $modelEstimasiJrr, $modelEstimasiChat, $modelJenisTransaksi, $modelReqPart;
+    public function __construct(RepairEstimasi $repairEstimasi, RepairEstimasiPart $repairEstimasiPart, RepairEstimasiJRR $repairEstimasiJRR, RepairEstimasiChat $repairEstimasiChat, RepairJenisTransaksi $repairJenisTransaksi, RepairReqSpareparts $repairReqSpareparts)
     {
-        $this->modelCase = $repairCase;
         $this->modelEstimasi = $repairEstimasi;
         $this->modelEstimasiJrr = $repairEstimasiJRR;
         $this->modelEstimasiPart = $repairEstimasiPart;
         $this->modelEstimasiChat = $repairEstimasiChat;
         $this->modelJenisTransaksi = $repairJenisTransaksi;
-        $this->modelTimestamp = $repairTimestampStatus;
-        $this->modelJurnal = $jurnal;
+        $this->modelReqPart = $repairReqSpareparts;
         $this->connection = DB::connection('rumahdrone_repair');
     }
 
@@ -59,6 +55,11 @@ class RepairEstimasiRepository implements RepairEstimasiInterface
 
         throw new \Exception('Data Not Found.');
     }
+
+    public function ensureHaveEstimasi($caseId)
+    {
+        return $this->modelEstimasi->where('case_id', $caseId)->first();
+    }
     
     public function createEstimasi(array $data)
     {
@@ -83,9 +84,7 @@ class RepairEstimasiRepository implements RepairEstimasiInterface
 
     public function createEstimasiPart(array $data)
     {
-        $data['created_at'] = Carbon::now();
-        $data['updated_at'] = Carbon::now();
-        return $this->modelEstimasiPart->insert($data);
+        return $this->modelEstimasiPart->create($data);
     }
 
     public function updateEstimasiPart($data, $id)
@@ -100,9 +99,7 @@ class RepairEstimasiRepository implements RepairEstimasiInterface
 
     public function createEstimasiJrr(array $data)
     {
-        $data['created_at'] = Carbon::now();
-        $data['updated_at'] = Carbon::now();
-        return $this->modelEstimasiJrr->insert($data);
+        return $this->modelEstimasiJrr->create($data);
     }
 
     public function updateEstimasiJrr($data, $id)
@@ -113,6 +110,16 @@ class RepairEstimasiRepository implements RepairEstimasiInterface
         }
 
         throw new \Exception('Data jasa repair not found.');
+    }
+
+    public function updateReqPart($data, $id)
+    {
+        $dataReq = $this->modelReqPart->find($id);
+        if ($dataReq) {
+            return $dataReq->update($data);
+        }
+
+        throw new \Exception('Data request part not found');
     }
 
 }

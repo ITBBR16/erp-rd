@@ -134,17 +134,15 @@ class RepairEstimasiService
             $namaAlias = $request->input('nama_alias');
             $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
             $namaPartGudang = $request->input('nama_part');
-            $dataEstimasiJRR = [];
         
             // Data Part
             $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
             $hargaGudang = preg_replace("/[^0-9]/", "",$request->input('harga_gudang'));
             $modalGudang = preg_replace("/[^0-9]/", "",$request->input('modal_gudang'));
-            $dataEstimasiPart = [];
         
             foreach ($jenisTransaksi as $index => $jt) {
                 if ($jt == 1) {
-                    $dataEstimasiPart[] = [
+                    $dataEstimasiPart = [
                         'estimasi_id' => $createEstimasi->id,
                         'jenis_transaksi_id' => $jt,
                         'sku' => $namaPartJasa[$index],
@@ -157,20 +155,18 @@ class RepairEstimasiService
                         'modal_gudang' => $modalGudang[$index],
                         'status_proses_id' => 3,
                         'active' => 'Active',
-                        'created_at' => $tglWaktu,
-                        'updated_at' => $tglWaktu,
                     ];
+                    $this->repairEstimasi->createEstimasiPart($dataEstimasiPart);
                 } else {
-                    $dataEstimasiJRR[] = [
+                    $dataEstimasiJRR = [
                         'estimasi_id' => $createEstimasi->id,
                         'jenis_transaksi_id' => $jt,
                         'jenis_jasa' => $jenisPartJasa[$index],
                         'nama_jasa' => $namaPartJasa[$index],
                         'harga_customer' => $hargaCustomer[$index],
                         'active' => 'Active',
-                        'created_at' => $tglWaktu,
-                        'updated_at' => $tglWaktu,
                     ];
+                    $this->repairEstimasi->createEstimasiJrr($dataEstimasiJRR);
                 }
             }
 
@@ -208,8 +204,6 @@ class RepairEstimasiService
             $this->repairCase->updateCase($id, $dataUpdate);
             $this->repairTimeJurnal->addJurnal($dataJurnal);
 
-            $this->repairEstimasi->createEstimasiPart($dataEstimasiPart);
-            $this->repairEstimasi->createEstimasiJrr($dataEstimasiJRR);
             $this->repairEstimasi->createEstimasiChat($dataChatEstimasi);
             $this->repairEstimasi->commitTransaction();
 
@@ -237,13 +231,11 @@ class RepairEstimasiService
             $namaAlias = $request->input('nama_alias');
             $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
             $namaPartGudang = $request->input('nama_part');
-            $createJrr = [];
             
             // Data Part
             $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
             $hargaGudang = preg_replace("/[^0-9]/", "",$request->input('harga_gudang'));
             $modalGudang = preg_replace("/[^0-9]/", "",$request->input('modal_gudang'));
-            $createPart = [];
             
             // Data Lama
             $idEstimasiLama = $request->input('id_hasil_estimasi');
@@ -282,7 +274,7 @@ class RepairEstimasiService
                 foreach ($jenisTransaksi as $index => $jt) {
                     // Insert new data
                     if ($jt == 1) {
-                        $createPart[] = [
+                        $createPart = [
                             'estimasi_id' => $id,
                             'jenis_transaksi_id' => $jt,
                             'sku' => $namaPartJasa[$index],
@@ -295,20 +287,20 @@ class RepairEstimasiService
                             'modal_gudang' => $modalGudang[$index],
                             'status_proses_id' => 3,
                             'active' => 'Active',
-                            'created_at' => $tglWaktu,
-                            'updated_at' => $tglWaktu,
                         ];
+                        $this->repairEstimasi->createEstimasiPart($createPart);
+
                     } else {
-                        $createJrr[] = [
+                        $createJrr = [
                             'estimasi_id' => $id,
                             'jenis_transaksi_id' => $jt,
                             'jenis_jasa' => $jenisPartJasa[$index],
                             'nama_jasa' => $namaPartJasa[$index],
                             'harga_customer' => $hargaCustomer[$index],
                             'active' => 'Active',
-                            'created_at' => $tglWaktu,
-                            'updated_at' => $tglWaktu,
                         ];
+                        $this->repairEstimasi->createEstimasiJrr($createJrr);
+
                     }
                 }
             }
@@ -339,16 +331,7 @@ class RepairEstimasiService
             ];
     
             $this->repairTimeJurnal->addJurnal($dataJurnal);
-
             $this->repairEstimasi->updateEstimasiChat($dataChatEstimasi, $id);
-            
-            if(!empty($createJrr) ) {
-                $this->repairEstimasi->createEstimasiJrr($createJrr);
-            }
-
-            if (!empty($createPart) ) {
-                $this->repairEstimasi->createEstimasiPart($createPart);
-            }
 
             $this->repairEstimasi->commitTransaction();
 
@@ -512,7 +495,138 @@ class RepairEstimasiService
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+    
+    public function konfirmasiReqPart(Request $request)
+    {
+        $this->repairEstimasi->beginTransaction();
+        
+        try {
 
+            $tanggalKonfirmasi = Carbon::now();
+            $tanggalKonfirmasiString = $tanggalKonfirmasi->toDateTimeString();
+            $user = auth()->user();
+            $namaTeknisi = $user->first_name;
+            $employeeId = $user->id;
+            $selectCustomer = $request->input('select_customer');
+            $statusKonfirmasi = $request->input('status_konfirmasi');
+            $statusRequest = $request->input('status_request');
+            $findCase = $this->repairCase->findCase($selectCustomer);
+            $estimasiId = ($findCase->estimasi) ? $findCase->estimasi->id : '';
+            $namaCustomer = $findCase->customer->first_name . ' ' . $findCase->customer->last_name . '-' . $findCase->customer->id . '-' . $findCase->id;
+            
+            $reqPartId = $request->input('req_part_id');
+            $skuPart = $request->input('sku_part');
+            $jenisDrone = $request->input('jenis_drone');
+            $namaPart = $request->input('nama_part');
+            $modalGudang = $request->input('modal_gudang');
+            $hargaGudang = $request->input('harga_gudang');
+            $hargaRepair = $request->input('harga_repair');
+            $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
+            $dataReqGudang = [];
+            $dataPinjam = [];
+
+            if ($statusKonfirmasi == 'Estimasi') {
+
+                $estimasiData = $this->repairEstimasi->ensureHaveEstimasi($estimasiId);
+                if ($estimasiData) {
+                    $resultEstimasi = $estimasiData;
+                } else {
+                    $dataEstimasi = [
+                        'employee_id' => $employeeId,
+                        'case_id' => $selectCustomer,
+                        'status' => 'Estimasi',
+                    ];
+                    $resultEstimasi = $this->repairEstimasi->createEstimasi($dataEstimasi);
+                }
+
+                foreach ($reqPartId as $index => $partId) {
+                    $getStatus = $this->repairCase->getNameStatus($statusRequest[$index]);
+                    $namaStatus = $getStatus->jenis_status;
+                    $dataEstimasiPart = [
+                        'estimasi_id' => $resultEstimasi->id,
+                        'jenis_transaksi_id' => 1,
+                        'sku' => $skuPart[$index],
+                        'jenis_produk' => $jenisDrone[$index],
+                        'nama_produk' => $namaPart[$index],
+                        'nama_alias' => '',
+                        'harga_customer' => $hargaCustomer[$index],
+                        'harga_repair' => $hargaRepair[$index],
+                        'harga_gudang' => $hargaGudang[$index],
+                        'modal_gudang' => $modalGudang[$index],
+                        'status_proses_id' => $statusRequest[$index],
+                        'active' => 'Active',
+                    ];
+
+                    $dataReqPart = [
+                        'status' => 'Lanjut Estimasi',
+                    ];
+
+                    $this->repairEstimasi->updateReqPart($dataReqPart, $partId);
+                    $resultEstimasiPart = $this->repairEstimasi->createEstimasiPart($dataEstimasiPart);
+
+                    $dataReqGudang[] = [
+                        'idPart' => $resultEstimasiPart->id, 
+                        'namaCustomer' => $namaCustomer, 
+                        'statusCustomer' => $namaStatus, 
+                        'skuPart' => $skuPart[$index], 
+                        'jenisDrone' => $jenisDrone[$index], 
+                        'namaPart' => $namaPart[$index], 
+                        'namaTeknisi' => $namaTeknisi, 
+                        'tanggalRequest' => $tanggalKonfirmasiString,
+                    ];
+                }
+
+
+                $urlReqPart = 'https://script.google.com/macros/s/AKfycbxGE0TO2PkO3DnyI1f3HtBuKf-3CM-5XJlhXPLtPbiqzILy9iO7Qh_ru7uWcKeoJFa0/exec';
+                $responseEstimasi = Http::post($urlReqPart, $dataReqGudang);
+
+            } elseif($statusKonfirmasi == 'Pinjam') {
+
+                foreach ($reqPartId as $index => $partId) {
+                    $getStatus = $this->repairCase->getNameStatus($statusRequest[$index]);
+                    $namaStatus = $getStatus->jenis_status;
+                    $dataPinjam[] = [
+                        'idPart' => $partId,
+                        'namaCustomer' => $namaCustomer,
+                        'statusCustomer' => $namaStatus,
+                        'skuPart' => $skuPart[$index],
+                        'jenisDrone' => $jenisDrone[$index],
+                        'namaPart' => $namaPart[$index],
+                        'namaTeknisi' => $namaTeknisi,
+                        'tanggalRequest' => $tanggalKonfirmasiString,
+                    ];
+
+                    $dataReqPart = [
+                        'tanggal_konfirmasi' => $tanggalKonfirmasi,
+                        'status' => 'Menunggu Konfirmasi Pinjaman',
+                    ];
+    
+                    $this->repairEstimasi->updateReqPart($dataReqPart, $partId);
+                }
+
+                $urlPinjamPart = 'https://script.google.com/macros/s/AKfycbxDbaNfKcE9LHA502clUkSYdX85mHYQgpSGO6z3gdnud_OJsnw7R6LspXeAIJDtxghpgg/exec';
+                $response = Http::post($urlPinjamPart, $dataPinjam);
+
+            } else {
+                $this->repairEstimasi->rollbackTransaction();
+                return ['status' => 'error', 'message' => 'Something Went Wrong.'];
+            }
+
+            $this->repairEstimasi->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil melakukan konfirmasi request sparepart.'];
+
+        } catch (Exception $e) {
+            $this->repairEstimasi->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function penerimaanSparepart(Request $request, $id)
+    {
+        
+    }
+
+    // Function get data
     public function getJenisDrone($jenisTransaksi)
     {
         $urlAPi = 'https://script.google.com/macros/s/AKfycbx0RQkM6hdlvBlaO6Hyt1NpK5e3c5Mbj5m-3u4AoZsgtSF49e5MHfNK6mSnzU_8mpB5/exec';
@@ -576,6 +690,11 @@ class RepairEstimasiService
         ];
 
         return response()->json($resultData);
+    }
+
+    public function getListReqPart($id)
+    {
+        return $this->repairCase->getListReqPart($id);
     }
     
 }

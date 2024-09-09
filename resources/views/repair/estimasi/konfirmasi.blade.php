@@ -2,6 +2,17 @@
 
 @section('container')
 
+    <div class="mb-4 border-b border-gray-200">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="caseList" data-tabs-toggle="#konfirmasiTabs" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="KonEs-tab" data-tabs-target="#KonEs" type="button" role="tab" aria-controls="KonEs" aria-selected="false">Konfiramasi Estimasi</button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="KonPen-tab" data-tabs-target="#KonPen" type="button" role="tab" aria-controls="KonPen" aria-selected="false">Konfirmasi Pengerjaan</button>
+            </li>
+        </ul>
+    </div>
+
     @if (session()->has('success'))
         <div id="alert-success-input" class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800" role="alert">
             <span class="material-symbols-outlined flex-shrink-0 w-4 h-4">task_alt</span>
@@ -31,17 +42,6 @@
             </button>
         </div>
     @endif
-
-    <div class="mb-4 border-b border-gray-200">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="caseList" data-tabs-toggle="#konfirmasiTabs" role="tablist">
-            <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="KonEs-tab" data-tabs-target="#KonEs" type="button" role="tab" aria-controls="KonEs" aria-selected="false">Konfiramasi Estimasi</button>
-            </li>
-            <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="KonPen-tab" data-tabs-target="#KonPen" type="button" role="tab" aria-controls="KonPen" aria-selected="false">Konfirmasi Pengerjaan</button>
-            </li>
-        </ul>
-    </div>
 
     <div class="konfirmasiTabs">
         @include('repair.estimasi.tabs.konfirmasi-estimasi')

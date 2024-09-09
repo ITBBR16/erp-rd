@@ -6,6 +6,7 @@ interface RepairEstimasiInterface
 {
     public function getJenisTransaksi();
     public function findEstimasi($id);
+    public function ensureHaveEstimasi($caseId);
 
     public function createEstimasi(array $data);
 

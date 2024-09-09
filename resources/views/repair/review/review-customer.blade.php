@@ -13,7 +13,7 @@
 
     <div class="bg-white my-20 p-8 rounded-lg text-center border shadow-lg max-w-4xl lg:w-3/4">
 
-        <form action="{{ route('review-customer.store') }}" method="POST" autocomplete="off">
+        <form action="{{ route('createReviewCustomer') }}" method="POST" autocomplete="off">
             @csrf
 
             <input type="hidden" name="no_case" value="{{ $noCase }}">

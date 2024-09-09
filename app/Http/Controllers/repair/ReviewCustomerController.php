@@ -20,7 +20,7 @@ class ReviewCustomerController extends Controller
         $this->customerReview = $repairCustomerReviewService;
     }
 
-    public function edit($increment)
+    public function index($increment)
     {
         $pos = strpos($increment, 'RD');
         $today = date('Y-m-d');
@@ -71,7 +71,7 @@ class ReviewCustomerController extends Controller
             $formattedDate = $tanggal->format('dmYHis');
             $formatUrl = $formattedDate . 'RD' . $noNota;
     
-            $message = 'https://stagging.rumahdrone.id/review-customer/' . $formatUrl . '/edit';
+            $message = 'https://stagging.rumahdrone.id/review-customer/' . $formatUrl;
             $urlWaApi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
             $dataWa = [
                 'no_telpon' => $noTelpon,

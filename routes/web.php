@@ -38,6 +38,7 @@ use App\Http\Controllers\repair\RepairCustomerListController;
 use App\Http\Controllers\repair\RepairEstimasiBiayaController;
 use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairKonfirmasiQCController;
+use App\Http\Controllers\repair\RepairKonfirmasiReqPartController;
 use App\Http\Controllers\repair\RepairListCaseController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\repair\RepairQCController;
@@ -59,7 +60,8 @@ Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
 Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
 Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);
 
-Route::resource('/review-customer', ReviewCustomerController::class)->only(['edit', 'store']);
+Route::get('/review-customer/{increment}', [ReviewCustomerController::class, 'index']);
+Route::post('/review-customer', [ReviewCustomerController::class, 'store'])->name('createReviewCustomer');
 
 Route::middleware('superadmin')->group(function () {
     Route::get('/', function() {
@@ -278,6 +280,12 @@ Route::middleware('repair')->group(function () {
                 Route::post('/addJurnalKonfirmasi', 'addJurnalKonfirmasi')->name('addJurnalKonfirmasi');
                 Route::put('/konfirmasiPengerjaan/{id}', 'konfirmasiPengerjaan')->name('konfirmasiPengerjaan');
             });
+
+            Route::group(['controller' => RepairKonfirmasiReqPartController::class], function () {
+                Route::resource('/konfirmasi-req-sparepart', RepairKonfirmasiReqPartController::class)->only(['index', 'store']);
+                Route::get('/getDataRequestPart/{id}', 'getListPart');
+            });
+            
         });
 
         Route::prefix('/quality-control')->group(function () {

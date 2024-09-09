@@ -12,4 +12,9 @@ class RepairReqSpareparts extends Model
     protected $connection = 'rumahdrone_repair';
     protected $table = 'repair_request_part';
     protected $guarded = ['id'];
+
+    public function repairCase()
+    {
+        return $this->belongsTo(RepairCase::class, 'case_id');
+    }
 }

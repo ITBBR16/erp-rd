@@ -349,4 +349,10 @@ class RepairCaseService
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+
+    public function getDataRequest()
+    {
+        return $this->repairCase->getDataRequestPart();
+    }
+
 }
