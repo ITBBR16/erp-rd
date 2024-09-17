@@ -36,10 +36,12 @@ use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\KasirRepairController;
 use App\Http\Controllers\repair\RepairCustomerListController;
 use App\Http\Controllers\repair\RepairEstimasiBiayaController;
+use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
 use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairKonfirmasiReqPartController;
 use App\Http\Controllers\repair\RepairListCaseController;
+use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\repair\RepairQCController;
 use App\Http\Controllers\repair\RepairPengerjaanController;
@@ -239,7 +241,15 @@ Route::middleware('repair')->group(function () {
                 Route::post('/kirimTandaTerima/{id}', 'kirimTandaTerimaCustomer')->name('kirimTandaTerima');
             });
 
-            Route::resource('/kasir-repair', KasirRepairController::class)->only(['index', 'edit']);
+            Route::group(['controller' => KasirRepairController::class], function () {
+                Route::resource('/kasir-repair', KasirRepairController::class)->only(['index', 'edit']);
+                Route::post('/add-ongkir-repair/{id}', 'createOngkirKasir')->name('createOngkirKasir');
+                Route::get('/kasir-repair-dp/{encryptId}', 'downpaymentKasir')->name('downpaymentKasir');
+                Route::get('/getDataCustomer/{id}', 'getDataCustomer');
+                Route::get('/getLayanan/{id}', 'getLayanan');
+                Route::get('/preview-pelunasan/{id}', 'previewPdfPelunasan');
+                Route::post('/create-pembayaran/{id}', 'createPembayaran')->name('createPembayaran');
+            });
 
             Route::group(['controller' => RepairKonfirmasiQCController::class], function () {
                 Route::resource('/konfirmasi-qc', RepairKonfirmasiQCController::class)->only(['index', 'update']);
@@ -272,6 +282,9 @@ Route::middleware('repair')->group(function () {
                 Route::get('/getPartGudang/{jenisTransaksi}/{jenisDrone}', 'getPartGudang');
                 Route::get('/getDetailGudang/{jenisTransaksi}/{sku}', 'getDetailGudang');
             });
+
+            Route::resource('/req-sparepart-estimasi', RepairEstimasiReqSparepartController::class)->only(['index', 'update']);
+            Route::resource('/penerimaan-sparepart-estimasi', RepairPenerimaanPartEstimasiController::class)->only(['index', 'store', 'update']);
 
             Route::group(['controller' => RepairKonfirmasiEstimasiController::class], function () {
                 Route::resource('/konfirmasi-estimasi', RepairKonfirmasiEstimasiController::class)->only(['index', 'edit', 'update']);

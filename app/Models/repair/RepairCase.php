@@ -3,6 +3,7 @@
 namespace App\Models\repair;
 
 use App\Models\customer\Customer;
+use App\Models\ekspedisi\LogRequest;
 use App\Models\employee\Employee;
 use App\Models\produk\ProdukJenis;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -65,7 +66,7 @@ class RepairCase extends Model
 
     public function transaksi()
     {
-        return $this->hasOne(RepairTransaksi::class);
+        return $this->hasOne(RepairTransaksi::class, 'case_id');
     }
 
     public function timestampStatus()
@@ -81,5 +82,10 @@ class RepairCase extends Model
     public function requestPart()
     {
         return $this->hasMany(RepairReqSpareparts::class, 'case_id');
+    }
+
+    public function logRequest()
+    {
+        return $this->hasOne(LogRequest::class, 'source_id')->where('divisi_id', 2);
     }
 }

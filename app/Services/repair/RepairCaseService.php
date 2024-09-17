@@ -6,22 +6,25 @@ use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\repository\ProdukRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
+use App\Repositories\logistik\repository\EkspedisiRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
 use App\Repositories\repair\repository\RepairTimeJurnalRepository;
 
 class RepairCaseService
 {
-    protected $customerRepository, $repairCase, $product, $repairTimeJurnal;
+    protected $customerRepository, $repairCase, $product, $repairTimeJurnal, $ekspedisi;
 
-    public function __construct(RepairCustomerRepository $customerRepository, RepairCaseRepository $repairCase, ProdukRepository $product, RepairTimeJurnalRepository $repairTimeJurnalRepository)
+    public function __construct(RepairCustomerRepository $customerRepository, RepairCaseRepository $repairCase, ProdukRepository $product, RepairTimeJurnalRepository $repairTimeJurnalRepository, EkspedisiRepository $ekspedisiRepository)
     {
         $this->repairTimeJurnal = $repairTimeJurnalRepository;
         $this->customerRepository = $customerRepository;
         $this->repairCase = $repairCase;
         $this->product = $product;
+        $this->ekspedisi = $ekspedisiRepository;
     }
 
     // Input New Case
@@ -297,6 +300,131 @@ class RepairCaseService
         }
     }
 
+    // Kasir
+    public function createOngkirKasir(Request $request, $id)
+    {
+        $this->ekspedisi->beginTransaction();
+        $this->customerRepository->beginTransaction();
+        $tanggalRequest = Carbon::now();
+
+        try {
+
+            $user = auth()->user();
+            $employeeId = $user->id;
+            $divisiId = $user->divisi_id;
+            $checkboxCustomer = $request->has('checkbox_customer_kasir');
+
+            $layananEkspedisi = $request->input('layanan_ongkir_repair');
+            $nominalOngkir = preg_replace("/[^0-9]/", "",$request->input('nominal_ongkir_repair')) ?? 0;
+            $nominalPacking = preg_replace("/[^0-9]/", "",$request->input('nominal_packing_repair')) ?? 0;
+            $nominalProduk = preg_replace("/[^0-9]/", "",$request->input('nominal_produk')) ?? 0;
+            $nominalAsuransi = preg_replace("/[^0-9]/", "",$request->input('nominal_asuransi')) ?? 0;
+
+            if ($checkboxCustomer) {
+                $tipePenerima = 'Other';
+                $dataPenerima = [
+                    'nama' => $request->input('nama_penerima'),
+                    'no_telpon' => $request->input('no_telpon'),
+                    'provinsi_id' => $request->input('provinsi_penerima'),
+                    'kabupaten_kota_id' => $request->input('kota_penerima'),
+                    'kecamatan_id' => $request->input('kecamatan_penerima'),
+                    'kelurahan_id' => $request->input('kelurahan_penerima'),
+                    'kode_pos' => $request->input('kode_pos_penerima'),
+                    'nama_jalan' => $request->input('nama_jalan_penerima'),
+                ];
+        
+                $resultPenerima = $this->ekspedisi->createLogPenerima($dataPenerima);
+            } else {
+                $tipePenerima = 'Customer';
+                $customerId = $request->input('customer_id');
+                $dataCustomer = [
+                    'provinsi' => $request->input('provinsi_customer'),
+                    'kota_kabupaten' => $request->input('kota_customer'),
+                    'kecamtan' => $request->input('kecamatan_customer'),
+                    'kelurahan' => $request->input('kelurahan_customer'),
+                    'kedo_pos' => $request->input('kode_pos_customer'),
+                    'nama_jalan' => $request->input('alamat_customer'),
+                ];
+
+                $resultPenerima = $this->customerRepository->updateCustomer($customerId, $dataCustomer);
+            }
+
+            $dataRequestLogistik = [
+                'employee_id' => $employeeId,
+                'divisi_id' => $divisiId,
+                'source_id' => $id,
+                'penerima_id' => $resultPenerima->id,
+                'layanan_id' => $layananEkspedisi,
+                'biaya_customer_ongkir' => $nominalOngkir,
+                'biaya_customer_packing' => $nominalPacking,
+                'nominal_produk' => $nominalProduk,
+                'nominal_asuransi' => $nominalAsuransi,
+                'tipe_penerima' => $tipePenerima,
+                'tanggal_request' => $tanggalRequest,
+                'status_request' => 'Request Packing',
+            ];
+
+            $this->ekspedisi->createLogRequest($dataRequestLogistik);
+            $this->ekspedisi->commitTransaction();
+            $this->customerRepository->commitTransaction();
+
+            return ['status' => 'success', 'message' => 'Berhasil menambahkan ongkir baru.'];
+
+        } catch (Exception $e) {
+            Log::error('Error menambahkan ongkir: ' . $e->getMessage());
+            $this->ekspedisi->rollbackTransaction();
+            $this->customerRepository->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function createPembayaran(Request $request, $id)
+    {
+        $this->repairCase->beginTransaction();
+
+        try {
+            $employeeId = auth()->user()->id;
+            $metodePembayaran = $request->input('metode_pembayaran_pembayaran');
+            $nominalPembayaran = preg_replace("/[^0-9]/", "", $request->input('nominal_pembayaran'));
+            
+            $checkTransaksi = $this->repairCase->findTransaksiByCase($id);
+
+            if (!$checkTransaksi->isEmpty()) {
+                $transaksi = $checkTransaksi;
+                $totalPembayaran = $checkTransaksi->total_pembayaran + $nominalPembayaran;
+                $dataUpdateTransaksi = [
+                    'total_pembayaran' => $totalPembayaran,
+                ];
+
+                $this->repairCase->updateTransaksi($transaksi->id, $dataUpdateTransaksi);
+            } else {
+                $dataTransaksi = [
+                    'case_id' => $id,
+                    'total_pembayaran' => $nominalPembayaran,
+                    'status_pembayaran' => 'Belum Lunas',
+                ];
+
+                $transaksi = $this->repairCase->createTransaksi($dataTransaksi);
+            }
+
+            $dataPembayaran = [
+                'transaksi_id' => $transaksi->id,
+                'metode_pembayaran_id' => $metodePembayaran,
+                'employee_id' => $employeeId,
+                'jumlah_pembayaran' => $nominalPembayaran,
+            ];
+
+            $this->repairCase->createPembayaran($dataPembayaran);
+            $this->repairCase->commitTransaction();
+
+            return ['status' => 'success', 'message' => 'Berhasil melakukan pembayaran.'];
+
+        } catch (Exception $e) {
+            $this->repairCase->rollBackTransaction();
+            return ['status' => 'error' , 'message' => $e->getMessage()];
+        }
+    }
+
     public function showTimeForChat()
     {
         $hour = date('H');
@@ -315,44 +443,19 @@ class RepairCaseService
         return $greeting;
     }
 
-    // Sparepart
-    public function createReqSparepart(Request $request, $id)
-    {
-        try {
-            $tglRequest = Carbon::now();
-            $statusCaseId = $request->input('status_case_id');
-            $jenisProduk = $request->input('jenis_produk');
-            $namaPart = $request->input('nama_part');
-            $skuPart = $request->input('sku_part');
-            $qtyReq = $request->input('qty_req');
-            $dataSendGudang = [];
-
-            foreach ($jenisProduk as $index => $produk) {
-                $qtyItem = $qtyReq[$index];
-                for ($i = 0; $i < $qtyItem; $i++) {
-                    $dataSendGudang[] = [
-                        'case_id' => $id,
-                        'sku' => $skuPart[$index],
-                        'jenis_produk' => $produk,
-                        'nama_produk' => $namaPart[$index],
-                        'status_proses_id' => $statusCaseId,
-                        'tanggal_request' => $tglRequest,
-                        'status' => 'Request',
-                    ];
-
-                }
-            }
-
-            return ['status' => 'success', 'message' => 'Berhasil melakukan request sparepart.'];
-
-        } catch (Exception $e) {
-            return ['status' => 'error', 'message' => $e->getMessage()];
-        }
-    }
-
     public function getDataRequest()
     {
         return $this->repairCase->getDataRequestPart();
+    }
+
+    public function getDataForPenerimaanPart()
+    {
+        return $this->repairCase->getDataPenerimaanReqPart();
+    }
+
+    public function getDataAkun()
+    {
+        return $this->repairCase->getMetodePembayaran();
     }
 
 }

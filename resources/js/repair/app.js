@@ -5,3 +5,5 @@ import '../../../public/js/repair/estimasi-biaya';
 import '../../../public/js/repair/estimasi-konfirmasi-request';
 import '../../../public/js/repair/konfirmasi-biaya';
 import '../../../public/js/repair/req-sparepart';
+import '../../../public/js/repair/penerimaan-req-part';
+import '../../../public/js/repair/kasir-repair';

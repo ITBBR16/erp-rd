@@ -2,6 +2,7 @@
 
 namespace App\Models\employee;
 
+use App\Models\ekspedisi\LogRequest;
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosTransaksi;
 use App\Models\repair\RepairCase;
@@ -47,5 +48,10 @@ class Employee extends Model
     public function repairTransaksiPembayaran()
     {
         return $this->hasMany(RepairTransaksiPembayaran::class);
+    }
+
+    public function logRequest()
+    {
+        return $this->hasMany(LogRequest::class, 'employee_id');
     }
 }

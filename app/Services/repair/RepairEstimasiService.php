@@ -5,6 +5,7 @@ namespace App\Services\repair;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\repair\repository\RepairEstimasiRepository;
@@ -115,6 +116,8 @@ class RepairEstimasiService
     public function createEstimasi(Request $request, $id)
     {
         try {
+            $this->repairEstimasi->beginTransaction();
+
             // Data estimasi
             $employeeId = auth()->user()->id;
             $tglWaktu = Carbon::now();
@@ -621,9 +624,113 @@ class RepairEstimasiService
         }
     }
 
-    public function penerimaanSparepart(Request $request, $id)
+    public function requestPartEstimasi(Request $request, $id)
     {
+        try {
+
+            $this->repairEstimasi->beginTransaction();
+
+            $user = auth()->user();
+            $employeeId = $user->id;
+            $tanggal = Carbon::now();
+            $tanggalRequest = $tanggal->toDateTimeString();
+            $findCase = $this->repairCase->findCase($id);
+            $estimasiId = ($findCase->estimasi) ? $findCase->estimasi->id : '';
+            $namaCustomer = $findCase->customer->first_name . ' ' . $findCase->customer->last_name . '-' . $findCase->customer->id . '-' . $findCase->id;
+            $statusId = $request->input('status_case_id');
+
+            $jenisProduk = $request->input('jenis_produk');
+            $namaPart = $request->input('nama_part');
+            $skuPart = $request->input('sku_part');
+            $namaAlias = $request->input('nama_alias');
+            $hargaCustomer = preg_replace("/[^0-9]/", "", $request->input('harga_customer'));
+            $hargaRepair = preg_replace("/[^0-9]/", "", $request->input('harga_repair'));
+            $hargaGudang = preg_replace("/[^0-9]/", "", $request->input('harga_gudang'));
+            $modalGudang = $request->input('modal_gudang');
+            $promoGudang = $request->input('promo_gudang');
+            $dataToGudang = [];
+
+            $resultEstimasi = $this->repairEstimasi->ensureHaveEstimasi($estimasiId) ?? 
+                              $this->repairEstimasi->createEstimasi([
+                                  'employee_id' => $employeeId,
+                                  'case_id' => $id,
+                                  'status' => 'Estimasi',
+                              ]);
+
+            foreach ($jenisProduk as $index => $drone) {
+                $dataEstimasiPart = [
+                    'estimasi_id' => $resultEstimasi->id,
+                    'jenis_transaksi_id' => 1,
+                    'sku' => $skuPart[$index],
+                    'jenis_produk' => $drone,
+                    'nama_produk' => $namaPart[$index],
+                    'nama_alias' => $namaAlias[$index],
+                    'harga_customer' => $hargaCustomer[$index],
+                    'harga_repair' => $hargaRepair[$index],
+                    'harga_gudang' => $hargaGudang[$index],
+                    'modal_gudang' => $modalGudang[$index],
+                    'status_proses_id' => $statusId,
+                    'active' => 'Wait Send Part',
+                ];
+                $resultEstimasiPart = $this->repairEstimasi->createEstimasiPart($dataEstimasiPart);
+
+                $dataToGudang[] = [
+                    'caseId' => $id,
+                    'idPart' => $resultEstimasiPart->id, 
+                    'namaCustomer' => $namaCustomer,
+                    'skuPart' => $skuPart[$index],
+                    'namaProduk' => $drone,
+                    'namaPart' => $namaPart[$index],
+                    'modalRepair' => $hargaRepair[$index],
+                    'hargaCustomer' => $hargaCustomer[$index],
+                    'tanggalRequest' => $tanggalRequest,
+                ];
+            }
+
+            // API request
+            try {
+                $urlReqPart = 'https://script.google.com/macros/s/AKfycbxSCIwD8QK2scOgjK062KNWY2I7sa0V2bNYVT65HxdaMz_AS5axhRYGdX1szm79Lm2_/exec';
+                $responseEstimasi = Http::post($urlReqPart, $dataToGudang);
+                $responseDecode = json_decode($responseEstimasi->body(), true);
+
+                if (isset($responseDecode['status']) && $responseDecode['status'] == 'success') {
+                    $this->repairEstimasi->commitTransaction();
+                    return ['status' => 'success', 'message' => 'Berhasil melakukan request sparepart ke gudang.'];
+                } else {
+                    Log::error('Gudang API error response', ['response' => $responseDecode]);
+                    $this->repairEstimasi->rollbackTransaction();
+                    return ['status' => 'error', 'message' => 'Tidak bisa melakukan request ke gudang.'];
+                }
+            } catch (Exception $e) {
+                $this->repairEstimasi->rollbackTransaction();
+                return ['status' => 'error', 'message' => 'Failed to send request to Gudang API. Error: ' . $e->getMessage()];
+            }
+
+        } catch(Exception $e) {
+            $this->repairEstimasi->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
         
+    }
+
+    public function penerimaanSparepartEstimasi(Request $request)
+    {
+        try {
+            $this->repairEstimasi->beginTransaction();
+            $checkboxData = $request->input('checkbox_select_penerimaan');
+
+            foreach ($checkboxData as $id) {
+                $dataEstimasiPart = ['active' => 'Active'];
+                $this->repairEstimasi->updateEstimasiPart($dataEstimasiPart, $id);
+            }
+
+            $this->repairEstimasi->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil melakukan penerimaan part'];
+
+        } catch (Exception $e) {
+            $this->repairEstimasi->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
     }
 
     // Function get data

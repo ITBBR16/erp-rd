@@ -19,8 +19,7 @@ class RepairPenerimaanSparepartController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->nameDivisi->getDivisi($user);
-        $caseService = $this->repairCaseService->getDataDropdown();
-        $dataCase = $caseService['data_case'];
+        $dataCase = $this->repairCaseService->getDataForPenerimaanPart();
 
         return view('repair.csr.penerimaan-sparepart', [
             'title' => 'Penerimaan Sparepart',

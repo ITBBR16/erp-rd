@@ -8,26 +8,26 @@ use App\Repositories\umum\UmumRepository;
 use App\Services\repair\RepairCaseService;
 use App\Services\repair\RepairEstimasiService;
 
-class RepairRequestSparepartController extends Controller
+class RepairEstimasiReqSparepartController extends Controller
 {
-    protected $caseService, $estimasiService;
+    protected $repairCaseService, $serviceEstimasi;
     public function __construct(private UmumRepository $nameDivisi, RepairCaseService $repairCaseService, RepairEstimasiService $repairEstimasiService)
     {
-        $this->caseService = $repairCaseService;
-        $this->estimasiService = $repairEstimasiService;
+        $this->repairCaseService = $repairCaseService;
+        $this->serviceEstimasi = $repairEstimasiService;
     }
 
     public function index()
     {
         $user = auth()->user();
         $divisiName = $this->nameDivisi->getDivisi($user);
-        $caseService = $this->caseService->getDataDropdown();
+        $caseService = $this->repairCaseService->getDataDropdown();
         $dataCase = $caseService['data_case'];
 
-        return view('repair.csr.req-sparepart', [
-            'title' => 'Request Sparepart',
-            'active' => 'req-part',
-            'navActive' => 'csr',
+        return view('repair.estimasi.req-sparepart', [
+            'title' => 'Request Sparepart Estimasi',
+            'active' => 'req-part-estimasi',
+            'navActive' => 'estimasi',
             'dropdown' => 'req-part',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
@@ -37,12 +37,12 @@ class RepairRequestSparepartController extends Controller
 
     public function update(Request $request, $id)
     {
-        $resultReqSparepart = $this->estimasiService->requestPartEstimasi($request, $id);
+        $resultReqPart = $this->serviceEstimasi->requestPartEstimasi($request, $id);
 
-        if ($resultReqSparepart['status'] == 'success') {
-            return back()->with('success', $resultReqSparepart['message']);
+        if ($resultReqPart['status'] == 'success') {
+            return back()->with('success', $resultReqPart['message']);
         } else {
-            return back()->with('error', $resultReqSparepart['message']);
+            return back()->with('error', $resultReqPart['message']);
         }
     }
 }
