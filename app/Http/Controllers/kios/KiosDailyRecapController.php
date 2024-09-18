@@ -6,7 +6,6 @@ use Exception;
 use App\Models\kios\KiosWTB;
 use App\Models\kios\KiosWTS;
 use Illuminate\Http\Request;
-use App\Models\kios\KiosProduk;
 use Illuminate\Validation\Rule;
 use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
@@ -15,8 +14,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\kios\KiosDailyRecap;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
-use App\Models\kios\KiosProdukSecond;
-use App\Models\produk\ProdukSubJenis;
 use App\Models\kios\KiosRecapKeperluan;
 use App\Models\kios\KiosTechnicalSupport;
 use App\Repositories\kios\KiosRepository;
@@ -33,7 +30,7 @@ class KiosDailyRecapController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $provinsi = Provinsi::all();
-        $customer = Customer::all();
+        $customer = Customer::orderByDesc('id')->get();
         $dailyRecap = KiosDailyRecap::orderByDesc('id')->get();
         $produkJenis = ProdukJenis::all();
         $infoPerusahaan = CustomerInfoPerusahaan::all();
@@ -66,7 +63,7 @@ class KiosDailyRecapController extends Controller
 
         $picId = auth()->user()->id;
 
-        try{
+        try {
             $idKeperluan = $request->input('keperluan_recap');
             $keperluanRecap = KiosRecapKeperluan::findOrFail($idKeperluan);
             $inputStatus = $request->input('status_produk');
@@ -78,7 +75,6 @@ class KiosDailyRecapController extends Controller
                     'paket_penjualan_id' => $request->input('paket_penjualan'),
                     'keterangan' => $keterangan,
                 ]);
-
                 $status = ($inputStatus == 'Ready' || $inputStatus == 'Promo') ? 'Sudah Ditawari Produk' : 'Produk Tidak Tersedia';
 
             } elseif ($keperluanRecap->nama == 'Want to Sell') {
@@ -87,7 +83,6 @@ class KiosDailyRecapController extends Controller
                     'produk_worth' => $request->input('produk_worth'),
                     'keterangan' => $keterangan,
                 ]);
-
                 $status = ($inputStatus == 'Ready') ? 'Produk dibutuhkan' : 'Produk tidak dibutuhkan';
 
             } elseif ($keperluanRecap->nama == 'Technical Support') {
@@ -100,12 +95,22 @@ class KiosDailyRecapController extends Controller
                     'jenis_id' => $request->input('jenis_produk'),
                     'keterangan' => $keterangan,
                 ]);
-
-                $status = ($keperluanTs == 'Belum Terdata') ? 'Unprocess' : 'Case Done';
+                $status = ($keperluanTs->nama == 'Belum Terdata') ? 'Unprocess' : 'Case Done';
 
             } else {
                 $connectionKios->rollBack();
                 return back()->with('error', 'Something went wrong.');
+            }
+
+            $today = now()->format('Y-m-d');
+            $existingRecap = KiosDailyRecap::where('customer_id', $request->input('nama_customer'))
+                ->where('keperluan_id', $request->input('keperluan_recap'))
+                ->whereDate('created_at', $today)
+                ->first();
+
+            if ($existingRecap) {
+                $connectionKios->rollBack();
+                return back()->with('error', 'Data customer dengan keperluan yang sama tidak dapat di input ulang.');
             }
 
             $dailyRecap = new KiosDailyRecap([
@@ -125,7 +130,6 @@ class KiosDailyRecapController extends Controller
             $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
-
     }
 
     public function newCustomer(Request $request)

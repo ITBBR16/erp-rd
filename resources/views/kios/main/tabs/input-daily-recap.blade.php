@@ -43,65 +43,67 @@
             </thead>
             <tbody>
                 @foreach ($dailyRecap as $recap)
-                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                        <td class="px-6 py-2">
-                            {{ $recap->customer->first_name }} {{ $recap->customer->last_name }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $recap->keperluan->nama }}
-                        </td>
-                        <td class="px-6 py-2">
-                            @if ($recap->keperluan->nama == 'Want to Buy')
-                                {{ $recap->kiosWtb->subjenis->paket_penjualan }}
-                            @elseif($recap->keperluan->nama == 'Want to Sell')
-                                {{ $recap->kiosWts->subjenis->paket_penjualan }}
-                            @elseif($recap->keperluan->nama == 'Technical Support')
-                                {{ $recap->recapTs->produkjenis->jenis_produk }}
-                            @endif
-                        </td>
-                        <td class="px-6 py-2">
-                            @if ($recap->keperluan->nama == 'Want to Buy')
-                                {{ $recap->kiosWtb->kondisi_produk }}
-                            @elseif($recap->keperluan->nama == 'Want to Sell')
-                                Produk Worth : {{ $recap->kiosWts->produk_worth }}
-                            @elseif($recap->keperluan->nama == 'Technical Support')
-                                {{ $recap->recapTs->kategoriPermasalahan->nama }}
-                            @endif
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $recap->status }}
-                        </td>
-                        <td class="px-6 py-2">
-                            <button id="dropdownDailyRecapButton{{ $recap->id }}" data-dropdown-toggle="dropdownDailyRecap{{ $recap->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                </svg>
-                            </button>
+                    @if (!empty($recap))
+                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <td class="px-6 py-2">
+                                {{ $recap->customer->first_name }} {{ $recap->customer->last_name }} - {{ $recap->customer->id }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $recap->keperluan->nama }}
+                            </td>
+                            <td class="px-6 py-2">
+                                @if ($recap->keperluan->nama == 'Want to Buy')
+                                    {{ $recap->kiosWtb->subjenis->paket_penjualan }}
+                                @elseif($recap->keperluan->nama == 'Want to Sell')
+                                    {{ $recap->kiosWts->subjenis->paket_penjualan }}
+                                @elseif($recap->keperluan->nama == 'Technical Support')
+                                    {{ $recap->recapTs->produkjenis->jenis_produk }}
+                                @endif
+                            </td>
+                            <td class="px-6 py-2">
+                                @if ($recap->keperluan->nama == 'Want to Buy')
+                                    {{ $recap->kiosWtb->kondisi_produk }}
+                                @elseif($recap->keperluan->nama == 'Want to Sell')
+                                    Produk Worth : {{ $recap->kiosWts->produk_worth }}
+                                @elseif($recap->keperluan->nama == 'Technical Support')
+                                    {{ $recap->recapTs->kategoriPermasalahan->nama }}
+                                @endif
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $recap->status }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <button id="dropdownDailyRecapButton{{ $recap->id }}" data-dropdown-toggle="dropdownDailyRecap{{ $recap->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                                </button>
 
-                            <!-- Dropdown menu -->
-                            <div id="dropdownDailyRecap{{ $recap->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDailyRecapButton{{ $recap->id }}">
-                                    {{-- <li>
-                                        <button type="button" data-modal-target="recap-view{{ $recap->id }}" data-modal-toggle="recap-view{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">visibility</span>
-                                            <span class="whitespace-nowrap">Detail</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button type="button" data-modal-target="recap-edit{{ $recap->id }}" data-modal-toggle="recap-edit{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">edit</span>
-                                            <span class="whitespace-nowrap">Edit</span>
-                                        </button>
-                                    </li> --}}
-                                    <li>
-                                        <button type="button" data-modal-target="recap-delete{{ $recap->id }}" data-modal-toggle="recap-delete{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">delete</span>
-                                            <span class="whitespace-nowrap">Hapus Data</span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
+                                <!-- Dropdown menu -->
+                                <div id="dropdownDailyRecap{{ $recap->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                                    <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDailyRecapButton{{ $recap->id }}">
+                                        {{-- <li>
+                                            <button type="button" data-modal-target="recap-view{{ $recap->id }}" data-modal-toggle="recap-view{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                                <span class="whitespace-nowrap">Detail</span>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" data-modal-target="recap-edit{{ $recap->id }}" data-modal-toggle="recap-edit{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <span class="material-symbols-outlined text-base mr-3">edit</span>
+                                                <span class="whitespace-nowrap">Edit</span>
+                                            </button>
+                                        </li> --}}
+                                        <li>
+                                            <button type="button" data-modal-target="recap-delete{{ $recap->id }}" data-modal-toggle="recap-delete{{ $recap->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <span class="material-symbols-outlined text-base mr-3">delete</span>
+                                                <span class="whitespace-nowrap">Hapus Data</span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

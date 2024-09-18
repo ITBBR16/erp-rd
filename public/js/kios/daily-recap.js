@@ -275,7 +275,7 @@ $(document).ready(function () {
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="jenis_produk"></label>
-                        <select name="jenis_produk" id="jenis-produk-ts" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="jenis_produk" id="jenis-produk-ts" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Jenis Produk</option>`;
                             jenisProduk.forEach(function (item) {
                                 itemForm += `<option value="${item.id}">${item.jenis_produk}</option>`
@@ -285,7 +285,7 @@ $(document).ready(function () {
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="kategori_permasalahan"></label>
-                        <select name="kategori_permasalahan" id="kategori_permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="kategori_permasalahan" id="kategori_permasalahan" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Jenis Permasalahan</option>`;
                             jenisPermasalahan.forEach(function (jp) {
                                 itemForm += `<option value="${jp.id}">${jp.nama}</option>`
@@ -297,7 +297,7 @@ $(document).ready(function () {
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="permasalahan"></label>
-                        <select name="permasalahan" id="permasalahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="permasalahan" id="permasalahan" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Permasalahan</option>
                         </select>
                     </div>
@@ -321,7 +321,7 @@ $(document).ready(function () {
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="kondisi_produk"></label>
-                        <select name="kondisi_produk" id="kondisi_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="kondisi_produk" id="kondisi_produk" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Kondisi Produk</option>
                             <option value="Drone Baru">Drone Baru</option>
                             <option value="Drone Bekas">Drone Bekas</option>
@@ -331,7 +331,7 @@ $(document).ready(function () {
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="jenis_produk"></label>
-                        <select name="jenis_produk" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="jenis_produk" id="jenis_produk" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Jenis Produk</option>
                         </select>
                     </div>
@@ -339,7 +339,7 @@ $(document).ready(function () {
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="paket_penjualan"></label>
-                        <select name="paket_penjualan" id="paket_penjualan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="paket_penjualan" id="paket_penjualan" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Paket Penjualan</option>
                         </select>
                     </div>
@@ -368,7 +368,7 @@ $(document).ready(function () {
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="jenis-produk-sell"></label>
-                        <select name="jenis_produk" id="jenis-produk-sell" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="jenis_produk" id="jenis-produk-sell" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Jenis Produk</option>`;
                             jenisProduk.forEach(function (item) {
                                 itemWts += `<option value="${item.id}">${item.jenis_produk}</option>`
@@ -378,7 +378,7 @@ $(document).ready(function () {
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="paket-penjualan-sell"></label>
-                        <select name="paket_penjualan" id="paket-penjualan-sell" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="paket_penjualan" id="paket-penjualan-sell" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Paket Penjualan</option>
                         </select>
                     </div>
@@ -386,7 +386,7 @@ $(document).ready(function () {
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="produk_worth"></label>
-                        <select name="produk_worth" id="produk_worth" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                        <select name="produk_worth" id="produk_worth" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Worth Produk</option>
                             <option value="Ya">Ya</option>
                             <option value="Mungkin">Mungkin</option>

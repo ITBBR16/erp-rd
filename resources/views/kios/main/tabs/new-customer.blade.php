@@ -55,10 +55,10 @@
             </div>
             <div class="relative z-0 w-full mb-6 group">
                 <label for="provinsi" class="sr-only">Provinsi</label>
-                <select name="provinsi" id="provinsi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provinsi') border-red-600 dark:border-red-500 @enderror">
+                <select name="provinsi" id="provinsi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provinsi') border-red-600 dark:border-red-500 @enderror" required>
                     <option hidden>Provinsi</option>
                     @foreach ($provinsi as $prov)
-                        <option value="{{ $prov['id'] }}" class="dark:bg-gray-700">{{ $prov['name'] }}</option>
+                        <option value="{{ $prov->id }}" class="dark:bg-gray-700">{{ $prov->name }}</option>
                     @endforeach
                 </select>
                 @error('provinsi')
@@ -67,7 +67,7 @@
             </div>
             <div class="relative z-0 w-full mb-6 group">
                 <label for="kota_kabupaten"></label>
-                <select name="kota_kabupaten" id="kota_kabupaten" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kota_kabupaten') border-red-600 dark:border-red-500 @enderror">
+                <select name="kota_kabupaten" id="kota_kabupaten" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kota_kabupaten') border-red-600 dark:border-red-500 @enderror" required>
                 </select>
                 @error('kota_kabupaten')
                     <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -100,7 +100,7 @@
             </div>
         </div>
         <div class="relative z-0 w-full mb-6 group">
-            <input type="text" name="nama_jalan" id="nama_jalan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nama_jalan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('nama_jalan') }}" required>
+            <input type="text" name="nama_jalan" id="nama_jalan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nama_jalan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('nama_jalan') }}">
             <label for="nama_jalan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nama Jalan</label>
             @error('nama_jalan')
                 <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
