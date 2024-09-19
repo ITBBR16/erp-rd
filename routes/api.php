@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\KiosDailyRecapApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\kios\KiosPaymentController;
@@ -12,3 +13,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/send-review-repair', [ReviewCustomerController::class, 'sendWhatsapp']);
+Route::post('/create-daily-recap', [KiosDailyRecapApiController::class, 'createDailyRecap']);
