@@ -46,6 +46,7 @@ class KasirRepairController extends Controller
         $idCase = decrypt($id);
         $divisiName = $this->nameDivisi->getDivisi($user);
         $dataCase = $this->caseService->findCase($idCase);
+        $daftarAkun = $this->caseService->getDataAkun();
 
         return view('repair.csr.edit.kasir-pelunasan', [
             'title' => 'Kasir Pelunasan Repair',
@@ -54,6 +55,7 @@ class KasirRepairController extends Controller
             'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
+            'daftarAkun' => $daftarAkun,
         ]);
     }
 
@@ -74,6 +76,17 @@ class KasirRepairController extends Controller
             'dataCase' => $dataCase,
             'daftarAkun' => $daftarAkun,
         ]);
+    }
+
+    public function createPelunasan(Request $request, $id)
+    {
+        $resultPelunasan = $this->caseService->createPelunasan($request, $id);
+
+        if ($resultPelunasan['status'] == 'success') {
+            return redirect()->route('kasir-repair.index')->with('success', $resultPelunasan['message']);
+        } else {
+            return back()->with('error', $resultPelunasan['message']);
+        }
     }
 
     public function createPembayaran(Request $request, $id)
@@ -106,10 +119,24 @@ class KasirRepairController extends Controller
             'dataCase' => $dataCase,
         ];
 
-        return view('repair.csr.invoice.invoice-pelunasan', $data);
+        // return view('repair.csr.invoice.invoice-pelunasan', $data);
 
-        // $pdf = Pdf::loadView('repair.csr.invoice.invoice-pelunasan', $data);
-        // return $pdf->stream();
+        $pdf = Pdf::loadView('repair.csr.invoice.invoice-pelunasan', $data);
+        return $pdf->stream();
+    }
+
+    public function previewPdfDp($id)
+    {
+        $dataCase = $this->caseService->findCase($id);
+        $data = [
+            'title' => 'Preview Down Payment',
+            'dataCase' => $dataCase,
+        ];
+
+        // return view('repair.csr.invoice.invoice-dp', $data);
+
+        $pdf = Pdf::loadView('repair.csr.invoice.invoice-dp', $data);
+        return $pdf->stream();
     }
 
     public function getDataCustomer($id)

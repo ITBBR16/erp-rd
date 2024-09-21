@@ -18,7 +18,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Tanggal Masuk
+                        No Nota
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Jenis Case
@@ -41,43 +41,47 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                    <td class="px-6 py-2">
-                        19 September 2024
-                    </td>
-                    <td class="px-6 py-2">
-                        Express Online
-                    </td>
-                    <td class="px-6 py-2">
-                        Daniel Kukuk
-                    </td>
-                    <td class="px-6 py-2">
-                        DJI PHANTOM 4 STANDARD
-                    </td>
-                    <td class="px-6 py-2">
-                        Magang Anjay
-                    </td>
-                    <td class="px-6 py-2">
-                        <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Lunas</span>
-                    </td>
-                    <td class="px-6 py-2">
-                        <button id="ddLunas" data-dropdown-toggle="dropdownLunas" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-                <!-- Dropdown menu -->
-                <div id="dropdownLunas" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                    <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="ddLunas">
-                        <li>
-                            <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                <span class="material-symbols-outlined text-base mr-3">visibility</span>
-                                <span class="whitespace-nowrap">Detail</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                @foreach ($dataCase as $case)
+                    @if ($case->jenisStatus->jenis_status == 'Close Case (Done)')
+                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <td class="px-6 py-2">
+                                R-{{ $case->id }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $case->jenisCase->jenis_case }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $case->jenisProduk->jenis_produk }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $case->teknisi->first_name }} {{ $case->teknisi->last_name }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">{{ $case->jenisStatus->jenis_status }}</span>
+                            </td>
+                            <td class="px-6 py-2">
+                                <button id="ddBelumLunas{{ $case->id }}" data-dropdown-toggle="dropdownBL{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownBL{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="ddBelumLunas{{ $case->id }}">
+                                <li>
+                                    <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                        <span class="whitespace-nowrap">Detail</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    @endif
+                @endforeach
             </tbody>
         </table>
         <div class="mt-4 ">

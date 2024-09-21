@@ -2,15 +2,14 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
-      "./resources/views/repair/csr/preview/preview-qc.blade.php",
-      "./resources/views/repair/csr/preview/preview-tt.blade.php",
+      "./resources/views/repair/csr/preview/**/*.blade.php",
+      "./resources/views/repair/csr/invvoice/**/*.blade.php",
     ],
     theme: {
       extend: {},
     },
     plugins: [
-      require('flowbite/plugin'),
-      require('tailwind-scrollbar'),
+      
     ],
   }
   

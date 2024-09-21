@@ -14,18 +14,32 @@
                     <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
-                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Pelunasan {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}-{{ $dataCase->customer->id }}</span>
+                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Down Payment {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}-{{ $dataCase->customer->id }}-{{ $dataCase->id }}</span>
                 </div>
             </li>
         </ol>
     </nav>
 
-    <form action="#" method="POST" autocomplete="off">
+    @if (session()->has('error'))
+        <div id="alert-failed-input" class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800" role="alert">
+            <span class="material-symbols-outlined flex-shrink-0 w-5 h-5">info</span>
+            <div class="ml-3 text-sm font-medium">
+                {{ session('error') }}
+            </div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-failed-input" aria-label="Close">
+                <span class="sr-only">Dismiss</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+        </div>
+    @endif
+
+    <form action="{{ route('createPelunasan', $dataCase->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
         <div class="grid grid-cols-3 gap-6 mt-4">
             {{-- Detail Box --}}
-            <div id="invoice-pelunasan-repair" class="bg-white p-6 rounded-lg shadow-lg border col-span-2 dark:bg-gray-800 dark:border-gray-600">
+            <div id="invoice-dp-repair" class="bg-white p-6 rounded-lg shadow-lg border col-span-2 dark:bg-gray-800 dark:border-gray-600">
                 <div class="mb-4 justify-center text-center">
                     <div class="flex justify-center text-center">
                         <img src="/img/Logo Rumah Drone Black.png" class="w-40" alt="Logo RD">
@@ -37,7 +51,6 @@
                     <div class="text-start">
                         <h2 class="text-lg font-semibold dark:text-white">Detail Transaksi / <span class="text-lg text-gray-600 dark:text-gray-400">R-{{ $dataCase->id }} <span class="text-sm ml-2 text-green-500 bg-green-100 px-2 py-1 rounded-full">Lunas</span></span></h2>
                     </div>
-
                     <div class="text-end">
                         <h2 class="text-lg font-semibold dark:text-white">{{ $dataCase->jenisProduk->jenis_produk }}</h2>
                     </div>
@@ -104,20 +117,44 @@
                                 </tr>
                             @endif
                             @endforeach
-                            <tr class="border-t">
-                                <td class="p-2">
-                                    Total Ongkir
-                                </td>
-                                <td class="p-2">
-                                    Rp. 0
-                                </td>
-                            </tr>
+                            @if (!empty($dataCase->logRequest->biaya_customer_ongkir) && !empty($dataCase->logRequest->biaya_customer_packing))
+                                <tr class="border-t">
+                                    <td class="p-2">
+                                        Total Ongkir
+                                    </td>
+                                    <td class="p-2">
+                                        @php
+                                            $biayaOngkir = $dataCase->logRequest->biaya_customer_ongkir ?? 0;
+                                            $biayaPacking = $dataCase->logRequest->biaya_customer_packing ?? 0;
+                                            $totalOngkir = $biayaOngkir + $biayaPacking;
+                                        @endphp
+                                        Rp. {{ number_format($totalOngkir, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endif
+                            @if (!empty($dataCase->logRequest->nominal_asuransi))
+                                @php
+                                    $nominalAsuransi = $dataCase->logRequest->nominal_asuransi;
+                                    $totalOngkir += $nominalAsuransi;
+                                @endphp
+                                <tr class="border-t">
+                                    <td class="p-2">
+                                        Asuransi
+                                    </td>
+                                    <td class="p-2">
+                                        Rp. {{ number_format($nominalAsuransi, 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endif
                             <tr class="border-t-2 border-gray-800">
                                 <td class="p-2 font-bold">
                                     Total Tagihan
                                 </td>
                                 <td class="p-2">
-                                    Rp. {{ number_format($totalTagihan, 0, ',', '.') }}
+                                    @php
+                                        $totalAkhir = $totalTagihan + $totalOngkir;
+                                    @endphp
+                                    Rp. {{ number_format($totalAkhir, 0, ',', '.') }}
                                 </td>
                             </tr>
                     </tbody>
@@ -169,7 +206,10 @@
                         <div class="text-sm w-full max-w-2xl pl-3">
                             <dl class="grid sm:grid-cols-5 gap-x-3">
                                 <dt class="col-span-3 font-semibold text-gray-800 dark:text-gray-200">Down Payment</dt>
-                                <dd class="col-span-2 text-gray-500">Rp. 0</dd>
+                                @php
+                                    $totalDp = $dataCase->transaksi->total_pembayaran ?? 0
+                                @endphp
+                                <dd class="col-span-2 text-gray-500">Rp. {{ number_format($totalDp, 0, ',', '.') }}</dd>
                             </dl>
                             <dl class="grid sm:grid-cols-5 gap-x-3">
                                 <dt class="col-span-3 font-semibold text-gray-800 dark:text-gray-200">Discount</dt>
@@ -178,7 +218,7 @@
                             <dl class="my-1 border-b"></dl>
                             <dl class="grid sm:grid-cols-5 gap-x-3">
                                 <dt class="col-span-3 font-semibold text-gray-800 dark:text-gray-200">Total Pembayaran</dt>
-                                <dd class="col-span-2 text-gray-500">Rp 0</dd>
+                                <dd id="total-pembayaran-dp" class="col-span-2 text-gray-500">Rp 0</dd>
                             </dl>
                         </div>
                     </div>
@@ -208,7 +248,7 @@
             </div>
 
             {{-- Input Box --}}
-            <div class="col-span-1 h-[444px] bg-white p-6 rounded-lg border shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
+            <div class="col-span-1 h-[620px] bg-white p-6 rounded-lg border shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
                 <h2 class="text-lg font-semibold mb-4 dark:text-white pb-2 border-b">Pembayaran Kasir</h2>
                 <div class="mb-4 text-sm">
                     <div class="flex justify-between">
@@ -216,15 +256,7 @@
                             <p class="font-semibold dark:text-white">Total Tagihan :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. 0</p>
-                        </div>
-                    </div>
-                    <div class="flex justify-between ">
-                        <div class="flex text-start">
-                            <p class="font-semibold dark:text-white">Total DP :</p>
-                        </div>
-                        <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. 0</p>
+                            <p class="font-normal dark:text-white">Rp. {{ number_format($totalTagihan, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between ">
@@ -232,7 +264,7 @@
                             <p class="font-semibold dark:text-white">Ongkir :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. 0</p>
+                            <p class="font-normal dark:text-white">Rp. {{ number_format($biayaOngkir, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between ">
@@ -240,34 +272,64 @@
                             <p class="font-semibold dark:text-white">Paking :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. 0</p>
+                            <p class="font-normal dark:text-white">Rp. {{ number_format($biayaPacking, 0, ',', '.') }}</p>
                         </div>
                     </div>
-                    <div class="flex justify-between mb-2">
+                    <div class="flex justify-between">
                         <div class="flex text-start">
                             <p class="font-semibold dark:text-white">Asuransi :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. 0</p>
+                            <p class="font-normal dark:text-white">Rp. {{ number_format($nominalAsuransi ?? 0, 0, ',', '.') }}</p>
                         </div>
                     </div>
-                    <div class="flex justify-between ">
+                    <div class="flex justify-between mb-2">
+                        <div class="flex text-start">
+                            <p class="font-semibold dark:text-white">Total DP :</p>
+                        </div>
+                        <div class="flex text-end">
+                            <p class="font-normal dark:text-white">Rp. {{ number_format($totalDp, 0, ',', '.') }}</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
                         <div class="flex text-start">
                             <p class="font-semibold dark:text-white">Sisa Total Tagihan :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. 0</p>
+                            @php
+                                $sisaTagihan = $totalTagihan + $biayaOngkir + $biayaPacking + ($nominalAsuransi ?? 0) - $totalDp
+                            @endphp
+                            <p class="font-normal dark:text-white">Rp. {{ number_format($sisaTagihan, 0, ',', '.') }}</p>
                         </div>
                     </div>
                 </div>
                 <h2 class="text-base font-semibold mb-4 dark:text-white border-y py-2">Input Pembayaran</h2>
                 <div class="mb-4">
-                    <label for="metode-pembayaran-pelunasan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
-                    <select name="metode_pembayaran_pelunasan" id="metode-pembayaran-pelunasan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <input type="hidden" name="link_doc" value="{{ $dataCase->link_doc }}">
+                    <input type="hidden" name="sisa_tagihan" value="{{ $sisaTagihan }}">
+                    <label for="metode-pembayaran-pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
+                    <select name="metode_pembayaran_pembayaran" id="metode-pembayaran-pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Pilih Metode Pembayaran</option>
+                        @foreach ($daftarAkun as $akun)
+                            <option value="{{ $akun->id }}">{{ $akun->nama_akun }}</option>
+                        @endforeach
                     </select>
                 </div>
-                <div class="text-end">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Files Bukti Transaksi :</label>
+                <div class="flex items-center justify-center w-full">
+                    <label for="file-upload-kasir" class="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                        <div id="image-transaksi" class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                            </svg>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
+                        </div>
+                        <div id="selected-files-bukti-transaksi" class="flex flex-wrap justify-evenly" style="display: none"></div>
+                        <input name="file_bukti_transaksi" id="file-upload-kasir" type="file" class="hidden file-upload-kasir">
+                    </label>
+                </div>
+                <div class="text-end mt-4">
                     <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
                     <div class="loader-button-form" style="display: none">
                         <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>

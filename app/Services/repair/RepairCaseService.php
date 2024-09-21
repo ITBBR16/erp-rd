@@ -12,19 +12,21 @@ use App\Repositories\umum\repository\ProdukRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\logistik\repository\EkspedisiRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
+use App\Repositories\repair\repository\RepairEstimasiRepository;
 use App\Repositories\repair\repository\RepairTimeJurnalRepository;
 
 class RepairCaseService
 {
-    protected $customerRepository, $repairCase, $product, $repairTimeJurnal, $ekspedisi;
+    protected $customerRepository, $repairCase, $product, $repairTimeJurnal, $ekspedisi, $estimasi;
 
-    public function __construct(RepairCustomerRepository $customerRepository, RepairCaseRepository $repairCase, ProdukRepository $product, RepairTimeJurnalRepository $repairTimeJurnalRepository, EkspedisiRepository $ekspedisiRepository)
+    public function __construct(RepairCustomerRepository $customerRepository, RepairCaseRepository $repairCase, ProdukRepository $product, RepairTimeJurnalRepository $repairTimeJurnalRepository, EkspedisiRepository $ekspedisiRepository, RepairEstimasiRepository $repairEstimasiRepository)
     {
         $this->repairTimeJurnal = $repairTimeJurnalRepository;
         $this->customerRepository = $customerRepository;
         $this->repairCase = $repairCase;
         $this->product = $product;
         $this->ekspedisi = $ekspedisiRepository;
+        $this->estimasi = $repairEstimasiRepository;
     }
 
     // Input New Case
@@ -212,7 +214,6 @@ class RepairCaseService
         }
     }
 
-
     // Konfirmasi QC
     public function sendKonfirmasiQC($id)
     {
@@ -384,14 +385,18 @@ class RepairCaseService
 
         try {
             $employeeId = auth()->user()->id;
+            $tglWaktu = Carbon::now();
+            $folderAkuntan = Carbon::now()->format('F-Y');
             $metodePembayaran = $request->input('metode_pembayaran_pembayaran');
             $nominalPembayaran = preg_replace("/[^0-9]/", "", $request->input('nominal_pembayaran'));
+            $linkDrive = $request->input('link_doc');
+            $fileBukti = base64_encode($request->file('file_bukti_transaksi')->get());
             
             $checkTransaksi = $this->repairCase->findTransaksiByCase($id);
 
-            if (!$checkTransaksi->isEmpty()) {
+            if (!empty($checkTransaksi)) {
                 $transaksi = $checkTransaksi;
-                $totalPembayaran = $checkTransaksi->total_pembayaran + $nominalPembayaran;
+                $totalPembayaran = $transaksi->total_pembayaran + $nominalPembayaran;
                 $dataUpdateTransaksi = [
                     'total_pembayaran' => $totalPembayaran,
                 ];
@@ -407,17 +412,224 @@ class RepairCaseService
                 $transaksi = $this->repairCase->createTransaksi($dataTransaksi);
             }
 
-            $dataPembayaran = [
-                'transaksi_id' => $transaksi->id,
-                'metode_pembayaran_id' => $metodePembayaran,
-                'employee_id' => $employeeId,
-                'jumlah_pembayaran' => $nominalPembayaran,
+            $dataCase = $this->repairCase->findCase($id);
+            $namaCustomer = $dataCase->customer->first_name . "-" . $dataCase->customer->id;
+            
+            $dataView = [
+                'title' => 'Preview Down Payment',
+                'dataCase' => $dataCase,
             ];
 
-            $this->repairCase->createPembayaran($dataPembayaran);
-            $this->repairCase->commitTransaction();
+            $pdf = Pdf::loadView('repair.csr.invoice.invoice-dp', $dataView);
+            $pdfContent = $pdf->output();
+            $pdfEncode = base64_encode($pdfContent);
 
-            return ['status' => 'success', 'message' => 'Berhasil melakukan pembayaran.'];
+            $payload = [
+                'nama_customer' => $namaCustomer,
+                'link_drive' => $linkDrive,
+                'file' => $fileBukti,
+                'pdf' => $pdfEncode,
+                'status_payment' => 'DP',
+                'folderAkuntan' => $folderAkuntan,
+            ];
+
+
+            $urlApi = 'https://script.google.com/macros/s/AKfycbxN1mlhPrtrnbyiWJSVdcA1YCkV6tBUhlSTcf9pQca4hKozqcwrrupxM_f0wJJrNh99kA/exec';
+            $response = Http::post($urlApi, $payload);
+            if ($response->successful()) {
+                $dataResponse = $response->json();
+                $statusResponse = $dataResponse['status'];
+        
+                if ($statusResponse === 'success') {
+                    $fileMutasi = $dataResponse['fileMutasi'] ?? null;
+                    
+                    $dataPembayaran = [
+                        'transaksi_id' => $transaksi->id,
+                        'metode_pembayaran_id' => $metodePembayaran,
+                        'employee_id' => $employeeId,
+                        'jumlah_pembayaran' => $nominalPembayaran,
+                        'link_bukti' => $fileMutasi,
+                    ];
+
+                    $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 9);
+                    if ($checkTimestamp) {
+                        $timestamp = $checkTimestamp;
+                    } else {
+                        $dataTimestamp = [
+                            'case_id' => $id,
+                            'jenis_status_id' => 9,
+                            'tanggal_waktu' => $tglWaktu,
+                        ];
+            
+                        $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
+                    }
+
+                    $dataJurnal = [
+                        'employee_id' => $employeeId,
+                        'jenis_substatus_id' => 1,
+                        'timestamps_status_id' => $timestamp->id,
+                        'isi_jurnal' => 'Melakukan pembayaran Down Payment.',
+                    ];
+        
+                    $this->repairTimeJurnal->addJurnal($dataJurnal);
+        
+                    $this->repairCase->createPembayaran($dataPembayaran);
+                    $this->repairCase->commitTransaction();
+                    
+                    return ['status' => 'success', 'message' => 'Berhasil melakukan pembayaran.'];
+
+                } else {
+                    $this->repairCase->rollBackTransaction();
+                    return [
+                        'status' => 'error',
+                        'message' => $dataResponse['message'] ?? 'Terjadi kesalahan'
+                    ];
+                }
+            } else {
+                $this->repairCase->rollBackTransaction();
+                return [
+                    'status' => 'error',
+                    'message' => 'Gagal menghubungi Google App Script'
+                ];
+            }
+
+        } catch (Exception $e) {
+            $this->repairCase->rollBackTransaction();
+            return ['status' => 'error' , 'message' => $e->getMessage()];
+        }
+    }
+
+    public function createPelunasan(Request $request, $id)
+    {
+        $this->repairCase->beginTransaction();
+
+        try {
+            $employeeId = auth()->user()->id;
+            $tglWaktu = Carbon::now();
+            $folderAkuntan = Carbon::now()->format('F-Y');
+            $metodePembayaran = $request->input('metode_pembayaran_pembayaran');
+            $nominalPembayaran = preg_replace("/[^0-9]/", "", $request->input('sisa_tagihan'));
+            $linkDrive = $request->input('link_doc');
+            $fileBukti = base64_encode($request->file('file_bukti_transaksi')->get());
+            
+            $checkTransaksi = $this->repairCase->findTransaksiByCase($id);
+
+            if (!empty($checkTransaksi)) {
+                $transaksi = $checkTransaksi;
+                $totalPembayaran = $transaksi->total_pembayaran + $nominalPembayaran;
+                $dataUpdateTransaksi = [
+                    'total_pembayaran' => $totalPembayaran,
+                    'status_pembayaran' => 'Lunas',
+                ];
+
+                $this->repairCase->updateTransaksi($transaksi->id, $dataUpdateTransaksi);
+            } else {
+                $dataTransaksi = [
+                    'case_id' => $id,
+                    'total_pembayaran' => $nominalPembayaran,
+                    'status_pembayaran' => 'Belum Lunas',
+                ];
+
+                $transaksi = $this->repairCase->createTransaksi($dataTransaksi);
+            }
+
+            $dataCase = $this->repairCase->findCase($id);
+            $namaCustomer = $dataCase->customer->first_name . "-" . $dataCase->customer->id;
+            
+            $dataView = [
+                'title' => 'Preview Pelunasan',
+                'dataCase' => $dataCase,
+            ];
+
+            $pdf = Pdf::loadView('repair.csr.invoice.invoice-pelunasan', $dataView);
+            $pdfContent = $pdf->output();
+            $pdfEncode = base64_encode($pdfContent);
+
+            $payload = [
+                'nama_customer' => $namaCustomer,
+                'link_drive' => $linkDrive,
+                'file' => $fileBukti,
+                'pdf' => $pdfEncode,
+                'status_payment' => 'Lunas',
+                'folderAkuntan' => $folderAkuntan,
+            ];
+
+
+            $urlApi = 'https://script.google.com/macros/s/AKfycbxN1mlhPrtrnbyiWJSVdcA1YCkV6tBUhlSTcf9pQca4hKozqcwrrupxM_f0wJJrNh99kA/exec';
+            $response = Http::post($urlApi, $payload);
+            if ($response->successful()) {
+                $dataResponse = $response->json();
+                $statusResponse = $dataResponse['status'];
+        
+                if ($statusResponse === 'success') {
+                    $fileMutasi = $dataResponse['fileMutasi'] ?? null;
+                    
+                    $dataPembayaran = [
+                        'transaksi_id' => $transaksi->id,
+                        'metode_pembayaran_id' => $metodePembayaran,
+                        'employee_id' => $employeeId,
+                        'jumlah_pembayaran' => $nominalPembayaran,
+                        'link_bukti' => $fileMutasi,
+                    ];
+
+                    $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 10);
+                    if ($checkTimestamp) {
+                        $timestamp = $checkTimestamp;
+                    } else {
+                        $dataTimestamp = [
+                            'case_id' => $id,
+                            'jenis_status_id' => 10,
+                            'tanggal_waktu' => $tglWaktu,
+                        ];
+            
+                        $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
+                    }
+
+                    $dataJurnal = [
+                        'employee_id' => $employeeId,
+                        'jenis_substatus_id' => 1,
+                        'timestamps_status_id' => $timestamp->id,
+                        'isi_jurnal' => 'Case Close Done.',
+                    ];
+                    $updateCase = ['jenis_status_id' => 10];
+
+                    $idEstimasi = $dataCase->estimasi->id;
+                    $findEstimasi = $this->estimasi->ensureHaveEstimasi($id);
+                    $updateEstimasi = ['status' => 'Lunas'];
+                    
+                    if ($findEstimasi) {
+                        $estimasiActive = $findEstimasi->estimasiPart()->where('active', 'Active');
+                        
+                        if ($estimasiActive->exists()) {
+                            $estimasiActive->update(['tanggal_lunas' => $tglWaktu]);
+                        }
+                    } else {
+                        $this->repairCase->rollBackTransaction();
+                        return ['status' => 'error', 'message' => 'Tidak bisa menemukan estimasi.'];
+                    }
+
+                    $this->estimasi->updateEstimasi($updateEstimasi, $idEstimasi);
+                    $this->repairTimeJurnal->addJurnal($dataJurnal);
+                    $this->repairCase->createPembayaran($dataPembayaran);
+                    $this->repairCase->updateCase($id, $updateCase);
+                    $this->repairCase->commitTransaction();
+                    
+                    return ['status' => 'success', 'message' => 'Berhasil melakukan pelunasan.'];
+
+                } else {
+                    $this->repairCase->rollBackTransaction();
+                    return [
+                        'status' => 'error',
+                        'message' => $dataResponse['message'] ?? 'Terjadi kesalahan'
+                    ];
+                }
+            } else {
+                $this->repairCase->rollBackTransaction();
+                return [
+                    'status' => 'error',
+                    'message' => 'Gagal menghubungi Google App Script'
+                ];
+            }
 
         } catch (Exception $e) {
             $this->repairCase->rollBackTransaction();

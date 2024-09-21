@@ -248,6 +248,8 @@ Route::middleware('repair')->group(function () {
                 Route::get('/getDataCustomer/{id}', 'getDataCustomer');
                 Route::get('/getLayanan/{id}', 'getLayanan');
                 Route::get('/preview-pelunasan/{id}', 'previewPdfPelunasan');
+                Route::get('/preview-down-payment/{id}', 'previewPdfDp');
+                Route::post('/create-pelunasan/{id}', 'createPelunasan')->name('createPelunasan');
                 Route::post('/create-pembayaran/{id}', 'createPembayaran')->name('createPembayaran');
             });
 

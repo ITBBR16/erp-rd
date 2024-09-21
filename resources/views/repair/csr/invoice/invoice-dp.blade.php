@@ -19,7 +19,7 @@
     <table style="width: 100%; padding-bottom: 8px; margin-bottom: 8px;">
         <tr>
             <td style="text-align: left; vertical-align: top; width: 50%;">
-                <h2 style="font-size: 14px; font-weight: 600;">Detail Transaksi / <span style="font-size: 14px; color: #4b5563;">R-{{ $dataCase->id }} <span style="font-size: 12px; margin-left: 8px; color: #22c55e; background-color: #dcfce7; padding: 2px 8px; border-radius: 9999px;">Lunas</span></span></h2>
+                <h2 style="font-size: 14px; font-weight: 600;">Detail Transaksi / <span style="font-size: 14px; color: #4b5563;">R-{{ $dataCase->id }} <span style="font-size: 12px; margin-left: 8px; color: #ef4444; background-color: #fee2e2; padding: 2px 8px; border-radius: 9999px;">Belum Lunas</span></span></h2>
             </td>
             <td style="text-align: right; vertical-align: top; width: 50%;">
                 <h2 style="font-size: 14px; font-weight: 600;">{{ $dataCase->jenisProduk->jenis_produk }}</h2>

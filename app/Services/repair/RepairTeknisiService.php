@@ -50,7 +50,7 @@ class RepairTeknisiService
             $tglWaktu = Carbon::now();
             $jurnalTS = $request->input('jurnal_troubleshooting');
             $linkDrive = $request->input('link_doc');
-            $imgTS = $request->input('files_troubleshooting');
+            $imgTS = $request->file('files_troubleshooting');
             $encodedFiles = [];
 
             foreach ($imgTS as $file) {

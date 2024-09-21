@@ -93,7 +93,7 @@ class RepairCaseRepository implements RepairCaseInterface
 
     public function findTransaksiByCase($caseId)
     {
-        return $this->modelTransaksi->where('case_id', $caseId)->get();
+        return $this->modelTransaksi->where('case_id', $caseId)->first();
     }
 
     public function createPembayaran(array $data)

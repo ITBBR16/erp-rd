@@ -16,7 +16,7 @@
                         </button>
                     </div>
                     {{-- Body Modal --}}
-                    <form action="{{ route('troubleshooting.update', $case->id) }}" method="POST" autocomplete="off">
+                    <form action="{{ route('troubleshooting.update', $case->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                         <div class="px-6 py-6 lg:px-8">
                             @csrf
                             @method('PUT')

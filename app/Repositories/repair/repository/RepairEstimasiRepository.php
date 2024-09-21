@@ -66,6 +66,17 @@ class RepairEstimasiRepository implements RepairEstimasiInterface
         return $this->modelEstimasi->create($data);
     }
 
+    public function updateEstimasi($data, $id)
+    {
+        $dataEstimasi = $this->modelEstimasi->findOrFail($id);
+        if ($dataEstimasi) {
+            $dataEstimasi->update($data);
+            return $dataEstimasi;
+        }
+
+        throw new \Exception('Case Not Found');
+    }
+
     public function createEstimasiChat(array $data)
     {
         return $this->modelEstimasiChat->create($data);
