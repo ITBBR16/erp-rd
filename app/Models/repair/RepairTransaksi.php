@@ -6,6 +6,7 @@ use App\Models\customer\Customer;
 use App\Models\employee\Employee;
 use App\Models\repair\RepairCase;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\management\AkuntanMutasi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RepairTransaksi extends Model
@@ -28,7 +29,12 @@ class RepairTransaksi extends Model
 
     public function transaksiPembayaran()
     {
-        return $this->hasMany(RepairTransaksiPembayaran::class);
+        return $this->hasMany(RepairTransaksiPembayaran::class, 'transaksi_id');
+    }
+
+    public function mergeMutasiTransaksi()
+    {
+        return $this->belongsToMany(AkuntanMutasi::class, 'rumahdrone_management.akuntan_pencocokan', 'transaksi_id', 'mutasi_id');
     }
 
 }

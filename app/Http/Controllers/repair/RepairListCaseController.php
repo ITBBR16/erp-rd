@@ -26,7 +26,7 @@ class RepairListCaseController extends Controller
         $caseService = $this->repairCaseService->getDataDropdown();
         $divisiName = $this->nameDivisi->getDivisi($user);
         $dataCase = $caseService['data_case'];
-        $dataCustomer = $caseService['data_customer'];
+        $dataCustomer = collect($caseService['data_customer'])->sortByDesc('id');
         $dataProvinsi = $caseService['data_provinsi'];
         $dataJenisCase = $caseService['jenis_case'];
         $dataJenisDrone = $caseService['jenis_drone'];

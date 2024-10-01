@@ -41,11 +41,13 @@ use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairKonfirmasiReqPartController;
 use App\Http\Controllers\repair\RepairListCaseController;
+use App\Http\Controllers\repair\RepairNonKasirController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\repair\RepairQCController;
 use App\Http\Controllers\repair\RepairPengerjaanController;
 use App\Http\Controllers\repair\RepairProdukSedangDikirim;
+use App\Http\Controllers\repair\RepairRecapTransaksiController;
 use App\Http\Controllers\repair\RepairRequestSparepartController;
 use App\Http\Controllers\repair\RepairTeknisiLCController;
 use App\Http\Controllers\repair\RepairTeknisiNCController;
@@ -251,6 +253,16 @@ Route::middleware('repair')->group(function () {
                 Route::get('/preview-down-payment/{id}', 'previewPdfDp');
                 Route::post('/create-pelunasan/{id}', 'createPelunasan')->name('createPelunasan');
                 Route::post('/create-pembayaran/{id}', 'createPembayaran')->name('createPembayaran');
+            });
+
+            Route::resource('/non-kasir', RepairNonKasirController::class)->only(['index']);
+
+            Route::group(['controller' => RepairRecapTransaksiController::class], function () {
+                Route::resource('/recap-transaksi', RepairRecapTransaksiController::class)->only(['index', 'store']);
+                Route::get('/getSaldoAkhirMutasi/{akunId}', 'getSaldoAkhirMutasi');
+                Route::get('/findMutasiSementara/{id}', 'findMutasiSementara');
+                Route::get('/findTransaksi/{source}/{id}', 'findTransaksi');
+                Route::post('/merge-mutasi-transaksi', 'pencocokanMutasiTransaksi')->name('mergeMutasiTransaksi');
             });
 
             Route::group(['controller' => RepairKonfirmasiQCController::class], function () {
