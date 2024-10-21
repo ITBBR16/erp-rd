@@ -12,4 +12,5 @@ class AkuntanTransaksi extends Model
     protected $connection = 'rumahdrone_management';
     protected $table = 'akuntan_transaksi';
     protected $guarded = ['id'];
+
 }

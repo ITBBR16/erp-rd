@@ -29,7 +29,9 @@ $(document).ready(function () {
                     <select name="data_mutasi[]" id="pilih-mutasi-${numberPTM}" data-id="${numberPTM}" class="select-mutasi bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Pilih Mutasi</option>`;
                         mutasiSementara.forEach(function(mutasi) {
-                            formPTM += `<option value="${mutasi.id}">M-${mutasi.id}</option>`
+                            if (mutasi.status == 'Unprocess') {
+                                formPTM += `<option value="${mutasi.id}">M-${mutasi.id}</option>`
+                            }
                         });
                         formPTM += `
                     </select>
@@ -49,14 +51,14 @@ $(document).ready(function () {
             </div>
         `
         containerPTM.append(formPTM);
-        updateSelectOptions();
+        updateSelectOptionsMutasi();
     });
 
     $(document).on('click', '.remove-form-prtr', function () {
         let numberId = $(this).data("id");
         $('#form-pencocokan-mutasi-' + numberId).remove();
         numberPTM--
-        updateSelectOptions();
+        updateSelectOptionsMutasi();
         checkNominalPencocokan();
     });
 
@@ -71,12 +73,17 @@ $(document).ready(function () {
             console.table(data)
             inputNominal.val(formatAngka(data.nominal));
             checkNominalPencocokan();
-            updateSelectOptions();
+            updateSelectOptionsMutasi();
         });
     });
 
     // Pencocokan Transaksi
     $(document).on('click', '#add-form-ptt', function () {
+        let lastSelect = $(`#pilih-transaksi-${numberPTT}`);
+        if (lastSelect.length && lastSelect.val() === "") {
+            alert("Pilih transaksi sebelumnya terlebih dahulu!");
+            return;
+        }
         numberPTT++;
         const containerPTT = $('#container-pencocokan-transaksi')
         let formPTT = `
@@ -86,7 +93,9 @@ $(document).ready(function () {
                     <select name="data_transaksi[]" id="pilih-transaksi-${numberPTT}" data-id="${numberPTT}" class="select-transaksi bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Pilih Transaksi</option>`;
                         allTransaksi.forEach(function(transaksi) {
-                            formPTT += `<option value="${transaksi.transaksi_id}">${transaksi.transaksi_id}</option>`
+                            if (transaksi.status_recap == 'Unprocess') {
+                                formPTT += `<option value="${transaksi.transaksi_id}">${transaksi.transaksi_id}</option>`
+                            }
                         });
                         formPTT += `
                     </select>
@@ -107,6 +116,7 @@ $(document).ready(function () {
         `
 
         containerPTT.append(formPTT);
+        updateSelectOptionsTransaksi();
     });
 
     $(document).on('click', '.remove-form-prtt', function () {
@@ -114,6 +124,7 @@ $(document).ready(function () {
         $('#form-pencocokan-transaksi-' + numberId).remove();
         numberPTT--;
         checkNominalPencocokan();
+        updateSelectOptionsTransaksi();
     });
 
     $(document).on('change', '.select-transaksi', function () {
@@ -135,6 +146,7 @@ $(document).ready(function () {
             }
             inputNominal.val(formatAngka(nominalTransaksi));
             checkNominalPencocokan();
+            updateSelectOptionsTransaksi();
         });
     });
 
@@ -179,7 +191,7 @@ $(document).ready(function () {
         }
     }
 
-    function updateSelectOptions() {
+    function updateSelectOptionsMutasi() {
         const selectedOptions = [];
         $('.select-mutasi').each(function() {
             const selectedValue = $(this).val();
@@ -189,6 +201,31 @@ $(document).ready(function () {
         });
 
         $('.select-mutasi').each(function() {
+            const currentSelect = $(this);
+            const currentValue = currentSelect.val();
+    
+            currentSelect.find('option').each(function() {
+                const optionValue = $(this).val();
+
+                if (selectedOptions.includes(optionValue) && optionValue !== currentValue) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+        });
+    }
+
+    function updateSelectOptionsTransaksi() {
+        const selectedOptions = [];
+        $('.select-transaksi').each(function() {
+            const selectedValue = $(this).val();
+            if (selectedValue) {
+                selectedOptions.push(selectedValue);
+            }
+        });
+
+        $('.select-transaksi').each(function() {
             const currentSelect = $(this);
             const currentValue = currentSelect.val();
     

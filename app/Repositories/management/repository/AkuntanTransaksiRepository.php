@@ -73,6 +73,11 @@ class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
     {
         return $this->ModelTransaksiDetail->create($data);
     }
+    
+    public function createDocument(array $data)
+    {
+        return $this->modelDocument->create($data);
+    }
 
     public function createMutasiSementara(array $data)
     {
@@ -112,14 +117,14 @@ class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
         return $this->modelAkun->find($id);
     }
 
+    public function findMutasiMM($id)
+    {
+        return $this->modelMutasi->with('mergeMutasiTransaksiRepair')->find($id);
+    }
+
     public function findMutasiSementara($id)
     {
         return $this->modelMutasiSementara->find($id);
-    }
-
-    public function findTransaksiRepair($id)
-    {
-        return $this->modelTransaksiRepair->where('case_id', $id)->first();
     }
 
     public function findeEstimasiRepair($id)
@@ -129,7 +134,7 @@ class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
 
     public function findTransaksiNamaAkun($transaksiId, $namaAkun)
     {
-        return $this->ModelTransaksiDetail->where('transaksii_id', $transaksiId)
+        return $this->ModelTransaksiDetail->where('transaksi_id', $transaksiId)
                                           ->where('nama_akun', $namaAkun)
                                           ->first();
     }
@@ -155,7 +160,8 @@ class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
     public function getDataTransaksi()
     {
         $today = Carbon::today();
-        $repairTransaksi = $this->modelTransaksiRepair->selectRaw("CONCAT('R', case_id) as transaksi_id, total_pembayaran, keterangan")
+        $repairTransaksi = $this->modelTransaksiRepair->selectRaw("CONCAT('R', case_id) as transaksi_id, total_pembayaran, keterangan, status_recap")
+                            ->with('mergeMutasiTransaksi')
                             ->whereDate('created_at', $today)
                             ->get();
 

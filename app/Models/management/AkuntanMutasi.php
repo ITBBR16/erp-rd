@@ -21,6 +21,7 @@ class AkuntanMutasi extends Model
 
     public function mergeMutasiTransaksiRepair()
     {
-        return $this->belongsToMany(RepairTransaksi::class, 'rumahdrone_management.akuntan_pencocokan', 'mutasi_id', 'transaksi_id');
+        return $this->belongsToMany(RepairTransaksi::class, 'rumahdrone_management.akuntan_pencocokan', 'mutasi_id', 'transaksi_id')
+                    ->withPivot(['status_penjurnalan', 'catatan']);
     }
 }

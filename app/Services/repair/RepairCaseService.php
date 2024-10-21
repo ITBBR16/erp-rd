@@ -563,6 +563,7 @@ class RepairCaseService
         
                 if ($statusResponse === 'success') {
                     $fileMutasi = $dataResponse['fileMutasi'] ?? null;
+                    $fileInvoice = $dataResponse['fileInvoice'] ?? null;
                     
                     $dataPembayaran = [
                         'transaksi_id' => $transaksi->id,
@@ -607,6 +608,13 @@ class RepairCaseService
                         $this->repairCase->rollBackTransaction();
                         return ['status' => 'error', 'message' => 'Tidak bisa menemukan estimasi.'];
                     }
+
+                    $statusTransaksi = $checkTransaksi->status_pembayaran;
+                    if ($statusTransaksi == 'Lunas') {
+                        $updateLink = ['link_invoice' => $totalPembayaran,];
+                        $this->repairCase->updateTransaksi($transaksi->id, $updateLink);
+                    }
+    
 
                     $this->estimasi->updateEstimasi($updateEstimasi, $idEstimasi);
                     $this->repairTimeJurnal->addJurnal($dataJurnal);

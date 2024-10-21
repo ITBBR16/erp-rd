@@ -121,7 +121,7 @@
                                 {{ $transaksi->keterangan }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ (!empty($transaksi->mergeMutasiTransaksi)) ? 'Done' : 'Unprocess' }}
+                               {{ $transaksi->status_recap }}
                             </td>
                         </tr>
                     @endforeach
