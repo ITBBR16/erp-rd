@@ -26,6 +26,7 @@ use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\kios\KiosBuatPaketSecondController;
 use App\Http\Controllers\kios\KiosPenerimaanProdukController;
 use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\gudang\GudangBelanjaController;
 use App\Http\Controllers\kios\KiosPengecekkanSecondController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\kios\KiosFilterProdukSecondController;
@@ -327,42 +328,11 @@ Route::middleware('repair')->group(function () {
     });
 });
 
-// Route::get('/gudang', function () {
-//     return view('gudang.main.index');
-// });
-// Route::get('gudang/sender', function () {
-//     return view('gudang.sender.main');
-// });
-// Route::get('gudang/belanja', function () {
-//     return view('gudang.shop.belanja.belanja');
-// });
-// Route::get('gudang/req-payment', function () {
-//     return view('gudang.shop.payment');
-// });
-// Route::get('gudang/input-resi', function () {
-//     return view('gudang.shop.resi');
-// });
-// Route::get('gudang/unboxing', function () {
-//     return view('gudang.checkpart.unboxing');
-// });
-// Route::get('gudang/quality-control', function () {
-//     return view('gudang.checkpart.qc.quality_control');
-// });
-// Route::get('gudang/quality-control/detail', function () {
-//     return view('gudang.checkpart.detail');
-// });
-// Route::get('gudang/validasi', function () {
-//     return view('gudang.checkpart.validasi');
-// });
-// Route::get('gudang/stock-opname', function () {
-//     return view('gudang.stockopname.stock_opname');
-// });
-// Route::get('gudang/inventory', function () {
-//     return view('gudang.main.inventory');
-// });
-// Route::get('gudang/inventory/tambah-sku', function () {
-//     return view('gudang.main.add_sku');
-// });
+Route::middleware('gudang')->group(function () {
+    Route::prefix('/gudang')->group(function () {
+        Route::resource('/belanja-sparepart', GudangBelanjaController::class)->only(['index']);
+    });
+});
 
 
 // Route::get('/battery', function () {

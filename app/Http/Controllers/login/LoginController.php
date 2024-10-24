@@ -22,6 +22,8 @@ class LoginController extends Controller
                 return redirect('/logistik');
             } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 2) {
                 return redirect('/repair/customer/list-customer-repair');
+            } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 4) {
+                return redirect('/gudang/belanja-sparepart');
             }
 
         } else {
@@ -49,6 +51,8 @@ class LoginController extends Controller
                 return redirect()->intended('/logistik')->withCookie($cookie);
             } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 2) {
                 return redirect('/repair/customer/list-customer-repair')->withCookie($cookie);
+            } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 4) {
+                return redirect('/gudang/belanja-sparepart')->withCookie($cookie);
             }
 
         }
