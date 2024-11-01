@@ -3,24 +3,28 @@
 namespace App\Repositories\umum\repository;
 
 use App\Models\produk\ProdukJenis;
+use App\Models\produk\ProdukSparepart;
 use App\Repositories\umum\interface\ProdukInterface;
 
 class ProdukRepository implements ProdukInterface
 {
-    protected $model;
+    public function __construct(
+        private ProdukJenis $produkJenis,
+        private ProdukSparepart $sparepart
+    ){}
 
-    public function __construct(ProdukJenis $produkJenis)
+    public function getAllJenisProduct()
     {
-        $this->model = $produkJenis;
+        return $this->produkJenis->all();
     }
 
-    public function getAllProduct()
+    public function findJenisProduct($id)
     {
-        return $this->model->all();
+        return $this->produkJenis->find($id);
     }
 
-    public function findProduct($id)
+    public function getSparepartbyJenis($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->sparepart->where('produk_jenis_id', $id)->get();
     }
 }

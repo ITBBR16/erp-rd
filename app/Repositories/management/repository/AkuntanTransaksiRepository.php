@@ -2,6 +2,7 @@
 
 namespace App\Repositories\management\repository;
 
+use App\Models\management\AkuntanAkunBank;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\management\AkuntanMutasi;
@@ -17,30 +18,22 @@ use App\Repositories\management\interface\AkuntanTransaksiInterface;
 
 class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
 {
-    protected $connection, $modelAkun, $modelMutasi, $modelMutasiSementara, $ModelTransaksi, $ModelTransaksiDetail, $modelTransaksiRepair, $modelTransaksiKios, $modelDocument, $modelDocumentMonth, $modelEstimasiRepair;
+    protected $connection;
 
     public function __construct(
-        AkuntanDaftarAkun $akuntanDaftarAkun,
-        AkuntanDocument $akuntanDocument,
-        AkuntanDocumentMonth $akuntanDocumentMonth,
-        AkuntanMutasi $akuntanMutasi,
-        AkuntanMutasiMonth $akuntanMutasiMonth,
-        AkuntanTransaksi $akuntanTransaksi,
-        AkuntanTransaksiDetail $akuntanTransaksiDetail,
-        RepairTransaksi $repairTransaksi,
-        RepairEstimasi $repairEstimasi,
+        private AkuntanAkunBank $modelAkunBank,
+        private AkuntanDaftarAkun $modelAkun,
+        private AkuntanDocument $modelDocument,
+        private AkuntanDocumentMonth $modelDocumentMonth,
+        private AkuntanMutasi $modelMutasi,
+        private AkuntanMutasiMonth $modelMutasiSementara,
+        private AkuntanTransaksi $modelTransaksi,
+        private AkuntanTransaksiDetail $modelTransaksiDetail,
+        private RepairTransaksi $modelTransaksiRepair,
+        private RepairEstimasi $modelEstimasiRepair,
         )
     {
         $this->connection = DB::connection('rumahdrone_management');
-        $this->modelAkun = $akuntanDaftarAkun;
-        $this->modelDocument = $akuntanDocument;
-        $this->modelDocumentMonth = $akuntanDocumentMonth;
-        $this->modelMutasi = $akuntanMutasi;
-        $this->modelMutasiSementara = $akuntanMutasiMonth;
-        $this->ModelTransaksi = $akuntanTransaksi;
-        $this->ModelTransaksiDetail = $akuntanTransaksiDetail;
-        $this->modelTransaksiRepair = $repairTransaksi;
-        $this->modelEstimasiRepair = $repairEstimasi;
     }
 
     public function beginTransaction()
@@ -66,12 +59,12 @@ class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
 
     public function createTransaksi(array $data)
     {
-        return $this->ModelTransaksi->create($data);
+        return $this->modelTransaksi->create($data);
     }
 
     public function createDetailTransaksi(array $data)
     {
-        return $this->ModelTransaksiDetail->create($data);
+        return $this->modelTransaksiDetail->create($data);
     }
     
     public function createDocument(array $data)
@@ -102,7 +95,7 @@ class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
 
     public function updateTransaksiDetail(array $data, $id)
     {
-        $mutasiSementara = $this->ModelTransaksiDetail->find($id);
+        $mutasiSementara = $this->modelTransaksiDetail->find($id);
         if ($mutasiSementara) {
             $mutasiSementara->update($data);
             return $mutasiSementara;
@@ -134,7 +127,7 @@ class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
 
     public function findTransaksiNamaAkun($transaksiId, $namaAkun)
     {
-        return $this->ModelTransaksiDetail->where('transaksi_id', $transaksiId)
+        return $this->modelTransaksiDetail->where('transaksi_id', $transaksiId)
                                           ->where('nama_akun', $namaAkun)
                                           ->first();
     }
@@ -180,5 +173,10 @@ class AkuntanTransaksiRepository implements AkuntanTransaksiInterface
 
         $akun = $this->modelAkun->find($akunId);
         return $akun ? $akun : null;
+    }
+
+    public function getNamaBank()
+    {
+        return $this->modelAkunBank->all();
     }
 }

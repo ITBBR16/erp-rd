@@ -44,4 +44,9 @@ class ProdukJenis extends Model
         return $this->hasMany(RepairCase::class);
     }
 
+    public function spareparts()
+    {
+        return $this->hasMany(ProdukSparepart::class);
+    }
+
 }

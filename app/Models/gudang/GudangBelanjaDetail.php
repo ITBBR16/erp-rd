@@ -2,6 +2,7 @@
 
 namespace App\Models\gudang;
 
+use App\Models\produk\ProdukSparepart;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,5 +17,10 @@ class GudangBelanjaDetail extends Model
     public function gudangBelanja()
     {
         return $this->belongsTo(GudangBelanja::class);
+    }
+
+    public function sparepart()
+    {
+        return $this->belongsTo(ProdukSparepart::class, 'sparepart_id');
     }
 }

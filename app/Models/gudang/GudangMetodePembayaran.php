@@ -2,6 +2,7 @@
 
 namespace App\Models\gudang;
 
+use App\Models\management\AkuntanAkunBank;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,8 +14,13 @@ class GudangMetodePembayaran extends Model
     protected $table = 'gudang_metode_pembayaran';
     protected $guarded = ['id'];
 
-    public function requestPayment()
+    public function belanja()
     {
-        return $this->hasMany(GudangRequestPembayaran::class);
+        return $this->hasMany(GudangBelanja::class);
+    }
+
+    public function namaBank()
+    {
+        return $this->belongsTo(AkuntanAkunBank::class, 'nama_bank_id');
     }
 }

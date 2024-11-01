@@ -27,6 +27,9 @@ use App\Http\Controllers\kios\KiosBuatPaketSecondController;
 use App\Http\Controllers\kios\KiosPenerimaanProdukController;
 use App\Http\Controllers\customer\DashboardCustomerController;
 use App\Http\Controllers\gudang\GudangBelanjaController;
+use App\Http\Controllers\gudang\GudangPengirimanBelanjaController;
+use App\Http\Controllers\gudang\GudangRequestPaymentController;
+use App\Http\Controllers\gudang\GudangSupplierController;
 use App\Http\Controllers\kios\KiosPengecekkanSecondController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\kios\KiosFilterProdukSecondController;
@@ -330,7 +333,15 @@ Route::middleware('repair')->group(function () {
 
 Route::middleware('gudang')->group(function () {
     Route::prefix('/gudang')->group(function () {
-        Route::resource('/belanja-sparepart', GudangBelanjaController::class)->only(['index']);
+        Route::prefix('/purchasing')->group(function () {
+            Route::group(['controller' => GudangBelanjaController::class], function () {
+                Route::resource('/belanja-sparepart', GudangBelanjaController::class)->only(['index', 'store', 'edit', 'update']);
+                Route::get('/sparepart-bjenis/{id}', 'getSparepartByJenis');
+            });
+            Route::resource('/request-payment', GudangRequestPaymentController::class)->only(['index']);
+            Route::resource('/pengiriman-belanja', GudangPengirimanBelanjaController::class)->only(['index']);
+            Route::resource('/supplier', GudangSupplierController::class)->only(['index']);
+        });
     });
 });
 

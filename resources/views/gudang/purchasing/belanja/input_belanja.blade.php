@@ -1,5 +1,6 @@
 <div class="hidden p-4" id="belanja" role="tabpanel" aria-labelledby="belanja-tab">
-    <form action="#" method="POST" autocomplete="off">
+    <form action="{{ route('belanja-sparepart.store') }}" method="POST" autocomplete="off">
+        @csrf
         <div class="grid grid-cols-3 gap-6">
             {{-- Bagian Kiri --}}
             <div class="col-span-2">
@@ -7,25 +8,28 @@
                     <div>
                         <label for="supplier-gudang" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Supplier :</label>
                         <select name="supplier" id="supplier-gudang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="">Pilih Supplier</option>
+                            <option value="" hidden>Pilih Supplier</option>
+                            @foreach ($suppliers as $supplier)
+                                <option value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div>
                         <label for="invoice-supplier" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Invoice Supplier :</label>
-                        <input type="text" name="invoice_supplier" id="invoice-supplier" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Invoice Supplier">
+                        <input type="text" name="invoice_supplier" id="invoice-supplier" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Invoice Supplier" required>
                     </div>
                     <div>
-                        <label for="nominal-ongkir" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nominal Ongkir :</label>
+                        <label for="nominal-ongkir-bg" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nominal Ongkir :</label>
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="nominal_ongkir" id="nominal-ongkir" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
+                            <input type="text" name="nominal_ongkir" id="nominal-ongkir-bg" class="format-angka-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
                         </div>
                     </div>
                     <div>
-                        <label for="nominal-pajak" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nominal Pajak :</label>
+                        <label for="nominal-pajak-bg" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nominal Pajak :</label>
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="nominal_pajak" id="nominal-pajak" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
+                            <input type="text" name="nominal_pajak" id="nominal-pajak-bg" class="format-angka-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
                         </div>
                     </div>
                 </div>
@@ -33,40 +37,40 @@
                     <div class="my-4 border-t-2 border-gray-400 pt-2">
                         <h3 class="text-gray-900 font-semibold text-xl dark:text-white">List Belanja</h3>
                     </div>
-                    <div class="grid grid-cols-5 gap-6" style="grid-template-columns: 5fr 5fr 5fr 5fr 1fr">
-                        <div>
-                            <label for="jenis-drone" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone :</label>
-                            <select name="jenis_drone[]" id="jenis-drone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                <option value="" hidden>Pilih Jenis Drone</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="spareparts" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Sparepart :</label>
-                            <select name="spareparts[]" id="spareparts" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                <option value="" hidden>Pilih Sparepart</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="sparepart-qty" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Quantity : </label>
-                            <input type="text" name="sparepart_qty[]" id="sparepart-qty" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
-                        </div>
-                        <div>
-                            <label for="nominal-pcs" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Harga / Pcs :</label>
-                            <div class="flex">
-                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                <input type="text" name="nominal_pcs[]" id="nominal-pcs" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                    <div id="container-list-belanja">
+                        <div id="form-list-belanja-0" class="form-lb grid grid-cols-5 gap-6" style="grid-template-columns: 5fr 5fr 2fr 3fr 1fr">
+                            <div>
+                                <label for="belanja-jenis-drone-0" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone :</label>
+                                <select name="jenis_drone[]" id="belanja-jenis-drone-0" data-id="0" class="jd-belanja bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <option value="" hidden>Pilih Jenis Drone</option>
+                                    @foreach ($jenisProduk as $jenis)
+                                        <option value="{{ $jenis->id }}">{{ $jenis->jenis_produk }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>
-                        <div class="flex justify-center pt-10">
-                            <button type="button" class="remove-list-belanja" data-id="">
-                                <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
-                            </button>
+                            <div>
+                                <label for="belanja-spareparts-0" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Sparepart :</label>
+                                <select name="spareparts[]" id="belanja-spareparts-0" data-id="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <option value="" hidden>Pilih Sparepart</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="belanja-sparepart-qty-0" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Quantity : </label>
+                                <input type="text" name="sparepart_qty[]" id="belanja-sparepart-qty-0" class="number-format belanja-sparepart-qty bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                            </div>
+                            <div>
+                                <label for="belanja-nominal-pcs-0" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Harga / Pcs :</label>
+                                <div class="flex">
+                                    <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                    <input type="text" name="nominal_pcs[]" id="belanja-nominal-pcs-0" class="format-angka-rupiah belanja-nominal-pcs rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-start text-red-500 mt-6">
                     <div class="flex cursor-pointer my-2 hover:text-rose-700">
-                        <button type="button" id="add-kelengkapan-case" class="flex flex-row justify-between gap-2">
+                        <button type="button" id="add-list-belanja" class="flex flex-row justify-between gap-2">
                             <span class="material-symbols-outlined">add_circle</span>
                             <span>Tambah Belanja</span>
                         </button>
@@ -82,7 +86,7 @@
                             <p class="font-semibold italic dark:text-white">Total Item :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">0 Unit</p>
+                            <p id="total-item-belanja" class="font-normal dark:text-white">0 Unit</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
@@ -90,7 +94,7 @@
                             <p class="font-semibold italic dark:text-white">Total Biaya :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. 0</p>
+                            <p id="total-biaya-belanja" class="font-normal dark:text-white">Rp. 0</p>
                         </div>
                     </div>
                 </div>
@@ -105,7 +109,12 @@
                     </div>
                     <div>
                         <label for="bank-pembayaran" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Bank Pembayaran :</label>
-                        <input type="text" name="bank_pembayaran" id="bank-pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Bank Pembayaran">
+                        <select name="bank_pembayaran" id="bank-pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <option value="" hidden>Pilih Akun Bank</option>
+                            @foreach ($namaBank as $bank)
+                                <option value="{{ $bank->id }}">{{ $bank->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
                         <label for="id-akun" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">ID Akun :</label>
@@ -127,4 +136,7 @@
             </div>
         </div>
     </form>
+    <script>
+        let jenisProduk = @json($jenisProduk);
+    </script>
 </div>

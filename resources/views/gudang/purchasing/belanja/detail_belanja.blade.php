@@ -40,48 +40,66 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                    <th class="px-6 py-2">
-                        N.666
-                    </th>
-                    <td class="px-6 py-2">
-                        FLYAS
-                    </td>
-                    <td class="px-6 py-2">
-                        INV/20230908/MPL/3446962446
-                    </td>
-                    <td class="px-6 py-2">
-                        Rp. 5.407.200
-                    </td>
-                    <td class="px-6 py-2">
-                        <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">TMR</span>
-                    </td>
-                    <td class="px-6 py-2">
-                        <button id="dropdownListBelanja" data-dropdown-toggle="dropdownLB" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-                <div id="dropdownLB" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                    <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListBelanja">
-                        <li>
-                            <button type="button" data-modal-target="detail-belanja" data-modal-toggle="detail-belanja" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                <span class="material-symbols-outlined text-base mr-3">visibility</span>
-                                <span class="whitespace-nowrap">Detail</span>
+                @foreach ($listBelanja as $belanja) 
+                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <th class="px-6 py-2">
+                            N.{{ $belanja->id }}
+                        </th>
+                        <td class="px-6 py-2">
+                            {{ $belanja->gudangSupplier->nama }}
+                        </td>
+                        <td class="px-6 py-2">
+                            {{ $belanja->invoice }}
+                        </td>
+                        <td class="px-6 py-2">
+                            @php
+                                $totalNominal = $belanja->total_pembelian + $belanja->total_ongkir + $belanja->total_pajak;
+                            @endphp
+                            Rp. {{ number_format($totalNominal, 0, ',', '.') }}
+                        </td>
+                        <td class="px-6 py-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $belanja->status }}</span>
+                        </td>
+                        <td class="px-6 py-2">
+                            <button id="dropdownListBelanja{{ $belanja->id }}" data-dropdown-toggle="dropdownLB{{ $belanja->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
                             </button>
-                        </li>
-                        <li>
-                            <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                <span class="material-symbols-outlined text-base mr-3">delete</span>
-                                <span class="whitespace-nowrap">Hapus Data</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                        </td>
+                    </tr>
+                    <div id="dropdownLB{{ $belanja->id }}" class="z-10 hidden bg-white rounded-lg shadow w-48 dark:bg-gray-700">
+                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListBelanja{{ $belanja->id }}">
+                            <li>
+                                <button type="button" data-modal-target="detail-belanja-{{ $belanja->id }}" data-modal-toggle="detail-belanja-{{ $belanja->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                    <span class="whitespace-nowrap">Detail</span>
+                                </button>
+                            </li>
+                            <li>
+                                <a href="{{ route('belanja-sparepart.edit', encrypt($belanja->id)) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-xl mr-3">edit</i>
+                                    <span class="whitespace-nowrap">Ubah Belanja</span>
+                                </a>
+                            </li>
+                            <li>
+                                <button type="button" data-modal-target="detail-belanja" data-modal-toggle="detail-belanja" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <span class="material-symbols-outlined text-base mr-3">payments</span>
+                                    <span class="whitespace-nowrap">Request Payment</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" data-modal-target="delete-belanja-{{ $belanja->id }}" data-modal-toggle="delete-belanja-{{ $belanja->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <span class="material-symbols-outlined text-base mr-3">delete</span>
+                                    <span class="whitespace-nowrap">Hapus Data</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                @endforeach
             </tbody>
         </table>
     </div>
     {{-- Modal Action --}}
     @include('gudang.purchasing.modal.detail-belanja')
+    @include('gudang.purchasing.modal.delete-belanja')
 </div>

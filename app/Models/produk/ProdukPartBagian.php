@@ -5,22 +5,16 @@ namespace App\Models\produk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProdukType extends Model
+class ProdukPartBagian extends Model
 {
     use HasFactory;
 
     protected $connection = 'rumahdrone_produk';
-    protected $table = 'produk_type';
+    protected $table = 'produk_bagian';
     protected $guarded = ['id'];
-
-    public function subjenis()
-    {
-        return $this->hasMany(ProdukSubJenis::class);
-    }
 
     public function spareparts()
     {
         return $this->hasMany(ProdukSparepart::class);
     }
-
 }

@@ -18,8 +18,4 @@ class GudangRequestPembayaran extends Model
         return $this->belongsTo(GudangBelanja::class);
     }
 
-    public function gudangMetodePembayaran()
-    {
-        return $this->belongsTo(GudangMetodePembayaran::class);
-    }
 }

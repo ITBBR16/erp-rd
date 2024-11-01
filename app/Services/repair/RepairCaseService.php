@@ -36,7 +36,7 @@ class RepairCaseService
         return [
             'data_customer' => $this->customerRepository->getDataCustomer(),
             'data_provinsi' => $this->customerRepository->getProvinsi(),
-            'jenis_drone' => $this->product->getAllProduct(),
+            'jenis_drone' => $this->product->getAllJenisProduct(),
             'fungsional_drone' => $dataDD['fungsional_drone'],
             'jenis_case' => $dataDD['jenis_case'],
             'data_case' => $dataDD['data_case'],
@@ -85,7 +85,7 @@ class RepairCaseService
             $newCase = $this->repairCase->createNewCase($dataInput);
 
             $dataCustomer = $this->customerRepository->findCustomer($customerId);
-            $dataProduct = $this->product->findProduct($jenisDroneId);
+            $dataProduct = $this->product->findJenisProduct($jenisDroneId);
             $urlCreateFolder = 'https://script.google.com/macros/s/AKfycbx4BPCbG9OiQvlilMHQrlQXs-d3mytuJ5qFPf4zBhqjvmtYo3tEFMYBQ2JZndR49Dw3/exec';
             $response = Http::post($urlCreateFolder, [
                 'nama' => $dataCustomer->first_name . '-' . $dataCustomer->last_name,

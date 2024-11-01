@@ -38,4 +38,9 @@ class GudangBelanja extends Model
     {
         return $this->hasMany(GudangRequestPembayaran::class);
     }
+    
+    public function gudangMetodePembayaran()
+    {
+        return $this->belongsTo(GudangMetodePembayaran::class);
+    }
 }

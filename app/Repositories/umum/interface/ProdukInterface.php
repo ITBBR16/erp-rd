@@ -4,6 +4,6 @@ namespace App\Repositories\umum\interface;
 
 interface ProdukInterface
 {
-    public function getAllProduct();
-    public function findProduct($id);
+    public function getAllJenisProduct();
+    public function findJenisProduct($id);
 }
