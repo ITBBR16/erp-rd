@@ -3,6 +3,8 @@
 namespace App\Services\gudang;
 
 use App\Repositories\gudang\repository\GudangBelanjaRepository;
+use App\Repositories\gudang\repository\GudangPengirimanRepository;
+use App\Repositories\gudang\repository\GudangRequestPaymentRepository;
 use App\Repositories\gudang\repository\GudangSupplierRepository;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
 use App\Repositories\management\repository\AkuntanTransaksiRepository;
@@ -21,6 +23,8 @@ class GudangBelanjaServices
         private GudangTransactionRepository $transaction,
         private GudangSupplierRepository $supplier,
         private GudangBelanjaRepository $belanja,
+        private GudangRequestPaymentRepository $payment,
+        private GudangPengirimanRepository $pengiriman,
         private AkuntanTransaksiRepository $akunBank,
         ){}
 
@@ -167,9 +171,9 @@ class GudangBelanjaServices
             $dataMetodePembayaran = [
                 'nama_bank_id' => $request->input('bank_pembayaran'),
                 'gudang_supplier_id' => $supplierId,
-                'media_transaksi' => $request->input('media_transaksi'),
-                'nama_akun' => $request->input('nama_akun'),
-                'id_akun' => $request->input('id_akun')
+                'media_transaksi' => strtoupper($request->input('media_transaksi')),
+                'nama_akun' => strtoupper($request->input('nama_akun')),
+                'id_akun' => strtoupper($request->input('id_akun'))
             ];
 
             $metodePembayaran = $this->belanja->updateOrCreateMP(
@@ -234,6 +238,65 @@ class GudangBelanjaServices
         }
     }
 
+    public function deleteListBelanja($id)
+    {
+        try {
+            $this->transaction->beginTransaction();
+            $this->belanja->deleteBelanja($id);
+            $this->transaction->commitTransaction();
+
+            return ['status' => 'success', 'message' => 'Berhasil menghapus data list belanja.'];
+
+        } catch (Exception $e) {
+            $this->transaction->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function requestPayment($id)
+    {
+        try {
+            $this->transaction->beginTransaction();
+            $belanja = $this->belanja->findBelanja($id);
+            $supplier = $belanja->gudangSupplier->nama;
+            $jenisTransaksi = 'HPP';
+            $nominalTotal = $belanja->total_pembelian + $belanja->total_ongkir + $belanja->total_pajak;
+
+            if ($belanja->total_ongkir > 0) {
+                $jenisTransaksi .= ', Ongkir';
+            }
+
+            if ($belanja->total_pajak > 0) {
+                $jenisTransaksi .= ', Pajak';
+            }
+
+            $dataPayment = [
+                'gudang_belanja_id' => $belanja->id,
+                'jenis_transaksi' => $jenisTransaksi,
+                'gudang_metode_pembayaran_id' => $belanja->gudang_metode_pembayaran_id,
+                'nominal' => $nominalTotal,
+                'keterangan' => 'Pembelian produk supplier ' . $supplier,
+                'status' => 'Waiting Payment',
+            ];
+
+            $dataPengiriman = [
+                'gudang_belanja_id' => $belanja->id,
+                'status' => 'Menunggu Resi'
+            ];
+
+            // Mengirim ke bagian akuntan
+
+            $belanja->update(['status' => 'Waiting Payment']);
+            $this->payment->createPayment($dataPayment);
+            $this->pengiriman->createPengiriman($dataPengiriman);
+            $this->transaction->commitTransaction();
+
+            return ['status' => 'success', 'message' => 'Berhasil Melakukan Request Payment.'];
+        } catch (Exception $e) {
+            $this->transaction->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
 
     public function getDataSparepart($id)
     {

@@ -15,6 +15,11 @@ class GudangBelanjaRepository implements GudangBelanjaInterface
         private GudangMetodePembayaran $metodePembayaran,
     ){}
 
+    public function findBelanja($id)
+    {
+        return $this->gudangBelanja->find($id);
+    }
+
     public function createMetodePembayaran(array $data)
     {
         $metodePembayaran = $this->metodePembayaran->create($data);
@@ -32,32 +37,26 @@ class GudangBelanjaRepository implements GudangBelanjaInterface
         return $belanja;
     }
 
-    public function updateBelanja($id, array $belanjaData, array $detailData = [])
+    public function updateBelanja($belanja, array $belanjaData)
     {
-        $belanja = $this->gudangBelanja->find($id);
+        $resultUpdate = $belanja->update($belanjaData);
+        return $resultUpdate;
+    }
 
-        if (!$belanja) {
-            throw new \Exception("List belanja not found.");
+    public function updateBelanjaDetails($belanja, array $detailData)
+    {
+        $existingDetailIds = [];
+
+        foreach ($detailData as $item) {
+            $detail = $belanja->detailBelanja()->find($item['id']) ?? new $this->gudangBelanjaDetail;
+            $detail->fill($item);
+            $detail->belanja_id = $belanja->id;
+            $detail->save();
+
+            $existingDetailIds[] = $detail->id;
         }
 
-        $belanja->update($belanjaData);
-
-        if (!empty($detailData)) {
-            $existingDetail = [];
-
-            foreach ($detailData as $item) {
-                $detail = $belanja->detailBelanja()->find($item['id']) ?? new $this->gudangBelanjaDetail;
-                $detail->fill($item);
-                $detail->belanja_id = $belanja->id;
-                $detail->save();
-
-                $existingDetail[] = $detail->id;
-            }
-
-            $belanja->detailBelanja()->whereNotIn('id', $existingDetail)->delete();
-        }
-
-        return $belanja;
+        return $existingDetailIds;
     }
 
     public function updateOrCreateMP(array $attributes, array $values = [])
@@ -82,7 +81,7 @@ class GudangBelanjaRepository implements GudangBelanjaInterface
             return $belanja;
         }
 
-        throw new \Exception("List belanja not found");
+        throw new \Exception("List belanja not found.");
     }
 
     public function indexBelanja()
@@ -90,8 +89,4 @@ class GudangBelanjaRepository implements GudangBelanjaInterface
         return $this->gudangBelanja->all();
     }
 
-    public function findBelanja($id)
-    {
-        return $this->gudangBelanja->find($id);
-    }
 }

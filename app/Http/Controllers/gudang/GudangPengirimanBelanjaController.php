@@ -4,22 +4,38 @@ namespace App\Http\Controllers\gudang;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\umum\UmumRepository;
+use App\Services\gudang\GudangPengirimanServices;
 
 class GudangPengirimanBelanjaController extends Controller
 {
-    public function __construct(private UmumRepository $nameDivisi){}
+    public function __construct(
+        private GudangPengirimanServices $pengiriman
+        ){}
 
     public function index()
     {
-        $user = auth()->user();
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        
-        return view('gudang.purchasing.pengiriman.pengiriman', [
-            'title' => 'Gudang Pengiriman',
-            'active' => 'gudang-pengiriman',
-            'navActive' => 'purchasing',
-            'divisi' => $divisiName,
-        ]);
+        return $this->pengiriman->index();
+    }
+
+    public function store(Request $request)
+    {
+        $resultResiBaru = $this->pengiriman->resiTambahan($request);
+
+        if ($resultResiBaru['status'] == 'success') {
+            return back()->with('success', $resultResiBaru['message']);
+        } else {
+            return back()->with('error', $resultResiBaru['message']);
+        }
+    }
+
+    public function update($id, Request $request)
+    {
+        $resultAddResi = $this->pengiriman->addResiPembelanjaan($id, $request);
+
+        if ($resultAddResi['status'] == 'success') {
+            return back()->with('success', $resultAddResi['message']);
+        } else {
+            return back()->with('error', $resultAddResi['message']);
+        }
     }
 }

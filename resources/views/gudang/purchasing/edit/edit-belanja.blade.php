@@ -37,8 +37,9 @@
         </div>
     @endif
 
-    <form action="{{ route('belanja-sparepart.store') }}" method="POST" autocomplete="off">
+    <form action="{{ route('belanja-sparepart.update', $belanja->id) }}" method="POST" autocomplete="off">
         @csrf
+        @method('PUT')
         <div class="grid grid-cols-3 gap-6 pt-6 border-t mt-4">
             {{-- Bagian Kiri --}}
             <div class="col-span-2 mt-4">

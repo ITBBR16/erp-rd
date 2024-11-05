@@ -82,17 +82,19 @@
                                 </a>
                             </li>
                             <li>
-                                <button type="button" data-modal-target="detail-belanja" data-modal-toggle="detail-belanja" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                <button type="button" data-modal-target="req-payment-{{ $belanja->id }}" data-modal-toggle="req-payment-{{ $belanja->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                     <span class="material-symbols-outlined text-base mr-3">payments</span>
                                     <span class="whitespace-nowrap">Request Payment</span>
                                 </button>
                             </li>
-                            <li>
-                                <button type="button" data-modal-target="delete-belanja-{{ $belanja->id }}" data-modal-toggle="delete-belanja-{{ $belanja->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">delete</span>
-                                    <span class="whitespace-nowrap">Hapus Data</span>
-                                </button>
-                            </li>
+                            @if ($belanja->status == 'Menunggu Konfirmasi Belanja')
+                                <li>
+                                    <button type="button" data-modal-target="delete-belanja-{{ $belanja->id }}" data-modal-toggle="delete-belanja-{{ $belanja->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">delete</span>
+                                        <span class="whitespace-nowrap">Hapus Data</span>
+                                    </button>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 @endforeach
@@ -102,4 +104,5 @@
     {{-- Modal Action --}}
     @include('gudang.purchasing.modal.detail-belanja')
     @include('gudang.purchasing.modal.delete-belanja')
+    @include('gudang.purchasing.modal.req-pembayaran')
 </div>

@@ -337,10 +337,11 @@ Route::middleware('gudang')->group(function () {
             Route::group(['controller' => GudangBelanjaController::class], function () {
                 Route::resource('/belanja-sparepart', GudangBelanjaController::class)->only(['index', 'store', 'edit', 'update']);
                 Route::get('/sparepart-bjenis/{id}', 'getSparepartByJenis');
+                Route::post('/belanja-req-payment/{id}', 'requestPaymentBelanja')->name('requestPB');
             });
-            Route::resource('/request-payment', GudangRequestPaymentController::class)->only(['index']);
-            Route::resource('/pengiriman-belanja', GudangPengirimanBelanjaController::class)->only(['index']);
-            Route::resource('/supplier', GudangSupplierController::class)->only(['index']);
+            Route::resource('/request-payment', GudangRequestPaymentController::class)->only(['index', 'store']);
+            Route::resource('/pengiriman-belanja', GudangPengirimanBelanjaController::class)->only(['index', 'store', 'update']);
+            Route::resource('/supplier', GudangSupplierController::class)->only(['index', 'store', 'update']);
         });
     });
 });

@@ -10,7 +10,7 @@ class GudangRequestPembayaran extends Model
     use HasFactory;
 
     protected $connection = 'rumahdrone_gudang';
-    protected $table = 'gudang_request_pembayaran';
+    protected $table = 'gudang_request_payment';
     protected $guarded = ['id'];
 
     public function gudangBelanja()

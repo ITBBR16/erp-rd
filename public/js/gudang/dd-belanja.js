@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    let formBelanjaLength = 0;
 
     $(document).on('click', '#add-list-belanja', function () {
+        let formBelanjaLength = $('.jd-belanja').length;
         let lastSelect = $(`#belanja-spareparts-${formBelanjaLength}`);
         if (lastSelect.length && lastSelect.val() === "") {
             alert("Selesaikan list belanja sebelumnya");

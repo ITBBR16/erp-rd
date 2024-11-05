@@ -15,6 +15,6 @@ class GudangPengiriman extends Model
 
     public function gudangBelanja()
     {
-        return $this->belongsTo(GudangBelanja::class);
+        return $this->belongsTo(GudangBelanja::class, 'gudang_belanja_id');
     }
 }

@@ -5,21 +5,27 @@ namespace App\Http\Controllers\gudang;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\umum\UmumRepository;
+use App\Services\gudang\GudangRequestPaymentService;
 
 class GudangRequestPaymentController extends Controller
 {
-    public function __construct(private UmumRepository $nameDivisi){}
+    public function __construct(
+        private GudangRequestPaymentService $reqPaymentService
+    ){}
 
     public function index()
     {
-        $user = auth()->user();
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        
-        return view('gudang.purchasing.reqpayment.payment', [
-            'title' => 'Gudang Payment',
-            'active' => 'gudang-payment',
-            'navActive' => 'purchasing',
-            'divisi' => $divisiName,
-        ]);
+        return $this->reqPaymentService->index();
+    }
+
+    public function store(Request $request)
+    {
+        $resultReqPayment = $this->reqPaymentService->addNewRP($request);
+
+        if ($resultReqPayment['status'] == 'success') {
+            return back()->with('success', $resultReqPayment['message']);
+        } else {
+            return back()->with('error', $resultReqPayment['message']);
+        }
     }
 }

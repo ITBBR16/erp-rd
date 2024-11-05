@@ -49,6 +49,17 @@ class GudangBelanjaController extends Controller
         }
     }
 
+    public function requestPaymentBelanja($id)
+    {
+        $resultPayment = $this->belanjaService->requestPayment($id);
+
+        if ($resultPayment['status'] == 'success') {
+            return back()->with('success', $resultPayment['message']);
+        } else {
+            return back()->with('error', $resultPayment['message']);
+        }
+    }
+
     public function getSparepartByJenis($id)
     {
         return $this->belanjaService->getDataSparepart($id);
