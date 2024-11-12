@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/kios/app.js',
                 'resources/js/repair/app.js',
                 'resources/js/logistik/app.js',
+                'resources/js/gudang/app.js',
             ],
             refresh: true,
         }),
