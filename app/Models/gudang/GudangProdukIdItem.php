@@ -5,12 +5,12 @@ namespace App\Models\gudang;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GudangPengiriman extends Model
+class GudangProdukIdItem extends Model
 {
     use HasFactory;
 
     protected $connection = 'rumahdrone_gudang';
-    protected $table = 'gudang_pengiriman';
+    protected $table = 'gudang_produk_id_item';
     protected $guarded = ['id'];
 
     public function gudangBelanja()
@@ -18,8 +18,14 @@ class GudangPengiriman extends Model
         return $this->belongsTo(GudangBelanja::class, 'gudang_belanja_id');
     }
 
-    public function gudangUnboxing()
+    public function gudangProduk()
     {
-        return $this->hasMany(GudangUnboxing::class);
+        return $this->belongsTo(GudangProduk::class, 'gudang_produk_id');
     }
+
+    public function qualityControll()
+    {
+        return $this->hasOne(GudangQualityControll::class);
+    }
+
 }

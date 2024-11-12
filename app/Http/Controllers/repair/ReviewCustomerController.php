@@ -71,7 +71,12 @@ class ReviewCustomerController extends Controller
             $formattedDate = $tanggal->format('dmYHis');
             $formatUrl = $formattedDate . 'RD' . $noNota;
     
-            $message = 'https://stagging.rumahdrone.id/review-customer/' . $formatUrl;
+            $linkReview = 'https://stagging.rumahdrone.id/review-customer/' . $formatUrl;
+            $message = "Terima kasih telah mempercayakan kami untuk kebutuhan Anda!\n
+                    Jika Anda puas dengan layanan/produk kami, kami sangat menghargai jika Anda bisa meluangkan waktu untuk memberikan ulasan atau masukan.
+                    Hal ini akan sangat membantu kami untuk terus meningkatkan kualitas pelayanan kami.\n
+                    Berikut link ulasan kami :\n" .
+                    $linkReview . "\nTerima kasih banyak!";
             $urlWaApi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
             $dataWa = [
                 'no_telpon' => $noTelpon,

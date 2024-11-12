@@ -3,6 +3,7 @@
 namespace App\Models\produk;
 
 use App\Models\gudang\GudangBelanjaDetail;
+use App\Models\gudang\GudangProduk;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,7 +40,7 @@ class ProdukSparepart extends Model
         return $this->belongsTo(ProdukPartSubBagian::class, 'produk_part_sub_bagian_id');
     }
 
-    public function partSifat()
+    public function partSifat() // Dipakek apa engga ya
     {
         return $this->belongsTo(ProdukPartSifat::class, 'produk_part_sifat_id');
     }
@@ -47,5 +48,10 @@ class ProdukSparepart extends Model
     public function detailBelanja()
     {
         return $this->hasMany(GudangBelanjaDetail::class);
+    }
+
+    public function gudangProduk()
+    {
+        return $this->hasOne(GudangProduk::class);
     }
 }

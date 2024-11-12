@@ -10,7 +10,7 @@ class ProdukPartBagian extends Model
     use HasFactory;
 
     protected $connection = 'rumahdrone_produk';
-    protected $table = 'produk_bagian';
+    protected $table = 'produk_part_bagian';
     protected $guarded = ['id'];
 
     public function spareparts()

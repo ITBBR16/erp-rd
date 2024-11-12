@@ -14,7 +14,7 @@ class GudangSupplierServices
         private UmumRepository $umum,
         private GudangTransactionRepository $transaction,
         private GudangSupplierRepository $supplier,
-        ){}
+    ){}
 
     public function index()
     {

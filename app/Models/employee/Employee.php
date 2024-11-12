@@ -4,6 +4,9 @@ namespace App\Models\employee;
 
 use App\Models\ekspedisi\LogRequest;
 use App\Models\gudang\GudangBelanja;
+use App\Models\gudang\GudangQualityControll;
+use App\Models\gudang\GudangUnboxing;
+use App\Models\gudang\GudangValidasi;
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosTransaksi;
 use App\Models\repair\RepairCase;
@@ -60,4 +63,15 @@ class Employee extends Model
     {
         return $this->hasMany(GudangBelanja::class);
     }
+
+    public function gudangUnboxing()
+    {
+        return $this->hasMany(GudangUnboxing::class);
+    }
+
+    public function gudangQC()
+    {
+        return $this->hasMany(GudangQualityControll::class);
+    }
+
 }

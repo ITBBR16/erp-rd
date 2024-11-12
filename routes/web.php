@@ -28,8 +28,11 @@ use App\Http\Controllers\kios\KiosPenerimaanProdukController;
 use App\Http\Controllers\customer\DashboardCustomerController;
 use App\Http\Controllers\gudang\GudangBelanjaController;
 use App\Http\Controllers\gudang\GudangPengirimanBelanjaController;
+use App\Http\Controllers\gudang\GudangQualityControlController;
 use App\Http\Controllers\gudang\GudangRequestPaymentController;
 use App\Http\Controllers\gudang\GudangSupplierController;
+use App\Http\Controllers\gudang\GudangUnboxingController;
+use App\Http\Controllers\gudang\GudangValidasiQCController;
 use App\Http\Controllers\kios\KiosPengecekkanSecondController;
 use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\kios\KiosFilterProdukSecondController;
@@ -343,6 +346,20 @@ Route::middleware('gudang')->group(function () {
             Route::resource('/pengiriman-belanja', GudangPengirimanBelanjaController::class)->only(['index', 'store', 'update']);
             Route::resource('/supplier', GudangSupplierController::class)->only(['index', 'store', 'update']);
         });
+
+        Route::prefix('/receive')->group(function () {
+            Route::resource('/unboxing-gd', GudangUnboxingController::class)->only(['index', 'update']);
+            Route::group(['controller' => GudangQualityControlController::class], function () {
+                Route::resource('/gudang-qc', GudangQualityControlController::class)->only(['index', 'store']);
+                Route::get('cek-fisik/{idBelanja}/{idProduk}', 'cekQcFisik')->name('qcFisik');
+                Route::get('cek-fungsional/{idBelanja}/{idProduk}', 'cekQcFungsional')->name('qcFungsional');
+                Route::post('cek-fungsional', 'storeFungsional')->name('storeFungsional');
+            });
+            Route::group(['controller' => GudangValidasiQCController::class], function () {
+                Route::resource('/gudang-validasi', GudangValidasiQCController::class)->only(['index', 'store']);
+                Route::get('/cek-validasi/{idBelanja}/{idProduk}', 'pageValidasi')->name('pageValidasi');
+            });
+        });
     });
 });
 
@@ -353,8 +370,4 @@ Route::middleware('gudang')->group(function () {
 
 // Route::get('/content', function () {
 //     return view('content.main.index');
-// });
-
-// Route::get('/logistik', function () {
-//     return view('logistik.main.index');
 // });

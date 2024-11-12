@@ -5,6 +5,7 @@ namespace App\Services\gudang;
 use App\Repositories\gudang\repository\GudangBelanjaRepository;
 use App\Repositories\gudang\repository\GudangPengirimanRepository;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
+use App\Repositories\gudang\repository\GudangUnboxingRepository;
 use App\Repositories\umum\UmumRepository;
 use Carbon\Carbon;
 use Exception;
@@ -17,6 +18,7 @@ class GudangPengirimanServices
         private GudangTransactionRepository $transaction,
         private GudangPengirimanRepository $pengiriman,
         private GudangBelanjaRepository $belanja,
+        private GudangUnboxingRepository $unboxing,
     ){}
 
     public function index()
@@ -41,8 +43,10 @@ class GudangPengirimanServices
     {
         try {
             $this->transaction->beginTransaction();
-            $dateToday = Carbon::today();
+            $employeeId = auth()->user()->id;
+            $dateToday = Carbon::today()->format('Y-m-d');
             $status = 'Process Shipping';
+            $belanjaId = $request->input('belanja_id');
 
             $dataResi = [
                 'tanggal_pengiriman' => $dateToday,
@@ -50,14 +54,22 @@ class GudangPengirimanServices
                 'status' => $status
             ];
 
+            $dataUnboxing = [
+                'employee_id' => $employeeId,
+                'gudang_belanja_id' => $belanjaId,
+                'gudang_pengiriman_id' => $id,
+                'status' => $status,
+            ];
+
             $dataBelanja = ['status' => $status];
-            $belanja = $this->belanja->findBelanja($request->input('belanja_id'));
+            $belanja = $this->belanja->findBelanja($belanjaId);
             if (!$belanja) {
                 throw new \Exception("Belanja not found.");
             }
             $belanja->update($dataBelanja);
 
             $this->pengiriman->updatePengiriman($id, $dataResi);
+            $this->unboxing->createUnboxing($dataUnboxing);
             $this->transaction->commitTransaction();
 
             return ['status' => 'success', 'message' => 'Berhasil menambahkan resi.'];

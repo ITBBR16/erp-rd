@@ -13,7 +13,12 @@
     <body>
 
         @include('gudang.layouts.header')
-        @include('gudang.layouts.sidebar')
+
+        @if (Request::is('gudang/purchasing/*'))
+            @include('gudang.layouts.sidebar-purchasing')
+        @elseif (Request::is('gudang/receive/*'))
+            @include('gudang.layouts.sidebar-receive-goods')
+        @endif
 
         <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-y-auto scrollbar-none">
             @yield('container')
