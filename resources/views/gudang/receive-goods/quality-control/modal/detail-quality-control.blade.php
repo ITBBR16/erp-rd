@@ -3,7 +3,7 @@
         $qc = $items->first();
         $quantityCount = $items->count();
     @endphp
-    @if ($qc->qualityControll->checked_quantity == '' || $qc->qualityControll->checked_fungsional == '')
+    @if ($qc->qualityControll?->checked_quantity == '' || $qc->qualityControll->checked_fungsional == '')
         <div id="detail-qc-{{ $qc->id }}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative w-full max-w-2xl max-h-full">
                 <!-- Modal content -->

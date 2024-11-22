@@ -25,7 +25,7 @@ class GudangKonfirmasiPengirimanServices
         $repairCase = $this->repairCase->getAllDataNeededNewCase();
         $case = $repairCase['data_case'];
 
-        return view('gudang.distribusi-produk.main-distribusi', [
+        return view('gudang.distribusi-produk.konfirmasi.main-distribusi', [
             'title' => 'Gudang Konfirmasi',
             'active' => 'gudang-konfirmasi',
             'navActive' => 'distribusi',

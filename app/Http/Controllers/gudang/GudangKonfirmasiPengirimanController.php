@@ -25,6 +25,11 @@ class GudangKonfirmasiPengirimanController extends Controller
     public function store(Request $request)
     {
         $resultSendPart = $this->konfirmasi->sendPart($request);
-        return redirect()->route('konfirmasi-pengiriman.index')->with('success', $resultSendPart['message']);
+
+        if ($resultSendPart['status'] == 'success') {
+            return redirect()->route('konfirmasi-pengiriman.index')->with($resultSendPart['status'], $resultSendPart['message']);
+        } else {
+            return back()->with($resultSendPart['status'], $resultSendPart['message']);
+        }
     }
 }

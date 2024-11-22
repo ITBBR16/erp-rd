@@ -77,7 +77,9 @@
             </thead>
             <tbody>
                 @php
-                    $groupedItems = $listValidasi->groupBy(function ($item) {
+                    $groupedItems = $listValidasi->filter(function ($item) {
+                        return $item->qualityControll !== null;
+                    })->groupBy(function ($item) {
                         return $item->gudang_belanja_id . '-' . $item->gudang_produk_id;
                     });
                 @endphp

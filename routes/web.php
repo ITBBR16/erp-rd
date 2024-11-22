@@ -36,6 +36,7 @@ use App\Http\Controllers\gudang\GudangListProdukController;
 use App\Http\Controllers\gudang\GudangPengirimanBelanjaController;
 use App\Http\Controllers\gudang\GudangQualityControlController;
 use App\Http\Controllers\gudang\GudangRequestPaymentController;
+use App\Http\Controllers\gudang\GudangReturSparepartController;
 use App\Http\Controllers\gudang\GudangSplitPartController;
 use App\Http\Controllers\gudang\GudangSupplierController;
 use App\Http\Controllers\gudang\GudangUnboxingController;
@@ -389,6 +390,7 @@ Route::middleware('gudang')->group(function () {
 
         Route::prefix('/distribusi')->group(function () {
             Route::resource('/konfirmasi-pengiriman', GudangKonfirmasiPengirimanController::class)->only(['index', 'edit', 'store']);
+            Route::resource('/retur-sparepart', GudangReturSparepartController::class)->only(['index']);
         });
     });
 });

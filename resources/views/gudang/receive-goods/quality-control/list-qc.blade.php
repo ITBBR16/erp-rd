@@ -77,7 +77,9 @@
             </thead>
             <tbody>
                 @php
-                    $groupedItems = $listQcIdItem->groupBy(function ($item) {
+                    $groupedItems = $listQcIdItem->filter(function ($item) {
+                        return $item->qualityControll !== null;
+                    })->groupBy(function ($item) {
                         return $item->gudang_belanja_id . '-' . $item->gudang_produk_id;
                     });
                 @endphp
@@ -87,7 +89,7 @@
                         $qc = $items->first();
                         $quantityCount = $items->count();
                     @endphp
-                    @if ($qc->qualityControll->checked_quantity == '' || $qc->qualityControll->checked_fungsional == '')
+                    @if ($qc->qualityControll?->checked_quantity == '' || $qc->qualityControll?->checked_fungsional == '')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 N.{{ $qc->gudang_belanja_id }}
@@ -107,7 +109,7 @@
                                 {{ $quantityCount }}
                             </td>
                             <td class="px-6 py-2">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $qc->qualityControll->status_qc }}</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $qc->qualityControll?->status_qc }}</span>
                             </td>
                             <td class="px-6 py-2">
                                 <button id="dropdownListQC{{ $qc->id }}{{ $qc->produk_gudang_id }}" data-dropdown-toggle="dropdownQCL{{ $qc->id }}{{ $qc->produk_gudang_id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">
@@ -127,7 +129,7 @@
                                         <span class="whitespace-nowrap">Detail</span>
                                     </button>
                                 </li>
-                                @if ($qc->qualityControll->status_qc == 'Menunggu QC')
+                                @if ($qc->qualityControll?->status_qc == 'Menunggu QC')
                                     <li>
                                         <a href="{{ route('qcFisik', ['idBelanja' => $qc->gudang_belanja_id, 'idProduk' => $qc->gudang_produk_id]) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <i class="material-symbols-outlined text-xl mr-3">build</i>
@@ -135,7 +137,7 @@
                                         </a>
                                     </li>
                                 @endif
-                                @if ($qc->qualityControll->checked_quantity != '')
+                                @if ($qc->qualityControll?->checked_quantity != '')
                                     <li>
                                         <a href="{{ route('qcFungsional', ['idBelanja' => $qc->gudang_belanja_id, 'idProduk' => $qc->gudang_produk_id]) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <i class="material-symbols-outlined text-xl mr-3">manufacturing</i>
