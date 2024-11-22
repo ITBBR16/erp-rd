@@ -107,7 +107,7 @@ $(document).ready(function () {
                 formSparepart.append(option);
             });
         })
-        .catch(error => alert('Error fetching data:', error));
+        .catch(error => alert('Error fetching data:' + error));
     }
 
     function updateOrderSummary() {

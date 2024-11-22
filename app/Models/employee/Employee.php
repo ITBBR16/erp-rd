@@ -3,6 +3,7 @@
 namespace App\Models\employee;
 
 use App\Models\ekspedisi\LogRequest;
+use App\Models\gudang\GudangAdjustStock;
 use App\Models\gudang\GudangBelanja;
 use App\Models\gudang\GudangQualityControll;
 use App\Models\gudang\GudangUnboxing;
@@ -72,6 +73,11 @@ class Employee extends Model
     public function gudangQC()
     {
         return $this->hasMany(GudangQualityControll::class);
+    }
+
+    public function gudangAdjustStock()
+    {
+        return $this->hasMany(GudangAdjustStock::class);
     }
 
 }

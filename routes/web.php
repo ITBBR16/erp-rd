@@ -26,10 +26,17 @@ use App\Http\Controllers\kios\AddKelengkapanKiosController;
 use App\Http\Controllers\kios\KiosBuatPaketSecondController;
 use App\Http\Controllers\kios\KiosPenerimaanProdukController;
 use App\Http\Controllers\customer\DashboardCustomerController;
+use App\Http\Controllers\gudang\GudangAddNewSparepartController;
+use App\Http\Controllers\gudang\GudangAdjustStockController;
 use App\Http\Controllers\gudang\GudangBelanjaController;
+use App\Http\Controllers\gudang\GudangKomplainSupplierController;
+use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
+use App\Http\Controllers\gudang\GudangLabelController;
+use App\Http\Controllers\gudang\GudangListProdukController;
 use App\Http\Controllers\gudang\GudangPengirimanBelanjaController;
 use App\Http\Controllers\gudang\GudangQualityControlController;
 use App\Http\Controllers\gudang\GudangRequestPaymentController;
+use App\Http\Controllers\gudang\GudangSplitPartController;
 use App\Http\Controllers\gudang\GudangSupplierController;
 use App\Http\Controllers\gudang\GudangUnboxingController;
 use App\Http\Controllers\gudang\GudangValidasiQCController;
@@ -359,15 +366,29 @@ Route::middleware('gudang')->group(function () {
                 Route::resource('/gudang-validasi', GudangValidasiQCController::class)->only(['index', 'store']);
                 Route::get('/cek-validasi/{idBelanja}/{idProduk}', 'pageValidasi')->name('pageValidasi');
             });
+            Route::group(['controller' => GudangLabelController::class], function () {
+                Route::get('/list-label', 'index')->name('list-label');
+                Route::get('/print-label/{idBelanja}/{idProduk}', 'printLabel')->name('printLabel');
+                Route::resource('/komplain-supplier', GudangKomplainSupplierController::class)->only(['index']);
+            });
+        });
+
+        Route::prefix('/produk')->group(function () {
+            Route::group(['controller' => GudangListProdukController::class], function () {
+                Route::resource('/list-produk', GudangListProdukController::class)->only(['index', 'update']);
+                Route::post('/update-harga-sparepart/{id}', 'updateHarga');
+            });
+            Route::group(['controller' => GudangSplitPartController::class], function () {
+                Route::resource('/split-sku', GudangSplitPartController::class)->only(['index', 'store']);
+                Route::get('/get-list-id-item/{id}', 'getListIdItem');
+                Route::get('/get-db-id-item/{id}', 'detailBelanjaIdItem');
+            });
+            Route::resource('/adjust-stock', GudangAdjustStockController::class)->only(['index', 'store']);
+            Route::resource('/add-sparepart', GudangAddNewSparepartController::class)->only(['index', 'store']);
+        });
+
+        Route::prefix('/distribusi')->group(function () {
+            Route::resource('/konfirmasi-pengiriman', GudangKonfirmasiPengirimanController::class)->only(['index', 'edit', 'store']);
         });
     });
 });
-
-
-// Route::get('/battery', function () {
-//     return view('battery.main.index');
-// });
-
-// Route::get('/content', function () {
-//     return view('content.main.index');
-// });

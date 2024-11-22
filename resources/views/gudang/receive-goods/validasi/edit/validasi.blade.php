@@ -38,6 +38,7 @@
     <form action="{{ route('gudang-validasi.store') }}" method="POST" autocomplete="off">
         @csrf
         <input type="hidden" name="belanja_id" value="{{ $idBelanja }}">
+        <input type="hidden" name="sparepart_id" value="{{ $idProduk }}">
         <div class="relative my-4">
             <div class="flex items-center justify-between">
                 <div class="flex text-xl justify-start">

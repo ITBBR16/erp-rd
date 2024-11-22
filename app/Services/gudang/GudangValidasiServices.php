@@ -2,6 +2,7 @@
 
 namespace App\Services\gudang;
 
+use App\Models\gudang\GudangProduk;
 use App\Repositories\gudang\repository\GudangBelanjaRepository;
 use App\Repositories\gudang\repository\GudangKomplainRepository;
 use Exception;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Repositories\umum\UmumRepository;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
 use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
+use App\Repositories\gudang\repository\GudangProdukRepository;
 use App\Repositories\gudang\repository\GudangQualityControllRepository;
 
 class GudangValidasiServices
@@ -21,6 +23,7 @@ class GudangValidasiServices
         private GudangProdukIdItemRepository $idItem,
         private GudangKomplainRepository $komplain,
         private GudangBelanjaRepository $belanja,
+        private GudangProdukRepository $produk,
     ){}
 
     public function index()
@@ -50,7 +53,8 @@ class GudangValidasiServices
             'navActive' => 'receive',
             'divisi' => $divisiName,
             'dataCekValidasi' => $dataCekValidasi,
-            'idBelanja' => $idBelanja
+            'idBelanja' => $idBelanja,
+            'idProduk' => $idProduk
         ]);
     }
 
@@ -61,6 +65,15 @@ class GudangValidasiServices
             $picId = auth()->user()->id;
             $dateToday = Carbon::today()->format('Y-m-d');
             $cekValidasi = $request->input('cek_validasi');
+            $belnajaId = $request->input('belanja_id');
+            $sparepartId = $request->input('sparepart_id');
+
+            $findProduk = $this->produk->findBySparepart($sparepartId);
+            $findDetailBelanja = $this->belanja->getDetailBelanja($belnajaId, $sparepartId);
+
+            $modalAwal = $findProduk->modal_awal;
+            $hargaPcs = $findDetailBelanja->nominal_pcs;
+            $modalProduk = 0;
 
             foreach ($request->input('idItemId') as $index => $item) {
 
@@ -75,6 +88,7 @@ class GudangValidasiServices
 
                 if ($cekValidasi[$index] === 'Pass') {
                     $this->idItem->updateIdItem($item, ['status_inventory' => 'Ready']);
+                    $modalProduk += $hargaPcs;
                     
                 } elseif ($cekValidasi[$index] === 'Komplain') {
                     $dataKomplain = [
@@ -87,7 +101,7 @@ class GudangValidasiServices
                 }
             }
 
-            $findBelanja = $this->belanja->findBelanja($request->input('belanja_id'));
+            $findBelanja = $this->belanja->findBelanja($belnajaId);
             $allValidated = $findBelanja->gudangProdukIdItem()->get()->every(function ($idItem) {
                 return $idItem->qualityControll()->get()->every(fn($qc) => !empty($qc->status_validasi));
             });
@@ -96,6 +110,8 @@ class GudangValidasiServices
                 $findBelanja->update(['status' => 'Done']);
             }
 
+            $totalModalAwal = $modalAwal + $modalProduk;
+            $this->produk->updateByValidasi($sparepartId, ['modal_awal' => $totalModalAwal]);
             $this->transaction->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil melakukan validasi barang.'];
 

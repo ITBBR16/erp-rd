@@ -28,4 +28,19 @@ class GudangProdukIdItem extends Model
         return $this->hasOne(GudangQualityControll::class);
     }
 
+    public function historyPart()
+    {
+        return $this->hasOne(GudangHistoryPart::class);
+    }
+
+    public function historySplit()
+    {
+        return $this->hasOne(GudangHistorySplit::class);
+    }
+
+    public function gudangAdjustStock()
+    {
+        return $this->hasOne(gudangAdjustStock::class);
+    }
+
 }

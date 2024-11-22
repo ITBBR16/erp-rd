@@ -18,7 +18,7 @@ class GudangBelanjaServices
 {
 
     public function __construct(
-        private UmumRepository $nameDivisi,
+        private UmumRepository $umum,
         private ProdukRepository $produk,
         private GudangTransactionRepository $transaction,
         private GudangSupplierRepository $supplier,
@@ -31,7 +31,7 @@ class GudangBelanjaServices
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->nameDivisi->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $suppliers = $this->supplier->getSuppliers();
         $jenisProduk = $this->produk->getAllJenisProduct();
         $namaAkunBank = $this->akunBank->getNamaBank();
@@ -52,7 +52,7 @@ class GudangBelanjaServices
     public function editBelanja($id)
     {
         $user = auth()->user();
-        $divisiName = $this->nameDivisi->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $suppliers = $this->supplier->getSuppliers();
         $jenisProduk = $this->produk->getAllJenisProduct();
         $namaAkunBank = $this->akunBank->getNamaBank();

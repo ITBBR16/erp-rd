@@ -2,13 +2,17 @@
 
 namespace App\Repositories\gudang\repository;
 
+use App\Models\gudang\GudangHistoryPart;
+use App\Models\gudang\GudangHistorySplit;
 use App\Models\gudang\GudangProdukIdItem;
 use App\Repositories\gudang\interface\GudangProdukIdItemInterface;
 
 class GudangProdukIdItemRepository implements GudangProdukIdItemInterface
 {
     public function __construct(
-        private GudangProdukIdItem $idPart
+        private GudangProdukIdItem $idPart,
+        private GudangHistoryPart $historyPart,
+        private GudangHistorySplit $historySplit,
     ){}
 
     public function getListProdukIdItem()
@@ -21,7 +25,17 @@ class GudangProdukIdItemRepository implements GudangProdukIdItemInterface
         return $this->idPart->where('gudang_belanja_id', $idBelanja)->where('gudang_produk_id', $idProduk)->get();
     }
 
-    public function createIdItem(array $data)
+    public function getHistoryPart()
+    {
+        return $this->historyPart->all();
+    }
+
+    public function findIdItem($id)
+    {
+        return $this->idPart->find($id);
+    }
+
+    public function createIdItemBatch(array $data)
     {
         return $this->idPart->create($data);
     }
@@ -47,5 +61,15 @@ class GudangProdukIdItemRepository implements GudangProdukIdItemInterface
         }
 
         throw new \Exception('Id item not found.');
+    }
+
+    public function createHistoryPart(array $data)
+    {
+        return $this->historyPart->create($data);
+    }
+
+    public function createHistorySplit(array $data)
+    {
+        return $this->historySplit->create($data);
     }
 }

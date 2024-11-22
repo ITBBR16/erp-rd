@@ -14,10 +14,20 @@ class GudangBelanjaRepository implements GudangBelanjaInterface
         private GudangBelanjaDetail $gudangBelanjaDetail,
         private GudangMetodePembayaran $metodePembayaran,
     ){}
+    
+    public function indexBelanja()
+    {
+        return $this->gudangBelanja->all();
+    }
 
     public function findBelanja($id)
     {
         return $this->gudangBelanja->find($id);
+    }
+
+    public function getDetailBelanja($belanjaId, $sparepartId)
+    {
+        return $this->gudangBelanjaDetail->where('gudang_belanja_id', $belanjaId)->where('sparepart_id', $sparepartId)->get();
     }
 
     public function createMetodePembayaran(array $data)
@@ -82,11 +92,6 @@ class GudangBelanjaRepository implements GudangBelanjaInterface
         }
 
         throw new \Exception("List belanja not found.");
-    }
-
-    public function indexBelanja()
-    {
-        return $this->gudangBelanja->all();
     }
 
 }
