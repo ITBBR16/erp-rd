@@ -38,11 +38,6 @@ class RepairEstimasiReqSparepartController extends Controller
     public function update(Request $request, $id)
     {
         $resultReqPart = $this->serviceEstimasi->requestPartEstimasi($request, $id);
-
-        if ($resultReqPart['status'] == 'success') {
-            return back()->with('success', $resultReqPart['message']);
-        } else {
-            return back()->with('error', $resultReqPart['message']);
-        }
+        return back()->with($resultReqPart['status'], $resultReqPart['message']);
     }
 }

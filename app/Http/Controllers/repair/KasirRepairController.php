@@ -83,9 +83,9 @@ class KasirRepairController extends Controller
         $resultPelunasan = $this->caseService->createPelunasan($request, $id);
 
         if ($resultPelunasan['status'] == 'success') {
-            return redirect()->route('kasir-repair.index')->with('success', $resultPelunasan['message']);
+            return redirect()->route('kasir-repair.index')->with($resultPelunasan['status'], $resultPelunasan['message']);
         } else {
-            return back()->with('error', $resultPelunasan['message']);
+            return back()->with($resultPelunasan['status'], $resultPelunasan['message']);
         }
     }
 
@@ -94,21 +94,16 @@ class KasirRepairController extends Controller
         $resultPembayaran = $this->caseService->createPembayaran($request, $id);
 
         if ($resultPembayaran['status'] == 'success') {
-            return redirect()->route('kasir-repair.index')->with('success', $resultPembayaran['message']);
+            return redirect()->route('kasir-repair.index')->with($resultPembayaran['status'], $resultPembayaran['message']);
         } else {
-            return back()->with('error', $resultPembayaran['message']);
+            return back()->with($resultPembayaran['status'], $resultPembayaran['message']);
         }
     }
 
     public function createOngkirKasir(Request $request, $id)
     {
         $resultOngkir = $this->caseService->createOngkirKasir($request, $id);
-
-        if ($resultOngkir['status'] == 'success') {
-            return back()->with('success', $resultOngkir['message']);
-        } else {
-            return back()->with('error', $resultOngkir['message']);
-        }
+        return back()->with($resultOngkir['status'], $resultOngkir['message']);
     }
 
     public function previewPdfPelunasan($id)

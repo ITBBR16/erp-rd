@@ -37,22 +37,12 @@ class RepairPenerimaanPartEstimasiController extends Controller
     public function store(Request $request)
     {
         $resultPenerimaan = $this->serviceEstimasi->penerimaanSparepartEstimasi($request);
-
-        if ($resultPenerimaan['status'] == 'success') {
-            return back()->with('success', $resultPenerimaan['message']);
-        } else {
-            return back()->with('error', $resultPenerimaan['message']);
-        }
+        return back()->with($resultPenerimaan['status'], $resultPenerimaan['message']);
     }
 
     public function update(Request $request, $id)
     {
         $resultReqPart = $this->serviceEstimasi->requestPartEstimasi($request, $id);
-
-        if ($resultReqPart['status'] == 'success') {
-            return back()->with('success', $resultReqPart['message']);
-        } else {
-            return back()->with('error', $resultReqPart['message']);
-        }
+        return back()->with($resultReqPart['status'], $resultReqPart['message']);
     }
 }

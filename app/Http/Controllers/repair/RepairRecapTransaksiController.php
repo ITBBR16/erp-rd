@@ -48,23 +48,13 @@ class RepairRecapTransaksiController extends Controller
     public function store(Request $request)
     {
         $resultMS = $this->serviceAT->createMutasiSementara($request);
-
-        if ($resultMS['status'] == 'success') {
-            return back()->with('success', $resultMS['message']);
-        } else {
-            return back()->with('error', $resultMS['message']);
-        }
+        return back()->with($resultMS['status'], $resultMS['message']);
     }
 
     public function pencocokanMutasiTransaksi(Request $request)
     {
         $resultMerge = $this->serviceAT->createPencocokan($request);
-
-        if ($resultMerge['status'] == 'success') {
-            return back()->with('success', $resultMerge['message']);
-        } else {
-            return back()->with('error', $resultMerge['message']);
-        }
+        return back()->with($resultMerge['status'], $resultMerge['message']);
     }
 
     public function getSaldoAkhirMutasi($akunId)

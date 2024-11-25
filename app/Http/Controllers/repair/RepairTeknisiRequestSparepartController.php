@@ -38,11 +38,6 @@ class RepairTeknisiRequestSparepartController extends Controller
     public function update(Request $request, $id)
     {
         $resultReqSparepart = $this->teknisiService->createReqPartTeknisi($request, $id);
-
-        if ($resultReqSparepart['status'] == 'success') {
-            return back()->with('success', $resultReqSparepart['message']);
-        } else {
-            return back()->with('error', $resultReqSparepart['message']);
-        }
+        return back()->with($resultReqSparepart['status'], $resultReqSparepart['message']);
     }
 }

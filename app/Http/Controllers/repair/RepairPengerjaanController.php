@@ -38,22 +38,12 @@ class RepairPengerjaanController extends Controller
     public function update(Request $request, $id)
     {
         $resultJurnal = $this->repairTeknisi->createJurnalPengerjaan($request, $id);
-
-        if ($resultJurnal['status'] == 'success') {
-            return back()->with('success', $resultJurnal['message']);
-        } else {
-            return back()->with('error', $resultJurnal['message']);
-        }
+        return back()->with($resultJurnal['status'], $resultJurnal['message']);
     }
 
     public function changeStatusPengerjaan($id)
     {
         $resultStatus = $this->repairTeknisi->changeStatusPengerjaan($id);
-
-        if ($resultStatus['status'] == 'success') {
-            return back()->with('success', $resultStatus['message']);
-        } else {
-            return back()->with('error', $resultStatus['message']);
-        }
+        return back()->with($resultStatus['status'], $resultStatus['message']);
     }
 }

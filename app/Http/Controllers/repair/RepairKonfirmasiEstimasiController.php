@@ -70,46 +70,26 @@ class RepairKonfirmasiEstimasiController extends Controller
     public function addJurnalKonfirmasi(Request $request)
     {
         $resultJurnal = $this->serviceEstimasi->addJurnalKonfirmasi($request);
-
-        if ($resultJurnal['status'] == 'success') {
-            return back()->with('success', $resultJurnal['message']);
-        } else {
-            return back()->with('error', $resultJurnal['message']);
-        }
+        return back()->with($resultJurnal['status'], $resultJurnal['message']);
     }
 
     public function konfirmasiEstimasi(Request $request, $id)
     {
         $resultKE = $this->serviceEstimasi->konfirmasiEstimasi($request, $id);
-
-        if ($resultKE['status'] == 'success') {
-            return back()->with('success', $resultKE['message']);
-        } else {
-            return back()->with('error', $resultKE['message']);
-        }
+        return back()->with($resultKE['status'], $resultKE['message']);
     }
 
     public function konfirmasiPengerjaan($id)
     {
         $resultKP = $this->serviceEstimasi->konfirmasiPengerjaan($id);
-
-        if ($resultKP['status'] == 'success') {
-            return back()->with('success', $resultKP['message']);
-        } else {
-            return back()->with('error', $resultKP['message']);
-        }
+        return back()->with($resultKP['status'], $resultKP['message']);
     }
 
     public function kirimPesanEstimasi(Request $request)
     {
         $greeting = $this->showTimeForChat();
         $resultPesan = $this->serviceEstimasi->kirimPesanKonfirmasiEstimasi($request, $greeting);
-
-        if ($resultPesan['status'] == 'success') {
-            return back()->with('success', $resultPesan['message']);
-        } else {
-            return back()->with('error', $resultPesan['message']);
-        }
+        return back()->with($resultPesan['status'], $resultPesan['message']);
     }
 
     public function showTimeForChat()

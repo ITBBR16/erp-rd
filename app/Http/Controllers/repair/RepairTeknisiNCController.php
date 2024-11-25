@@ -39,13 +39,7 @@ class RepairTeknisiNCController extends Controller
     public function update($id)
     {
         $resultAmbilCase = $this->repairTeknisi->ambilCase($id);
-
-        if ($resultAmbilCase['status'] === 'success') {
-            return back()->with('success', $resultAmbilCase['message']);
-        } else {
-            return back()->with('error', $resultAmbilCase['message']);
-        }
-
+        return back()->with($resultAmbilCase['status'], $resultAmbilCase['message']);
     }
 
 }

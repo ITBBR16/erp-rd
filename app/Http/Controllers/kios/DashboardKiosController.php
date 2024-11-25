@@ -41,7 +41,7 @@ class DashboardKiosController extends Controller
         $typeGrowth = ($newCustomer >= $initialCustomer) ? 'Bertambah' : 'Berkurang';
         $growthPercentage = ($initialCustomer > 0) ? (($newCustomer - $initialCustomer) / $initialCustomer) * 100 : 0;
 
-        return view('kios.main.index', [
+        return view('kios.analisa.index', [
             'title' => 'Dashboard Analisa',
             'active' => 'dashboard-kios',
             'navActive' => 'analisa',

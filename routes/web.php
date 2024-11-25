@@ -1,5 +1,8 @@
 <?php
 
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\KiosDailyRecapExport;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
@@ -7,6 +10,7 @@ use App\Http\Controllers\kios\KiosPODPController;
 use App\Http\Controllers\kios\KiosShopController;
 use App\Http\Controllers\kios\KiosDashboardProduk;
 use App\Http\Controllers\kios\KiosKasirController;
+use App\Http\Controllers\repair\RepairQCController;
 use App\Http\Controllers\kios\KiosInputTSController;
 use App\Http\Controllers\kios\KiosPaymentController;
 use App\Http\Controllers\kios\KiosProductController;
@@ -15,60 +19,60 @@ use App\Http\Controllers\kios\KiosKomplainController;
 use App\Http\Controllers\kios\KiosSupplierController;
 use App\Http\Controllers\wilayah\KecamatanController;
 use App\Http\Controllers\wilayah\KelurahanController;
+use App\Http\Controllers\gudang\GudangLabelController;
 use App\Http\Controllers\kios\DashboardKiosController;
+use App\Http\Controllers\repair\KasirRepairController;
 use App\Http\Controllers\kios\KiosDailyRecapController;
 use App\Http\Controllers\kios\KiosPengirimanController;
 use App\Http\Controllers\kios\KiosShopSecondController;
 use App\Http\Controllers\customer\AddCustomerController;
+use App\Http\Controllers\gudang\GudangBelanjaController;
 use App\Http\Controllers\customer\DataCustomerController;
+use App\Http\Controllers\gudang\GudangSupplierController;
+use App\Http\Controllers\gudang\GudangUnboxingController;
+use App\Http\Controllers\repair\RepairListCaseController;
+use App\Http\Controllers\repair\RepairNonKasirController;
+use App\Http\Controllers\repair\ReviewCustomerController;
+use App\Http\Controllers\gudang\GudangSplitPartController;
 use App\Http\Controllers\kios\KiosProductSecondController;
+use App\Http\Controllers\repair\RepairProdukSedangDikirim;
+use App\Http\Controllers\repair\RepairTeknisiLCController;
+use App\Http\Controllers\repair\RepairTeknisiNCController;
+use App\Http\Controllers\gudang\GudangListProdukController;
+use App\Http\Controllers\gudang\GudangValidasiQCController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
+use App\Http\Controllers\repair\RepairPengerjaanController;
+use App\Http\Controllers\gudang\GudangAdjustStockController;
 use App\Http\Controllers\kios\KiosBuatPaketSecondController;
 use App\Http\Controllers\kios\KiosPenerimaanProdukController;
+use App\Http\Controllers\repair\RepairCustomerListController;
+use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\customer\DashboardCustomerController;
-use App\Http\Controllers\gudang\GudangAddNewSparepartController;
-use App\Http\Controllers\gudang\GudangAdjustStockController;
-use App\Http\Controllers\gudang\GudangBelanjaController;
-use App\Http\Controllers\gudang\GudangKomplainSupplierController;
-use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
-use App\Http\Controllers\gudang\GudangLabelController;
-use App\Http\Controllers\gudang\GudangListProdukController;
-use App\Http\Controllers\gudang\GudangPengirimanBelanjaController;
+use App\Http\Controllers\kios\KiosAnalisaDailyRecapController;
+use App\Http\Controllers\kios\KiosPengecekkanSecondController;
+use App\Http\Controllers\logistik\LogistikDashboardController;
+use App\Http\Controllers\repair\RepairEstimasiBiayaController;
 use App\Http\Controllers\gudang\GudangQualityControlController;
 use App\Http\Controllers\gudang\GudangRequestPaymentController;
 use App\Http\Controllers\gudang\GudangReturSparepartController;
-use App\Http\Controllers\gudang\GudangSplitPartController;
-use App\Http\Controllers\gudang\GudangSupplierController;
-use App\Http\Controllers\gudang\GudangUnboxingController;
-use App\Http\Controllers\gudang\GudangValidasiQCController;
-use App\Http\Controllers\kios\KiosPengecekkanSecondController;
-use App\Http\Controllers\logistik\LogistikDashboardController;
 use App\Http\Controllers\kios\KiosFilterProdukSecondController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
+use App\Http\Controllers\repair\RepairRecapTransaksiController;
+use App\Http\Controllers\gudang\GudangAddNewSparepartController;
+use App\Http\Controllers\repair\RepairTroubleshootingController;
+use App\Http\Controllers\gudang\GudangKomplainSupplierController;
+use App\Http\Controllers\repair\RepairRequestSparepartController;
+use App\Http\Controllers\gudang\GudangPengirimanBelanjaController;
 use App\Http\Controllers\kios\DashboardTechnicalSupportController;
 use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
-use App\Http\Controllers\logistik\LogistikValidasiProdukController;
-use App\Http\Controllers\repair\KasirRepairController;
-use App\Http\Controllers\repair\RepairCustomerListController;
-use App\Http\Controllers\repair\RepairEstimasiBiayaController;
-use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
-use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
-use App\Http\Controllers\repair\RepairKonfirmasiQCController;
 use App\Http\Controllers\repair\RepairKonfirmasiReqPartController;
-use App\Http\Controllers\repair\RepairListCaseController;
-use App\Http\Controllers\repair\RepairNonKasirController;
-use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
+use App\Http\Controllers\logistik\LogistikValidasiProdukController;
+use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
-use App\Http\Controllers\repair\RepairQCController;
-use App\Http\Controllers\repair\RepairPengerjaanController;
-use App\Http\Controllers\repair\RepairProdukSedangDikirim;
-use App\Http\Controllers\repair\RepairRecapTransaksiController;
-use App\Http\Controllers\repair\RepairRequestSparepartController;
-use App\Http\Controllers\repair\RepairTeknisiLCController;
-use App\Http\Controllers\repair\RepairTeknisiNCController;
+use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
+use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
+use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
-use App\Http\Controllers\repair\RepairTroubleshootingController;
-use App\Http\Controllers\repair\ReviewCustomerController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -91,8 +95,19 @@ Route::middleware('superadmin')->group(function () {
 Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
 
+        Route::get('/test-export', function () {
+            $export = new KiosDailyRecapExport();
+            return response()->json($export->collection());
+        });
+        Route::get('/download-recap', function () {
+            $timestamp = Carbon::now()->format('d M Y');
+            $fileName = "Kios Daily Recap - {$timestamp}.csv";
+            return Excel::download(new KiosDailyRecapExport, $fileName);
+        })->name('download.recap');
+
         Route::prefix('/analisa')->group(function () {
             Route::get('/dashboard', [DashboardKiosController::class, 'index']);
+            Route::get('/analisa-daily-recap', [KiosAnalisaDailyRecapController::class, 'index'])->name('analisa-dr');
             Route::get('/analisa-chart', [DashboardKiosController::class, 'analisaChart']);
         });
 

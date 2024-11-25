@@ -80,23 +80,13 @@ class RepairListCaseController extends Controller
     public function createNC(Request $request)
     {
         $result = $this->customerService->createNewCustomer($request);
-
-        if ($result['status'] === 'success') {
-            return back()->with('success', $result['message']);
-        } else {
-            return back()->with('error', $result['message']);
-        }
+        return back()->with($result['status'], $result['message']);
     }
 
     public function store(Request $request)
     {
         $resultCase = $this->repairCaseService->createNewCase($request);
-
-        if ($resultCase['status'] === 'success') {
-            return back()->with('success', $resultCase['message']);
-        } else {
-            return back()->with('error', $resultCase['message']);
-        }
+        return back()->with($resultCase['status'], $resultCase['message']);
     }
 
     public function reviewPdfTandaTerima($id)
@@ -114,12 +104,7 @@ class RepairListCaseController extends Controller
     public function kirimTandaTerimaCustomer($id)
     {
         $resultTandaTerima = $this->repairCaseService->kirimTandaTerimaCustomer($id);
-
-        if ($resultTandaTerima['status'] == 'success') {
-            return back()->with('success', $resultTandaTerima['message']);
-        } else {
-            return back()->with('error', $resultTandaTerima['message']);
-        }
+        return back()->with($resultTandaTerima['status'], $resultTandaTerima['message']);
     }
 
     public function getKelengkapan($id)

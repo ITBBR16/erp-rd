@@ -59,21 +59,16 @@ class RepairEstimasiBiayaController extends Controller
         $resultEstimasi = $this->serviceEstimasi->createEstimasi($request, $id);
 
         if ($resultEstimasi['status'] === 'success') {
-            return redirect()->route('estimasi-biaya.index')->with('success', $resultEstimasi['message']);
+            return redirect()->route('estimasi-biaya.index')->with($resultEstimasi['status'], $resultEstimasi['message']);
         } else {
-            return back()->with('error', $resultEstimasi['message']);
+            return back()->with($resultEstimasi['status'], $resultEstimasi['message']);
         }
     }
 
     public function inputJurnalEstimasi(Request $request)
     {
         $resultJurnal = $this->serviceEstimasi->addJurnalEstimasi($request);
-
-        if ($resultJurnal['status'] === 'success') {
-            return back()->with('success', $resultJurnal['message']);
-        } else {
-            return back()->with('error', $resultJurnal['message']);
-        }
+        return back()->with($resultJurnal['status'], $resultJurnal['message']);
     }
 
     public function getJenisDrone($jenisTransaksi)

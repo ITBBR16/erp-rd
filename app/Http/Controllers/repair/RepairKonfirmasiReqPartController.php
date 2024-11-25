@@ -37,12 +37,7 @@ class RepairKonfirmasiReqPartController extends Controller
     public function store(Request $request)
     {
         $resultKonfReqPart = $this->serviceEstimasi->konfirmasiReqPart($request);
-
-        if ($resultKonfReqPart['status'] == 'success') {
-            return back()->with('success', $resultKonfReqPart['message']);
-        } else {
-            return back()->with('error', $resultKonfReqPart['message']);
-        }
+        return back()->with($resultKonfReqPart['status'], $resultKonfReqPart['message']);
     }
 
     public function getListPart($id)

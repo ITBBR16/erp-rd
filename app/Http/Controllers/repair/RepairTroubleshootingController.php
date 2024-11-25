@@ -38,23 +38,13 @@ class RepairTroubleshootingController extends Controller
     public function update(Request $request, $id)
     {
         $resultJurnal = $this->repairTeknisi->createJurnal($request, $id);
-
-        if ($resultJurnal['status'] === 'success') {
-            return back()->with('success', $resultJurnal['message']);
-        } else {
-            return back()->with('error', $resultJurnal['message']);
-        }
+        return back()->with($resultJurnal['status'], $resultJurnal['message']);
     }
 
     public function changeStatus($id)
     {
         $resultJurnal = $this->repairTeknisi->changeStatus($id);
-
-        if ($resultJurnal['status'] === 'success') {
-            return back()->with('success', $resultJurnal['message']);
-        } else {
-            return back()->with('error', $resultJurnal['message']);
-        }
+        return back()->with($resultJurnal['status'], $resultJurnal['message']);
     }
 
 }

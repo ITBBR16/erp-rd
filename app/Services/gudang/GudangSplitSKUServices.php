@@ -11,7 +11,7 @@ use App\Repositories\gudang\repository\GudangTransactionRepository;
 use Exception;
 use Illuminate\Http\Request;
 
-class GUdangSplitSKUServices
+class GudangSplitSKUServices
 {
     public function __construct(
         private UmumRepository $umum,

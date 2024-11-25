@@ -37,23 +37,13 @@ class RepairKonfirmasiQCController extends Controller
     public function update($id)
     {
         $resultKonfQC = $this->caseService->konfirmasiQc($id);
-
-        if ($resultKonfQC['status'] == 'success') {
-            return back()->with('success', $resultKonfQC['message']);
-        } else {
-            return back()->with('error', $resultKonfQC['message']);
-        }
+        return back()->with($resultKonfQC['status'], $resultKonfQC['message']);
     }
 
     public function sendKonfirmasiQC($id)
     {
         $resultSend = $this->caseService->sendKonfirmasiQC($id);
-
-        if ($resultSend['status'] == 'success') {
-            return back()->with('success', $resultSend['message']);
-        } else {
-            return back()->with('error', $resultSend['message']);
-        }
+        return back()->with($resultSend['status'], $resultSend['message']);
     }
 
     public function previewPdfQc($id)

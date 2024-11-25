@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\gudang;
 
 use App\Http\Controllers\Controller;
-use App\Services\gudang\GUdangSplitSKUServices;
+use App\Services\gudang\GudangSplitSKUServices;
 use Illuminate\Http\Request;
 
 class GudangSplitPartController extends Controller
 {
     public function __construct(
-        private GUdangSplitSKUServices $split
+        private GudangSplitSKUServices $split
     ){}
 
     public function index()
