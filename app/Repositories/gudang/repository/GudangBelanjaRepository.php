@@ -27,7 +27,7 @@ class GudangBelanjaRepository implements GudangBelanjaInterface
 
     public function getDetailBelanja($belanjaId, $sparepartId)
     {
-        return $this->gudangBelanjaDetail->where('gudang_belanja_id', $belanjaId)->where('sparepart_id', $sparepartId)->get();
+        return $this->gudangBelanjaDetail->where('gudang_belanja_id', $belanjaId)->where('sparepart_id', $sparepartId)->first();
     }
 
     public function createMetodePembayaran(array $data)

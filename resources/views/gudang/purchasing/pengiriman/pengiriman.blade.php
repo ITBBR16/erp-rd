@@ -6,12 +6,12 @@
             <div class="flex text-xl">
                 <span class="text-gray-700 font-semibold dark:text-gray-300">List Pengiriman</span>
             </div>
-            <div class="relative text-xl">
+            {{-- <div class="relative text-xl">
                 <button type="button" data-modal-target="add-resi" data-modal-toggle="add-resi" class="flex text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 dark:focus:ring-indigo-800">
                     <span class="material-symbols-outlined">receipt_long</span>
                     <span class="ml-2"> Add Resi</span>
                 </button>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -101,6 +101,6 @@
         </table>
     </div>
     {{-- Modal Input Resi --}}
-    @include('gudang.purchasing.modal.add-resi')
+    {{-- @include('gudang.purchasing.modal.add-resi') --}}
     @include('gudang.purchasing.modal.create-resi')
 @endsection
