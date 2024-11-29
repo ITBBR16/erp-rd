@@ -50,7 +50,7 @@
                             {{ $case->jenisCase->jenis_case }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $case->customer->first_name }} {{ $case->customer->last_name }}
+                            {{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->customer->id }}
                         </td>
                         <td class="px-6 py-2">
                             {{ $case->jenisProduk->jenis_produk }}

@@ -70,7 +70,7 @@ class GudangValidasiServices
 
             $findProduk = $this->produk->findBySparepart($sparepartId);
             $findDetailBelanja = $this->belanja->getDetailBelanja($belnajaId, $sparepartId);
-            dd($findProduk->modal_awal);
+            
             $modalAwal = $findProduk->modal_awal;
             $hargaPcs = $findDetailBelanja->nominal_pcs;
             $modalProduk = 0;

@@ -67,6 +67,7 @@ class RepairListCaseController extends Controller
             'title' => 'Edit Case List',
             'active' => 'list-case',
             'navActive' => 'csr',
+            'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
             'dataProvinsi' => $dataProvinsi,

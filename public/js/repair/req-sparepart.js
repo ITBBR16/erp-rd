@@ -4,22 +4,22 @@ function formatAngka(angka) {
 
 $(document).ready(function () {
     let uniqueCount = 1;
-    let cacheJDG = {};
-    let cachePart = {};
+    // let cacheJDG = {};
+    // let cachePart = {};
 
-    function loadCachedData() {
-        let cachedData = localStorage.getItem('cacheJDG');
-        if (cachedData) {
-            cacheJDG = JSON.parse(cachedData);
-        }
+    // function loadCachedData() {
+    //     let cachedData = localStorage.getItem('cacheJDG');
+    //     if (cachedData) {
+    //         cacheJDG = JSON.parse(cachedData);
+    //     }
         
-        let cachedPartData = localStorage.getItem('cachePart');
-        if (cachedPartData) {
-            cachePart = JSON.parse(cachedPartData);
-        }
-    }
+    //     let cachedPartData = localStorage.getItem('cachePart');
+    //     if (cachedPartData) {
+    //         cachePart = JSON.parse(cachedPartData);
+    //     }
+    // }
 
-    loadCachedData();
+    // loadCachedData();
 
     // Req CSR & Estimasi
 
@@ -83,11 +83,11 @@ $(document).ready(function () {
         parentReqCsr.append(itemFormReq);
         buttonCheckCsr(dataId);
 
-        if (cacheJDG[jenisTransaksi]) {
-            getCacheJDG(cacheJDG[jenisTransaksi], formId);
-        } else {
-            getJenisDroneGudang(jenisTransaksi, formId);
-        }
+        // if (cacheJDG[jenisTransaksi]) {
+        //     getCacheJDG(cacheJDG[jenisTransaksi], formId);
+        // } else {
+        //     getJenisDroneGudang(jenisTransaksi, formId);
+        // }
     });
 
     $(document).on('input', '.format-angka-req-part', function () {
@@ -172,11 +172,11 @@ $(document).ready(function () {
         parentReqTeknisi.append(itemFormReq);
         buttonCheckTeknisi(dataId);
 
-        if (cacheJDG[jenisTransaksi]) {
-            getCacheJDG(cacheJDG[jenisTransaksi], formId);
-        } else {
-            getJenisDroneGudang(jenisTransaksi, formId);
-        }
+        // if (cacheJDG[jenisTransaksi]) {
+        //     getCacheJDG(cacheJDG[jenisTransaksi], formId);
+        // } else {
+        // }
+        // getJenisDroneGudang(formId);
     });
 
     $(document).on('change', '.req-jenis-produk-teknisi', function () {
@@ -211,36 +211,36 @@ $(document).ready(function () {
 
     // All function combine req sparepart
 
-    function getJenisDroneGudang(jenisTransaksi, formId) {
-        fetch(`/repair/estimasi/jenisDroneGudang/${jenisTransaksi}`)
-        .then(response => response.json())
-        .then(data => {
-            cacheJDG[jenisTransaksi] = data;
-            localStorage.setItem('cacheJDG', JSON.stringify(cacheJDG));
-            getCacheJDG(data, formId);
-        });
-    }
+    // function getJenisDroneGudang(jenisTransaksi, formId) {
+    //     fetch(`/repair/estimasi/jenisDroneGudang/${jenisTransaksi}`)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         cacheJDG[jenisTransaksi] = data;
+    //         localStorage.setItem('cacheJDG', JSON.stringify(cacheJDG));
+    //         getCacheJDG(data, formId);
+    //     });
+    // }
 
-    function getCacheJDG(data, formId) {
-        var selectJP = $('#' + formId);
-        selectJP.empty();
+    // function getCacheJDG(data, formId) {
+    //     var selectJP = $('#' + formId);
+    //     selectJP.empty();
 
-        const defaultOption = $('<option>', {
-            text: 'Pilih Jenis Produk',
-            value: '',
-            hidden: true
-        });
-        selectJP.append(defaultOption);
+    //     const defaultOption = $('<option>', {
+    //         text: 'Pilih Jenis Produk',
+    //         value: '',
+    //         hidden: true
+    //     });
+    //     selectJP.append(defaultOption);
 
-        data.forEach(produk => {
-            const option = $('<option>', {
-                value: produk.jenisDrone,
-                text: produk.jenisDrone
-            })
-            .addClass('dark:bg-gray-700');
-            selectJP.append(option);
-        });
-    }
+    //     data.forEach(produk => {
+    //         const option = $('<option>', {
+    //             value: produk.jenisDrone,
+    //             text: produk.jenisDrone
+    //         })
+    //         .addClass('dark:bg-gray-700');
+    //         selectJP.append(option);
+    //     });
+    // }
 
     function getNamaPartGudang(jenisTransaksi, formId, jenisDrone) {
         fetch(`/repair/estimasi/getPartGudang/${jenisTransaksi}/${jenisDrone}`)

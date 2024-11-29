@@ -2,7 +2,7 @@
 
 @section('container')
     <nav class="flex">
-        <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+        <ol class="inline-flex items-center mt-2 space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li class="flex items-center">
                 <a href="{{ route("case-list.index") }}" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                     <span class="material-symbols-outlined text-base mr-2.5">list_alt</span>
@@ -37,7 +37,7 @@
 
     <form action="#" method="POST" autocomplete="off">
         @csrf
-        <div class="grid grid-cols-2 gap-8">
+        <div class="grid grid-cols-2 gap-8 mt-4">
             {{-- Form Data Customer --}}
             <div>
                 <div class="mb-4 pb-2">

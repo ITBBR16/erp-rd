@@ -26,7 +26,7 @@ class GudangBelanjaServices
         private GudangRequestPaymentRepository $payment,
         private GudangPengirimanRepository $pengiriman,
         private AkuntanTransaksiRepository $akunBank,
-        ){}
+    ){}
 
     public function index()
     {

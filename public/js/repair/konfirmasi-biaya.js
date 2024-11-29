@@ -130,7 +130,7 @@ $(document).ready(function () {
             $('#estimasi-jpj-container-' + formId).append(itemJpPart)
             $('#estimasi-part-jasa-container-' + formId).append(itemNpjPart)
 
-            getJenisDroneGudang(jenisTransaksi, formId);
+            // getJenisDroneGudang(jenisTransaksi, formId);
         } else {
             let itemJpJasa = `<input type="text" name="jenis_part_jasa[]" id="estimasi-jp-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa">`
             let itemNpjJasa = `<input type="text" name="nama_part_jasa[]" id="estimasi-part-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa">`
@@ -207,31 +207,31 @@ $(document).ready(function () {
         });
     });
 
-    function getJenisDroneGudang(jenisTransaksi, formId) {
-        var inputJP = $('#estimasi-jp-' + formId);
-        fetch(`/repair/estimasi/jenisDroneGudang/${jenisTransaksi}`)
-        .then(response => response.json())
-        .then(data => {
-            inputJP.empty();
+    // function getJenisDroneGudang(jenisTransaksi, formId) {
+    //     var inputJP = $('#estimasi-jp-' + formId);
+    //     fetch(`/repair/estimasi/jenisDroneGudang/${jenisTransaksi}`)
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         inputJP.empty();
 
-            const defaultOption = $('<option>', {
-                text: 'Pilih Jenis Produk',
-                value: '',
-                hidden: true
-            });
-            inputJP.append(defaultOption);
+    //         const defaultOption = $('<option>', {
+    //             text: 'Pilih Jenis Produk',
+    //             value: '',
+    //             hidden: true
+    //         });
+    //         inputJP.append(defaultOption);
 
-            data.forEach(produk => {
-                const option = $('<option>', {
-                    value: produk.jenisDrone,
-                    text: produk.jenisDrone
-                })
-                .addClass('dark:bg-gray-700')
-                inputJP.append(option)
-            });
+    //         data.forEach(produk => {
+    //             const option = $('<option>', {
+    //                 value: produk.jenisDrone,
+    //                 text: produk.jenisDrone
+    //             })
+    //             .addClass('dark:bg-gray-700')
+    //             inputJP.append(option)
+    //         });
 
-        });
-    }
+    //     });
+    // }
 
     function getNamaPart(jenisTransaksi, formId, jenisDrone) {
         var inputPart = $('#estimasi-part-' + formId);

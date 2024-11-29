@@ -47,14 +47,23 @@ class RepairTeknisiService
         $employeeId = auth()->user()->id;
 
         try {
+            // Validasi Input
+            $request->validate([
+                'jurnal_troubleshooting' => 'required|string',
+                'link_doc' => 'required|url',
+                'files_troubleshooting.*' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
+            ]);
+
             $tglWaktu = Carbon::now();
             $jurnalTS = $request->input('jurnal_troubleshooting');
             $linkDrive = $request->input('link_doc');
             $imgTS = $request->file('files_troubleshooting');
-            $encodedFiles = [];
 
-            foreach ($imgTS as $file) {
-                $encodedFiles[] = base64_encode($file->get());
+            $encodedFiles = [];
+            if ($imgTS) {
+                foreach ($imgTS as $file) {
+                    $encodedFiles[] = base64_encode(file_get_contents($file->getPathname()));
+                }
             }
 
             $payload = [
@@ -65,22 +74,22 @@ class RepairTeknisiService
 
             $urlApi = 'https://script.google.com/macros/s/AKfycbygVDxzRgXbmbMBgCl3G5MZU7ZGMuMP9HO2xARk3_GQXI19JVflcUeQK6kLnXN31o6F/exec';
             $response = Http::post($urlApi, $payload);
+
+            if ($response->failed()) {
+                throw new Exception('Gagal mengirim data ke Google Drive.');
+            }
+
             $dataResponse = json_decode($response->body(), true);
-            $status = $dataResponse['status'];
+            if ($dataResponse['status'] !== 'success') {
+                throw new Exception($dataResponse['message'] ?? 'Terjadi kesalahan pada API.');
+            }
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 2);
-
-            if ($checkTimestamp) {
-                $timestamp = $checkTimestamp;
-            } else {
-                $dataTimestamp = [
-                    'case_id' => $id,
-                    'jenis_status_id' => 2,
-                    'tanggal_waktu' => $tglWaktu,
-                ];
-    
-                $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
-            }
+            $timestamp = $checkTimestamp ?? $this->repairTimeJurnal->createTimestamp([
+                'case_id' => $id,
+                'jenis_status_id' => 2,
+                'tanggal_waktu' => $tglWaktu,
+            ]);
 
             $dataJurnal = [
                 'employee_id' => $employeeId,
@@ -88,7 +97,6 @@ class RepairTeknisiService
                 'timestamps_status_id' => $timestamp->id,
                 'isi_jurnal' => $jurnalTS,
             ];
-
             $this->repairTimeJurnal->addJurnal($dataJurnal);
 
             $this->repairTeknisi->commitTransaction();

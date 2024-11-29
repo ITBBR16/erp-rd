@@ -40,7 +40,7 @@ class CustomerService
                 'email' => 'nullable|email:dns',
                 'instansi' => 'max:50',
                 'provinsi' => 'required',
-                'nama_jalan' => 'required|max:255'
+                'nama_jalan' => 'max:255'
             ]);
 
             $validate['by_divisi'] = $divisiId;

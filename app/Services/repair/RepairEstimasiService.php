@@ -7,19 +7,58 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use App\Repositories\umum\UmumRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\repair\repository\RepairEstimasiRepository;
 use App\Repositories\repair\repository\RepairTimeJurnalRepository;
+use App\Repositories\umum\repository\ProdukRepository;
 
 class RepairEstimasiService
 {
-    protected $repairCase, $repairEstimasi, $repairTimeJurnal;
+    public function __construct(
+        private UmumRepository $nameDivisi,
+        private ProdukRepository $produk,
+        private RepairCaseService $repairCaseService, 
+        private RepairCaseRepository $repairCase, 
+        private RepairEstimasiRepository $repairEstimasi, 
+        private RepairTimeJurnalRepository $repairTimeJurnal)
+    {}
 
-    public function __construct(RepairCaseRepository $repairCaseRepository, RepairEstimasiRepository $repairEstimasiRepository, RepairTimeJurnalRepository $repairTimeJurnalRepository)
+    public function index()
     {
-        $this->repairCase = $repairCaseRepository;
-        $this->repairEstimasi = $repairEstimasiRepository;
-        $this->repairTimeJurnal = $repairTimeJurnalRepository;
+        $user = auth()->user();
+        $caseService = $this->repairCaseService->getDataDropdown();
+        $divisiName = $this->nameDivisi->getDivisi($user);
+        $dataCase = $caseService['data_case'];
+
+        return view('repair.estimasi.estimasi-biaya', [
+            'title' => 'List Estimasi Biaya',
+            'active' => 'estimasi-biaya',
+            'navActive' => 'estimasi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+        ]);
+    }
+
+    public function pageEstimasi($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $jenisTransaksi = $this->dataJenisTransaksi();
+        $dataCase = $this->repairCaseService->findCase($id);
+        $divisiName = $this->nameDivisi->getDivisi($user);
+
+        return view('repair.estimasi.edit.form-estimasi-biaya', [
+            'title' => 'List Estimasi Biaya',
+            'active' => 'estimasi-biaya',
+            'navActive' => 'estimasi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+            'jenisTransaksi' => $jenisTransaksi,
+        ]);
+
     }
 
     public function dataJenisTransaksi()
@@ -734,49 +773,14 @@ class RepairEstimasiService
     }
 
     // Function get data
-    public function getJenisDrone($jenisTransaksi)
+    public function getJenisDrone()
     {
-        $urlAPi = 'https://script.google.com/macros/s/AKfycbx0RQkM6hdlvBlaO6Hyt1NpK5e3c5Mbj5m-3u4AoZsgtSF49e5MHfNK6mSnzU_8mpB5/exec';
-        $response = Http::post($urlAPi, [
-            'status' => $jenisTransaksi,
-            'jenisDrone' => '',
-            'sku' => '',
-        ]);
-
-        $data = $response->json();
-        $resultData = [];
-
-        foreach ($data['data'] as $part) {
-            $dataPart = [
-                'jenisDrone' => $part,
-            ];
-            $resultData[] = $dataPart;
-        }
-
-        return response()->json($resultData);
+        return $this->produk->getAllJenisProduct();
     }
-
-    public function getNamaPart($jenisTransaksi, $jenisDrone)
+    
+    public function getNamaPart($jenisDrone)
     {
-        $urlAPi = 'https://script.google.com/macros/s/AKfycbx0RQkM6hdlvBlaO6Hyt1NpK5e3c5Mbj5m-3u4AoZsgtSF49e5MHfNK6mSnzU_8mpB5/exec';
-        $response = Http::post($urlAPi, [
-            'status' => $jenisTransaksi,
-            'jenisDrone' => $jenisDrone,
-            'sku' => '',
-        ]);
-
-        $data = $response->json();
-        $resultData = [];
-
-        foreach ($data['data'] as $part) {
-            $dataPart = [
-                'sku' => $part[0],
-                'namaPart' => $part[2],
-            ];
-            $resultData[] = $dataPart;
-        }
-
-        return response()->json($resultData);
+        return $this->produk->getSparepartbyJenis($jenisDrone);
     }
 
     public function getDetailPart($jenisTransaksi, $sku)

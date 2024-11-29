@@ -10,48 +10,18 @@ use App\Services\repair\RepairEstimasiService;
 
 class RepairEstimasiBiayaController extends Controller
 {
-    protected $repairCaseService, $serviceEstimasi;
-    public function __construct(private UmumRepository $nameDivisi, RepairCaseService $repairCaseService, RepairEstimasiService $repairEstimasiService)
-    {
-        $this->repairCaseService = $repairCaseService;
-        $this->serviceEstimasi = $repairEstimasiService;
-    }
+    public function __construct(
+        private RepairEstimasiService $serviceEstimasi)
+    {}
 
     public function index()
     {
-        $user = auth()->user();
-        $caseService = $this->repairCaseService->getDataDropdown();
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        $dataCase = $caseService['data_case'];
-
-        return view('repair.estimasi.estimasi-biaya', [
-            'title' => 'List Estimasi Biaya',
-            'active' => 'estimasi-biaya',
-            'navActive' => 'estimasi',
-            'dropdown' => '',
-            'divisi' => $divisiName,
-            'dataCase' => $dataCase,
-        ]);
-
+        return $this->serviceEstimasi->index();
     }
 
     public function edit($encryptId)
     {
-        $id = decrypt($encryptId);
-        $user = auth()->user();
-        $jenisTransaksi = $this->serviceEstimasi->dataJenisTransaksi();
-        $dataCase = $this->repairCaseService->findCase($id);
-        $divisiName = $this->nameDivisi->getDivisi($user);
-
-        return view('repair.estimasi.edit.form-estimasi-biaya', [
-            'title' => 'List Estimasi Biaya',
-            'active' => 'estimasi-biaya',
-            'navActive' => 'estimasi',
-            'divisi' => $divisiName,
-            'dataCase' => $dataCase,
-            'jenisTransaksi' => $jenisTransaksi,
-        ]);
-
+        return $this->serviceEstimasi->pageEstimasi($encryptId);
     }
 
     public function update(Request $request, $id)
@@ -71,14 +41,14 @@ class RepairEstimasiBiayaController extends Controller
         return back()->with($resultJurnal['status'], $resultJurnal['message']);
     }
 
-    public function getJenisDrone($jenisTransaksi)
+    public function getJenisDrone()
     {
-        return $this->serviceEstimasi->getJenisDrone($jenisTransaksi);
+        return $this->serviceEstimasi->getJenisDrone();
     }
 
-    public function getPartGudang($jenisTransaksi, $jenisDrone)
+    public function getPartGudang($jenisDrone)
     {
-        return $this->serviceEstimasi->getNamaPart($jenisTransaksi, $jenisDrone);
+        return $this->serviceEstimasi->getNamaPart($jenisDrone);
     }
 
     public function getDetailGudang($jenisTransaksi, $sku)

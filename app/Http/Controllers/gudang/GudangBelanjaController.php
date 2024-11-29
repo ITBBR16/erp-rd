@@ -8,11 +8,9 @@ use App\Services\gudang\GudangBelanjaServices;
 
 class GudangBelanjaController extends Controller
 {
-    protected $belanjaService;
-    public function __construct(GudangBelanjaServices $gudangBelanjaService)
-    {
-        $this->belanjaService = $gudangBelanjaService;
-    }
+    public function __construct(
+        private GudangBelanjaServices $belanjaService
+    ){}
 
     public function index()
     {
@@ -30,12 +28,7 @@ class GudangBelanjaController extends Controller
     public function store(Request $request)
     {
         $resultBelanja = $this->belanjaService->createBelanja($request);
-
-        if ($resultBelanja['status'] == 'success') {
-            return back()->with('success', $resultBelanja['message']);
-        } else {
-            return back()->with('error', $resultBelanja['message']);
-        }
+        return back()->with($resultBelanja['status'], $resultBelanja['message']);
     }
 
     public function update(Request $request, $id)
@@ -52,12 +45,7 @@ class GudangBelanjaController extends Controller
     public function requestPaymentBelanja($id)
     {
         $resultPayment = $this->belanjaService->requestPayment($id);
-
-        if ($resultPayment['status'] == 'success') {
-            return back()->with('success', $resultPayment['message']);
-        } else {
-            return back()->with('error', $resultPayment['message']);
-        }
+        return back()->with($resultPayment['status'], $resultPayment['message']);
     }
 
     public function getSparepartByJenis($id)

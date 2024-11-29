@@ -105,7 +105,7 @@
                         <div id="dropdownTS{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTroubleshooting{{ $case->id }}">
                                 <li>
-                                    <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="detail-troubleshooting-{{ $case->id }}" data-modal-toggle="detail-troubleshooting-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">visibility</span>
                                         <span class="whitespace-nowrap">Detail</span>
                                     </button>
@@ -116,12 +116,14 @@
                                         <span class="whitespace-nowrap">Add Jurnal</span>
                                     </button>
                                 </li>
-                                <li>
-                                    <button type="button" data-modal-target="lanjut-estimasi-{{ $case->id }}" data-modal-toggle="lanjut-estimasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">find_replace</span>
-                                        <span class="whitespace-nowrap">Lanjut Estimasi</span>
-                                    </button>
-                                </li>
+                                @if ($case->timestampStatus->contains('jenis_status_id', 2))
+                                    <li>
+                                        <button type="button" data-modal-target="lanjut-estimasi-{{ $case->id }}" data-modal-toggle="lanjut-estimasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">find_replace</span>
+                                            <span class="whitespace-nowrap">Lanjut Estimasi</span>
+                                        </button>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                     @endif
@@ -134,6 +136,7 @@
     </div>
 
     {{-- Modal --}}
+    @include('repair.teknisi.modal.detail-troubleshooting')
     @include('repair.teknisi.modal.add-jurnal-ts')
     @include('repair.teknisi.modal.lanjut-estimasi')
 

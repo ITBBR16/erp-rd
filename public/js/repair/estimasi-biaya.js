@@ -130,7 +130,7 @@ $(document).ready(function () {
             $('#estimasi-jpj-container-' + formId).append(itemJpPart)
             $('#estimasi-part-jasa-container-' + formId).append(itemNpjPart)
 
-            getJenisDroneGudang(jenisTransaksi, formId);
+            getJenisDrone(formId);
         } else {
             let itemJpJasa = `<input type="text" name="jenis_part_jasa[]" id="estimasi-jp-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa">`
             let itemNpjJasa = `<input type="text" name="nama_part_jasa[]" id="estimasi-part-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa">`
@@ -146,7 +146,7 @@ $(document).ready(function () {
         var jenisTransaksi = $('#estimasi-jt-' + jpId + ' option:selected').text();
         
         if (jenisTransaksi  == 'P.Baru' || jenisTransaksi == 'P.Bekas') {
-            getNamaPart(jenisTransaksi, jpId, jpValue);
+            getNamaPart(jpId, jpValue);
         }
     });
 
@@ -164,9 +164,9 @@ $(document).ready(function () {
         }
     });
 
-    function getJenisDroneGudang(jenisTransaksi, formId) {
+    function getJenisDrone(formId) {
         var inputJP = $('#estimasi-jp-' + formId);
-        fetch(`/repair/estimasi/jenisDroneGudang/${jenisTransaksi}`)
+        fetch(`/repair/estimasi/jenisDrone`)
         .then(response => response.json())
         .then(data => {
             inputJP.empty();
@@ -180,8 +180,8 @@ $(document).ready(function () {
 
             data.forEach(produk => {
                 const option = $('<option>', {
-                    value: produk.jenisDrone,
-                    text: produk.jenisDrone
+                    value: produk.id,
+                    text: produk.jenis_produk
                 })
                 .addClass('dark:bg-gray-700')
                 inputJP.append(option)
@@ -190,9 +190,9 @@ $(document).ready(function () {
         });
     }
 
-    function getNamaPart(jenisTransaksi, formId, jenisDrone) {
+    function getNamaPart(formId, jenisDrone) {
         var inputPart = $('#estimasi-part-' + formId);
-        fetch(`/repair/estimasi/getPartGudang/${jenisTransaksi}/${jenisDrone}`)
+        fetch(`/repair/estimasi/getPartGudang/${jenisDrone}`)
         .then(response => response.json())
         .then(data => {
             inputPart.empty();
@@ -206,8 +206,8 @@ $(document).ready(function () {
 
             data.forEach(part => {
                 const option = $('<option>', {
-                    value: part.sku,
-                    text: part.namaPart
+                    value: part.id,
+                    text: part.nama_internal
                 })
                 .addClass('dark:bg-gray-700')
                 inputPart.append(option)

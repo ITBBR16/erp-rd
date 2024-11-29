@@ -146,7 +146,7 @@
                         </div>
                         <div class="border mt-2 p-2 text-sm0">
                             @foreach ($dataCase->timestampStatus as $timeStamp)
-                                @foreach ($timeStamp->jurnal->where('timestamps_status_id', 2)->sortByDesc('created_at')->take(1) as $jurnal)
+                                @foreach ($timeStamp->jurnal->sortByDesc('created_at')->take(1) as $jurnal)
                                     {!! nl2br(e($jurnal->isi_jurnal)) !!}
                                 @endforeach
                             @endforeach

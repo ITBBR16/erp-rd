@@ -322,8 +322,8 @@ Route::middleware('repair')->group(function () {
             Route::group(['controller' => RepairEstimasiBiayaController::class], function () {
                 Route::resource('/estimasi-biaya', RepairEstimasiBiayaController::class)->only(['index', 'update', 'edit']);
                 Route::post('/addJurnalEstimasi', 'inputJurnalEstimasi')->name('addJurnalEstimasi');
-                Route::get('/jenisDroneGudang/{jenisTransaksi}', 'getJenisDrone');
-                Route::get('/getPartGudang/{jenisTransaksi}/{jenisDrone}', 'getPartGudang');
+                Route::get('/jenisDrone', 'getJenisDrone');
+                Route::get('/getPartGudang/{jenisDrone}', 'getPartGudang');
                 Route::get('/getDetailGudang/{jenisTransaksi}/{sku}', 'getDetailGudang');
             });
 

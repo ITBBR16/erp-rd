@@ -20,6 +20,7 @@
                         <div class="px-6 py-6 lg:px-8">
                             @csrf
                             @method('PUT')
+                            <input type="hidden" name="link_doc" value="{{ $case->link_doc }}">
                             <div class="grid gap-6 mb-6 md:grid-cols-2">
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">Nama Customer</p>
@@ -36,7 +37,7 @@
                             </div>
                             <div class="mb-6">
                                 <label for="jurnal-ts-{{ $case->id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jurnal</label>
-                                <textarea name="jurnal_troubleshooting" id="jurnal-ts-{{ $case->id }}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Isi Jurnal . . ."></textarea>
+                                <textarea name="jurnal_troubleshooting" id="jurnal-ts-{{ $case->id }}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Isi Jurnal . . ." required></textarea>
                             </div>
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Files Troubleshooting :</label>
                             <div class="flex items-center justify-center w-full">
@@ -49,7 +50,7 @@
                                         <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
                                     </div>
                                     <div id="selected-files-ts-{{ $case->id }}" class="flex flex-wrap justify-evenly" style="display: none"></div>
-                                    <input name="files_troubleshooting[]" id="files-troubleshooting-{{ $case->id }}" data-id="{{ $case->id }}" type="file" class="hidden file-upload" multiple>
+                                    <input name="files_troubleshooting[]" id="files-troubleshooting-{{ $case->id }}" data-id="{{ $case->id }}" type="file" class="hidden file-upload" multiple required>
                                 </label>
                             </div>
                         </div>
