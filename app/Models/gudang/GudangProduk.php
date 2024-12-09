@@ -3,6 +3,7 @@
 namespace App\Models\gudang;
 
 use App\Models\produk\ProdukSparepart;
+use App\Models\repair\RepairEstimasi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,5 +23,10 @@ class GudangProduk extends Model
     public function gudangIdItem()
     {
         return $this->hasMany(GudangProdukIdItem::class);
+    }
+
+    public function estimasiRepair()
+    {
+        return $this->hasMany(RepairEstimasi::class);
     }
 }

@@ -225,6 +225,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <h2 class="text-base font-semibold my-4 dark:text-white pb-2 border-b">Data Asuransi</h2>
                                     <div class="grid grid-cols-3 items-center">
                                         <div class="col-span-1">
                                             Nominal Produk :

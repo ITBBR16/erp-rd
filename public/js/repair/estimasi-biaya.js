@@ -26,7 +26,6 @@ $(document).ready(function () {
                     </select>
                 </td>
                 <td class="px-2 py-4" id="estimasi-part-jasa-container-${countForm}">
-                    <input type="hidden" name="nama_part[]" id="nama-part-${countForm}}">
                     <select name="nama_part_jasa[]" id="estimasi-part-${countForm}" data-id="${countForm}" class="estimasi-part bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Pilih Part</option>
                     </select>
@@ -46,7 +45,7 @@ $(document).ready(function () {
                     </button>
                 </td>
             </tr>
-        `
+        `;
 
         let itemFG = `
             <tr id="data-gudang-${countForm}" class="bg-white dark:bg-gray-800">
@@ -75,7 +74,7 @@ $(document).ready(function () {
                     </div>
                 </td>
             </tr>
-        `
+        `;
 
         containerEstimasi.append(itemForm);
         containerGudang.append(itemFG);
@@ -116,19 +115,18 @@ $(document).ready(function () {
         
         if (jenisTransaksi  == 'P.Baru' || jenisTransaksi == 'P.Bekas') {
             let itemJpPart = `
-                        <select name="jenis_part_jasa[]" id="estimasi-jp-${formId}" data-id="${formId}" class="estimasi-jp bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>Pilih Jenis Produk</option>
-                        </select>
-            `
+                <select name="jenis_part_jasa[]" id="estimasi-jp-${formId}" data-id="${formId}" class="estimasi-jp bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <option value="" hidden>Pilih Jenis Produk</option>
+                </select>
+            `;
 
             let itemNpjPart = `
-                <input type="hidden" name="nama_part[]" id="nama-part-${formId}}">
                 <select name="nama_part_jasa[]" id="estimasi-part-${formId}" data-id="${formId}" class="estimasi-part bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     <option value="" hidden>Pilih Part</option>
                 </select>
-            `
-            $('#estimasi-jpj-container-' + formId).append(itemJpPart)
-            $('#estimasi-part-jasa-container-' + formId).append(itemNpjPart)
+            `;
+            $('#estimasi-jpj-container-' + formId).append(itemJpPart);
+            $('#estimasi-part-jasa-container-' + formId).append(itemNpjPart);
 
             getJenisDrone(formId);
         } else {
@@ -160,7 +158,7 @@ $(document).ready(function () {
 
         if (jenisTransaksi  == 'P.Baru' || jenisTransaksi == 'P.Bekas') {
             inputNamaPart.val(textNamaPart);
-            getDetailPart(jenisTransaksi, partId, sku);
+            getDetailPart(partId, sku);
         }
     });
 
@@ -216,22 +214,22 @@ $(document).ready(function () {
         });
     }
 
-    function getDetailPart(jenisTransaksi, formId, sku) {
+    function getDetailPart(formId, sku) {
         var stockPart = $('#stok-part-' + formId);
         var hargaJualRepair = $('#harga-repair-' + formId);
         var hargaJualGudang = $('#harga-gudang-' + formId);
         var hargaPromoGudang = $('#harga-promo-part-' + formId);
         var hargaModalGudang = $('#estimasi-modal-gudang-' + formId);
 
-        fetch(`/repair/estimasi/getDetailGudang/${jenisTransaksi}/${sku}`)
+        fetch(`/repair/estimasi/getDetailGudang/${sku}`)
         .then(response => response.json())
         .then(data => {
-
-            stockPart.val(data.stok);
-            hargaJualRepair.val(formatAngka(data.srpRepair));
-            hargaJualGudang.val(formatAngka(data.srpGudang));
-            hargaModalGudang.val(formatAngka(data.modal));
-            hargaPromoGudang.val(0);
+            
+            stockPart.val(data.stock);
+            hargaJualRepair.val(formatAngka(data.detail.harga_internal));
+            hargaJualGudang.val(formatAngka(data.detail.harga_global));
+            hargaModalGudang.val(formatAngka(data.detail.modal_awal));
+            hargaPromoGudang.val(formatAngka(data.detail.harga_promo));
 
         });
     }

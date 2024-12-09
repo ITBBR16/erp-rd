@@ -16,10 +16,10 @@
                             <div class="flex justify-center mx-auto mb-4">
                                 <span class="material-symbols-outlined text-8xl dark:text-white">confirmation_number</span>
                             </div>
-                            <input type="hidden" name="konfirmasi_customer" id="konfirmasi-customer">
+                            <input type="hidden" name="konfirmasi_customer" id="konfirmasi-customer-{{ $case->id }}">
                             <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Customer Ingin Lanjut ?</h3>
                             <div class="flex justify-center space-x-3">
-                                <button type="submit" value="lanjut" class="submit-konfirmasi-estimasi text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Lanjut Case</button>
+                                <button type="submit" value="lanjut" data-id="{{ $case->id }}" class="submit-konfirmasi-estimasi text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Lanjut Case</button>
                                 <div class="loader-konfirmasi-estimasi" style="display: none">
                                     <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>
                                         <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +29,7 @@
                                         Loading . . .
                                     </button>
                                 </div>
-                                <button type="submit" value="cancel" class="submit-konfirmasi-estimasi text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 dark:focus:ring-red-800">Cancel Case</button>
+                                <button type="submit" value="cancel" data-id="{{ $case->id }}" class="submit-konfirmasi-estimasi text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 dark:focus:ring-red-800">Cancel Case</button>
                                 <div class="loader-konfirmasi-estimasi" style="display: none">
                                     <button class="cursor-not-allowed text-white border border-red-700 bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-white dark:bg-red-500 dark:focus:ring-red-800" disabled>
                                         <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -12,70 +12,25 @@ use App\Repositories\repair\repository\RepairCustomerRepository;
 
 class KasirRepairController extends Controller
 {
-    protected $caseService;
-    public function __construct(private UmumRepository $nameDivisi, private RepairCustomerRepository $repairCustomer, private EkspedisiRepository $ekspedisiRepository, RepairCaseService $repairCaseService)
-    {
-        $this->caseService = $repairCaseService;
-    }
+    public function __construct(
+        private UmumRepository $nameDivisi,
+        private RepairCustomerRepository $repairCustomer,
+        private RepairCaseService $caseService)
+    {}
 
     public function index()
     {
-        $user = auth()->user();
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        $dataProvinsi = $this->repairCustomer->getProvinsi();
-        $caseService = $this->caseService->getDataDropdown();
-        $dataEkspedisi = $this->ekspedisiRepository->getDataEkspedisi();
-        $dataCase = $caseService['data_case'];
-
-        return view('repair.csr.kasir-repair', [
-            'title' => 'List Kasir Repair',
-            'active' => 'kasir-repair',
-            'navActive' => 'csr',
-            'dropdown' => '',
-            'divisi' => $divisiName,
-            'dataProvinsi' => $dataProvinsi,
-            'dataCase' => $dataCase,
-            'dataEkspedisi' => $dataEkspedisi,
-        ]);
-
+        return $this->caseService->indexKasir();
     }
 
     public function edit($id)
     {
-        $user = auth()->user();
-        $idCase = decrypt($id);
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        $dataCase = $this->caseService->findCase($idCase);
-        $daftarAkun = $this->caseService->getDataAkun();
-
-        return view('repair.csr.edit.kasir-pelunasan', [
-            'title' => 'Kasir Pelunasan Repair',
-            'active' => 'kasir-repair',
-            'navActive' => 'csr',
-            'dropdown' => '',
-            'divisi' => $divisiName,
-            'dataCase' => $dataCase,
-            'daftarAkun' => $daftarAkun,
-        ]);
+        return $this->caseService->pagePelunasan($id);
     }
 
     public function downpaymentKasir($encryptId)
     {
-        $user = auth()->user();
-        $idCase = decrypt($encryptId);
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        $dataCase = $this->caseService->findCase($idCase);
-        $daftarAkun = $this->caseService->getDataAkun();
-
-        return view('repair.csr.edit.kasir-dp', [
-            'title' => 'Kasir DP Repair',
-            'active' => 'kasir-repair',
-            'navActive' => 'csr',
-            'dropdown' => '',
-            'divisi' => $divisiName,
-            'dataCase' => $dataCase,
-            'daftarAkun' => $daftarAkun,
-        ]);
+        return $this->caseService->pageDp($encryptId);
     }
 
     public function createPelunasan(Request $request, $id)
@@ -114,8 +69,6 @@ class KasirRepairController extends Controller
             'dataCase' => $dataCase,
         ];
 
-        // return view('repair.csr.invoice.invoice-pelunasan', $data);
-
         $pdf = Pdf::loadView('repair.csr.invoice.invoice-pelunasan', $data);
         return $pdf->stream();
     }
@@ -128,8 +81,6 @@ class KasirRepairController extends Controller
             'dataCase' => $dataCase,
         ];
 
-        // return view('repair.csr.invoice.invoice-dp', $data);
-
         $pdf = Pdf::loadView('repair.csr.invoice.invoice-dp', $data);
         return $pdf->stream();
     }
@@ -141,7 +92,7 @@ class KasirRepairController extends Controller
 
     public function getLayanan($id)
     {
-        return $this->ekspedisiRepository->getDataLayanan($id);
+        return $this->caseService->getLayanan($id);
     }
 
 }

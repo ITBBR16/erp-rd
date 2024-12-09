@@ -4,8 +4,6 @@ namespace App\Http\Controllers\repair;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\umum\UmumRepository;
-use App\Services\repair\RepairCaseService;
 use App\Services\repair\RepairEstimasiService;
 
 class RepairEstimasiBiayaController extends Controller
@@ -51,9 +49,9 @@ class RepairEstimasiBiayaController extends Controller
         return $this->serviceEstimasi->getNamaPart($jenisDrone);
     }
 
-    public function getDetailGudang($jenisTransaksi, $sku)
+    public function getDetailGudang($id)
     {
-        return $this->serviceEstimasi->getDetailPart($jenisTransaksi, $sku);
+        return $this->serviceEstimasi->getDetailPart($id);
     }
 
 }

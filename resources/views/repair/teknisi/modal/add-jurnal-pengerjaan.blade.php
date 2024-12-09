@@ -39,7 +39,7 @@
                                 <label for="jurnal-pengerjaan-{{ $case->id }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jurnal</label>
                                 <textarea name="jurnal_pengerjaan" id="jurnal-pengerjaan-{{ $case->id }}" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Isi Jurnal . . ." required></textarea>
                             </div>
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Files Troubleshooting :</label>
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Files Pengerjaan :</label>
                             <div class="flex items-center justify-center w-full">
                                 <label for="files-pengerjaan-{{ $case->id }}" class="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div id="image-ts-{{ $case->id }}" class="flex flex-col items-center justify-center pt-5 pb-6">

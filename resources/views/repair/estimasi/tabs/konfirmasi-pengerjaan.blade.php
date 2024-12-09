@@ -67,7 +67,7 @@
                         <div id="dropdownTS{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-auto min-w-44 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTroubleshooting{{ $case->id }}">
                                 <li>
-                                    <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="detail-konfirmasi-pengerjaan-{{ $case->id }}" data-modal-toggle="detail-konfirmasi-pengerjaan-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">visibility</span>
                                         <span class="whitespace-nowrap">Detail</span>
                                     </button>
@@ -96,6 +96,7 @@
     </div>
 
     {{-- Modal --}}
+    @include('repair.estimasi.modal.detail-konfirmasi-pengerjaan')
     @include('repair.estimasi.modal.jurnal-konfirmasi')
     @include('repair.estimasi.modal.lanjut-pengerjaan')
 </div>

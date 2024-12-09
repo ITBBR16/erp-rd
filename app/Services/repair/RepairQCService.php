@@ -2,22 +2,45 @@
 
 namespace App\Services\repair;
 
-use App\Repositories\repair\repository\RepairCaseRepository;
 use Exception;
-use Illuminate\Http\Request;
-use App\Repositories\repair\repository\RepairQCRepository;
-use App\Repositories\repair\repository\RepairTimeJurnalRepository;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Repositories\umum\UmumRepository;
+use App\Repositories\repair\repository\RepairQCRepository;
+use App\Repositories\repair\repository\RepairCaseRepository;
+use App\Repositories\repair\repository\RepairTimeJurnalRepository;
 
 class RepairQCService
 {
-    protected $repairQc, $repairTimeJurnal, $repairCase;
+    public function __construct(
+        private UmumRepository $umum,
+        private RepairQCRepository $repairQc,
+        private RepairTimeJurnalRepository $repairTimeJurnal,
+        private RepairCaseRepository $repairCase,
+        private RepairCaseService $caseService,
+        )
+    {}
 
-    public function __construct(RepairQCRepository $repairQCRepository, RepairTimeJurnalRepository $repairTimeJurnal, RepairCaseRepository $repairCase)
+    public function indexQc()
     {
-        $this->repairCase = $repairCase;
-        $this->repairQc = $repairQCRepository;
-        $this->repairTimeJurnal = $repairTimeJurnal;
+        $user = auth()->user();
+        $caseService = $this->caseService->getDataDropdown();
+        $divisiName = $this->umum->getDivisi($user);
+        $dataQc = $this->getDataNeed();
+        $kondisi = $dataQc['kondisi'];
+        $kategori = $dataQc['kategori'];
+        $dataCase = $caseService['data_case'];
+
+        return view('repair.qc.quality-control', [
+            'title' => 'Pengecekkan',
+            'active' => 'pengecekkan',
+            'navActive' => 'qc',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+            'kategoris' => $kategori,
+            'kondisis' => $kondisi,
+        ]);
     }
 
     public function getDataNeed()
@@ -29,7 +52,51 @@ class RepairQCService
         ];
     }
 
-    public function changeStatus(Request $request, $id)
+    // Function Proses
+    public function addJurnalQc(Request $request)
+    {
+        $this->repairQc->beginTransaction();
+
+        try {
+
+            $employeeId = auth()->user()->id;
+            $caseId = $request->input('case_id');
+            $isiJurnal = $request->input('jurnal_qc');
+            $tglWaktu = Carbon::now();
+
+            $checkTimestamp = $this->repairTimeJurnal->findTimestime($caseId, 7);
+
+            if ($checkTimestamp) {
+                $timestamp = $checkTimestamp;
+            } else {
+                $dataTimestamp = [
+                    'case_id' => $caseId,
+                    'jenis_status_id' => 7,
+                    'tanggal_waktu' => $tglWaktu,
+                ];
+    
+                $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
+            }
+
+            $dataJurnal = [
+                'employee_id' => $employeeId,
+                'jenis_substatus_id' => 1,
+                'timestamps_status_id' => $timestamp->id,
+                'isi_jurnal' => $isiJurnal,
+            ];
+
+            $this->repairTimeJurnal->addJurnal($dataJurnal);
+
+            $this->repairQc->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil membuat jurnal baru.'];
+
+        } catch (Exception $e) {
+            $this->repairQc->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function changeStatus($request, $id)
     {
         $this->repairQc->beginTransaction();
         $employeeId = auth()->user()->id;
@@ -64,7 +131,7 @@ class RepairQCService
         }
     }
 
-    public function createQcFisik(Request $request)
+    public function createQcFisik($request)
     {
         $this->repairQc->beginTransaction();
 
@@ -111,7 +178,7 @@ class RepairQCService
         }
     }
 
-    public function createCalibrasi(Request $request)
+    public function createCalibrasi($request)
     {
         $this->repairQc->beginTransaction();
 
@@ -170,7 +237,7 @@ class RepairQCService
         }
     }
 
-    public function createTestFly(Request $request)
+    public function createTestFly($request)
     {
         $this->repairQc->beginTransaction();
 

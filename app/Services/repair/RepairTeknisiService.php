@@ -2,22 +2,22 @@
 
 namespace App\Services\repair;
 
-use App\Repositories\repair\repository\RepairTeknisiRepository;
-use App\Repositories\repair\repository\RepairTimeJurnalRepository;
-use Carbon\Carbon;
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Repositories\umum\UmumRepository;
+use App\Repositories\repair\repository\RepairTeknisiRepository;
+use App\Repositories\repair\repository\RepairTimeJurnalRepository;
 
 class RepairTeknisiService
 {
-    protected $repairTeknisi, $repairTimeJurnal;
-
-    public function __construct(RepairTeknisiRepository $repairTeknisiRepository, RepairTimeJurnalRepository $repairTimeJurnal)
-    {
-        $this->repairTeknisi = $repairTeknisiRepository;
-        $this->repairTimeJurnal = $repairTimeJurnal;
-    }
+    public function __construct(
+        private UmumRepository $nameDivisi,
+        private RepairTeknisiRepository $repairTeknisi,
+        private RepairCaseService $repairCaseService,
+        private RepairTimeJurnalRepository $repairTimeJurnal)
+    {}
 
     // Troubleshooting
     public function ambilCase($id)
@@ -148,6 +148,23 @@ class RepairTeknisiService
     }
 
     // Pengerjaan
+    public function indexPengerjaan()
+    {
+        $user = auth()->user();
+        $caseService = $this->repairCaseService->getDataDropdown();
+        $divisiName = $this->nameDivisi->getDivisi($user);
+        $dataCase = $caseService['data_case'];
+
+        return view('repair.teknisi.pengerjaan', [
+            'title' => 'List Pengerjaan',
+            'active' => 'pengerjaan',
+            'navActive' => 'teknisi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+        ]);
+    }
+
     public function createJurnalPengerjaan(Request $request, $id)
     {
         $this->repairTeknisi->beginTransaction();

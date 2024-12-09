@@ -28,11 +28,13 @@
                                 <td style="padding: 0.5rem;">{{ $fisik->qcKategori->nama }}</td>
                                 <td style="padding: 0.5rem; text-align: center;">
                                     @if ($fisik->check == 1)
-                                        <img src="{{ public_path('img/check-box.png') }}" alt="Logo RD" style="width: 18px;">
+                                        <img src="{{ public_path('img/check-box.png') }}" alt="Selected" style="width: 18px;">
+                                    @else
+                                        <img src="{{ public_path('img/unselect.png') }}" alt="Unselectd" style="width: 20px;">
                                     @endif
                                 </td>
-                                <td style="padding: 0.5rem;">{{ $fisik->qcKondisi->nama }}</td>
-                                <td style="padding: 0.5rem;">{{ $fisik->keterangan }}</td>
+                                <td style="padding: 0.5rem;">{{ $fisik->qcKondisi->nama ?? "-" }}</td>
+                                <td style="padding: 0.5rem;">{{ $fisik->keterangan ?? "-" }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -41,6 +43,7 @@
         </div>
     
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 1rem;">
+            {{-- Table Calibrasi --}}
             <div style="background-color: white; border-radius: 0.5rem; border: 1px solid #E5E7EB; grid-column: span 2;">
                 <div style="position: relative;">
                     <table style="width: 100%; font-size: 0.875rem; text-align: left; color: #6B7280;">
@@ -56,18 +59,20 @@
                                 <tr style="background-color: white; border-bottom: 1px solid #E5E7EB;">
                                     <td style="padding: 0.5rem;">{{ $calibrasi->qcKategori->nama }}</td>
                                     <td style="padding: 0.5rem; text-align: center">
-                                        @if ($fisik->check == 1)
+                                    @if ($calibrasi->check == 1)
                                         <img src="{{ public_path('img/check-box.png') }}" alt="Logo RD" style="width: 18px;">
+                                    @else
+                                        <img src="{{ public_path('img/unselect.png') }}" alt="Unselectd" style="width: 20px;">
                                     @endif
                                     </td>
-                                    <td style="padding: 0.5rem;">{{ $calibrasi->keterangan }}</td>
+                                    <td style="padding: 0.5rem;">{{ $calibrasi->keterangan ?? "-" }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
-    
+            {{-- Table Firmware --}}
             <div style="grid-column: span 1; margin-left: 0.5rem; padding: 0.5rem; background-color: white;">
                 <h3 style="font-size: 0.875rem; text-align: left; color: #6B7280;">Firmware Version</h3>
                 <ol style="position: relative; border-left: 1px solid #E5E7EB;">

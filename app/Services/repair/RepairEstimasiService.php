@@ -2,6 +2,8 @@
 
 namespace App\Services\repair;
 
+use App\Models\gudang\GudangProduk;
+use App\Repositories\gudang\repository\GudangProdukRepository;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,19 +18,21 @@ use App\Repositories\umum\repository\ProdukRepository;
 class RepairEstimasiService
 {
     public function __construct(
-        private UmumRepository $nameDivisi,
+        private UmumRepository $umum,
         private ProdukRepository $produk,
+        private GudangProdukRepository $produkGudang,
         private RepairCaseService $repairCaseService, 
         private RepairCaseRepository $repairCase, 
         private RepairEstimasiRepository $repairEstimasi, 
         private RepairTimeJurnalRepository $repairTimeJurnal)
     {}
 
+    // View Estimasi Biaya
     public function index()
     {
         $user = auth()->user();
         $caseService = $this->repairCaseService->getDataDropdown();
-        $divisiName = $this->nameDivisi->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $dataCase = $caseService['data_case'];
 
         return view('repair.estimasi.estimasi-biaya', [
@@ -45,9 +49,9 @@ class RepairEstimasiService
     {
         $id = decrypt($encryptId);
         $user = auth()->user();
-        $jenisTransaksi = $this->dataJenisTransaksi();
+        $jenisTransaksi = $this->getJenisTransaksi();
         $dataCase = $this->repairCaseService->findCase($id);
-        $divisiName = $this->nameDivisi->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
 
         return view('repair.estimasi.edit.form-estimasi-biaya', [
             'title' => 'List Estimasi Biaya',
@@ -61,11 +65,48 @@ class RepairEstimasiService
 
     }
 
-    public function dataJenisTransaksi()
+    // View Konfirmasi Estimasi
+    public function indexKonfirmasi()
     {
-        return $this->repairEstimasi->getJenisTransaksi();
+        $user = auth()->user();
+        $caseService = $this->repairCaseService->getDataDropdown();
+        $divisiName = $this->umum->getDivisi($user);
+        $greeting = $this->showTimeForChat();
+        $dataCase = $caseService['data_case'];
+
+        return view('repair.estimasi.konfirmasi', [
+            'title' => 'List Konfirmasi Estimasi',
+            'active' => 'konfirmasi-estimasi',
+            'navActive' => 'estimasi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+            'greeting' => $greeting,
+        ]);
     }
 
+    public function pageUbahEstimasi($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $jenisTransaksi = $this->getJenisTransaksi();
+        $jenisProduk = $this->getJenisDrone();
+        $dataCase = $this->repairCaseService->findCase($id);
+        $divisiName = $this->umum->getDivisi($user);
+
+        return view('repair.estimasi.edit.ubah-estimasi-biaya', [
+            'title' => 'List Estimasi Biaya',
+            'active' => 'konfirmasi-estimasi',
+            'navActive' => 'estimasi',
+            'divisi' => $divisiName,
+            'dropdown' => '',
+            'dataCase' => $dataCase,
+            'jenisTransaksi' => $jenisTransaksi,
+            'jenisProduk' => $jenisProduk,
+        ]);
+    }
+
+    // Function Proses
     public function addJurnalEstimasi(Request $request)
     {
         $this->repairEstimasi->beginTransaction();
@@ -84,7 +125,7 @@ class RepairEstimasiService
             } else {
                 $dataTimestamp = [
                     'case_id' => $caseId,
-                    'jenis_status_id' => 3,
+                    'jenis_status_id' => 4,
                     'tanggal_waktu' => $tglWaktu,
                 ];
     
@@ -175,7 +216,6 @@ class RepairEstimasiService
             $namaPartJasa = $request->input('nama_part_jasa');
             $namaAlias = $request->input('nama_alias');
             $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
-            $namaPartGudang = $request->input('nama_part');
         
             // Data Part
             $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
@@ -187,9 +227,7 @@ class RepairEstimasiService
                     $dataEstimasiPart = [
                         'estimasi_id' => $createEstimasi->id,
                         'jenis_transaksi_id' => $jt,
-                        'sku' => $namaPartJasa[$index],
-                        'jenis_produk' => $jenisPartJasa[$index],
-                        'nama_produk' => $namaPartGudang[$index],
+                        'gudang_produk_id' => $namaPartJasa[$index],
                         'nama_alias' => $namaAlias[$index],
                         'harga_customer' => $hargaCustomer[$index],
                         'harga_repair' => $hargaRepair[$index],
@@ -395,22 +433,19 @@ class RepairEstimasiService
 
             $tglWaktu = Carbon::now();
             $status = $request->input('konfirmasi_customer');
+            
+            if ($status == '') {
+                $this->repairEstimasi->rollbackTransaction();
+                return ['status' => 'error', 'message' => 'Data inputan invalid.'];
+            }
+            
             $isiJurnal = ($status == 'lanjut') ? 'Lanjut menunggu konfirmasi pengerjaan' : 'Cancel customer tidak lanjut';
             $jenisStatusId = ($status == 'lanjut') ? 5 : 10;
+            $dataUpdateCase = [
+                'jenis_status_id' => $jenisStatusId,
+            ];
 
-            if ($status == 'cancel') {
-                $dataUpdateCase = [
-                    'jenis_status_id' => $jenisStatusId,
-                ];
-
-                $this->repairCase->updateCase($id, $dataUpdateCase);
-            } else {
-                $dataUpdateCase = [
-                    'jenis_status_id' => $jenisStatusId,
-                ];
-
-                $this->repairCase->updateCase($id, $dataUpdateCase);
-            }
+            $this->repairCase->updateCase($id, $dataUpdateCase);
 
             $dataTimestamp = [
                 'case_id' => $id,
@@ -474,9 +509,10 @@ class RepairEstimasiService
         }
     }
 
-    public function kirimPesanKonfirmasiEstimasi(Request $request, $greeting)
+    public function kirimPesanKonfirmasiEstimasi(Request $request)
     {
         try {
+            $greeting = $this->showTimeForChat();
             $noTelpon = $request->input('no_customer');
             $namaCustomer = $request->input('nama_customer');
             $namaNota = $request->input('nama_nota');
@@ -772,7 +808,30 @@ class RepairEstimasiService
         }
     }
 
+    public function showTimeForChat()
+    {
+        $hour = date('H');
+        $greeting = '';
+
+        if ($hour >= 5 && $hour < 11) {
+            $greeting = 'Pagi';
+        } elseif ($hour >= 11 && $hour < 15) {
+            $greeting = 'Siang';
+        } elseif ($hour >= 15 && $hour < 18) {
+            $greeting = 'Sore';
+        } else {
+            $greeting = 'Malam';
+        }
+
+        return $greeting;
+    }
+
     // Function get data
+    public function getJenisTransaksi()
+    {
+        return $this->repairEstimasi->getJenisTransaksi();
+    }
+
     public function getJenisDrone()
     {
         return $this->produk->getAllJenisProduct();
@@ -783,24 +842,11 @@ class RepairEstimasiService
         return $this->produk->getSparepartbyJenis($jenisDrone);
     }
 
-    public function getDetailPart($jenisTransaksi, $sku)
+    public function getDetailPart($id)
     {
-        $urlAPi = 'https://script.google.com/macros/s/AKfycbx0RQkM6hdlvBlaO6Hyt1NpK5e3c5Mbj5m-3u4AoZsgtSF49e5MHfNK6mSnzU_8mpB5/exec';
-        $response = Http::post($urlAPi, [
-            'status' => $jenisTransaksi,
-            'jenisDrone' => '',
-            'sku' => $sku,
-        ]);
-
-        $data = $response->json();
-        $resultData = [
-            'stok' => $data['stok'],
-            'modal' => $data['modalPart'],
-            'srpRepair' => $data['hargaRepair'],
-            'srpGudang' => $data['hargaGudang'],
-        ];
-
-        return response()->json($resultData);
+        $gudangProduk = $this->produkGudang->findBySparepart($id);
+        $stock = $gudangProduk->gudangIdItem->where('status_inventory', 'Ready')->count();
+        return response()->json(['stock' => $stock, 'detail' => $gudangProduk]);
     }
 
     public function getListReqPart($id)

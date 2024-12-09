@@ -66,7 +66,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Alamat</p>
-                        <h3 class="text-sm font-semibold dark:text-white">{{ $dataCase->customer->kota->name }}</h3>
+                        <h3 class="text-sm font-semibold dark:text-white">{{-- $dataCase->customer->kota->name --}}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Status Case</p>
@@ -96,6 +96,9 @@
                     <tbody class="text-gray-700 dark:text-gray-300">
                         @php
                             $totalTagihan = 0;
+                            $totalOngkir = 0;
+                            $biayaOngkir = 0;
+                            $biayaPacking = 0;
                         @endphp
                         @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $index => $estimasi)
                             @if ($estimasi->active == 'Active')
@@ -105,10 +108,10 @@
                                 <tr class="border-t">
                                     <td class="p-2">
                                         {{ 
-                                            (isset($estimasi->sku)) ? 
+                                            (isset($estimasi->gudang_produk_id)) ? 
                                                 ($estimasi->nama_alias != '' ? $estimasi->nama_alias :
-                                                    $estimasi->nama_produk) :
-                                                            $estimasi->nama_jasa 
+                                                    $estimasi->sparepartGudang->produkSparepart->nama_internal) :
+                                                            $estimasi->nama_jasa  
                                         }}
                                     </td>
                                     <td class="p-2">

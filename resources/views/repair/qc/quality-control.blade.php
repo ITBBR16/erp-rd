@@ -105,41 +105,49 @@
                         <div id="ddCF{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCekFisik{{ $case->id }}">
                                 <li>
-                                    <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="detail-qc-{{ $case->id }}" data-modal-toggle="detail-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">visibility</span>
                                         <span class="whitespace-nowrap">Detail</span>
                                     </button>
                                 </li>
                                 <li>
-                                    <button type="button" data-modal-target="add-jurnal-pengerjaan-{{ $case->id }}" data-modal-toggle="add-jurnal-pengerjaan-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="add-jurnal-qc-{{ $case->id }}" data-modal-toggle="add-jurnal-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">menu_book</span>
                                         <span class="whitespace-nowrap">Add Jurnal</span>
                                     </button>
                                 </li>
-                                <li>
-                                    <button type="button" data-modal-target="qc-cek-fisik-{{ $case->id }}" data-modal-toggle="qc-cek-fisik-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">minor_crash</span>
-                                        <span class="whitespace-nowrap">Cek Fisik</span>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" data-modal-target="qc-cek-calibrasi-{{ $case->id }}" data-modal-toggle="qc-cek-calibrasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">compass_calibration</span>
-                                        <span class="whitespace-nowrap">Cek Calibrasi</span>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" data-modal-target="qc-test-fly-{{ $case->id }}" data-modal-toggle="qc-test-fly-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">flight_takeoff</span>
-                                        <span class="whitespace-nowrap">Test Flight</span>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" data-modal-target="konfirmasi-qc-{{ $case->id }}" data-modal-toggle="konfirmasi-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">recommend</span>
-                                        <span class="whitespace-nowrap">Konfirmasi QC</span>
-                                    </button>
-                                </li>
+                                @if (optional($case?->qualityControl?->cekFisik)->isEmpty())
+                                    <li>
+                                        <button type="button" data-modal-target="qc-cek-fisik-{{ $case->id }}" data-modal-toggle="qc-cek-fisik-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">minor_crash</span>
+                                            <span class="whitespace-nowrap">Cek Fisik</span>
+                                        </button>
+                                    </li>
+                                @endif
+                                @if (optional($case?->qualityControl?->cekCalibrasi)->isEmpty())
+                                    <li>
+                                        <button type="button" data-modal-target="qc-cek-calibrasi-{{ $case->id }}" data-modal-toggle="qc-cek-calibrasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">compass_calibration</span>
+                                            <span class="whitespace-nowrap">Cek Calibrasi</span>
+                                        </button>
+                                    </li>
+                                @endif
+                                @if (optional($case?->qualityControl?->testFly)->isEmpty())
+                                    <li>
+                                        <button type="button" data-modal-target="qc-test-fly-{{ $case->id }}" data-modal-toggle="qc-test-fly-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">flight_takeoff</span>
+                                            <span class="whitespace-nowrap">Test Flight</span>
+                                        </button>
+                                    </li>
+                                @endif
+                                @if (optional($case?->qualityControl?->cekFisik)->isNotEmpty() && optional($case?->qualityControl?->cekCalibrasi)->isNotEmpty() && optional($case?->qualityControl?->testFly)->isNotEmpty())
+                                    <li>
+                                        <button type="button" data-modal-target="konfirmasi-qc-{{ $case->id }}" data-modal-toggle="konfirmasi-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">recommend</span>
+                                            <span class="whitespace-nowrap">Konfirmasi QC</span>
+                                        </button>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                     @endif
@@ -152,9 +160,11 @@
     </div>
 
     {{-- Modal --}}
+    @include('repair.qc.modal.detail-qc')
     @include('repair.qc.modal.cek-fisik')
     @include('repair.qc.modal.cek-calibrasi')
     @include('repair.qc.modal.cek-test-fly')
     @include('repair.qc.modal.konfirmasi-qc')
+    @include('repair.qc.modal.jurnal-qc')
 
 @endsection

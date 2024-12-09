@@ -2,36 +2,19 @@
 
 namespace App\Http\Controllers\repair;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\umum\UmumRepository;
 use App\Services\repair\RepairCaseService;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class RepairKonfirmasiQCController extends Controller
 {
-    protected $caseService;
-    public function __construct(private UmumRepository $nameDivisi, RepairCaseService $repairCaseService)
-    {
-        $this->caseService = $repairCaseService;
-    }
+    public function __construct(
+        private RepairCaseService $caseService)
+    {}
 
     public function index()
     {
-        $user = auth()->user();
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        $caseService = $this->caseService->getDataDropdown();
-        $dataCase = $caseService['data_case'];
-
-        return view('repair.csr.konfirmasi-qc', [
-            'title' => 'Konfirmasi QC',
-            'active' => 'konf-qc',
-            'navActive' => 'csr',
-            'dropdown' => '',
-            'divisi' => $divisiName,
-            'dataCase' => $dataCase,
-        ]);
-
+        return $this->caseService->indexKonfirmasiQC();
     }
 
     public function update($id)

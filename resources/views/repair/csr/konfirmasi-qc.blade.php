@@ -141,7 +141,7 @@
 
     {{-- Modal --}}
     @include('repair.csr.modal.detail-konf-qc')
-    @include('repair.csr.modal.caution-konf-qc')
     @include('repair.csr.modal.caution-sent-wa')
+    @include('repair.csr.modal.caution-konf-qc')
 
 @endsection

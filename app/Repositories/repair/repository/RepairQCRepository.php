@@ -13,16 +13,16 @@ use App\Repositories\repair\interface\RepairQCInterface;
 
 class RepairQCRepository implements RepairQCInterface
 {
-    protected $connection, $modelQc, $modelQcFisik, $modelQcCalibrasi, $modelQcTestFly, $modelQcKategori, $modelQcKondisi;
-    public function __construct(RepairQualityControl $repairQualityControl, RepairQCFisik $repairQCFisik, RepairQCCalibrasi $repairQCCalibrasi, RepairQCTestFly $repairQCTestFly, RepairQCKategori $repairQCKategori, RepairQCKondisi $repairQCKondisi)
+    protected $connection;
+    public function __construct(
+        private RepairQualityControl $modelQc,
+        private RepairQCFisik $modelQcFisik,
+        private RepairQCCalibrasi $modelQcCalibrasi,
+        private RepairQCTestFly $modelQcTestFly,
+        private RepairQCKategori $modelQcKategori,
+        private RepairQCKondisi $modelQcKondisi)
     {
         $this->connection = DB::connection('rumahdrone_repair');
-        $this->modelQc = $repairQualityControl;
-        $this->modelQcFisik = $repairQCFisik;
-        $this->modelQcKondisi = $repairQCKondisi;
-        $this->modelQcTestFly = $repairQCTestFly;
-        $this->modelQcKategori = $repairQCKategori;
-        $this->modelQcCalibrasi = $repairQCCalibrasi;
     }
 
     public function beginTransaction()

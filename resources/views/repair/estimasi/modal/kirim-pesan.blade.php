@@ -36,7 +36,7 @@
                                     <div class="mr-4">
                                         <input type="hidden" name="hasil_analisa_ts" value="{{ $case->estimasi->estimasiChat->isi_chat }}">
                                         <h3 class="dark:text-white">Berikut hasil analisa dan troubleshooting teknisi kami :</h3>
-                                        <p class="dark:text-white">{{ $case->estimasi->estimasiChat->isi_chat }}</p>
+                                        <p class="dark:text-white">{!! nl2br(e($case->estimasi->estimasiChat->isi_chat)) !!}</p>
                                     </div>
                                     <div>
                                         <h3 class="font-semibold dark:text-white">Estimasi Biaya</h3>

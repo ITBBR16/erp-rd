@@ -39,118 +39,116 @@
         @csrf
         @method('PUT')
         <div class="grid grid-row-2 gap-6 mt-4">
-            <div class="bg-white p-4 rounded-lg shadow-lg border dark:bg-gray-800 dark:border-gray-600">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <div class="border-b grid grid-cols-2 gap-2 pb-2">
-                            <div class="text-sm text-start">
-                                <h3 class="font-semibold">Detail Customer</h3>
-                            </div>
-                            <div class="text-sm text-end">
-                                <h3 class="font-semibold">Jenis Drone : {{ $dataCase->jenisProduk->jenis_produk }}</h3>
-                            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <div class="border-b grid grid-cols-2 gap-2 pb-2">
+                        <div class="text-sm text-start">
+                            <h3 class="font-semibold">Detail Customer</h3>
                         </div>
-                        <div class="grid grid-cols-2 mt-2 gap-3">
-                            <div class="text-start">
-                                <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Masuk</p>
-                                <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
-                            </div>
-                            <div class="text-end">
-                                <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Estimasi</p>
-                                <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::parse($dataCase->updated_at)->isoFormat('D MMMM YYYY') }}</h3>
-                            </div>
-                            <div class="mr-auto text-start">
-                                <p class="text-xs text-gray-700 dark:text-gray-300">No Telpon</p>
-                                <a href="https://wa.me/{{ $dataCase->customer->no_telpon }}" target="__blank" class="text-sm flex items-center text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-                                    <span class="font-semibold mr-3">{{ $dataCase->customer->no_telpon }}</span>
-                                    <i class="material-symbols-outlined">call</i>
-                                </a>
-                            </div>
-                            <div class="ml-auto text-end">
-                                <p class="text-xs text-gray-700 dark:text-gray-300">Link Drive</p>
-                                <a href="{{ $dataCase->link_doc }}" target="__blank" class="text-sm flex items-center text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-                                    <span class="font-semibold mr-3">Link Drive</span>
-                                    <i class="material-symbols-outlined">link</i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="mt-4 border-b">
-                            <div data-accordion="collapse" data-active-classes="bg-white text-sm dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 text-sm dark:text-gray-400">
-                                <h2 id="keluhan-heading">
-                                    <button type="button" class="flex items-center justify-between w-full py-3 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#keluhan-body" aria-expanded="false">
-                                        <span>Keluhan</span>
-                                        <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
-                                        </svg>
-                                    </button>
-                                </h2>
-                                <div id="keluhan-body" class="hidden" aria-labelledby="keluhan-heading">
-                                    <div class="py-3 text-xs border-b border-gray-200 dark:border-gray-700">
-                                        <p class="mb-2 text-gray-500 dark:text-gray-400">{{ $dataCase->keluhan }}</p>
-                                    </div>
-                                </div>
-                                <h2 id="kronologi-heading">
-                                    <button type="button" class="flex items-center justify-between w-full py-3 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#kronologi-body" aria-expanded="false">
-                                        <span>Kronologi Kerusakan</span>
-                                        <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
-                                        </svg>
-                                    </button>
-                                </h2>
-                                <div id="kronologi-body" class="hidden" aria-labelledby="kronologi-heading">
-                                    <div class="py-3 text-xs border-b border-gray-200 dark:border-gray-700">
-                                        <p class="mb-2 text-gray-500 dark:text-gray-400">{{ ($dataCase->kronologi_kerusakan) ? $dataCase->kronologi_kerusakan : '-' }}</p>
-                                    </div>
-                                </div>
-                                <h2 id="pac-heading">
-                                    <button type="button" class="flex items-center justify-between w-full py-3 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#pac-body" aria-expanded="false">
-                                        <span>Penanganan After Crash</span>
-                                        <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
-                                        </svg>
-                                    </button>
-                                </h2>
-                                <div id="pac-body" class="hidden" aria-labelledby="pac-heading">
-                                    <div class="py-3 text-xs border-b border-gray-200 dark:border-gray-700">
-                                        <p class="mb-2 text-gray-500 dark:text-gray-400">{{ ($dataCase->penanganan_after_crash) ? $dataCase->penanganan_after_crash : '-' }}</p>
-                                    </div>
-                                </div>
-                                <h2 id="riwayat-heading">
-                                    <button type="button" class="flex items-center justify-between w-full py-3 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#riwayat-body" aria-expanded="false">
-                                        <span>Riwayat Penggunaan</span>
-                                        <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
-                                        </svg>
-                                    </button>
-                                </h2>
-                                <div id="riwayat-body" class="hidden" aria-labelledby="riwayat-heading">
-                                    <div class="py-3 text-xs border-b border-gray-200 dark:border-gray-700">
-                                        <p class="mb-2 text-gray-500 dark:text-gray-400">{{ ($dataCase->riwayat_penggunaan) ? $dataCase->riwayat_penggunaan : '-' }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4 border p-4 bottom-0">
-                            <label for="pesan-hasil-ts" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pesan Hasil Troubleshooting</label>
-                            <textarea name="pesan_hasil_ts" id="pesan-hasil-ts" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesan pesan hasil troubleshooting untuk customer . . ." required>{{ $dataCase->estimasi->estimasiChat->isi_chat }}</textarea>
+                        <div class="text-sm text-end">
+                            <h3 class="font-semibold">Jenis Drone : {{ $dataCase->jenisProduk->jenis_produk }}</h3>
                         </div>
                     </div>
-                    <div>
-                        <div class="border-b grid grid-cols-2 gap-2 pb-2">
-                            <div class="text-sm text-start">
-                                <h3 class="font-semibold">Hasil Troubleshooting</h3>
+                    <div class="grid grid-cols-2 mt-2 gap-3">
+                        <div class="text-start">
+                            <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Masuk</p>
+                            <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
+                        </div>
+                        <div class="text-end">
+                            <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Estimasi</p>
+                            <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::parse($dataCase->updated_at)->isoFormat('D MMMM YYYY') }}</h3>
+                        </div>
+                        <div class="mr-auto text-start">
+                            <p class="text-xs text-gray-700 dark:text-gray-300">No Telpon</p>
+                            <a href="https://wa.me/{{ $dataCase->customer->no_telpon }}" target="__blank" class="text-sm flex items-center text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+                                <span class="font-semibold mr-3">{{ $dataCase->customer->no_telpon }}</span>
+                                <i class="material-symbols-outlined">call</i>
+                            </a>
+                        </div>
+                        <div class="ml-auto text-end">
+                            <p class="text-xs text-gray-700 dark:text-gray-300">Link Drive</p>
+                            <a href="{{ $dataCase->link_doc }}" target="__blank" class="text-sm flex items-center text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+                                <span class="font-semibold mr-3">Link Drive</span>
+                                <i class="material-symbols-outlined">link</i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mt-4 border-b">
+                        <div data-accordion="collapse" data-active-classes="bg-white text-sm dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 text-sm dark:text-gray-400">
+                            <h2 id="keluhan-heading">
+                                <button type="button" class="flex items-center justify-between w-full py-3 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#keluhan-body" aria-expanded="false">
+                                    <span>Keluhan</span>
+                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="keluhan-body" class="hidden" aria-labelledby="keluhan-heading">
+                                <div class="py-3 text-xs border-b border-gray-200 dark:border-gray-700">
+                                    <p class="mb-2 text-gray-500 dark:text-gray-400">{{ $dataCase->keluhan }}</p>
+                                </div>
                             </div>
-                            <div class="text-sm text-end">
-                                <h3 class="font-semibold">Teknisi : {{ $dataCase->teknisi->first_name }}</h3>
+                            <h2 id="kronologi-heading">
+                                <button type="button" class="flex items-center justify-between w-full py-3 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#kronologi-body" aria-expanded="false">
+                                    <span>Kronologi Kerusakan</span>
+                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="kronologi-body" class="hidden" aria-labelledby="kronologi-heading">
+                                <div class="py-3 text-xs border-b border-gray-200 dark:border-gray-700">
+                                    <p class="mb-2 text-gray-500 dark:text-gray-400">{{ ($dataCase->kronologi_kerusakan) ? $dataCase->kronologi_kerusakan : '-' }}</p>
+                                </div>
+                            </div>
+                            <h2 id="pac-heading">
+                                <button type="button" class="flex items-center justify-between w-full py-3 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#pac-body" aria-expanded="false">
+                                    <span>Penanganan After Crash</span>
+                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="pac-body" class="hidden" aria-labelledby="pac-heading">
+                                <div class="py-3 text-xs border-b border-gray-200 dark:border-gray-700">
+                                    <p class="mb-2 text-gray-500 dark:text-gray-400">{{ ($dataCase->penanganan_after_crash) ? $dataCase->penanganan_after_crash : '-' }}</p>
+                                </div>
+                            </div>
+                            <h2 id="riwayat-heading">
+                                <button type="button" class="flex items-center justify-between w-full py-3 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#riwayat-body" aria-expanded="false">
+                                    <span>Riwayat Penggunaan</span>
+                                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                    </svg>
+                                </button>
+                            </h2>
+                            <div id="riwayat-body" class="hidden" aria-labelledby="riwayat-heading">
+                                <div class="py-3 text-xs border-b border-gray-200 dark:border-gray-700">
+                                    <p class="mb-2 text-gray-500 dark:text-gray-400">{{ ($dataCase->riwayat_penggunaan) ? $dataCase->riwayat_penggunaan : '-' }}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="border mt-2 p-2 text-sm0">
-                            @foreach ($dataCase->timestampStatus as $timeStamp)
-                                @foreach ($timeStamp->jurnal->where('timestamps_status_id', 2)->sortByDesc('created_at')->take(1) as $jurnal)
-                                    {!! nl2br(e($jurnal->isi_jurnal)) !!}
-                                @endforeach
+                    </div>
+                    <div class="mt-4 bottom-0">
+                        <label for="pesan-hasil-ts" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pesan Hasil Troubleshooting</label>
+                        <textarea name="pesan_hasil_ts" id="pesan-hasil-ts" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesan pesan hasil troubleshooting untuk customer . . ." required>{{ $dataCase->estimasi->estimasiChat->isi_chat }}</textarea>
+                    </div>
+                </div>
+                <div>
+                    <div class="border-b grid grid-cols-2 gap-2 pb-2">
+                        <div class="text-sm text-start">
+                            <h3 class="font-semibold">Hasil Troubleshooting</h3>
+                        </div>
+                        <div class="text-sm text-end">
+                            <h3 class="font-semibold">Teknisi : {{ $dataCase->teknisi->first_name }}</h3>
+                        </div>
+                    </div>
+                    <div class="mt-2 p-2 text-sm0">
+                        @foreach ($dataCase->timestampStatus->where('jenis_status_id', 2) as $timeStamp)
+                            @foreach ($timeStamp->jurnal->sortByDesc('created_at')->take(1) as $jurnal)
+                                {!! nl2br(e($jurnal->isi_jurnal)) !!}
                             @endforeach
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -174,7 +172,7 @@
                                         Product Name
                                     </th>
                                     <th scope="col" class="px-2 py-3" style="width: 20%">
-                                        Name Alias
+                                        Nama Alias
                                     </th>
                                     <th scope="col" class="px-2 py-3" style="width: 20%">
                                         Harga Customer
@@ -199,21 +197,27 @@
                                                 </select>
                                             </td>
                                             <td class="px-2 py-4" id="estimasi-jpj-container-{{ $index }}">
-                                                @if (isset($estimasi->sku))
+                                                @if (isset($estimasi->gudang_produk_id))
                                                     <select name="jenis_part_jasa_lama[]" id="estimasi-jp-{{ $index }}" data-id="{{ $index }}" class="estimasi-jp bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                         <option value="" hidden>Pilih Jenis Produk</option>
-                                                        <option value="{{ $estimasi->jenis_produk }}" selected>{{ $estimasi->jenis_produk }}</option>
+                                                        @foreach ($jenisProduk as $produk)
+                                                            @if ($estimasi->sparepartGudang->produkSparepart->produkJenis->id == $produk->id)
+                                                                <option value="{{ $produk->id }}" selected>{{ $produk->jenis_produk }}</option>
+                                                            @else
+                                                                <option value="{{ $produk->id }}">{{ $produk->jenis_produk }}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 @else
                                                     <input type="text" name="jenis_part_jasa_lama[]" id="estimasi-jp-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa" value="{{ $estimasi->jenis_jasa }}">
                                                 @endif
                                             </td>
                                             <td class="px-2 py-4" id="estimasi-part-jasa-container-{{ $index }}">
-                                                @if (isset($estimasi->sku))
+                                                @if (isset($estimasi->gudang_produk_id))
                                                     <input type="hidden" name="nama_part[]" id="nama-part-{{ $index }}" value="{{ $estimasi->nama_produk }}">
                                                     <select name="nama_part_jasa_lama[]" id="estimasi-part-{{ $index }}" data-id="{{ $index }}" class="estimasi-part bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                         <option value="" hidden>Pilih Part</option>
-                                                        <option value="{{ $estimasi->sku }}" selected>{{ $estimasi->nama_produk }}</option>
+                                                        <option value="{{ $estimasi->gudang_produk_id }}" selected>{{ $estimasi->sparepartGudang->produkSparepart->nama_internal }}</option>
                                                     </select>
                                                 @else
                                                     <input type="text" name="nama_part_jasa_lama[]" id="estimasi-part-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa" value="{{ $estimasi->nama_jasa }}">

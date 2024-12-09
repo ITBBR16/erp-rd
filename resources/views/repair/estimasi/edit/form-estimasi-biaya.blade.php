@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4 border p-4 bottom-0">
+                        <div class="mt-4 bottom-0">
                             <label for="pesan-hasil-ts" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pesan Hasil Troubleshooting</label>
                             <textarea name="pesan_hasil_ts" id="pesan-hasil-ts" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesan pesan hasil troubleshooting untuk customer . . ." required></textarea>
                         </div>
@@ -144,8 +144,8 @@
                                 <h3 class="font-semibold">Teknisi : {{ $dataCase->teknisi->first_name }}</h3>
                             </div>
                         </div>
-                        <div class="border mt-2 p-2 text-sm0">
-                            @foreach ($dataCase->timestampStatus as $timeStamp)
+                        <div class="mt-2 p-2 text-sm0">
+                            @foreach ($dataCase->timestampStatus->where('jenis_status_id', 2) as $timeStamp)
                                 @foreach ($timeStamp->jurnal->sortByDesc('created_at')->take(1) as $jurnal)
                                     {!! nl2br(e($jurnal->isi_jurnal)) !!}
                                 @endforeach

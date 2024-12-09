@@ -10,50 +10,20 @@ use App\Services\repair\RepairEstimasiService;
 
 class RepairKonfirmasiEstimasiController extends Controller
 {
-    protected $repairCaseService, $serviceEstimasi;
-    public function __construct(private UmumRepository $nameDivisi, RepairCaseService $repairCaseService, RepairEstimasiService $repairEstimasiService)
-    {
-        $this->repairCaseService = $repairCaseService;
-        $this->serviceEstimasi = $repairEstimasiService;
-    }
+    public function __construct(
+        private UmumRepository $nameDivisi, 
+        private RepairCaseService $repairCaseService, 
+        private RepairEstimasiService $serviceEstimasi)
+    {}
 
     public function index()
     {
-        $user = auth()->user();
-        $caseService = $this->repairCaseService->getDataDropdown();
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        $greeting = $this->showTimeForChat();
-        $dataCase = $caseService['data_case'];
-
-        return view('repair.estimasi.konfirmasi', [
-            'title' => 'List Konfirmasi Estimasi',
-            'active' => 'konfirmasi-estimasi',
-            'navActive' => 'estimasi',
-            'dropdown' => '',
-            'divisi' => $divisiName,
-            'dataCase' => $dataCase,
-            'greeting' => $greeting,
-        ]);
-
+        return $this->serviceEstimasi->indexKonfirmasi();
     }
 
     public function edit($encryptId)
     {
-        $id = decrypt($encryptId);
-        $user = auth()->user();
-        $jenisTransaksi = $this->serviceEstimasi->dataJenisTransaksi();
-        $dataCase = $this->repairCaseService->findCase($id);
-        $divisiName = $this->nameDivisi->getDivisi($user);
-
-        return view('repair.estimasi.edit.ubah-estimasi-biaya', [
-            'title' => 'List Estimasi Biaya',
-            'active' => 'konfirmasi-estimasi',
-            'navActive' => 'estimasi',
-            'divisi' => $divisiName,
-            'dataCase' => $dataCase,
-            'jenisTransaksi' => $jenisTransaksi,
-        ]);
-
+        return $this->serviceEstimasi->pageUbahEstimasi($encryptId);
     }
 
     public function update(Request $request, $id)
@@ -87,27 +57,8 @@ class RepairKonfirmasiEstimasiController extends Controller
 
     public function kirimPesanEstimasi(Request $request)
     {
-        $greeting = $this->showTimeForChat();
-        $resultPesan = $this->serviceEstimasi->kirimPesanKonfirmasiEstimasi($request, $greeting);
+        $resultPesan = $this->serviceEstimasi->kirimPesanKonfirmasiEstimasi($request);
         return back()->with($resultPesan['status'], $resultPesan['message']);
-    }
-
-    public function showTimeForChat()
-    {
-        $hour = date('H');
-        $greeting = '';
-
-        if ($hour >= 5 && $hour < 11) {
-            $greeting = 'Pagi';
-        } elseif ($hour >= 11 && $hour < 15) {
-            $greeting = 'Siang';
-        } elseif ($hour >= 15 && $hour < 18) {
-            $greeting = 'Sore';
-        } else {
-            $greeting = 'Malam';
-        }
-
-        return $greeting;
     }
 
 }

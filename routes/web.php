@@ -324,7 +324,7 @@ Route::middleware('repair')->group(function () {
                 Route::post('/addJurnalEstimasi', 'inputJurnalEstimasi')->name('addJurnalEstimasi');
                 Route::get('/jenisDrone', 'getJenisDrone');
                 Route::get('/getPartGudang/{jenisDrone}', 'getPartGudang');
-                Route::get('/getDetailGudang/{jenisTransaksi}/{sku}', 'getDetailGudang');
+                Route::get('/getDetailGudang/{id}', 'getDetailGudang');
             });
 
             Route::resource('/req-sparepart-estimasi', RepairEstimasiReqSparepartController::class)->only(['index', 'update']);
@@ -348,6 +348,7 @@ Route::middleware('repair')->group(function () {
         Route::prefix('/quality-control')->group(function () {
             Route::group(['controller' => RepairQCController::class], function () {
                 Route::resource('/pengecekkan', RepairQCController::class)->only(['index', 'update']);
+                Route::post('/createJurnalQc', 'createJurnalQc')->name('createJurnalQc');
                 Route::post('/createQcFisik', 'createQcFisik')->name('createQcFisik');
                 Route::post('/createQcCalibrasi', 'createQcCalibrasi')->name('createQcCalibrasi');
                 Route::post('/createTestFly', 'createTestFly')->name('createTestFly');

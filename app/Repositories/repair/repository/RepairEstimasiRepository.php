@@ -14,15 +14,15 @@ use App\Repositories\repair\interface\RepairEstimasiInterface;
 
 class RepairEstimasiRepository implements RepairEstimasiInterface
 {
-    protected $connection, $modelEstimasi, $modelEstimasiPart, $modelEstimasiJrr, $modelEstimasiChat, $modelJenisTransaksi, $modelReqPart;
-    public function __construct(RepairEstimasi $repairEstimasi, RepairEstimasiPart $repairEstimasiPart, RepairEstimasiJRR $repairEstimasiJRR, RepairEstimasiChat $repairEstimasiChat, RepairJenisTransaksi $repairJenisTransaksi, RepairReqSpareparts $repairReqSpareparts)
+    protected $connection;
+    public function __construct(
+        private RepairEstimasi $modelEstimasi,
+        private RepairEstimasiPart $modelEstimasiPart,
+        private RepairEstimasiJRR $modelEstimasiJrr,
+        private RepairEstimasiChat $modelEstimasiChat,
+        private RepairJenisTransaksi $modelJenisTransaksi,
+        private RepairReqSpareparts $modelReqPart)
     {
-        $this->modelEstimasi = $repairEstimasi;
-        $this->modelEstimasiJrr = $repairEstimasiJRR;
-        $this->modelEstimasiPart = $repairEstimasiPart;
-        $this->modelEstimasiChat = $repairEstimasiChat;
-        $this->modelJenisTransaksi = $repairJenisTransaksi;
-        $this->modelReqPart = $repairReqSpareparts;
         $this->connection = DB::connection('rumahdrone_repair');
     }
 
