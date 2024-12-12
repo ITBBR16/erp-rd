@@ -7,11 +7,11 @@ $(document).ready(function() {
         var editNamaAkun = $('#nama-akun-' + formId);
         
         if ($(this).is(':checked')) {
-            editMediaPembayaran.prop("readonly", false);
+            editMediaPembayaran.prop("disabled", false);
             editNoRek.prop("readonly", false);
             editNamaAkun.prop("readonly", false);
         } else {
-            editMediaPembayaran.prop("readonly", true);
+            editMediaPembayaran.prop("disabled", true);
             editNoRek.prop("readonly", true);
             editNamaAkun.prop("readonly", true);
         }

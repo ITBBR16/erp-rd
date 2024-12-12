@@ -11,12 +11,17 @@ class KiosDailyRecapExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        $dailyRecap = KiosDailyRecap::with('keperluan', 'recapTs', 'kiosWtb', 'kiosWts')
-                        ->whereDate('created_at', '>=', Carbon::now()->subDays(7)->toDateString())
+        $startOfMonth = Carbon::createFromDate(2024, 12, 1)->startOfDay();
+        $endOfMonth = Carbon::createFromDate(2024, 12, 1)->endOfMonth();
+        $last7Day = Carbon::now()->subDays(7)->toDateString();
+
+        $dailyRecap = KiosDailyRecap::with('customer', 'keperluan', 'recapTs', 'kiosWtb', 'kiosWts')
+                        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
                         ->get();
         return $dailyRecap->map(function ($recap) {
             return [
                 $recap->keperluan->nama,
+                $recap->customer_id,
                 !empty($recap->recapTs) && $recap->keperluan->nama == 'Technical Support' ?
                     $recap->recapTs->technicalSupport->nama . "#" . 
                     $recap->recapTs->produkjenis->jenis_produk . "#" . 
@@ -28,7 +33,8 @@ class KiosDailyRecapExport implements FromCollection, WithHeadings
                 !empty($recap->kiosWts) && $recap->keperluan->nama == 'Want to Sell' ?
                     $recap->kiosWts->subjenis->paket_penjualan . "#" . 
                     $recap->kiosWts->produk_worth . "#" . 
-                    $recap->kiosWts->keterangan : '-'
+                    $recap->kiosWts->keterangan : '-',
+                $recap->status
             ];
         });
     }
@@ -37,9 +43,11 @@ class KiosDailyRecapExport implements FromCollection, WithHeadings
     {
         return [
             'Keperluan',
+            'Incremen Contact',
             'Recap TS',
             'Kios WTB',
-            'Kios WTS'
+            'Kios WTS',
+            'Status'
         ];
     }
 

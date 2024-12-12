@@ -15,22 +15,48 @@ use Illuminate\Support\Facades\Http;
 use App\Models\produk\ProdukSubJenis;
 use App\Models\kios\KiosHistoryOrderList;
 use App\Models\kios\KiosMetodePembayaran;
-use App\Repositories\kios\KiosRepository;
+use App\Repositories\umum\UmumRepository;
 
 class KiosShopController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(
+        private UmumRepository $umum
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $supplier = SupplierKios::all();
         $jenisProduk = ProdukJenis::all();
         $paketPenjualan = ProdukSubJenis::all();
         $orders = KiosOrder::with('orderLists.paket', 'supplier')->orderBy('created_at', 'desc')->get();
 
         return view('kios.shop.index', [
+            'title' => 'Shop',
+            'active' => 'shop',
+            'navActive' => 'product',
+            'dropdown' => '',
+            'dropdownShop' => true,
+            'divisi' => $divisiName,
+            'supplier' => $supplier,
+            'jenisProduk' => $jenisProduk,
+            'paketPenjualan' => $paketPenjualan,
+            'data' => $orders,
+        ]);
+    }
+
+    public function edit($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $divisiName = $this->umum->getDivisi($user);
+        $supplier = SupplierKios::all();
+        $jenisProduk = ProdukJenis::all();
+        $paketPenjualan = ProdukSubJenis::all();
+        $orders = KiosOrder::find($id);
+
+        return view('kios.shop.edit.edit-belanja-baru', [
             'title' => 'Shop',
             'active' => 'shop',
             'navActive' => 'product',
@@ -168,6 +194,16 @@ class KiosShopController extends Controller
                 $productName = $productPacket->paket_penjualan . " * " . $quantities[$index] ."\n";
                 $message .= $productName;
 
+                $existingSubJenisIds = $order->orderLists()->pluck('sub_jenis_id')->toArray();
+                $newSubJenisIds = array_map('intval', $request->input('jenis_paket'));
+
+                $idsToDelete = array_diff($existingSubJenisIds, $newSubJenisIds);
+
+                if (!empty($idsToDelete)) {
+                    $order->orderLists()->whereIn('sub_jenis_id', $idsToDelete)->delete();
+                    $order->histories()->whereIn('sub_jenis_id', $idsToDelete)->delete();
+                }
+
                 if($orderList) {
                     $orderList->sub_jenis_id = $jenisPaket;
                     $orderList->quantity = $quantities[$index];
@@ -228,13 +264,12 @@ class KiosShopController extends Controller
             $payment->save();
             $connectionKios->commit();
 
-            return back()->with('success', 'Success Validasi Order.');
+            return redirect()->route('shop.index')->with('success', 'Success Validasi Order.');
             
         } catch(Exception $e) {
             $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
-        
     }
 
     public function destroy($id)

@@ -57,7 +57,6 @@ $(document).ready(function () {
     $(document).on('click', '.remove-list-belanja', function () {
         let idForm = $(this).data("id");
         $('#form-list-belanja-' + idForm).remove();
-        formBelanjaLength--;
         updateOrderSummary();
     });
 

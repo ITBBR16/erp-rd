@@ -1,14 +1,5 @@
-$(document).ready(function(){
-    const paketPenjualanSecond = $('#paket_penjualan_second');
-    const biayaSatuan = $('.biaya_satuan');
-    const nomorCustomer = $('#no_customer_second');
-    const idCustmer = $('#id_customer');
-    const namaCustomer = $('#nama_customer');
-    const tambahKelengkapan = $('#tambah-kelengkapan');
-    const buttonAddKelengkapan = $('#add-second-belanja');
-    const buttonAddAdditionalKelengkapan = $('#add-second-additional-belanja');
-    const containerAdditional = $('#additional-kelengkapan-second');
-    let uniqueNumberId = 20;
+$(document).ready(function () {
+    let uniqueNumberId = 1;
 
     $(document).on('change', '#come_from', function () {
         var statusCome = $(this).val();
@@ -32,9 +23,11 @@ $(document).ready(function(){
         }
     });
 
-    nomorCustomer.on('change', function() {
-        const idValue = nomorCustomer.val();
+    $(document).on('change', '#no_customer_second', function() {
+        const idValue = $(this).val();
         const nomor = idValue.replace(/\D/g, "");
+        const idCustmer = $('#id_customer');
+        const namaCustomer = $('#nama_customer');
 
         if(nomor != '') {
             fetch(`/kios/product/getCustomerbyNomor/${nomor}`)
@@ -62,27 +55,27 @@ $(document).ready(function(){
 
     });
 
-    paketPenjualanSecond.on('change', function () {
+    $(document).on('change', '#paket_penjualan_second', function () {
         const idPaket = $(this).val();
         tambahKelengkapanSecond(idPaket);
     });
 
-    buttonAddKelengkapan.on('click', function () {
-        const paketId = paketPenjualanSecond.val();
+    $(document).on('click', '#add-second-belanja', function () {
+        const paketId = $('#paket_penjualan_second').val();
 
         if(paketId){
             uniqueNumberId++
             let addKelengkapan = `
-                <div id="tambah-kelengkapan-${uniqueNumberId}" class="grid md:grid-cols-5 md:gap-6">
-                    <div class="relative col-span-2 z-0 w-full mb-6 group">
-                        <label for="kelengkapan_second${uniqueNumberId}" class="sr-only">Jenis Paket Produk</label>
-                        <select name="kelengkapan_second[]" id="kelengkapan_second${uniqueNumberId}" class="kelengkapan_second block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                <div id="tambah-kelengkapan-${uniqueNumberId}" class="grid grid-cols-3 gap-6" style="grid-template-columns: 5fr 3fr 1fr">
+                    <div class="relative z-0 w-full mb-6 group">
+                        <label for="kelengkapan-second-${uniqueNumberId}" class="sr-only">Jenis Paket Produk</label>
+                        <select name="kelengkapan_second[]" id="kelengkapan-second-${uniqueNumberId}" class="kelengkapan-second- block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                             <option value="" hidden>Pilih Kelengkapan</option>
                         </select>
                     </div>
-                    <div class="relative col-span-2 z-0 w-full mb-6 group">
-                        <input type="number" name="quantity_second[]" id="quantity_second${uniqueNumberId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
-                        <label for="quantity_second${uniqueNumberId}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
+                    <div class="relative z-0 w-full mb-6 group">
+                        <input type="text" name="quantity_second[]" id="quantity-second-${uniqueNumberId}" class="number-format block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                        <label for="quantity-second-${uniqueNumberId}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
                     </div>
                     <div class="flex justify-center items-center col-span-1">
                         <button type="button" class="remove-second-belanja" data-id="${uniqueNumberId}">
@@ -92,7 +85,7 @@ $(document).ready(function(){
                 </div>
             `;
 
-            tambahKelengkapan.append(addKelengkapan);
+            $('#tambah-kelengkapan').append(addKelengkapan);
             tambahKelengkapanSecond(paketId, uniqueNumberId);
 
         } else {
@@ -100,7 +93,7 @@ $(document).ready(function(){
         }
     });
 
-    buttonAddAdditionalKelengkapan.on('click', function () {
+    $(document).on('click', '#add-second-additional-belanja', function () {
         uniqueNumberId++
         let additonalKelengkapan = `
             <div id="additional-kelengkapan-${uniqueNumberId}" class="grid md:grid-cols-5 md:gap-6">
@@ -109,8 +102,8 @@ $(document).ready(function(){
                     <label id="additional-kelengkapan" for="additional-kelengkapan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Additional Kelengkapan</label>
                 </div>
                 <div class="relative col-span-2 z-0 w-full mb-6 group">
-                    <input type="number" name="additional_quantity_second[]" id="quantity_second${uniqueNumberId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
-                    <label for="quantity_second${uniqueNumberId}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
+                    <input type="number" name="additional_quantity_second[]" id="additional-quantity-second-${uniqueNumberId}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                    <label for="additional-quantity-second-${uniqueNumberId}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Quantity</label>
                 </div>
                 <div class="flex justify-center items-center col-span-1">
                     <button type="button" class="remove-second-additional-belanja" data-id="${uniqueNumberId}">
@@ -120,7 +113,7 @@ $(document).ready(function(){
             </div>
         `
 
-        containerAdditional.append(additonalKelengkapan);
+        $('#additional-kelengkapan-second').append(additonalKelengkapan);
     });
 
     $(document).on("click", ".remove-second-belanja", function() {
@@ -135,7 +128,7 @@ $(document).ready(function(){
         uniqueNumberId--;
    });
 
-    biayaSatuan.on('input', function () {
+    $(document).on('input', '.biaya_satuan', function () {
         var inputValue = $(this).val();
         inputValue = inputValue.replace(/[^\d]/g, '');
         var parsedValue = parseInt(inputValue, 10);
@@ -147,7 +140,7 @@ $(document).ready(function(){
     }
 
     function tambahKelengkapanSecond(id, dataId) {
-        const ddKelengkapanSecond = $('#kelengkapan_second' + dataId);
+        const ddKelengkapanSecond = $('#kelengkapan-second-' + dataId);
             fetch(`/kios/product/getKelengkapanSecond/${id}`)
             .then(response => response.json())
             .then(data => {
@@ -169,7 +162,7 @@ $(document).ready(function(){
                     ddKelengkapanSecond.append(option);
                 });
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => alert('Error:' + error));
     }
 
 });

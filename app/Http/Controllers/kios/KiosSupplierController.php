@@ -118,6 +118,13 @@ class KiosSupplierController extends Controller
         $connectionProduk->beginTransaction();
 
         try {
+            $request->merge([
+                'no_telpon' => preg_replace('/^0/', '62', $request->input('no_telpon')),
+                'alamat_lengkap' => ucwords($request->alamat_lengkap),
+                'pic_name' => ucwords($request->pic_name),
+                'nama_perusahaan' => strtoupper($request->nama_perusahaan),
+            ]);
+            
             $request->validate([
                 'pic_name' => 'required',
                 'nama_perusahaan' => 'required',
@@ -136,9 +143,7 @@ class KiosSupplierController extends Controller
             ]);
 
             $kategoris = $request->input('kategori');
-            foreach ($kategoris as $kategori) {
-                $supplier->kategoris()->sync($kategori);
-            }
+            $supplier->kategoris()->sync($kategoris);
 
             $connectionKios->commit();
             $connectionProduk->commit();

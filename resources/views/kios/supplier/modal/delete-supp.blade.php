@@ -2,7 +2,7 @@
     <div id="delete-supplier{{ $item->id }}" tabindex="-1" class="fixed top-0 left-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[cal(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-md max-h-full">
             <div class="flex flex-col p-8 bg-white shadow-md hover:shodow-lg rounded-2xl dark:bg-gray-800">
-                <form action="{{ route('supplier.destroy', $item->id) }}" method="POST">
+                <form action="{{ route('supplier-kios.destroy', $item->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex items-center justify-between">

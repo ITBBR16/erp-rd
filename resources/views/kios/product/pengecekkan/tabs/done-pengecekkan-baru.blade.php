@@ -36,20 +36,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($dataIncoming as $history)
-                    @if ($history->status == 'Diterima' || $history->status == 'InRD')
+                @foreach ($historyPenerimaan as $history)
+                    @if ($history->pengiriman->status == 'Diterima' || $history->pengiriman->status == 'InRD')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ $history->no_resi }}
+                                {{ $history->pengiriman->no_resi }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $history->ekspedisi->ekspedisi }}
+                                {{ $history->pengiriman->ekspedisi->ekspedisi }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ \Carbon\Carbon::parse($history->penerimaan->tanggal_diterima)->isoFormat('D MMMM YYYY') }}
+                                {{ \Carbon\Carbon::parse($history->tanggal_diterima)->isoFormat('D MMMM YYYY') }}
                             </td>
                             <td class="px-6 py-2">
-                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $history->status }}</span>
+                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $history->pengiriman->status }}</span>
                             </td>
                             <td class="px-6 py-2">
                                 <button id="dropdownListDroneBaruButton{{ $history->id }}" data-dropdown-toggle="dropdownListDroneBaru{{ $history->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -62,7 +62,7 @@
                         <div id="dropdownListDroneBaru{{ $history->id }}" class="z-10 hidden bg-white rounded-lg shadow w-auto dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListDroneBaruButton{{ $history->id }}">
                                 <li>
-                                    <button type="button" data-modal-target="view-done-penerimaan{{ $history->id }}" data-modal-toggle="view-done-penerimaan{{ $history->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <button type="button" data-modal-target="view-done-penerimaan-{{ $history->id }}" data-modal-toggle="view-done-penerimaan-{{ $history->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base mr-3">visibility</i>
                                         <span class="whitespace-nowrap">History Penerimaan</span>
                                     </button>

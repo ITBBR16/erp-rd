@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\customer;
 
 use Illuminate\Http\Request;
-use App\Models\divisi\Divisi;
 use Illuminate\Validation\Rule;
 use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;

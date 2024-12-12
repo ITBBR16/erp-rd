@@ -1,10 +1,7 @@
 $(document).ready(function(){
-    const validasi_resi = $('#validasi_resi');
-    const listOrder = $('#list_order');
-    const inputSN = $('#input-serial-number');
-    
-    validasi_resi.on('change', function() {
-        const dataOrderList = validasi_resi.val();
+    $(document).on('change', '#validasi_resi', function() {
+        const dataOrderList = $(this).val();
+        const listOrder = $('#list_order');
         
         if(dataOrderList){
             fetch(`/kios/product/getOrderList/${dataOrderList}`)
@@ -13,7 +10,7 @@ $(document).ready(function(){
                     listOrder.empty();
                     
                     const defaultOption = $('<option>', {
-                        text: '-- Nama Produk --',
+                        text: 'Pilih Paket Penjualan',
                         value: '',
                         hidden: true
                     });
@@ -23,7 +20,7 @@ $(document).ready(function(){
                         
                         const option = $('<option>', {
                             value: result.id,
-                            text: result.paket.produkjenis.jenis_produk +" "+ result.paket.paket_penjualan
+                            text: result.paket.paket_penjualan
                         })
                         .addClass('dark:bg-gray-700');
                         listOrder.append(option);
@@ -36,8 +33,9 @@ $(document).ready(function(){
         }
     });
 
-    listOrder.on('change', function() {
-        const orderListId = listOrder.val();
+    $(document).on('change', '#list_order', function() {
+        const orderListId = $(this).val();
+        const inputSN = $('#input-serial-number');
         
         if(orderListId){
             fetch(`/kios/product/getQtyOrderList/${orderListId}`)
@@ -72,7 +70,7 @@ $(document).ready(function(){
                         }
                     });
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => alert('Error:' + error));
         } else {
             inputSN.empty();
         }

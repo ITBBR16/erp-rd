@@ -90,7 +90,7 @@
                             {{ $sp->nama_perusahaan }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $sp->no_telpon }}
+                           {{ formatPhoneNumber($sp->no_telpon) }}
                         </td>
                         <td class="px-6 py-2">
                             @php $no = 0; @endphp
@@ -123,7 +123,7 @@
                                         </button>
                                     </li>
                                     <li>
-                                        <a href="{{ route('supplier.edit', encrypt($sp->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300" target="__blank">
+                                        <a href="{{ route('supplier-kios.edit', encrypt($sp->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300" target="__blank">
                                             <i class="material-symbols-outlined text-base mr-3">shield_person</i>
                                             <span class="whitespace-nowrap">Support Supplier</span>
                                         </a>

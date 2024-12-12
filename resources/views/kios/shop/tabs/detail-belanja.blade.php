@@ -77,7 +77,7 @@
                         </td>
                     </tr>
                     <!-- Dropdown menu -->
-                    <div id="dropdownListBelanjaBaru{{ $item->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                    <div id="dropdownListBelanjaBaru{{ $item->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
                         <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListBelanjaBaruButton{{ $item->id }}">
                             <li>
                                 <button type="button" data-modal-target="view-order-new{{ $item->id }}" data-modal-toggle="view-order-new{{ $item->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
@@ -87,10 +87,10 @@
                             </li>
                             @if ($item->status == 'Belum Validasi')
                                 <li>
-                                    <button type="button" data-modal-target="validasi-order{{ $item->id }}" data-modal-toggle="validasi-order{{ $item->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base mr-3">task_alt</i>
+                                    <a href="{{ route('shop.edit', encrypt($item->id)) }}" target="_blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-xl mr-3">task_alt</i>
                                         <span class="whitespace-nowrap">Validasi Belanja</span>
-                                    </button>
+                                    </a>
                                 </li>
                                 <li>
                                     <button type="button" data-modal-target="delete-belanja{{ $item->id }}" data-modal-toggle="delete-belanja{{ $item->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
@@ -107,6 +107,5 @@
     </div>
     {{-- Modal Action --}}
     @include('kios.shop.modal.view-new')
-    @include('kios.shop.modal.validasi-new')
-    {{-- @include('kios.shop.modal.delete-new') --}}
+    @include('kios.shop.modal.delete-new')
 </div>

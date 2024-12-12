@@ -125,17 +125,18 @@
                             </div>
                         </td>
                     </tr>
-                    {{-- Modal --}}
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="mt-4 ">
-                {{ $dataCustomer->links() }}
-            </div>
+                    
+                @endforeach
+            </tbody>
+        </table>
+        <div class="mt-4 ">
+            {{ $dataCustomer->links() }}
         </div>
-        @include('customer.main.modal.delete-modal')
-        @include('customer.main.modal.edit-modal')
-        @include('customer.main.modal.view-modal')
+    </div>
+    {{-- Modal --}}
+    @include('customer.main.modal.delete-modal')
+    @include('customer.main.modal.edit-modal')
+    @include('customer.main.modal.view-modal')
 
     <div id="dataNotFound" class="hidden p-4">
         <div class="flex items-center justify-center">

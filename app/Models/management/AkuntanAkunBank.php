@@ -3,6 +3,7 @@
 namespace App\Models\management;
 
 use App\Models\gudang\GudangMetodePembayaran;
+use App\Models\kios\KiosMetodePembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,5 +18,10 @@ class AkuntanAkunBank extends Model
     public function gudangMP()
     {
         return $this->hasMany(GudangMetodePembayaran::class);
+    }
+
+    public function kiosReqPayment()
+    {
+        return $this->hasMany(KiosMetodePembayaran::class);
     }
 }

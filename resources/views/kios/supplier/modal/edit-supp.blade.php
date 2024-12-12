@@ -15,7 +15,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="px-6 py-6 lg:px-8">
-                    <form action="{{ route('supplier.update', $item->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    <form action="{{ route('supplier-kios.update', $item->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                         <div class="grid md:grid-cols-2 md:gap-6">

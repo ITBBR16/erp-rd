@@ -2,8 +2,9 @@
 
 namespace App\Models\kios;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\management\AkuntanAkunBank;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KiosMetodePembayaranSecond extends Model
 {
@@ -16,5 +17,10 @@ class KiosMetodePembayaranSecond extends Model
     public function payment()
     {
         return $this->hasMany(KiosPayment::class);
+    }
+
+    public function akunBank()
+    {
+        return $this->belongsTo(AkuntanAkunBank::class, 'akun_bank_id');
     }
 }

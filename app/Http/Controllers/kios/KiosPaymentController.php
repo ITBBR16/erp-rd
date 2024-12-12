@@ -9,23 +9,26 @@ use App\Models\kios\KiosOrder;
 use Illuminate\Validation\Rule;
 use App\Models\kios\KiosPayment;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosOrderSecond;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosMetodePembayaran;
-use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
 use App\Models\kios\KiosMetodePembayaranSecond;
+use App\Models\management\AkuntanAkunBank;
+use App\Repositories\umum\UmumRepository;
 
 class KiosPaymentController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(
+        private UmumRepository $umum
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
+        $daftarAkun = AkuntanAkunBank::all();
         $payment = KiosPayment::with('order.supplier', 'metodepembayaran', 'ordersecond', 'metodepembayaransecond')->get();
 
         return view('kios.shop.payment.payment', [
@@ -36,6 +39,7 @@ class KiosPaymentController extends Controller
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'payment' => $payment,
+            'daftarAkun' => $daftarAkun
         ]);
     }
 
@@ -54,14 +58,20 @@ class KiosPaymentController extends Controller
             ]);
             $user = auth()->user();
             $divisiId = $user->divisi_id;
-            $divisi = $this->suppKiosRepo->getDivisi($user);
+            $divisi = $this->umum->getDivisi($user);
             $divisiName = $divisi->nama;
             $tanggal = Carbon::now();
             $tanggal->setTimezone('Asia/Jakarta');
             $formattedDate = $tanggal->format('d/m/Y H:i:s');
-            $kiosPayment = KiosPayment::findOrFail($id);
-            $orderId = $request->input('order_id');
             $statusOrder = $request->input('status_order');
+            $kiosPayment = KiosPayment::findOrFail($id);
+            $dataMPBaru = $kiosPayment->metodepembayaran;
+            $dataMPSecond = $kiosPayment->metodepembayaransecond;
+            $ssMediaTransaksi = ($statusOrder == 'Baru') ? $dataMPBaru->akunBank->nama : $dataMPSecond->media_pembayaran;
+            $ssNamaAkun = ($statusOrder == 'Baru') ? $dataMPBaru->nama_akun : $dataMPSecond->nama_akun;
+            $ssNoRek = ($statusOrder == 'Baru') ? $dataMPBaru->no_rek : $dataMPSecond->no_rek;
+
+            $orderId = $request->input('order_id');
             $noTransaksi = ($statusOrder == 'Baru') ? 'KiosBaru-' . $id : 'KiosBekas-' . $id;
             $keteranganFinance = ($statusOrder == 'Baru') ? 'Order Id N.' . $id : 'Order Id S.' . $id;
             
@@ -74,9 +84,9 @@ class KiosPaymentController extends Controller
                 'tanggal' => $formattedDate,
                 'divisi' => $divisiName,
                 'no_transaksi' => $noTransaksi,
-                'media_transaksi' => $request->input('media_transaksi'),
-                'no_rek' => $request->input('no_rek'),
-                'nama_akun' => $request->input('nama_akun'),
+                'media_transaksi' => $ssMediaTransaksi,
+                'no_rek' => $ssNoRek,
+                'nama_akun' => $ssNamaAkun,
                 'nilai_belanja' => $totalBelanja,
                 'ongkir' => $totalOngkir,
                 'pajak' => $totalPajak,
@@ -166,7 +176,7 @@ class KiosPaymentController extends Controller
                 if($statusOrder === 'Baru') {
                     $validate = $request->validate([
                                     'supplier_id' => 'required',
-                                    'media_pembayaran' => 'required',
+                                    'akun_bank_id' => 'required',
                                     'no_rek' => ['required', Rule::unique('rumahdrone_kios.metode_pembayaran_supplier', 'no_rek')],
                                     'nama_akun' => 'required',
                                 ]);
@@ -177,7 +187,7 @@ class KiosPaymentController extends Controller
                 } else {
                     $validate = $request->validate([
                         'customer_id' => 'required',
-                        'media_pembayaran' => 'required',
+                        'akun_bank_id' => 'required',
                         'no_rek' => ['required', Rule::unique('rumahdrone_kios.kios_metode_pembayaran_second', 'no_rek')],
                         'nama_akun' => 'required',
                     ]);
@@ -256,7 +266,7 @@ class KiosPaymentController extends Controller
                             ]);
                             $updateStatus->update(['status' => 'Belum Dikirim']);
                         } else {
-                            $updateStatus->update(['status' => 'Proses QC']);
+                            $updateStatus->update(['status_pembayaran' => 'Paid', 'status' => 'Proses QC']);
                         }
                     } else {
                         throw new \Exception('OrderSecond not found');

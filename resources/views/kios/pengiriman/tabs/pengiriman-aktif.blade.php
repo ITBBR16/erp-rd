@@ -42,7 +42,7 @@
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 {{ ($data->status_order == 'Baru' ? 
-                                        ('N.' . ($data->order ? $data->order->id : '')) : 
+                                        ('N.' . $data?->order->id) : 
                                             (
                                                 $data->status_order == 'Bekas' ? 
                                                     ('S.' . ($data->ordersecond ? $data->ordersecond->id : '')) : 

@@ -162,12 +162,9 @@ Route::middleware('kios')->group(function () {
                 Route::post('/pembayaran/{id}', 'validasi')->name('form-validasi-payment');
             });
 
-            Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);
-            Route::get('/getLayanan/{ekspedisiId}', [KiosPengirimanController::class, 'getLayanan']);
-
-            Route::group(['controller' => KiosSupplierController::class], function () {
-                Route::resource('/supplier', KiosSupplierController::class);
-                Route::put('/supplier/update-support', 'supportSupplier')->name('support-supplier');
+            Route::group(['controller' => KiosPengirimanController::class], function () {
+                Route::resource('/pengiriman', KiosPengirimanController::class)->only(['index', 'update']);
+                Route::get('/getLayanan/{ekspedisiId}', 'getLayanan');
             });
 
             Route::group(['controller' => AddKelengkapanKiosController::class], function () {
@@ -184,6 +181,12 @@ Route::middleware('kios')->group(function () {
             });
 
             Route::resource('/penerimaan-produk', KiosPenerimaanProdukController::class)->only(['index', 'update']);
+            
+            Route::group(['controller' => KiosPengecekkanProdukBaruController::class], function () {
+                Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
+                Route::get('/getOrderList/{orderId}', 'getOrderList');
+                Route::get('/getQtyOrderList/{orderListId}', 'getQtyOrderList');
+            });
 
             Route::resource('/pengecekkan-produk-second', KiosPengecekkanSecondController::class)->names([
                 'edit' => 'pengecekkan-produk-second.quality-control',
@@ -191,10 +194,9 @@ Route::middleware('kios')->group(function () {
 
             Route::resource('/filter-product-second', KiosFilterProdukSecondController::class);
 
-            Route::group(['controller' => KiosPengecekkanProdukBaruController::class], function () {
-                Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
-                Route::get('/getOrderList/{orderId}', 'getOrderList');
-                Route::get('/getQtyOrderList/{orderListId}', 'getQtyOrderList');
+            Route::group(['controller' => KiosSupplierController::class], function () {
+                Route::resource('/supplier-kios', KiosSupplierController::class);
+                Route::put('/supplier/update-support', 'supportSupplier')->name('support-supplier');
             });
 
             Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);

@@ -93,16 +93,16 @@
                 </div>
                 <div class="grid grid-cols-3 gap-8 mb-6">
                     <div class="relative">
-                        <select name="validasi_resi" id="validasi_resi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
-                            <option value="" hidden>-- No Resi --</option>
+                        <select name="validasi_resi" id="validasi_resi" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                            <option value="" hidden>Pilih No Resi</option>
                             @foreach ($dataOrderList as $dol)
                                 <option value="{{ $dol->id }}" class="dark:bg-gray-700">{{ $dol->no_resi }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="relative col-span-2">
-                        <select name="list_order" id="list_order" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
-                            <option value="" hidden>-- Nama Produk --</option>
+                        <select name="list_order" id="list_order" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                            <option value="" hidden>Pilih Paket Penjualan</option>
                         </select>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                     Input Serial Number :
                 </h3>
                 <div id="input-serial-number" class="flex flex-wrap gap-6 mb-6">
-                    
+
                 </div>
                 <div class="flex justify-end">
                     <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>

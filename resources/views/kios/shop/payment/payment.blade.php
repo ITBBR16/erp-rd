@@ -34,6 +34,7 @@
             </button>
         </div>
     @endif
+
     <div class="flex flex-nowrap relative overflow-x-auto">
         <div class="flex flex-row justify-between w-full">
             <div class="flex flex-row gap-6">
@@ -45,7 +46,7 @@
                 </div>
             </div>
             <div class="flex flex-row gap-6">
-                <label for="table-search" class="sr-only">Search</label>
+                {{-- <label for="table-search" class="sr-only">Search</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <svg class="w-5 h-5 text-gray-500 dark:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +55,7 @@
                     </div>
                     <input type="text" id="table-search" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-52 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search. . .">
                 </div>
-                {{-- <div class="relative">
+                <div class="relative">
                     <button type="button" data-modal-target="add-payment-kios" data-modal-toggle="add-payment-kios" class="p-2 text-blue-700 border border-blue-700 hover:text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg text-sm py-2.5 px-5 text-center dark:border-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Add Payment</button>
                 </div> --}}
             </div>
@@ -116,19 +117,27 @@
                         <!-- Dropdown menu -->
                         <div id="dropdownReqPembayaran{{ $py->id }}" class="z-10 hidden bg-white rounded-lg shadow w-auto dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownReqPembayaranButton{{ $py->id }}">
-                                @if ($py->status != 'Waiting For Payment')
-                                    <li>
-                                        <button type="button" data-modal-target="konfirmasi-pembayaran{{ $py->id }}" data-modal-toggle="konfirmasi-pembayaran{{ $py->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base mr-3">task_alt</i>
-                                            <span class="whitespace-nowrap">Konfirmasi Pembayaran</span>
-                                        </button>
-                                    </li>
+                                <li>
+                                    <button type="button" data-modal-target="view-belum-terbayar-{{ $py->id }}" data-modal-toggle="view-belum-terbayar-{{ $py->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base mr-3">visibility</i>
+                                        <span class="whitespace-nowrap">Detail Pembayaran</span>
+                                    </button>
+                                </li>
+                                @if ($py->status == 'Unpaid')
                                     <li>
                                         <button type="button" data-modal-target="edit-pembayaran{{ $py->id }}" data-modal-toggle="edit-pembayaran{{ $py->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <i class="material-symbols-outlined text-base mr-3">edit</i>
                                             <span class="whitespace-nowrap">Edit Pembayaran</span>
                                         </button>
                                     </li>
+                                    @if (!empty($py->metodepembayaran) || !empty($py->metodepembayaransecond))
+                                        <li>
+                                            <button type="button" data-modal-target="konfirmasi-pembayaran{{ $py->id }}" data-modal-toggle="konfirmasi-pembayaran{{ $py->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <i class="material-symbols-outlined text-base mr-3">task_alt</i>
+                                                <span class="whitespace-nowrap">Konfirmasi Pembayaran</span>
+                                            </button>
+                                        </li>
+                                    @endif
                                 @endif
                             </ul>
                         </div>
@@ -236,6 +245,7 @@
 
     {{-- Modal --}}
     {{-- @include('kios.shop.payment.modal.add-payment') --}}
+    @include('kios.shop.payment.modal.view-payment')
     @include('kios.shop.payment.modal.validasi-payment')
     @include('kios.shop.payment.modal.edit-payment')
     @include('kios.shop.payment.modal.view-done-payment')

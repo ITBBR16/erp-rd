@@ -22,15 +22,18 @@ use App\Models\ekspedisi\PengirimanEkspedisi;
 use App\Models\kios\KiosAlasanJual;
 use App\Models\kios\KiosMetodePembelianSecond;
 use App\Models\kios\KiosMetodePembayaranSecond;
+use App\Repositories\umum\UmumRepository;
 
 class KiosShopSecondController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(
+        private UmumRepository $umum
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $metode_pembelian = KiosMetodePembelianSecond::all();
         $statusPembayaran = KiosStatusPembayaran::all();
         $customer = Customer::all();
@@ -202,7 +205,7 @@ class KiosShopSecondController extends Controller
         try {
             $user = auth()->user();
             $divisiId = $user->divisi_id;
-            $divisi = $this->suppKiosRepo->getDivisi($user);
+            $divisi = $this->umum->getDivisi($user);
             $divisiName = $divisi->nama;
             $tanggal = Carbon::now();
             $tanggal->setTimezone('Asia/Jakarta');

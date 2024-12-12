@@ -11,7 +11,7 @@
                 </button>
             </div>
             <div class="px-6 py-6 lg:px-8">
-                <form action="{{ route('supplier.store') }}" method="POST" autocomplete="off">
+                <form action="{{ route('supplier-kios.store') }}" method="POST" autocomplete="off">
                     @csrf
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div class="relative z-0 w-full mb-6 group">
