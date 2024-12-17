@@ -23,4 +23,9 @@ class RepairTimestampStatus extends Model
         return $this->hasMany(RepairJurnal::class, 'timestamps_status_id');
     }
 
+    public function jenisStatus()
+    {
+        return $this->belongsTo(RepairJenisStatus::class, 'jenis_status_id');
+    }
+
 }

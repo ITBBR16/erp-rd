@@ -185,20 +185,20 @@
                             <tbody id="container-estimasi-active">
                                 @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $index => $estimasi)
                                     @if ($estimasi->active == 'Active')
-                                        <tr id="input-estimasi-{{ $index }}" class="bg-white dark:bg-gray-800">
+                                        <tr id="konfirmasi-estimasi-{{ $index }}" class="bg-white dark:bg-gray-800">
                                             <td class="px-2 py-4">
                                                 <input type="hidden" name="status[]" id="status-active-{{ $index }}" value="{{ $estimasi->active }}">
                                                 <input type="hidden" name="id_hasil_estimasi[]" value="{{ $estimasi->id }}">
-                                                <select name="jenis_transaksi_lama[]" id="estimasi-jt-{{ $index }}" data-id="{{ $index }}" class="estimasi-jt bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                                <select name="jenis_transaksi_lama[]" id="konfirmasi-jt-{{ $index }}" data-id="{{ $index }}" class="konfirmasi-jt bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                     <option value="" hidden>Pilih Jenis Transaksi</option>
                                                     @foreach ($jenisTransaksi as $jt)
                                                         <option value="{{ $jt->id }}" {{ $jt->id == $estimasi->jenis_transaksi_id ? 'selected' : '' }}>{{ $jt->code_jt }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="px-2 py-4" id="estimasi-jpj-container-{{ $index }}">
+                                            <td class="px-2 py-4" id="konfirmasi-jpj-container-{{ $index }}">
                                                 @if (isset($estimasi->gudang_produk_id))
-                                                    <select name="jenis_part_jasa_lama[]" id="estimasi-jp-{{ $index }}" data-id="{{ $index }}" class="estimasi-jp bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                                    <select name="jenis_part_jasa_lama[]" id="konfirmasi-jp-{{ $index }}" data-id="{{ $index }}" class="konfirmasi-jp bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                         <option value="" hidden>Pilih Jenis Produk</option>
                                                         @foreach ($jenisProduk as $produk)
                                                             @if ($estimasi->sparepartGudang->produkSparepart->produkJenis->id == $produk->id)
@@ -209,18 +209,17 @@
                                                         @endforeach
                                                     </select>
                                                 @else
-                                                    <input type="text" name="jenis_part_jasa_lama[]" id="estimasi-jp-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa" value="{{ $estimasi->jenis_jasa }}">
+                                                    <input type="text" name="jenis_part_jasa_lama[]" id="konfirmasi-jp-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa" value="{{ $estimasi->jenis_jasa }}">
                                                 @endif
                                             </td>
-                                            <td class="px-2 py-4" id="estimasi-part-jasa-container-{{ $index }}">
+                                            <td class="px-2 py-4" id="konfirmasi-part-jasa-container-{{ $index }}">
                                                 @if (isset($estimasi->gudang_produk_id))
-                                                    <input type="hidden" name="nama_part[]" id="nama-part-{{ $index }}" value="{{ $estimasi->nama_produk }}">
-                                                    <select name="nama_part_jasa_lama[]" id="estimasi-part-{{ $index }}" data-id="{{ $index }}" class="estimasi-part bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                                    <select name="nama_part_jasa_lama[]" id="konfirmasi-part-{{ $index }}" data-id="{{ $index }}" class="konfirmasi-part bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                         <option value="" hidden>Pilih Part</option>
                                                         <option value="{{ $estimasi->gudang_produk_id }}" selected>{{ $estimasi->sparepartGudang->produkSparepart->nama_internal }}</option>
                                                     </select>
                                                 @else
-                                                    <input type="text" name="nama_part_jasa_lama[]" id="estimasi-part-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa" value="{{ $estimasi->nama_jasa }}">
+                                                    <input type="text" name="nama_part_jasa_lama[]" id="konfirmasi-part-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa" value="{{ $estimasi->nama_jasa }}">
                                                 @endif
                                             </td>
                                             <td class="px-2 py-4">
@@ -281,7 +280,7 @@
                             <tbody id="container-data-gudang-active">
                                 @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $indexGudang => $gudang)
                                     @if ($gudang->active == 'Active')
-                                        <tr id="data-gudang-{{ $indexGudang }}" class="bg-white dark:bg-gray-800">
+                                        <tr id="konfirmasi-data-gudang-{{ $indexGudang }}" class="bg-white dark:bg-gray-800">
                                             <td class="px-2 py-4">
                                                 <div class="relative z-0 w-full">
                                                     <input name="stok_part[]" id="stok-part-{{ $indexGudang }}" type="text" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="-" readonly>
@@ -362,36 +361,35 @@
                             <tbody id="container-estimasi-deactive">
                                 @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $index => $estimasi)
                                     @if ($estimasi->active == 'Deactive')
-                                        <tr id="input-estimasi-{{ $index }}" class="bg-white dark:bg-gray-800">
+                                        <tr id="konfirmasi-estimasi-{{ $index }}" class="bg-white dark:bg-gray-800">
                                             <td class="px-2 py-4">
                                                 <input type="hidden" name="status[]" id="status-active-{{ $index }}" value="{{ $estimasi->active }}">
                                                 <input type="hidden" name="id_hasil_estimasi[]" value="{{ $estimasi->id }}">
-                                                <select name="jenis_transaksi_lama[]" id="estimasi-jt-{{ $index }}" data-id="{{ $index }}" class="estimasi-jt bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                                <select name="jenis_transaksi_lama[]" id="konfirmasi-jt-{{ $index }}" data-id="{{ $index }}" class="konfirmasi-jt bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                     <option value="" hidden>Pilih Jenis Transaksi</option>
                                                     @foreach ($jenisTransaksi as $jt)
                                                         <option value="{{ $jt->id }}" {{ $jt->id == $estimasi->jenis_transaksi_id ? 'selected' : '' }}>{{ $jt->code_jt }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class="px-2 py-4" id="estimasi-jpj-container-{{ $index }}">
+                                            <td class="px-2 py-4" id="konfirmasi-jpj-container-{{ $index }}">
                                                 @if (isset($estimasi->sku))
-                                                    <select name="jenis_part_jasa_lama[]" id="estimasi-jp-{{ $index }}" data-id="{{ $index }}" class="estimasi-jp bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                                    <select name="jenis_part_jasa_lama[]" id="konfirmasi-jp-{{ $index }}" data-id="{{ $index }}" class="konfirmasi-jp bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                         <option value="" hidden>Pilih Jenis Produk</option>
                                                         <option value="{{ $estimasi->jenis_produk }}" selected>{{ $estimasi->jenis_produk }}</option>
                                                     </select>
                                                 @else
-                                                    <input type="text" name="jenis_part_jasa_lama[]" id="estimasi-jp-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa" value="{{ $estimasi->jenis_jasa }}">
+                                                    <input type="text" name="jenis_part_jasa_lama[]" id="konfirmasi-jp-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa" value="{{ $estimasi->jenis_jasa }}">
                                                 @endif
                                             </td>
-                                            <td class="px-2 py-4" id="estimasi-part-jasa-container-{{ $index }}">
+                                            <td class="px-2 py-4" id="konfirmasi-part-jasa-container-{{ $index }}">
                                                 @if (isset($estimasi->sku))
-                                                    <input type="hidden" name="nama_part[]" id="nama-part-{{ $index }}" value="{{ $estimasi->nama_produk }}">
-                                                    <select name="nama_part_jasa_lama[]" id="estimasi-part-{{ $index }}" data-id="{{ $index }}" class="estimasi-part bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                                    <select name="nama_part_jasa_lama[]" id="konfirmasi-part-{{ $index }}" data-id="{{ $index }}" class="konfirmasi-part bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                         <option value="" hidden>Pilih Part</option>
                                                         <option value="{{ $estimasi->sku }}" selected>{{ $estimasi->nama_produk }}</option>
                                                     </select>
                                                 @else
-                                                    <input type="text" name="nama_part_jasa_lama[]" id="estimasi-part-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa" value="{{ $estimasi->nama_jasa }}">
+                                                    <input type="text" name="nama_part_jasa_lama[]" id="konfirmasi-part-{{ $index }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa" value="{{ $estimasi->nama_jasa }}">
                                                 @endif
                                             </td>
                                             <td class="px-2 py-4">
@@ -404,7 +402,7 @@
                                                 </div>
                                             </td>
                                             <td class="px-2 py-4 text-center">
-                                                <button type="button" data-id="{{ $index }}" >
+                                                <button type="button" data-id="{{ $index }}" class="activate-button">
                                                     <span class="material-symbols-outlined text-red-600 hover:text-red-500">add_circle</span>
                                                 </button>
                                             </td>
@@ -435,7 +433,7 @@
                             <tbody id="container-data-gudang-deactive">
                                 @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $indexGudang => $gudang)
                                     @if ($gudang->active == 'Deactive')
-                                        <tr id="data-gudang-{{ $indexGudang }}" class="bg-white dark:bg-gray-800">
+                                        <tr id="konfirmasi-data-gudang-{{ $indexGudang }}" class="bg-white dark:bg-gray-800">
                                             <td class="px-2 py-4">
                                                 <div class="relative z-0 w-full">
                                                     <input name="stok_part[]" id="stok-part-{{ $indexGudang }}" type="text" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="-" readonly>

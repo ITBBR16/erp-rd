@@ -87,7 +87,7 @@
                                 <li>
                                     <button data-modal-target="lanjut-wait-konfirmasi-{{ $case->id }}" data-modal-toggle="lanjut-wait-konfirmasi-{{ $case->id }}" type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">find_replace</span>
-                                        <span class="whitespace-nowrap">Konfirmasi Pengerjaan</span>
+                                        <span class="whitespace-nowrap">Lanjut Konfirmasi</span>
                                     </button>
                                 </li>
                             </ul>

@@ -180,18 +180,19 @@
                                 <p>{{ $case?->qualityControl->kesimpulan ?? "-" }}</p>
                             </div>
                             <div class="border block p-4 bg-white text-sm text-gray-900 rounded-lg dark:border-gray-600 space-y-4">
-                                <h3 class="text-base font-semibold dark:text-white">Jurnal</h3>
-                                @php
-                                    $timeStamp = $case?->timestampStatus?->firstWhere('jenis_status_id', 7);
-                                @endphp
-
-                                @if ($timeStamp && $timeStamp->jurnal->isNotEmpty())
-                                    @foreach ($timeStamp->jurnal->sortByDesc('created_at')->take(1) as $jurnal)
-                                        <p>{!! nl2br(e($jurnal->isi_jurnal)) !!}</p>
+                                <h3 class="text-lg font-semibold mb-4 pt-2 border-t dark:text-white">All Jurnal</h3>
+                                <ol class="relative border-s border-gray-200 dark:border-gray-700">
+                                    @foreach ($case->timestampStatus as $status)
+                                        <li class="mb-10 ms-4">
+                                            <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                            <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ \Carbon\Carbon::parse($status->created_at)->isoFormat('D MMMM YYYY') }}</time>
+                                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $status->jenisStatus->jenis_status }}</h3>
+                                            @foreach ($status->jurnal as $jurnal)
+                                                <p class="text-sm font-normal text-gray-500 dark:text-gray-400">{!! nl2br(e($jurnal->isi_jurnal)) !!}</p>
+                                            @endforeach
+                                        </li>
                                     @endforeach
-                                @else
-                                    <p>-</p>
-                                @endif
+                                </ol>
                             </div>
                         </div>
                     </div>

@@ -14,10 +14,10 @@
             body * {
                 visibility: hidden;
             }
-            #coba-print-repair, #coba-print-repair * {
+            .invoice-penerimaan-repair, .invoice-penerimaan-repair * {
                 visibility: visible;
             }
-            #coba-print-repair {
+            .invoice-penerimaan-repair {
                 margin-top: -215px;
                 padding: 0;
                 width: 100%;

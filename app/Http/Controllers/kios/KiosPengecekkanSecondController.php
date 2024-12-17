@@ -5,23 +5,24 @@ namespace App\Http\Controllers\kios;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosQcProdukSecond;
 use App\Models\produk\ProdukKelengkapan;
 use App\Models\produk\ProdukSubJenis;
-use App\Repositories\kios\KiosRepository;
+use App\Repositories\umum\UmumRepository;
 
 class KiosPengecekkanSecondController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(
+        private UmumRepository $umum
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $secondOrder = KiosOrderSecond::where('status', 'Proses QC')->get();
 
         return view('kios.product.pengecekkan.index-pengecekkan-second', [
@@ -39,7 +40,7 @@ class KiosPengecekkanSecondController extends Controller
     {
         $id = decrypt($encryptId);
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $kos = KiosOrderSecond::findOrFail($id);
         return view('kios.product.pengecekkan.qc-second.qc-second', [
             'title' => 'Quality Control Second',
@@ -61,6 +62,9 @@ class KiosPengecekkanSecondController extends Controller
 
         try {
             $statusQc = 'Done QC';
+            $orderId = $request->input('order_second_id');
+            $customerId = $request->input('customer_id');
+            $customSN = 'S' . $orderId . $customerId;
             $pivotIds = $request->input('pivot_id');
             $serialNumbers = $request->input('serial_number');
             $keterangan = $request->input('keterangan');
@@ -75,7 +79,7 @@ class KiosPengecekkanSecondController extends Controller
                     'kondisi' => $kondisi[$index],
                     'keterangan' => $keterangan[$index],
                     'harga_satuan' => '0',
-                    'serial_number' => $serialNumbers[$index],
+                    'serial_number' => ($serialNumbers[$index] != "") ? $serialNumbers[$index] : $customSN . $pivotId,
                     'status' => $statusQc,
                 ];
 

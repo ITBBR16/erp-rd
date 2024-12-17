@@ -116,30 +116,30 @@
                                         <span class="whitespace-nowrap">Add Jurnal</span>
                                     </button>
                                 </li>
-                                @if (optional($case?->qualityControl?->cekFisik)->isEmpty())
+                                {{-- @if (optional($case?->qualityControl?->cekFisik)->isEmpty() || $case?->qualityControl?->cekFisik) --}}
                                     <li>
                                         <button type="button" data-modal-target="qc-cek-fisik-{{ $case->id }}" data-modal-toggle="qc-cek-fisik-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <span class="material-symbols-outlined text-base mr-3">minor_crash</span>
                                             <span class="whitespace-nowrap">Cek Fisik</span>
                                         </button>
                                     </li>
-                                @endif
-                                @if (optional($case?->qualityControl?->cekCalibrasi)->isEmpty())
+                                {{-- @endif --}}
+                                {{-- @if (optional($case?->qualityControl?->cekCalibrasi)->isEmpty()) --}}
                                     <li>
                                         <button type="button" data-modal-target="qc-cek-calibrasi-{{ $case->id }}" data-modal-toggle="qc-cek-calibrasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <span class="material-symbols-outlined text-base mr-3">compass_calibration</span>
                                             <span class="whitespace-nowrap">Cek Calibrasi</span>
                                         </button>
                                     </li>
-                                @endif
-                                @if (optional($case?->qualityControl?->testFly)->isEmpty())
+                                {{-- @endif --}}
+                                {{-- @if (optional($case?->qualityControl?->testFly)->isEmpty()) --}}
                                     <li>
                                         <button type="button" data-modal-target="qc-test-fly-{{ $case->id }}" data-modal-toggle="qc-test-fly-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <span class="material-symbols-outlined text-base mr-3">flight_takeoff</span>
                                             <span class="whitespace-nowrap">Test Flight</span>
                                         </button>
                                     </li>
-                                @endif
+                                {{-- @endif --}}
                                 @if (optional($case?->qualityControl?->cekFisik)->isNotEmpty() && optional($case?->qualityControl?->cekCalibrasi)->isNotEmpty() && optional($case?->qualityControl?->testFly)->isNotEmpty())
                                     <li>
                                         <button type="button" data-modal-target="konfirmasi-qc-{{ $case->id }}" data-modal-toggle="konfirmasi-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">

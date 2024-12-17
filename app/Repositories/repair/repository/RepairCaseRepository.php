@@ -16,19 +16,19 @@ use App\Repositories\repair\interface\RepairCaseInterface;
 
 class RepairCaseRepository implements RepairCaseInterface
 {
-    protected $modelCase, $modelFungsional, $modelJenisCase, $modelRepairKelengkapan, $modelReqPart, $modelStatus, $modelTransaksi, $modelPembayaran, $modelAkun, $connection;
+    protected $connection;
 
-    public function __construct(RepairCase $case, RepairJenisFungsional $repairJenisFungsional, RepairJenisCase $repairJenisCase, RepairKelengkapan $repairKelengkapan, RepairReqSpareparts $repairReqSpareparts, RepairJenisStatus $repairJenisStatus, RepairTransaksi $repairTransaksi, RepairTransaksiPembayaran $repairTransaksiPembayaran, KiosAkunRD $kiosAkunRD)
+    public function __construct(
+        private RepairCase $modelCase,
+        private RepairJenisFungsional $modelFungsional,
+        private RepairJenisCase $modelJenisCase,
+        private RepairKelengkapan $modelRepairKelengkapan,
+        private RepairReqSpareparts $modelReqPart,
+        private RepairJenisStatus $modelStatus,
+        private RepairTransaksi $modelTransaksi,
+        private RepairTransaksiPembayaran $modelPembayaran,
+        private KiosAkunRD $modelAkun)
     {
-        $this->modelCase = $case;
-        $this->modelFungsional = $repairJenisFungsional;
-        $this->modelJenisCase = $repairJenisCase;
-        $this->modelRepairKelengkapan = $repairKelengkapan;
-        $this->modelReqPart = $repairReqSpareparts;
-        $this->modelStatus = $repairJenisStatus;
-        $this->modelTransaksi = $repairTransaksi;
-        $this->modelPembayaran = $repairTransaksiPembayaran;
-        $this->modelAkun = $kiosAkunRD;
         $this->connection = DB::connection('rumahdrone_repair');
     }
 

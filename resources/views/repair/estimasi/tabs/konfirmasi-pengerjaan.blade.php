@@ -73,6 +73,12 @@
                                     </button>
                                 </li>
                                 <li>
+                                    <a href="{{ route('konfirmasi-estimasi.edit', encrypt($case->id)) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-xl mr-3">playlist_add_check_circle</i>
+                                        <span class="whitespace-nowrap">Ubah Estimasi</span>
+                                    </a>
+                                </li>
+                                <li>
                                     <button type="button" data-modal-target="add-jurnal-konfirmasi-{{ $case->id }}" data-modal-toggle="add-jurnal-konfirmasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">menu_book</span>
                                         <span class="whitespace-nowrap">Add Jurnal</span>
@@ -81,7 +87,7 @@
                                 <li>
                                     <button data-modal-target="lanjut-pengerjaan-{{ $case->id }}" data-modal-toggle="lanjut-pengerjaan-{{ $case->id }}" type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">find_replace</span>
-                                        <span class="whitespace-nowrap">Lanjut Pengerjaan</span>
+                                        <span class="whitespace-nowrap">Konfirmasi Pengerjaan</span>
                                     </button>
                                 </li>
                             </ul>

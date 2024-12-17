@@ -1,14 +1,10 @@
 $(document).ready(function(){
-    const containerFilterSecond = $('#additional-kelengkapan-filter-second');
-    const containerFilterExclude = $('#barang-exclude-filter-second');
-    const tambahAdditionalFilter = $('#add-second-additional-filter');
-    const tambahExcludeBarangQcSecond = $('#add-second-exclude-kelengkapan-filter')
-    const paketPenjualanQcSecond = $('#paket-penjualan-filter-id');
+    const tambahExcludeBarangQcSecond = $()
     let uniqueCount = 20;
 
-    tambahAdditionalFilter.on('click', function () {
+    $(document).on('click', '#add-second-additional-filter', function () {
         uniqueCount++
-        const paketId = paketPenjualanQcSecond.val();
+        const paketId = $('#paket-penjualan-filter-id').val();
 
         let addAdditonalForm = `
             <tr id="additionalKelengkapanFilter-${uniqueCount}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -51,7 +47,7 @@ $(document).ready(function(){
             </tr>
         `;
 
-        containerFilterSecond.append(addAdditonalForm);
+        $('#additional-kelengkapan-filter-second').append(addAdditonalForm);
 
         if(paketId){
             const ddFilterKelengkapan = $('#kelengkapan_filter_additional' + uniqueCount);
@@ -82,7 +78,7 @@ $(document).ready(function(){
         }
     });
 
-    tambahExcludeBarangQcSecond.on('click', function () {
+    $(document).on('click', '#add-second-exclude-kelengkapan-filter', function () {
         uniqueCount++
 
         let addAdditonalForm = `
@@ -118,7 +114,7 @@ $(document).ready(function(){
         </div>
         `;
 
-        containerFilterExclude.append(addAdditonalForm);
+        $('#barang-exclude-filter-second').append(addAdditonalForm);
     });
 
     $(document).on("click", ".remove-exclude-kelengkapan-filter", function() {
@@ -150,7 +146,7 @@ $(document).ready(function(){
 
     function updateCekBiayaFilter() {
         let totalNilai = 0;
-        let biayaAwal = $("#biaya_ambil").val();
+        let biayaAwal = $("#biaya-ambil-filter").val();
         let parsedBiayaAwal = parseFloat(biayaAwal.replace(/\D/g, ''));
 
         $("#additional-kelengkapan-filter-second tr").each(function () {
@@ -161,7 +157,7 @@ $(document).ready(function(){
         });
         
         var showNilai = formatRupiah(totalNilai);
-        $("#biaya_cek_filter").val(showNilai);
+        $("#biaya-cek-filter").val(showNilai);
 
         if( parsedBiayaAwal === totalNilai ) {
             $("#btn-filter-second").removeClass('cursor-not-allowed').removeAttr('disabled', true);

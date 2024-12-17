@@ -5,7 +5,7 @@ function formatAngka(angka) {
 $(document).ready(function () {
     let countForm = 1;
 
-    $('#add-item-estimasi').on('click', function () {
+    $(document).on('click', '#add-item-estimasi', function () {
         countForm++;
         const containerEstimasi = $('#container-input-estimasi');
         const containerGudang = $('#container-data-gudang');
@@ -130,8 +130,8 @@ $(document).ready(function () {
 
             getJenisDrone(formId);
         } else {
-            let itemJpJasa = `<input type="text" name="jenis_part_jasa[]" id="estimasi-jp-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa">`
-            let itemNpjJasa = `<input type="text" name="nama_part_jasa[]" id="estimasi-part-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa">`
+            let itemJpJasa = `<input type="text" name="jenis_part_jasa[]" id="estimasi-jp-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" disabled>`
+            let itemNpjJasa = `<input type="text" name="nama_part_jasa[]" id="estimasi-part-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa" required>`
             $('#estimasi-jpj-container-' + formId).append(itemJpJasa)
             $('#estimasi-part-jasa-container-' + formId).append(itemNpjJasa)
         }

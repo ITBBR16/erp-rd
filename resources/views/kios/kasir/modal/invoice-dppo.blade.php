@@ -20,7 +20,7 @@
                                           </address>
                                     </div>
                                 </div>
-                                <input type="hidden" id="invoice-number" value="{{ $today->format('Ymd') }}{{ $invoiceid + 1 }}">
+                                <input type="hidden" id="invoice-number" value="{{ $today->format('Ymd') }}{{ $invoice + 1 }}">
                                 <div class="mt-3 grid sm:grid-cols-2 gap-3">
                                     <div>
                                         <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
@@ -42,7 +42,7 @@
                                         <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-2">
                                             <dl class="grid sm:grid-cols-5 gap-x-3">
                                                 <dt class="col-span-4 font-semibold text-gray-800 dark:text-gray-200">No Invoice :</dt>
-                                                <dd class="col-span-1 text-gray-500">{{ $today->format('Ymd') }}{{ $invoiceid + 1 }}</dd>
+                                                <dd class="col-span-1 text-gray-500">{{ $today->format('Ymd') }}{{ $invoice + 1 }}</dd>
                                             </dl>
                                             <dl class="-mt-1 grid sm:grid-cols-5 gap-x-3">
                                                 <dt class="col-span-4 font-semibold text-gray-800 dark:text-gray-200">Due date:</dt>

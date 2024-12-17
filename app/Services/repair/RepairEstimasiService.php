@@ -2,7 +2,6 @@
 
 namespace App\Services\repair;
 
-use App\Models\gudang\GudangProduk;
 use App\Repositories\gudang\repository\GudangProdukRepository;
 use Exception;
 use Carbon\Carbon;
@@ -212,7 +211,6 @@ class RepairEstimasiService
         
             // Data Estimasi JRR
             $jenisTransaksi = $request->input('jenis_transaksi');
-            $jenisPartJasa = $request->input('jenis_part_jasa');
             $namaPartJasa = $request->input('nama_part_jasa');
             $namaAlias = $request->input('nama_alias');
             $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
@@ -241,8 +239,8 @@ class RepairEstimasiService
                     $dataEstimasiJRR = [
                         'estimasi_id' => $createEstimasi->id,
                         'jenis_transaksi_id' => $jt,
-                        'jenis_jasa' => $jenisPartJasa[$index],
                         'nama_jasa' => $namaPartJasa[$index],
+                        'nama_alias' => $namaAlias[$index],
                         'harga_customer' => $hargaCustomer[$index],
                         'active' => 'Active',
                     ];
@@ -439,8 +437,8 @@ class RepairEstimasiService
                 return ['status' => 'error', 'message' => 'Data inputan invalid.'];
             }
             
-            $isiJurnal = ($status == 'lanjut') ? 'Lanjut menunggu konfirmasi pengerjaan' : 'Cancel customer tidak lanjut';
-            $jenisStatusId = ($status == 'lanjut') ? 5 : 10;
+            $isiJurnal = ($status == 'lanjut') ? 'Mulai Proses Pengerjaan' : 'Cancel customer tidak lanjut';
+            $jenisStatusId = ($status == 'lanjut') ? 6 : 10;
             $dataUpdateCase = [
                 'jenis_status_id' => $jenisStatusId,
             ];
@@ -481,7 +479,7 @@ class RepairEstimasiService
 
             $dataTimestamp = [
                 'case_id' => $id,
-                'jenis_status_id' => 6,
+                'jenis_status_id' => 5,
                 'tanggal_waktu' => $tglWaktu,
             ];
             $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
@@ -490,13 +488,13 @@ class RepairEstimasiService
                 'employee_id' => $employeeId,
                 'jenis_substatus_id' => 1,
                 'timestamps_status_id' => $timestamp->id,
-                'isi_jurnal' => 'Mulai Proses Pengerjaan',
+                'isi_jurnal' => 'Lanjut menunggu konfirmasi pengerjaan',
             ];
 
             $this->repairTimeJurnal->addJurnal($dataJurnal);
 
             $dataUpdateCase = [
-                'jenis_status_id' => 6,
+                'jenis_status_id' => 5,
             ];
 
             $this->repairCase->updateCase($id, $dataUpdateCase);

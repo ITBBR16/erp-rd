@@ -96,12 +96,12 @@
                                 </li>
                             </ul>
                         </div>
-                        {{-- Modal List DP PO --}}
-                        @include('kios.kasir.modal.dppo-views-modal')
                     @endif
                 @endforeach
             </tbody>
         </table>
     </div>
+    {{-- Modal List DP PO --}}
+    @include('kios.kasir.modal.dppo-views-modal')
     
 </div>

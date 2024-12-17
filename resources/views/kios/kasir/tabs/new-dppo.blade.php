@@ -8,7 +8,10 @@
                         <p class="text-base font-semibold text-gray-900 dark:text-white">Current Date : <span class="text-gray-900 font-normal dark:text-white">{{ $today->format('d/m/Y') }}</span></p>
                     </div>
                     <div class="flex justify-end">
-                        <p class="text-base font-semibold text-gray-900 dark:text-white">Invoice Number : <span class="text-gray-900 font-normal dark:text-white">{{ $today->format('Ymd') }}{{ $invoiceid + 1 }}</span></p>
+                        @php
+                            $invoice = $dataTransaksi->first()->id ?? 0;
+                        @endphp
+                        <p class="text-base font-semibold text-gray-900 dark:text-white">Invoice Number : <span class="text-gray-900 font-normal dark:text-white">{{ $today->format('Ymd') }}{{ $invoice + 1 }}</span></p>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 w-full gap-6 mb-4">

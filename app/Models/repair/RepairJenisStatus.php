@@ -22,4 +22,9 @@ class RepairJenisStatus extends Model
     {
         return $this->hasMany(RepairJurnal::class);
     }
+
+    public function timeStampStatus()
+    {
+        return $this->hasMany(RepairTimestampStatus::class);
+    }
 }

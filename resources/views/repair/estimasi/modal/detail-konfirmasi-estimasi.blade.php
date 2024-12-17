@@ -58,10 +58,23 @@
                                     </div>
                                 </div>
                                 <h3 class="text-lg font-semibold mb-4 pt-2 border-t dark:text-white">Detail Pesan Troubleshooting</h3>
-                                <div>
+                                <div class="mb-2">
                                     <h3 class="text-sm font-semibold mb-1">Pesan Hasil Troubleshooting</h3>
                                     <p class="text-gray-500 text-base">{!! nl2br(e($case->estimasi->estimasiChat->isi_chat)) !!}</p>
                                 </div>
+                                <h3 class="text-lg font-semibold mb-4 pt-2 border-t dark:text-white">All Jurnal</h3>
+                                <ol class="relative border-s border-gray-200 dark:border-gray-700">
+                                    @foreach ($case->timestampStatus as $status)
+                                        <li class="mb-10 ms-4">
+                                            <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                            <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ \Carbon\Carbon::parse($status->created_at)->isoFormat('D MMMM YYYY') }}</time>
+                                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $status->jenisStatus->jenis_status }}</h3>
+                                            @foreach ($status->jurnal as $jurnal)
+                                                <p class="text-sm font-normal text-gray-500 dark:text-gray-400">{!! nl2br(e($jurnal->isi_jurnal)) !!}</p>
+                                            @endforeach
+                                        </li>
+                                    @endforeach
+                                </ol>
                             </div>
                             <div class="p-4 rounded-lg bg-white border shadow-md dark:bg-gray-700 dark:border-gray-600">
                                 <h3 class="text-lg font-semibold mb-4 dark:text-white">Daftar Estimasi</h3>
@@ -91,7 +104,7 @@
                                                             @if (isset($estimasi->gudang_produk_id))
                                                                 {{ $estimasi->sparepartGudang->produkSparepart->nama_internal }}
                                                             @else
-                                                                {{ $estimasi->jenis_jasa }}
+                                                                {{ $estimasi->nama_jasa }}
                                                             @endif
                                                         </td>
                                                         <td class="px-6 py-4">

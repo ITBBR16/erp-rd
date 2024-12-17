@@ -49,9 +49,9 @@
                                                 @if ($item->active == 'Active')
                                                     <li class="flex justify-between">
                                                         <span>
-                                                            @if (isset($item->sku))
-                                                                <input type="hidden" name="data_estimasi[]" value="{{ ($item->nama_alias != '') ? $item->nama_alias : $item->nama_produk }}">
-                                                                {{ ($item->nama_alias != '') ? $item->nama_alias : $item->nama_produk }}
+                                                            @if (isset($item->gudang_produk_id))
+                                                                <input type="hidden" name="data_estimasi[]" value="{{ ($item->nama_alias != '') ? $item->nama_alias : $item->sparepartGudang->produkSparepart->nama_internal }}">
+                                                                {{ ($item->nama_alias != '') ? $item->nama_alias : $item->sparepartGudang->produkSparepart->nama_internal }}
                                                             @else
                                                                 <input type="hidden" name="data_estimasi[]" value="{{ $item->nama_jasa }}">
                                                                 {{ $item->nama_jasa }}

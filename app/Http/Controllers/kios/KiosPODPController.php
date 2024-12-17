@@ -33,7 +33,6 @@ class KiosPODPController extends Controller
         $customerData = Customer::all();
         $akunRd = KiosAkunRD::all();
         $dataTransaksi = KiosTransaksi::orderBy('id', 'desc')->get();
-        $invoiceId = $dataTransaksi->first()->id;
 
         return view('kios.kasir.dppo', [
             'title' => 'DP / PO Kios',
@@ -47,7 +46,6 @@ class KiosPODPController extends Controller
             'customerdata' => $customerData,
             'akunrd' => $akunRd,
             'dataTransaksi' => $dataTransaksi,
-            'invoiceid' => $invoiceId,
         ]);
     }
 

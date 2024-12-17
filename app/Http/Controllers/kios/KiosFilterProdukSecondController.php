@@ -12,17 +12,18 @@ use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosQcProdukSecond;
 use App\Models\produk\ProdukKelengkapan;
 use App\Models\produk\ProdukSubJenis;
-use App\Repositories\kios\KiosRepository;
-use Symfony\Component\Console\Input\Input;
+use App\Repositories\umum\UmumRepository;
 
 class KiosFilterProdukSecondController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(
+        private UmumRepository $umum
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $secondOrder = KiosOrderSecond::with('customer', 'subjenis.produkjenis', 'qcsecond.kelengkapans', 'statuspembayaran', 'buymetodesecond')
         ->where('status', 'Done QC')
         ->get();
@@ -42,7 +43,7 @@ class KiosFilterProdukSecondController extends Controller
     {
         $id = decrypt($encryptId);
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $kos = KiosOrderSecond::findOrFail($id);
         return view('kios.product.pengecekkan.filtersecond.filter-produk-second', [
             'title' => 'Filter Product Second',

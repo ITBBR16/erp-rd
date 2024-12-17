@@ -1,6 +1,8 @@
 $(document).ready(function () {
-    $(document).on('click', '#button-print-penerimaan', function (e) {
+    $(document).on('click', '.button-print-penerimaan', function (e) {
         e.preventDefault();
-        window.print();
+        let formId = $(this).data("id");
+        let modalPrintPenerimaan = $('#invoice-penerimaan-repair-' + formId);
+        window.print(modalPrintPenerimaan);
     });
-})
+});

@@ -30,9 +30,6 @@
                     <th scope="col" class="px-6 py-3">
                         Status
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -50,19 +47,6 @@
                             </td>
                             <td class="px-6 py-2">
                                 <span class="bg-{{ ($item->pivot->status == 'On Sell') ? 'red' : (($item->pivot->status == 'Ready') ? 'green' : 'yellow') }}-500 rounded-md px-2 py-0 text-white">{{ $item->pivot->status }}</span>
-                            </td>
-                            <td class="px-6 py-2">
-                                <div class="flex flex-wrap">
-                                    {{-- <button type="button" data-modal-target="view-supplier{{ $item->id }}" data-modal-toggle="view-supplier{{ $item->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base">visibility</span>
-                                    </button>
-                                    <button type="button" data-modal-target="edit-supplier{{ $item->id }}" data-modal-toggle="edit-supplier{{ $item->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base">edit</span>
-                                    </button>
-                                    <button type="button" data-modal-target="delete-supplier{{ $item->id }}" data-modal-toggle="delete-supplier{{ $item->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base">delete</span>
-                                    </button> --}}
-                                </div>
                             </td>
                         </tr>
                     @endforeach
