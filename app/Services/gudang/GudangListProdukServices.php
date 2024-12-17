@@ -61,7 +61,8 @@ class GudangListProdukServices
         }
     }
 
-    public function updateHargaJual($id, Request $request) {
+    public function updateHargaJual($id, Request $request)
+    {
         try {
             $this->transaction->beginTransaction();
             

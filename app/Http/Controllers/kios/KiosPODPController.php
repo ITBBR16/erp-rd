@@ -30,7 +30,7 @@ class KiosPODPController extends Controller
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $today = Carbon::now();
         $dueDate = $today->copy()->addMonth(2);
-        $customerData = Customer::all();
+        $customerData = Customer::orderBy('id', 'desc')->get();
         $akunRd = KiosAkunRD::all();
         $dataTransaksi = KiosTransaksi::orderBy('id', 'desc')->get();
 
@@ -260,18 +260,17 @@ class KiosPODPController extends Controller
             $namaAkun = $dppoTransaksi->metodepembayaran->nama_akun;
             $getDataCustomer = Customer::findOrFail($dppoCustomer);
             $namaCustomer = $getDataCustomer->first_name . ' ' . $getDataCustomer->id;
-            $urlFinance = 'https://script.google.com/macros/s/AKfycby_XodelnakZ1ZSi6tnR2vPgQRQ4iFeXY6ZJDyBRSE_dHAZNIxAauYmDu-KWRQcZm8_/exec';
-            $payload = [
-                'status' => 'DP',
-                'idTransaksi' => $dppoTransaksi->id,
-                'dpCustomer' => $dppoNominal,
-                'namaAkun' => $namaAkun,
-                'namaCustomer' => $namaCustomer,
-            ];
+            // $urlFinance = 'https://script.google.com/macros/s/AKfycby_XodelnakZ1ZSi6tnR2vPgQRQ4iFeXY6ZJDyBRSE_dHAZNIxAauYmDu-KWRQcZm8_/exec';
+            // $payload = [
+            //     'status' => 'DP',
+            //     'idTransaksi' => $dppoTransaksi->id,
+            //     'dpCustomer' => $dppoNominal,
+            //     'namaAkun' => $namaAkun,
+            //     'namaCustomer' => $namaCustomer,
+            // ];
 
-            $sentData = Http::post($urlFinance, $payload);
-            $response = json_decode($sentData->body(), true);
-            $responseStatus = $response['status'];
+            // $sentData = Http::post($urlFinance, $payload);
+            // $response = json_decode($sentData->body(), true);
 
             $connectionKios->commit();
             return back()->with('success', 'Berhasil membuat ' . $dppoStatus);
@@ -310,6 +309,7 @@ class KiosPODPController extends Controller
         $transaksi->ongkir = 0;
         $transaksi->discount = 0;
         $transaksi->tax = 0;
+        $transaksi->status = 'Belum Lunas';
         $transaksi->save();
 
         return $transaksi;

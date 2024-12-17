@@ -23,7 +23,16 @@ class KiosProductController extends Controller
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
 
-        $produk = KiosProduk::paginate(15);
+        $produk = KiosProduk::orderByRaw("
+                        CASE 
+                            WHEN status = 'Promo' THEN 1 
+                            WHEN status = 'Ready' THEN 2 
+                            WHEN status = 'Not Ready' THEN 3 
+                            ELSE 4 
+                        END
+                    ")
+                    ->orderBy('updated_at', 'desc')
+                    ->paginate(15);
         $kategori = ProdukKategori::all();
         $types = ProdukType::all();
         $jenisProduk = ProdukJenis::all();

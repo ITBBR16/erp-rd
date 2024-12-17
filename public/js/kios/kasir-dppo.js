@@ -142,20 +142,19 @@ $(document).ready(function () {
                 source: function(request, response) {
                     
                     var term = request.term.toLowerCase();
-                    var filteredData = data.filter(function(item) {
-                        return (item.subjenis.produkjenis.jenis_produk.toLowerCase().indexOf(term) !== -1) || 
-                                (item.subjenis.paket_penjualan.toLowerCase().indexOf(term) !== -1);
-                    });
-
-                    var formattedData = filteredData.map(function(item) {
-                        return {
-                            label: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
-                            value: item.subjenis.produkjenis.jenis_produk + ' ' + item.subjenis.paket_penjualan,
-                            id: item.subjenis.id
-                        };
-                    });
+                        var filteredData = data.filter(function(item) {
+                            return (item.subjenis.paket_penjualan.toLowerCase().indexOf(term) !== -1);
+                        });
     
-                    response(formattedData);
+                        var formattedData = filteredData.map(function(item) {
+                            return {
+                                label: item.subjenis.paket_penjualan,
+                                value: item.subjenis.paket_penjualan,
+                                id: item.subjenis.id
+                            };
+                        });
+
+                        response(formattedData);
                 },
                 autoFocus: true,
                 select: function(event, ui) {
@@ -182,7 +181,7 @@ $(document).ready(function () {
         .then(response => response.json())
         .then(data => {
             data.forEach(customer => {
-                var fullName = customer.first_name + ' ' + customer.last_name;
+                var fullName = customer.first_name + ' ' + customer.last_name + ' - ' + customer.id;
 
                 invoiceNamaCus.text(fullName);
                 invoiceTlp.text(customer.no_telpon);
