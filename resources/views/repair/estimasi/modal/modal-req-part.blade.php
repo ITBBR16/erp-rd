@@ -21,13 +21,13 @@
                         @method('PUT')
                         <div class="px-6 py-6 lg:px-8">
                             <input type="hidden" name="status_case_id" value="{{ $case->jenis_status_id }}">
-                            <div id="parent-req-part-csr-{{ $case->id }}">
+                            <div id="parent-req-part-estimasi-{{ $case->id }}">
                                 {{-- Form Req Part --}}
                                 
                             </div>
                             <div class="flex justify-between mb-4 text-rose-600">
                                 <div class="flex cursor-pointer mt-4 hover:text-red-400">
-                                    <button type="button" data-id="{{ $case->id }}" class="add-req-part-csr flex flex-row justify-between gap-2">
+                                    <button type="button" data-id="{{ $case->id }}" class="add-req-part-estimasi flex flex-row justify-between gap-2">
                                         <span class="material-symbols-outlined">add_circle</span>
                                         <span class="">Tambah Kelengkapan</span>
                                     </button>

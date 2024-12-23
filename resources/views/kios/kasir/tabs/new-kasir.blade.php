@@ -15,17 +15,40 @@
                     <p class="text-lg font-bold text-black dark:text-white">INVOICE</p>
                 </div>
                 <div class="grid grid-cols-2 w-full gap-6">
-                    <div>
-                        <label for="kasir-nama-customer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Customer :</label>
-                        <select name="nama_customer" id="kasir-nama-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>Select Customer</option>
-                            @foreach ($customerdata as $customer)
-                                <option value="{{ $customer->id }}">{{ $customer->first_name }} {{ $customer->last_name }}</option>
-                            @endforeach
-                        </select>
+                    <div x-data="dropdownCustomerCase()" class="relative text-start">
+                        <label for="kasir_metode_pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Customer :</label>
+                        <div class="relative">
+                            <input x-model="search" 
+                                @focus="open = true" 
+                                @keydown.escape="open = false" 
+                                @click.outside="open = false"
+                                type="text" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                placeholder="Search or select customer...">
+                                <svg :class="{ 'rotate-180': open }" class="absolute inset-y-0 right-2 top-2.5 w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            <input type="hidden" id="kasir-nama-customer" name="nama_customer" :value="selected" required>
+                        </div>
+
+                        <ul x-show="open" 
+                            x-transition 
+                            class="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-60 w-full overflow-y-auto shadow-md dark:bg-gray-700 dark:border-gray-600">
+                            <template x-for="customer in filteredCustomers" :key="customer.id">
+                                <li @click="select(customer.id, customer.display)" 
+                                    class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
+                                    <span x-text="customer.display" class="dark:text-white"></span>
+                                </li>
+                            </template>
+                            <li 
+                                x-show="filteredCustomers.length === 0" 
+                                class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                                Data customer tidak ditemukan.
+                            </li>
+                        </ul>
                     </div>
                     <div>
-                        <label for="kasir_metode_pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
+                        <label for="kasir_metode_pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Metode Pembayaran :</label>
                         <select name="kasir_metode_pembayaran" id="kasir_metode_pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Select Metode Pembayaran</option>
                             @foreach ($akunrd as $akun)
@@ -159,4 +182,37 @@
     </form>
     {{-- Modal --}}
     @include('kios.kasir.modal.invoice-modal')
+
+    {{-- Function Script --}}
+    <script>
+        function dropdownCustomerCase() {
+            return {
+                open: false,
+                search: '',
+                selected: '',
+                customers: Object.values(@json($customerdata)),
+                filteredCustomers: [],
+                debounceSearch: null,
+                init() {
+                    if (!Array.isArray(this.customers)) {
+                        this.customers = [];
+                    }
+                    this.filteredCustomers = this.customers;
+                    this.$watch('search', (value) => {
+                        clearTimeout(this.debounceSearch);
+                        this.debounceSearch = setTimeout(() => {
+                            this.filteredCustomers = this.customers.filter(customer =>
+                                customer.display.toLowerCase().includes(value.toLowerCase())
+                            );
+                        }, 300);
+                    });
+                },
+                select(id, display) {
+                    this.selected = id;
+                    this.search = display;
+                    this.open = false;
+                }
+            }
+        }
+    </script>
 </div>

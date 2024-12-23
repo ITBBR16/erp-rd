@@ -107,7 +107,7 @@ $(document).ready(function () {
                 </td>
                 <td class="px-4 py-4">
                     <input type="hidden" name="dppo_id_produk[]" id="dppo-item-id-${itemBodyCount}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
-                    <input type="text" name="dppo_nama_produk[]" id="nama-produk-${itemBodyCount}" data-id="${itemBodyCount}" class="dppo_nama_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
+                    <input type="text" name="dppo_nama_produk[]" id="dppo-nama-produk-${itemBodyCount}" data-id="${itemBodyCount}" class="dppo_nama_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
                 </td>
                 <td class="px-4 py-4">
                     <input type="text" name="dppo_qty_produk[]" id="qty-produk-${itemBodyCount}" data-id="${itemBodyCount}" class="dppo_qty_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Jumlah Produk" required>
@@ -138,7 +138,7 @@ $(document).ready(function () {
         let jenisTransaksi = $('#dppo-jenis-transaksi-'+produkNameId).val();
 
         $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
-            $("#nama-produk-"+produkNameId).autocomplete({
+            $("#dppo-nama-produk-"+produkNameId).autocomplete({
                 source: function(request, response) {
                     
                     var term = request.term.toLowerCase();

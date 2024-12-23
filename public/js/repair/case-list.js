@@ -2,6 +2,7 @@ $(document).ready(function () {
     const caseContainer = $("#container-data-kelengkapan-case");
     let formLength = 1;
 
+    // For new case
     $("#add-kelengkapan-case").on("click", function () {
         const jenisProduk = $("#case-jenis-drone").val();
         if (jenisProduk != '') {
@@ -45,9 +46,10 @@ $(document).ready(function () {
 
     })
 
-    $(document).on('change', '#case-jenis-drone', function () {
-        var statusGanti = "Rubah Jenis"
-        const jenisProduk = $(this).val();
+    $(document).on('jenis-drone-changed', (e) => {
+        const jenisProduk = e.originalEvent.detail.id;
+        console.log('Jenis Drone Changed:', jenisProduk);
+        const statusGanti = "Rubah Jenis";
         getKelengkapan(jenisProduk, statusGanti);
     });
 
@@ -104,13 +106,12 @@ $(document).ready(function () {
     }
 
     // Dropdown Wilayah
-    const provinsiSelect = $('#provinsi');
     const kotaSelect = $('#kota-kabupaten');
     const kecamatanSelect = $('#kecamatan');
     const kelurahanSelect = $('#kelurahan');
 
-    provinsiSelect.on('change', function () {
-        const selectedProvinsi = provinsiSelect.val();
+    $(document).on('change', '#provinsi', function () {
+        const selectedProvinsi = $(this).val();
 
         if (selectedProvinsi) {
             fetch(`/getKota/${selectedProvinsi}`)
@@ -138,8 +139,8 @@ $(document).ready(function () {
         }
     });
 
-    kotaSelect.on('change', function () {
-        const selectedKota = kotaSelect.val();
+    $(document).on('change', '#kota-kabupaten', function () {
+        const selectedKota = $(this).val();
 
         if (selectedKota) {
             fetch(`/getKecamatan/${selectedKota}`)
@@ -167,7 +168,7 @@ $(document).ready(function () {
         }
     });
 
-    kecamatanSelect.on('change', function () {
+    $(document).on('change', '#kecamatan', function () {
         const selectedKota = kecamatanSelect.val();
 
         if (selectedKota) {

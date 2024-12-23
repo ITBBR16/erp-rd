@@ -80,7 +80,7 @@
             </thead>
             <tbody>
                 @foreach ($dataCase as $case)
-                    @if ($case->jenisStatus->jenis_status != 'Close Case (Done)' && $case->jenisStatus->jenis_status != 'Proses Menunggu Pembayaran (Cancel)' && $case->jenisStatus->jenis_status != 'Close Case (Cancel)')
+                    @if ($case->jenisStatus->jenis_status != 'Close Case (Done)' && $case->jenisStatus->jenis_status != 'Proses Menunggu Pembayaran (Cancel)' && $case->jenisStatus->jenis_status != 'Close Case (Cancel)' && $case->jenisStatus->jenis_status != 'New Case')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
                                 R-{{ $case->id }}

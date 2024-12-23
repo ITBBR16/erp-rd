@@ -131,7 +131,7 @@ function setupAutocomplete(data, itemNameId) {
             const formattedData = filteredData.map(part => ({
                 label: part.nama_part,
                 value: part.nama_part,
-                id: part.sku
+                id: part.id
             }));
 
             response(formattedData);
@@ -149,7 +149,7 @@ $(document).ready(function(){
     let itemCount = $("#kasir-container tr").length;
     let autocompleteData = [];
 
-    $("#add-item-kasir").on("click", function () {
+    $(document).on("click", "#add-item-kasir", function () {
          itemCount++
          let itemForm = `
          <tr id="kasir-item-${itemCount}" class="bg-white dark:bg-gray-800">
@@ -272,16 +272,16 @@ $(document).ready(function(){
             if (jenisTransaksi == 'part_baru' || jenisTransaksi == 'part_bekas') {
                 data.data_sn.forEach(dataII => {
                     const option = $('<option>', {
-                        value: dataII.idItem,
-                        text: dataII.idItem,
+                        value: dataII.id,
+                        text: dataII.id_item,
                     })
                     .addClass('dark:bg-gray-700');
                     formSN.append(option);
                 });
 
-                var nilaiPart = formatRupiah(data.nilai.nilai);
+                var nilaiPart = formatRupiah(data.nilai.hargaGlobal);
                 formHarga.val(nilaiPart);
-                formModalPart.val(data.nilai.modal);
+                formModalPart.val(data.nilai.modalGudangg);
 
                 updateSubtotalBox();
 

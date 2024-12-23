@@ -10,18 +10,17 @@ use App\Services\repair\RepairEstimasiService;
 
 class RepairEstimasiReqSparepartController extends Controller
 {
-    protected $repairCaseService, $serviceEstimasi;
-    public function __construct(private UmumRepository $nameDivisi, RepairCaseService $repairCaseService, RepairEstimasiService $repairEstimasiService)
-    {
-        $this->repairCaseService = $repairCaseService;
-        $this->serviceEstimasi = $repairEstimasiService;
-    }
+    public function __construct(
+        private UmumRepository $umum,
+        private RepairCaseService $serviceCase,
+        private RepairEstimasiService $serviceEstimasi
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->nameDivisi->getDivisi($user);
-        $caseService = $this->repairCaseService->getDataDropdown();
+        $divisiName = $this->umum->getDivisi($user);
+        $caseService = $this->serviceCase->getDataDropdown();
         $dataCase = $caseService['data_case'];
 
         return view('repair.estimasi.req-sparepart', [

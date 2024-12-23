@@ -2,29 +2,35 @@
 
 namespace App\Services\repair;
 
-use App\Repositories\gudang\repository\GudangProdukRepository;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\gudang\GudangProduk;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use App\Models\kios\KiosTransaksiPart;
+use App\Models\repair\RepairEstimasiPart;
 use App\Repositories\umum\UmumRepository;
+use App\Repositories\umum\repository\ProdukRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
+use App\Repositories\gudang\repository\GudangProdukRepository;
 use App\Repositories\repair\repository\RepairEstimasiRepository;
 use App\Repositories\repair\repository\RepairTimeJurnalRepository;
-use App\Repositories\umum\repository\ProdukRepository;
 
 class RepairEstimasiService
 {
     public function __construct(
+        private RepairEstimasiPart $estimasiPart,
+        private KiosTransaksiPart $transaksiPart,
+        private GudangProduk $gudangProduk,
         private UmumRepository $umum,
         private ProdukRepository $produk,
         private GudangProdukRepository $produkGudang,
-        private RepairCaseService $repairCaseService, 
-        private RepairCaseRepository $repairCase, 
-        private RepairEstimasiRepository $repairEstimasi, 
-        private RepairTimeJurnalRepository $repairTimeJurnal)
-    {}
+        private RepairCaseService $repairCaseService,
+        private RepairCaseRepository $repairCase,
+        private RepairEstimasiRepository $repairEstimasi,
+        private RepairTimeJurnalRepository $repairTimeJurnal
+    ){}
 
     // View Estimasi Biaya
     public function index()
@@ -842,6 +848,37 @@ class RepairEstimasiService
 
     public function getDetailPart($id)
     {
+        $dataGudangEstimasi = $this->estimasiPart
+                ->where('gudang_produk_id', $id)
+                ->whereNotNull('tanggal_dikirim')
+                ->where('active', 'Active')
+                ->sum('modal_gudang');
+
+            $dataGudangTransaksi = $this->transaksiPart
+                ->where('gudang_produk_id', $id)
+                ->sum('modal_gudang');
+
+            $dataGudang = $this->gudangProduk
+                ->where('id', $id)
+                ->whereIn('status', ['Ready', 'Promo'])
+                ->first();
+
+            if (!$dataGudang) {
+                throw new \Exception("Data gudang tidak ditemukan");
+            }
+
+            $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get();
+            $totalSN = $dataSubGudang->count();
+            $modalAwal = $dataGudang->modal_awal ?? 0;
+            $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
+            $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
+            $nilai = [
+                'modalGudangg' => $modalGudang,
+                'hargaGlobal' => $hargaJualGudang,
+                'hargaRepair' => $dataGudang->harga_internal,
+                'promoGudang' => $dataGudang->harga_promo
+            ];
+            
         $gudangProduk = $this->produkGudang->findBySparepart($id);
         $stock = $gudangProduk->gudangIdItem->where('status_inventory', 'Ready')->count();
         return response()->json(['stock' => $stock, 'detail' => $gudangProduk]);

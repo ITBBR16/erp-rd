@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
+use App\Models\customer\CustomerInfoPerusahaan;
 use App\Repositories\umum\repository\ProdukRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\logistik\repository\EkspedisiRepository;
@@ -29,6 +30,75 @@ class RepairCaseService
     {}
 
     // Input New Case
+    public function indexNewCase()
+    {
+        $user = auth()->user();
+        $caseService = $this->getDataDropdown();
+        $divisiName = $this->umum->getDivisi($user);
+        $dataCase = $caseService['data_case'];
+        $dataCustomer = collect($caseService['data_customer'])->sortByDesc('id');
+        $dataCustomers = $dataCustomer->map(function ($customer) {
+            return [
+                'id' => $customer->id,
+                'display' => "{$customer->first_name} {$customer->last_name} - {$customer->id}"
+            ];
+        });
+        $dataProvinsi = $caseService['data_provinsi'];
+        $dataJenisCase = $caseService['jenis_case'];
+        $jenisDrone = $caseService['jenis_drone'];
+        $dataJenisDrone = $jenisDrone->map(function ($jenis) {
+            return [
+                'id' => $jenis->id,
+                'display' => $jenis->jenis_produk,
+            ];
+        });
+        $dataFungsionalDrone = $caseService['fungsional_drone'];
+        $infoPerusahaan = CustomerInfoPerusahaan::all();
+
+        return view('repair.csr.case-list', [
+            'title' => 'Case List',
+            'active' => 'list-case',
+            'navActive' => 'csr',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+            'dataCustomers' => $dataCustomers,
+            'dataProvinsi' => $dataProvinsi,
+            'infoPerusahaan' => $infoPerusahaan,
+            'jenisCase' => $dataJenisCase,
+            'jenisDrone' => $dataJenisDrone,
+            'fungsionalDrone' => $dataFungsionalDrone,
+        ]);
+    }
+
+    public function editNewCase($encryptId)
+    {
+        $user = auth()->user();
+        $id = decrypt($encryptId);
+        $caseService = $this->getDataDropdown();
+        $divisiName = $this->umum->getDivisi($user);
+        $dataCase = $this->findCase($id);
+        $dataProvinsi = $caseService['data_provinsi'];
+        $dataJenisCase = $caseService['jenis_case'];
+        $dataJenisDrone = $caseService['jenis_drone'];
+        $dataFungsionalDrone = $caseService['fungsional_drone'];
+        $infoPerusahaan = CustomerInfoPerusahaan::all();
+
+        return view('repair.csr.edit.edit-list-case', [
+            'title' => 'Edit Case List',
+            'active' => 'list-case',
+            'navActive' => 'csr',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+            'dataProvinsi' => $dataProvinsi,
+            'infoPerusahaan' => $infoPerusahaan,
+            'jenisCase' => $dataJenisCase,
+            'jenisDrone' => $dataJenisDrone,
+            'fungsionalDrone' => $dataFungsionalDrone,
+        ]);
+    }
+
     public function getDataDropdown()
     {
         $dataDD = $this->repairCase->getAllDataNeededNewCase();

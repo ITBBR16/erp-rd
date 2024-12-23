@@ -11,26 +11,71 @@
                     <div class="col-span-1 text-end pr-6">
                         <label for="case-customer" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Customer :</label>
                     </div>
-                    <div class="col-span-2 text-start">
-                        <select name="case_customer" id="case-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>Select Customer</option>
-                            @foreach ($dataCustomer as $customer)
-                                <option value="{{ $customer->id }}">{{ $customer->first_name }} {{ $customer->last_name }} - {{ $customer->id }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <div x-data="dropdownCustomerCase()" class="relative col-span-2 text-start">
+                        <div class="relative">
+                            <input x-model="search" 
+                                @focus="open = true" 
+                                @keydown.escape="open = false" 
+                                @click.outside="open = false"
+                                type="text" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                placeholder="Search or select customer...">
+                                <svg :class="{ 'rotate-180': open }" class="absolute inset-y-0 right-2 top-2.5 w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            <input type="hidden" name="case_customer" :value="selected" required>
+                        </div>
+                    
+                        <ul x-show="open" 
+                            x-transition 
+                            class="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-60 w-full overflow-y-auto shadow-md dark:bg-gray-700 dark:border-gray-600">
+                            <template x-for="customer in filteredCustomers" :key="customer.id">
+                                <li @click="select(customer.id, customer.display)" 
+                                    class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
+                                    <span x-text="customer.display" class="dark:text-white"></span>
+                                </li>
+                            </template>
+                            <li 
+                                x-show="filteredCustomers.length === 0" 
+                                class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                                Data customer tidak ditemukan.
+                            </li>
+                        </ul>
+                    </div>                    
                 </div>
                 <div class="grid grid-cols-3 mb-4">
                     <div class="col-span-1 text-end pr-6">
                         <label for="case-jenis-drone" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone :</label>
                     </div>
-                    <div class="col-span-2 text-start">
-                        <select name="case_jenis_drone" id="case-jenis-drone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>Select Jenis Drone</option>
-                            @foreach ($jenisDrone as $drone)
-                                <option value="{{ $drone->id }}">{{ $drone->jenis_produk }}</option>
-                            @endforeach
-                        </select>
+                    <div x-data="dropdownJenisDrone()" class="relative col-span-2 text-start">
+                        <div class="relative">
+                            <input x-model="search"
+                                @focus="open = true" 
+                                @keydown.escape="open = false" 
+                                @click.outside="open = false"
+                                type="text" 
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                placeholder="Search or select jenis drone...">
+                                <svg :class="{ 'rotate-180': open }" class="absolute inset-y-0 right-2 top-2.5 w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            <input type="hidden" id="case-jenis-drone" name="case_jenis_drone" :value="selected" required>
+                        </div>
+                    
+                        <ul x-show="open" 
+                            x-transition 
+                            class="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-60 w-full overflow-y-auto shadow-md dark:bg-gray-700 dark:border-gray-600">
+                            <template x-for="jenis in filteredJenis" :key="jenis.id">
+                                <li @click="select(jenis.id, jenis.display)"
+                                    class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
+                                    <span x-text="jenis.display" class="dark:text-white"></span>
+                                </li>
+                            </template>
+                            <li x-show="filteredJenis.length === 0" 
+                                class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                                Data Jenis Drone tidak ditemukan.
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="grid grid-cols-3 mb-4">
@@ -70,7 +115,7 @@
                         <label for="case-keluhan" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Keluhan :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <input type="text" name="case_keluhan" id="case-keluhan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="">
+                        <input type="text" name="case_keluhan" id="case-keluhan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
                     </div>
                 </div>
                 <div class="grid grid-cols-3 mb-4">
@@ -78,7 +123,7 @@
                         <label for="case-kronologi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Kronologi Kerusakan :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <input type="text" name="case_kronologi" id="case-kronologi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="">
+                        <input type="text" name="case_kronologi" id="case-kronologi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
                     </div>
                 </div>
                 <div class="grid grid-cols-3 mb-4">
@@ -153,4 +198,73 @@
             </div>
         </div>
     </form>
+
+    {{-- Search Select Function --}}
+    <script>
+        function dropdownCustomerCase() {
+            return {
+                open: false,
+                search: '',
+                selected: '',
+                customers: Object.values(@json($dataCustomers)),
+                filteredCustomers: [],
+                debounceSearch: null,
+                init() {
+                    if (!Array.isArray(this.customers)) {
+                        this.customers = [];
+                    }
+                    this.filteredCustomers = this.customers;
+                    this.$watch('search', (value) => {
+                        clearTimeout(this.debounceSearch);
+                        this.debounceSearch = setTimeout(() => {
+                            this.filteredCustomers = this.customers.filter(customer =>
+                                customer.display.toLowerCase().includes(value.toLowerCase())
+                            );
+                        }, 300);
+                    });
+                },
+                select(id, display) {
+                    this.selected = id;
+                    this.search = display;
+                    this.open = false;
+                }
+            }
+        }
+
+        function dropdownJenisDrone() {
+            return {
+                open: false,
+                search: '',
+                selected: '',
+                jenis: Object.values(@json($jenisDrone)),
+                filteredJenis: [],
+                debounceSearch: null,
+                init() {
+                    if (!Array.isArray(this.jenis)) {
+                        this.customers = [];
+                    }
+                    this.filteredJenis = this.jenis;
+                    this.$watch('search', (value) => {
+                        clearTimeout(this.debounceSearch);
+                        this.debounceSearch = setTimeout(() => {
+                            this.filteredJenis = this.jenis.filter(jenis =>
+                                jenis.display.toLowerCase().includes(value.toLowerCase())
+                            );
+                        }, 300);
+                    });
+                },
+                select(id, display) {
+                    this.selected = id;
+                    this.search = display;
+                    this.open = false;
+                    
+                    // Emit event
+                    const event = new CustomEvent('jenis-drone-changed', {
+                        detail: { id: this.selected },
+                    });
+                    document.dispatchEvent(event);
+                }
+            }
+        }
+    </script>
 </div>

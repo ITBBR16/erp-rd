@@ -13,25 +13,38 @@ use App\Models\kios\KiosProduk;
 use App\Models\customer\Customer;
 use App\Models\kios\KiosTransaksi;
 use Illuminate\Support\Facades\DB;
+use App\Models\gudang\GudangProduk;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
-use App\Models\kios\KiosTransaksiDetail;
 use App\Models\kios\KiosTransaksiPart;
-use App\Repositories\kios\KiosRepository;
+use App\Models\kios\KiosTransaksiDetail;
+use App\Models\repair\RepairEstimasiPart;
+use App\Repositories\umum\UmumRepository;
 
 class KiosKasirController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(
+        private UmumRepository $umum,
+        private GudangProduk $gudangProduk,
+        private RepairEstimasiPart $estimasiPart,
+        private KiosTransaksiPart $transaksiPart,
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $today = Carbon::now();
         $dueDate = $today->copy()->addMonth(3);
-        $customerData = Customer::all();
+        $dataCustomer = Customer::all();
+        $customerData = $dataCustomer->map(function ($customer) {
+            return [
+                'id' => $customer->id,
+                'display' => "{$customer->first_name} {$customer->last_name} - {$customer->id}"
+            ];
+        });
         $akunRd = KiosAkunRD::all();
         $invoiceId = KiosTransaksi::latest()->value('id');
         $dataHoldKasir = KiosTransaksi::where('status', 'Hold')->get();
@@ -60,7 +73,7 @@ class KiosKasirController extends Controller
         $user = auth()->user();
         $today = Carbon::now();
         $dueDate = $today->copy()->addMonth(2);
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $dataTransaksi = KiosTransaksi::findOrFail($id);
         $akunRd = KiosAkunRD::all();
 
@@ -336,22 +349,13 @@ class KiosKasirController extends Controller
         } elseif ($jenisTransaksi == 'drone_bekas') {
             $items = KiosProdukSecond::with('subjenis')->where('status', 'Ready')->get();
         } elseif ($jenisTransaksi == 'part_baru' || $jenisTransaksi == 'part_bekas') {
-            
-            $urlApiGudang = 'https://script.google.com/macros/s/AKfycbyGbMFkZyhJAGgZa4Tr8bKObYrNxMo4h-uY1I-tS_SbtmEOKPeCcxO2aU6JjLWedQlFVw/exec';
-            $response = Http::post($urlApiGudang, [
-                'status' => $jenisTransaksi
-            ]);
-
-            $data = $response->json();
-            $resultData = [];
-            foreach ($data['data'] as $dataNeed) {
-                $neededData = [
-                    'sku' => $dataNeed[0],
-                    'nama_part' => $dataNeed[2],
-                    'srp_part' => $dataNeed[8],
+            $dataPart = $this->gudangProduk->where('status', 'Ready')->orWhere('status', 'Promo')->get();
+            $resultData = $dataPart->map(function ($part) {
+                return [
+                    'id' => $part->id,
+                    'nama_part' => $part->produkSparepart->nama_internal
                 ];
-                $resultData[] = $neededData;
-            }
+            });
 
             $items = $resultData;
 
@@ -377,27 +381,54 @@ class KiosKasirController extends Controller
             $nilai = KiosProdukSecond::where('sub_jenis_id', $id)->value('srp');
             $dataSN = KiosProdukSecond::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
         } elseif ($jenisTransaksi == 'part_baru' || $jenisTransaksi == 'part_bekas') {
+            $dataGudangEstimasi = $this->estimasiPart
+                ->where('gudang_produk_id', $id)
+                ->whereNotNull('tanggal_dikirim')
+                ->where('active', 'Active')
+                ->sum('modal_gudang');
 
-            $urlApiGudang = 'https://script.google.com/macros/s/AKfycbzWFWbEhcdIyslBXQQ4QjZ9DI_nn1JYcjHHZYoHgwyDGFV7Izs3WOf11fBdW6YysPpYOQ/exec';
-            $response = Http::post($urlApiGudang, [
-                'sku' => $id
-            ]);
+            $dataGudangTransaksi = $this->transaksiPart
+                ->where('gudang_produk_id', $id)
+                ->sum('modal_gudang');
 
-            $data = $response->json();
-            $resultData = [];
-            foreach ($data['data'] as $dataNeed) {
-                $dataII = [
-                    'idItem' => $dataNeed,
-                ];
-                $resultData[] = $dataII;
+            $dataGudang = $this->gudangProduk
+                ->where('id', $id)
+                ->whereIn('status', ['Ready', 'Promo'])
+                ->first();
+
+            if (!$dataGudang) {
+                throw new \Exception("Data gudang tidak ditemukan");
             }
 
-            $dataSN = $resultData;
-            $nilai = [
-                'nilai' => $data['nilai'],
-                'modal' => $data['modal'],
-            ];
+            $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get();
+            $dataSN = $dataSubGudang->map(function ($item) {
+                if ($item->produk_asal == 'Belanja') {
+                    $supplierId = optional($item->gudangBelanja)->gudang_supplier_id;
+                    return [
+                        'id' => $item->id,
+                        'id_item' => 'N.' . $item->gudang_belanja_id . '.' . $supplierId . '.' . $item->id,
+                    ];
+                } elseif ($item->produk_asal == 'Split') {
+                    $supplierId = optional($item->gudangBelanja)->gudang_supplier_id;
+                    return [
+                        'id' => $item->id,
+                        'id_item' => 'P.' . $item->gudang_belanja_id . '.' . $supplierId . '.' . $item->id,
+                    ];
+                }
+            });
+            $totalSN = $dataSubGudang->count();
 
+            if ($totalSN === 0) {
+                throw new \Exception("Tidak ada item dengan status 'Ready' di gudang");
+            }
+
+            $modalAwal = $dataGudang->modal_awal ?? 0;
+            $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
+            $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
+            $nilai = [
+                'modalGudangg' => $modalGudang,
+                'hargaGlobal' => $hargaJualGudang,
+            ];
         }
 
         return response()->json(['data_sn' => $dataSN, 'nilai' => $nilai]);
@@ -409,20 +440,20 @@ class KiosKasirController extends Controller
         return response()->json($dataCustomer);
     }
 
-    public function downloadInvoice(Request $request)
-    {
-        $html = $request->input('content');
-        $noInvoice = $request->input('no_invoice');
+    // public function downloadInvoice(Request $request)
+    // {
+    //     $html = $request->input('content');
+    //     $noInvoice = $request->input('no_invoice');
 
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
+    //     $options = new Options();
+    //     $options->set('isHtml5ParserEnabled', true);
 
-        $newPdf = new Dompdf();
-        $newPdf->loadHTML($html);
-        $newPdf->setPaper('A5', 'landscape');
-        $newPdf->render();
+    //     $newPdf = new Dompdf();
+    //     $newPdf->loadHTML($html);
+    //     $newPdf->setPaper('A5', 'landscape');
+    //     $newPdf->render();
 
-        return $newPdf->download($noInvoice . ".pdf");
-    }
+    //     return $newPdf->download($noInvoice . ".pdf");
+    // }
 
 }
