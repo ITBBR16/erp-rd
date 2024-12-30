@@ -14,7 +14,7 @@
                     <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
-                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Down Payment {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}-{{ $dataCase->customer->id }}-{{ $dataCase->id }}</span>
+                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Lunas {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}-{{ $dataCase->customer->id }}-{{ $dataCase->id }}</span>
                 </div>
             </li>
         </ol>
@@ -39,7 +39,7 @@
         @csrf
         <div class="grid grid-cols-3 gap-6 mt-4">
             {{-- Detail Box --}}
-            <div id="invoice-dp-repair" class="bg-white p-6 rounded-lg shadow-lg border col-span-2 dark:bg-gray-800 dark:border-gray-600">
+            <div id="invoice-dp-repair" class="bg-white p-6 rounded-lg shadow-lg border col-span-2 border-gray-200 dark:bg-gray-800 dark:border-gray-600">
                 <div class="mb-4 justify-center text-center">
                     <div class="flex justify-center text-center">
                         <img src="/img/Logo Rumah Drone Black.png" class="w-40" alt="Logo RD">
@@ -49,36 +49,36 @@
                 </div>
                 <div class="flex justify-between my-4">
                     <div class="text-start">
-                        <h2 class="text-lg font-semibold dark:text-white">Detail Transaksi / <span class="text-lg text-gray-600 dark:text-gray-400">R-{{ $dataCase->id }} <span class="text-sm ml-2 text-green-500 bg-green-100 px-2 py-1 rounded-full">Lunas</span></span></h2>
+                        <h2 class="text-lg font-semibold text-black dark:text-white">Detail Transaksi / <span class="text-lg text-gray-600 dark:text-gray-400">R-{{ $dataCase->id }} <span class="text-sm ml-2 text-green-500 bg-green-100 px-2 py-1 rounded-full">Lunas</span></span></h2>
                     </div>
                     <div class="text-end">
-                        <h2 class="text-lg font-semibold dark:text-white">{{ $dataCase->jenisProduk->jenis_produk }}</h2>
+                        <h2 class="text-lg font-semibold text-black dark:text-white">{{ $dataCase->jenisProduk->jenis_produk }}</h2>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Nama Customer</p>
-                        <h3 class="text-sm font-semibold dark:text-white">{{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}</h3>
+                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">No Telpon</p>
-                        <h3 class="text-sm font-semibold dark:text-white">{{ $dataCase->customer->no_telpon }}</h3>
+                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ $dataCase->customer->no_telpon }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Alamat</p>
-                        <h3 class="text-sm font-semibold dark:text-white">{{-- $dataCase->customer->kota->name --}}</h3>
+                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ $dataCase->customer->kota->name }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Status Case</p>
-                        <h3 class="text-sm font-semibold dark:text-white">{{ $dataCase->jenisCase->jenis_case }}</h3>
+                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ $dataCase->jenisCase->jenis_case }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Masuk</p>
-                        <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
+                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Keluar</p>
-                        <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::now()->isoFormat('D MMMM YYYY') }}</h3>
+                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ \Carbon\Carbon::now()->isoFormat('D MMMM YYYY') }}</h3>
                     </div>
                 </div>
 
@@ -205,7 +205,7 @@
                 <div class="grid grid-cols-3 mt-4">
                     <div class="col-span-2 text-sm border p-3">
                         <div class="border-b font-semibold">Keluhan Kerusakan</div>
-                        <div>{{ $dataCase->keluhan }}</div>
+                        <div class="pt-2">{{ $dataCase->keluhan }}</div>
                     </div>
                     <div class="col-span-1">
                         <div class="text-sm w-full max-w-2xl pl-3">
@@ -253,62 +253,62 @@
             </div>
 
             {{-- Input Box --}}
-            <div class="col-span-1 h-[620px] bg-white p-6 rounded-lg border shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
-                <h2 class="text-lg font-semibold mb-4 dark:text-white pb-2 border-b">Pembayaran Kasir</h2>
+            <div class="col-span-1 h-[620px] bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
+                <h2 class="text-lg font-semibold mb-4 text-black dark:text-white pb-2 border-b">Pembayaran Kasir</h2>
                 <div class="mb-4 text-sm">
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold dark:text-white">Total Tagihan :</p>
+                            <p class="font-semibold text-black dark:text-white">Total Tagihan :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. {{ number_format($totalTagihan, 0, ',', '.') }}</p>
+                            <p class="font-normal text-black dark:text-white">Rp. {{ number_format($totalTagihan, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between ">
                         <div class="flex text-start">
-                            <p class="font-semibold dark:text-white">Ongkir :</p>
+                            <p class="font-semibold text-black dark:text-white">Ongkir :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. {{ number_format($biayaOngkir, 0, ',', '.') }}</p>
+                            <p class="font-normal text-black dark:text-white">Rp. {{ number_format($biayaOngkir, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between ">
                         <div class="flex text-start">
-                            <p class="font-semibold dark:text-white">Paking :</p>
+                            <p class="font-semibold text-black dark:text-white">Paking :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. {{ number_format($biayaPacking, 0, ',', '.') }}</p>
+                            <p class="font-normal text-black dark:text-white">Rp. {{ number_format($biayaPacking, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold dark:text-white">Asuransi :</p>
+                            <p class="font-semibold text-black dark:text-white">Asuransi :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. {{ number_format($nominalAsuransi ?? 0, 0, ',', '.') }}</p>
+                            <p class="font-normal text-black dark:text-white">Rp. {{ number_format($nominalAsuransi ?? 0, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between mb-2">
                         <div class="flex text-start">
-                            <p class="font-semibold dark:text-white">Total DP :</p>
+                            <p class="font-semibold text-black dark:text-white">Total DP :</p>
                         </div>
                         <div class="flex text-end">
-                            <p class="font-normal dark:text-white">Rp. {{ number_format($totalDp, 0, ',', '.') }}</p>
+                            <p class="font-normal text-black dark:text-white">Rp. {{ number_format($totalDp, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold dark:text-white">Sisa Total Tagihan :</p>
+                            <p class="font-semibold text-black dark:text-white">Sisa Total Tagihan :</p>
                         </div>
                         <div class="flex text-end">
                             @php
                                 $sisaTagihan = $totalTagihan + $biayaOngkir + $biayaPacking + ($nominalAsuransi ?? 0) - $totalDp
                             @endphp
-                            <p class="font-normal dark:text-white">Rp. {{ number_format($sisaTagihan, 0, ',', '.') }}</p>
+                            <p class="font-normal text-black dark:text-white">Rp. {{ number_format($sisaTagihan, 0, ',', '.') }}</p>
                         </div>
                     </div>
                 </div>
-                <h2 class="text-base font-semibold mb-4 dark:text-white border-y py-2">Input Pembayaran</h2>
+                <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-y py-2">Input Pembayaran</h2>
                 <div class="mb-4">
                     <input type="hidden" name="link_doc" value="{{ $dataCase->link_doc }}">
                     <input type="hidden" name="sisa_tagihan" value="{{ $sisaTagihan }}">

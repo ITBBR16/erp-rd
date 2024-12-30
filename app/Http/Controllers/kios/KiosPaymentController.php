@@ -177,7 +177,7 @@ class KiosPaymentController extends Controller
                     $validate = $request->validate([
                                     'supplier_id' => 'required',
                                     'akun_bank_id' => 'required',
-                                    'no_rek' => ['required', Rule::unique('rumahdrone_kios.metode_pembayaran_supplier', 'no_rek')],
+                                    'no_rek' => ['required', Rule::unique('rumahdrone_kios.kios_metode_pembayaran_supplier', 'no_rek')],
                                     'nama_akun' => 'required',
                                 ]);
         
@@ -244,7 +244,7 @@ class KiosPaymentController extends Controller
                     if ($updateStatus) {
                         PengirimanEkspedisi::create([
                             'divisi_id' => 1,
-                            'order_id' => $id,
+                            'order_id' => $paymentKios->order_id,
                             'status_order' => 'Baru',
                             'status' => 'Belum Dikirim',
                         ]);
@@ -260,7 +260,7 @@ class KiosPaymentController extends Controller
                         if ($paymentKios->ongkir > 0) {
                             PengirimanEkspedisi::create([
                                 'divisi_id' => 1,
-                                'order_id' => $id,
+                                'order_id' => $paymentKios->order_id,
                                 'status_order' => 'Bekas',
                                 'status' => 'Belum Dikirim',
                             ]);

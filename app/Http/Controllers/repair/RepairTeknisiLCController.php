@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\repair;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\repair\CustomerService;
 use App\Repositories\umum\UmumRepository;
@@ -10,12 +9,11 @@ use App\Services\repair\RepairCaseService;
 
 class RepairTeknisiLCController extends Controller
 {
-    protected $customerService, $repairCaseService;
-    public function __construct(private UmumRepository $nameDivisi, CustomerService $customerService, RepairCaseService $repairCaseService)
-    {
-        $this->customerService = $customerService;
-        $this->repairCaseService = $repairCaseService;
-    }
+    public function __construct(
+        private UmumRepository $nameDivisi,
+        private CustomerService $customerService,
+        private RepairCaseService $repairCaseService
+    ){}
 
     public function index()
     {

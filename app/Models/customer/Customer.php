@@ -8,6 +8,8 @@ use App\Models\kios\KiosTransaksi;
 use App\Models\repair\RepairCase;
 use App\Models\repair\RepairReviewCustomer;
 use App\Models\repair\RepairTransaksi;
+use App\Models\wilayah\Kecamatan;
+use App\Models\wilayah\Kelurahan;
 use App\Models\wilayah\Kota;
 use App\Models\wilayah\Provinsi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,12 +25,22 @@ class Customer extends Model
 
     public function provinsi()
     {
-        return $this->belongsTo(Provinsi::class, 'provinsi');
+        return $this->belongsTo(Provinsi::class, 'provinsi_id');
     }
 
     public function kota()
     {
-        return $this->belongsTo(Kota::class, 'kota_kabupaten');
+        return $this->belongsTo(Kota::class, 'kota_kabupaten_id');
+    }
+
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class, 'kecataman_id');
+    }
+
+    public function kelurahan()
+    {
+        return $this->belongsTo(Kelurahan::class, 'kelurahan_id');
     }
 
     public function suppliersecond()

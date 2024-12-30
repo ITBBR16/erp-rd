@@ -16,7 +16,7 @@ class Provinsi extends Model
 
     public function customer()
     {
-        return $this->hasMany(Customer::class);
+        return $this->hasMany(Customer::class, 'provinsi_id');
     }
 
     public function kota()

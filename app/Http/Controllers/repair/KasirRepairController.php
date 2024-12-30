@@ -23,6 +23,11 @@ class KasirRepairController extends Controller
         return $this->caseService->indexKasir();
     }
 
+    public function detailKasir($encryptId)
+    {
+        return $this->caseService->pageDetailKasir($encryptId);
+    }
+
     public function edit($id)
     {
         return $this->caseService->pagePelunasan($id);
@@ -53,6 +58,12 @@ class KasirRepairController extends Controller
         } else {
             return back()->with($resultPembayaran['status'], $resultPembayaran['message']);
         }
+    }
+
+    public function konfirmasiAlamat($id)
+    {
+        $resultKonfirmasiAlamat = $this->caseService->sendKonfirmasiAlamat($id);
+        return back()->with($resultKonfirmasiAlamat['status'], $resultKonfirmasiAlamat['message']);
     }
 
     public function createOngkirKasir(Request $request, $id)

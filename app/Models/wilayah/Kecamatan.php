@@ -2,6 +2,7 @@
 
 namespace App\Models\wilayah;
 
+use App\Models\customer\Customer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +22,11 @@ class Kecamatan extends Model
     public function kota()
     {
         return $this->belongsTo(Kota::class, 'kabupaten_id');
+    }
+
+    public function customer()
+    {
+        return $this->hasMany(Customer::class);
     }
 
 }

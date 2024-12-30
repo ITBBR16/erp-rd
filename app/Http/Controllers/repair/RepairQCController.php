@@ -4,7 +4,6 @@ namespace App\Http\Controllers\repair;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\umum\UmumRepository;
 use App\Services\repair\RepairCaseService;
 use App\Services\repair\RepairQCService;
 
@@ -18,6 +17,11 @@ class RepairQCController extends Controller
     public function index()
     {
         return $this->qcService->indexQc();
+    }
+
+    public function detailQualityControl($encryptId)
+    {
+        return $this->qcService->detailQc($encryptId);
     }
 
     public function update(Request $request, $id)

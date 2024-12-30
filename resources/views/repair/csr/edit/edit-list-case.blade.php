@@ -124,7 +124,7 @@
                         <label for="case-kronologi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Kronologi Kerusakan :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <input type="text" name="case_kronologi" id="case-kronologi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $dataCase->kronologi_kerusakan }}">
+                        <input type="text" name="case_kronologi" id="case-kronologi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value="{{ $dataCase->kronologi_kerusakan }}">
                     </div>
                 </div>
                 <div class="grid grid-cols-3 mb-4">
@@ -132,7 +132,7 @@
                         <label for="case-penggunaan" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Penggunaan After Crash :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <input type="text" name="case_penggunaan" id="case-penggunaan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" {{ $dataCase->penanganan_after_crash }}>
+                        <input type="text" name="case_penggunaan" id="case-penggunaan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value="{{ $dataCase->penanganan_after_crash }}">
                     </div>
                 </div>
                 <div class="grid grid-cols-3 mb-4">
@@ -140,7 +140,7 @@
                         <label for="case-riwayat" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Riwayat Penggunaan :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <input type="text" name="case_riwayat" id="case-riwayat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" {{ $dataCase->riwayat_penggunaan }}>
+                        <input type="text" name="case_riwayat" id="case-riwayat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value="{{ $dataCase->riwayat_penggunaan }}">
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@
                 </button>
                 <a href="/repair/dashboard" class="flex ml-2 md:mr-24">
                     <img src="/img/Logo Repair.png" class="h-8 mr-3" alt="FlowBite Logo" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Repair RD</span>
+                    <span class="self-center text-xl text-black font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Repair RD</span>
                 </a>
             </div>
             {{-- Navbar --}}

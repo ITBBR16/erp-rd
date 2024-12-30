@@ -18,7 +18,7 @@
                     <div class="px-6 py-6 lg:px-8 bg-gray-50">
                         <div class="grid grid-cols-2 gap-4">
                             <div class="grid-rows-2 space-y-4">
-                                <div class="bg-white rounded-lg border dark:bg-gray-800 dark:border-gray-600">
+                                <div class="bg-white rounded-lg border border-gray-300 dark:bg-gray-800 dark:border-gray-600">
                                     <div class="relative">
                                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
@@ -40,7 +40,7 @@
                                             <tbody>
                                                 @if (optional($case?->qualityControl?->cekFisik)->isNotEmpty())
                                                     @foreach ($case->qualityControl->cekFisik as $fisik)
-                                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                        <tr class="bg-white border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700">
                                                             <td class="px-3 py-2">
                                                                 {{ $fisik->qcKategori->nama }}
                                                             </td>
@@ -67,7 +67,7 @@
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-3">
-                                    <div class="bg-white col-span-2 rounded-lg border dark:bg-gray-800 dark:border-gray-600">
+                                    <div class="bg-white col-span-2 rounded-lg border border-gray-300 dark:bg-gray-800 dark:border-gray-600">
                                         <div class="relative">
                                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
@@ -86,12 +86,12 @@
                                                 <tbody>
                                                     @if (optional($case?->qualityControl?->cekCalibrasi)->isNotEmpty())
                                                         @foreach ($case?->qualityControl->cekCalibrasi as $calibrasi)
-                                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                            <tr class="bg-white border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700">
                                                                 <td class="px-3 py-2">
                                                                     {{ $calibrasi->qcKategori->nama }}
                                                                 </td>
                                                                 <td class="px-3 py-2">
-                                                                    <input {{ ($calibrasi->check == 1) ? 'checked' : '' }} type="checkbox" value="" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                                    <input {{ ($calibrasi->check == 1) ? 'checked' : '' }} type="checkbox" value="" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" disabled>
                                                                 </td>
                                                                 <td class="px-3 py-2">
                                                                     {{ $calibrasi->keterangan }}
@@ -132,7 +132,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="bg-white col-span-2 rounded-lg border dark:bg-gray-800 dark:border-gray-600">
+                                <div class="bg-white col-span-2 rounded-lg border border-gray-300 dark:bg-gray-800 dark:border-gray-600">
                                     <div class="relative">
                                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
@@ -151,12 +151,12 @@
                                             <tbody>
                                                 @if (optional($case?->qualityControl?->testFly)->isNotEmpty())
                                                     @foreach ($case?->qualityControl->testFly as $testFly)
-                                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                        <tr class="bg-white border-b border-gray-300 dark:bg-gray-800 dark:border-gray-700">
                                                             <td class="px-3 py-2">
                                                                 {{ $testFly->qcKategori->nama }}
                                                             </td>
                                                             <td class="px-3 py-2">
-                                                                <input {{ ($testFly->check == 1) ? 'checked' : '' }} type="checkbox" value="" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                                <input {{ ($testFly->check == 1) ? 'checked' : '' }} type="checkbox" value="" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" disabled>
                                                             </td>
                                                             <td class="px-3 py-2">
                                                                 {{ $testFly->keterangan }}
@@ -177,7 +177,7 @@
                             </div>
                         </div>
                         <div class="border block p-4 mt-4 bg-white text-sm text-gray-900 rounded-lg dark:border-gray-600 space-y-4">
-                            <h3 class="text-base font-semibold dark:text-white">Kesimpulan</h3>
+                            <h3 class="text-base font-semibold text-black dark:text-white">Kesimpulan</h3>
                             <p>{!! nl2br(e($case?->qualityControl->kesimpulan)) !!}</p>
                         </div>
                     </div>

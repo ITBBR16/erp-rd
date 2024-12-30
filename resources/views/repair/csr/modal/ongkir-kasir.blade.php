@@ -46,7 +46,7 @@
                                                 <select name="provinsi_customer" id="ongkir-provinsi-ori-{{ $case->id }}" data-id="{{ $case->id }}" class="ongkir-provinsi-ori bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                     <option value="" hidden>Pilih Provinsi</option>
                                                     @foreach ($dataProvinsi as $provinsi)
-                                                        @if ($case->customer->provinsi == $provinsi->id)
+                                                        @if ($case->customer->provinsi_id == $provinsi->id)
                                                             <option value="{{ $provinsi->id }}" selected>{{ $provinsi->name }}</option>
                                                         @else
                                                             <option value="{{ $provinsi->id }}">{{ $provinsi->name }}</option>

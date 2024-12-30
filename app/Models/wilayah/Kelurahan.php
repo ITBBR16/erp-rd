@@ -2,6 +2,7 @@
 
 namespace App\Models\wilayah;
 
+use App\Models\customer\Customer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,11 @@ class Kelurahan extends Model
     public function kecamatan()
     {
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
+    }
+
+    public function customer()
+    {
+        return $this->hasMany(Customer::class);
     }
 
 }

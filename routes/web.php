@@ -268,6 +268,7 @@ Route::middleware('repair')->group(function () {
         Route::prefix('/csr')->group(function () {
             Route::group(['controller' => RepairListCaseController::class], function () {
                 Route::resource('/case-list', RepairListCaseController::class)->only(['index', 'edit', 'store']);
+                Route::get('/detail-list-case/{id}', 'detailListCase')->name('detailListCase');
                 Route::post('/create-nc', 'createNC')->name('createNC');
                 Route::get('/getKelengkapan/{id}', 'getKelengkapan');
                 Route::get('/reviewPdfTandaTerima/{id}', 'reviewPdfTandaTerima');
@@ -277,6 +278,7 @@ Route::middleware('repair')->group(function () {
 
             Route::group(['controller' => KasirRepairController::class], function () {
                 Route::resource('/kasir-repair', KasirRepairController::class)->only(['index', 'edit']);
+                Route::get('/detail-kasir/{id}', 'detailKasir')->name('detailKasir');
                 Route::post('/add-ongkir-repair/{id}', 'createOngkirKasir')->name('createOngkirKasir');
                 Route::get('/kasir-repair-dp/{encryptId}', 'downpaymentKasir')->name('downpaymentKasir');
                 Route::get('/getDataCustomer/{id}', 'getDataCustomer');
@@ -285,6 +287,7 @@ Route::middleware('repair')->group(function () {
                 Route::get('/preview-down-payment/{id}', 'previewPdfDp');
                 Route::post('/create-pelunasan/{id}', 'createPelunasan')->name('createPelunasan');
                 Route::post('/create-pembayaran/{id}', 'createPembayaran')->name('createPembayaran');
+                Route::post('/konfirmasi-alamat-csr/{id}', 'konfirmasiAlamat')->name('konfirmasiAlamatCSR');
             });
 
             Route::resource('/non-kasir', RepairNonKasirController::class)->only(['index']);
@@ -354,6 +357,7 @@ Route::middleware('repair')->group(function () {
                 Route::post('/createQcFisik', 'createQcFisik')->name('createQcFisik');
                 Route::post('/createQcCalibrasi', 'createQcCalibrasi')->name('createQcCalibrasi');
                 Route::post('/createTestFly', 'createTestFly')->name('createTestFly');
+                Route::get('/detail-qc/{id}', 'detailQualityControl')->name('detailQc');
             });
         });
 

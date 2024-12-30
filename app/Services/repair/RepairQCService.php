@@ -43,6 +43,28 @@ class RepairQCService
         ]);
     }
 
+    public function detailQc($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $dataCase = $this->repairCase->findCase($id);
+        $divisiName = $this->umum->getDivisi($user);
+        $dataQc = $this->getDataNeed();
+        $kondisi = $dataQc['kondisi'];
+        $kategori = $dataQc['kategori'];
+
+        return view('repair.qc.page.detail-qc', [
+            'title' => 'Detail Pengecekkan',
+            'active' => 'pengecekkan',
+            'navActive' => 'qc',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'case' => $dataCase,
+            'kategoris' => $kategori,
+            'kondisis' => $kondisi,
+        ]);
+    }
+
     public function getDataNeed()
     {
         $dataDD = $this->repairQc->getAllData();

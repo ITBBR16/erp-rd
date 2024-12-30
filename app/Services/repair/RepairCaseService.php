@@ -99,6 +99,23 @@ class RepairCaseService
         ]);
     }
 
+    public function pageDetailListCase($encryptId)
+    {
+        $user = auth()->user();
+        $id = decrypt($encryptId);
+        $divisiName = $this->umum->getDivisi($user);
+        $dataCase = $this->findCase($id);
+
+        return view('repair.csr.page.detail-list-case', [
+            'title' => 'Detail List Case',
+            'active' => 'list-case',
+            'navActive' => 'csr',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'case' => $dataCase,
+        ]);
+    }
+
     public function getDataDropdown()
     {
         $dataDD = $this->repairCase->getAllDataNeededNewCase();
@@ -409,6 +426,23 @@ class RepairCaseService
         ]);
     }
 
+    public function pageDetailKasir($encryptId)
+    {
+        $user = auth()->user();
+        $id = decrypt($encryptId);
+        $divisiName = $this->umum->getDivisi($user);
+        $dataCase = $this->findCase($id);
+
+        return view('repair.csr.page.detail-kasir', [
+            'title' => 'Detail List Case',
+            'active' => 'kasir-repair',
+            'navActive' => 'csr',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'case' => $dataCase,
+        ]);
+    }
+
     public function pagePelunasan($id)
     {
         $user = auth()->user();
@@ -445,6 +479,49 @@ class RepairCaseService
             'dataCase' => $dataCase,
             'daftarAkun' => $daftarAkun,
         ]);
+    }
+
+    public function sendKonfirmasiAlamat($id)
+    {
+        try {
+            $dataCase = $this->repairCase->findCase($id);
+
+            if (!$dataCase || !$dataCase->customer) {
+                throw new Exception('Data case atau customer tidak ditemukan.');
+            }
+
+            $greeting = $this->showTimeForChat();
+            $notelpon = 6285156519066; //$dataCase->customer->no_telpon
+            $provinsi = $dataCase->customer->provinsi->name ?? '-';
+            $kota = $dataCase->customer->kota->name ?? '-';
+            $kecamatan = $dataCase->customer->kecamatan->name ?? '-';
+            $kelurahan = $dataCase->customer->kelurahan->name ?? '-';
+            $kodePos = $dataCase->customer->kode_pos ?? '-';
+            $namaJalan = $dataCase->customer->nama_jalan ?? '-';
+
+            $namaReal = $dataCase->customer->first_name . " " . $dataCase->customer->last_name;
+            $header = "{$greeting} {$namaReal}\n\nMohon Koreksi alamat berikut untuk pengiriman : \n\n";
+            $body = "Provinsi : {$provinsi}\nKota / Kabupaten : {$kota}\nKecamatan : {$kecamatan}\nKelurahan : {$kelurahan}\nKode Pos : {$kodePos}\nNama Jalan : {$namaJalan}\n\n";
+            $footer = "Jika sudah benar mohon balas pesan ini dengan *YA*";
+            $pesan = $header . $body . $footer;
+
+            $payload = [
+                'pesan' => $pesan,
+                'no_telpon' => $notelpon,
+            ];
+
+            $url = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
+            $response = Http::post($url, $payload);
+
+            if ($response->failed()) {
+                throw new Exception('Gagal mengirim konfirmasi alamat. Error: ' . $response->body());
+            }
+
+            return ['status' => 'success', 'message' => 'Konfirmasi alamat berhasil dikirim.'];
+
+        } catch (Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
     }
 
     public function createOngkirKasir(Request $request, $id)

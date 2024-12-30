@@ -43,9 +43,23 @@ class CustomerService
                 'nama_jalan' => 'max:255'
             ]);
 
-            $validate['by_divisi'] = $divisiId;
+            $dataInput = [
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'asal_informasi' => $request->input('asal_informasi'),
+                'no_telpon' => $request->input('no_telpon'),
+                'by_divisi' => $divisiId,
+                'email' => $request->input('email'),
+                'instansi' => $request->input('instansi'),
+                'provinsi_id' => $request->input('provinsi'),
+                'kota_kabupaten_id' => $request->input('kota_kabupaten'),
+                'kecamatan_id' => $request->input('kecamatan'),
+                'kelurahan_id' => $request->input('kelurahan'),
+                'kode_pos' => $request->input('kode_pos'),
+                'nama_jalan' => $request->input('nama_jalan')
+            ];
 
-            $dataCustomer = $this->customerRepository->createCustomer($validate);
+            $dataCustomer = $this->customerRepository->createCustomer($dataInput);
 
             $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
             $response = Http::post($appScriptUrl, [

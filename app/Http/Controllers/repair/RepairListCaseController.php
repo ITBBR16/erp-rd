@@ -25,6 +25,11 @@ class RepairListCaseController extends Controller
         return $this->repairCaseService->editNewCase($encryptId);
     }
 
+    public function detailListCase($encryptId)
+    {
+        return $this->repairCaseService->pageDetailListCase($encryptId);
+    }
+
     public function createNC(Request $request)
     {
         $result = $this->customerService->createNewCustomer($request);

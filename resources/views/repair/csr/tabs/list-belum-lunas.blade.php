@@ -43,7 +43,7 @@
             <tbody>
                 @foreach ($dataCase as $case)
                     @if ($case->jenisStatus->jenis_status == 'Proses Menunggu Pembayaran (Lanjut)')
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
                                 R-{{ $case->id }}
                             </td>
@@ -70,19 +70,25 @@
                             </td>
                         </tr>
                         <!-- Dropdown menu -->
-                        <div id="dropdownBL{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
+                        <div id="dropdownBL{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-46 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="ddBelumLunas{{ $case->id }}">
                                 <li>
-                                    <button type="button" data-modal-target="detail-kasir-{{ $case->id }}" data-modal-toggle="detail-kasir-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                    <a href="{{ route('detailKasir', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base mr-3">visibility</i>
                                         <span class="whitespace-nowrap">Detail</span>
-                                    </button>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('kasir-repair.edit', encrypt($case->id)) }}" target="_blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('kasir-repair.edit', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base mr-3">shopping_cart_checkout</i>
                                         <span class="whitespace-nowrap">Pelunasan</span>
                                     </a>
+                                </li>
+                                <li>
+                                    <button type="button" data-modal-target="konfirmasi-alamat-{{ $case->id }}" data-modal-toggle="konfirmasi-alamat-{{ $case->id }}" data-id="{{ $case->id }}" data-customer-id="{{ $case->customer->id }}" class="ongkir-kasir-repair flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">contact_mail</span>
+                                        <span class="whitespace-nowrap">Konfirmasi Alamat</span>
+                                    </button>
                                 </li>
                                 <li>
                                     <button type="button" data-modal-target="ongkir-kasir-{{ $case->id }}" data-modal-toggle="ongkir-kasir-{{ $case->id }}" data-id="{{ $case->id }}" data-customer-id="{{ $case->customer->id }}" class="ongkir-kasir-repair flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
@@ -91,7 +97,7 @@
                                     </button>
                                 </li>
                                 <li>
-                                    <a href="{{ route('downpaymentKasir', encrypt($case->id)) }}" target="_blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('downpaymentKasir', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-base mr-3">credit_card</i>
                                         <span class="whitespace-nowrap">Down Payment</span>
                                     </a>
@@ -107,6 +113,6 @@
         </div>
     </div>
     {{-- Modal Kasir --}}
-    @include('repair.csr.modal.detail-kasir')
+    @include('repair.csr.modal.konfirmasi-alamat')
     @include('repair.csr.modal.ongkir-kasir')
 </div>
