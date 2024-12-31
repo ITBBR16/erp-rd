@@ -4,7 +4,7 @@
             <div class="relative w-full max-w-2xl max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     {{-- Header Modal --}}
-                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">
                             Quality Control / Calibrasi
                         </h3>
@@ -20,7 +20,7 @@
                         <div class="px-6 py-6 lg:px-8 bg-gray-50">
                             @csrf
                             <div class="grid grid-cols-3">
-                                <div class="bg-white col-span-2 rounded-lg border dark:bg-gray-800 dark:border-gray-600">
+                                <div class="bg-white col-span-2 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-600">
                                     <input type="hidden" name="case_id" id="case-id-calibrasi-{{ $case->id }}" value="{{ $case->id }}">
                                     <div class="relative">
                                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -40,7 +40,7 @@
                                             <tbody>
                                                 @foreach ($kategoris as $index => $kategori)
                                                     @if ($kategori->kategori_cek == 'calibrasi')
-                                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                        <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                                                             <td class="px-3 py-2">
                                                                 <input type="hidden" name="cek_calibrasi[]" id="cek-calibrasi-{{ $index }}" value="{{ $kategori->id }}">
                                                                 {{ $kategori->nama }}
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         {{-- Footer Modal --}}
-                        <div class="flex justify-end p-3 border-t rounded-t dark:border-gray-600">
+                        <div class="flex justify-end p-3 border-t border-gray-200 rounded-t dark:border-gray-600">
                             <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
                             <div class="loader-button-form" style="display: none">
                                 <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>

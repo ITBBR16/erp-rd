@@ -17,6 +17,11 @@ class RepairEstimasiBiayaController extends Controller
         return $this->serviceEstimasi->index();
     }
 
+    public function detailEstimasi($encryptId)
+    {
+        return $this->serviceEstimasi->pageDetailEstimasi($encryptId);
+    }
+
     public function edit($encryptId)
     {
         return $this->serviceEstimasi->pageEstimasi($encryptId);

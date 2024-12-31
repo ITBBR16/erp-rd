@@ -17,7 +17,7 @@
                 <select name="asal_informasi" id="asal-informasi-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     <option value="" hidden>Lead Source</option>
                     @foreach ($infoPerusahaan as $info)
-                        <option value="{{ $info->id }}" class="dark:bg-gray-700">{{ $info->asal }}</option>
+                        <option value="{{ $info->id }}" class="bg-white dark:bg-gray-700">{{ $info->asal }}</option>
                     @endforeach
                 </select>
             </div>
@@ -38,7 +38,7 @@
                 <select name="provinsi" id="provinsi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     <option value="" hidden>Pilih Provinsi</option>
                     @foreach ($dataProvinsi as $provinsi)
-                        <option value="{{ $provinsi->id }}" class="dark:bg-gray-700">{{ $provinsi->name }}</option>
+                        <option value="{{ $provinsi->id }}" class="bg-white dark:bg-gray-700">{{ $provinsi->name }}</option>
                     @endforeach
                 </select>
             </div>

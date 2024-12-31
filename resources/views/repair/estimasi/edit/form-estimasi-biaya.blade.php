@@ -39,8 +39,8 @@
         @csrf
         @method('PUT')
         <div class="grid grid-row-2 gap-6 mt-4">
-            <div class="bg-white p-4 rounded-lg shadow-lg border dark:bg-gray-800 dark:border-gray-600">
-                <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-600">
+                <div class="grid grid-cols-2 h-[550px] gap-4">
                     <div>
                         <div class="border-b grid grid-cols-2 gap-2 pb-2">
                             <div class="text-sm text-start">
@@ -53,11 +53,11 @@
                         <div class="grid grid-cols-2 mt-2 gap-3">
                             <div class="text-start">
                                 <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Masuk</p>
-                                <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
+                                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
                             </div>
                             <div class="text-end">
                                 <p class="text-xs text-gray-700 dark:text-gray-300">Tanggal Estimasi</p>
-                                <h3 class="text-sm font-semibold dark:text-white">{{ \Carbon\Carbon::parse($dataCase->updated_at)->isoFormat('D MMMM YYYY') }}</h3>
+                                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ \Carbon\Carbon::parse($dataCase->updated_at)->isoFormat('D MMMM YYYY') }}</h3>
                             </div>
                             <div class="mr-auto text-start">
                                 <p class="text-xs text-gray-700 dark:text-gray-300">No Telpon</p>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="ml-auto text-end">
                                 <p class="text-xs text-gray-700 dark:text-gray-300">Link Drive</p>
-                                <a href="{{ $dataCase->link_doc }}" target="__blank" class="text-sm flex items-center text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+                                <a href="{{ $dataCase->link_doc }}" target="_blank" class="text-sm flex items-center text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
                                     <span class="font-semibold mr-3">Link Drive</span>
                                     <i class="material-symbols-outlined">link</i>
                                 </a>
@@ -135,7 +135,7 @@
                             <textarea name="pesan_hasil_ts" id="pesan-hasil-ts" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesan pesan hasil troubleshooting untuk customer . . ." required></textarea>
                         </div>
                     </div>
-                    <div>
+                    <div class="overflow-y-auto">
                         <div class="border-b grid grid-cols-2 gap-2 pb-2">
                             <div class="text-sm text-start">
                                 <h3 class="font-semibold">Hasil Troubleshooting</h3>
@@ -144,7 +144,7 @@
                                 <h3 class="font-semibold">Teknisi : {{ $dataCase->teknisi->first_name }}</h3>
                             </div>
                         </div>
-                        <div class="mt-2 p-2 text-sm0">
+                        <div class="mt-2 p-2 text-sm">
                             @foreach ($dataCase->timestampStatus->where('jenis_status_id', 2) as $timeStamp)
                                 @foreach ($timeStamp->jurnal->sortByDesc('created_at')->take(1) as $jurnal)
                                     {!! nl2br(e($jurnal->isi_jurnal)) !!}
@@ -155,7 +155,7 @@
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-lg border shadow-lg dark:bg-gray-800 dark:border-gray-600">
+            <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600">
                 <div class="grid grid-cols-3 gap-5">
                     <div class="relative col-span-2 overflow-x-auto">
                         <div class="border-b">

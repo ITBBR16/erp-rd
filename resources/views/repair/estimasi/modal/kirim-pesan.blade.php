@@ -4,7 +4,7 @@
             <div class="relative w-full max-w-4xl max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     {{-- Header Modal --}}
-                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">
                             Kirim Pesan {{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->customer->id }}
                         </h3>
@@ -26,20 +26,20 @@
                                 <input type="hidden" name="jenis_drone" value="{{ $case->jenisProduk->jenis_produk }}">
                                 <input type="hidden" name="serial_number" value="-">
 
-                                <h3 class="dark:text-white">Selamat {{ $greeting }} {{ $case->customer->first_name }} {{ $case->customer->last_name }} 😊</h3><br>
-                                <p class="dark:text-white">Kami dari Rumah Drone ingin menginformasikan hasil troubleshooting dari :</p><br>
-                                <p class="dark:text-white">Drone Atas Nama : {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}-{{ $case->id }}</p>
-                                <p class="dark:text-white">Jenis Drone : {{ $case->jenisProduk->jenis_produk }}</p>
-                                <p class="dark:text-white">SN : -</p>
+                                <h3 class="text-black dark:text-white">Selamat {{ $greeting }} {{ $case->customer->first_name }} {{ $case->customer->last_name }} 😊</h3><br>
+                                <p class="text-black dark:text-white">Kami dari Rumah Drone ingin menginformasikan hasil troubleshooting dari :</p><br>
+                                <p class="text-black dark:text-white">Drone Atas Nama : {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}-{{ $case->id }}</p>
+                                <p class="text-black dark:text-white">Jenis Drone : {{ $case->jenisProduk->jenis_produk }}</p>
+                                <p class="text-black dark:text-white">SN : -</p>
 
                                 <div class="my-3 border p-2 grid grid-cols-2">
                                     <div class="mr-4">
                                         <input type="hidden" name="hasil_analisa_ts" value="{{ $case->estimasi->estimasiChat->isi_chat }}">
-                                        <h3 class="dark:text-white">Berikut hasil analisa dan troubleshooting teknisi kami :</h3>
-                                        <p class="dark:text-white">{!! nl2br(e($case->estimasi->estimasiChat->isi_chat)) !!}</p>
+                                        <h3 class="text-black dark:text-white">Berikut hasil analisa dan troubleshooting teknisi kami :</h3>
+                                        <p class="text-black dark:text-white">{!! nl2br(e($case->estimasi->estimasiChat->isi_chat)) !!}</p>
                                     </div>
                                     <div>
-                                        <h3 class="font-semibold dark:text-white">Estimasi Biaya</h3>
+                                        <h3 class="font-semibold text-black dark:text-white">Estimasi Biaya</h3>
                                         <ul class="space-y-1 list-disc list-inside dark:text-white">
                                             @php
                                                 $totalNilai = 0;
@@ -47,7 +47,7 @@
                                         
                                             @foreach (array_merge($case->estimasi->estimasiPart->all(), $case->estimasi->estimasiJrr->all()) as $item)
                                                 @if ($item->active == 'Active')
-                                                    <li class="flex justify-between">
+                                                    <li class="flex justify-between text-black">
                                                         <span>
                                                             @if (isset($item->gudang_produk_id))
                                                                 <input type="hidden" name="data_estimasi[]" value="{{ ($item->nama_alias != '') ? $item->nama_alias : $item->sparepartGudang->produkSparepart->nama_internal }}">
@@ -71,40 +71,40 @@
                                             
                                             <li class="flex justify-between">
                                                 <input type="hidden" name="total_biaya_estimasi" value="Rp. {{ number_format($totalNilai, 0, ',', '.') }}">
-                                                <span class="font-semibold">TOTAL BIAYA :</span>
-                                                <span class="font-semibold">Rp. {{ number_format($totalNilai, 0, ',', '.') }}</span>
+                                                <span class="text-black font-semibold dark:text-white">TOTAL BIAYA :</span>
+                                                <span class="text-black font-semibold dark:text-white">Rp. {{ number_format($totalNilai, 0, ',', '.') }}</span>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
 
                                 <div class="mt-2 space-y-2">
-                                    <h3>Untuk foto dokumentasi saat troubleshooting dapat dilihat pada link dibawah :</h3>
+                                    <h3 class="text-black dark:text-white">Untuk foto dokumentasi saat troubleshooting dapat dilihat pada link dibawah :</h3>
                                     <input type="hidden" name="link_doc" value="{{ $case->link_doc }}">
-                                    <a href="{{ $case->link_doc }}" target="__blank" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ $case->link_doc }}</a>
+                                    <a href="{{ $case->link_doc }}" target="_blank" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ $case->link_doc }}</a>
                                 </div>
 
                                 <div class="mt-2">
-                                    <p class="dark:text-white">Mohon konfirmasi apakah pengerjaan di lanjut atau di batalkan</p>
-                                    <p class="dark:text-white">Jika ada kerusakan lain di tengah pengerjaan kami akan menginformasikan ulang</p>
-                                    <p class="dark:text-white">Misal informasi yang kami sampaikan kurang jelas bisa langsung ngobrol via telfon ya kak 🙏😊</p>
+                                    <p class="text-black dark:text-white">Mohon konfirmasi apakah pengerjaan di lanjut atau di batalkan</p>
+                                    <p class="text-black dark:text-white">Jika ada kerusakan lain di tengah pengerjaan kami akan menginformasikan ulang</p>
+                                    <p class="text-black dark:text-white">Misal informasi yang kami sampaikan kurang jelas bisa langsung ngobrol via telfon ya kak 🙏😊</p>
                                 </div>
 
-                                <div class="mt-2">
-                                    <h3 class="font-semibold dark:text-white">Note : </h3>
+                                <div class="mt-2 text-black dark:text-white">
+                                    <h3 class="font-semibold text-black dark:text-white">Note : </h3>
                                     <p>- Jasa sudah termasuk include kalibrasi IMU, Gimbal, Vision, pembersihan total dan pergantian pasta</p>
                                     <p>- Garansi 1 Bulan *Syarat dan Ketentukan berlaku</p>
                                     <p>- Khusus Mavic 3, mavic air 3 dan case masuk air, akan dikenakan biaya minimal Rp 300.000 tergantung penanganan yang telah diberikan (jika dicancel)</p>
                                     <p>- Jika tidak segera dilakukan konfirmasi maka biaya dapat berubah tergantung harga sparepart saat konfirmasi pengerjaan</p>
                                 </div>
 
-                                <div class="mt-2">
+                                <div class="mt-2 text-black">
                                     <p>Terimakasih, Salam satu langit 🙏😊🚁</p>
                                 </div>
                             </div>
                         </div>
                         {{-- Footer Modal --}}
-                        <div class="flex justify-end p-3 border-t rounded-t dark:border-gray-600">
+                        <div class="flex justify-end p-3 border-t border-gray-200 rounded-t dark:border-gray-600">
                             <button type="submit" class="submit-button-form text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-500 dark:focus:ring-green-800">Kirim Pesan</button>
                             <div class="loader-button-form" style="display: none">
                                 <button class="cursor-not-allowed text-white border border-green-700 bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-green-500 dark:text-white dark:bg-green-500 dark:focus:ring-green-800" disabled>

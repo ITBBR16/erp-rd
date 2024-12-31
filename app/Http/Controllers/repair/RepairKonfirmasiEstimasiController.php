@@ -21,6 +21,11 @@ class RepairKonfirmasiEstimasiController extends Controller
         return $this->serviceEstimasi->indexKonfirmasi();
     }
 
+    public function detailKonfirmasi($encryptId)
+    {
+        return $this->serviceEstimasi->pageDetailKonfirmasi($encryptId);
+    }
+
     public function edit($encryptId)
     {
         return $this->serviceEstimasi->pageUbahEstimasi($encryptId);

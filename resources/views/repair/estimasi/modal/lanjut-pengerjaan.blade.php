@@ -14,7 +14,7 @@
                             @csrf
                             @method('PUT')
                             <div class="flex justify-center mx-auto mb-4">
-                                <span class="material-symbols-outlined text-8xl dark:text-white">confirmation_number</span>
+                                <span class="material-symbols-outlined text-8xl text-black dark:text-white">confirmation_number</span>
                             </div>
                             <input type="hidden" name="konfirmasi_customer" id="konfirmasi-customer-{{ $case->id }}">
                             <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Apakah Customer Ingin Lanjut ?</h3>

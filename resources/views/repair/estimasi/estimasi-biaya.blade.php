@@ -78,7 +78,7 @@
             <tbody>
                 @foreach ($dataCase as $case)
                     @if ($case->jenisStatus->jenis_status == 'Proses Estimasi Biaya')
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
                                 {{ \Carbon\Carbon::parse($case->created_at)->isoFormat('D MMMM YYYY') }}
                             </td>
@@ -105,10 +105,10 @@
                         <div id="dropdownTS{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTroubleshooting{{ $case->id }}">
                                 <li>
-                                    <button type="button" data-modal-target="detail-estimasi-{{ $case->id }}" data-modal-toggle="detail-estimasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                    <a href="{{ route('detailEstimasi', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-xl mr-3">visibility</i>
                                         <span class="whitespace-nowrap">Detail</span>
-                                    </button>
+                                    </a>
                                 </li>
                                 <li>
                                     <a href="{{ route('estimasi-biaya.edit', encrypt($case->id)) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
@@ -134,7 +134,6 @@
     </div>
 
     {{-- Modal --}}
-    @include('repair.estimasi.modal.detail-estimasi')
     @include('repair.estimasi.modal.jurnal-estimasi')
 
 @endsection

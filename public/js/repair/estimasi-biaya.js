@@ -181,7 +181,7 @@ $(document).ready(function () {
                     value: produk.id,
                     text: produk.jenis_produk
                 })
-                .addClass('dark:bg-gray-700')
+                .addClass('bg-white dark:bg-gray-700')
                 inputJP.append(option)
             });
 
@@ -207,7 +207,7 @@ $(document).ready(function () {
                     value: part.id,
                     text: part.nama_internal
                 })
-                .addClass('dark:bg-gray-700')
+                .addClass('bg-white dark:bg-gray-700')
                 inputPart.append(option)
             });
 

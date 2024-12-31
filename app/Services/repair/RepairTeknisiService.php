@@ -13,7 +13,7 @@ use App\Repositories\repair\repository\RepairTimeJurnalRepository;
 class RepairTeknisiService
 {
     public function __construct(
-        private UmumRepository $nameDivisi,
+        private UmumRepository $umum,
         private RepairTeknisiRepository $repairTeknisi,
         private RepairCaseService $repairCaseService,
         private RepairTimeJurnalRepository $repairTimeJurnal)
@@ -152,7 +152,7 @@ class RepairTeknisiService
     {
         $user = auth()->user();
         $caseService = $this->repairCaseService->getDataDropdown();
-        $divisiName = $this->nameDivisi->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $dataCase = $caseService['data_case'];
 
         return view('repair.teknisi.pengerjaan', [
@@ -162,6 +162,23 @@ class RepairTeknisiService
             'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
+        ]);
+    }
+
+    public function pageDetailPengerjaan($encryptId)
+    {
+        $user = auth()->user();
+        $id = decrypt($encryptId);
+        $divisiName = $this->umum->getDivisi($user);
+        $dataCase = $this->repairCaseService->findCase($id);
+
+        return view('repair.teknisi.pages.detail-case-pengerjaan', [
+            'title' => 'Detail List Pengerjaan',
+            'active' => 'pengerjaan',
+            'navActive' => 'teknisi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'case' => $dataCase,
         ]);
     }
 

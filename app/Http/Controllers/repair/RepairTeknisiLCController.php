@@ -10,7 +10,7 @@ use App\Services\repair\RepairCaseService;
 class RepairTeknisiLCController extends Controller
 {
     public function __construct(
-        private UmumRepository $nameDivisi,
+        private UmumRepository $umum,
         private CustomerService $customerService,
         private RepairCaseService $repairCaseService
     ){}
@@ -19,7 +19,7 @@ class RepairTeknisiLCController extends Controller
     {
         $user = auth()->user();
         $caseService = $this->repairCaseService->getDataDropdown();
-        $divisiName = $this->nameDivisi->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $dataCase = $caseService['data_case'];
 
         return view('repair.teknisi.case-list', [
@@ -31,6 +31,23 @@ class RepairTeknisiLCController extends Controller
             'dataCase' => $dataCase,
         ]);
 
+    }
+
+    public function pageDetailCaseTeknisi($encryptId)
+    {
+        $user = auth()->user();
+        $id = decrypt($encryptId);
+        $divisiName = $this->umum->getDivisi($user);
+        $dataCase = $this->repairCaseService->findCase($id);
+
+        return view('repair.teknisi.pages.detail-case-teknisi', [
+            'title' => 'Detail List Case',
+            'active' => 'list-case',
+            'navActive' => 'teknisi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'case' => $dataCase,
+        ]);
     }
 
 }

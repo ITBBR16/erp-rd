@@ -12,19 +12,16 @@ use Exception;
 
 class RepairCustomerListController extends Controller
 {
-    public function __construct(private UmumRepository $nameDivisi, private RepairCustomerRepository $repairCustomer){}
+    public function __construct(
+        private UmumRepository $umum,
+        private RepairCustomerRepository $repairCustomer){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->nameDivisi->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $dataCustomer = $this->repairCustomer->getAll();
         $provinsi = $this->repairCustomer->getProvinsi();
-        // $dataKota = $this->repairCustomer->getKota();
-        // $dataKecamatan = $this->repairCustomer->getKecamatan();
-        // $dataKelurahan = $this->repairCustomer->getKelurahan();
-
-        // return response()->json($dataCustomer);
 
         return view('repair.customer.list-customer', [
             'title' => 'Customer List',
@@ -32,9 +29,6 @@ class RepairCustomerListController extends Controller
             'navActive' => 'customer',
             'divisi' => $divisiName,
             'dataCustomer' => $dataCustomer,
-            // 'dataKota' => $dataKota,
-            // 'dataKecamatan' => $dataKecamatan,
-            // 'dataKelurahan' => $dataKelurahan,
             'provinsi' => $provinsi,
         ]);
 
@@ -51,7 +45,7 @@ class RepairCustomerListController extends Controller
                         ->orWhere('no_telpon', 'like', "%$query%")
                         ->get();
 
-        return response()->json($dataCustomer);
+        return response()->json(['data' => $dataCustomer]);
     }
 
 

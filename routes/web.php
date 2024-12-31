@@ -313,11 +313,13 @@ Route::middleware('repair')->group(function () {
 
         Route::prefix('/teknisi')->group(function () {
             Route::get('/list-cases', [RepairTeknisiLCController::class, 'index'])->name('listCaseTeknisi');
+            Route::get('/detail-cases-teknisi/{id}', [RepairTeknisiLCController::class, 'pageDetailCaseTeknisi'])->name('pageDetailCaseTeknisi');
             Route::resource('/new-case-teknisi', RepairTeknisiNCController::class)->only(['index', 'update']);
             Route::resource('/troubleshooting', RepairTroubleshootingController::class)->only(['index', 'update']);
             Route::put('/change-to-estimasi/{id}', [RepairTroubleshootingController::class, 'changeStatus'])->name('change-to-estimasi');
 
             Route::resource('/pengerjaan', RepairPengerjaanController::class)->only(['index', 'update']);
+            Route::get('/detail-pengerjaan-teknisi/{id}',[RepairPengerjaanController::class, 'detailPengerjaan'])->name('detailPengerjaan');
             Route::put('/changeStatusPengerjaan/{id}', [RepairPengerjaanController::class, 'changeStatusPengerjaan'])->name('changeStatusPengerjaan');
 
             Route::resource('/req-sparepart-teknisi', RepairTeknisiRequestSparepartController::class)->only(['index', 'update']);
@@ -326,6 +328,7 @@ Route::middleware('repair')->group(function () {
         Route::prefix('/estimasi')->group(function () {
             Route::group(['controller' => RepairEstimasiBiayaController::class], function () {
                 Route::resource('/estimasi-biaya', RepairEstimasiBiayaController::class)->only(['index', 'update', 'edit']);
+                Route::get('/detail-estimasi/{id}', 'detailEstimasi')->name('detailEstimasi');
                 Route::post('/addJurnalEstimasi', 'inputJurnalEstimasi')->name('addJurnalEstimasi');
                 Route::get('/jenisDrone', 'getJenisDrone');
                 Route::get('/getPartGudang/{jenisDrone}', 'getPartGudang');
@@ -337,6 +340,7 @@ Route::middleware('repair')->group(function () {
 
             Route::group(['controller' => RepairKonfirmasiEstimasiController::class], function () {
                 Route::resource('/konfirmasi-estimasi', RepairKonfirmasiEstimasiController::class)->only(['index', 'edit', 'update']);
+                Route::get('/detail-konfirmasi/{id}', 'detailKonfirmasi')->name('detailKonfirmasi');
                 Route::post('/kirimPesanEstimasi', 'kirimPesanEstimasi')->name('kirimPesanEstimasi');
                 Route::put('/konfirmasiEstimasi/{id}', 'konfirmasiEstimasi')->name('konfirmasiEstimasi');
                 Route::post('/addJurnalKonfirmasi', 'addJurnalKonfirmasi')->name('addJurnalKonfirmasi');

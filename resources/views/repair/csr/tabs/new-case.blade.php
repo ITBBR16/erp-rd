@@ -32,7 +32,7 @@
                             <template x-for="customer in filteredCustomers" :key="customer.id">
                                 <li @click="select(customer.id, customer.display)" 
                                     class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
-                                    <span x-text="customer.display" class="dark:text-white"></span>
+                                    <span x-text="customer.display" class="text-black dark:text-white"></span>
                                 </li>
                             </template>
                             <li 
@@ -68,7 +68,7 @@
                             <template x-for="jenis in filteredJenis" :key="jenis.id">
                                 <li @click="select(jenis.id, jenis.display)"
                                     class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
-                                    <span x-text="jenis.display" class="dark:text-white"></span>
+                                    <span x-text="jenis.display" class="text-black dark:text-white"></span>
                                 </li>
                             </template>
                             <li x-show="filteredJenis.length === 0" 

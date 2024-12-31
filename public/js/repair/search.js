@@ -10,7 +10,7 @@ $(document).ready(function(){
         } else {
             $('.repair-customer-row').hide();
 
-            fetch('/repair/list-customer/search?query=' + encodeURIComponent(query), {
+            fetch('/repair/customer/list-customer-repair/search?query=' + encodeURIComponent(query), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -31,11 +31,11 @@ $(document).ready(function(){
                         dataNotFound.style.display = 'none';
                     }
                 } else {
-                    console.error('Invalid response format: missing "data" property');
+                    console.log('Invalid response format: missing "data" property');
                 }
             })
             .catch(error => {
-                console.error('Fetch error:', error);
+                console.log('Fetch error: ' + error);
             });
         }
     });

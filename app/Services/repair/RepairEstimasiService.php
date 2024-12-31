@@ -50,6 +50,23 @@ class RepairEstimasiService
         ]);
     }
 
+    public function pageDetailEstimasi($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $dataCase = $this->repairCaseService->findCase($id);
+        $divisiName = $this->umum->getDivisi($user);
+
+        return view('repair.estimasi.pages.detail-estimasi', [
+            'title' => 'Detail Estimasi',
+            'active' => 'estimasi-biaya',
+            'navActive' => 'estimasi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'case' => $dataCase,
+        ]);
+    }
+
     public function pageEstimasi($encryptId)
     {
         $id = decrypt($encryptId);
@@ -87,6 +104,23 @@ class RepairEstimasiService
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
             'greeting' => $greeting,
+        ]);
+    }
+
+    public function pageDetailKonfirmasi($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $dataCase = $this->repairCaseService->findCase($id);
+        $divisiName = $this->umum->getDivisi($user);
+
+        return view('repair.estimasi.pages.detail-konfirmasi-estimasi', [
+            'title' => 'Detail Konfiramsi',
+            'active' => 'konfirmasi-estimasi',
+            'navActive' => 'estimasi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'case' => $dataCase,
         ]);
     }
 

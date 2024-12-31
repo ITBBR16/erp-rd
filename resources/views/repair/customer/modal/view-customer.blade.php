@@ -16,107 +16,107 @@
                         <div class="dark:text-white">
                             <div class="grid grid-cols-4 gap-4 md:gap-6 mb-4">
                                 <div class="col-span-1">
-                                    <h3>First Name</h3>
+                                    <h3 class="text-black dark:text-white">First Name</h3>
                                 </div>
                                 <div class="col-span-1">
                                     :
                                 </div>
                                 <div class="col-span-2">
-                                    <h3>{{ $customer->first_name }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ $customer->first_name }}</h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-4 gap-4 md:gap-6 mb-4">
                                 <div class="col-span-1">
-                                    <h3>Last Name</h3>
+                                    <h3 class="text-black dark:text-white">Last Name</h3>
                                 </div>
                                 <div class="col-span-1">
                                     :
                                 </div>
                                 <div class="col-span-2">
-                                    <h3>{{ $customer->last_name }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ $customer->last_name }}</h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-4 gap-4 md:gap-6 mb-4">
                                 <div class="col-span-1">
-                                    <h3>No Telpon</h3>
+                                    <h3 class="text-black dark:text-white">No Telpon</h3>
                                 </div>
                                 <div class="col-span-1">
                                     :
                                 </div>
                                 <div class="col-span-2">
-                                    <h3>{{ $customer->no_telpon }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ $customer->no_telpon }}</h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-4 gap-4 md:gap-6 mb-4">
                                 <div class="col-span-1">
-                                    <h3>Email</h3>
+                                    <h3 class="text-black dark:text-white">Email</h3>
                                 </div>
                                 <div class="col-span-1">
                                     :
                                 </div>
                                 <div class="col-span-2">
-                                    <h3>{{ $customer->email }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ $customer->email ?? '-' }}</h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-4 gap-4 md:gap-6 mb-4">
                                 <div class="col-span-1">
-                                    <h3>Instansi</h3>
+                                    <h3 class="text-black dark:text-white">Instansi</h3>
                                 </div>
                                 <div class="col-span-1">
                                     :
                                 </div>
                                 <div class="col-span-2">
-                                    <h3>{{ ($customer->instansi) ?? '-' }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ ($customer->instansi) ?? '-' }}</h3>
                                 </div>
                             </div>
                         </div>
                         <div class="border-l-2 border-gray-900 dark:border-gray-200 pl-2 dark:text-white">
                             <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
                                 <div>
-                                    <h3>Provinsi :</h3>
+                                    <h3 class="text-black dark:text-white">Provinsi :</h3>
                                 </div>
                                 <div>
-                                    <h3></h3>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
-                                <div>
-                                    <h3>Kota / Kabupaten :</h3>
-                                </div>
-                                <div>
-                                    <h3>{{ $customer->first_name }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ $customer->provinsi->name ?? '-' }}</h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
                                 <div>
-                                    <h3>Kecamatan :</h3>
+                                    <h3 class="text-black dark:text-white">Kota / Kabupaten :</h3>
                                 </div>
                                 <div>
-                                    <h3>{{ $customer->no_telpon }}</h3>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
-                                <div>
-                                    <h3>Kelurahan :</h3>
-                                </div>
-                                <div>
-                                    <h3>{{ $customer->email }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ $customer->kota->name ?? '-' }}</h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
                                 <div>
-                                    <h3>Kode Pos :</h3>
+                                    <h3 class="text-black dark:text-white">Kecamatan :</h3>
                                 </div>
                                 <div>
-                                    <h3>{{ $customer->email }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ $customer->kecamatan->name ?? '-' }}</h3>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
                                 <div>
-                                    <h3>Nama Jalan :</h3>
+                                    <h3 class="text-black dark:text-white">Kelurahan :</h3>
                                 </div>
                                 <div>
-                                    <h3>{{ $customer->email }}</h3>
+                                    <h3 class="text-black dark:text-white">{{ $customer->kelurahan->name ?? '-' }}</h3>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
+                                <div>
+                                    <h3 class="text-black dark:text-white">Kode Pos :</h3>
+                                </div>
+                                <div>
+                                    <h3 class="text-black dark:text-white">{{ $customer->kode_pos ?? '-' }}</h3>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 md:gap-6 mb-4">
+                                <div>
+                                    <h3 class="text-black dark:text-white">Nama Jalan :</h3>
+                                </div>
+                                <div>
+                                    <h3 class="text-black dark:text-white">{{ $customer->nama_jalan ?? '-' }}</h3>
                                 </div>
                             </div>
                         </div>

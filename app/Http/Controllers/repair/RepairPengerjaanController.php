@@ -17,6 +17,11 @@ class RepairPengerjaanController extends Controller
         return $this->repairTeknisi->indexPengerjaan();
     }
 
+    public function detailPengerjaan($encryptId)
+    {
+        return $this->repairTeknisi->pageDetailPengerjaan($encryptId);
+    }
+
     public function update(Request $request, $id)
     {
         $resultJurnal = $this->repairTeknisi->createJurnalPengerjaan($request, $id);

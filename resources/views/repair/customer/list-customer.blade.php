@@ -74,7 +74,7 @@
             </thead>
             <tbody>
                 @foreach ($dataCustomer as $dc)
-                    <tr id="resultCustomerRepair{{ $dc->id }}" class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 repair-customer-row">
+                    <tr id="resultCustomerRepair{{ $dc->id }}" class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 repair-customer-row">
                         <td class="px-6 py-2">
                             {{ $dc->first_name }} {{ $dc->last_name }} - {{ $dc->id }}
                         </td>

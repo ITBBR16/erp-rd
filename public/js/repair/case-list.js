@@ -95,7 +95,7 @@ $(document).ready(function () {
                 const option = $('<option>', {
                     value: kelengkapan.id,
                     text: kelengkapan.kelengkapan
-                }).addClass('dark:bg-gray-700');
+                }).addClass('bg-white dark:bg-gray-700');
                 formDefault.append(option);
                 formKelengkapan.append(option);
             });
@@ -122,14 +122,14 @@ $(document).ready(function () {
                     const defaultOption = $('<option>')
                         .text('Pilih Kota / Kabupaten')
                         .val("")
-                        .addClass('dark:bg-gray-700');
+                        .addClass('bg-white dark:bg-gray-700');
                     kotaSelect.append(defaultOption);
 
                     data.forEach(kota => {
                         const option = $('<option>')
                             .val(kota.id)
                             .text(kota.name)
-                            .addClass('dark:bg-gray-700');
+                            .addClass('bg-white dark:bg-gray-700');
                         kotaSelect.append(option);
                     });
                 })
@@ -151,14 +151,14 @@ $(document).ready(function () {
                     const defaultOption = $('<option>')
                         .text('Pilih Kecamatan')
                         .val("")
-                        .addClass('dark:bg-gray-700');
+                        .addClass('bg-white dark:bg-gray-700');
                     kecamatanSelect.append(defaultOption);
 
                     data.forEach(kecamatan => {
                         const option = $('<option>')
                             .val(kecamatan.id)
                             .text(kecamatan.name)
-                            .addClass('dark:bg-gray-700');
+                            .addClass('bg-white dark:bg-gray-700');
                         kecamatanSelect.append(option);
                     });
                 })
@@ -180,14 +180,14 @@ $(document).ready(function () {
                     const defaultOption = $('<option>')
                         .text('Pilih Kelurahan')
                         .val("")
-                        .addClass('dark:bg-gray-700');
+                        .addClass('bg-white dark:bg-gray-700');
                     kelurahanSelect.append(defaultOption);
 
                     data.forEach(kelurahan => {
                         const option = $('<option>')
                             .val(kelurahan.id)
                             .text(kelurahan.name)
-                            .addClass('dark:bg-gray-700');
+                            .addClass('bg-white dark:bg-gray-700');
                         kelurahanSelect.append(option);
                     });
                 })
