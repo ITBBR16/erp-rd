@@ -41,7 +41,7 @@
             </thead>
             <tbody>
                 @foreach ($data as $item)
-                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <th class="px-6 py-2">
                             N.{{ $item->id }}
                         </th>
@@ -87,7 +87,7 @@
                             </li>
                             @if ($item->status == 'Belum Validasi')
                                 <li>
-                                    <a href="{{ route('shop.edit', encrypt($item->id)) }}" target="_blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('shop.edit', encrypt($item->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-xl mr-3">task_alt</i>
                                         <span class="whitespace-nowrap">Validasi Belanja</span>
                                     </a>

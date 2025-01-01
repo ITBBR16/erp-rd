@@ -183,7 +183,7 @@
         </div>
     </div>
     {{-- Analis Chart --}}
-    <div class="p-6 mt-6 border bg-white rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+    <div class="p-6 mt-6 border border-gray-200 bg-white rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
         <div class="grid grid-cols-1 mb-3 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             <button type="button" class="flex flex-col h-auto min-w-0 break-words bg-white shadow-md border-b-4 border-green-500 rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
                 <div class="flex-auto p-4">
@@ -277,7 +277,7 @@
             </button>
         </div>
         {{-- Chart --}}
-        <div class="bg-white p-2 border shadow-md h-64 rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600" style="min-height: 385px;">
+        <div class="bg-white p-2 border border-gray-200 shadow-md h-64 rounded-xl bg-clip-border dark:bg-gray-800 dark:border-gray-600" style="min-height: 385px;">
             <div id="analisa-profit-chart" style="height: 420;" class="w-full"></div>
         </div>
     </div>

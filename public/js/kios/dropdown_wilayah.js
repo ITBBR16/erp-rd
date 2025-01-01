@@ -22,7 +22,7 @@ $(document).ready(function () {
                         const option = $('<option>')
                             .val(kota.id)
                             .text(kota.name)
-                            .addClass('dark:bg-gray-700');
+                            .addClass('bg-white dark:bg-gray-700');
                         kotaSelect.append(option);
                     });
                 })
@@ -50,7 +50,7 @@ $(document).ready(function () {
                         const option = $('<option>')
                             .val(kecamatan.id)
                             .text(kecamatan.name)
-                            .addClass('dark:bg-gray-700');
+                            .addClass('bg-white dark:bg-gray-700');
                         kecamatanSelect.append(option);
                     });
                 })
@@ -72,7 +72,7 @@ $(document).ready(function () {
                     const defaultOption = $('<option>')
                         .text('Pilih Kelurahan')
                         .attr('hidden', true)
-                        .addClass('dark:bg-gray-700');
+                        .addClass('bg-white dark:bg-gray-700');
                     kelurahanSelect.append(defaultOption);
 
                     data.forEach(kelurahan => {

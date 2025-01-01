@@ -38,7 +38,7 @@ $(document).ready(function() {
                     <select name="paket_penjualan[]" id="paket-penjualan-${formBBLength}" class="select-new-belanja bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Pilih Paket Penjualan</option>`;
                         paketPenjualan.forEach(function(item) {
-                            newFormBelanja += `<option value="${item.id}" class="dark:bg-gray-700">${item.paket_penjualan}</option>`;
+                            newFormBelanja += `<option value="${item.id}" class="bg-white dark:bg-gray-700">${item.paket_penjualan}</option>`;
                         });
                         newFormBelanja += `
                     </select>
@@ -79,7 +79,7 @@ $(document).ready(function() {
                     <select name="jenis_paket[]" id="jenis-paket${formValLength}" class="val-seri-drone block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                         <option value="" hidden>Paket Penjualan</option>`;
                         paketPenjualan.forEach(function(item) {
-                            newFormValidasi += `<option value="${item.id}" class="dark:bg-gray-700">${item.paket_penjualan}</option>`;
+                            newFormValidasi += `<option value="${item.id}" class="bg-white dark:bg-gray-700">${item.paket_penjualan}</option>`;
                         });
                         newFormValidasi += `
                     </select>
@@ -194,9 +194,10 @@ $(document).ready(function() {
             let totalSeriVal = $(this).find('.val-seri-drone').length;
             let qtyVal = parseFloat($(this).find('.val-qty-baru').val()) || 0;
             let nominalVal = parseFloat($(this).find('.val-nilai-buy-baru').val().replace(/\./g, '')) || 0;
+            let total = qtyVal * nominalVal;
             totalItemVal += totalSeriVal;
             totalQtyVal += qtyVal;
-            totalNominalVal += nominalVal;
+            totalNominalVal += total;
         });
 
         $('#validasi-item-total').text(totalItemVal + " Unit");

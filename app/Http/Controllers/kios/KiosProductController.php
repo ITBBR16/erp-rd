@@ -18,7 +18,7 @@ class KiosProductController extends Controller
 {
     public function __construct(private KiosRepository $suppKiosRepo){}
 
-    public function index(Request $request)
+    public function index()
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);

@@ -45,7 +45,7 @@ class KiosDailyRecapController extends Controller
             'dropdown' => '',
             'dropdownShop' => '',
             'divisi' => $divisiName,
-            'provinsi' => $provinsi,
+            'dataProvinsi' => $provinsi,
             'customer' => $customer,
             'produkJenis' => $produkJenis,
             'dailyRecap' => $dailyRecap,

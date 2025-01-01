@@ -13,7 +13,7 @@
                                     <select name="supplier_kios" id="supplier-kios" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                         <option value="" hidden>Pilih Supplier</option>
                                         @foreach ($supplier as $supp)
-                                            <option value="{{ $supp->id }}" class="dark:bg-gray-700">{{ $supp->nama_perusahaan }}</option>
+                                            <option value="{{ $supp->id }}" class="bg-white dark:bg-gray-700">{{ $supp->nama_perusahaan }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -29,7 +29,7 @@
                                             <select name="paket_penjualan[]" id="paket-penjualan-1" class="select-new-belanja bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                 <option value="" hidden>Pilih Paket Penjualan</option>
                                                 @foreach ($paketPenjualan as $pp)
-                                                    <option value="{{ $pp->id }}" class="dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
+                                                    <option value="{{ $pp->id }}" class="bg-white dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -56,19 +56,19 @@
                         </div>
                         {{-- Bagian Kanan --}}
                         <div class="col-span-1 h-[200px] bg-white p-4 rounded-lg border shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
-                            <h2 class="text-lg font-semibold mb-4 dark:text-white pb-2 border-b">Order Summary :</h2>
+                            <h2 class="text-lg font-semibold mb-4 text-black dark:text-white pb-2 border-b">Order Summary :</h2>
                             <div class="flex justify-between gap-6 mb-4">
                                 <div class="flex text-start">
-                                    <p class="font-semibold italic dark:text-white">Total Item :</p>
+                                    <p class="font-semibold italic text-black dark:text-white">Total Item :</p>
                                 </div>
                                 <div class="flex text-end">
-                                    <p id="total-item-belanja-baru" class="font-normal dark:text-white">0 Unit</p>
+                                    <p id="total-item-belanja-baru" class="font-normal text-black dark:text-white">0 Unit</p>
                                 </div>
                                 <div class="flex text-start">
-                                    <p class="font-semibold italic dark:text-white">Total Qty :</p>
+                                    <p class="font-semibold italic text-black dark:text-white">Total Qty :</p>
                                 </div>
                                 <div class="flex text-end">
-                                    <p id="total-qty-belanja-baru" class="font-normal dark:text-white">0 Unit</p>
+                                    <p id="total-qty-belanja-baru" class="font-normal text-black dark:text-white">0 Unit</p>
                                 </div>
                             </div>
                             <div class="text-end mt-6">

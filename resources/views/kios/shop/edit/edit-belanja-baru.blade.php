@@ -66,9 +66,9 @@
                                     <option value="" hidden>Pilih Seri Drone</option>
                                     @foreach ($paketPenjualan as $pp)
                                         @if ($orderList->sub_jenis_id == $pp->id)
-                                            <option value="{{ $pp->id }}" selected class="dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
+                                            <option value="{{ $pp->id }}" selected class="bg-white dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
                                         @else
-                                            <option value="{{ $pp->id }}" class="dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
+                                            <option value="{{ $pp->id }}" class="bg-white dark:bg-gray-700">{{ $pp->paket_penjualan }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -101,31 +101,31 @@
 
             </div>
             {{-- Bagian Kanan --}}
-            <div class="col-span-1 h-[240px] bg-white p-6 rounded-lg border shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
-                <h2 class="text-lg font-semibold mb-4 dark:text-white pb-2 border-b">Order Summary :</h2>
+            <div class="col-span-1 h-[240px] bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
+                <h2 class="text-lg font-semibold mb-4 text-black dark:text-white pb-2 border-b">Order Summary :</h2>
                 <div class="grid grid-cols-2 gap-6 mb-4">
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold italic dark:text-white">Total Item :</p>
+                            <p class="font-semibold italic text-black dark:text-white">Total Item :</p>
                         </div>
                         <div class="flex text-end">
-                            <p id="validasi-item-total" class="font-normal dark:text-white">{{ $data->orderLists->count() }} Unit</p>
+                            <p id="validasi-item-total" class="font-normal text-black dark:text-white">{{ $data->orderLists->count() }} Unit</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold italic dark:text-white">Total Nominal :</p>
+                            <p class="font-semibold italic text-black dark:text-white">Total Nominal :</p>
                         </div>
                         <div class="flex text-end">
-                            <p id="validasi-total-nominal" class="font-normal dark:text-white">Rp. 0</p>
+                            <p id="validasi-total-nominal" class="font-normal text-black dark:text-white">Rp. 0</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold italic dark:text-white">Total Qty :</p>
+                            <p class="font-semibold italic text-black dark:text-white">Total Qty :</p>
                         </div>
                         <div class="flex text-end">
-                            <p id="validasi-total-qty" class="font-normal dark:text-white">{{ $totalQty }} Unit</p>
+                            <p id="validasi-total-qty" class="font-normal text-black dark:text-white">{{ $totalQty }} Unit</p>
                         </div>
                     </div>
                 </div>

@@ -59,9 +59,9 @@
                                                 <option value="" hidden>Pilih Akun Bank</option>
                                                 @foreach ($daftarAkun as $akun)
                                                     @if ($bankAkun == $akun->id)
-                                                        <option value="{{ $akun->id }}" selected class="dark:bg-gray-700">{{ $akun->nama }}</option>
+                                                        <option value="{{ $akun->id }}" selected class="bg-white dark:bg-gray-700">{{ $akun->nama }}</option>
                                                     @else
-                                                        <option value="{{ $akun->id }}" class="dark:bg-gray-700">{{ $akun->nama }}</option>
+                                                        <option value="{{ $akun->id }}" class="bg-white dark:bg-gray-700">{{ $akun->nama }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>

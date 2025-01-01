@@ -39,7 +39,7 @@
             <tbody>
                 @foreach ($dataIncoming as $data)
                     @if ($data->status == 'Incoming' || $data->status == 'Belum Dikirim' || $data->status == 'Pengiriman Balik')
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 {{ ($data->status_order == 'Baru' ? 
                                         ('N.' . $data->order->id) : 

@@ -44,7 +44,7 @@
         <input type="hidden" id="order_id" name="order_id">
         <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3 mt-4">
             {{-- Daftar Invoice / No Resi --}}
-            <div class="p-4 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <h3 class="flex items-center mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                     Daftar Invoice / No Resi
                 </h3>
@@ -65,7 +65,7 @@
                         </thead>
                         <tbody>
                             @foreach ($dataOrderList as $viewOrderList)
-                                <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                     <th class="px-6 py-2">
                                         {{ ($viewOrderList->status_order == 'Baru') ? 'N.' . $viewOrderList->order_id : 'S.' . $viewOrderList->order_id }}
                                     </th>
@@ -82,7 +82,7 @@
                 </div>
             </div>
             {{-- Input Validasi --}}
-            <div class="p-4 border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex-shrink-0">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -96,7 +96,7 @@
                         <select name="validasi_resi" id="validasi_resi" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
                             <option value="" hidden>Pilih No Resi</option>
                             @foreach ($dataOrderList as $dol)
-                                <option value="{{ $dol->id }}" class="dark:bg-gray-700">{{ $dol->no_resi }}</option>
+                                <option value="{{ $dol->id }}" class="bg-white dark:bg-gray-700">{{ $dol->no_resi }}</option>
                             @endforeach
                         </select>
                     </div>

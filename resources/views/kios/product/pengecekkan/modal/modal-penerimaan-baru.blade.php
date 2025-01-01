@@ -3,7 +3,7 @@
         <div id="modal-penerimaan-{{ $item->id }}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative w-full max-w-lg max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:bg-gray-700">
+                    <div class="flex items-center justify-between p-5 border-b rounded-t bg-white dark:bg-gray-700">
                         <h3 class="text-xl font-medium text-gray-900 dark:text-white">Input Data Paket</h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-penerimaan-{{ $item->id }}">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -56,7 +56,7 @@
                             <div class="grid md:grid-cols-2 md:gap-6">
                                 <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Files Resi :</label>
                                 <div class="relative z-0 w-full items-center py-2">
-                                    <input type="file" name="file_resi" id="file_resi{{ $item->id }}" class="block w-full text-xs text-gray-900 rounded-lg cursor-pointer dark:text-gray-400 focus:outline-none dark:placeholder-gray-400">
+                                    <input type="file" name="file_resi" id="file_resi{{ $item->id }}" class="block w-full text-xs text-gray-900 rounded-lg cursor-pointer dark:text-gray-400 focus:outline-none dark:placeholder-gray-400" required>
                                 </div>
                             </div>
                             <div class="grid md:grid-cols-2 md:gap-6">
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex justify-end p-3 border-t rounded-t dark:border-gray-600">
+                        <div class="flex justify-end p-3 border-t border-gray-200 rounded-t dark:border-gray-600">
                             <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
                             <div class="loader-button-form" style="display: none">
                                 <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>

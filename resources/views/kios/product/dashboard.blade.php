@@ -91,7 +91,7 @@
     </div>
     <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3 mt-4">
         {{-- Analytic --}}
-        <div class="p-4 border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex-shrink-0">
                     <span class="text-xl font-bold leading-none text-gray-900 sm:text-xl dark:text-white">Rp. {{ number_format($totalSales, 0, ',', '.') }}</span>
@@ -124,7 +124,7 @@
             </div>
         </div>
         {{-- Tabs Widget --}}
-        <div class="p-4 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="flex items-center mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 Statistic bulan ini 
                 <button data-tooltip-target="statistic" data-tooltip-placement="right" type="button" class="items-center ">
@@ -213,7 +213,7 @@
         </div>
     </div>
     <div class="grid gap-4 xl:grid-cols-3 mt-6">
-        <div class="p-4 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="flex items-center mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 List belanja bulan ini
                 <button data-tooltip-target="list-invoice-belanja" data-tooltip-placement="right" type="button" class="items-center ">
@@ -270,7 +270,7 @@
                 </div>
             </div>
         </div>
-        <div class="p-4 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="flex items-center mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 List produk promo bulan ini
                 <button data-tooltip-target="list-invoice-belanja" data-tooltip-placement="right" type="button" class="items-center ">
@@ -327,7 +327,7 @@
                 </div>
             </div>
         </div>
-        <div class="p-4 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="flex items-center mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 List transaksi bulan ini
                 <button data-tooltip-target="list-invoice-belanja" data-tooltip-placement="right" type="button" class="items-center ">

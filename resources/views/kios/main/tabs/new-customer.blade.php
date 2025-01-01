@@ -1,110 +1,73 @@
 <div class="hidden p-4" id="new-customer" role="tabpanel" aria-labelledby="new-customer-tab">
     <form action="{{ route('newCustomer') }}" method="POST" autocomplete="off">
         @csrf
-        <div class="grid md:grid-cols-2 md:gap-6">
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="text" name="first_name" id="first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('first_name') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('first_name') }}" required>
-                <label for="first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First Name</label>
-                @error('first_name')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+        <div class="grid md:grid-cols-2 md:gap-4">
+            <div>
+                <label for="first-name" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">First Name :</label>
+                <input type="text" name="first_name" id="first-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First Name" required>
             </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="text" name="last_name" id="last_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('last_name') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('last_name') }}" required>
-                <label for="last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last Name</label>
-                @error('last_name')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+            <div>
+                <label for="last-name" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Last Name :</label>
+                <input type="text" name="last_name" id="last-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First Name" required>
             </div>
         </div>
-        <div class="grid md:grid-cols-3 md:gap-6">
-            <div class="relative w-full mb-6 group">
-                <label for="asal-informasi-customer" class="absolute text-xs text-gray-500 dark:text-gray-400 -translate-y-6 top-3 z-10">Lead Source</label>
-                <select name="asal_informasi" id="asal-informasi-customer" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+        <div class="grid md:grid-cols-3 md:gap-4">
+            <div>
+                <label for="asal-informasi-customer" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Lead Source :</label>
+                <select name="asal_informasi" id="asal-informasi-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     <option value="" hidden>Lead Source</option>
                     @foreach ($infoPerusahaan as $info)
-                        <option value="{{ $info->id }}" class="dark:bg-gray-700">{{ $info->asal }}</option>
+                        <option value="{{ $info->id }}" class="bg-white dark:bg-gray-700">{{ $info->asal }}</option>
                     @endforeach
                 </select>
-                @error('asal-informasi-customer')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
             </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="text" name="no_telpon" id="no_telpon" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('no_telpon') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('no_telpon') }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
-                <label for="no_telpon" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">No Telphone</label>
-                @error('no_telpon')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+            <div>
+                <label for="no-telpon" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">No Telpon :</label>
+                <input type="text" name="no_telpon" id="no-telpon" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="6285123456789" oninput="this.value = this.value.replace(/\D/g, '')" required>
             </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="email" name="email" id="email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('email') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('email') }}">
-                <label for="email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email</label>
-                @error('email')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+            <div>
+                <label for="email" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Email :</label>
+                <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="ujang@gmail.com">
             </div>
-        </div>
-        <div class="grid md:grid-cols-3 md:gap-6">
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="text" name="instansi" id="instansi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('instansi') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('instansi') }}">
-                <label for="instansi" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Instansi</label>
-                @error('instansi')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+            <div>
+                <label for="instansi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Instansi :</label>
+                <input type="text" name="instansi" id="instansi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Instansi">
             </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <label for="provinsi" class="sr-only">Provinsi</label>
-                <select name="provinsi" id="provinsi" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provinsi') border-red-600 dark:border-red-500 @enderror" required>
-                    <option hidden>Provinsi</option>
-                    @foreach ($provinsi as $prov)
-                        <option value="{{ $prov->id }}" class="dark:bg-gray-700">{{ $prov->name }}</option>
+            <div>
+                <label for="provinsi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Provinsi :</label>
+                <select name="provinsi" id="provinsi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <option value="" hidden>Pilih Provinsi</option>
+                    @foreach ($dataProvinsi as $provinsi)
+                        <option value="{{ $provinsi->id }}" class="bg-white dark:bg-gray-700">{{ $provinsi->name }}</option>
                     @endforeach
                 </select>
-                @error('provinsi')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
             </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <label for="kota_kabupaten"></label>
-                <select name="kota_kabupaten" id="kota_kabupaten" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kota_kabupaten') border-red-600 dark:border-red-500 @enderror" required>
+            <div>
+                <label for="kota-kabupaten" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Kota Kabupaten :</label>
+                <select name="kota_kabupaten" id="kota-kabupaten" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <option value="" hidden></option>
                 </select>
-                @error('kota_kabupaten')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+            </div>
+            <div>
+                <label for="kecamatan" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Kecamatan :</label>
+                <select name="kecamatan" id="kecamatan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="" hidden></option>
+                </select>
+            </div>
+            <div>
+                <label for="kelurahan" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Kelurahan :</label>
+                <select name="kelurahan" id="kelurahan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="" hidden></option>
+                </select>
+            </div>
+            <div>
+                <label for="kode-pos" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Kode Pos :</label>
+                <input type="text" name="kode_pos" id="kode-pos" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="65139" oninput="this.value = this.value.replace(/\D/g, '')">
             </div>
         </div>
-        <div class="grid md:grid-cols-3 md:gap-6">
-            <div class="relative z-0 w-full mb-6 group">
-                <label for="kecamatan"></label>
-                <select name="kecamatan" id="kecamatan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kecamatan') border-red-600 dark:border-red-500 @enderror">
-                </select>
-                @error('kecamatan')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
-            </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <label for="kelurahan"></label>
-                <select name="kelurahan" id="kelurahan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kelurahan') border-red-600 dark:border-red-500 @enderror">
-                </select>
-                @error('kelurahan')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
-            </div>
-            <div class="relative z-0 w-full mb-6 group">
-                <input type="number" name="kode_pos" id="kode_pos" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kode_pos') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('kode_pos') }}" oninput="this.value = this.value.replace(/\D/g, '')">
-                <label for="kode_pos" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kode Pos</label>
-                @error('kode_pos')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
-            </div>
-        </div>
-        <div class="relative z-0 w-full mb-6 group">
-            <input type="text" name="nama_jalan" id="nama_jalan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nama_jalan') border-red-600 dark:border-red-500 @enderror" placeholder="" value="{{ old('nama_jalan') }}">
-            <label for="nama_jalan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nama Jalan</label>
-            @error('nama_jalan')
-                <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-            @enderror
+        <div>
+            <label for="nama-jalan" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nama Jalan :</label>
+            <input type="text" name="nama_jalan" id="nama-jalan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jalan">
         </div>
         <div class="mt-4 text-end">
             <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>

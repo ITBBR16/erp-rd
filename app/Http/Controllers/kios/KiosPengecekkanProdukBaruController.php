@@ -13,17 +13,19 @@ use App\Http\Controllers\Controller;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\ekspedisi\ValidasiProduk;
 use App\Models\kios\KiosKomplainSupplier;
-use App\Repositories\kios\KiosRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
+use App\Repositories\umum\UmumRepository;
 
 class KiosPengecekkanProdukBaruController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(
+        private UmumRepository $umum
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $dataOrderList = PengirimanEkspedisi::with('order.orderLists')
                         ->where('status', 'Diterima')
                         ->get();
