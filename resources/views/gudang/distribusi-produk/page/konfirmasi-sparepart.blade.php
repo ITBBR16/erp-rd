@@ -14,7 +14,7 @@
                     <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
-                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Konfirmasi Part {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }} - {{ $dataCase->customer->id }}</span>
+                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Konfirmasi Part {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }} - {{ $dataCase->customer->id }} - {{ $dataCase->id }}</span>
                 </div>
             </li>
         </ol>
@@ -88,25 +88,30 @@
                 <tbody>
                     @foreach ($dataCase->estimasi->estimasiPart as $item)
                         @if ($item->tanggal_dikirim == '')
-                            <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                 <td class="px-6 py-2">
                                     <input type="hidden" name="id_estimasi_part[]" value="{{ $item->id }}">
                                     {{ $item->jenisTransaksi->code_jt }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $item->sku }}
+                                    @php
+                                        $sku = $item->sparepartGudang->produkSparepart->produkType->code . "." . $item->sparepartGudang->produkSparepart->partModel->code . "." . 
+                                                $item->sparepartGudang->produkSparepart->produk_jenis_id . "." . $item->sparepartGudang->produkSparepart->partBagian->code . "." . 
+                                                $item->sparepartGudang->produkSparepart->partSubBagian->code . "." . $item->sparepartGudang->produkSparepart->produk_part_sifat_id . "." . $item->sparepartGudang->produkSparepart->id;
+                                    @endphp
+                                    {{ $sku }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $item->jenis_produk }}
+                                    {{ $item->sparepartGudang->produkSparepart->produkJenis->jenis_produk }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $item->nama_produk }}
+                                    {{ $item->sparepartGudang->produkSparepart->nama_internal }}
                                 </td>
                                 <td class="px-6 py-2">
                                     Rp. {{ number_format($item->harga_repair) }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    
+                                    Rp. {{ number_format($item->modal_gudang) }}
                                 </td>
                                 <td class="px-6 py-2">
                                     <input type="text" name="scan_barcode[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Scan Barcode">

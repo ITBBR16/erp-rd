@@ -24,7 +24,7 @@
             @include('gudang.layouts.sidebar-distribusi')
         @endif
 
-        <div class="p-4 h-screen sm:ml-64 mt-14 dark:bg-gray-800 overflow-y-auto scrollbar-none">
+        <div class="p-4 h-screen sm:ml-64 mt-14 bg-white dark:bg-gray-800 overflow-y-auto scrollbar-none">
             @yield('container')
         </div>
 

@@ -10,7 +10,7 @@
                 </button>
                 <a href="#" class="flex ml-2 md:mr-24">
                     <img src="/img/warehouse.png" class="h-8 mr-3" alt="FlowBite Logo" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Gudang RD</span>
+                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-black dark:text-white">Gudang RD</span>
                 </a>
             </div>
             {{-- Navbar --}}
@@ -73,7 +73,7 @@
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">Log Out</button>
+                                    <button type="submit" class="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">Log Out</button>
                                 </form>
                             </li>
                         </ul>

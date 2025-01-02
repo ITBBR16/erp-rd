@@ -126,26 +126,26 @@
                 </div>
             </div>
             {{-- Bagian Kanan --}}
-            <div class="col-span-1 h-[400px] bg-white p-6 mt-4 rounded-lg border shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
-                <h2 class="text-lg font-semibold mb-4 dark:text-white pb-2 border-b">Order Summary :</h2>
+            <div class="col-span-1 h-[400px] bg-white p-6 mt-4 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
+                <h2 class="text-lg font-semibold mb-4 text-black dark:text-white pb-2 border-b">Order Summary :</h2>
                 <div class="grid grid-cols-2 gap-6 mb-4">
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold italic dark:text-white">Total Item :</p>
+                            <p class="font-semibold italic text-black dark:text-white">Total Item :</p>
                         </div>
                         <div class="flex text-end">
-                            <p id="total-item-belanja" class="font-normal dark:text-white">{{ $belanja->total_quantity }} Unit</p>
+                            <p id="total-item-belanja" class="font-normal text-black dark:text-white">{{ $belanja->total_quantity }} Unit</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold italic dark:text-white">Total Biaya :</p>
+                            <p class="font-semibold italic text-black dark:text-white">Total Biaya :</p>
                         </div>
                         <div class="flex text-end">
                             @php
                                 $totalNominal = $belanja->total_pembelian + $belanja->total_ongkir + $belanja->total_pajak;
                             @endphp
-                            <p id="total-biaya-belanja" class="font-normal dark:text-white">Rp. {{ number_format($totalNominal, 0, ',', '.') }}</p>
+                            <p id="total-biaya-belanja" class="font-normal text-black dark:text-white">Rp. {{ number_format($totalNominal, 0, ',', '.') }}</p>
                         </div>
                     </div>
                 </div>

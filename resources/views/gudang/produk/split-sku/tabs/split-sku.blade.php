@@ -108,42 +108,42 @@
             </div>
             {{-- Bagian Kanan --}}
             <div class="col-span-1">
-                <div class="col-span-1 h-280px] bg-white p-6 rounded-lg border shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
-                    <h2 class="text-lg font-semibold mb-4 dark:text-white pb-2 border-b">Detail Split :</h2>
+                <div class="col-span-1 h-280px] bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
+                    <h2 class="text-lg font-semibold mb-4 text-black dark:text-white pb-2 border-b border-gray-200 dark:border-gray-600">Detail Split :</h2>
                     <div class="grid grid-cols-2 gap-6 mb-4">
                         <div class="flex justify-between">
                             <div class="flex text-start">
-                                <p class="font-semibold italic dark:text-white">SKU :</p>
+                                <p class="font-semibold italic text-black dark:text-white">SKU :</p>
                             </div>
                             <div class="flex text-end">
-                                <p id="text-sku-split" class="font-normal dark:text-white">-</p>
+                                <p id="text-sku-split" class="font-normal text-black dark:text-white">-</p>
                             </div>
                         </div>
                         <div class="flex justify-between">
                             <div class="flex text-start">
-                                <p class="font-semibold italic dark:text-white">Tanggal Masuk :</p>
+                                <p class="font-semibold italic text-black dark:text-white">Tanggal Masuk :</p>
                             </div>
                             <div class="flex text-end">
-                                <p id="tanggal-masuk-split" class="font-normal dark:text-white">-</p>
+                                <p id="tanggal-masuk-split" class="font-normal text-black dark:text-white">-</p>
                             </div>
                         </div>
                         <div class="flex justify-between">
                             <div class="flex text-start">
-                                <p class="font-semibold italic dark:text-white">Nilai Awal :</p>
+                                <p class="font-semibold italic text-black dark:text-white">Nilai Awal :</p>
                             </div>
                             <div class="flex text-end">
                                 {{-- Hidden Input --}}
                                 <input type="hidden" name="nominal_sparepart" id="nominal-awal-part-split" value="0">
                                 <input type="hidden" name="belanja_id" id="belanja-id">
-                                <p id="text-sisa-nilai" class="font-normal dark:text-white">Rp. 0</p>
+                                <p id="text-sisa-nilai" class="font-normal text-black dark:text-white">Rp. 0</p>
                             </div>
                         </div>
                         <div class="flex justify-between">
                             <div class="flex text-start">
-                                <p class="font-semibold italic dark:text-white">Sisa Nilai :</p>
+                                <p class="font-semibold italic text-black dark:text-white">Sisa Nilai :</p>
                             </div>
                             <div class="flex text-end">
-                                <p id="sisa-nominal-split" class="font-normal dark:text-white">Rp. 0</p>
+                                <p id="sisa-nominal-split" class="font-normal text-black dark:text-white">Rp. 0</p>
                             </div>
                         </div>
                     </div>

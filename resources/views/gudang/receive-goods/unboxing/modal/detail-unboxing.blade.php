@@ -3,7 +3,7 @@
         <div class="relative w-full max-w-xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 {{-- Header Modal --}}
-                <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">
                         Detail Unboxing N.{{ $unboxing->gudang_belanja_id }} / <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $unboxing->status }}</span>
                     </h3>
@@ -16,8 +16,8 @@
                 </div>
                 {{-- Body Modal --}}
                 <div class="px-2 py-2 lg:px-8 lg:py-6 bg-gray-50 dark:bg-gray-600">
-                    <div class="p-4 rounded-lg bg-white border shadow-md dark:bg-gray-700 dark:border-gray-600">
-                        <h3 class="text-lg font-semibold mb-4 dark:text-white">Informasi Pembelian</h3>
+                    <div class="p-4 rounded-lg bg-white border border-gray-200 shadow-md dark:bg-gray-700 dark:border-gray-600">
+                        <h3 class="text-lg font-semibold mb-4 text-black dark:text-white">Informasi Pembelian</h3>
                         <div class="grid grid-cols-2 gap-4 mb-2">
                             <div>
                                 <h3 class="text-sm font-semibold mb-1">Supplier</h3>

@@ -9,7 +9,7 @@
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <!-- Modal header -->
-                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-medium text-gray-900 dark:text-white">Detail QC N.{{ $qc->gudang_belanja_id }} / <i>{{ $sku }}</i></h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="detail-qc-{{ $qc->id }}">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -20,8 +20,8 @@
                     </div>
                     <!-- Modal body -->
                     <div class="px-2 py-2 lg:px-8 lg:py-6 bg-gray-50 dark:bg-gray-600">
-                        <div class="p-4 rounded-lg bg-white border shadow-md dark:bg-gray-700 dark:border-gray-600">
-                            <h3 class="text-lg font-semibold mb-4 dark:text-white">Informasi Pembelian</h3>
+                        <div class="p-4 rounded-lg bg-white border border-gray-200 shadow-md dark:bg-gray-700 dark:border-gray-600">
+                            <h3 class="text-lg font-semibold mb-4 text-black dark:text-white">Informasi Pembelian</h3>
                             <div class="grid grid-cols-2 gap-4 mb-2">
                                 <div>
                                     <h3 class="text-xs font-semibold mb-1">Supplier</h3>

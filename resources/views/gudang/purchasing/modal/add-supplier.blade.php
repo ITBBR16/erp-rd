@@ -2,7 +2,7 @@
     <div class="relative w-full max-w-xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             {{-- Header Modal --}}
-            <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+            <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">
                     Tambah Supplier Baru
                 </h3>

@@ -90,7 +90,7 @@
                         $quantityCount = $items->count();
                     @endphp
                     @if ($qc->qualityControll?->checked_quantity == '' || $qc->qualityControll?->checked_fungsional == '')
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 N.{{ $qc->gudang_belanja_id }}
                             </th>

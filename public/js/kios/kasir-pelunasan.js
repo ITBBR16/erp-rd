@@ -171,10 +171,10 @@ $(document).ready(function(){
                 <label for="jenis-transaksi-${itemCount}"></label>
                 <select name="jenis_transaksi[]" id="jenis-transaksi-${itemCount}" data-id="${itemCount}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     <option value="" hidden>Pilih Jenis Transaksi</option>
-                    <option value="drone_baru">Drone Baru</option>
-                    <option value="drone_bekas">Drone Bekas</option>
-                    <option value="part_baru">Part Baru</option>
-                    <option value="part_bekas">Part Bekas</option>
+                    <option value="drone_baru" class="bg-white dark:bg-gray-700">Drone Baru</option>
+                    <option value="drone_bekas" class="bg-white dark:bg-gray-700">Drone Bekas</option>
+                    <option value="part_baru" class="bg-white dark:bg-gray-700">Part Baru</option>
+                    <option value="part_bekas" class="bg-white dark:bg-gray-700">Part Bekas</option>
                 </select>
             </td>
             <td class="px-4 py-4">

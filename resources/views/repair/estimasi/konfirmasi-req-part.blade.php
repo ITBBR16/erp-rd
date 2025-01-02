@@ -40,7 +40,7 @@
 
     <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3 mt-4">
         {{-- List Request Sparepart --}}
-        <div class="p-4 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="flex items-center mb-4 text-lg font-semibold text-gray-900 dark:text-white">
                 Daftar Request Sparepart
             </h3>
@@ -78,7 +78,7 @@
             </div>
         </div>
         {{-- Konfirmasi Request Sparepart --}}
-        <div class="p-4 border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="p-4 border border-gray-200 bg-white rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex-shrink-0">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -93,7 +93,7 @@
                         <select name="select_customer" id="select-customer-konfirmasi-rp" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Pilih Nama Customer</option>
                             @foreach ($dataCase as $caseCustomer)
-                                <option value="{{ $caseCustomer->id }}">{{ $caseCustomer->customer->first_name }} {{ $caseCustomer->customer->last_name }}-{{ $caseCustomer->customer->id }}-{{ $caseCustomer->id }}</option>
+                                <option value="{{ $caseCustomer->id }}" class="bg-white dark:bg-gray-700">{{ $caseCustomer->customer->first_name }} {{ $caseCustomer->customer->last_name }}-{{ $caseCustomer->customer->id }}-{{ $caseCustomer->id }}</option>
                             @endforeach
                         </select>
                     </div>

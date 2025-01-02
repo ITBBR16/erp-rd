@@ -58,7 +58,7 @@
             </thead>
             <tbody>
                 @foreach ($reqPayments as $reqPayment)
-                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <th class="px-6 py-2">
                             Gudang-{{ $reqPayment->id }}
                         </th>
@@ -77,14 +77,14 @@
                             </span>
                         </td>
                         <td class="px-6 py-2">
-                            <button id="dropdownReqPayment" data-dropdown-toggle="dropdownRP" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <button id="dropdownReqPayment{{ $reqPayment }}" data-dropdown-toggle="dropdownRP{{ $reqPayment }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                 </svg>
                             </button>
                         </td>
                     </tr>
-                    <div id="dropdownRP" class="z-10 hidden bg-white rounded-lg shadow w-48 dark:bg-gray-700">
-                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownReqPayment">
+                    <div id="dropdownRP{{ $reqPayment }}" class="z-10 hidden bg-white rounded-lg shadow w-48 dark:bg-gray-700">
+                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownReqPayment{{ $reqPayment }}">
                             <li>
                                 <button type="button" data-modal-target="detail-req-payment-{{ $reqPayment->id }}" data-modal-toggle="detail-req-payment-{{ $reqPayment->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                     <span class="material-symbols-outlined text-base mr-3">visibility</span>

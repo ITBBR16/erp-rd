@@ -82,7 +82,7 @@
                 </thead>
                 <tbody>
                     @foreach ($dataCekFisik as $item)
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
                                 <input type="hidden" name="idItemId[]" value="{{ $item->id }}">
                                 @php

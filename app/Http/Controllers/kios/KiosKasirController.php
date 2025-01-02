@@ -4,9 +4,6 @@ namespace App\Http\Controllers\kios;
 
 use Exception;
 use Carbon\Carbon;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use App\Models\kios\KiosAkunRD;
 use App\Models\kios\KiosProduk;

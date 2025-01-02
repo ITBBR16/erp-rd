@@ -58,7 +58,7 @@
             </thead>
             <tbody>
                 @foreach ($listPengiriman as $pengiriman)
-                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <th class="px-6 py-2">
                             N.{{ $pengiriman->gudangBelanja->id }}
                         </th>
@@ -88,12 +88,14 @@
                                     <span class="whitespace-nowrap">Detail</span>
                                 </button>
                             </li>
-                            <li>
-                                <button type="button" data-modal-target="create-resi-{{ $pengiriman->id }}" data-modal-toggle="create-resi-{{ $pengiriman->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">receipt_long</span>
-                                    <span class="whitespace-nowrap">Add Resi</span>
-                                </button>
-                            </li>
+                            @if ($pengiriman->status == 'Process Shipping')
+                                <li>
+                                    <button type="button" data-modal-target="create-resi-{{ $pengiriman->id }}" data-modal-toggle="create-resi-{{ $pengiriman->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">receipt_long</span>
+                                        <span class="whitespace-nowrap">Add Resi</span>
+                                    </button>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 @endforeach

@@ -79,7 +79,7 @@
                         })->count();
                     @endphp
                     @if ($qc->qualityControll->status_qc == 'Tervalidasi')
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 N.{{ $qc->gudang_belanja_id }}
                             </th>
@@ -113,7 +113,7 @@
                         <div id="dropdownLL{{ $qc->id }}{{ $qc->produk_gudang_id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListLabel{{ $qc->id }}{{ $qc->produk_gudang_id }}">
                                 <li>
-                                    <a href="{{ route('printLabel', ['idBelanja' => $qc->gudang_belanja_id, 'idProduk' => $qc->gudang_produk_id]) }}" target="_blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('printLabel', ['idBelanja' => $qc->gudang_belanja_id, 'idProduk' => $qc->gudang_produk_id]) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-xl mr-3">label</i>
                                         <span class="whitespace-nowrap">Print Label</span>
                                     </a>

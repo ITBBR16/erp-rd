@@ -41,7 +41,7 @@
             </thead>
             <tbody>
                 @foreach ($listBelanja as $belanja) 
-                    <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                         <th class="px-6 py-2">
                             N.{{ $belanja->id }}
                         </th>
@@ -75,18 +75,20 @@
                                     <span class="whitespace-nowrap">Detail</span>
                                 </button>
                             </li>
-                            <li>
-                                <a href="{{ route('belanja-sparepart.edit', encrypt($belanja->id)) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-xl mr-3">edit</i>
-                                    <span class="whitespace-nowrap">Ubah Belanja</span>
-                                </a>
-                            </li>
-                            <li>
-                                <button type="button" data-modal-target="req-payment-{{ $belanja->id }}" data-modal-toggle="req-payment-{{ $belanja->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">payments</span>
-                                    <span class="whitespace-nowrap">Request Payment</span>
-                                </button>
-                            </li>
+                            @if ($belanja->status == 'Menunggu Konfirmasi Belanja')
+                                <li>
+                                    <a href="{{ route('belanja-sparepart.edit', encrypt($belanja->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-xl mr-3">edit</i>
+                                        <span class="whitespace-nowrap">Ubah Belanja</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <button type="button" data-modal-target="req-payment-{{ $belanja->id }}" data-modal-toggle="req-payment-{{ $belanja->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">payments</span>
+                                        <span class="whitespace-nowrap">Request Payment</span>
+                                    </button>
+                                </li>
+                            @endif
                             @if ($belanja->status == 'Menunggu Konfirmasi Belanja')
                                 <li>
                                     <button type="button" data-modal-target="delete-belanja-{{ $belanja->id }}" data-modal-toggle="delete-belanja-{{ $belanja->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">

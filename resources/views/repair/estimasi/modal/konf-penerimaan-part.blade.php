@@ -3,7 +3,7 @@
         <div class="relative w-full max-w-5xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 {{-- Header Modal --}}
-                <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">
                         Penerimaan Sparepart {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}
                     </h3>
@@ -45,7 +45,7 @@
                                 <tbody id="container-data-penerimaan-req-part-{{ $case->id }}">
                                     @foreach ($case->estimasi->estimasiPart as $epart)
                                         @if ($epart->active == 'Wait Send Part')
-                                            <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                                 <td class="p-4">
                                                     <div class="flex items-center">
                                                         <input type="checkbox" name="checkbox_select_penerimaan[]" data-id="{{ $case->id }}" id="checkbox-penerimaan-part-estimasi-{{ $case->id }}-{{ $epart->id }}" value="{{ $epart->id }}" class="check-data-penerimaan w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" value="">
@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     {{-- Footer Modal --}}
-                    <div class="flex justify-end p-3 border-t rounded-t dark:border-gray-600">
+                    <div class="flex justify-end p-3 border-t border-gray-200 rounded-t dark:border-gray-600">
                         <button type="submit" id="button-penerimaan-req-part-{{ $case->id }}" class="submit-button-form cursor-not-allowed text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" disabled>Submit</button>
                         <div class="loader-button-form" style="display: none">
                             <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>
