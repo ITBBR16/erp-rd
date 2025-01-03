@@ -5,7 +5,7 @@
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <!-- Modal header -->
-                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-medium text-gray-900 dark:text-white">Detail Hasil QC {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}-{{ $case->id }}</h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="view-hasil-qc-{{ $case->id }}">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -115,17 +115,17 @@
                                             <li class="mb-4 ms-4">
                                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-2 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                                 <p class="p-1 text-xs font-normal leading-none text-gray-400 dark:text-gray-500">Aircraft</p>
-                                                <h3 class="p-1 text-sm font-semibold text-gray-900 dark:text-white">{{ $case->qualityControl->fv_aircraft }}</h3>
+                                                <h3 class="p-1 text-sm font-semibold text-gray-900 dark:text-white">{{ $case->qualityControl->fv_aircraft ?? "-" }}</h3>
                                             </li>
                                             <li class="mb-4 ms-4">
                                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                                 <p class="p-1 text-xs font-normal leading-none text-gray-400 dark:text-gray-500">RC</p>
-                                                <h3 class="p-1 text-sm font-semibold text-gray-900 dark:text-white">{{ $case->qualityControl->fv_rc }}</h3>
+                                                <h3 class="p-1 text-sm font-semibold text-gray-900 dark:text-white">{{ $case->qualityControl->fv_rc ?? "-" }}</h3>
                                             </li>
                                             <li class="ms-4">
                                                 <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                                 <p class="p-1 text-xs font-normal leading-none text-gray-400 dark:text-gray-500">Battery</p>
-                                                <h3 class="p-1 text-sm font-semibold text-gray-900 dark:text-white">{{ $case->qualityControl->fv_battery }}</h3>
+                                                <h3 class="p-1 text-sm font-semibold text-gray-900 dark:text-white">{{ $case->qualityControl->fv_battery ?? "-" }}</h3>
                                             </li>
                                         </ol>
                                     </div>
@@ -176,9 +176,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="border block p-4 mt-4 bg-white text-sm text-gray-900 rounded-lg dark:border-gray-600 space-y-4">
+                        <div class="border border-gray-200 block p-4 mt-4 bg-white text-sm text-gray-900 rounded-lg dark:border-gray-600 space-y-4">
                             <h3 class="text-base font-semibold text-black dark:text-white">Kesimpulan</h3>
-                            <p>{!! nl2br(e($case?->qualityControl->kesimpulan)) !!}</p>
+                            <p>{!! nl2br(e($case?->qualityControl->kesimpulan ?? "-")) !!}</p>
                         </div>
                     </div>
                 </div>

@@ -36,7 +36,7 @@
                         <span class="ml-3">Pengerjaan</span>
                     </a>
                 </li>
-                <li x-data="{ open: {{ ($dropdown == 'req-part') ? 'true' : 'false' }} }">
+                {{-- <li x-data="{ open: {{ ($dropdown == 'req-part') ? 'true' : 'false' }} }">
                     <button @click="open = !open" type="button" class="flex items-center w-full text-left p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" aria-controls="dropdown-chek">
                         <span class="material-symbols-outlined w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">handyman</span>
                         <span class="flex-1 ml-3 whitespace-nowrap">Sparepart</span>
@@ -64,7 +64,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
             </ul>
         </ul>
     </div>

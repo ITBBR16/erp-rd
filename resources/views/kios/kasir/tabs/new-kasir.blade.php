@@ -87,7 +87,7 @@
     
             {{-- Bagian Kanan Kasir --}}
             <div class="col-span-1 my-4 mx-auto flex justify-center">
-                <div class="w-80 text-base bg-white p-4 text-white border-gray-200 border-2 border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+                <div class="w-80 text-base bg-white p-4 text-white border-gray-600 border-2 border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-200">
                     <div class="mb-4 text-center justify-center">
                         <p class="text-lg font-semibold text-gray-600 dark:text-white">Resume Tagihan</p>
                     </div>

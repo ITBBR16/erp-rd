@@ -73,7 +73,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('konfirmasi-estimasi.edit', encrypt($case->id)) }}" target="__blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('konfirmasi-estimasi.edit', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-xl mr-3">playlist_add_check_circle</i>
                                         <span class="whitespace-nowrap">Ubah Estimasi</span>
                                     </a>

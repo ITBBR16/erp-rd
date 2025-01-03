@@ -132,7 +132,7 @@
                         </div>
                         <div class="mt-4 bottom-0">
                             <label for="pesan-hasil-ts" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pesan Hasil Troubleshooting</label>
-                            <textarea name="pesan_hasil_ts" id="pesan-hasil-ts" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesan pesan hasil troubleshooting untuk customer . . ." required>{{ $dataCase->estimasi->estimasiChat->isi_chat }}</textarea>
+                            <textarea name="pesan_hasil_ts" id="pesan-hasil-ts" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pesan pesan hasil troubleshooting untuk customer . . ." required>{{ $dataCase->estimasi->estimasiChat->isi_chat ?? "" }}</textarea>
                         </div>
                     </div>
                     <div class="overflow-y-auto">

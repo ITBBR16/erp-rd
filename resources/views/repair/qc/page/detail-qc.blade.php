@@ -89,7 +89,7 @@
                         @foreach ($case->detailKelengkapan as $item)
                             <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                                 <th class="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                    {{ $item->itemKelengkapan->kelengkapan }}
+                                    {{ ($item->item_kelengkapan_id == null) ? $item->nama_data_lama : $item->itemKelengkapan->kelengkapan }}
                                 </th>
                                 <td class="px-6 py-4 items-center">
                                     {{ $item->quantity }}
@@ -275,7 +275,7 @@
                         <h3 class="font-semibold">All Jurnal</h3>
                     </div>
                     <div class="text-sm text-end">
-                        <h3 class="font-semibold">Teknisi : {{ $case->teknisi->first_name }}</h3>
+                        <h3 class="font-semibold">Teknisi : {{ $case->teknisi->first_name ?? "Belum ada Teknisi" }}</h3>
                     </div>
                 </div>
                 <ol class="relative border-s border-gray-200 dark:border-gray-700">

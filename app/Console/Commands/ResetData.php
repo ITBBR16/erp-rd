@@ -26,12 +26,18 @@ class ResetData extends Command
      */
     public function handle()
     {
-        $databases = ['rumahdrone_ekspedisi', 'rumahdrone_kios'];
+        // $databases = ['rumahdrone_ekspedisi', 'rumahdrone_kios'];
+
+        // $protectedTables = [
+        //     'ekspedisi', 'jenis_layanan', 
+        //     'daily_recap', 'kios_akun_rd', 'kios_alasan_jual', 'kios_kategori_permasalahan', 'kios_marketplace', 'kios_recap_keperluan', 'kios_recap_ts', 'kios_recap_ts_produk', 'kios_technical_support', 'kios_status_komplain', 'kios_want_to_buy', 'kios_want_to_sell', 'metode_pembelian_second', 'status_pembayaran'];
+
+        $databases = ['rumahdrone_gudang', 'rumahdrone_repair'];
 
         $protectedTables = [
-            'ekspedisi', 'jenis_layanan', 
-            'daily_recap', 'kios_akun_rd', 'kios_alasan_jual', 'kios_kategori_permasalahan', 'kios_marketplace', 'kios_recap_keperluan', 'kios_recap_ts', 'kios_recap_ts_produk', 'kios_technical_support', 'kios_status_komplain', 'kios_want_to_buy', 'kios_want_to_sell', 'metode_pembelian_second', 'status_pembayaran'];
-
+            'repair_customer_review', 'repair_jenis_case', 'repair_jenis_fungsional', 'repair_jenis_status', 'repair_jenis_substatus', 'repair_jenis_transaksi', 'repair_kategori_cek_qc', 'repair_konidisi'
+        ];
+    
         foreach ($databases as $database) {
 
             config(['database.connections.mysql.database' => $database]);

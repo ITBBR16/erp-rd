@@ -46,7 +46,7 @@ class GudangProdukRepository implements GudangProdukInterface
                         END
                     ")
                     ->orderBy('updated_at', 'desc')
-                    ->paginate(10);
+                    ->paginate(30);
     }
     public function createProduk(array $data)
     {

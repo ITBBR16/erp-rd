@@ -75,7 +75,7 @@
                                                         @foreach ($case->detailKelengkapan as $detail)
                                                             <tr class="border-b">
                                                                 <td class="pr-2 py-1">
-                                                                    {{ $detail->itemKelengkapan->kelengkapan }}
+                                                                    {{ ($detail->item_kelengkapan_id == null) ? $detail->nama_data_lama : $detail->itemKelengkapan->kelengkapan }}
                                                                 </td>
                                                                 <td class="pr-2 py-1">
                                                                     {{ $detail->quantity }}

@@ -4,7 +4,7 @@
             <div class="relative w-full max-w-xl max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     {{-- Header Modal --}}
-                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white">
                             Input Jurnal / <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $case->jenisStatus->jenis_status }}</span>
                         </h3>
@@ -23,11 +23,11 @@
                             <div class="grid gap-6 mb-6 md:grid-cols-2">
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">Nama Customer</p>
-                                    <h3 class="text-sm font-semibold dark:text-white">{{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->id }}</h3>
+                                    <h3 class="text-sm font-semibold text-black dark:text-white">{{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->id }}</h3>
                                 </div>
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">Jenis Produk</p>
-                                    <h3 class="text-sm font-semibold dark:text-white">{{ $case->jenisProduk->jenis_produk }}</h3>
+                                    <h3 class="text-sm font-semibold text-black dark:text-white">{{ $case->jenisProduk->jenis_produk }}</h3>
                                 </div>
                             </div>
                             <div class="mb-6">
@@ -36,7 +36,7 @@
                             </div>
                         </div>
                         {{-- Footer Modal --}}
-                        <div class="flex justify-end p-3 border-t rounded-t dark:border-gray-600">
+                        <div class="flex justify-end p-3 border-t border-gray-200 rounded-t dark:border-gray-600">
                             <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
                             <div class="loader-button-form" style="display: none">
                                 <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>
