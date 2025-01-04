@@ -1,26 +1,31 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-281fc9ca.css",
+    "file": "assets/app-c57762ba.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
   "resources/js/app.js": {
-    "file": "assets/app-2091d46c.js",
+    "file": "assets/app-87f4d873.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
+  "resources/js/gudang/app.js": {
+    "file": "assets/app-dc553a84.js",
+    "isEntry": true,
+    "src": "resources/js/gudang/app.js"
+  },
   "resources/js/kios/app.js": {
-    "file": "assets/app-76f945bf.js",
+    "file": "assets/app-15fae882.js",
     "isEntry": true,
     "src": "resources/js/kios/app.js"
   },
   "resources/js/logistik/app.js": {
-    "file": "assets/app-1e740a58.js",
+    "file": "assets/app-1d5f22bc.js",
     "isEntry": true,
     "src": "resources/js/logistik/app.js"
   },
   "resources/js/repair/app.js": {
-    "file": "assets/app-3f5537ba.js",
+    "file": "assets/app-80bacaad.js",
     "isEntry": true,
     "src": "resources/js/repair/app.js"
   }

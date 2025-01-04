@@ -2,13 +2,14 @@
 
 namespace App\Services\gudang;
 
-use App\Repositories\umum\UmumRepository;
-use App\Repositories\gudang\repository\GudangProdukRepository;
-use App\Repositories\gudang\repository\GudangAddNewSparepartRepository;
-use App\Repositories\gudang\repository\GudangTransactionRepository;
-use App\Repositories\umum\repository\ProdukRepository;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Repositories\umum\UmumRepository;
+use App\Repositories\umum\repository\ProdukRepository;
+use App\Repositories\gudang\repository\GudangProdukRepository;
+use App\Repositories\gudang\repository\GudangTransactionRepository;
+use App\Repositories\gudang\repository\GudangAddNewSparepartRepository;
 
 class GudangAddNewSparepartServices
 {
@@ -16,7 +17,8 @@ class GudangAddNewSparepartServices
         private UmumRepository $umum,
         private GudangTransactionRepository $transaction,
         private ProdukRepository $produk,
-        private GudangAddNewSparepartRepository $sparepart
+        private GudangAddNewSparepartRepository $sparepart,
+        private GudangProdukRepository $produkGudang,
     ){}
 
     public function index()
@@ -48,43 +50,47 @@ class GudangAddNewSparepartServices
     {
         try {
             $this->transaction->beginTransaction();
-            
-            $timestamp = now();
-            $typePart = $request->input('model_part');
-            $modelPart = $request->input('jenis_produk');
-            $jenisProduk = $request->input('type_part');
-            $bagianPart = $request->input('bagian_part');
-            $subBagianPart = $request->input('sub_bagian_part');
-            $sifatPart = $request->input('sifat_part');
-            $skuExternal = $request->input('sku_external');
-            $namaExternal = $request->input('nama_eksternal');
-            $namaInternal = $request->input('nama_internal');
-            $dataSparepart = [];
 
-            foreach ($typePart as $index => $type) {
+            $timestamp = now();
+            $dataSparepart = [];
+            foreach ($request->input('type_part') as $index => $type) {
                 $dataSparepart[] = [
-                    'produk_type_id' => $typePart[$index],
-                    'produk_part_model_id' => $modelPart[$index],
-                    'produk_jenis_id' => $jenisProduk[$index],
-                    'produk_part_bagian_id' => $bagianPart[$index],
-                    'produk_part_sub_bagian_id' => $subBagianPart[$index],
-                    'produk_part_sifat_id' => $sifatPart[$index],
-                    'nama_internal' => $namaInternal[$index],
-                    'sku_origin' => $skuExternal[$index],
-                    'nama_origin' => $namaExternal[$index],
+                    'produk_type_id' => $type,
+                    'produk_part_model_id' => $request->input('model_part')[$index],
+                    'produk_jenis_id' => $request->input('jenis_produk')[$index],
+                    'produk_part_bagian_id' => $request->input('bagian_part')[$index],
+                    'produk_part_sub_bagian_id' => $request->input('sub_bagian_part')[$index],
+                    'produk_part_sifat_id' => $request->input('sifat_part')[$index],
+                    'nama_internal' => $request->input('nama_internal')[$index],
+                    'sku_origin' => $request->input('sku_external')[$index],
+                    'nama_origin' => $request->input('nama_eksternal')[$index],
                     'created_at' => $timestamp,
                     'updated_at' => $timestamp,
                 ];
             }
 
-            $this->sparepart->insertSparepart($dataSparepart);
+            $insertedIds = $this->sparepart->insertSparepart($dataSparepart);
+
+            $dataProduk = [];
+            foreach ($insertedIds as $id) {
+                $dataProduk[] = [
+                    'produk_sparepart_id' => $id,
+                    'status' => 'Not Ready',
+                    'created_at' => $timestamp,
+                    'updated_at' => $timestamp,
+                ];
+            }
+
+            $this->produkGudang->insertProduk($dataProduk);
             $this->transaction->commitTransaction();
 
-            return ['status' => 'success', 'message' => 'Berhasil menambahkan sparepart baru.'];
+            return response()->json(['status' => 'success', 'message' => 'Berhasil menambahkan sparepart baru.']);
 
         } catch (Exception $e) {
             $this->transaction->rollbackTransaction();
-            return ['status' => 'error', 'message' => $e->getMessage()];
+            Log::error('Error creating sparepart', ['error' => $e->getMessage()]);
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
 }

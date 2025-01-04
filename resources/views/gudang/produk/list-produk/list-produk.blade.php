@@ -90,7 +90,7 @@
                             <td class="px-6 py-2">
                                 @php
                                     $sku = $produk->produkSparepart->produkType->code . "." . $produk->produkSparepart->partModel->code . "." . 
-                                            $produk->produkSparepart->produk_jenis_id . "." . $produk->produkSparepart->partBagian->code . "." . 
+                                            $produk->produkSparepart->produkJenis->code . "." . $produk->produkSparepart->partBagian->code . "." . 
                                             $produk->produkSparepart->partSubBagian->code . "." . $produk->produkSparepart->produk_part_sifat_id;
                                 @endphp
                                 {{ $sku }}
@@ -126,6 +126,29 @@
                                 </button>
                             </td>
                         </tr>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownLP{{ $produk->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListProduk{{ $produk->id }}">
+                                <li>
+                                    <button type="button" data-modal-target="detail-produk-{{ $produk->id }}" data-modal-toggle="detail-produk-{{ $produk->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base mr-3">visibility</i>
+                                        <span class="whitespace-nowrap">Detail Produk</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" data-modal-target="promo-sparepart-{{ $produk->id }}" data-modal-toggle="promo-sparepart-{{ $produk->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base mr-3">confirmation_number</i>
+                                        <span class="whitespace-nowrap">Add Promo</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" data-modal-target="disabled-part" data-modal-toggle="disabled-part" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base mr-3">block</i>
+                                        <span class="whitespace-nowrap">Disable</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     @endforeach
                 </tbody>
             </table>
