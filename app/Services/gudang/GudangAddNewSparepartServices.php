@@ -69,9 +69,9 @@ class GudangAddNewSparepartServices
                     'produk_part_bagian_id' => $bagianPart[$index],
                     'produk_part_sub_bagian_id' => $subBagianPart[$index],
                     'produk_part_sifat_id' => $sifatPart[$index],
-                    'nama_internal' => $skuExternal[$index],
-                    'sku_origin' => $namaExternal[$index],
-                    'nama_origin' => $namaInternal[$index],
+                    'nama_internal' => $namaInternal[$index],
+                    'sku_origin' => $skuExternal[$index],
+                    'nama_origin' => $namaExternal[$index],
                     'created_at' => $timestamp,
                     'updated_at' => $timestamp,
                 ];

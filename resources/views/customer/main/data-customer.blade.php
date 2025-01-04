@@ -75,60 +75,63 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($dataCustomer as $key => $dc)
-                    <tr id="customerRow_{{ $dc->id }}" class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
-                        <td class="px-6 py-2">
-                            {{ $dataCustomer->firstItem() + $key }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $dc->first_name }} {{ $dc->last_name }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $dc->no_telpon }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $dc->nama_jalan }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $dc->created_at->diffForHumans() }}
-                        </td>
-                        <td class="px-6 py-2">
-                            <button id="dropdownDailyRecapButton{{ $dc->id }}" data-dropdown-toggle="dropdownDailyRecap{{ $dc->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                </svg>
-                            </button>
-                            <!-- Dropdown menu -->
-                            <div id="dropdownDailyRecap{{ $dc->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDailyRecapButton{{ $dc->id }}">
-                                    <li>
-                                        <button type="button" data-modal-target="view-customer{{ $dc->id }}" data-modal-toggle="view-customer{{ $dc->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">visibility</span>
-                                            <span class="whitespace-nowrap">Detail</span>
-                                        </button>
-                                    </li>
-                                    @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
+            <div class="overflow-y-auto max-h-[550px]">
+                <tbody>
+                    @foreach ($dataCustomer as $key => $dc)
+                        <tr id="customerRow_{{ $dc->id }}" class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
+                            <td class="px-6 py-2">
+                                {{ $dataCustomer->firstItem() + $key }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $dc->first_name }} {{ $dc->last_name }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $dc->no_telpon }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $dc->nama_jalan }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $dc->created_at->diffForHumans() }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <button id="dropdownDailyRecapButton{{ $dc->id }}" data-dropdown-toggle="dropdownDailyRecap{{ $dc->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                                </button>
+                                <!-- Dropdown menu -->
+                                <div id="dropdownDailyRecap{{ $dc->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                                    <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDailyRecapButton{{ $dc->id }}">
                                         <li>
-                                            <button type="button" data-modal-target="update-customer{{ $dc->id }}" data-modal-toggle="update-customer{{ $dc->id }}" data-id="{{ $dc->id }}" class="update-customer-kios flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                                <span class="material-symbols-outlined text-base mr-3">edit</span>
-                                                <span class="whitespace-nowrap">Edit</span>
+                                            <button type="button" data-modal-target="view-customer{{ $dc->id }}" data-modal-toggle="view-customer{{ $dc->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                                <span class="whitespace-nowrap">Detail</span>
                                             </button>
                                         </li>
-                                        <li>
-                                            <button type="button" data-modal-target="delete-customer{{ $dc->id }}" data-modal-toggle="delete-customer{{ $dc->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                                <span class="material-symbols-outlined text-base mr-3">delete</span>
-                                                <span class="whitespace-nowrap">Hapus Data</span>
-                                            </button>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    
-                @endforeach
-            </tbody>
-        </table>
+                                        @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
+                                            <li>
+                                                <button type="button" data-modal-target="update-customer{{ $dc->id }}" data-modal-toggle="update-customer{{ $dc->id }}" data-id="{{ $dc->id }}" class="update-customer-kios flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                    <span class="material-symbols-outlined text-base mr-3">edit</span>
+                                                    <span class="whitespace-nowrap">Edit</span>
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" data-modal-target="delete-customer{{ $dc->id }}" data-modal-toggle="delete-customer{{ $dc->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                    <span class="material-symbols-outlined text-base mr-3">delete</span>
+                                                    <span class="whitespace-nowrap">Hapus Data</span>
+                                                </button>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    @endforeach
+                </tbody>
+            </div>
+            </table>
+        </div>
         <div class="mt-4 ">
             {{ $dataCustomer->links() }}
         </div>

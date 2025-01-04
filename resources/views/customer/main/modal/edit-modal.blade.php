@@ -47,7 +47,7 @@
                                 <select name="provinsi" id="edit-provinsi-{{ $item->id }}" data-id="{{ $item->id }}" class="edit-provinsi-kios block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600">
                                     <option hidden>Pilih Provinsi</option>
                                     @foreach ($provinsi as $prov)
-                                        @if ($item->provinsi == $prov->id)
+                                        @if ($item->provinsi_id == $prov->id)
                                             <option value="{{ $prov->id }}" selected class="dark:bg-gray-700">{{ $prov->name }}</option>
                                         @else
                                             <option value="{{ $prov->id }}" class="dark:bg-gray-700">{{ $prov->name }}</option>
