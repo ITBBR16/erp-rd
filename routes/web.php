@@ -362,6 +362,7 @@ Route::middleware('repair')->group(function () {
                 Route::post('/createQcCalibrasi', 'createQcCalibrasi')->name('createQcCalibrasi');
                 Route::post('/createTestFly', 'createTestFly')->name('createTestFly');
                 Route::get('/detail-qc/{id}', 'detailQualityControl')->name('detailQc');
+                Route::get('/list-case-qc', 'indexListCase')->name('listCaseQC');
             });
         });
 

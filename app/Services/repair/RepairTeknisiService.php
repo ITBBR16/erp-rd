@@ -59,29 +59,30 @@ class RepairTeknisiService
             $linkDrive = $request->input('link_doc');
             $imgTS = $request->file('files_troubleshooting');
 
-            $encodedFiles = [];
             if ($imgTS) {
+                $encodedFiles = [];
+
                 foreach ($imgTS as $file) {
                     $encodedFiles[] = base64_encode(file_get_contents($file->getPathname()));
                 }
-            }
 
-            $payload = [
-                'status' => 'Troubleshooting',
-                'link_drive' => $linkDrive,
-                'files' => $encodedFiles,
-            ];
-
-            $urlApi = 'https://script.google.com/macros/s/AKfycbygVDxzRgXbmbMBgCl3G5MZU7ZGMuMP9HO2xARk3_GQXI19JVflcUeQK6kLnXN31o6F/exec';
-            $response = Http::post($urlApi, $payload);
-
-            if ($response->failed()) {
-                throw new Exception('Gagal mengirim data ke Google Drive.');
-            }
-
-            $dataResponse = json_decode($response->body(), true);
-            if ($dataResponse['status'] !== 'success') {
-                throw new Exception($dataResponse['message'] ?? 'Terjadi kesalahan pada API.');
+                $payload = [
+                    'status' => 'Troubleshooting',
+                    'link_drive' => $linkDrive,
+                    'files' => $encodedFiles,
+                ];
+    
+                $urlApi = 'https://script.google.com/macros/s/AKfycbygVDxzRgXbmbMBgCl3G5MZU7ZGMuMP9HO2xARk3_GQXI19JVflcUeQK6kLnXN31o6F/exec';
+                $response = Http::post($urlApi, $payload);
+    
+                if ($response->failed()) {
+                    throw new Exception('Gagal mengirim data ke Google Drive.');
+                }
+    
+                $dataResponse = json_decode($response->body(), true);
+                if ($dataResponse['status'] !== 'success') {
+                    throw new Exception($dataResponse['message'] ?? 'Terjadi kesalahan pada API.');
+                }
             }
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 2);
@@ -192,22 +193,25 @@ class RepairTeknisiService
             $jurnalTS = $request->input('jurnal_pengerjaan');
             $linkDrive = $request->input('link_doc');
             $imgPengerjaan = $request->file('files_pengerjaan');
-            $encodedFiles = [];
+            
+            if ($imgPengerjaan) {
+                $encodedFiles = [];
+                foreach ($imgPengerjaan as $file) {
+                    $encodedFiles[] = base64_encode($file->get());
+                }
+    
+                $payload = [
+                    'status' => 'Pengerjaan',
+                    'link_drive' => $linkDrive,
+                    'files' => $encodedFiles,
+                ];
+    
+                $urlApi = 'https://script.google.com/macros/s/AKfycbygVDxzRgXbmbMBgCl3G5MZU7ZGMuMP9HO2xARk3_GQXI19JVflcUeQK6kLnXN31o6F/exec';
+                $response = Http::post($urlApi, $payload);
+                $dataResponse = json_decode($response->body(), true);
+                $status = $dataResponse['status'];
 
-            foreach ($imgPengerjaan as $file) {
-                $encodedFiles[] = base64_encode($file->get());
             }
-
-            $payload = [
-                'status' => 'Pengerjaan',
-                'link_drive' => $linkDrive,
-                'files' => $encodedFiles,
-            ];
-
-            $urlApi = 'https://script.google.com/macros/s/AKfycbygVDxzRgXbmbMBgCl3G5MZU7ZGMuMP9HO2xARk3_GQXI19JVflcUeQK6kLnXN31o6F/exec';
-            $response = Http::post($urlApi, $payload);
-            $dataResponse = json_decode($response->body(), true);
-            $status = $dataResponse['status'];
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 6);
             if ($checkTimestamp) {

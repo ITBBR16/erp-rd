@@ -3,7 +3,7 @@
 @section('container')
     <div class="grid grid-cols-2 gap-8 mb-8 border-b border-gray-400 py-3">
         <div class="flex text-3xl font-bold text-gray-700 dark:text-gray-300">
-            List Troubleshooting
+            Konfirmasi Quality Control
         </div>
     </div>
 
@@ -57,7 +57,7 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Tanggal Masuk
+                            No Nota
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Jenis Case
@@ -69,6 +69,9 @@
                             Jenis Drone
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Teknisi
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Status
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -78,53 +81,42 @@
                 </thead>
                 <tbody>
                     @foreach ($dataCase as $case)
-                        @if ($case->jenisStatus->jenis_status == 'Proses Troubleshooting')
-                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                        @if ($case->jenisStatus->jenis_status == 'Proses Konfirmasi Hasil QC' || $case->jenisStatus->jenis_status == 'Proses Quality Control' || $case->jenisStatus->jenis_status == 'Proses Menunggu Pembayaran (Lanjut)')
+                            <tr class="bg-white border-b border-gray-300 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                 <td class="px-6 py-2">
-                                    {{ \Carbon\Carbon::parse($case->created_at)->isoFormat('D MMMM YYYY') }}
+                                    R-{{ $case->id }}
                                 </td>
                                 <td class="px-6 py-2">
                                     {{ $case->jenisCase->jenis_case }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $case->customer->first_name }} {{ $case->customer->last_name }}
+                                    {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}
                                 </td>
                                 <td class="px-6 py-2">
                                     {{ $case->jenisProduk->jenis_produk }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $case->jenisStatus->jenis_status }}</span>
+                                    {{ ($case->teknisi) ? $case->teknisi->first_name . ' ' . $case->teknisi->last_name : 'Belum Ada Teknisi' }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    <button id="dropdownTroubleshooting{{ $case->id }}" data-dropdown-toggle="dropdownTS{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <span class="bg-orange-100 text-orange-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300">{{ $case->jenisStatus->jenis_status }}</span>
+                                </td>
+                                <td class="px-6 py-2">
+                                    <button id="ddKQC{{ $case->id }}" data-dropdown-toggle="dropdownKQC{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                         </svg>
                                     </button>
                                 </td>
                             </tr>
                             <!-- Dropdown menu -->
-                            <div id="dropdownTS{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
-                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTroubleshooting{{ $case->id }}">
+                            <div id="dropdownKQC{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
+                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="ddKQC{{ $case->id }}">
                                     <li>
-                                        <button type="button" data-modal-target="detail-troubleshooting-{{ $case->id }}" data-modal-toggle="detail-troubleshooting-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                        <a href="{{ route('detailQc', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-xl mr-3">visibility</i>
                                             <span class="whitespace-nowrap">Detail</span>
-                                        </button>
+                                        </a>
                                     </li>
-                                    <li>
-                                        <button type="button" data-modal-target="add-jurnal-{{ $case->id }}" data-modal-toggle="add-jurnal-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">menu_book</span>
-                                            <span class="whitespace-nowrap">Add Jurnal</span>
-                                        </button>
-                                    </li>
-                                    @if ($case->timestampStatus->contains('jenis_status_id', 2))
-                                        <li>
-                                            <button type="button" data-modal-target="lanjut-estimasi-{{ $case->id }}" data-modal-toggle="lanjut-estimasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                                <span class="material-symbols-outlined text-base mr-3">find_replace</span>
-                                                <span class="whitespace-nowrap">Lanjut Estimasi</span>
-                                            </button>
-                                        </li>
-                                    @endif
                                 </ul>
                             </div>
                         @endif
@@ -136,10 +128,5 @@
             {{-- {{ $dataCustomer->links() }} --}}
         </div>
     </div>
-
-    {{-- Modal --}}
-    @include('repair.teknisi.modal.detail-troubleshooting')
-    @include('repair.teknisi.modal.add-jurnal-ts')
-    @include('repair.teknisi.modal.lanjut-estimasi')
 
 @endsection

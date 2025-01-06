@@ -94,7 +94,7 @@ class RepairEstimasiService
         $caseService = $this->repairCaseService->getDataDropdown();
         $divisiName = $this->umum->getDivisi($user);
         $greeting = $this->showTimeForChat();
-        $dataCase = $caseService['data_case'];
+        $dataCase = $caseService['data_case']->sortByDesc('id');
 
         return view('repair.estimasi.konfirmasi', [
             'title' => 'List Konfirmasi Estimasi',
@@ -593,7 +593,7 @@ class RepairEstimasiService
         
             $urlAPi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
             $response = Http::post($urlAPi,[
-                'no_telpon' => '6285156519066',
+                'no_telpon' => $noTelpon,
                 'pesan' => $fullMessage,
             ]);
 

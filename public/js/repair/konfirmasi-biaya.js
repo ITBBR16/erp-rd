@@ -129,7 +129,7 @@ $(document).ready(function () {
             $('#konfirmasi-jpj-container-' + formId).append(itemJpPart)
             $('#konfirmasi-part-jasa-container-' + formId).append(itemNpjPart)
 
-            konfirmasiGetJenisDrone(jenisTransaksi, formId);
+            konfirmasiGetJenisDrone(formId);
         } else {
             let itemJpJasa = `<input type="text" name="jenis_part_jasa[]" id="konfirmasi-jp-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jenis Jasa">`
             let itemNpjJasa = `<input type="text" name="nama_part_jasa[]" id="konfirmasi-part-${formId}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jasa">`
@@ -145,7 +145,7 @@ $(document).ready(function () {
         var jenisTransaksi = $('#estimasi-jt-' + jpId + ' option:selected').text();
         
         if (jenisTransaksi  == 'P.Baru' || jenisTransaksi == 'P.Bekas') {
-            konfirmasiGetNamaPart(jenisTransaksi, jpId, jpValue);
+            konfirmasiGetNamaPart(jpId, jpValue);
         }
     });
 
@@ -225,7 +225,7 @@ $(document).ready(function () {
                     value: produk.id,
                     text: produk.jenis_produk
                 })
-                .addClass('dark:bg-gray-700')
+                .addClass('bg-white dark:bg-gray-700')
                 inputJP.append(option)
             });
 
@@ -251,7 +251,7 @@ $(document).ready(function () {
                     value: part.id,
                     text: part.nama_internal
                 })
-                .addClass('dark:bg-gray-700')
+                .addClass('bg-white dark:bg-gray-700')
                 inputPart.append(option)
             });
 

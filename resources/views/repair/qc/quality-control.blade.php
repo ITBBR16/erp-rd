@@ -52,108 +52,131 @@
     </div>
 
     <div class="relative">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Tanggal Masuk
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Jenis Case
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Customer
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Jenis Drone
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($dataCase as $case)
-                    @if ($case->jenisStatus->jenis_status == 'Proses Quality Control')
-                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                            <td class="px-6 py-2">
-                                {{ \Carbon\Carbon::parse($case->created_at)->isoFormat('D MMMM YYYY') }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ $case->jenisCase->jenis_case }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ $case->customer->first_name }} {{ $case->customer->last_name }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ $case->jenisProduk->jenis_produk }}
-                            </td>
-                            <td class="px-6 py-2">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $case->jenisStatus->jenis_status }}</span>
-                            </td>
-                            <td class="px-6 py-2">
-                                <button id="dropdownCekFisik{{ $case->id }}" data-dropdown-toggle="ddCF{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Dropdown menu -->
-                        <div id="ddCF{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
-                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCekFisik{{ $case->id }}">
-                                <li>
-                                    <a href="{{ route('detailQc', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-xl mr-3">visibility</i>
-                                        <span class="whitespace-nowrap">Detail</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <button type="button" data-modal-target="add-jurnal-qc-{{ $case->id }}" data-modal-toggle="add-jurnal-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">menu_book</span>
-                                        <span class="whitespace-nowrap">Add Jurnal</span>
+        <div class="overflow-y-auto max-h-[550px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Tanggal Masuk
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Jenis Case
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nama Customer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Jenis Drone
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($dataCase as $case)
+                        @if ($case->jenisStatus->jenis_status == 'Proses Quality Control')
+                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                <td class="px-6 py-2">
+                                    {{ \Carbon\Carbon::parse($case->created_at)->isoFormat('D MMMM YYYY') }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->jenisCase->jenis_case }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->customer->id }} - {{ $case->id }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->jenisProduk->jenis_produk }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $case->jenisStatus->jenis_status }}</span>
+                                </td>
+                                <td class="px-6 py-2">
+                                    <button id="dropdownCekFisik{{ $case->id }}" data-dropdown-toggle="ddCF{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                        </svg>
                                     </button>
-                                </li>
-                                {{-- @if (optional($case?->qualityControl?->cekFisik)->isEmpty() || $case?->qualityControl?->cekFisik) --}}
+                                </td>
+                            </tr>
+                            <!-- Dropdown menu -->
+                            <div id="ddCF{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
+                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCekFisik{{ $case->id }}">
                                     <li>
-                                        <button type="button" data-modal-target="qc-cek-fisik-{{ $case->id }}" data-modal-toggle="qc-cek-fisik-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">minor_crash</span>
-                                            <span class="whitespace-nowrap">Cek Fisik</span>
+                                        <a href="{{ route('detailQc', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-xl mr-3">visibility</i>
+                                            <span class="whitespace-nowrap">Detail</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <button type="button" data-modal-target="add-jurnal-qc-{{ $case->id }}" data-modal-toggle="add-jurnal-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">menu_book</span>
+                                            <span class="whitespace-nowrap">Add Jurnal</span>
                                         </button>
                                     </li>
-                                {{-- @endif --}}
-                                {{-- @if (optional($case?->qualityControl?->cekCalibrasi)->isEmpty()) --}}
-                                    <li>
-                                        <button type="button" data-modal-target="qc-cek-calibrasi-{{ $case->id }}" data-modal-toggle="qc-cek-calibrasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">compass_calibration</span>
-                                            <span class="whitespace-nowrap">Cek Calibrasi</span>
-                                        </button>
-                                    </li>
-                                {{-- @endif --}}
-                                {{-- @if (optional($case?->qualityControl?->testFly)->isEmpty()) --}}
-                                    <li>
-                                        <button type="button" data-modal-target="qc-test-fly-{{ $case->id }}" data-modal-toggle="qc-test-fly-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">flight_takeoff</span>
-                                            <span class="whitespace-nowrap">Test Flight</span>
-                                        </button>
-                                    </li>
-                                {{-- @endif --}}
-                                @if (optional($case?->qualityControl?->cekFisik)->isNotEmpty() && optional($case?->qualityControl?->cekCalibrasi)->isNotEmpty() && optional($case?->qualityControl?->testFly)->isNotEmpty())
-                                    <li>
-                                        <button type="button" data-modal-target="konfirmasi-qc-{{ $case->id }}" data-modal-toggle="konfirmasi-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <span class="material-symbols-outlined text-base mr-3">recommend</span>
-                                            <span class="whitespace-nowrap">Konfirmasi QC</span>
-                                        </button>
-                                    </li>
-                                @endif
-                            </ul>
-                        </div>
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
+                                    @if (!$case->qualityControl)
+                                        <li>
+                                            <button type="button" data-modal-target="qc-cek-fisik-{{ $case->id }}" data-modal-toggle="qc-cek-fisik-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <span class="material-symbols-outlined text-base mr-3">minor_crash</span>
+                                                <span class="whitespace-nowrap">Cek Fisik</span>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" data-modal-target="qc-cek-calibrasi-{{ $case->id }}" data-modal-toggle="qc-cek-calibrasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <span class="material-symbols-outlined text-base mr-3">compass_calibration</span>
+                                                <span class="whitespace-nowrap">Cek Calibrasi</span>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" data-modal-target="qc-test-fly-{{ $case->id }}" data-modal-toggle="qc-test-fly-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <span class="material-symbols-outlined text-base mr-3">flight_takeoff</span>
+                                                <span class="whitespace-nowrap">Test Flight</span>
+                                            </button>
+                                        </li>
+                                    @else
+                                        @if (optional($case->qualityControl->cekFisik)->isEmpty())
+                                            <li>
+                                                <button type="button" data-modal-target="qc-cek-fisik-{{ $case->id }}" data-modal-toggle="qc-cek-fisik-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                    <span class="material-symbols-outlined text-base mr-3">minor_crash</span>
+                                                    <span class="whitespace-nowrap">Cek Fisik</span>
+                                                </button>
+                                            </li>
+                                        @endif
+                                        @if (optional($case->qualityControl->cekCalibrasi)->isEmpty())
+                                            <li>
+                                                <button type="button" data-modal-target="qc-cek-calibrasi-{{ $case->id }}" data-modal-toggle="qc-cek-calibrasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                    <span class="material-symbols-outlined text-base mr-3">compass_calibration</span>
+                                                    <span class="whitespace-nowrap">Cek Calibrasi</span>
+                                                </button>
+                                            </li>
+                                        @endif
+                                        @if (optional($case->qualityControl->testFly)->isEmpty())
+                                            <li>
+                                                <button type="button" data-modal-target="qc-test-fly-{{ $case->id }}" data-modal-toggle="qc-test-fly-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                    <span class="material-symbols-outlined text-base mr-3">flight_takeoff</span>
+                                                    <span class="whitespace-nowrap">Test Flight</span>
+                                                </button>
+                                            </li>
+                                        @endif
+                                    @endif
+                                    @if (optional($case?->qualityControl?->cekFisik)->isNotEmpty() && optional($case?->qualityControl?->cekCalibrasi)->isNotEmpty() && optional($case?->qualityControl?->testFly)->isNotEmpty())
+                                        <li>
+                                            <button type="button" data-modal-target="konfirmasi-qc-{{ $case->id }}" data-modal-toggle="konfirmasi-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <span class="material-symbols-outlined text-base mr-3">recommend</span>
+                                                <span class="whitespace-nowrap">Konfirmasi QC</span>
+                                            </button>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         <div class="mt-4 ">
             {{-- {{ $dataCustomer->links() }} --}}
         </div>

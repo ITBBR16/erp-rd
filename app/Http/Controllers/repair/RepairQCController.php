@@ -14,6 +14,11 @@ class RepairQCController extends Controller
         private RepairQCService $qcService)
     {}
 
+    public function indexListCase()
+    {
+        return $this->qcService->indexListCase();
+    }
+
     public function index()
     {
         return $this->qcService->indexQc();

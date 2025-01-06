@@ -10,18 +10,17 @@ use App\Services\repair\RepairTeknisiService;
 
 class RepairTroubleshootingController extends Controller
 {
-    protected $repairCaseService, $repairTeknisi;
-    public function __construct(private UmumRepository $nameDivisi, RepairCaseService $repairCaseService, RepairTeknisiService $repairTeknisiService)
-    {
-        $this->repairCaseService = $repairCaseService;
-        $this->repairTeknisi = $repairTeknisiService;
-    }
+    public function __construct(
+        private UmumRepository $umum,
+        private RepairCaseService $repairCaseService,
+        private RepairTeknisiService $repairTeknisi
+    ){}
 
     public function index()
     {
         $user = auth()->user();
         $caseService = $this->repairCaseService->getDataDropdown();
-        $divisiName = $this->nameDivisi->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $dataCase = $caseService['data_case'];
 
         return view('repair.teknisi.troubleshooting', [

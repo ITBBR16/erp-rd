@@ -24,11 +24,11 @@
                             <div class="grid gap-6 mb-6 md:grid-cols-2">
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">Nama Customer</p>
-                                    <h3 class="text-sm font-semibold dark:text-white">{{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->id }}</h3>
+                                    <h3 class="text-sm font-semibold text-black dark:text-white">{{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->id }}</h3>
                                 </div>
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">Jenis Produk</p>
-                                    <h3 class="text-sm font-semibold dark:text-white">{{ $case->jenisProduk->jenis_produk }}</h3>
+                                    <h3 class="text-sm font-semibold text-black dark:text-white">{{ $case->jenisProduk->jenis_produk }}</h3>
                                 </div>
                             </div>
                             <div class="mb-6">
@@ -50,7 +50,7 @@
                                         <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
                                     </div>
                                     <div id="selected-files-ts-{{ $case->id }}" class="flex flex-wrap justify-evenly" style="display: none"></div>
-                                    <input name="files_troubleshooting[]" id="files-troubleshooting-{{ $case->id }}" data-id="{{ $case->id }}" type="file" class="hidden file-upload" multiple required>
+                                    <input name="files_troubleshooting[]" id="files-troubleshooting-{{ $case->id }}" data-id="{{ $case->id }}" type="file" class="hidden file-upload" multiple>
                                 </label>
                             </div>
                         </div>

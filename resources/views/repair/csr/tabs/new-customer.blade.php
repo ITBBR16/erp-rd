@@ -3,17 +3,17 @@
         @csrf
         <div class="grid md:grid-cols-2 md:gap-4">
             <div>
-                <label for="first-name" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">First Name :</label>
+                <label for="first-name" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">First Name <span class="text-red-500">*</span>:</label>
                 <input type="text" name="first_name" id="first-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First Name" required>
             </div>
             <div>
-                <label for="last-name" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Last Name :</label>
+                <label for="last-name" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Last Name <span class="text-red-500">*</span>:</label>
                 <input type="text" name="last_name" id="last-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First Name" required>
             </div>
         </div>
         <div class="grid md:grid-cols-3 md:gap-4">
             <div>
-                <label for="asal-informasi-customer" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Lead Source :</label>
+                <label for="asal-informasi-customer" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Lead Source <span class="text-red-500">*</span>:</label>
                 <select name="asal_informasi" id="asal-informasi-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     <option value="" hidden>Lead Source</option>
                     @foreach ($infoPerusahaan as $info)
@@ -22,7 +22,7 @@
                 </select>
             </div>
             <div>
-                <label for="no-telpon" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">No Telpon :</label>
+                <label for="no-telpon" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">No Telpon <span class="text-red-500">*</span>:</label>
                 <input type="text" name="no_telpon" id="no-telpon" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="6285123456789" oninput="this.value = this.value.replace(/\D/g, '')" required>
             </div>
             <div>
@@ -34,7 +34,7 @@
                 <input type="text" name="instansi" id="instansi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Instansi">
             </div>
             <div>
-                <label for="provinsi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Provinsi :</label>
+                <label for="provinsi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Provinsi <span class="text-red-500">*</span>:</label>
                 <select name="provinsi" id="provinsi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                     <option value="" hidden>Pilih Provinsi</option>
                     @foreach ($dataProvinsi as $provinsi)

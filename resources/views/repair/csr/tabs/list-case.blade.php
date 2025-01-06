@@ -70,13 +70,13 @@
                                             <span class="whitespace-nowrap">Edit</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <button type="button" data-modal-target="tanda-terima-{{ $case->id }}" data-modal-toggle="tanda-terima-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">receipt_long</span>
+                                            <span class="whitespace-nowrap">Tanda Terima</span>
+                                        </button>
+                                    </li>
                                 @endif
-                                <li>
-                                    <button type="button" data-modal-target="tanda-terima-{{ $case->id }}" data-modal-toggle="tanda-terima-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">receipt_long</span>
-                                        <span class="whitespace-nowrap">Tanda Terima</span>
-                                    </button>
-                                </li>
                                 {{-- <li>
                                     <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">delete</span>

@@ -21,6 +21,25 @@ class RepairQCService
         )
     {}
 
+    // List Case 
+    public function indexListCase()
+    {
+        $user = auth()->user();
+        $caseService = $this->caseService->getDataDropdown();
+        $divisiName = $this->umum->getDivisi($user);
+        $dataCase = $caseService['data_case']->sortByDesc('id');
+
+        return view('repair.qc.list-case', [
+            'title' => 'List Case',
+            'active' => 'list-case-qc',
+            'navActive' => 'qc',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+        ]);
+    }
+
+    // Quality Control
     public function indexQc()
     {
         $user = auth()->user();
@@ -29,7 +48,7 @@ class RepairQCService
         $dataQc = $this->getDataNeed();
         $kondisi = $dataQc['kondisi'];
         $kategori = $dataQc['kategori'];
-        $dataCase = $caseService['data_case'];
+        $dataCase = $caseService['data_case']->sortByDesc('id');
 
         return view('repair.qc.quality-control', [
             'title' => 'Pengecekkan',

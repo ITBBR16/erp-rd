@@ -35,7 +35,7 @@ class RepairCaseService
         $user = auth()->user();
         $caseService = $this->getDataDropdown();
         $divisiName = $this->umum->getDivisi($user);
-        $dataCase = $caseService['data_case'];
+        $dataCase = $caseService['data_case']->sortByDesc('id');
         $dataCustomer = collect($caseService['data_customer'])->sortByDesc('id');
         $dataCustomers = $dataCustomer->map(function ($customer) {
             return [
@@ -212,6 +212,22 @@ class RepairCaseService
         }
     }
 
+    public function reviewPdfLunas($id)
+    {
+        $user = auth()->user();
+        $employee = $user->first_name . " " . $user->last_name;
+        $dataCase = $this->repairCase->findCase($id);
+        $dataView = [
+            'title' => 'Preview Tanda Terima',
+            'dataCase' => $dataCase,
+            'employee' => $employee,
+        ];
+
+        $pdf = Pdf::loadView('repair.csr.preview.preview-lunas', $dataView)
+                    ->setPaper('a5', 'portrait');
+
+        return $pdf;
+    }
     public function reviewPdfTandaTerima($id)
     {
         $user = auth()->user();
@@ -261,7 +277,7 @@ class RepairCaseService
             $greeting = $this->showTimeForChat();
             $namaCustomer = "{$dataCase->customer->first_name} {$dataCase->customer->last_name}-{$dataCase->customer->id}-{$id}";
             $linkDrive = $dataCase->link_doc;
-            $notelpon = 6285156519066; //$dataCase->customer->no_telpon
+            $notelpon = $dataCase->customer->no_telpon;
 
             $tanggalMasuk = Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY');
             $namaReal = $dataCase->customer->first_name . " " . $dataCase->customer->last_name;
@@ -332,7 +348,7 @@ class RepairCaseService
             $greeting = $this->showTimeForChat();
             $namaCustomer = "{$dataCase->customer->first_name} {$dataCase->customer->last_name}-{$dataCase->customer->id}-{$id}";
             $linkDrive = $dataCase->link_doc;
-            $notelpon = 6285156519066; //$dataCase->customer->no_telpon
+            $notelpon = $dataCase->customer->no_telpon;
 
             $namaReal = $dataCase->customer->first_name . " " . $dataCase->customer->last_name;
             $pesan = "{$greeting} {$namaReal}\nBerikut adalah hasil quality control : ";
@@ -491,7 +507,7 @@ class RepairCaseService
             }
 
             $greeting = $this->showTimeForChat();
-            $notelpon = 6285156519066; //$dataCase->customer->no_telpon
+            $notelpon = $dataCase->customer->no_telpon;
             $provinsi = $dataCase->customer->provinsi->name ?? '-';
             $kota = $dataCase->customer->kota->name ?? '-';
             $kecamatan = $dataCase->customer->kecamatan->name ?? '-';

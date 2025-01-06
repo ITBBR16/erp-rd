@@ -24,11 +24,11 @@
                                 <input type="hidden" name="link_doc" value="{{ $case->link_doc }}">
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">Nama Customer</p>
-                                    <h3 class="text-sm font-semibold dark:text-white">{{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->id }}</h3>
+                                    <h3 class="text-sm font-semibold text-black dark:text-white">{{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->id }}</h3>
                                 </div>
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">Jenis Produk</p>
-                                    <h3 class="text-sm font-semibold dark:text-white">{{ $case->jenisProduk->jenis_produk }}</h3>
+                                    <h3 class="text-sm font-semibold text-black dark:text-white">{{ $case->jenisProduk->jenis_produk }}</h3>
                                 </div>
                             </div>
                             <div class="mb-6">

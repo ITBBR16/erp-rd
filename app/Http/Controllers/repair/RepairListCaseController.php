@@ -44,7 +44,7 @@ class RepairListCaseController extends Controller
 
     public function reviewPdfTandaTerima($id)
     {
-        $pdf = $this->repairCaseService->reviewPdfTandaTerima($id);
+        $pdf = $this->repairCaseService->reviewPdfLunas($id);
         return $pdf->stream();
     }
 

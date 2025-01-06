@@ -19,7 +19,7 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div class="p-4 rounded-lg bg-white border border-gray-200 shadow-md dark:bg-gray-700 dark:border-gray-600">
                                 <h3 class="text-lg font-semibold mb-4 text-black dark:text-white">Detail Customer</h3>
-                                <div class="grid grid-cols-2 gap-4 mb-2">
+                                <div class="grid grid-cols-2 gap-4 mb-4">
                                     <div>
                                         <h3 class="text-sm font-semibold mb-1">Nama Customer</h3>
                                         <p class="text-gray-500 text-base">{{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->customer->id }}</p>
@@ -35,6 +35,10 @@
                                     <div>
                                         <h3 class="text-sm font-semibold mb-1">Jenis Case</h3>
                                         <p class="text-gray-500 text-base">{{ $case->jenisCase->jenis_case }}</p>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold mb-4">Link Drive</h3>
+                                        <a href="{{ $case->link_doc }}" target="_blank" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Folder Drive</a>
                                     </div>
                                 </div>
                                 <h3 class="text-lg font-semibold mb-4 pt-2 border-t text-black dark:text-white">Detail Kronologi</h3>

@@ -123,7 +123,7 @@ $(document).ready(function () {
                             const option = $('<option>')
                                 .val(kota.id)
                                 .text(kota.name)
-                                .addClass('dark:bg-gray-700');
+                                .addClass('bg-white dark:bg-gray-700');
 
                             if (kotaId && kota.id == kotaId) {
                                 option.attr('selected', true);
@@ -159,7 +159,7 @@ $(document).ready(function () {
                             const option = $('<option>')
                                 .val(kecamatan.id)
                                 .text(kecamatan.name)
-                                .addClass('dark:bg-gray-700');
+                                .addClass('bg-white dark:bg-gray-700');
 
                             if (kecamatanId && kecamatan.id == kecamatanId) {
                                 option.attr('selected', true);
@@ -190,7 +190,7 @@ $(document).ready(function () {
                             .text('Pilih Kelurahan')
                             .val('')
                             .attr('hidden', true)
-                            .addClass('dark:bg-gray-700');
+                            .addClass('bg-white dark:bg-gray-700');
                         containerKelurahan.append(defaultOption);
 
                         data.forEach(kelurahan => {
@@ -221,7 +221,7 @@ $(document).ready(function () {
                     .text('Pilih Layanan')
                     .val('')
                     .attr('hidden', true)
-                    .addClass('dark:bg-gray-700');
+                    .addClass('bg-white dark:bg-gray-700');
             containerLayanan.append(defaultOption);
 
             data.forEach(layanan => {

@@ -66,7 +66,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Alamat</p>
-                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ $dataCase->customer->kota->name }}</h3>
+                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ $dataCase->customer->kota->name ?? "-" }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Status Case</p>
@@ -186,7 +186,7 @@
                         @foreach ($dataCase->detailKelengkapan as $kelengkapan)
                             <tr class="border-t">
                                 <td class="p-2">
-                                    {{ $kelengkapan->itemKelengkapan->kelengkapan }}
+                                    {{ ($kelengkapan->item_kelengkapan_id == null) ? $kelengkapan->nama_data_lama : $kelengkapan->itemKelengkapan->kelengkapan }}
                                 </td>
                                 <td class="p-2">
                                     {{ $kelengkapan->quantity }}

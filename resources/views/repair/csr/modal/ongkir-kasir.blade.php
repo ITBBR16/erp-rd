@@ -5,7 +5,7 @@
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <!-- Modal header -->
-                    <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t dark:border-gray-600">
                         <h3 class="text-xl font-medium text-gray-900 dark:text-white">Ongkir {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}-{{ $case->id }}</h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="ongkir-kasir-{{ $case->id }}">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -19,7 +19,7 @@
                         @csrf
                         <div class="px-2 py-2 lg:px-8 lg:py-6 bg-gray-50 dark:bg-gray-600">
                             <div class="grid grid-cols-2 gap-x-4 relative">
-                                <div class="relative px-4 py-4 rounded-md shadow-lg border bg-white dark:bg-gray-700 dark:border-gray-600">
+                                <div class="relative px-4 py-4 rounded-md shadow-lg border border-gray-200 bg-white dark:bg-gray-700 dark:border-gray-600">
                                     <div class="pb-2 border-b flex justify-between items-center">
                                         <h2 class="text-base font-semibold mb-4 dark:text-white">Data Customer</h2>
                                         <label class="inline-flex items-center cursor-pointer">
@@ -210,7 +210,7 @@
                                         <div class="col-span-2">
                                             <div class="flex">
                                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                                <input type="text" name="nominal_ongkir_repair" id="nominal-ongkir-repair-{{ $case->id }}" class="format-angka-ongkir-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                                                <input type="text" name="nominal_ongkir_repair" id="nominal-ongkir-repair-{{ $case->id }}" class="format-angka-ongkir-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
                                             </div>
                                         </div>
                                     </div>
