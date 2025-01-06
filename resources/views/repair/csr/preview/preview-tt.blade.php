@@ -73,7 +73,7 @@
                     <tbody>
                         @foreach ($case->detailKelengkapan as $detail)
                             <tr style="border-bottom: 1px solid black;">
-                                <td style="padding-right: 8px; padding-bottom: 4px;">{{ $detail->itemKelengkapan->kelengkapan }}</td>
+                                <td style="padding-right: 8px; padding-bottom: 4px;">{{ ($detail->item_kelengkapan_id == null) ? $detail->nama_data_lama : $detail->itemKelengkapan->kelengkapan }}</td>
                                 <td style="padding-right: 8px; padding-bottom: 4px;">{{ $detail->quantity }}</td>
                                 <td style="padding-right: 8px; padding-bottom: 4px;">{{ ($detail->serial_number) ? $detail->serial_number : '-' }}</td>
                                 <td style="padding-right: 8px; padding-bottom: 4px;">{{ $detail->keterangan }}</td>

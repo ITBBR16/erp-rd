@@ -10,54 +10,65 @@
 
 </head>
 <body>
-    <div style="background-color: white; padding: 2px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: 1px solid #E5E7EB;">
+    <div style="background-color: white; padding: 2px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); solid #E5E7EB;">
         <div style="margin-bottom: 16px; display: flex; justify-content: center; text-align: center;">
             <div style="display: flex; justify-content: center; text-align: center;">
-                <img src="{{ public_path('img/Logo Rumah Drone Black.png') }}" style="width: 160px;" alt="Logo RD">
+                <img src="{{ public_path('img/Logo Rumah Drone Black.png') }}" style="width: 80px;" alt="Logo RD">
             </div>
-            <p style="font-size: 10px;">Jl. Kwoka Q2-6 Perum Tidar Permai, Kel. Karang Besuki Kec. Sukun Kota Malang Kode Pos 65146</p>
-            <p style="font-size: 10px;">Telp. 0813-3430-0706</p>
+            <p style="font-size: 7px;">Jl. Kwoka Q2-6 Perum Tidar Permai, Kel. Karang Besuki Kec. Sukun Kota Malang Kode Pos 65146</p>
+            <p style="font-size: 7px;">Telp. 0813-3430-0706</p>
         </div>
-        <div style="display: flex; justify-content: space-between; margin: 16px 0;">
-            <div style="text-align: start;">
-                <h2 style="font-size: 18px; font-weight: 600; color: black;">Detail Transaksi / <span style="font-size: 18px; color: gray;">R-{{ $dataCase->id }} <span style="font-size: 12px; margin-left: 8px; color: green; background-color: #D1FAE5; padding: 4px 8px; border-radius: 9999px;">Lunas</span></span></h2>
-            </div>
-            <div style="text-align: end;">
-                <h2 style="font-size: 18px; font-weight: 600; color: black;">{{ $dataCase->jenisProduk->jenis_produk }}</h2>
-            </div>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-            <div>
-                <p style="font-size: 12px; color: gray;">Nama Customer</p>
-                <h3 style="font-size: 14px; font-weight: 600; color: black;">{{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}</h3>
-            </div>
-            <div>
-                <p style="font-size: 12px; color: gray;">No Telpon</p>
-                <h3 style="font-size: 14px; font-weight: 600; color: black;">{{ $dataCase->customer->no_telpon }}</h3>
-            </div>
-            <div>
-                <p style="font-size: 12px; color: gray;">Alamat</p>
-                <h3 style="font-size: 14px; font-weight: 600; color: black;">{{ $dataCase->customer->kota->name ?? "-" }}</h3>
-            </div>
-            <div>
-                <p style="font-size: 12px; color: gray;">Status Case</p>
-                <h3 style="font-size: 14px; font-weight: 600; color: black;">{{ $dataCase->jenisCase->jenis_case }}</h3>
-            </div>
-            <div>
-                <p style="font-size: 12px; color: gray;">Tanggal Masuk</p>
-                <h3 style="font-size: 14px; font-weight: 600; color: black;">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
-            </div>
-            <div>
-                <p style="font-size: 12px; color: gray;">Tanggal Keluar</p>
-                <h3 style="font-size: 14px; font-weight: 600; color: black;">{{ \Carbon\Carbon::now()->isoFormat('D MMMM YYYY') }}</h3>
-            </div>
-        </div>
+        <table style="width: 100%; padding-bottom: 8px; margin-bottom: 8px;">
+            <tr>
+                <!-- Kolom Kiri -->
+                <td style="text-align: left; vertical-align: top; width: 50%;">
+                    <h2 style="font-size: 8px; font-weight: 600; color: black;">Detail Transaksi / <span style="font-size: 8px; color: gray;">R-{{ $dataCase->id }} <span style="font-size: 6px; margin-left: 8px; color: green; background-color: #D1FAE5; padding: 4px 8px; border-radius: 9999px;">Lunas</span></span></h2>
+                </td>
+                <!-- Kolom Kanan -->
+                <td style="text-align: right; vertical-align: top; width: 50%;">
+                    <h2 style="font-size: 8px; font-weight: 600; color: black;">Jenis Drone : {{ $dataCase->jenisProduk->jenis_produk }}</h2>
+                </td>
+            </tr>
+        </table>
+
+        <table style="width: 100%; font-size: 10px; margin-bottom: 16px; border-spacing: 0 8px;">
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <p style="color: gray; margin: 0;">Nama Customer</p>
+                    <h3 style="font-weight: 600; margin: 0;">{{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}</h3>
+                </td>
+                <td style="width: 50%; vertical-align: top;">
+                    <p style="color: gray; margin: 0;">No Telpon</p>
+                    <h3 style="font-weight: 600; margin: 0;">{{ $dataCase->customer->no_telpon }}</h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <p style="color: gray; margin: 0;">Alamat</p>
+                    <h3 style="font-weight: 600; margin: 0;">{{ $dataCase->customer->kota->name ?? "-" }}</h3>
+                </td>
+                <td style="width: 50%; vertical-align: top;">
+                    <p style="color: gray; margin: 0;">Status Case</p>
+                    <h3 style="font-weight: 600; margin: 0;">{{ $dataCase->jenisCase->jenis_case }}</h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <p style="color: gray; margin: 0;">Tanggal Masuk</p>
+                    <h3 style="font-weight: 600; margin: 0;">{{ \Carbon\Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY') }}</h3>
+                </td>
+                <td style="width: 50%; vertical-align: top;">
+                    <p style="color: gray; margin: 0;">Tanggal Keluar</p>
+                    <h3 style="font-weight: 600; margin: 0;">{{ \Carbon\Carbon::now()->isoFormat('D MMMM YYYY') }}</h3>
+                </td>
+            </tr>
+        </table>
     
-        <table style="font-size: 14px; margin-top: 24px; width: 100%; background-color: #F9FAFB; border-radius: 8px; color: #9CA3AF;">
-            <thead style="text-align: left; color: #111827;">
-                <tr>
-                    <th style="padding: 8px; width: 80%;">Analisa Kerusakan</th>
-                    <th style="padding: 8px; width: 20%;">Harga</th>
+        <table style="font-size: 8px; width: 100%; text-align: left; margin-bottom: 8px; background-color: #F9FAFB; border-radius: 8px; color: #9CA3AF;">
+            <thead style="font-size: 8px; color: gray;">
+                <tr style="border-bottom: 1px solid black;">
+                    <th style="padding-right: 8px; padding-bottom: 4px; width: 80%;">Analisa Kerusakan</th>
+                    <th style="padding-right: 8px; padding-bottom: 4px; width: 20%;">Harga</th>
                 </tr>
             </thead>
             <tbody style="color: #374151;">
@@ -124,7 +135,7 @@
             </tbody>
         </table>
     
-        <table style="font-size: 14px; margin-top: 24px; width: 100%; background-color: #F9FAFB; border-radius: 8px; color: #9CA3AF;">
+        <table style="font-size: 8px; width: 100%; text-align: left; margin-bottom: 8px; background-color: #F9FAFB; border-radius: 8px; color: #9CA3AF;">
             <thead style="text-align: left; color: #111827;">
                 <tr>
                     <th style="padding: 8px; width: 35%;">Kelengkapan</th>
@@ -146,92 +157,62 @@
                 @endforeach
             </tbody>
         </table>
+        
+        <table style="width: 100%; color: gray; font-size: 8px; margin-top: 8px; border-collapse: collapse;">
+            <tr>
+                <!-- Kolom untuk paragraf -->
+                <td style="width: 66.67%; vertical-align: top; padding-right: 8px; border: 1px solid #9CA3AF;">
+                    <p style="margin: 0; border-bottom: 1px solid #9CA3AF; color: black;">Keluhan Kerusakan</p>
+                    <p style="margin: 0; margin-top: 4px;">{{ $dataCase->keluhan }}</p>
+                </td>
+                <!-- Kolom untuk gambar dan tanda tangan -->
+                <td style="width: 33.33%; vertical-align: top; text-align: center;">
+                    <table style="width: 100%; color: gray; font-size: 8px; margin-top: 8px; border-collapse: collapse;">
+                        <tr>
+                            <td>Down Payment</td>
+                            @php
+                                $totalDp = $dataCase->transaksi->total_pembayaran ?? 0
+                            @endphp
+                            <td>Rp. {{ number_format($totalDp, 0, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Discount</td>
+                            <td>Rp. 0</td>
+                        </tr>
+                        <tr style="border-top: 1px solid #27292b;">
+                            <td>Total Pembayaran</td>
+                            <td>Rp. 0</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>        
 
-        <table style="font-size: 0.875rem; margin-top: 1.5rem; width: 100%; background-color: #F9FAFB; border-radius: 0.5rem; color: #9CA3AF;">
-            <thead style="text-align: left; color: #1F2937;">
-                <tr>
-                    <th style="padding: 0.5rem; width: 35%;">
-                        Kelengkapan
-                    </th>
-                    <th style="padding: 0.5rem; width: 10%;">
-                        Quantity
-                    </th>
-                    <th style="padding: 0.5rem; width: 20%;">
-                        Serial Number
-                    </th>
-                    <th style="padding: 0.5rem; width: 35%;">
-                        Keterangan
-                    </th>
-                </tr>
-            </thead>
-            <tbody style="color: #374151;">
-                @foreach ($dataCase->detailKelengkapan as $kelengkapan)
-                    <tr style="border-top: 1px solid #E5E7EB;">
-                        <td style="padding: 0.5rem;">
-                            {{ ($kelengkapan->item_kelengkapan_id == null) ? $kelengkapan->nama_data_lama : $kelengkapan->itemKelengkapan->kelengkapan }}
-                        </td>
-                        <td style="padding: 0.5rem;">
-                            {{ $kelengkapan->quantity }}
-                        </td>
-                        <td style="padding: 0.5rem;">
-                            {{ $kelengkapan->serial_number }}
-                        </td>
-                        <td style="padding: 0.5rem;">
-                            {{ ($kelengkapan->keterangan) ? $kelengkapan->keterangan : '-' }}
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <table style="width: 100%; color: gray; border: #9CA3AF; font-size: 8px; margin-top: 8px; border-collapse: collapse;">
+            <tr>
+                <!-- Kolom untuk paragraf -->
+                <td style="width: 66.67%; vertical-align: top; padding-right: 8px; border: 1px solid #9CA3AF;">
+                    <p style="color: #6B7280;">- Garansi hanya termasuk bagian yang direpair / direplace</p>
+                    <p style="color: #6B7280;">- Garansi tidak berlaku jika human error, overheat, overvoltage, overclocking</p>
+                    <p style="color: #6B7280;">- Garansi tidak berlaku jika segel rusak</p>
+                    <p style="color: #6B7280;">- Garansi berlaku 1 bulan setelah barang diterima</p>
+                </td>
+                <td></td>
+            </tr>
+        </table>        
         
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 1rem;">
-            <div style="grid-column: span 2; font-size: 0.875rem; border: 1px solid #E5E7EB; padding: 0.75rem;">
-                <div style="border-bottom: 1px solid #E5E7EB; font-weight: 600;">Keluhan Kerusakan</div>
-                <div style="padding-top: 0.5rem;">{{ $dataCase->keluhan }}</div>
-            </div>
-            <div style="grid-column: span 1;">
-                <div style="font-size: 0.875rem; width: 100%; max-width: 40rem; padding-left: 0.75rem;">
-                    <dl style="display: grid; grid-template-columns: repeat(5, 1fr); gap-left: 0.75rem;">
-                        <dt style="grid-column: span 3; font-weight: 600; color: #1F2937;">Down Payment</dt>
-                        @php
-                            $totalDp = $dataCase->transaksi->total_pembayaran ?? 0
-                        @endphp
-                        <dd style="grid-column: span 2; color: #6B7280;">Rp. {{ number_format($totalDp, 0, ',', '.') }}</dd>
-                    </dl>
-                    <dl style="display: grid; grid-template-columns: repeat(5, 1fr); gap-left: 0.75rem;">
-                        <dt style="grid-column: span 3; font-weight: 600; color: #1F2937;">Discount</dt>
-                        <dd style="grid-column: span 2; color: #6B7280;">Rp. 0</dd>
-                    </dl>
-                    <dl style="margin: 0.25rem 0; border-bottom: 1px solid #E5E7EB;"></dl>
-                    <dl style="display: grid; grid-template-columns: repeat(5, 1fr); gap-left: 0.75rem;">
-                        <dt style="grid-column: span 3; font-weight: 600; color: #1F2937;">Total Pembayaran</dt>
-                        <dd id="total-pembayaran-dp" style="grid-column: span 2; color: #6B7280;">Rp 0</dd>
-                    </dl>
-                </div>
-            </div>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 1rem;">
-            <div style="grid-column: span 2; font-size: 0.875rem; border: 1px solid #E5E7EB; padding: 0.75rem;">
-                <div style="border-bottom: 1px solid #E5E7EB; font-weight: 600;">Ketentuan Garansi</div>
-                <div>
-                    <p style="font-size: 0.75rem; color: #6B7280;">- Garansi hanya termasuk bagian yang direpair / direplace</p>
-                    <p style="font-size: 0.75rem; color: #6B7280;">- Garansi tidak berlaku jika human error, overheat, overvoltage, overclocking</p>
-                    <p style="font-size: 0.75rem; color: #6B7280;">- Garansi tidak berlaku jika segel rusak</p>
-                    <p style="font-size: 0.75rem; color: #6B7280;">- Garansi berlaku 1 bulan setelah barang diterima</p>
-                </div>
-            </div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); margin-top: 1rem; text-align: center;">
-            <div>
-                <h3 style="font-size: 0.875rem; font-weight: 600; margin-bottom: 3rem;">Penerima</h3>
-                <p style="font-size: 0.75rem;">( {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }} )</p>
-            </div>
-            <div>
-                <h3 style="font-size: 0.875rem; font-weight: 600; margin-bottom: 3rem;">Hormat Kami</h3>
-                <p style="font-size: 0.75rem;">( {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} )</p>
-            </div>
-        </div>        
+        <table style="width: 100%; color: black; font-size: 8px; margin-top: 14px; border-collapse: collapse;">
+            <tr>
+                <td style="width: 50%; vertical-align: middle; text-align: center; padding-right: 8px;">
+                    <h3 style="font-weight: 600; margin-bottom: 2rem;">Penerima</h3>
+                    <p style="color: gray;">( {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }} )</p>
+                </td>
+                <td style="width: 50%; vertical-align: middle; text-align: center;">
+                    <h3 style="font-weight: 600; margin-bottom: 2rem;">Hormat Kami</h3>
+                    <p style="color: gray;">( {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} )</p>
+                </td>
+            </tr>
+        </table>        
     </div>      
 </body>
 </html>

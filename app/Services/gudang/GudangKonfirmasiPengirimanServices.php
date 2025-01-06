@@ -2,6 +2,7 @@
 
 namespace App\Services\gudang;
 
+use App\Models\gudang\GudangProdukIdItem;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\repair\repository\RepairEstimasiRepository;
@@ -15,7 +16,8 @@ class GudangKonfirmasiPengirimanServices
         private UmumRepository $umum,
         private GudangTransactionRepository $transaction,
         private RepairCaseRepository $repairCase,
-        private RepairEstimasiRepository $repairEstimasi
+        private RepairEstimasiRepository $repairEstimasi,
+        private GudangProdukIdItem $produkIdITem,
     ){}
 
     public function index()
@@ -61,19 +63,31 @@ class GudangKonfirmasiPengirimanServices
             $barcodeScan = $request->input('scan_barcode');
 
             foreach ($idEstimasiPart as $index => $estimasi) {
-                if ($barcodeScan[$index] != '') {
+                if (!empty($barcodeScan[$index])) {
+                    $identity = explode('*', $barcodeScan[$index]);
+                    $sku = trim($identity[0]);
+                    $idItem = trim($identity[1]);
+
                     $dataEstimasiPart = [
-                        'id_item' => $barcodeScan[$index],
+                        'id_item' => $idItem,
                         'tanggal_dikirim' => $timeStamp
                     ];
-                    $this->repairEstimasi->updateEstimasiPart($dataEstimasiPart, $estimasi);
+
+                    $matchedProduct = $this->produkIdITem->where('sku_lama', 'LIKE', "%$sku%")->first();
+
+                    if ($matchedProduct) {
+                        $matchedProduct->update(['status_inventory' => 'Piutang']);
+                        $this->repairEstimasi->updateEstimasiPart($dataEstimasiPart, $estimasi);
+                    } else {
+                        return ['status' => 'error', 'message' => "SKU $sku tidak ditemukan."];
+                    }
                 }
             }
 
             $this->transaction->commitTransaction();
             $this->repairCase->commitTransaction();
 
-            return ['status' => 'success', 'message' => 'Sparepart berhasil di kirim.'];
+            return ['status' => 'success', 'message' => 'Sparepart berhasil dikirim.'];
 
         } catch (Exception $e) {
             $this->transaction->rollbackTransaction();
@@ -81,4 +95,5 @@ class GudangKonfirmasiPengirimanServices
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+
 }

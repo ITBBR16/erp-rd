@@ -52,9 +52,9 @@ class GudangAddNewSparepartServices
             $this->transaction->beginTransaction();
 
             $timestamp = now();
-            $dataSparepart = [];
+            $insertedIds = []; // Untuk menyimpan ID yang di-insert
             foreach ($request->input('type_part') as $index => $type) {
-                $dataSparepart[] = [
+                $data = [
                     'produk_type_id' => $type,
                     'produk_part_model_id' => $request->input('model_part')[$index],
                     'produk_jenis_id' => $request->input('jenis_produk')[$index],
@@ -67,14 +67,16 @@ class GudangAddNewSparepartServices
                     'created_at' => $timestamp,
                     'updated_at' => $timestamp,
                 ];
+
+                // Insert data dan ambil ID
+                $sparepart = $this->sparepart->createNewSparepart($data);
+                $insertedIds[] = $sparepart->id;
             }
 
-            $insertedIds = $this->sparepart->insertSparepart($dataSparepart);
-
             $dataProduk = [];
-            foreach ($insertedIds as $id) {
+            foreach ($insertedIds as $idPart) {
                 $dataProduk[] = [
-                    'produk_sparepart_id' => $id,
+                    'produk_sparepart_id' => $idPart,
                     'status' => 'Not Ready',
                     'created_at' => $timestamp,
                     'updated_at' => $timestamp,
@@ -84,12 +86,12 @@ class GudangAddNewSparepartServices
             $this->produkGudang->insertProduk($dataProduk);
             $this->transaction->commitTransaction();
 
-            return response()->json(['status' => 'success', 'message' => 'Berhasil menambahkan sparepart baru.']);
+            return ['status' => 'success', 'message' => 'Berhasil menambahkan sparepart baru.'];
 
         } catch (Exception $e) {
             $this->transaction->rollbackTransaction();
             Log::error('Error creating sparepart', ['error' => $e->getMessage()]);
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
 

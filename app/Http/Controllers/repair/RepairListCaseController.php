@@ -42,9 +42,15 @@ class RepairListCaseController extends Controller
         return back()->with($resultCase['status'], $resultCase['message']);
     }
 
-    public function reviewPdfTandaTerima($id)
+    public function reviewPdfInvoiceLunas($id)
     {
         $pdf = $this->repairCaseService->reviewPdfLunas($id);
+        return $pdf->stream();
+    }
+
+    public function reviewPdfTandaTerima($id)
+    {
+        $pdf = $this->repairCaseService->reviewPdfTandaTerima($id);
         return $pdf->stream();
     }
 
