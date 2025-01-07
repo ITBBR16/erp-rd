@@ -37,75 +37,77 @@
     </div>
 
     <div class="relative">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Tanggal Konfirmasi
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Customer
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Jenis Drone
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($repairCase as $case)
-                    @if ($case->estimasi && $case->estimasi->estimasiPart->contains('tanggal_dikirim', ''))
-                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
-                            <td class="px-6 py-2">
-                                {{ \Carbon\Carbon::parse($case->estimasi->estimasiPart->first()->tanggal_konfirmasi)->format('d M Y') }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->customer->id }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ $case->jenisProduk->jenis_produk }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ ($case->estimasi->estimasiPart->contains(function ($part) {
-                                        return $part->tanggal_dikirim == null || $part->tanggal_dikirim == '';
-                                    })) ? 'Belum Dikirim' : '' 
-                                }}
-                            </td>
-                            <td class="px-6 py-2">
-                                <button id="dropdownKonfirmasiSparepart{{ $case->id }}" data-dropdown-toggle="dropdownKS{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">
-                                    Atur
-                                    <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Dropdown menu -->
-                        <div id="dropdownKS{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownKonfirmasiSparepart{{ $case->id }}">
-                                <li>
-                                    <button type="button" data-modal-target="detail-konfirmasi-{{ $case->id }}" data-modal-toggle="detail-konfirmasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base mr-3">visibility</i>
-                                        <span class="whitespace-nowrap">Detail</span>
+        <div class="overflow-y-auto max-h-[550px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Tanggal Konfirmasi
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nama Customer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Jenis Drone
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($repairCase as $case)
+                        @if ($case->estimasi && $case->estimasi->estimasiPart->contains('tanggal_dikirim', ''))
+                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
+                                <td class="px-6 py-2">
+                                    {{ \Carbon\Carbon::parse($case->estimasi->estimasiPart->first()->tanggal_konfirmasi)->format('d M Y') }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->customer->id }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->jenisProduk->jenis_produk }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ ($case->estimasi->estimasiPart->contains(function ($part) {
+                                            return $part->tanggal_dikirim == null || $part->tanggal_dikirim == '';
+                                        })) ? 'Belum Dikirim' : '' 
+                                    }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    <button id="dropdownKonfirmasiSparepart{{ $case->id }}" data-dropdown-toggle="dropdownKS{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">
+                                        Atur
+                                        <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                        </svg>
                                     </button>
-                                </li>
-                                <li>
-                                    <a href="{{ route('konfirmasi-pengiriman.edit', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-xl mr-3">build_circle</i>
-                                        <span class="whitespace-nowrap">Send Part</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
+                                </td>
+                            </tr>
+                            <!-- Dropdown menu -->
+                            <div id="dropdownKS{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownKonfirmasiSparepart{{ $case->id }}">
+                                    <li>
+                                        <button type="button" data-modal-target="detail-konfirmasi-{{ $case->id }}" data-modal-toggle="detail-konfirmasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base mr-3">visibility</i>
+                                            <span class="whitespace-nowrap">Detail</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('konfirmasi-pengiriman.edit', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-xl mr-3">build_circle</i>
+                                            <span class="whitespace-nowrap">Send Part</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         <div class="mt-4 ">
             {{-- {{ $dataCustomer->links() }} --}}
         </div>

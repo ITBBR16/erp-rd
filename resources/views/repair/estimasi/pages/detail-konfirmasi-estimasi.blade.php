@@ -66,7 +66,20 @@
             </div>
         </div>
         <div class="p-4 rounded-lg bg-white border border-gray-100 shadow-md dark:bg-gray-700 dark:border-gray-600">
-            <h3 class="text-lg font-semibold mb-4 text-black dark:text-white">Daftar Estimasi</h3>
+            <div class="border-b flex justify-between text-sm pb-2">
+                <div class="text-start">
+                    <h3 class="text-lg font-semibold mb-4 text-black dark:text-white">Daftar Estimasi</h3>
+                </div>
+                <div class="text-end flex items-center space-x-2">
+                    <h3>Total Biaya:</h3>
+                    @php
+                        $totalHargaCustomer = collect($case->estimasi->estimasiPart->all())
+                                            ->merge($case->estimasi->estimasiJrr->all())
+                                            ->sum('harga_customer');
+                    @endphp
+                    <span id="total-nominal-estimasi-biaya" class="font-bold text-red-500">Rp {{ number_format($totalHargaCustomer, 0, ',', '.') }}</span>
+                </div>
+            </div>
             <div class="relative overflow-y-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
