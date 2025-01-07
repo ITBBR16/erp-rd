@@ -1,4 +1,4 @@
-@foreach ($groupedItems as $items)
+@foreach ($listQcIdItem as $items)
     @php
         $qc = $items->first();
         $quantityCount = $items->count();

@@ -158,8 +158,14 @@
             <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600">
                 <div class="grid grid-cols-3 gap-5">
                     <div class="relative col-span-2 overflow-x-auto">
-                        <div class="border-b">
-                            <h3 class="font-semibold text-sm pb-2">Input Estimasi</h3>
+                        <div class="border-b flex justify-between text-sm pb-2">
+                            <div class="text-start">
+                                <h3 class="font-semibold">Input Estimasi</h3>
+                            </div>
+                            <div class="text-end flex items-center space-x-2">
+                                <h3>Total Biaya:</h3>
+                                <span id="total-nominal-estimasi-biaya" class="font-bold text-red-500">Rp 0</span>
+                            </div>
                         </div>
                         <table class="w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-[10px] text-gray-900 border-b-2 uppercase dark:text-white">

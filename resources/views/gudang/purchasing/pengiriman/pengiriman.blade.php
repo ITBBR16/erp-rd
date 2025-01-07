@@ -88,7 +88,7 @@
                                     <span class="whitespace-nowrap">Detail</span>
                                 </button>
                             </li>
-                            @if ($pengiriman->status == 'Process Shipping')
+                            @if ($pengiriman->status == 'Menunggu Resi')
                                 <li>
                                     <button type="button" data-modal-target="create-resi-{{ $pengiriman->id }}" data-modal-toggle="create-resi-{{ $pengiriman->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">receipt_long</span>

@@ -18,4 +18,9 @@ class GudangRequestPembayaran extends Model
         return $this->belongsTo(GudangBelanja::class);
     }
 
+    public function metodePembayaran()
+    {
+        return $this->belongsTo(GudangMetodePembayaran::class, 'gudang_metode_pembayaran_id');
+    }
+
 }

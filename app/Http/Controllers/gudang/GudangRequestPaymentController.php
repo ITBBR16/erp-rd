@@ -22,10 +22,6 @@ class GudangRequestPaymentController extends Controller
     {
         $resultReqPayment = $this->reqPaymentService->addNewRP($request);
 
-        if ($resultReqPayment['status'] == 'success') {
-            return back()->with('success', $resultReqPayment['message']);
-        } else {
-            return back()->with('error', $resultReqPayment['message']);
-        }
+        return back()->with($resultReqPayment['status'], $resultReqPayment['message']);
     }
 }

@@ -23,4 +23,9 @@ class GudangMetodePembayaran extends Model
     {
         return $this->belongsTo(AkuntanAkunBank::class, 'nama_bank_id');
     }
+
+    public function reqPembayaran()
+    {
+        return $this->hasMany(GudangRequestPembayaran::class);
+    }
 }

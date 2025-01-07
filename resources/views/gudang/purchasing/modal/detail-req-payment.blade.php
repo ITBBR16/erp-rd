@@ -23,19 +23,19 @@
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold mb-1">Media Transaksi</h3>
-                            <p class="text-gray-500 text-base">{{ $reqPayment->gudangBelanja->gudangMetodePembayaran->media_transaksi }}</p>
+                            <p class="text-gray-500 text-base">{{ $reqPayment->metodePembayaran->media_transaksi }}</p>
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold mb-1">Nama Akun</h3>
-                            <p class="text-gray-500 text-base">{{ $reqPayment->gudangBelanja->gudangMetodePembayaran->nama_akun }}</p>
+                            <p class="text-gray-500 text-base">{{ $reqPayment->metodePembayaran->nama_akun }}</p>
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold mb-1">Bank Pembayaran</h3>
-                            <p class="text-gray-500 text-base">{{ $reqPayment->gudangBelanja->gudangMetodePembayaran->namaBank->nama }}</p>
+                            <p class="text-gray-500 text-base">{{ $reqPayment->metodePembayaran->namaBank->nama }}</p>
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold mb-1">ID Akun</h3>
-                            <p class="text-gray-500 text-base">{{ $reqPayment->gudangBelanja->gudangMetodePembayaran->id_akun }}</p>
+                            <p class="text-gray-500 text-base">{{ $reqPayment->metodePembayaran->id_akun }}</p>
                         </div>
                     </div>
                     <div class="mt-4 space-y-2">

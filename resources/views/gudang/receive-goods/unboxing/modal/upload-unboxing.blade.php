@@ -26,11 +26,11 @@
                             <div class="grid gap-6 mb-6 md:grid-cols-2">
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">Nama Supplier :</p>
-                                    <h3 class="text-sm font-semibold dark:text-white">{{ $unboxing->gudangBelanja->gudangSupplier->nama }}</h3>
+                                    <h3 class="text-sm font-semibold text-black dark:text-white">{{ $unboxing->gudangBelanja->gudangSupplier->nama }}</h3>
                                 </div>
                                 <div>
                                     <p class="text-xs mb-2 text-gray-700 dark:text-gray-300">No Resi :</p>
-                                    <h3 class="text-sm font-semibold dark:text-white">{{ $unboxing->gudangPengiriman->no_resi }}</h3>
+                                    <h3 class="text-sm font-semibold text-black dark:text-white">{{ $unboxing->gudangPengiriman->no_resi }}</h3>
                                 </div>
                             </div>
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File Unboxing :</label>
