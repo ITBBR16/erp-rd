@@ -61,7 +61,7 @@ class CustomerService
             $dataCustomer = $this->customerRepository->createCustomer($dataInput);
             $this->customerRepository->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil membuat data customer baru.'];
-
+            
             // $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
             // $response = Http::post($appScriptUrl, [
             //     'first_name' => $request->input('first_name'),
@@ -69,7 +69,7 @@ class CustomerService
             //     'email' => $request->input('email'),
             //     'no_telpon' => $request->input('no_telpon'),
             // ]);
-
+            
             // $payloadContact = json_decode($response->body(), true);
             // $statusContact = $payloadContact['status'];
             

@@ -85,7 +85,22 @@ $(document).ready(function () {
     $(document).on('change', '.nominal-produk-repair', function () {
         let formId = $(this).data("id");
         var nominalProduk = parseFloat($('#nominal-produk-repair-' + formId).val().replace(/\./g, ''));
-        var nominalAsuransi = (nominalProduk * 4) / 1000;
+        var nominalAsuransi
+
+        if (nominalProduk >= 20000001) {
+            nominalAsuransi = nominalProduk * 0.0027;
+        } else if (nominalProduk >= 10000001) {
+            nominalAsuransi = 38000;
+        } else if (nominalProduk >= 5000001) {
+            nominalAsuransi = 19000;
+        } else if (nominalProduk >= 3000001) {
+            nominalAsuransi = 8550;
+        } else if (nominalProduk >= 1000001) {
+            nominalAsuransi = 4750;
+        } else if (nominalProduk <= 1000000) {
+            nominalAsuransi = 950
+        }
+
 
         $('#nominal-asuransi-repair-' + formId).val(formatAngka(nominalAsuransi));
     });

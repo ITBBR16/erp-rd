@@ -21,7 +21,7 @@
                             <div class="grid grid-cols-2 gap-x-4 relative">
                                 <div class="relative px-4 py-4 rounded-md shadow-lg border border-gray-200 bg-white dark:bg-gray-700 dark:border-gray-600">
                                     <div class="pb-2 border-b flex justify-between items-center">
-                                        <h2 class="text-base font-semibold mb-4 dark:text-white">Data Customer</h2>
+                                        <h2 class="text-base font-semibold mb-4 text-black dark:text-white">Data Customer</h2>
                                         <label class="inline-flex items-center cursor-pointer">
                                             <input type="checkbox" name="checkbox_customer_kasir" id="checkbox-ongkir-kasir-repair-{{ $case->id }}" data-id="{{ $case->id }}" class="checkbox-ongkir-kasir-repair sr-only peer">
                                             <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-500"></div>
@@ -179,7 +179,7 @@
                                     </div>
                                 </div>
                                 <div class="relative space-y-4 px-4 py-4 rounded-md shadow-lg border bg-white dark:bg-gray-700">
-                                    <h2 class="text-base font-semibold mb-4 dark:text-white pb-2 border-b">Data Ekspedisi</h2>
+                                    <h2 class="text-base font-semibold mb-4 text-black dark:text-white pb-2 border-b">Data Ekspedisi</h2>
                                     <div class="grid grid-cols-3 items-center">
                                         <div class="col-span-1">
                                             Ekspedisi :

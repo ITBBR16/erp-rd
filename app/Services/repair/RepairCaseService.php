@@ -322,7 +322,7 @@ class RepairCaseService
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
         $caseService = $this->getDataDropdown();
-        $dataCase = $caseService['data_case'];
+        $dataCase = $caseService['data_case']->sortByDesc('updated_at');
 
         return view('repair.csr.konfirmasi-qc', [
             'title' => 'Konfirmasi QC',
