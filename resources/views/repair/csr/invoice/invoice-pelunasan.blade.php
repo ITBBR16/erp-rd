@@ -27,7 +27,7 @@
         </tr>
     </table>
     
-    <table style="width: 100%; font-size: 12px; margin-bottom: 16px; border-spacing: 0 8px">
+    <table style="width: 100%; font-size: 10px; margin-bottom: 16px; border-spacing: 0 8px">
         <tr>
             <td style="width: 50%; vertical-align: top;">
                 <p style="color: gray; margin: 0;">Nama Customer</p>
@@ -41,7 +41,7 @@
         <tr>
             <td style="width: 50%; vertical-align: top;">
                 <p style="color: gray; margin: 0;">Alamat</p>
-                <h3 style="font-weight: 600; margin: 0;">{{ $dataCase->customer->kota->name }}</h3>
+                <h3 style="font-weight: 600; margin: 0;">{{ $dataCase->customer->kota->name ?? "-" }}</h3>
             </td>
             <td style="width: 50%; vertical-align: top;">
                 <p style="color: gray; margin: 0;">Status Case</p>
@@ -134,7 +134,7 @@
         <tbody style="color: #4b5563;">
             @foreach ($dataCase->detailKelengkapan as $kelengkapan)
                 <tr style="border-top: 1px solid #e5e7eb;">
-                    <td style="padding: 8px;">{{ $kelengkapan->itemKelengkapan->kelengkapan }}</td>
+                    <td style="padding: 8px;">{{ ($kelengkapan->item_kelengkapan_id == null) ? $kelengkapan->nama_data_lama : $kelengkapan->itemKelengkapan->kelengkapan }}</td>
                     <td style="padding: 8px;">{{ $kelengkapan->quantity }}</td>
                     <td style="padding: 8px;">{{ $kelengkapan->serial_number }}</td>
                     <td style="padding: 8px;">{{ ($kelengkapan->keterangan) ? $kelengkapan->keterangan : '-' }}</td>
@@ -198,7 +198,7 @@
         </table>
     </div>
 
-    <div style="margin-top: 16px">
+    <div style="margin-top: 10px">
         <table style="width: 100%; padding-bottom: 8px; margin-bottom: 8px;">
             <tr>
                 <td style="text-align: center; vertical-align: top; width: 50%;">

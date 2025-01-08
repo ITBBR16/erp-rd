@@ -111,10 +111,10 @@
                         <div id="dropdownKQC{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="ddKQC{{ $case->id }}">
                                 <li>
-                                    <button type="button" data-modal-target="view-hasil-qc-{{ $case->id }}" data-modal-toggle="view-hasil-qc-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                    <a href="{{ route('detailKonfirmasiQC', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-xl mr-3">visibility</i>
                                         <span class="whitespace-nowrap">Detail</span>
-                                    </button>
+                                    </a>
                                 </li>
                                 <li>
                                     <button type="button" data-modal-target="send-whatsapp-{{ $case->id }}" data-modal-toggle="send-whatsapp-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
@@ -140,7 +140,6 @@
     </div>
 
     {{-- Modal --}}
-    @include('repair.csr.modal.detail-konf-qc')
     @include('repair.csr.modal.caution-sent-wa')
     @include('repair.csr.modal.caution-konf-qc')
 

@@ -23,6 +23,11 @@ class RepairKonfirmasiQCController extends Controller
         return back()->with($resultKonfQC['status'], $resultKonfQC['message']);
     }
 
+    public function detailKonfirmasiQC($encryptId)
+    {
+        return $this->caseService->peageDetailKQC($encryptId);
+    }
+
     public function sendKonfirmasiQC($id)
     {
         $resultSend = $this->caseService->sendKonfirmasiQC($id);

@@ -25,6 +25,17 @@ class RepairListCaseController extends Controller
         return $this->repairCaseService->editNewCase($encryptId);
     }
 
+    public function update(Request $request, $id)
+    {
+        $resultUpdate = $this->repairCaseService->updateCase($request, $id);
+        
+        if ($resultUpdate['status'] === 'success') {
+            return redirect()->route('case-list.index')->with($resultUpdate['status'], $resultUpdate['message']);
+        } else {
+            return back()->with($resultUpdate['status'], $resultUpdate['message']);
+        }
+    }
+
     public function detailListCase($encryptId)
     {
         return $this->repairCaseService->pageDetailListCase($encryptId);

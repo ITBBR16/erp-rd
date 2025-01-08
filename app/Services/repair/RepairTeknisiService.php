@@ -154,7 +154,7 @@ class RepairTeknisiService
         $user = auth()->user();
         $caseService = $this->repairCaseService->getDataDropdown();
         $divisiName = $this->umum->getDivisi($user);
-        $dataCase = $caseService['data_case'];
+        $dataCase = $caseService['data_case']->sortByDesc('created_at');
 
         return view('repair.teknisi.pengerjaan', [
             'title' => 'List Pengerjaan',

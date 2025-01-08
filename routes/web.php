@@ -267,7 +267,7 @@ Route::middleware('repair')->group(function () {
 
         Route::prefix('/csr')->group(function () {
             Route::group(['controller' => RepairListCaseController::class], function () {
-                Route::resource('/case-list', RepairListCaseController::class)->only(['index', 'edit', 'store']);
+                Route::resource('/case-list', RepairListCaseController::class)->only(['index', 'edit', 'update', 'store']);
                 Route::get('/detail-list-case/{id}', 'detailListCase')->name('detailListCase');
                 Route::post('/create-nc', 'createNC')->name('createNC');
                 Route::get('/getKelengkapan/{id}', 'getKelengkapan');
@@ -303,6 +303,7 @@ Route::middleware('repair')->group(function () {
 
             Route::group(['controller' => RepairKonfirmasiQCController::class], function () {
                 Route::resource('/konfirmasi-qc', RepairKonfirmasiQCController::class)->only(['index', 'update']);
+                Route::get('/detail-konfirmasi-qc/{id}', 'detailKonfirmasiQC')->name('detailKonfirmasiQC');
                 Route::post('/sendKonfQc/{id}', 'sendKonfirmasiQC')->name('sendKonfirmasiQC');
                 Route::get('/preview-qc/{id}', 'previewPdfQc');
             });

@@ -13,6 +13,7 @@ use App\Models\repair\RepairTransaksi;
 use App\Models\repair\RepairTransaksiPembayaran;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\repair\interface\RepairCaseInterface;
+use Exception;
 
 class RepairCaseRepository implements RepairCaseInterface
 {
@@ -67,6 +68,12 @@ class RepairCaseRepository implements RepairCaseInterface
         }
 
         throw new \Exception("Case not found.");
+    }
+
+    public function updateDetailKelengkapan($caseId, array $data)
+    {
+        $this->modelCase->find($caseId)->detailKelengkapan()->delete();
+        $this->modelCase->find($caseId)->detailKelengkapan()->createMany($data);
     }
 
     public function createDetailKelengkapan(array $data)

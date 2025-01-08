@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
 use App\Models\customer\CustomerInfoPerusahaan;
 use App\Repositories\umum\repository\ProdukRepository;
+use App\Repositories\repair\repository\RepairQCRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\logistik\repository\EkspedisiRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
@@ -26,8 +27,9 @@ class RepairCaseService
         private ProdukRepository $product,
         private RepairTimeJurnalRepository $repairTimeJurnal,
         private EkspedisiRepository $ekspedisi,
-        private RepairEstimasiRepository $estimasi)
-    {}
+        private RepairEstimasiRepository $estimasi,
+        private RepairQCRepository $repairQC,
+    ){}
 
     // Input New Case
     public function indexNewCase()
@@ -212,6 +214,58 @@ class RepairCaseService
         }
     }
 
+    public function updateCase(Request $request, $caseId)
+    {
+        $this->repairCase->beginTransaction();
+
+        try {
+            $fungsionalDroneId = $request->input('case_fungsional');
+            $jenisCaseId = $request->input('case_jenis');
+            $keluhan = $request->input('case_keluhan');
+            $kronologiKerusakan = $request->input('case_kronologi');
+            $penggunaanAfterCrash = $request->input('case_penggunaan');
+            $riwayatPengguna = $request->input('case_riwayat');
+
+            $dataInput = [
+                'jenis_fungsional_id' => $fungsionalDroneId,
+                'jenis_case_id' => $jenisCaseId,
+                'keluhan' => $keluhan,
+                'kronologi_kerusakan' => $kronologiKerusakan,
+                'penanganan_after_crash' => $penggunaanAfterCrash,
+                'riwayat_penggunaan' => $riwayatPengguna,
+            ];
+
+            $updatedCase = $this->repairCase->updateCase($caseId, $dataInput);
+
+            $dataKelengkapan = $request->input('case_kelengkapan', []);
+            $dataQty = $request->input('case_quantity', []);
+            $dataSN = $request->input('case_sn', []);
+            $dataKeterangan = $request->input('case_keterangan', []);
+
+            if (!empty($dataKelengkapan)) {
+                $dataToDetailKelengkapan = [];
+                foreach ($dataKelengkapan as $index => $kelengkapan) {
+                    $dataToDetailKelengkapan[] = [
+                        'case_id' => $caseId,
+                        'item_kelengkapan_id' => $kelengkapan,
+                        'quantity' => $dataQty[$index] ?? null,
+                        'serial_number' => $dataSN[$index] ?? null,
+                        'keterangan' => $dataKeterangan[$index] ?? null,
+                    ];
+                }
+
+                $this->repairCase->updateDetailKelengkapan($caseId, $dataToDetailKelengkapan);
+            }
+
+            $this->repairCase->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil memperbarui case.'];
+
+        } catch (Exception $e) {
+            $this->repairCase->rollBackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
     public function reviewPdfLunas($id)
     {
         $user = auth()->user();
@@ -279,9 +333,12 @@ class RepairCaseService
             $linkDrive = $dataCase->link_doc;
             $notelpon = $dataCase->customer->no_telpon;
 
-            $tanggalMasuk = Carbon::parse($dataCase->created_at)->isoFormat('D MMMM YYYY');
-            $namaReal = $dataCase->customer->first_name . " " . $dataCase->customer->last_name;
-            $pesan = "{$greeting} {$namaReal}\nBerikut adalah invoice tanda terima untuk transaksi pada tanggal {$tanggalMasuk}.";
+            $namaReal = $dataCase->customer->first_name . " " . $dataCase->customer->last_name . "-" . $dataCase->customer->id . "-" . $dataCase->id;
+            $pembukaan = "Drone sudah selesai pengerjaan dan lolos testfly ☺️";
+            $penjelasan = "Untuk performa terbang drone dan gimbalnya sudah aman, sudah kembali normal";
+            $pemberitahuanLink = "Hasil video test fly nya bisa cek disini ya kak";
+            $penutupan = "*Note: proses testfly menggunakan propeller dan battery milik Rumah Drone*";
+            $pesan = "*Hallo {$greeting} kak {$namaReal}*\n\n{$pembukaan}\n{$penjelasan}\n\n{$pemberitahuanLink}\n{$linkDrive}\n\n{$penutupan}";
 
             $dataView = [
                 'title' => 'Tanda Terima',
@@ -331,6 +388,28 @@ class RepairCaseService
             'dropdown' => '',
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
+        ]);
+    }
+
+    public function peageDetailKQC($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $dataCase = $this->repairCase->findCase($id);
+        $divisiName = $this->umum->getDivisi($user);
+        $dataQc = $this->repairQC->getAllData();
+        $kondisi = $dataQc['kondisi'];
+        $kategori = $dataQc['kategori'];
+
+        return view('repair.csr.page.detail-konfirmasi-qc', [
+            'title' => 'Detail Konfirmasi QC',
+            'active' => 'konf-qc',
+            'navActive' => 'csr',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'case' => $dataCase,
+            'kategoris' => $kategori,
+            'kondisis' => $kondisi,
         ]);
     }
 
@@ -577,10 +656,10 @@ class RepairCaseService
                 $tipePenerima = 'Customer';
                 $customerId = $request->input('customer_id');
                 $dataCustomer = [
-                    'provinsi' => $request->input('provinsi_customer'),
-                    'kota_kabupaten' => $request->input('kota_customer'),
-                    'kecamtan' => $request->input('kecamatan_customer'),
-                    'kelurahan' => $request->input('kelurahan_customer'),
+                    'provinsi_id' => $request->input('provinsi_customer'),
+                    'kota_kabupaten_id' => $request->input('kota_customer'),
+                    'kecamatan_id' => $request->input('kecamatan_customer'),
+                    'kelurahan_id' => $request->input('kelurahan_customer'),
                     'kedo_pos' => $request->input('kode_pos_customer'),
                     'nama_jalan' => $request->input('alamat_customer'),
                 ];

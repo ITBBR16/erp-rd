@@ -86,7 +86,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <button type="button" data-modal-target="konfirmasi-alamat-{{ $case->id }}" data-modal-toggle="konfirmasi-alamat-{{ $case->id }}" data-id="{{ $case->id }}" data-customer-id="{{ $case->customer->id }}" class="ongkir-kasir-repair flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <button type="button" data-modal-target="konfirmasi-alamat-{{ $case->id }}" data-modal-toggle="konfirmasi-alamat-{{ $case->id }}" data-id="{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                             <span class="material-symbols-outlined text-base mr-3">contact_mail</span>
                                             <span class="whitespace-nowrap">Konfirmasi Alamat</span>
                                         </button>

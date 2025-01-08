@@ -35,8 +35,9 @@
         </div>
     @endif
 
-    <form action="#" method="POST" autocomplete="off">
+    <form action="{{ route('case-list.update', $dataCase->id) }}" method="POST" autocomplete="off">
         @csrf
+        @method('PUT')
         <div class="grid grid-cols-2 gap-8 mt-4">
             {{-- Form Data Customer --}}
             <div>
@@ -48,7 +49,7 @@
                         <label for="case-customer" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Customer :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <select name="case_customer" id="case-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required readonly>
+                        <select name="case_customer" id="case-customer" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                             <option value="" hidden>Select Customer</option>
                             <option value="{{ $dataCase->customer->id }}" selected>{{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }} - {{ $dataCase->customer->id }}</option>
                         </select>
@@ -59,7 +60,7 @@
                         <label for="case-jenis-drone" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <select name="case_jenis_drone" id="case-jenis-drone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <select name="case_jenis_drone" id="case-jenis-drone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                             <option value="" hidden>Select Jenis Drone</option>
                             @foreach ($jenisDrone as $drone)
                                 @if ($dataCase->produk_jenis_id == $drone->id)

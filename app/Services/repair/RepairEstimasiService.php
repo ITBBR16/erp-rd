@@ -38,7 +38,7 @@ class RepairEstimasiService
         $user = auth()->user();
         $caseService = $this->repairCaseService->getDataDropdown();
         $divisiName = $this->umum->getDivisi($user);
-        $dataCase = $caseService['data_case'];
+        $dataCase = $caseService['data_case']->sortByDesc('created_at');
 
         return view('repair.estimasi.estimasi-biaya', [
             'title' => 'List Estimasi Biaya',
@@ -94,7 +94,7 @@ class RepairEstimasiService
         $caseService = $this->repairCaseService->getDataDropdown();
         $divisiName = $this->umum->getDivisi($user);
         $greeting = $this->showTimeForChat();
-        $dataCase = $caseService['data_case']->sortByDesc('id');
+        $dataCase = $caseService['data_case']->sortByDesc('created_at');
 
         return view('repair.estimasi.konfirmasi', [
             'title' => 'List Konfirmasi Estimasi',

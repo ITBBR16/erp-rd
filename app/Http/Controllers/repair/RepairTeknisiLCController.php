@@ -20,7 +20,7 @@ class RepairTeknisiLCController extends Controller
         $user = auth()->user();
         $caseService = $this->repairCaseService->getDataDropdown();
         $divisiName = $this->umum->getDivisi($user);
-        $dataCase = $caseService['data_case'];
+        $dataCase = $caseService['data_case']->sortByDesc('created_at');
 
         return view('repair.teknisi.case-list', [
             'title' => 'Case List',

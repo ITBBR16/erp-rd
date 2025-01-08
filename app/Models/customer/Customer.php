@@ -35,7 +35,7 @@ class Customer extends Model
 
     public function kecamatan()
     {
-        return $this->belongsTo(Kecamatan::class, 'kecataman_id');
+        return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
 
     public function kelurahan()
