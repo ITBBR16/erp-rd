@@ -66,7 +66,11 @@
                                 {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
                             </p>
                             <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                {{ $divisi->nama }}
+                                @if ($divisi == 'Super Admin')
+                                    Super Admin
+                                @else
+                                    Divisi {{ $divisi->nama }}
+                                @endif
                             </p>
                         </div>
                         <ul class="py-1" role="none">

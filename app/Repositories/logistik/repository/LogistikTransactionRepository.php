@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Repositories\gudang\repository;
+namespace App\Repositories\logistik\repository;
 
-use App\Repositories\gudang\interface\GudangTransactionInterface;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\logistik\interface\LogistikTransactionInterface;
 
-class GudangTransactionRepository implements GudangTransactionInterface
+class LogistikTransactionRepository implements LogistikTransactionInterface
 {
     protected $connection;
 
     public function __construct()
     {
-        $this->connection = DB::connection('rumahdrone_gudang');
+        $this->connection = DB::connection('rumahdrone_ekspedisi');
     }
 
     public function beginTransaction()

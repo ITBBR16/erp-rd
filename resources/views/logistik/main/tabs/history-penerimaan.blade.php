@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    <div class="relative overflow-x-auto">
+    <div class="relative">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
@@ -42,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($historyPenerimaan as $history)
+                {{-- @foreach ($historyPenerimaan as $history)
                     @if ($history->pengiriman->status == 'Diterima' || $history->pengiriman->status == 'InRD')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
@@ -72,14 +72,14 @@
                             </td>
                         </tr>
                     @endif
-                @endforeach
+                @endforeach --}}
             </tbody>
         </table>
         <div class="mt-4 ">
             {{-- {{ $suppliers->links() }} --}}
         </div>
     </div>
-    @if (!$dataIncoming->contains('status', 'Diterima') && !$dataIncoming->contains('status', 'InRD'))
+    {{-- @if (!$dataIncoming->contains('status', 'Diterima') && !$dataIncoming->contains('status', 'InRD'))
         <div class="p-4 mt-4">
             <div class="flex justify-center">
                 <figure class="max-w-lg">
@@ -88,5 +88,5 @@
                 </figure>
             </div>
         </div>
-    @endif
+    @endif --}}
 </div>

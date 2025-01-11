@@ -10,7 +10,7 @@
                 </button>
                 <a href="/logistik" class="flex ml-2 md:mr-24">
                     <img src="/img/box.png" class="h-8 mr-3" alt="FlowBite Logo" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Logistik RD</span>
+                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-black dark:text-white">Logistik RD</span>
                 </a>
             </div>
             <div class="flex items-center">

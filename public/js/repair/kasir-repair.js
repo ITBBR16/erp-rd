@@ -12,9 +12,9 @@ $(document).ready(function () {
         fetch(`/repair/csr/getDataCustomer/${customerId}`)
             .then(response => response.json())
             .then(data => {
-                let kotaId = data.kota_kabupaten;
-                let kecamatanId = data.kecamatan;
-                let kelurahanId = data.kelurahan;
+                let kotaId = data.kota_kabupaten_id;
+                let kecamatanId = data.kecamatan_id;
+                let kelurahanId = data.kelurahan_id;
 
                 getDataKota(idModal, kotaId);
 

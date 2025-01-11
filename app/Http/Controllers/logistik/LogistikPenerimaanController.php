@@ -13,24 +13,19 @@ use App\Models\ekspedisi\PengirimanEkspedisi;
 
 class LogistikPenerimaanController extends Controller
 {
-    public function __construct(private UmumRepository $umumRepo){}
+    public function __construct(
+        private UmumRepository $umum
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->umumRepo->getDivisi($user);
-        $dataIncoming = PengirimanEkspedisi::with( 'order.supplier', 'pelayanan.ekspedisi')
-                        ->where('status', 'Incoming')
-                        ->orWhere('status', 'InRD')
-                        ->get();
-        $historyPenerimaan = PenerimaanProduk::with('pengiriman.order.supplier', 'pengiriman.pelayanan.ekspedisi')->get();
+        $divisiName = $this->umum->getDivisi($user);
 
         return view('logistik.main.index', [
             'title' => 'Penerimaan Barang',
             'active' => 'penerimaan',
             'divisi' => $divisiName,
-            'dataIncoming' => $dataIncoming,
-            'historyPenerimaan' => $historyPenerimaan,
         ]);
     }
 
@@ -80,6 +75,11 @@ class LogistikPenerimaanController extends Controller
             $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function storeFromFormGoogleRepair(Request $request)
+    {
+        
     }
 
 }

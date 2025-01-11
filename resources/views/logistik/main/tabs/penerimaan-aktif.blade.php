@@ -42,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($dataIncoming as $data)
+                {{-- @foreach ($dataIncoming as $data)
                     @if ($data->status == 'Incoming')
                         <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
@@ -75,14 +75,14 @@
                             </td>
                         </tr>
                     @endif
-                @endforeach
+                @endforeach --}}
             </tbody>
         </table>
         <div class="mt-4 ">
             {{-- {{ $suppliers->links() }} --}}
         </div>
     </div>
-    @if (!$dataIncoming->contains('status', 'Incoming'))
+    {{-- @if (!$dataIncoming->contains('status', 'Incoming'))
         <div class="p-4 mt-4">
             <div class="flex datas-center justify-center">
                 <figure class="max-w-lg">
@@ -91,8 +91,8 @@
                 </figure>
             </div>
         </div>
-    @endif
+    @endif --}}
 
     {{-- Modal --}}
-    @include('logistik.main.modal.penerimaan-modal')
+    {{-- @include('logistik.main.modal.penerimaan-modal') --}}
 </div>
