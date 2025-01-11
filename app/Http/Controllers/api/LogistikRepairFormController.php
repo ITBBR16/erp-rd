@@ -7,6 +7,7 @@ use App\Repositories\logistik\repository\LogistikAPIFormRepairRepository;
 use App\Repositories\logistik\repository\LogistikTransactionRepository;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LogistikRepairFormController extends Controller
 {
@@ -26,7 +27,7 @@ class LogistikRepairFormController extends Controller
                 'email_address' => $request->input('email_address'),
                 'provinsi' => $request->input('provinsi'),
                 'kabupaten_kota' => $request->input('kabupaten_kota'),
-                'kelurahan' => $request->input('kelurahan'),
+                'kecamatan' => $request->input('kecamatan'),
                 'kelurahan' => $request->input('kelurahan'),
                 'kode_pos' => $request->input('kode_pos'),
                 'alamat' => $request->input('alamat'),
@@ -45,6 +46,7 @@ class LogistikRepairFormController extends Controller
 
         } catch (Exception $e) {
             $this->logisticTransaction->rollbackTransaction();
+            Log::error('Error in storeFromFormGoogleRepair: ' . $e->getMessage());
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
