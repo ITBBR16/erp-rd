@@ -14,7 +14,8 @@ use App\Models\ekspedisi\PengirimanEkspedisi;
 class LogistikPenerimaanController extends Controller
 {
     public function __construct(
-        private UmumRepository $umum
+        private UmumRepository $umum,
+        
     ){}
 
     public function index()
@@ -75,11 +76,6 @@ class LogistikPenerimaanController extends Controller
             $connectionEkspedisi->rollBack();
             return back()->with('error', $e->getMessage());
         }
-    }
-
-    public function storeFromFormGoogleRepair(Request $request)
-    {
-        
     }
 
 }
