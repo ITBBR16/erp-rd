@@ -14,15 +14,19 @@ use App\Models\ekspedisi\ValidasiProduk;
 use App\Models\kios\KiosKomplainSupplier;
 use App\Repositories\umum\UmumRepository;
 use App\Models\ekspedisi\PengirimanEkspedisi;
+use App\Repositories\logistik\repository\LogistikAPIFormRepairRepository;
 
 class LogistikValidasiProdukController extends Controller
 {
-    public function __construct(private UmumRepository $umumRepo){}
+    public function __construct(
+        private UmumRepository $umum,
+        private LogistikAPIFormRepairRepository $form
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->umumRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $dataOrderList = PengirimanEkspedisi::with('order.orderLists')
                         ->where('status', 'Diterima')
                         ->get();
@@ -149,6 +153,12 @@ class LogistikValidasiProdukController extends Controller
     {
         $qtyOrderList = KiosOrderList::where('id', $orderListId)->get();
         return response()->json($qtyOrderList);
+    }
+
+    public function testFormId($register)
+    {
+        $data = $this->form->findRegister($register);
+        return response()->json($data);
     }
 
 }

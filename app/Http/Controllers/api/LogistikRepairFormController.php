@@ -51,4 +51,28 @@ class LogistikRepairFormController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+    public function updateFormForResi(Request $request)
+    {
+        try {
+            $this->logisticTransaction->beginTransaction();
+
+            $no_pendaftaran = $request->input('no_pendaftaran');
+
+            $dataUpdate = [
+                'ekspedisi' => $request->input('ekspedisi'),
+                'nomor_resi' => $request->input('no_resi'),
+                'tanggal_dikirim' => $request->input('timestamp'),
+            ];
+
+            $this->apiFormRepository->updateDataFormRepair($no_pendaftaran, $dataUpdate);
+            $this->logisticTransaction->commitTransaction();
+            return response()->json(['status' => 'success', 'message' => 'Berhasil update data.']);
+
+        } catch (Exception $e) {
+            $this->logisticTransaction->rollbackTransaction();
+            Log::error('Error updateFormForResi: ' . $e->getMessage());
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 }

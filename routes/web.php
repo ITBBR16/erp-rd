@@ -231,6 +231,7 @@ Route::middleware('logistik')->group(function () {
         Route::resource('/validasi', LogistikValidasiProdukController::class)->only(['index', 'store']);
         Route::get('/getOrderList/{orderId}', [LogistikValidasiProdukController::class, 'getOrderList']);
         Route::get('/getQtyOrderList/{orderListId}', [LogistikValidasiProdukController::class, 'getQtyOrderList']);
+        Route::get('/testFormId/{orderListId}', [LogistikValidasiProdukController::class, 'testFormId']);
     });
 });
 

@@ -6,4 +6,5 @@ interface LogistikAPIFormRepairInterface
 {
     public function createDataFormRepair(array $data);
     public function updateDataFormRepair($id, array $data);
+    public function findRegister($id);
 }
