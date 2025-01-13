@@ -22,6 +22,7 @@ class LogistikRepairFormController extends Controller
             $this->logisticTransaction->beginTransaction();
 
             $dataPayload = [
+                'no_register' => $request->input('no_register'),
                 'nama_lengkap' => $request->input('nama_lengkap'),
                 'no_wa' => $request->input('no_wa'),
                 'email_address' => $request->input('email_address'),
