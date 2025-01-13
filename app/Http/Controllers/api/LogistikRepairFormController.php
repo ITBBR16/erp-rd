@@ -38,7 +38,7 @@ class LogistikRepairFormController extends Controller
                 'kronologi_kerusakan' => $request->input('kronologi_kerusakan'),
                 'penanganan_after_creash' => $request->input('penanganan_after_creash'),
                 'riwayat_penggunaan' => $request->input('riwayat_penggunaan'),
-                'documen_customer' => $request->input('documen_customer'),
+                'dokumen_customer' => $request->input('dokumen_customer'),
             ];
 
             $this->apiFormRepository->createDataFormRepair($dataPayload);
@@ -63,6 +63,7 @@ class LogistikRepairFormController extends Controller
                 'ekspedisi' => $request->input('ekspedisi'),
                 'nomor_resi' => $request->input('no_resi'),
                 'tanggal_dikirim' => $request->input('timestamp'),
+                'status' => 'On Shipping'
             ];
 
             $this->apiFormRepository->updateDataFormRepair($no_pendaftaran, $dataUpdate);
