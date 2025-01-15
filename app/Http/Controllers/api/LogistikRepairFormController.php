@@ -36,9 +36,10 @@ class LogistikRepairFormController extends Controller
                 'fungsional_produk' => $request->input('fungsional_produk'),
                 'keluhan' => $request->input('keluhan'),
                 'kronologi_kerusakan' => $request->input('kronologi_kerusakan'),
-                'penanganan_after_creash' => $request->input('penanganan_after_creash'),
+                'penanganan_after_crash' => $request->input('penanganan_after_crash'),
                 'riwayat_penggunaan' => $request->input('riwayat_penggunaan'),
                 'dokumen_customer' => $request->input('dokumen_customer'),
+                'status' => 'Belum Dikirim',
             ];
 
             $this->apiFormRepository->createDataFormRepair($dataPayload);

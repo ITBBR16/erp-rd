@@ -8,9 +8,15 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('penerimaan.index') }}" class="{{ ($active === 'penerimaan') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a href="{{ route('penerimaan-logistik.index') }}" class="{{ ($active === 'penerimaan') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <span class="material-symbols-outlined w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">box</span>
                     <span class="ml-3">Penerimaan</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('sent-to-rapair.index') }}" class="{{ ($active === 'sent-repair') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <span class="material-symbols-outlined w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">forward</span>
+                    <span class="ml-3">Sent to Repair</span>
                 </a>
             </li>
         </ul>

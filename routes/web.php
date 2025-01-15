@@ -70,6 +70,7 @@ use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
+use App\Http\Controllers\logistik\LogistikSentToRepairController;
 use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
@@ -227,7 +228,10 @@ Route::middleware('kios')->group(function () {
 Route::middleware('logistik')->group(function () {
     Route::prefix('/logistik')->group(function () {
         Route::get('/', [LogistikDashboardController::class, 'index']);
-        Route::resource('/penerimaan', LogistikPenerimaanController::class)->only(['index', 'update']);
+        Route::resource('/penerimaan-logistik', LogistikPenerimaanController::class)->only(['index', 'update']);
+        Route::resource('/sent-to-rapair', LogistikSentToRepairController::class)->only(['index', 'update', 'edit']);
+        Route::get('/logistik-get-kelengkapan/{id}', [LogistikSentToRepairController::class, 'getKelengkapan']);
+        // Route lama
         Route::resource('/validasi', LogistikValidasiProdukController::class)->only(['index', 'store']);
         Route::get('/getOrderList/{orderId}', [LogistikValidasiProdukController::class, 'getOrderList']);
         Route::get('/getQtyOrderList/{orderListId}', [LogistikValidasiProdukController::class, 'getQtyOrderList']);

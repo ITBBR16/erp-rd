@@ -4,7 +4,7 @@
     <div class="mb-4 border-b border-gray-200">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="penerimaanTab" data-tabs-toggle="#penerimaanTabContent" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="penerimaanAktif-tab" data-tabs-target="#penerimaanAktif" type="button" role="tab" aria-controls="penerimaanAktif" aria-selected="false">PENERIMAAN AKTIF</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="penerimaanAktif-tab" data-tabs-target="#penerimaanAktif" type="button" role="tab" aria-controls="penerimaanAktif" aria-selected="false">PENGIRIMAN AKTIF</button>
             </li>
             <li class="mr-2" role="presentation">
                 <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="history-penerimaan-tab" data-tabs-target="#history-penerimaan" type="button" role="tab" aria-controls="history-penerimaan" aria-selected="false">HISTORY PENERIMAAN</button>

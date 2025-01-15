@@ -14,21 +14,24 @@
             </div>
         </div>
     </div>
-    <div class="relative overflow-x-auto">
+    <div class="relative">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Divisi
+                        Nama Customer
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        No Resi
+                        No Register
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Jenis Produk
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Ekspedisi
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Jenis Layanan
+                        No Resi
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Tanggal Dikirim
@@ -42,47 +45,69 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- @foreach ($dataIncoming as $data)
-                    @if ($data->status == 'Incoming')
-                        <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                @foreach ($dataFormRepair as $data)
+                    @if ($data->status == 'Belum Dikirim' || $data->status == 'On Shipping')
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{ $data->divisi->nama }}
+                                {{ $data->nama_lengkap }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $data->no_resi }}
+                                {{ $data->no_register }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $data->pelayanan->ekspedisi->ekspedisi }}
+                                {{ $data->tipe_produk }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $data->pelayanan->nama_layanan }}
+                                {{ $data->ekspedisi ?? '' }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $data->tanggal_kirim }}
+                                {{ $data->nomor_resi ?? '' }}
+                            </td>
+                            <td class="px-6 py-2">
+                                @php
+                                    $tgl = $data->tanggal_dikirim
+                                @endphp
+                                @if (!$tgl == '')
+                                    {{ \Carbon\Carbon::parse($data->tanggal_dikirim)->isoFormat('D MMMM YYYY') }}
+                                @endif 
                             </td>
                             <td class="px-6 py-2">
                                 <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $data->status }}</span>
                             </td>
                             <td class="px-6 py-2">
-                                <div class="flex flex-wrap">
-                                    <button type="button" data-modal-target="view-order-new" data-modal-toggle="view-order-new{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">visibility</i>
-                                    </button>
-                                    <button type="button" data-modal-target="modal-penerimaan" data-modal-toggle="modal-penerimaan{{ $data->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base">receipt_long</i>
-                                    </button>
-                                </div>
+                                <button id="dropdownPengirimanAktif{{ $data->id }}" data-dropdown-toggle="dropdownPA{{ $data->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
+                                </button>
                             </td>
                         </tr>
+                        <div id="dropdownPA{{ $data->id }}" class="z-10 hidden bg-white rounded-lg shadow w-50 dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownPengirimanAktif{{ $data->id }}">
+                                <li>
+                                    <a href="#" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-xl mr-3">visibility</i>
+                                        <span class="whitespace-nowrap">Detail</span>
+                                    </a>
+                                </li>
+                                @if ($data->status == 'On Shipping')
+                                    <li>
+                                        <button type="button" data-modal-target="konf-penerimaan-{{ $data->id }}" data-modal-toggle="konf-penerimaan-{{ $data->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">archive</span>
+                                            <span class="whitespace-nowrap">Produk Diterima</span>
+                                        </button>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
                     @endif
-                @endforeach --}}
+                @endforeach
             </tbody>
         </table>
         <div class="mt-4 ">
             {{-- {{ $suppliers->links() }} --}}
         </div>
     </div>
-    {{-- @if (!$dataIncoming->contains('status', 'Incoming'))
+    @if (!$dataFormRepair->contains('status', 'Belum Dikirim') || !$dataFormRepair->contains('status', 'On Shipping'))
         <div class="p-4 mt-4">
             <div class="flex datas-center justify-center">
                 <figure class="max-w-lg">
@@ -91,8 +116,8 @@
                 </figure>
             </div>
         </div>
-    @endif --}}
+    @endif
 
     {{-- Modal --}}
-    {{-- @include('logistik.main.modal.penerimaan-modal') --}}
+    @include('logistik.main.modal.penerimaan-modal')
 </div>

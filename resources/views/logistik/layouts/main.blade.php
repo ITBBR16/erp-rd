@@ -7,7 +7,7 @@
     <link rel="icon" href="{{ asset('/img/RD Tab Icon.png') }}" sizes="16x16 32x32" type="image/png">
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
-    @vite('resources/js/logistik.js')
+    @vite('resources/js/logistik/app.js')
 </head>
 <body>
 

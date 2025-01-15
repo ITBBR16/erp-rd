@@ -176,7 +176,7 @@ class RepairCaseService
             $dataProduct = $this->product->findJenisProduct($jenisDroneId);
             $urlCreateFolder = 'https://script.google.com/macros/s/AKfycbx4BPCbG9OiQvlilMHQrlQXs-d3mytuJ5qFPf4zBhqjvmtYo3tEFMYBQ2JZndR49Dw3/exec';
             $response = Http::post($urlCreateFolder, [
-                'nama' => $dataCustomer->first_name . '-' . $dataCustomer->last_name,
+                'nama' => $dataCustomer->first_name . ' ' . $dataCustomer->last_name,
                 'jenisDrone' => $dataProduct->jenis_produk,
                 'noInvoice' => 'R' . $newCase->id,
             ]);

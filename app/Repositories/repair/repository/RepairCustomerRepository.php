@@ -48,6 +48,11 @@ class RepairCustomerRepository implements RepairCustomerInterface
         return $this->model->findOrFail($id);
     }
 
+    public function findByPhoneNumber($noTelpon)
+    {
+        return $this->model->where('no_telpon', $noTelpon)->first();
+    }
+
     public function getProvinsi()
     {
         $dataProvinsi = Provinsi::all();

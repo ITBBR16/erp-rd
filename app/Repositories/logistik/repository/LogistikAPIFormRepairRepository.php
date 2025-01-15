@@ -11,6 +11,11 @@ class LogistikAPIFormRepairRepository implements LogistikAPIFormRepairInterface
         private DataFormRepair $modelFormRepair
     ){}
 
+    public function getDataForm()
+    {
+        return $this->modelFormRepair->all();
+    }
+
     public function createDataFormRepair(array $data)
     {
         return $this->modelFormRepair->create($data);
