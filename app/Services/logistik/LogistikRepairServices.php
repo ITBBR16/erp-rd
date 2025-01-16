@@ -5,7 +5,6 @@ namespace App\Services\logistik;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
@@ -231,6 +230,14 @@ class LogistikRepairServices
 
             if ($status === 'success') {
                 $this->repairCase->updateCase($newCase->id, ['link_doc' => $linkDoc]);
+                
+                $linkFile = $request->input('link_files');
+                $urlMoveFile = 'https://script.google.com/macros/s/AKfycbxxfZMzR_IfSptajZ4yfGZ9zyjEUTHREpq-DQwadcBfWlEOLva4KpaFy8yfkFyjfEmr/exec';
+                $responseMF = Http::post($urlMoveFile, [
+                    'namaCustomer' => $dataCustomer->first_name . ' ' . $dataCustomer->last_name,
+                    'linkCustomer' => $linkDoc,
+                    'linkFileCustomer' => $linkFile,
+                ]);
 
                 $dataToDetailKelengkapan = [];
                 foreach ($dataKelengkapan as $index => $kelengkapan) {

@@ -5,7 +5,7 @@
         <ol class="inline-flex items-center space-x-2 md:space-x-3 rtl:space-x-reverse">
             <li class="flex items-center">
                 <a href="{{ route("sent-to-rapair.index") }}" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                    <span class="material-symbols-outlined text-base mr-2.5">page_info</span>
+                    <span class="material-symbols-outlined text-base mr-2.5">forward</span>
                     Sent To Repair
                 </a>
             </li>
@@ -43,6 +43,7 @@
             <input type="hidden" name="str_kronologi" value="{{ $dataCustomer->kronologi_kerusakan }}">
             <input type="hidden" name="str_penggunaan" value="{{ $dataCustomer->penanganan_after_crash }}">
             <input type="hidden" name="str_riwayat" value="{{ $dataCustomer->riwayat_penggunaan }}">
+            <input type="hidden" name="link_files" value="{{ $dataCustomer->dokumen_customer }}">
             {{-- Form Data Customer Awal --}}
             <div>
                 <div class="mb-4 pb-2">
@@ -269,10 +270,10 @@
                 </div>
                 <div class="grid grid-cols-3 mb-4">
                     <div class="col-span-1 text-end pr-6">
-                        <label for="jenis-fungsional" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Fungsional :</label>
+                        <label for="str-fungsional" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Fungsional :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <select name="case_fungsional" id="case-fungsional" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <select name="str_fungsional" id="str-fungsional" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Select Fungsional Drone</option>
                             @foreach ($fungsionalDrone as $fungsional)
                                 <option value="{{ $fungsional->id }}">{{ $fungsional->jenis_fungsional }}</option>

@@ -46,7 +46,7 @@
             </thead>
             <tbody>
                 @foreach ($dataFormRepair as $data)
-                    @if ($data->status == 'Diterima')
+                    @if ($data->status == 'Diterima' || $data->status == 'Done InRD')
                         <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
                                 {{ $data->nama_lengkap }}
@@ -102,7 +102,7 @@
             {{-- {{ $suppliers->links() }} --}}
         </div>
     </div>
-    @if (!$dataFormRepair->contains('status', 'Diterima'))
+    @if (!$dataFormRepair->contains('status', 'Diterima') && !$dataFormRepair->contains('status', 'Done InRD'))
         <div class="p-4 mt-4">
             <div class="flex datas-center justify-center">
                 <figure class="max-w-lg">
