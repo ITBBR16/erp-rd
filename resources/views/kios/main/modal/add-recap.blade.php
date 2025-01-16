@@ -1,7 +1,7 @@
 <div id="add-daily-recap" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-2xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+            <div class="flex items-center justify-between p-5 border-b border-gray-300 rounded-t dark:border-gray-600">
                 <h3 class="text-xl font-medium text-gray-900 dark:text-white">Daily Recap</h3>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="add-daily-recap">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -15,21 +15,43 @@
                     @csrf
                     {{-- Semua Keperluan --}}
                     <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-6 group">
-                            <label for="nama_customer"></label>
-                            <select name="nama_customer" id="nama_customer" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                                <option value="" hidden>Nama Customer</option>
-                                @foreach ($customer as $cs)
-                                    <option value="{{ $cs->id }}" class="dark:bg-gray-700">{{ $cs->first_name }} {{ $cs->last_name }} - {{ $cs->id }}</option>
-                                @endforeach
-                            </select>
+                        <div x-data="dropdownCustomerCase()" class="relative text-start mb-6">
+                            <div class="relative">
+                                <input x-model="search" 
+                                    @focus="open = true" 
+                                    @keydown.escape="open = false" 
+                                    @click.outside="open = false"
+                                    type="text" 
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Search or select customer...">
+                                    <svg :class="{ 'rotate-180': open }" class="absolute inset-y-0 right-2 top-2.5 w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                <input type="hidden" name="nama_customer" :value="selected" required>
+                            </div>
+                        
+                            <ul x-show="open" 
+                                x-transition 
+                                class="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-60 w-full overflow-y-auto shadow-md dark:bg-gray-700 dark:border-gray-600">
+                                <template x-for="customer in filteredCustomers" :key="customer.id">
+                                    <li @click="select(customer.id, customer.display)" 
+                                        class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
+                                        <span x-text="customer.display" class="text-black dark:text-white"></span>
+                                    </li>
+                                </template>
+                                <li 
+                                    x-show="filteredCustomers.length === 0" 
+                                    class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                                    Data customer tidak ditemukan.
+                                </li>
+                            </ul>
                         </div>
-                        <div class="relative z-0 w-full mb-6 group">
+                        <div class="relative text-start mb-6">
                             <label for="keperluan_recap"></label>
-                            <select name="keperluan_recap" id="keperluan_recap" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                                <option value="" hidden>Keperluan</option>
+                            <select name="keperluan_recap" id="keperluan_recap" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <option value="" hidden>Pilih Keperluan</option>
                                 @foreach ($keperluanrecap as $keperluan)
-                                    <option value="{{ $keperluan->id }}" class="dark:bg-gray-700">{{ $keperluan->nama }}</option>
+                                    <option value="{{ $keperluan->id }}" class="bg-white dark:bg-gray-700">{{ $keperluan->nama }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -60,4 +82,34 @@
 <script>
     let jenisProduk = @json($produkJenis);
     let jenisPermasalahan = @json($kategoriPermasalahan);
+
+    function dropdownCustomerCase() {
+            return {
+                open: false,
+                search: '',
+                selected: '',
+                customers: Object.values(@json($dataCustomers)),
+                filteredCustomers: [],
+                debounceSearch: null,
+                init() {
+                    if (!Array.isArray(this.customers)) {
+                        this.customers = [];
+                    }
+                    this.filteredCustomers = this.customers;
+                    this.$watch('search', (value) => {
+                        clearTimeout(this.debounceSearch);
+                        this.debounceSearch = setTimeout(() => {
+                            this.filteredCustomers = this.customers.filter(customer =>
+                                customer.display.toLowerCase().includes(value.toLowerCase())
+                            );
+                        }, 300);
+                    });
+                },
+                select(id, display) {
+                    this.selected = id;
+                    this.search = display;
+                    this.open = false;
+                }
+            }
+        }
 </script>

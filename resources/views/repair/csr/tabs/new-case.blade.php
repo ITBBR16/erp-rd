@@ -41,7 +41,7 @@
                                 Data customer tidak ditemukan.
                             </li>
                         </ul>
-                    </div>                    
+                    </div>
                 </div>
                 <div class="grid grid-cols-3 mb-4">
                     <div class="col-span-1 text-end pr-6">

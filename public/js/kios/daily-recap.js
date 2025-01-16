@@ -53,7 +53,7 @@ $(document).ready(function () {
                     const option = $('<option>', {
                         value: produk.id,
                         text: produk.jenis_produk
-                    }).addClass('dark:bg-gray-700');
+                    }).addClass('bg-white dark:bg-gray-700');
                     jenisProduk.append(option);
                 });
             })
@@ -91,7 +91,7 @@ $(document).ready(function () {
                         value: jenis.id,
                         text: jenis.paket_penjualan
                     })
-                    .addClass('dark:bg-gray-700');
+                    .addClass('bg-white dark:bg-gray-700');
                     paketPenjualan.append(option);
                 });
             })
@@ -181,7 +181,7 @@ $(document).ready(function () {
                         value: jenis.id,
                         text: jenis.paket_penjualan
                     })
-                    .addClass('dark:bg-gray-700');
+                    .addClass('bg-white dark:bg-gray-700');
                     paketPenjualan.append(option);
                 });
             })

@@ -12,26 +12,38 @@ use App\Models\customer\Customer;
 use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\DB;
 use App\Models\kios\KiosDailyRecap;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosRecapKeperluan;
 use App\Models\kios\KiosTechnicalSupport;
 use App\Repositories\kios\KiosRepository;
+use App\Repositories\umum\UmumRepository;
 use App\Models\kios\KiosKategoriPermasalahan;
 use App\Models\kios\KiosRecapTechnicalSupport;
 use App\Models\customer\CustomerInfoPerusahaan;
+use App\Repositories\repair\repository\RepairCustomerRepository;
 
 class KiosDailyRecapController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(
+        private UmumRepository $umum,
+        private RepairCustomerRepository $customerRepository,
+    ){}
 
     public function index()
     {
         $user = auth()->user();
-        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $divisiName = $this->umum->getDivisi($user);
         $provinsi = Provinsi::all();
         $customer = Customer::orderByDesc('id')->get();
-        $dailyRecap = KiosDailyRecap::orderByDesc('id')->get();
+        $dataCustomers = $customer->map(function ($cust) {
+            return [
+                'id' => $cust->id,
+                'display' => "{$cust->first_name} {$cust->last_name} - {$cust->id}"
+            ];
+        });
+        $dailyRecap = KiosDailyRecap::orderByDesc('id')->paginate(50);
         $produkJenis = ProdukJenis::all();
         $infoPerusahaan = CustomerInfoPerusahaan::all();
         $recapKeperluan = KiosRecapKeperluan::all();
@@ -46,7 +58,7 @@ class KiosDailyRecapController extends Controller
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'dataProvinsi' => $provinsi,
-            'customer' => $customer,
+            'dataCustomers' => $dataCustomers,
             'produkJenis' => $produkJenis,
             'dailyRecap' => $dailyRecap,
             'keperluanrecap' => $recapKeperluan,
@@ -145,37 +157,55 @@ class KiosDailyRecapController extends Controller
                     'no_telpon' => preg_replace('/^0/', '62', $request->input('no_telpon')),
                 ]);
 
-                $validate = $request->validate([
+                $request->validate([
                     'first_name' => 'required|max:50',
-                    'last_name' => 'required|max:50',
-                    'asal_informasi' => 'required',
-                    'no_telpon' => ['required', 'regex:/^62\d{9,}$/', Rule::unique('rumahdrone_customer.customer', 'no_telpon')],
+                    'no_telpon' => 'required',
                     'email' => 'nullable|email:dns',
                     'instansi' => 'max:50',
                     'provinsi' => 'required',
-                    'nama_jalan' => 'required|max:255'
+                    'nama_jalan' => 'max:255'
                 ]);
-    
-                $validate['by_divisi'] = $divisiId;
-    
-                $dataCustomer = Customer::create($validate);
-                $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
-                $response = Http::post($appScriptUrl, [
-                    'first_name' => $validate['first_name'],
-                    'last_name' => $validate['last_name'] . ' - ' . $dataCustomer->id,
-                    'email' => $validate['email'],
-                    'no_telpon' => $validate['no_telpon'],
-                ]);
-    
-                $payloadContact = json_decode($response->body(), true);
-                $statusContact = $payloadContact['status'];
-                
-                if($statusContact === 'success') {
-                    $connectionCustomer->commit();
-                    return back()->with('success', 'Success Add New Customer.');
+
+                $existingCustomer = $this->customerRepository->findByPhoneNumber($request->input('no_telpon'));
+
+                if ($existingCustomer) {
+                    $dataCustomer = $existingCustomer;
+                    $namaCustomer = $dataCustomer->first_name . ' ' . $dataCustomer->last_name . ' - ' . $dataCustomer->id;
+                    return back()->with('success', 'No telpon sudah tersimpan dengan nama: ' . $namaCustomer);
                 } else {
-                    $connectionCustomer->rollBack();
-                    return back()->with('error', 'Failed to Save Contact. Please try again.');
+                    $dataInput = [
+                        'first_name' => $request->input('first_name'),
+                        'last_name' => $request->input('last_name'),
+                        'asal_informasi' => 1,
+                        'no_telpon' => $request->input('no_telpon'),
+                        'by_divisi' => $divisiId,
+                        'email' => $request->input('email'),
+                        'instansi' => $request->input('instansi'),
+                        'provinsi_id' => $request->input('provinsi'),
+                        'kota_kabupaten_id' => $request->input('kota_kabupaten'),
+                        'kecamatan_id' => $request->input('kecamatan'),
+                        'kelurahan_id' => $request->input('kelurahan'),
+                        'kode_pos' => $request->input('kode_pos'),
+                        'nama_jalan' => $request->input('nama_jalan')
+                    ];
+
+                    $dataCustomer = $this->customerRepository->createCustomer($dataInput);
+                    $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
+                    $response = Http::post($appScriptUrl, [
+                        'first_name' => $dataInput['first_name'],
+                        'last_name' => $dataInput['last_name'] . ' - ' . $dataCustomer->id,
+                        'email' => $dataInput['email'],
+                        'no_telpon' => $dataInput['no_telpon'],
+                    ]);
+        
+                    if ($response->failed()) {
+                        throw new Exception('Something Went Wrong. Error: ' . $response->body());
+                    }
+        
+                    $responseBody = $response->body();
+                    Log::info("Response from App Script: " . $responseBody);
+                    $connectionCustomer->commit();
+                    return back()->with('success', 'Contact berhasil di simpan');
                 }
 
             } catch (Exception $e) {

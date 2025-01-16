@@ -49,7 +49,7 @@ class LogistikRepairServices
             $dataCustomer = $this->formRepair->findRegister($noRegister);
             $jenisDrone = $dataCustomer->tipe_produk;
             $namaCustomer = $dataCustomer->nama_lengkap;
-            $noTelpon = '6285156519066'; // $dataCustomer->no_wa;
+            $noTelpon = $dataCustomer->no_wa;
 
             $header = "Yth. {$namaCustomer},\n\n";
             $tipe = "Dengan Tipe Produk :\n{$jenisDrone}\n\n";
