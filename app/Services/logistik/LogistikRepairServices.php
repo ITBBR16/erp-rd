@@ -233,10 +233,16 @@ class LogistikRepairServices
                 
                 $linkFile = $request->input('link_files');
                 $urlMoveFile = 'https://script.google.com/macros/s/AKfycbxxfZMzR_IfSptajZ4yfGZ9zyjEUTHREpq-DQwadcBfWlEOLva4KpaFy8yfkFyjfEmr/exec';
-                $responseMF = Http::post($urlMoveFile, [
+                Http::post($urlMoveFile, [
                     'namaCustomer' => $dataCustomer->first_name . ' ' . $dataCustomer->last_name,
                     'linkCustomer' => $linkDoc,
                     'linkFileCustomer' => $linkFile,
+                ]);
+
+                $urlSheetLabel = 'https://script.google.com/macros/s/AKfycbzNiCCCcEbod0Gdkk46UqwKt6D0dM63K5hQaY8po5kz43oRV80bK_LBCGoD9eLNbhntRQ/exec';
+                Http::post($urlSheetLabel, [
+                    'namaCustomer' => $dataCustomer->first_name . '-' . $dataCustomer->id . '-' . $newCase->id,
+                    'jenisDrone' => $dataProduct->jenis_produk,
                 ]);
 
                 $dataToDetailKelengkapan = [];

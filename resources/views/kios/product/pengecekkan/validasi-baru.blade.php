@@ -65,17 +65,19 @@
                         </thead>
                         <tbody>
                             @foreach ($dataOrderList as $viewOrderList)
-                                <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                                    <th class="px-6 py-2">
-                                        {{ ($viewOrderList->status_order == 'Baru') ? 'N.' . $viewOrderList->order_id : 'S.' . $viewOrderList->order_id }}
-                                    </th>
-                                    <td class="px-6 py-2">
-                                        {{ $viewOrderList->no_resi }}
-                                    </td>
-                                    <td class="px-6 py-2">
-                                        <span class="bg-orange-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $viewOrderList->status }}</span>
-                                    </td>
-                                </tr>
+                                @if ($viewOrderList->status_order == 'Baru')
+                                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                        <th class="px-6 py-2">
+                                            {{ ($viewOrderList->status_order == 'Baru') ? 'N.' . $viewOrderList->order_id : 'S.' . $viewOrderList->order_id }}
+                                        </th>
+                                        <td class="px-6 py-2">
+                                            {{ $viewOrderList->no_resi }}
+                                        </td>
+                                        <td class="px-6 py-2">
+                                            <span class="bg-orange-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $viewOrderList->status }}</span>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
