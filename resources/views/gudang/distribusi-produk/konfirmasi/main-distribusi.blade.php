@@ -66,7 +66,7 @@
                                     {{ \Carbon\Carbon::parse($case->estimasi->estimasiPart->first()->tanggal_konfirmasi)->format('d M Y') }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->customer->id }}
+                                    {{ $case->customer->first_name }} {{ $case->customer->last_name }} - {{ $case->customer->id }} - {{ $case->id }}
                                 </td>
                                 <td class="px-6 py-2">
                                     {{ $case->jenisProduk->jenis_produk }}

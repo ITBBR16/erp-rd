@@ -95,17 +95,21 @@
                                 </td>
                                 <td class="px-6 py-2">
                                     @php
-                                        $sku = $item->sparepartGudang->produkSparepart->produkType->code . "." . $item->sparepartGudang->produkSparepart->partModel->code . "." . 
-                                                $item->sparepartGudang->produkSparepart->produk_jenis_id . "." . $item->sparepartGudang->produkSparepart->partBagian->code . "." . 
-                                                $item->sparepartGudang->produkSparepart->partSubBagian->code . "." . $item->sparepartGudang->produkSparepart->produk_part_sifat_id . "." . $item->sparepartGudang->produkSparepart->id;
+                                        $sku = $item?->sparepartGudang?->produkSparepart->produkType->code . "." .
+                                            $item?->sparepartGudang?->produkSparepart->partModel->code . "." .
+                                            $item?->sparepartGudang?->produkSparepart->produk_jenis_id . "." .
+                                            $item?->sparepartGudang?->produkSparepart->partBagian->code . "." .
+                                            $item?->sparepartGudang?->produkSparepart->partSubBagian->code . "." .
+                                            $item?->sparepartGudang?->produkSparepart->produk_part_sifat_id . "." .
+                                            $item?->sparepartGudang?->produkSparepart->id;
                                     @endphp
                                     {{ $sku }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $item->sparepartGudang->produkSparepart->produkJenis->jenis_produk }}
+                                    {{ $item->sparepartGudang->produkSparepart->produkJenis->jenis_produk ?? '-' }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $item->sparepartGudang->produkSparepart->nama_internal }}
+                                    {{ $item->sparepartGudang->produkSparepart->nama_internal ?? '-' }}
                                 </td>
                                 <td class="px-6 py-2">
                                     Rp. {{ number_format($item->harga_repair) }}
@@ -114,7 +118,14 @@
                                     Rp. {{ number_format($item->modal_gudang) }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    <input type="text" name="scan_barcode[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Scan Barcode">
+                                    <select name="id_item[]" id="id-item-distribusi-{{ $item->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option value="" hidden>Pilih ID Item</option>
+                                        @if (isset($dataIdItems[$item->id]))
+                                            @foreach ($dataIdItems[$item->id] as $idItem)
+                                                <option value="{{ $idItem }}">{{ $idItem }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
                                 </td>
                             </tr>
                         @endif

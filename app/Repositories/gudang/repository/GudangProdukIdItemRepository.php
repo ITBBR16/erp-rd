@@ -17,7 +17,12 @@ class GudangProdukIdItemRepository implements GudangProdukIdItemInterface
 
     public function getListProdukIdItem()
     {
-        return $this->idPart->all();
+        return $this->idPart
+                ->with('qualityControll')
+                ->whereHas('qualityControll', function ($query) {
+                    $query->where('status_qc', '!=', 'Tervalidasi');
+                })
+                ->get();
     }
 
     public function getProdukForQc($idBelanja, $idProduk)

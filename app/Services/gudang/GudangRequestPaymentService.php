@@ -27,7 +27,7 @@ class GudangRequestPaymentService
         $listDataRP = $this->reqPayment->getDataRequestPayment();
         $namaAkunBank = $this->akunBank->getNamaBank();
         $listBelanja = $this->belanja->indexBelanja();
-        $filterBelanja = $listBelanja->where('status', '!=', 'Menunggu Konfirmasi Belanja');
+        $filterBelanja = $listBelanja->where('status', ['Menunggu Konfirmasi Belanja', 'Menunggu Resi', 'Waiting Payment', 'Process Shipping']);
         
         return view('gudang.purchasing.reqpayment.payment', [
             'title' => 'Gudang Payment',
@@ -44,6 +44,7 @@ class GudangRequestPaymentService
     {
         try {
             $this->transaction->beginTransaction();
+
             $findBelanja = $this->belanja->findBelanja($request->input('order_id'));
             $nominalOngkir = preg_replace("/[^0-9]/", "", $request->input('nominal_ongkir')) ?: 0;
             $nominalPajak = preg_replace("/[^0-9]/", "", $request->input('nominal_pajak')) ?: 0;
@@ -57,6 +58,15 @@ class GudangRequestPaymentService
                 $jenisTransaksi = 'Pajak';
             }
 
+            // Update total ongkir dan pajak pada belanja gudang jika nilai nominal tidak kosong
+            if ($nominalOngkir > 0) {
+                $findBelanja->total_ongkir += $nominalOngkir;
+            }
+
+            if ($nominalPajak > 0) {
+                $findBelanja->total_pajak += $nominalPajak;
+            }
+
             $dataMetodePembayaran = [
                 'nama_bank_id' => $request->input('add_bank_pembayaran'),
                 'gudang_supplier_id' => $findBelanja->gudang_supplier_id,
@@ -66,8 +76,13 @@ class GudangRequestPaymentService
             ];
 
             $metodePembayaran = $this->reqPayment->createOrNotMp(
-                ['gudang_supplier_id' => $dataMetodePembayaran['gudang_supplier_id'], 'media_transaksi' => $dataMetodePembayaran['media_transaksi']],
-                $dataMetodePembayaran);
+                [
+                    'gudang_supplier_id' => $dataMetodePembayaran['gudang_supplier_id'], 
+                    'media_transaksi' => $dataMetodePembayaran['media_transaksi']
+                ],
+                $dataMetodePembayaran
+            );
+
             $totalNominal = $nominalOngkir + $nominalPajak;
 
             $dataPayment = [
@@ -80,15 +95,16 @@ class GudangRequestPaymentService
             ];
 
             // Mengirim ke bagian akuntan
-
             $this->reqPayment->createPayment($dataPayment);
+            $findBelanja->save();
+
             $this->transaction->commitTransaction();
 
             return ['status' => 'success', 'message' => 'Berhasil menambahkan request baru.'];
-            
         } catch (Exception $e) {
             $this->transaction->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+
 }

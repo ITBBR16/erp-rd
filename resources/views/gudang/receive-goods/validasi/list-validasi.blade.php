@@ -62,7 +62,7 @@
                         SKU
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Nama Produk
+                        Nama Sparepart
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Quantity

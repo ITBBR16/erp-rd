@@ -233,7 +233,7 @@ $(document).ready(function () {
             stockPart.val(data.stock);
             hargaJualRepair.val(formatAngka(data.detail.harga_internal));
             hargaJualGudang.val(formatAngka(data.detail.harga_global));
-            hargaModalGudang.val(formatAngka(data.detail.modal_awal));
+            hargaModalGudang.val(formatAngka(0));
             hargaPromoGudang.val(formatAngka(data.detail.harga_promo));
 
         });

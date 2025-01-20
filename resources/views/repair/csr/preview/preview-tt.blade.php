@@ -7,7 +7,37 @@
     <title>{{ $title }} | RD</title>
     <link rel="icon" href="{{ asset('/img/RD Tab Icon.png') }}" sizes="16x16 32x32" type="image/png">
     <link rel="stylesheet" href="{{ public_path('css/pdf.css') }}" type="text/css">
+    <style>
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            background-image: url('{{ public_path('img/invoice/Pattern.png') }}');
+            background-size: contain;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
 
+        @media print {
+            body {
+                background-image: url('{{ public_path('img/invoice/Pattern.png') }}');
+                background-size: contain;
+                background-position: center bottom;
+                background-repeat: no-repeat;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+        .invoice {
+            width: 148mm;
+            height: 210mm;
+            margin: 0 auto;
+            padding: 0 auto;
+            box-sizing: border-box;
+            background: white;
+        }
+    </style>
 </head>
 <body>
     <div>
@@ -103,6 +133,11 @@
                 </td>
             </tr>
         </table>
+
+        <div style="text-align: center; font-size: 8px; margin-top: 30px;">
+            <p style="margin: 0;">Jl. Kwoka Q2-6 Perum Tidar Permai, Kel. Karangbesuki, Kec. Sukun, Kota Malang, Kode Pos 65146</p>
+            <p style="margin: 0;">Telp. 0813-3430-0706</p>
+        </div>
     </div>    
 </body>
 </html>

@@ -77,16 +77,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @php
+                    @php
                         $groupedItems = $listQcIdItem->filter(function ($item) {
                             return $item->qualityControll !== null;
                         })->groupBy(function ($item) {
                             return $item->gudang_belanja_id . '-' . $item->gudang_produk_id;
                         });
-                    @endphp --}}
-    
-                    @foreach ($listQcIdItem as $items)
-                        
+                    @endphp
+                    
+                    @foreach ($groupedItems as $items)
                         @php
                             $qc = $items->first();
                             $quantityCount = $items->count();
@@ -159,6 +158,6 @@
         </div>
     </div>
     {{-- Modal --}}
-    @include('gudang.receive-goods.quality-control.modal.detail-quality-control')
+    {{-- @include('gudang.receive-goods.quality-control.modal.detail-quality-control') --}}
 
 @endsection

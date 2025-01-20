@@ -24,18 +24,13 @@ class GudangQCServices
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
         $listQcIdItem = $this->idItem->getListProdukIdItem();
-        $groupedItems = $listQcIdItem->filter(function ($item) {
-            return $item->qualityControll !== null;
-        })->groupBy(function ($item) {
-            return $item->gudang_belanja_id . '-' . $item->gudang_produk_id;
-        });
         
         return view('gudang.receive-goods.quality-control.list-qc', [
             'title' => 'Gudang Quality Control',
             'active' => 'gudang-qc',
             'navActive' => 'receive',
             'divisi' => $divisiName,
-            'listQcIdItem' => $groupedItems
+            'listQcIdItem' => $listQcIdItem
         ]);
     }
 
