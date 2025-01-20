@@ -2,13 +2,16 @@
 
 namespace App\Services\gudang;
 
-use App\Models\gudang\GudangProdukIdItem;
-use App\Repositories\gudang\repository\GudangTransactionRepository;
-use App\Repositories\repair\repository\RepairCaseRepository;
-use App\Repositories\repair\repository\RepairEstimasiRepository;
-use App\Repositories\umum\UmumRepository;
 use Exception;
 use Illuminate\Http\Request;
+use App\Models\gudang\GudangProduk;
+use App\Models\kios\KiosTransaksiPart;
+use App\Models\gudang\GudangProdukIdItem;
+use App\Models\repair\RepairEstimasiPart;
+use App\Repositories\umum\UmumRepository;
+use App\Repositories\repair\repository\RepairCaseRepository;
+use App\Repositories\repair\repository\RepairEstimasiRepository;
+use App\Repositories\gudang\repository\GudangTransactionRepository;
 
 class GudangKonfirmasiPengirimanServices
 {
@@ -18,6 +21,9 @@ class GudangKonfirmasiPengirimanServices
         private RepairCaseRepository $repairCase,
         private RepairEstimasiRepository $repairEstimasi,
         private GudangProdukIdItem $produkIdITem,
+        private RepairEstimasiPart $estimasiPart,
+        private KiosTransaksiPart $transaksiPart,
+        private GudangProduk $gudangProduk,
     ){}
 
     public function index()
@@ -76,27 +82,11 @@ class GudangKonfirmasiPengirimanServices
 
             $timeStamp = now();
             $idEstimasiPart = $request->input('id_estimasi_part');
-            $barcodeScan = $request->input('scan_barcode');
+            $idItemGudang = $request->input('id_item');
 
-            foreach ($idEstimasiPart as $index => $estimasi) {
-                if (!empty($barcodeScan[$index])) {
-                    $identity = explode('*', $barcodeScan[$index]);
-                    $sku = trim($identity[0]);
-                    $idItem = trim($identity[1]);
+            foreach ($idItemGudang as $index => $idItem) {
+                if ($idItem != '') {
 
-                    $dataEstimasiPart = [
-                        'id_item' => $idItem,
-                        'tanggal_dikirim' => $timeStamp
-                    ];
-
-                    $matchedProduct = $this->produkIdITem->where('sku_lama', 'LIKE', "%$sku%")->first();
-
-                    if ($matchedProduct) {
-                        $matchedProduct->update(['status_inventory' => 'Piutang']);
-                        $this->repairEstimasi->updateEstimasiPart($dataEstimasiPart, $estimasi);
-                    } else {
-                        return ['status' => 'error', 'message' => "SKU $sku tidak ditemukan."];
-                    }
                 }
             }
 
@@ -110,6 +100,42 @@ class GudangKonfirmasiPengirimanServices
             $this->repairCase->rollBackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
+    }
+
+    public function countModalGudang($id)
+    {
+        $dataGudangEstimasi = $this->estimasiPart
+            ->where('gudang_produk_id', $id)
+            ->whereNotNull('tanggal_dikirim')
+            ->where('active', 'Active')
+            ->sum('modal_gudang');
+
+        $dataGudangTransaksi = $this->transaksiPart
+            ->where('gudang_produk_id', $id)
+            ->sum('modal_gudang');
+
+        $dataGudang = $this->gudangProduk
+            ->where('id', $id)
+            ->whereIn('status', ['Ready', 'Promo'])
+            ->first();
+
+        if (!$dataGudang) {
+            throw new \Exception("Data gudang tidak ditemukan");
+        }
+
+        $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get();
+        $totalSN = $dataSubGudang->count();
+        $modalAwal = $dataGudang->modal_awal ?? 0;
+        $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
+        $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
+        $nilai = [
+            'modalGudangg' => $modalGudang,
+            'hargaGlobal' => $hargaJualGudang,
+            'hargaRepair' => $dataGudang->harga_internal,
+            'promoGudang' => $dataGudang->harga_promo
+        ];
+            
+        return $nilai;
     }
 
 }

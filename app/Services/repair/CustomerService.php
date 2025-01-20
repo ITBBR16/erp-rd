@@ -69,12 +69,12 @@ class CustomerService
                 $dataCustomer = $this->customerRepository->createCustomer($dataInput);
 
                 // Kirim data ke App Script
-                $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
+                $appScriptUrl = 'https://script.google.com/macros/s/AKfycbwmH6xCZ9XCY4FOJ9V8_p3VwNLi8IRid6hF-Vkfho8RvPeZ1F-nXYdg0e5FinHt6NJS/exec';
                 $response = Http::post($appScriptUrl, [
                     'first_name' => $request->input('first_name'),
                     'last_name' => $request->input('last_name') . ' - ' . $dataCustomer->id,
                     'email' => $request->input('email'),
-                    'no_telpon' => $request->input('no_telpon'),
+                    'no_telpon' => '+' . $request->input('no_telpon'),
                 ]);
     
                 if ($response->failed()) {
