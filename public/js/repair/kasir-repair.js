@@ -105,11 +105,131 @@ $(document).ready(function () {
         $('#nominal-asuransi-repair-' + formId).val(formatAngka(nominalAsuransi));
     });
 
+    // Kasir Pelunasan
+    $(document).on('click', '#add-metode-pembayaran-lunas', function () {
+        let formLength = $('.form-mp-lunas').length;
+        const contaienrMPLunas = $('#container-metode-pembayaran-lunas');
+
+        formLength++;
+        let formMPDP = `
+            <div id="form-mp-lunas-${formLength}" class="form-mp-lunas grid grid-cols-4 gap-4 mb-4" style="grid-template-columns: 5fr 5fr 3fr 1fr">
+                <div>
+                    <label for="metode-pembayaran-pembayaran-${formLength}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
+                    <select name="metode_pembayaran_pembayaran[]" id="metode-pembayaran-pembayaran-${formLength}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <option value="" hidden>Pilih Metode Pembayaran</option>`;
+                        daftarAkun.forEach(function(akun) {
+                            formMPDP += `<option value="${akun.id}">${akun.nama_akun}</option>`
+                        });
+                        formMPDP +=
+                        `
+                    </select>
+                </div>
+                <div>
+                    <label for="nominal-pembayaran-lunas-repair-${formLength}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                    <div class="flex">
+                        <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                        <input type="text" name="nominal_pembayaran[]" id="nominal-pembayaran-lunas-repair-${formLength}" class="format-angka-ongkir-repair nominal-lunas-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Files Bukti Transaksi :</label>
+                    <div class="relative z-0 w-full">
+                        <label 
+                            for="file-bukti-transaksi-${formLength}" 
+                            id="file-label" 
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            No file chosen
+                        </label>
+                        <input 
+                            type="file" 
+                            name="file_bukti_transaksi[]" 
+                            id="file-bukti-transaksi-${formLength}" 
+                            class="hidden"
+                            onchange="updateFileName(this)"
+                            required>
+                    </div>
+                </div>
+                <div class="flex justify-center items-end pb-2">
+                    <button type="button" class="remove-metode-pembayaran-lunas" data-id="${formLength}">
+                        <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        contaienrMPLunas.append(formMPDP);
+    });
+
+    $(document).on(
+        'change',
+        '.nominal-lunas-repair, #nominal-discount-lunas, #nominal-saldo-customer-terpakai, #nominal-kerugian-lunas, #nominal-dikembalikan, #nominal-pll, #nominal-simpan-saldo-customer',
+        function () {
+            updateBoxPembayaranLunas();
+            checkPembayaranLunas();
+        }
+    );
+
     // Down Payment
-    $(document).on('change', '#nominal-pembayaran-dp-repair', function () {
-        var nominalPembayaran = $(this).val();
-        var prsedNominal = parseFloat(nominalPembayaran.replace(/\D/g, ''));
-        $('#total-pembayaran-dp').text(formatRupiah(prsedNominal));
+    $(document).on('click', '#add-metode-pembayaran-dp', function () {
+        let formLength = $('.form-mp-dp').length;
+        const contaienrMPDP = $('#container-metode-pembayaran-dp');
+
+        formLength++;
+        let formMPDP = `
+            <div id="form-mp-dp-${formLength}" class="form-mp-dp grid grid-cols-4 gap-4 mb-4" style="grid-template-columns: 5fr 5fr 3fr 1fr">
+                <div>
+                    <label for="metode-pembayaran-pembayaran-${formLength}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
+                    <select name="metode_pembayaran_pembayaran[]" id="metode-pembayaran-pembayaran-${formLength}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <option value="" hidden>Pilih Metode Pembayaran</option>`;
+                        daftarAkun.forEach(function(akun) {
+                            formMPDP += `<option value="${akun.id}">${akun.nama_akun}</option>`
+                        });
+                        formMPDP +=
+                        `
+                    </select>
+                </div>
+                <div>
+                    <label for="nominal-pembayaran-dp-repair-${formLength}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                    <div class="flex">
+                        <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                        <input type="text" name="nominal_pembayaran[]" id="nominal-pembayaran-dp-repair-${formLength}" class="format-angka-ongkir-repair nominal-dp-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Files Bukti Transaksi :</label>
+                    <div class="relative z-0 w-full">
+                        <label 
+                            for="file-bukti-transaksi-${formLength}" 
+                            id="file-label" 
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            No file chosen
+                        </label>
+                        <input 
+                            type="file" 
+                            name="file_bukti_transaksi[]" 
+                            id="file-bukti-transaksi-${formLength}" 
+                            class="hidden"
+                            onchange="updateFileName(this)"
+                            required>
+                    </div>
+                </div>
+                <div class="flex justify-center items-end pb-2">
+                    <button type="button" class="remove-metode-pembayaran-dp" data-id="${formLength}">
+                        <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        contaienrMPDP.append(formMPDP);
+    });
+
+    $(document).on('click', '.remove-metode-pembayaran-dp', function () {
+        let idForm = $(this).data("id");
+        $('#form-mp-dp-' + idForm).remove();
+        updateBoxPembayaran();
+    });
+
+    $(document).on('change', '.nominal-dp-repair', function () {
+        updateBoxPembayaran();
     });
 
     // Function Ongkir Kasir
@@ -255,6 +375,70 @@ $(document).ready(function () {
 
     function formatRupiah(angka) {
         return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
+    }
+
+    function updateBoxPembayaran() {
+        let totalNominal = 0;
+
+        $('#container-metode-pembayaran-dp .form-mp-dp').each(function () {
+            let nominal = parseFloat($(this).find('.nominal-dp-repair').val().replace(/\./g, '')) || 0;
+            totalNominal += nominal;
+        });
+
+        $('#total-pembayaran-dp').text(formatRupiah(totalNominal));
+        $('#total-pembayaran-dp-box').text(formatRupiah(totalNominal));
+    }
+
+    function updateBoxPembayaranLunas() {
+        let totalNominal = 0;
+        let nilaiDiscount = $('#nominal-discount-lunas').val().replace(/\./g, '') || 0
+        let nilaiDp = $('#nominal-saldo-customer-terpakai').val().replace(/\./g, '') || 0
+
+        $('#container-metode-pembayaran-lunas .form-mp-lunas').each(function () {
+            let nominal = parseFloat($(this).find('.nominal-lunas-repair').val().replace(/\./g, '')) || 0;
+            totalNominal += nominal;
+        });
+
+        $('#nilai-discount').text(formatRupiah(nilaiDiscount));
+        $('#box-nilai-discount').text(formatRupiah(nilaiDiscount));
+        $('#total-pembayaran-lunas').text(formatRupiah(totalNominal));
+        $('#box-total-pembayaran-lunas').text(formatRupiah(totalNominal));
+        $('#down-payment-invoice-lunas').text(formatRupiah(nilaiDp));
+    }
+
+    function checkPembayaranLunas() {
+        let totalTagihan = parseFloat($('#total-tagihan').val())
+        let totalPembayaranAwal = 0;
+        let nominalDiscount = parseFloat($('#nominal-discount-lunas').val().replace(/\./g, '')) || 0;
+        let nominalSaldoCustomerTerpakai = parseFloat($('#nominal-saldo-customer-terpakai').val().replace(/\./g, '')) || 0;
+        let nominalKerugian = parseFloat($('#nominal-kerugian-lunas').val().replace(/\./g, '')) || 0;
+        let nominalDikembalikan = parseFloat($('#nominal-dikembalikan').val().replace(/\./g, '')) || 0;
+        let nominalPll = parseFloat($('#nominal-pll').val().replace(/\./g, '')) || 0;
+        let nominalSaveSaldoCustomer = parseFloat($('#nominal-simpan-saldo-customer').val().replace(/\./g, '')) || 0;
+
+        $('#container-metode-pembayaran-lunas .form-mp-lunas').each(function () {
+            let nominal = parseFloat($(this).find('.nominal-lunas-repair').val().replace(/\./g, '')) || 0;
+            totalPembayaranAwal += nominal;
+        });
+
+        let totalTagihanAkhir = totalTagihan + nominalDikembalikan + nominalPll + nominalSaveSaldoCustomer;
+        let totalPembayaranAkhir = totalPembayaranAwal + nominalDiscount + nominalSaldoCustomerTerpakai + nominalKerugian;
+
+        if (totalTagihanAkhir == totalPembayaranAkhir) {
+            $('#status-box-lunas').text('Pass');
+            $('#btn-kasir-lunas-repair').removeClass('cursor-not-allowed').removeAttr('disabled', true);
+        } else if(totalTagihan < totalPembayaranAkhir) {
+            $('#status-box-lunas').text('Lebih');
+            $('#form-pembayaran-lebih').show();
+            $('#btn-kasir-lunas-repair').addClass('cursor-not-allowed').prop('disabled', true);
+        } else {
+            $('#status-box-lunas').text('Not Pass');
+            $('#form-pembayaran-lebih').hide();
+            $('#nominal-dikembalikan').val(0);
+            $('#nominal-pll').val(0);
+            $('#nominal-simpan-saldo-customer').val(0);
+            $('#btn-kasir-lunas-repair').addClass('cursor-not-allowed').prop('disabled', true);
+        }
     }
 
 });

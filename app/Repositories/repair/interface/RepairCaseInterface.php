@@ -8,7 +8,6 @@ interface RepairCaseInterface
     public function getDataRequestPart();
     public function getDataPenerimaanReqPart();
     public function getListReqPart($id);
-    public function getMetodePembayaran();
     public function findCase($id);
 
     public function createNewCase(array $data);

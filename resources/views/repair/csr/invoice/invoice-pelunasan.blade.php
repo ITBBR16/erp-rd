@@ -70,6 +70,10 @@
         <tbody style="color: #4b5563;">
             @php
                 $totalTagihan = 0;
+                $totalOngkir = 0;
+                $biayaOngkir = 0;
+                $biayaPacking = 0;
+                $nominalAsuransi = 0;
             @endphp
             @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $index => $estimasi)
                 @if ($estimasi->active == 'Active')

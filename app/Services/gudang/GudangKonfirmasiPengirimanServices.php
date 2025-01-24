@@ -81,12 +81,13 @@ class GudangKonfirmasiPengirimanServices
             $this->repairCase->beginTransaction();
 
             $timeStamp = now();
+            $partId = $request->input('gudang_part');
             $idEstimasiPart = $request->input('id_estimasi_part');
             $idItemGudang = $request->input('id_item');
 
             foreach ($idItemGudang as $index => $idItem) {
                 if ($idItem != '') {
-
+                    
                 }
             }
 

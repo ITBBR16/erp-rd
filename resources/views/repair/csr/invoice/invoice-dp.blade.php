@@ -19,7 +19,7 @@
     <table style="width: 100%; padding-bottom: 8px; margin-bottom: 8px;">
         <tr>
             <td style="text-align: left; vertical-align: top; width: 50%;">
-                <h2 style="font-size: 14px; font-weight: 600;">Detail Transaksi / <span style="font-size: 14px; color: #4b5563;">R-{{ $dataCase->id }} <span style="font-size: 12px; margin-left: 8px; color: #ef4444; background-color: #fee2e2; padding: 2px 8px; border-radius: 9999px;">Belum Lunas</span></span></h2>
+                <h2 style="font-size: 14px; font-weight: 600;">Detail Transaksi / <span style="font-size: 14px; color: #4b5563;">R-{{ $dataCase->id }} <span style="font-size: 12px; margin-left: 8px; color: #ef4444; background-color: #fee2e2; padding: 2px 8px; border-radius: 9999px;">Down Payment</span></span></h2>
             </td>
             <td style="text-align: right; vertical-align: top; width: 50%;">
                 <h2 style="font-size: 14px; font-weight: 600;">{{ $dataCase->jenisProduk->jenis_produk }}</h2>
@@ -70,6 +70,10 @@
         <tbody style="color: #4b5563;">
             @php
                 $totalTagihan = 0;
+                $totalOngkir = 0;
+                $biayaOngkir = 0;
+                $biayaPacking = 0;
+                $nominalAsuransi = 0;
             @endphp
             @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $index => $estimasi)
                 @if ($estimasi->active == 'Active')
@@ -94,9 +98,9 @@
             @if (!empty($dataCase->logRequest->biaya_customer_ongkir) && !empty($dataCase->logRequest->biaya_customer_packing))
                 <tr style="border-top: 1px solid #e5e7eb;">
                     @php
-                        $biayaOngkir = $dataCase->logRequest->biaya_customer_ongkir ?? 0;
-                        $biayaPacking = $dataCase->logRequest->biaya_customer_packing ?? 0;
-                        $totalOngkir = $biayaOngkir + $biayaPacking;
+                        $biayaOngkir += $dataCase->logRequest->biaya_customer_ongkir ?? 0;
+                        $biayaPacking += $dataCase->logRequest->biaya_customer_packing ?? 0;
+                        $totalOngkir += $biayaOngkir + $biayaPacking;
                     @endphp
                     <td style="padding: 8px;">Total Ongkir</td>
                     <td style="padding: 8px;">Rp. {{ number_format($totalOngkir, 0, ',', '.') }}</td>
@@ -105,7 +109,7 @@
             @if (!empty($dataCase->logRequest->nominal_asuransi))
             <tr style="border-top: 1px solid #e5e7eb;">
                 @php
-                    $nominalAsuransi = $dataCase->logRequest->nominal_asuransi;
+                    $nominalAsuransi += $dataCase->logRequest->nominal_asuransi;
                     $totalOngkir += $nominalAsuransi;
                 @endphp
                 <td style="padding: 8px;">Asuransi</td>
@@ -134,7 +138,7 @@
         <tbody style="color: #4b5563;">
             @foreach ($dataCase->detailKelengkapan as $kelengkapan)
                 <tr style="border-top: 1px solid #e5e7eb;">
-                    <td style="padding: 8px;">{{ $kelengkapan->itemKelengkapan->kelengkapan }}</td>
+                    <td style="padding: 8px;">{{ ($kelengkapan->item_kelengkapan_id == null) ? $kelengkapan->nama_data_lama : $kelengkapan->itemKelengkapan->kelengkapan }}</td>
                     <td style="padding: 8px;">{{ $kelengkapan->quantity }}</td>
                     <td style="padding: 8px;">{{ $kelengkapan->serial_number }}</td>
                     <td style="padding: 8px;">{{ ($kelengkapan->keterangan) ? $kelengkapan->keterangan : '-' }}</td>
@@ -159,7 +163,7 @@
                                         $totalDp = $dataCase->transaksi->total_pembayaran ?? 0
                                     @endphp
                                     <th style="text-align: left; font-weight: 600; color: #374151;">Down Payment</th>
-                                    <td style="color: #6b7280; text-align: right;">Rp. {{ number_format($totalDp, 0, ',', '.') }}</td>
+                                    <td style="color: #6b7280; text-align: right;">Rp. 0</td>
                                 </tr>
                                 <tr>
                                     <th style="text-align: left; font-weight: 600; color: #374151;">Discount</th>

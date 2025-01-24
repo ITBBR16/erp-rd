@@ -106,6 +106,7 @@
                                     {{ $sku }}
                                 </td>
                                 <td class="px-6 py-2">
+                                    <input type="hidden" name="gudang_part[]" value="{{ $item->sparepartGudang->produkSparepart->id }}">
                                     {{ $item->sparepartGudang->produkSparepart->produkJenis->jenis_produk ?? '-' }}
                                 </td>
                                 <td class="px-6 py-2">

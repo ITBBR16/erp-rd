@@ -37,9 +37,9 @@
 
     <form action="{{ route('createPelunasan', $dataCase->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
         @csrf
-        <div class="grid grid-cols-3 gap-6 mt-4">
+        <div class="grid grid-cols-2 gap-6 mt-4" style="grid-template-columns: 5fr 4fr">
             {{-- Detail Box --}}
-            <div id="invoice-dp-repair" class="bg-white p-6 rounded-lg shadow-lg border col-span-2 border-gray-200 dark:bg-gray-800 dark:border-gray-600">
+            <div id="invoice-dp-repair" class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-600">
                 <div class="mb-4 justify-center text-center">
                     <div class="flex justify-center text-center">
                         <img src="/img/Logo Rumah Drone Black.png" class="w-40" alt="Logo RD">
@@ -99,6 +99,7 @@
                             $totalOngkir = 0;
                             $biayaOngkir = 0;
                             $biayaPacking = 0;
+                            $nominalAsuransi = 0;
                         @endphp
                         
                         @foreach (array_merge($dataCase->estimasi->estimasiPart->all(), $dataCase->estimasi->estimasiJrr->all()) as $index => $estimasi)
@@ -139,7 +140,7 @@
                             @endif
                             @if (!empty($dataCase->logRequest->nominal_asuransi))
                                 @php
-                                    $nominalAsuransi = $dataCase->logRequest->nominal_asuransi;
+                                    $nominalAsuransi += $dataCase->logRequest->nominal_asuransi;
                                     $totalOngkir += $nominalAsuransi;
                                 @endphp
                                 <tr class="border-t">
@@ -211,19 +212,16 @@
                         <div class="text-sm w-full max-w-2xl pl-3">
                             <dl class="grid sm:grid-cols-5 gap-x-3">
                                 <dt class="col-span-3 font-semibold text-gray-800 dark:text-gray-200">Down Payment</dt>
-                                @php
-                                    $totalDp = $dataCase->transaksi->total_pembayaran ?? 0
-                                @endphp
-                                <dd class="col-span-2 text-gray-500">Rp. {{ number_format($totalDp, 0, ',', '.') }}</dd>
+                                <dd id="down-payment-invoice-lunas" class="col-span-2 text-gray-500">Rp. 0</dd>
                             </dl>
                             <dl class="grid sm:grid-cols-5 gap-x-3">
                                 <dt class="col-span-3 font-semibold text-gray-800 dark:text-gray-200">Discount</dt>
-                                <dd class="col-span-2 text-gray-500">Rp. 0</dd>
+                                <dd id="nilai-discount" class="col-span-2 text-gray-500">Rp. 0</dd>
                             </dl>
                             <dl class="my-1 border-b"></dl>
                             <dl class="grid sm:grid-cols-5 gap-x-3">
                                 <dt class="col-span-3 font-semibold text-gray-800 dark:text-gray-200">Total Pembayaran</dt>
-                                <dd id="total-pembayaran-dp" class="col-span-2 text-gray-500">Rp 0</dd>
+                                <dd id="total-pembayaran-lunas" class="col-span-2 text-gray-500">Rp 0</dd>
                             </dl>
                         </div>
                     </div>
@@ -247,20 +245,28 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-semibold mb-12">Hormat Kami</h3>
-                        <p class="text-xs">( {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} )</p>
+                        <p class="text-xs">( Rumah Drone )</p>
                     </div>
                 </div>
             </div>
 
             {{-- Input Box --}}
-            <div class="col-span-1 h-[620px] bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
-                <h2 class="text-lg font-semibold mb-4 text-black dark:text-white pb-2 border-b">Pembayaran Kasir</h2>
+            <div class="h-[850px] bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600 sticky top-4">
+                <div class="flex justify-between mb-4 pb-2 border-b">
+                    <div class="text-start">
+                        <h2 class="text-lg font-semibold text-black dark:text-white">Detail Pembayaran Kasir</h2>
+                    </div>
+                    <div class="text-end">
+                        <span id="status-box-lunas" class="text-base ml-2 text-pink-500 bg-pink-100 px-2 py-1 rounded-full">Not Pass</span>
+                    </div>
+                </div>
                 <div class="mb-4 text-sm">
                     <div class="flex justify-between">
                         <div class="flex text-start">
                             <p class="font-semibold text-black dark:text-white">Total Tagihan :</p>
                         </div>
                         <div class="flex text-end">
+                            <input type="hidden" id="total-tagihan" name="total_tagihan" value="{{ $totalTagihan }}">
                             <p class="font-normal text-black dark:text-white">Rp. {{ number_format($totalTagihan, 0, ',', '.') }}</p>
                         </div>
                     </div>
@@ -269,6 +275,7 @@
                             <p class="font-semibold text-black dark:text-white">Ongkir :</p>
                         </div>
                         <div class="flex text-end">
+                            <input type="hidden" id="nominal-ongkir" name="nominal_ongkir" value="{{ $biayaOngkir }}">
                             <p class="font-normal text-black dark:text-white">Rp. {{ number_format($biayaOngkir, 0, ',', '.') }}</p>
                         </div>
                     </div>
@@ -277,6 +284,7 @@
                             <p class="font-semibold text-black dark:text-white">Paking :</p>
                         </div>
                         <div class="flex text-end">
+                            <input type="hidden" id="nominal-packing" name="nominal_packing" value="{{ $biayaPacking }}">
                             <p class="font-normal text-black dark:text-white">Rp. {{ number_format($biayaPacking, 0, ',', '.') }}</p>
                         </div>
                     </div>
@@ -285,57 +293,144 @@
                             <p class="font-semibold text-black dark:text-white">Asuransi :</p>
                         </div>
                         <div class="flex text-end">
+                            <input type="hidden" id="nominal-asuransi" name="nominal_asuransi" value="{{ $nominalAsuransi }}">
                             <p class="font-normal text-black dark:text-white">Rp. {{ number_format($nominalAsuransi ?? 0, 0, ',', '.') }}</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
+                        <div class="flex text-start">
+                            <p class="font-semibold text-black dark:text-white">Discount :</p>
+                        </div>
+                        <div class="flex text-end">
+                            <p id="box-nilai-discount" class="font-normal text-black dark:text-white">Rp. 0</p>
                         </div>
                     </div>
                     <div class="flex justify-between mb-2">
                         <div class="flex text-start">
-                            <p class="font-semibold text-black dark:text-white">Total DP :</p>
+                            <p class="font-semibold text-black dark:text-white">Saldo Customer :</p>
                         </div>
                         <div class="flex text-end">
+                            @php
+                                $totalDp = $dataCase->transaksi->total_pembayaran ?? 0
+                            @endphp
                             <p class="font-normal text-black dark:text-white">Rp. {{ number_format($totalDp, 0, ',', '.') }}</p>
                         </div>
                     </div>
                     <div class="flex justify-between">
                         <div class="flex text-start">
-                            <p class="font-semibold text-black dark:text-white">Sisa Total Tagihan :</p>
+                            <p class="font-semibold text-black dark:text-white">Total Pembayaran :</p>
                         </div>
                         <div class="flex text-end">
-                            @php
-                                $sisaTagihan = $totalTagihan + $biayaOngkir + $biayaPacking + ($nominalAsuransi ?? 0) - $totalDp
-                            @endphp
-                            <p class="font-normal text-black dark:text-white">Rp. {{ number_format($sisaTagihan, 0, ',', '.') }}</p>
+                            <p id="box-total-pembayaran-lunas" class="font-normal text-black dark:text-white">Rp. 0</p>
                         </div>
                     </div>
                 </div>
                 <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-y py-2">Input Pembayaran</h2>
-                <div class="mb-4">
-                    <input type="hidden" name="link_doc" value="{{ $dataCase->link_doc }}">
-                    <input type="hidden" name="sisa_tagihan" value="{{ $sisaTagihan }}">
-                    <label for="metode-pembayaran-pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
-                    <select name="metode_pembayaran_pembayaran" id="metode-pembayaran-pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                        <option value="" hidden>Pilih Metode Pembayaran</option>
-                        @foreach ($daftarAkun as $akun)
-                            <option value="{{ $akun->id }}">{{ $akun->nama_akun }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Files Bukti Transaksi :</label>
-                <div class="flex items-center justify-center w-full">
-                    <label for="file-upload-kasir" class="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                        <div id="image-transaksi" class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
+                <div class="grid grid-cols-3 gap-x-4 gap-y-2 mb-4">
+                    <div>
+                        <label for="nominal-saldo-customer-terpakai" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Saldo Customer Terpakai :</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="nominal_saldo_customer_terpakai" id="nominal-saldo-customer-terpakai" class="format-angka-ongkir-repair nominal-lunas-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="0">
                         </div>
-                        <div id="selected-files-bukti-transaksi" class="flex flex-wrap justify-evenly" style="display: none"></div>
-                        <input name="file_bukti_transaksi" id="file-upload-kasir" type="file" class="hidden file-upload-kasir">
-                    </label>
+                    </div>
+                    <div>
+                        <label for="nominal-discount-lunas" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Discount :</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="nominal_discount" id="nominal-discount-lunas" class="format-angka-ongkir-repair nominal-lunas-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="0">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="nominal-kerugian-lunas" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Kerugian :</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="nominal_kerugian" id="nominal-kerugian-lunas" class="format-angka-ongkir-repair nominal-lunas-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="0" readonly>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-y py-2">Input Metode Pembayaran</h2>
+                <div id="container-metode-pembayaran-lunas">
+                    <div id="form-mp-lunas" class="form-mp-lunas grid grid-cols-4 gap-4 mb-4" style="grid-template-columns: 5fr 5fr 3fr 1fr">
+                        <div>
+                            <input type="hidden" name="link_doc" value="{{ $dataCase->link_doc }}">
+                            <input type="hidden" name="sisa_tagihan" value="0">
+                            <label for="metode-pembayaran-pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
+                            <select name="metode_pembayaran_pembayaran[]" id="metode-pembayaran-pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <option value="" hidden>Pilih Metode Pembayaran</option>
+                                @foreach ($daftarAkun as $akun)
+                                    <option value="{{ $akun->id }}">{{ $akun->nama_akun }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="nominal-pembayaran-lunas-repair" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="nominal_pembayaran[]" id="nominal-pembayaran-lunas-repair" class="format-angka-ongkir-repair nominal-lunas-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Files Bukti Transaksi :</label>
+                            <div class="relative z-0 w-full">
+                                <label 
+                                    for="file-bukti-transaksi" 
+                                    id="file-label" 
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    No file chosen
+                                </label>
+                                <input 
+                                    type="file" 
+                                    name="file_bukti_transaksi[]" 
+                                    id="file-bukti-transaksi" 
+                                    class="hidden"
+                                    onchange="updateFileName(this)"
+                                    required>
+                            </div>
+                        </div>
+                        {{-- <div class="flex justify-center items-end pb-2">
+                            <button type="button" class="remove-metode-pembayaran-lunas" data-id="">
+                                <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                            </button>
+                        </div> --}}
+                    </div>
+                </div>
+                <div class="flex justify-start text-red-500 mt-6">
+                    <div class="flex cursor-pointer my-2 hover:text-rose-700">
+                        <button type="button" id="add-metode-pembayaran-lunas" class="flex flex-row justify-between gap-2">
+                            <span class="material-symbols-outlined">add_circle</span>
+                            <span>Tambah Metode Pembayaran</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="form-pembayaran-lebih" style="display: none">
+                    <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-y py-2">Input Pembayaran Lebih</h2>
+                    <div class="grid grid-cols-3 gap-x-4 gap-y-2 mb-4">
+                        <div>
+                            <label for="nominal-dikembalikan" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Dikembalikan :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="nominal_dikembalikan" id="nominal-dikembalikan" class="format-angka-ongkir-repair nominal-lunas-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="0">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="nominal-pll" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal P. Lain Lain :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="nominal_pll" id="nominal-pll" class="format-angka-ongkir-repair nominal-lunas-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="0">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="nominal-simpan-saldo-customer" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Save Saldo Customer :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="nominal_save_saldo_customer" id="nominal-simpan-saldo-customer" class="format-angka-ongkir-repair nominal-lunas-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="0">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-end mt-4">
-                    <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>
+                    <button id="btn-kasir-lunas-repair" type="submit" class="submit-button-form cursor-not-allowed text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" disabled>Submit</button>
                     <div class="loader-button-form" style="display: none">
                         <button class="cursor-not-allowed text-white border border-blue-700 bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800" disabled>
                             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -349,5 +444,16 @@
             </div>
         </div>
     </form>
+
+    <script>
+        function updateFileName(input) {
+            const fileName = input.files.length > 0 ? input.files[0].name : "No file chosen";
+            const label = input.previousElementSibling;
+            if (label) {
+                label.textContent = fileName;
+            }
+        }
+        let daftarAkun = @json($daftarAkun);
+    </script>
 
 @endsection

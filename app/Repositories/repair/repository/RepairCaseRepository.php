@@ -148,9 +148,4 @@ class RepairCaseRepository implements RepairCaseInterface
         return $this->modelStatus->find($id);
     }
 
-    public function getMetodePembayaran()
-    {
-        return $this->modelAkun->all();
-    }
-
 }
