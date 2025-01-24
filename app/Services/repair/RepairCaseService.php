@@ -880,6 +880,7 @@ class RepairCaseService
             $pdf = Pdf::loadView('repair.csr.invoice.invoice-pelunasan', $dataView);
             $pdfContent = $pdf->output();
             $pdfEncode = base64_encode($pdfContent);
+            $filesFinance[] = $pdfEncode;
 
             $payload = [
                 'nama_customer' => $namaCustomer,
