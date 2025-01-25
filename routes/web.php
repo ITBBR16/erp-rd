@@ -284,7 +284,7 @@ Route::middleware('repair')->group(function () {
                 Route::post('/create-nc', 'createNC')->name('createNC');
                 Route::get('/getKelengkapan/{id}', 'getKelengkapan');
                 Route::get('/reviewPdfTandaTerima/{id}', 'reviewPdfTandaTerima');
-                Route::get('/reviewPdfInvoiceLunas/{id}', 'reviewPdfInvoiceLunas');
+                Route::get('/reviewPdfInvoiceLunas/{id}', 'reviewPdfInvoiceLunas')->name('reviewPdfInvoiceLunas');
                 Route::get('/downloadPdf/{id}', 'downloadPdf')->name('downloadPdf');
                 Route::post('/kirimTandaTerima/{id}', 'kirimTandaTerimaCustomer')->name('kirimTandaTerima');
             });

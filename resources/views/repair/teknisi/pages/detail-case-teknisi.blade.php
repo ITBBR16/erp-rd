@@ -275,7 +275,7 @@
                         <h3 class="font-semibold">All Jurnal</h3>
                     </div>
                     <div class="text-sm text-end">
-                        <h3 class="font-semibold">Teknisi : {{ $case->teknisi->first_name }}</h3>
+                        <h3 class="font-semibold">Teknisi : {{ $case->teknisi->first_name ?? "-" }}</h3>
                     </div>
                 </div>
                 <ol class="relative border-s border-gray-200 dark:border-gray-700">

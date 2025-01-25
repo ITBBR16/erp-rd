@@ -53,8 +53,9 @@ class RepairListCaseController extends Controller
         return back()->with($resultCase['status'], $resultCase['message']);
     }
 
-    public function reviewPdfInvoiceLunas($id)
+    public function reviewPdfInvoiceLunas($encryptId)
     {
+        $id = decrypt($encryptId);
         $pdf = $this->repairCaseService->reviewPdfLunas($id);
         return $pdf->stream();
     }
