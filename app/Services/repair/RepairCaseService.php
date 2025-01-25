@@ -706,6 +706,7 @@ class RepairCaseService
             $employeeId = auth()->user()->id;
             $tglWaktu = Carbon::now();
             $linkDrive = $request->input('link_doc');
+            $keteranganDp = $request->input('keterangan_dp');
             
             $checkTransaksi = $this->repairCase->findTransaksiByCase($id);
 
@@ -787,9 +788,9 @@ class RepairCaseService
                 'files' => $filesFinance,
                 'source' => 'Repair',
                 'inOut' => 'In',
-                'keterangan' => "DP R$id sejumlah ",
-                'idEksternal' => $id,
-                'idCustomer' => $dataCase->customer_id,
+                'keterangan' => $keteranganDp,
+                'idEksternal' => "R$id",
+                'idCustomer' => $dataCase->customer->first_name . "-" . $dataCase->customer->last_name . "-" . $dataCase->customer->id,
                 'totalNominal' => $totalPembayaran,
                 'nilaiJasa' => 0,
                 'nilaiReparasi' => 0,
@@ -833,6 +834,7 @@ class RepairCaseService
             $employeeId = auth()->user()->id;
             $tglWaktu = Carbon::now();
             $linkDrive = $request->input('link_doc');
+            $keteranganLunas = $request->input('keterangan_lunas');
             $saldoTerpakai = preg_replace("/[^0-9]/", "", $request->input('nominal_saldo_customer_terpakai')) ?: 0;
             $nominalDiscount = preg_replace("/[^0-9]/", "", $request->input('nominal_discount')) ?: 0;
             $nominalKerugian = preg_replace("/[^0-9]/", "", $request->input('nominal_kerugian')) ?: 0;
@@ -847,7 +849,7 @@ class RepairCaseService
                 $statusSC[] = true;
             }
             if ($tambahSaldoCustomer > 0) {
-                $saldoCustomer[] = $tambahSaldoCustomer;
+                $saldoCustomer[] = $tambahSaldoCustomer + $nominalDikembalikan;
                 $statusSC[] = false;
             }
             
@@ -914,7 +916,7 @@ class RepairCaseService
                 $this->repairCase->createPembayaran($dataPembayaran);
             }
 
-            $this->repairCase->updateTransaksi($transaksi->id, ['total_pembayaran' => $totalPembayaran]);
+            $this->repairCase->updateTransaksi($transaksi->id, ['total_pembayaran' => $totalPembayaran, 'status' => 'Lunas']);
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 10);
             if ($checkTimestamp) {
@@ -942,7 +944,6 @@ class RepairCaseService
             $nilaiPJasa = 0;
             $nilaiPReparasi = 0;
             $nilaiPResiko = 0;
-            $nilaiPLainnya = 0;
             $nilaiSparepartBaru = 0;
             $nilaiSparepartBekas = 0;
             
@@ -974,8 +975,6 @@ class RepairCaseService
                             $nilaiPResiko += $nominal;
                         } elseif ($jenisTransaksi === 'Pendapatan Repair Reparasi') {
                             $nilaiPReparasi += $nominal;
-                        } elseif ($jenisTransaksi === 'Pendapatan Repair Lain Lain') {
-                            $nilaiPLainnya += $nominal;
                         }
                     }
                 }
@@ -989,16 +988,16 @@ class RepairCaseService
                 'files' => $filesFinance,
                 'source' => 'Repair',
                 'inOut' => 'In',
-                'keterangan' => "Pemasukan R$id sejumlah ",
-                'idEksternal' => $id,
-                'idCustomer' => $dataCase->customer_id,
+                'keterangan' => $keteranganLunas,
+                'idEksternal' => "R$id",
+                'idCustomer' => $dataCase->customer->first_name . "-" . $dataCase->customer->last_name . "-" . $dataCase->customer->id,
                 'totalNominal' => $totalPembayaran,
                 'nilaiJasa' => $nilaiPJasa,
                 'nilaiReparasi' => $nilaiPReparasi,
                 'nilaiResiko' => $nilaiPResiko,
                 'nilaiSparepartBaru' => $nilaiSparepartBaru,
                 'nilaiSparepartBekas' => $nilaiSparepartBekas,
-                'nilaiLainnya' => $nilaiPLainnya,
+                'nilaiLainnya' => $pendapatanLainLain,
                 'nilaiDiskon' => $nominalDiscount,
                 'nilaiKerugian' => $nominalKerugian,
                 'saldoCustomer' => $saldoCustomer,

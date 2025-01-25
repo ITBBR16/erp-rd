@@ -66,7 +66,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Alamat</p>
-                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ $dataCase->customer->kota->name }}</h3>
+                        <h3 class="text-sm font-semibold text-black dark:text-white">{{ $dataCase->customer->kota->name ?? '-' }}</h3>
                     </div>
                     <div>
                         <p class="text-xs text-gray-700 dark:text-gray-300">Status Case</p>
@@ -358,6 +358,10 @@
                             <span>Tambah Metode Pembayaran</span>
                         </button>
                     </div>
+                </div>
+                <div class="mt-4 bottom-0">
+                    <label for="keterangan-dp" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan :</label>
+                    <textarea name="keterangan_dp" id="keterangan-dp" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Down Payment Atas Nama . . ." required></textarea>
                 </div>
                 <div class="text-end mt-4">
                     <button type="submit" class="submit-button-form text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Submit</button>

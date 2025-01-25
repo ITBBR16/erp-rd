@@ -168,6 +168,13 @@ $(document).ready(function () {
         }
     );
 
+    $(document).on('click', '.remove-metode-pembayaran-lunas', function () {
+        let idForm = $(this).data("id");
+        $('#form-mp-lunas-' + idForm).remove()
+        updateBoxPembayaranLunas();
+        checkPembayaranLunas();
+    });
+
     // Down Payment
     $(document).on('click', '#add-metode-pembayaran-dp', function () {
         let formLength = $('.form-mp-dp').length;
