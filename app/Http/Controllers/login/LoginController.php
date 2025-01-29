@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\login;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
+use App\Models\employee\Employee;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
@@ -40,21 +42,28 @@ class LoginController extends Controller
     {
         $credentials = $request->only('username', 'password');
 
-        if($token = JWTAuth::attempt($credentials)) {
-            $cookie = cookie('jwt_token', $token, 60 * 24);
-            $user = JWTAuth::setToken($token)->authenticate();
-            if($user->is_admin == 1){
+        $user = Employee::whereRaw('BINARY username = ?', [$credentials['username']])->first();
+
+        if ($user && Hash::check($credentials['password'], $user->password)) {
+            $token = JWTAuth::fromUser($user);
+
+            $now = now();
+            $midnight = $now->copy()->endOfDay();
+            $minutesUntilMidnight = $now->diffInMinutes($midnight);
+
+            $cookie = cookie('jwt_token', $token, $minutesUntilMidnight);
+
+            if ($user->statusEmployee->status == 'Super Admin') {
                 return redirect('/')->withCookie($cookie);
-            } elseif($user->is_admin == 2 && $user->divisi_id == 1){
+            } elseif ($user->statusEmployee->status == 'Admin' && $user->divisiEmployee->nama == 'Kios') {
                 return redirect()->intended('/kios/analisa/dashboard')->withCookie($cookie);
-            } elseif($user->is_admin == 2 && $user->divisi_id == 6){
+            } elseif ($user->statusEmployee->status == 'Admin' && $user->divisiEmployee->nama == 'Logistik') {
                 return redirect()->intended('/logistik')->withCookie($cookie);
-            } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 2) {
+            } elseif ($user->statusEmployee->status == 'Admin' && $user->divisiEmployee->nama == 'Repair') {
                 return redirect('/repair/csr/case-list')->withCookie($cookie);
-            } elseif (auth()->user()->is_admin == 2 && auth()->user()->divisi_id == 4) {
+            } elseif ($user->statusEmployee->status == 'Admin' && $user->divisiEmployee->nama == 'Gudang') {
                 return redirect('/gudang/purchasing/belanja-sparepart')->withCookie($cookie);
             }
-
         }
 
         return back()->with('loginError', 'Failed to Login!');

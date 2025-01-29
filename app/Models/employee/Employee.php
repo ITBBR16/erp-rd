@@ -2,12 +2,12 @@
 
 namespace App\Models\employee;
 
+use App\Models\divisi\Divisi;
 use App\Models\ekspedisi\LogRequest;
 use App\Models\gudang\GudangAdjustStock;
 use App\Models\gudang\GudangBelanja;
 use App\Models\gudang\GudangQualityControll;
 use App\Models\gudang\GudangUnboxing;
-use App\Models\gudang\GudangValidasi;
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosTransaksi;
 use App\Models\repair\RepairCase;
@@ -16,14 +16,35 @@ use App\Models\repair\RepairJurnal;
 use App\Models\repair\RepairTransaksiPembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Employee extends Model
+class Employee extends Model implements JWTSubject
 {
     use HasFactory;
 
     protected $connection = 'rumahdrone_employee';
     protected $table = 'employee';
     protected $guarded = ['id'];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function divisiEmployee()
+    {
+        return $this->belongsTo(Divisi::class, 'divisi_id');
+    }
+
+    public function statusEmployee()
+    {
+        return $this->belongsTo(StatusEmployee::class, 'is_admin');
+    }
 
     public function dailyrecap()
     {

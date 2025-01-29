@@ -16,7 +16,7 @@
                 </div>
                 <div class="grid grid-cols-2 w-full gap-6">
                     <div x-data="dropdownCustomerCase()" class="relative text-start">
-                        <label for="kasir_metode_pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Customer :</label>
+                        <label for="kasir-nama-customer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Customer :</label>
                         <div class="relative">
                             <input x-model="search" 
                                 @focus="open = true" 
@@ -80,7 +80,7 @@
                     </div>
                     <div>
                         <label for="keterangan-pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan :</label>
-                        <input type="text" name="keterangan_pembayaran" id="keterangan-pembayaran" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Keterangan . . .">
+                        <input type="text" name="keterangan_pembayaran" id="keterangan-pembayaran" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pendapatan Kios Sejumlah Rp.xxx.xxx . . .">
                     </div>
                 </div>
             </div>
@@ -115,14 +115,14 @@
                             <p id="kasir-box-ongkir" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between border-b-2">
+                    {{-- <div class="flex items-center justify-between border-b-2">
                         <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Tax :</p>
                         </div>
                         <div class="flex justify-end ml-auto">
                             <p id="kasir-box-tax" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="flex items-center justify-between mt-2">
                         <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Total :</p>
@@ -132,12 +132,22 @@
                         </div>
                     </div>
                     <button type="button" data-modal-target="kasir-invoice" data-modal-toggle="kasir-invoice" class="review-invoice text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full">Review Invoice</button>
-                    <button type="submit" name="status_kasir" value="Hold" class="review-invoice text-white mt-4 bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full">Hold Payment</button>
+                    {{-- <button type="submit" name="status_kasir" value="Hold" class="review-invoice text-white mt-4 bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full">Hold Payment</button> --}}
                 </div>
             </div>
         </div>
-        <div class="relative overflow-x-auto pt-4">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+
+        <div x-data>
+            <div class="flex justify-between text-rose-600">
+                <div class="flex cursor-pointer mt-4 hover:text-red-400">
+                    <button type="button" @click="$store.kasirForm.addItem()" id="add-item-kasir" class="flex flex-row justify-between gap-2">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span class="">Tambah Item</span>
+                    </button>
+                </div>
+            </div>
+    
+            <table class="w-full mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 border-b-2 uppercase dark:text-white">
                     <tr>
                         <th scope="col" class="px-4 py-3" style="width: 20%;">
@@ -160,23 +170,72 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody id="kasir-container">
-                    
-                </tbody>
-                <tfoot>
-                    <tr class="font-semibold text-gray-900 dark:text-white">
-                        <td class="px-4 py-3">
-                            <div class="flex justify-between text-rose-600">
-                                <div class="flex cursor-pointer mt-4 hover:text-red-400">
-                                    <button type="button" id="add-item-kasir" class="flex flex-row justify-between gap-2">
-                                        <span class="material-symbols-outlined">add_circle</span>
-                                        <span class="">Tambah Item</span>
-                                    </button>
+                <tbody>
+                    <template x-for="item in $store.kasirForm.items" :key="item.id">
+                        <tr>
+                            <td class="px-4 py-2">
+                                <select name="jenis_transaksi[]" x-model="item.jenisTransaksi" @change="$store.kasirForm.fetchItemOptions(item)" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <option value="" hidden>Pilih Jenis Transaksi</option>
+                                    <option value="drone_baru">Drone Baru</option>
+                                    <option value="drone_bekas">Drone Bekas</option>
+                                    <option value="part_baru">Part Baru</option>
+                                    <option value="part_bekas">Part Bekas</option>
+                                </select>
+                            </td>
+                            <td class="px-4 py-2 relative text-start">
+                                <div class="relative">
+                                    <input x-model="item.searchQuery" 
+                                        @focus="item.showDropdown = true" 
+                                        @keydown.escape="item.showDropdown = false" 
+                                        @click.outside="item.showDropdown = false"
+                                        @input="$store.kasirForm.searchItems(item)"
+                                        type="text" 
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Search or select product...">
+                                        <svg :class="{ 'rotate-180': item.showDropdown }" class="absolute inset-y-0 right-2 top-2.5 w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    <input type="hidden" name="item_id[]" :value="item.itemId" required>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
+        
+                                <ul x-show="item.showDropdown" 
+                                    x-transition 
+                                    class="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-60 w-full overflow-y-auto shadow-md dark:bg-gray-700 dark:border-gray-600">
+                                    <template x-for="option in item.filteredItems" :key="option.value">
+                                        <li @click="$store.kasirForm.selectItem(item, option)" 
+                                            class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
+                                            <span x-text="option.label" class="text-black dark:text-white"></span>
+                                        </li>
+                                    </template>
+                                    <li 
+                                        x-show="item.itemOptions.length === 0" 
+                                        class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                                        Data produk tidak ditemukan.
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="px-4 py-2">
+                                <select x-model="item.kasirSn" name="kasir_sn[]" class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <option value="" hidden>Pilih SN</option>
+                                    <template x-for="sn in item.kasirSnOptions" :key="sn.value">
+                                        <option :value="sn.value" x-text="sn.label"></option>
+                                    </template>
+                                </select>
+                            </td>
+                            <td class="px-4 py-2">
+                                <input type="text" name="kasir_harga[]" x-model="item.kasirHarga" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
+                            </td>
+                            <td class="px-4 py-2">
+                                <input type="checkbox" name="checkbox_tax[]" x-model="item.checkboxTax" class="checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
+                            </td>
+                            <td class="px-4 py-2">
+                                <button type="button" @click="$store.kasirForm.removeItem(item.id)">
+                                    <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
             </table>
         </div>
     </form>
@@ -213,6 +272,151 @@
                     this.open = false;
                 }
             }
+        }
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('kasirForm', {
+                itemCount: 0,
+                items: [],
+                invoices: [],
+                autocompleteData: {},
+
+                addItem() {
+                    this.itemCount++;
+                    this.items.push({
+                        id: this.itemCount,
+                        jenisTransaksi: '',
+                        itemName: '',
+                        itemId: '',
+                        kasirSn: '',
+                        kasirHarga: '',
+                        kasirModalPart: '',
+                        checkboxTax: false,
+                        itemOptions: [],
+                        filteredItems: [],
+                        searchQuery: '',
+                        kasirSnOptions: [],
+                        showDropdown: false,
+                    });
+                },
+
+                removeItem(id) {
+                    this.items = this.items.filter(item => item.id !== id);
+                },
+
+                async fetchItemOptions(item) {
+                    if (!item.jenisTransaksi) {
+                        alert('Silahkan pilih jenis transaksi terlebih dahulu.');
+                        return;
+                    }
+
+                    if (!this.autocompleteData[item.jenisTransaksi]) {
+                        try {
+                            let response = await fetch(`/kios/kasir/autocomplete/${item.jenisTransaksi}`);
+                            let data = await response.json();
+                            this.autocompleteData[item.jenisTransaksi] = data;
+                        } catch (error) {
+                            alert('Terjadi kesalahan saat mengambil data.');
+                            return;
+                        }
+                    }
+
+                    if (item.jenisTransaksi == 'part_baru' || item.jenisTransaksi == 'part_bekas') {
+                        
+                        item.itemOptions = this.autocompleteData[item.jenisTransaksi].map(part => ({
+                            label: part.nama_part,
+                            value: part.id
+                        }));
+
+                    } else {
+
+                        item.itemOptions = this.autocompleteData[item.jenisTransaksi].map(drone => ({
+                            label: drone.subjenis.paket_penjualan,
+                            value: drone.subjenis.id
+                        }));
+
+                    }
+
+                    item.filteredItems = item.itemOptions;
+                },
+
+                searchItems(item) {
+                    if (!item.searchQuery) {
+                        item.filteredItems = item.itemOptions;
+                    } else {
+                        item.filteredItems = item.itemOptions.filter(option =>
+                            option.label.toLowerCase().includes(item.searchQuery.toLowerCase())
+                        );
+                    }
+                    item.showDropdown = true;
+                },
+
+                selectItem(item, selectedItem) {
+                    item.itemId = selectedItem.value;
+                    item.itemName = selectedItem.label;
+                    item.showDropdown = false;
+                    item.searchQuery = selectedItem.label;
+
+                    this.fetchKasirSnOptions(item);
+                },
+
+                async fetchKasirSnOptions(item) {
+                    if (!item.itemId) {
+                        alert('Silahkan pilih item terlebih dahulu.');
+                        return;
+                    }
+
+                    try {
+                        let response = await fetch(`/kios/kasir/getSerialNumber/${item.jenisTransaksi}/${item.itemId}`);
+                        let data = await response.json();
+
+                        if (!data || !data.data_sn) {
+                            alert('Tidak ada serial number yang tersedia.');
+                            return;
+                        }
+
+                        if (item.jenisTransaksi == 'part_baru' || item.jenisTransaksi == 'part_bekas') {
+
+                            item.kasirSnOptions = data.data_sn.map(sn => ({
+                                label: sn.id_item,
+                                value: sn.id
+                            }));
+
+                            item.kasirHarga = formatRupiah(data.nilai.hargaGlobal);
+
+                        } else {
+
+                            item.kasirSnOptions = data.data_sn.map(sn => ({
+                                label: sn.serial_number,
+                                value: sn.id
+                            }));
+
+                            item.kasirHarga = formatRupiah(data.nilai);
+
+                        }
+
+                        this.addToInvoice(item);
+                    } catch (error) {
+                        alert('Terjadi kesalahan saat mengambil data serial number. Error : ' + error);
+                    }
+                }, 
+
+                addToInvoice(item) {
+                    const invoiceItem = {
+                        productName: item.itemName,
+                        description: 'Halo aku keterangan',
+                        qty: 1,
+                        itemPrice: formatRupiah(item.kasirHarga) || formatRupiah(0),
+                        totalPrice: formatRupiah(item.kasirHarga) || formatRupiah(0),
+                    };
+
+                    this.invoices.push(invoiceItem);
+                },
+            });
+        });
+
+        function formatRupiah(angka) {
+            return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
         }
     </script>
 </div>

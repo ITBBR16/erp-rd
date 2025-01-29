@@ -51,31 +51,41 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="relative overflow-x-auto pt-4">
-                                    <table class="border text-xs w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead class="text-xs text-gray-900 border-b-2 uppercase dark:text-gray-400">
-                                            <tr>
-                                                <th scope="col" class="px-2 py-1" style="width: 30%;">
-                                                    Product Name
-                                                </th>
-                                                <th scope="col" class="px-2 py-1" style="width: 30%;">
-                                                    Description
-                                                </th>
-                                                <th scope="col" class="px-2 py-1" style="width: 10%;">
-                                                    QTY
-                                                </th>
-                                                <th scope="col" class="px-2 py-1" style="width: 15%;">
-                                                    Item Price
-                                                </th>
-                                                <th scope="col" class="px-2 py-1" style="width: 15%;">
-                                                    Total Price
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="invoice-kasir-container">
-                                            
-                                        </tbody>
-                                    </table>
+                                <div x-data>
+                                    <div class="relative pt-4">
+                                        <table class="border text-xs w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead class="text-xs text-gray-900 border-b-2 uppercase dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-2 py-1" style="width: 30%;">
+                                                        Product Name
+                                                    </th>
+                                                    <th scope="col" class="px-2 py-1" style="width: 30%;">
+                                                        Description
+                                                    </th>
+                                                    <th scope="col" class="px-2 py-1" style="width: 10%;">
+                                                        QTY
+                                                    </th>
+                                                    <th scope="col" class="px-2 py-1" style="width: 15%;">
+                                                        Item Price
+                                                    </th>
+                                                    <th scope="col" class="px-2 py-1" style="width: 15%;">
+                                                        Total Price
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template x-for="invoice in $store.kasirForm.invoices" :key="invoice.productName">
+                                                    <tr>
+                                                        <td class="px-2 py-1" x-text="invoice.productName"></td>
+                                                        <td class="px-2 py-1" x-text="invoice.description"></td>
+                                                        <td class="px-2 py-1" x-text="invoice.qty"></td>
+                                                        <td class="px-2 py-1" x-text="invoice.itemPrice"></td>
+                                                        <td class="px-2 py-1" x-text="invoice.totalPrice"></td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
+                                    </div>                                
                                 </div>
                                 <div class="grid grid-cols-3 mt-4">
                                     <div class="col-span-2">
@@ -84,7 +94,6 @@
                                         <p class="text-xs text-gray-500">- Garansi tidak berlaku akibat human error</p>
                                         <p class="text-xs text-gray-500">- Garansi tidak berlaku apabila barang pernah diperbaiki/dibongkar pemilik/pihak lain</p>
                                         <p class="text-xs text-gray-500">- Pembeli Wajib membawa nota dan kartu garansi pada saat klaim garansi</p>
-                                        <p class="text-xs text-gray-500">- Pembayaran melalui Marketplace atau transfer rek BCA 4400175395 | Mandiri 1560012623593 a/n Farra Rachmanda</p>
                                     </div>
                                     <div class="flex sm:justify-end">
                                         <div class="text-sm w-full max-w-2xl sm:text-end">
@@ -101,10 +110,10 @@
                                                     <dt class="col-span-2 font-semibold text-gray-800 dark:text-gray-200">Ongkir:</dt>
                                                     <dd id="invoice-ongkir" class="col-span-3 text-gray-500"></dd>
                                                 </dl>
-                                                <dl class="grid sm:grid-cols-5 gap-x-3">
+                                                {{-- <dl class="grid sm:grid-cols-5 gap-x-3">
                                                     <dt class="col-span-2 font-semibold text-gray-800 dark:text-gray-200">Tax:</dt>
                                                     <dd id="invoice-tax" class="col-span-3 text-gray-500"></dd>
-                                                </dl>
+                                                </dl> --}}
                                                 <dl class="grid sm:grid-cols-5 gap-x-3">
                                                     <dt class="col-span-2 font-semibold text-gray-800 dark:text-gray-200">Total:</dt>
                                                     <dd id="invoice-total" class="col-span-3 text-gray-500"></dd>

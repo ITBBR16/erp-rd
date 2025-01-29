@@ -2,9 +2,10 @@
 
 namespace App\Models\divisi;
 
+use App\Models\employee\Employee;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\ekspedisi\PengirimanEkspedisi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Divisi extends Model
 {
@@ -14,6 +15,11 @@ class Divisi extends Model
     protected $table = 'divisi';
 
     protected $guarded = ['id'];
+
+    public function employee() 
+    {
+        return $this->hasMany(Employee::class);
+    }
 
     public function pengiriman()
     {

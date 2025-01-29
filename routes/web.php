@@ -304,6 +304,7 @@ Route::middleware('repair')->group(function () {
             });
 
             Route::resource('/non-kasir', RepairNonKasirController::class)->only(['index']);
+            Route::get('/downloadCustomerByCase', [RepairNonKasirController::class, 'downloadCustomers']);
 
             Route::group(['controller' => RepairRecapTransaksiController::class], function () {
                 Route::resource('/recap-transaksi', RepairRecapTransaksiController::class)->only(['index', 'store']);
