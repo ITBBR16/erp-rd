@@ -893,18 +893,17 @@ class RepairEstimasiService
                 ->sum('modal_gudang');
 
             $dataGudang = $this->gudangProduk
-                ->where('id', $id)
-                ->whereIn('status', ['Ready', 'Promo'])
+                ->where('produk_sparepart_id', $id)
                 ->first();
 
             if (!$dataGudang) {
                 throw new \Exception("Data gudang tidak ditemukan");
             }
 
-            $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get();
+            $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get() ?? 0;
             $totalSN = $dataSubGudang->count();
             $modalAwal = $dataGudang->modal_awal ?? 0;
-            $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
+            $modalGudang = ($totalSN > 0) ? ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN : 0;
             $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
             $nilai = [
                 'modalGudangg' => $modalGudang,

@@ -229,12 +229,16 @@ $(document).ready(function () {
         fetch(`/repair/estimasi/getDetailGudang/${sku}`)
         .then(response => response.json())
         .then(data => {
-            
-            stockPart.val(data.stock);
-            hargaJualRepair.val(formatAngka(data.detail.harga_internal));
-            hargaJualGudang.val(formatAngka(data.detail.harga_global));
+            var stock = data.stock || 0
+            var hargaGlobal = data.detail.harga_global || 0
+            var hargaInternal = data.detail.harga_internal || 0
+            var hargaPromo = data.detail.harga_promo || 0
+
+            stockPart.val(stock);
+            hargaJualRepair.val(formatAngka(hargaInternal));
+            hargaJualGudang.val(formatAngka(hargaGlobal));
             hargaModalGudang.val(formatAngka(0));
-            hargaPromoGudang.val(formatAngka(data.detail.harga_promo));
+            hargaPromoGudang.val(formatAngka(hargaPromo));
 
         });
     }
