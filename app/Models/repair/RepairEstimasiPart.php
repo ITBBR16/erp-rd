@@ -3,6 +3,7 @@
 namespace App\Models\repair;
 
 use App\Models\gudang\GudangProduk;
+use App\Models\gudang\GudangProdukIdItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +28,11 @@ class RepairEstimasiPart extends Model
     public function sparepartGudang()
     {
         return $this->belongsTo(GudangProduk::class, 'gudang_produk_id');
+    }
+
+    public function partIdITem()
+    {
+        return $this->belongsTo(GudangProdukIdItem::class, 'id_item');
     }
 
 }

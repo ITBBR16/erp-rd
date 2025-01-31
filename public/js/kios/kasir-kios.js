@@ -144,225 +144,168 @@ function setupAutocomplete(data, itemNameId) {
     }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
 }
 
+// Alphine.js
+document.addEventListener('alpine:init', () => {
+    Alpine.store('kasirForm', {
+        itemCount: 0,
+        items: [],
+        invoices: [],
+        autocompleteData: {},
+
+        addItem() {
+            this.itemCount++;
+            this.items.push({
+                id: this.itemCount,
+                jenisTransaksi: '',
+                itemName: '',
+                itemId: '',
+                kasirSn: '',
+                kasirHarga: '',
+                kasirModalPart: '',
+                checkboxTax: false,
+                itemOptions: [],
+                filteredItems: [],
+                searchQuery: '',
+                kasirSnOptions: [],
+                showDropdown: false,
+            });
+        },
+
+        removeItem(id) {
+            this.items = this.items.filter(item => item.id !== id);
+        },
+
+        async fetchItemOptions(item) {
+            if (!item.jenisTransaksi) {
+                alert('Silahkan pilih jenis transaksi terlebih dahulu.');
+                return;
+            }
+
+            if (!this.autocompleteData[item.jenisTransaksi]) {
+                try {
+                    let response = await fetch(`/kios/kasir/autocomplete/${item.jenisTransaksi}`);
+                    let data = await response.json();
+                    this.autocompleteData[item.jenisTransaksi] = data;
+                } catch (error) {
+                    alert('Terjadi kesalahan saat mengambil data.');
+                    return;
+                }
+            }
+
+            if (item.jenisTransaksi == 'part_baru' || item.jenisTransaksi == 'part_bekas') {
+                
+                item.itemOptions = this.autocompleteData[item.jenisTransaksi].map(part => ({
+                    label: part.nama_part,
+                    value: part.id
+                }));
+
+            } else {
+
+                item.itemOptions = this.autocompleteData[item.jenisTransaksi].map(drone => ({
+                    label: drone.subjenis.paket_penjualan,
+                    value: drone.subjenis.id
+                }));
+
+            }
+
+            item.filteredItems = item.itemOptions;
+        },
+
+        searchItems(item) {
+            if (!item.searchQuery) {
+                item.filteredItems = item.itemOptions;
+            } else {
+                item.filteredItems = item.itemOptions.filter(option =>
+                    option.label.toLowerCase().includes(item.searchQuery.toLowerCase())
+                );
+            }
+            item.showDropdown = true;
+        },
+
+        selectItem(item, selectedItem) {
+            this.removeFromInvoice(item);
+
+            item.itemId = selectedItem.value;
+            item.itemName = selectedItem.label;
+            item.showDropdown = false;
+            item.searchQuery = selectedItem.label;
+
+            this.fetchKasirSnOptions(item);
+        },
+
+        async fetchKasirSnOptions(item) {
+            if (!item.itemId) {
+                alert('Silahkan pilih item terlebih dahulu.');
+                return;
+            }
+
+            try {
+                let response = await fetch(`/kios/kasir/getSerialNumber/${item.jenisTransaksi}/${item.itemId}`);
+                let data = await response.json();
+
+                if (!data || !data.data_sn) {
+                    alert('Tidak ada serial number yang tersedia.');
+                    return;
+                }
+
+                if (item.jenisTransaksi == 'part_baru' || item.jenisTransaksi == 'part_bekas') {
+
+                    item.kasirSnOptions = data.data_sn.map(sn => ({
+                        label: sn.id_item,
+                        value: sn.id
+                    }));
+
+                    item.kasirHarga = formatRupiah(data.nilai.hargaGlobal);
+
+                } else {
+
+                    item.kasirSnOptions = data.data_sn.map(sn => ({
+                        label: sn.serial_number,
+                        value: sn.id
+                    }));
+
+                    item.kasirHarga = formatRupiah(data.nilai);
+
+                }
+
+                this.addToInvoice(item);
+
+            } catch (error) {
+                alert('Terjadi kesalahan saat mengambil data serial number. Error : ' + error);
+            }
+        }, 
+
+        addToInvoice(item) {
+            var deskripsi = item.jenisTransaksi == 'drone_baru'
+                ? 'Unit Baru, Garansi 1 Tahun'
+                : item.jenisTransaksi == 'drone_bekas'
+                    ? 'Unit Second, Garansi 1'
+                    : '-';
+
+            const invoiceItem = {
+                productName: item.itemName,
+                description: deskripsi,
+                qty: 1,
+                itemPrice: item.kasirHarga || 0,
+                totalPrice: item.kasirHarga || 0,
+            };
+
+            this.invoices.push(invoiceItem);
+        },
+
+        removeFromInvoice(item) {
+            this.invoices = this.invoices.filter(invItem => invItem.productName !== item.itemName);
+        },
+    });
+});
+
 $(document).ready(function(){
     const kasirContainer = $("#kasir-container");
     let itemCount = $("#kasir-container tr").length;
-    let autocompleteData = [];
-    let errorFlag = {};
-
-    // $(document).on("click", "#add-item-kasir", function () {
-    //      itemCount++
-    //      let itemForm = `
-    //      <tr id="kasir-item-${itemCount}" class="bg-white dark:bg-gray-800">
-    //         <td class="px-4 py-4">
-    //             <label for="jenis-transaksi-${itemCount}"></label>
-    //             <select name="jenis_transaksi[]" id="jenis-transaksi-${itemCount}" data-id="${itemCount}" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-    //                 <option value="" hidden>Pilih Jenis Transaksi</option>
-    //                 <option value="drone_baru" class="bg-white dark:bg-gray-700">Drone Baru</option>
-    //                 <option value="drone_bekas" class="bg-white dark:bg-gray-700">Drone Bekas</option>
-    //                 <option value="part_baru" class="bg-white dark:bg-gray-700">Part Baru</option>
-    //                 <option value="part_bekas" class="bg-white dark:bg-gray-700">Part Bekas</option>
-    //             </select>
-    //         </td>
-    //         <td class="px-4 py-4">
-    //             <input type="hidden" name="item_id[]" id="item-id-${itemCount}" class="item_id" required>
-    //             <input type="text" name="item_name[]" id="item-name-${itemCount}" data-id="${itemCount}" class="item_name bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Item Name" required>
-    //         </td>
-    //         <td class="px-4 py-4">
-    //             <label for="kasir_sn-${itemCount}"></label>
-    //             <select name="kasir_sn[]" id="kasir_sn-${itemCount}" data-id="${itemCount}" class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-    //                 <option value="" hidden>Pilih SN</option>
-    //             </select>
-    //         </td>
-    //         <td class="px-4 py-4">
-    //             <input type="hidden" name="kasir_modal_part[]" id="kasir-modal-part-${itemCount}">
-    //             <input type="text" name="kasir_harga[]" id="kasir-harga-${itemCount}" data-id="${itemCount}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
-    //         </td>
-    //         <td class="px-4 py-4">
-    //             <input type="checkbox" name="checkbox_tax[]" id="checkbox-tax-${itemCount}" data-id="${itemCount}" class="checkbox-tax w-10 h-6 bg-gray-100 border border-gray-300 text-green-600 text-lg rounded-lg focus:ring-green-600 focus:ring-2 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:ring-offset-gray-800">
-    //         </td>
-    //         <td class="px-4 py-4">
-    //             <button type="button" class="remove-kasir-item" data-id="${itemCount}">
-    //                 <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
-    //             </button>
-    //         </td>
-    //     </tr>
-    //      `;
-    //      kasirContainer.append(itemForm);
-    //      updateInvoice();
-
-    // });
-
-    // $(document).on('focus', '.item_name', function () {
-    //     const itemNameId = $(this).data("id");
-    //     const jenisTransaksi = $(`#jenis-transaksi-${itemNameId}`).val();
-        
-    //     if (errorFlag[itemNameId]) {
-    //         return;
-    //     }
-
-    //     if (jenisTransaksi === 'part_baru' || jenisTransaksi === 'part_bekas') {
-    //         if (autocompleteData[jenisTransaksi]) {
-    //             setupAutocomplete(autocompleteData[jenisTransaksi], itemNameId);
-    //         } else {
-    //             $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`)
-    //                 .done((data) => {
-    //                     console.table(data);
-    //                     autocompleteData[jenisTransaksi] = data;
-    //                     setupAutocomplete(data, itemNameId);
-    //                 })
-    //                 .fail((error) => {
-    //                     alert('Silahkan pilih jenis transaksi terlebih dahulu.\nError : ' + error);
-    //                 });
-    //         }
-
-    //     } else {
-
-    //         $.get(`/kios/kasir/autocomplete/${jenisTransaksi}`, function(data) {
-    //             $("#item-name-"+itemNameId).autocomplete({
-    //                 source: function(request, response) {
-
-    //                     var term = request.term.toLowerCase();
-    //                     var filteredData = data.filter(function(item) {
-    //                         return (item.subjenis.paket_penjualan.toLowerCase().indexOf(term) !== -1);
-    //                     });
-    
-    //                     var formattedData = filteredData.map(function(item) {
-    //                         return {
-    //                             label: item.subjenis.paket_penjualan,
-    //                             value: item.subjenis.paket_penjualan,
-    //                             id: item.subjenis.id
-    //                         };
-    //                     });
-
-    //                     response(formattedData);
-    //                 },
-    //                 autoFocus: true,
-    //                 select: function(event, ui) {
-    //                     var selectedValue = ui.item.value;
-    //                     var selectedLabel = ui.item.label;
-    //                     var selectedId = ui.item.id;
-
-    //                     $("#item-id-"+itemNameId).val(selectedId);
-    //                 }
-    //             }).autocomplete("widget").addClass("cursor-pointer overflow-y-auto px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
-    
-    //         }).fail(function(error) {
-    //             alert('Silahkan pilih jenis transaksi terlebih dahulu.\nError : ' + error);
-    //         });
-
-    //     }
-    // });
-
-    // $(document).on('change', '.item_name', function () {
-    //     let formIdItem = $(this).data("id");
-    //     var formHarga = $('#kasir-harga-'+formIdItem);
-    //     var formModalPart = $('#kasir-modal-part-'+formIdItem);
-    //     var formSN = $('#kasir_sn-'+formIdItem);
-    //     let jenisTransaksi = $('#jenis-transaksi-'+formIdItem).val();
-    //     var idItem = $('#item-id-'+formIdItem).val();
-    //     fetch(`/kios/kasir/getSerialNumber/${jenisTransaksi}/${idItem}`)
-    //     .then(response => response.json())
-    //     .then(data => {
-
-    //         formSN.empty();
-
-    //         const defaultOption = $('<option>', {
-    //             text: 'Pilih SN',
-    //             value: '',
-    //             hidden: true
-    //         });
-    //         formSN.append(defaultOption);
-
-    //         if (jenisTransaksi == 'part_baru' || jenisTransaksi == 'part_bekas') {
-    //             data.data_sn.forEach(dataII => {
-    //                 const option = $('<option>', {
-    //                     value: dataII.id,
-    //                     text: dataII.id_item,
-    //                 })
-    //                 .addClass('dark:bg-gray-700');
-    //                 formSN.append(option);
-    //             });
-
-    //             var nilaiPart = formatRupiah(data.nilai.hargaGlobal);
-    //             formHarga.val(nilaiPart);
-    //             formModalPart.val(data.nilai.modalGudangg);
-
-    //             updateSubtotalBox();
-
-    //         } else {
-    //             data.data_sn.forEach(serialnumber => {
-    //                 const option = $('<option>', {
-    //                     value: serialnumber.id,
-    //                     text: serialnumber.serial_number
-    //                 })
-    //                 .addClass('dark:bg-gray-700');
-    //                 formSN.append(option);
-    //             });
-    //         }
-
-    //     })
-    //     .catch(error => {
-    //         alert('Error fetching data:' + error);
-    //     });
-    // });
-
-    // $(document).on('change', '.kasir_sn', function () {
-    //     let formIdItem = $(this).data("id");
-    //     var formHarga = $('#kasir-harga-'+formIdItem);
-    //     let jenisTransaksi = $('#jenis-transaksi-'+formIdItem).val();
-    //     var idItem = $('#item-id-'+formIdItem).val();
-
-    //     fetch(`/kios/kasir/getSerialNumber/${jenisTransaksi}/${idItem}`)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         if (jenisTransaksi == 'part_baru' || jenisTransaksi == 'part_bekas') {
-                
-    //         } else {
-    //             var nilaiDrone = formatRupiah(data.nilai);
-    //             formHarga.val(nilaiDrone);
-    //         }
-
-    //         updateSubtotalBox();
-    //     })
-    //     .catch(error => {
-    //         console.error('Error fetching data:', error);
-    //     });
- 
-    // });
 
     $(document).on('change', '.checkbox-tax', function() {
         updateInvoice();
         updateSubtotalBox();
-    });
-
-    $(document).on("click", ".remove-kasir-item", function() {
-         let itemNameId = $(this).data("id");
-         $("#kasir-item-"+itemNameId).remove();
-         itemCount--;
-         updateInvoice()
-         updateSubtotalBox();
-    });
-
-    $(document).on("click", ".review-invoice", function () {
-        var invoiceNamaCus = $('#invoice-nama-customer');
-        var invoiceTlp = $('#invoice-no-tlp');
-        var invoiceJalan = $('#invoice-jalan');
-        var namaCustomer = $('#kasir-nama-customer').val();
-        fetch(`/kios/kasir/getCustomer/${namaCustomer}`)
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(customer => {
-                var fullName = customer.first_name + ' ' + customer.last_name;
-    
-                invoiceNamaCus.text(fullName);
-                invoiceTlp.text(customer.no_telpon);
-                invoiceJalan.text(customer.nama_jalan);
-            })
-        })
-        .catch(error => console.error('Error:', error));
-
-        updateInvoice();
     });
 
     $(document).on("change", "#kasir-discount", function () {

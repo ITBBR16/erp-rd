@@ -2,7 +2,7 @@
     <form action="{{ route('kasir.store') }}" id="kasir-form" method="POST" autocomplete="off">
         @csrf
         <div class="grid grid-cols-3 w-full">
-            <div class="col-span-2 my-4">
+            <div class="col-span-2 mb-4">
                 <div class="flex items-center justify-between">
                     <div class="flex justify-start">
                         <p class="text-base font-semibold text-gray-900 dark:text-white">Current Date : <span class="text-gray-900 font-normal dark:text-white">{{ $today->format('d/m/Y') }}</span></p>
@@ -11,12 +11,10 @@
                         <p class="text-base font-semibold text-gray-900 dark:text-white">Invoice Number : <span class="text-gray-900 font-normal dark:text-white">{{ $today->format('Ymd') }}{{ $invoiceid + 1 }}</span></p>
                     </div>
                 </div>
-                <div class="my-4 pt-2 border-t-2 text-center justify-center">
-                    <p class="text-lg font-bold text-black dark:text-white">INVOICE</p>
-                </div>
-                <div class="grid grid-cols-2 w-full gap-6">
+                <h2 class="text-base font-semibold mb-4 text-black dark:text-white my-4 pt-2 border-t-2">Data Customer</h2>
+                <div class="grid grid-cols-3 w-full gap-x-4 gap-y-2 mb-4">
                     <div x-data="dropdownCustomerCase()" class="relative text-start">
-                        <label for="kasir-nama-customer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Customer :</label>
+                        <label for="kasir-nama-customer" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Pilih Customer :</label>
                         <div class="relative">
                             <input x-model="search" 
                                 @focus="open = true" 
@@ -48,16 +46,7 @@
                         </ul>
                     </div>
                     <div>
-                        <label for="kasir_metode_pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Metode Pembayaran :</label>
-                        <select name="kasir_metode_pembayaran" id="kasir_metode_pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>Select Metode Pembayaran</option>
-                            @foreach ($akunrd as $akun)
-                                <option value="{{ $akun->id }}">{{ $akun->nama_akun }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label for="kasir-discount" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Discount :</label>
+                        <label for="kasir-discount" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Discount :</label>
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
                             <input type="text" name="kasir_discount" id="kasir-discount" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
@@ -65,31 +54,114 @@
                     </div>
                     <div>
                         <input type="hidden" name="kasir_tax" id="kasir-tax">
-                        <label for="kasir-ongkir" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ongkir :</label>
+                        <label for="kasir-ongkir" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Ongkir :</label>
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
                             <input type="text" name="kasir_ongkir" id="kasir-ongkir" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
                         </div>
                     </div>
                     <div>
-                        <label for="kasir-nominal-bayar" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                        <label for="kasir-packing" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Packing :</label>
                         <div class="flex">
-                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="kasir_nominal_pembayaran" id="kasir-nominal-pembayaran" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="kasir_packing" id="kasir-packing" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
                         </div>
                     </div>
                     <div>
-                        <label for="keterangan-pembayaran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan :</label>
+                        <label for="kasir-asuransi" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Asuransi :</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="kasir_asuransi" id="kasir-asuransi" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="keterangan-pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Keterangan :</label>
                         <input type="text" name="keterangan_pembayaran" id="keterangan-pembayaran" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pendapatan Kios Sejumlah Rp.xxx.xxx . . .">
+                    </div>
+                </div>
+
+                <div id="form-kelebihan" style="display: none">
+                    <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-t pt-2">Pembayaran Lebih</h2>
+                    <div class="grid grid-cols-3 gap-4 w-full mb-4">
+                        <div>
+                            <label for="kasir-dikembalikan" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Dikembalikan :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="kasir_dikembalikan" id="kasir-dikembalikan" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="kasir-pll" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal P. Lain Lain :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="kasir_pll" id="kasir-pll" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="kasir-sc" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Save Saldo Customer :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="kasir_sc" id="kasir-sc" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-t pt-2">Metode Pemabayaran</h2>
+                <div id="container-metode-pembayaran-kasir-kios">
+                    <div id="form-mp-kasir" class="grid grid-cols-4 gap-4 mb-4" style="grid-template-columns: 5fr 5fr 3fr 1fr">
+                        <div>
+                            <label for="kasir_metode_pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Pilih Metode Pembayaran :</label>
+                            <select name="kasir_metode_pembayaran[]" id="kasir_metode_pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <option value="" hidden>Select Metode Pembayaran</option>
+                                @foreach ($akunrd as $akun)
+                                    <option value="{{ $akun->id }}">{{ $akun->nama_akun }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="kasir-nominal-bayar" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="kasir_nominal_pembayaran[]" id="kasir-nominal-pembayaran" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Files Bukti Transaksi :</label>
+                            <div class="relative z-0 w-full">
+                                <label for="file-bukti-transaksi" id="file-label" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    No file chosen
+                                </label>
+                                <input type="file" name="file_bukti_transaksi[]" id="file-bukti-transaksi" class="hidden" onchange="updateFileName(this)"required>
+                            </div>
+                        </div>
+                        <div class="flex justify-center items-end pb-2">
+                            <button type="button" class="remove-mp-kasir">
+                                <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-start text-red-500 mt-6">
+                    <div class="flex cursor-pointer my-2 hover:text-rose-700">
+                        <button type="button" id="add-metode-pembayaran-lunas" class="flex flex-row justify-between gap-2">
+                            <span class="material-symbols-outlined">add_circle</span>
+                            <span>Tambah Metode Pembayaran</span>
+                        </button>
                     </div>
                 </div>
             </div>
     
             {{-- Bagian Kanan Kasir --}}
-            <div class="col-span-1 my-4 mx-auto flex justify-center">
+            <div class="col-span-1 my-4 mx-auto flex justify-center flex-col">
                 <div class="w-80 text-base bg-white p-4 text-white border-gray-600 border-2 border-solid shadow-xl rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-200">
-                    <div class="mb-4 text-center justify-center">
-                        <p class="text-lg font-semibold text-gray-600 dark:text-white">Resume Tagihan</p>
+                    <div class="flex mb-4 items-center justify-between">
+                        <div class="flex justify-start">
+                            <p class="text-lg font-bold text-black dark:text-white">Resume Tagihan</p>
+                        </div>
+                        <div class="flex justify-end ml-auto">
+                            <span class="bg-rose-100 text-rose-700 text-xs font-bold me-2 px-2.5 py-0.5 rounded dark:bg-rose-800 dark:text-rose-300">Not Pass</span>
+                        </div>
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex justify-start">
@@ -115,14 +187,22 @@
                             <p id="kasir-box-ongkir" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
                     </div>
-                    {{-- <div class="flex items-center justify-between border-b-2">
+                    <div class="flex items-center justify-between">
                         <div class="flex justify-start">
-                            <p class="font-semibold text-gray-900 dark:text-white">Tax :</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">Packing :</p>
                         </div>
                         <div class="flex justify-end ml-auto">
-                            <p id="kasir-box-tax" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
+                            <p id="kasir-box-packing" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
-                    </div> --}}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex justify-start">
+                            <p class="font-semibold text-gray-900 dark:text-white">Asuransi :</p>
+                        </div>
+                        <div class="flex justify-end ml-auto">
+                            <p id="kasir-box-asuransi" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
+                        </div>
+                    </div>
                     <div class="flex items-center justify-between mt-2">
                         <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Total :</p>
@@ -131,21 +211,13 @@
                             <p id="kasir-box-total" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
                         </div>
                     </div>
-                    <button type="button" data-modal-target="kasir-invoice" data-modal-toggle="kasir-invoice" class="review-invoice text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-full">Review Invoice</button>
-                    {{-- <button type="submit" name="status_kasir" value="Hold" class="review-invoice text-white mt-4 bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full">Hold Payment</button> --}}
                 </div>
+                <button type="button" data-modal-target="kasir-invoice" data-modal-toggle="kasir-invoice" class="review-invoice text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-80 mx-auto">Review Invoice</button>
+                {{-- <button type="submit" name="status_kasir" value="Hold" class="text-white mt-4 bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full">Hold Payment</button> --}}
             </div>
         </div>
 
         <div x-data>
-            <div class="flex justify-between text-rose-600">
-                <div class="flex cursor-pointer mt-4 hover:text-red-400">
-                    <button type="button" @click="$store.kasirForm.addItem()" id="add-item-kasir" class="flex flex-row justify-between gap-2">
-                        <span class="material-symbols-outlined">add_circle</span>
-                        <span class="">Tambah Item</span>
-                    </button>
-                </div>
-            </div>
     
             <table class="w-full mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-900 border-b-2 uppercase dark:text-white">
@@ -215,7 +287,10 @@
                                 </ul>
                             </td>
                             <td class="px-4 py-2">
-                                <select x-model="item.kasirSn" name="kasir_sn[]" class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <select x-model="item.kasirSn" 
+                                        name="kasir_sn[]" 
+                                        class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        required>
                                     <option value="" hidden>Pilih SN</option>
                                     <template x-for="sn in item.kasirSnOptions" :key="sn.value">
                                         <option :value="sn.value" x-text="sn.label"></option>
@@ -237,6 +312,15 @@
                     </template>
                 </tbody>
             </table>
+
+            <div class="flex justify-between text-rose-600">
+                <div class="flex cursor-pointer mt-4 hover:text-red-400">
+                    <button type="button" @click="$store.kasirForm.addItem()" id="add-item-kasir" class="flex flex-row justify-between gap-2">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span class="">Tambah Item</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </form>
     {{-- Modal --}}
@@ -274,149 +358,12 @@
             }
         }
 
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('kasirForm', {
-                itemCount: 0,
-                items: [],
-                invoices: [],
-                autocompleteData: {},
-
-                addItem() {
-                    this.itemCount++;
-                    this.items.push({
-                        id: this.itemCount,
-                        jenisTransaksi: '',
-                        itemName: '',
-                        itemId: '',
-                        kasirSn: '',
-                        kasirHarga: '',
-                        kasirModalPart: '',
-                        checkboxTax: false,
-                        itemOptions: [],
-                        filteredItems: [],
-                        searchQuery: '',
-                        kasirSnOptions: [],
-                        showDropdown: false,
-                    });
-                },
-
-                removeItem(id) {
-                    this.items = this.items.filter(item => item.id !== id);
-                },
-
-                async fetchItemOptions(item) {
-                    if (!item.jenisTransaksi) {
-                        alert('Silahkan pilih jenis transaksi terlebih dahulu.');
-                        return;
-                    }
-
-                    if (!this.autocompleteData[item.jenisTransaksi]) {
-                        try {
-                            let response = await fetch(`/kios/kasir/autocomplete/${item.jenisTransaksi}`);
-                            let data = await response.json();
-                            this.autocompleteData[item.jenisTransaksi] = data;
-                        } catch (error) {
-                            alert('Terjadi kesalahan saat mengambil data.');
-                            return;
-                        }
-                    }
-
-                    if (item.jenisTransaksi == 'part_baru' || item.jenisTransaksi == 'part_bekas') {
-                        
-                        item.itemOptions = this.autocompleteData[item.jenisTransaksi].map(part => ({
-                            label: part.nama_part,
-                            value: part.id
-                        }));
-
-                    } else {
-
-                        item.itemOptions = this.autocompleteData[item.jenisTransaksi].map(drone => ({
-                            label: drone.subjenis.paket_penjualan,
-                            value: drone.subjenis.id
-                        }));
-
-                    }
-
-                    item.filteredItems = item.itemOptions;
-                },
-
-                searchItems(item) {
-                    if (!item.searchQuery) {
-                        item.filteredItems = item.itemOptions;
-                    } else {
-                        item.filteredItems = item.itemOptions.filter(option =>
-                            option.label.toLowerCase().includes(item.searchQuery.toLowerCase())
-                        );
-                    }
-                    item.showDropdown = true;
-                },
-
-                selectItem(item, selectedItem) {
-                    item.itemId = selectedItem.value;
-                    item.itemName = selectedItem.label;
-                    item.showDropdown = false;
-                    item.searchQuery = selectedItem.label;
-
-                    this.fetchKasirSnOptions(item);
-                },
-
-                async fetchKasirSnOptions(item) {
-                    if (!item.itemId) {
-                        alert('Silahkan pilih item terlebih dahulu.');
-                        return;
-                    }
-
-                    try {
-                        let response = await fetch(`/kios/kasir/getSerialNumber/${item.jenisTransaksi}/${item.itemId}`);
-                        let data = await response.json();
-
-                        if (!data || !data.data_sn) {
-                            alert('Tidak ada serial number yang tersedia.');
-                            return;
-                        }
-
-                        if (item.jenisTransaksi == 'part_baru' || item.jenisTransaksi == 'part_bekas') {
-
-                            item.kasirSnOptions = data.data_sn.map(sn => ({
-                                label: sn.id_item,
-                                value: sn.id
-                            }));
-
-                            item.kasirHarga = formatRupiah(data.nilai.hargaGlobal);
-
-                        } else {
-
-                            item.kasirSnOptions = data.data_sn.map(sn => ({
-                                label: sn.serial_number,
-                                value: sn.id
-                            }));
-
-                            item.kasirHarga = formatRupiah(data.nilai);
-
-                        }
-
-                        this.addToInvoice(item);
-                    } catch (error) {
-                        alert('Terjadi kesalahan saat mengambil data serial number. Error : ' + error);
-                    }
-                }, 
-
-                addToInvoice(item) {
-                    const invoiceItem = {
-                        productName: item.itemName,
-                        description: 'Halo aku keterangan',
-                        qty: 1,
-                        itemPrice: formatRupiah(item.kasirHarga) || formatRupiah(0),
-                        totalPrice: formatRupiah(item.kasirHarga) || formatRupiah(0),
-                    };
-
-                    this.invoices.push(invoiceItem);
-                },
-            });
-        });
-
-        function formatRupiah(angka) {
-            return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
+        function updateFileName(input) {
+            const fileName = input.files.length > 0 ? input.files[0].name : "No file chosen";
+            const label = input.previousElementSibling;
+            if (label) {
+                label.textContent = fileName;
+            }
         }
     </script>
 </div>

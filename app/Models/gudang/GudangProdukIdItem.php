@@ -2,6 +2,7 @@
 
 namespace App\Models\gudang;
 
+use App\Models\repair\RepairEstimasiPart;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,7 +41,12 @@ class GudangProdukIdItem extends Model
 
     public function gudangAdjustStock()
     {
-        return $this->hasOne(gudangAdjustStock::class);
+        return $this->hasOne(GudangAdjustStock::class);
+    }
+
+    public function estimasiRepair()
+    {
+        return $this->hasOne(RepairEstimasiPart::class);
     }
 
 }

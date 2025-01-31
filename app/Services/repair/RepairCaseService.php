@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
 use App\Models\customer\CustomerInfoPerusahaan;
 use App\Models\management\AkuntanDaftarAkun;
+use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
+use App\Repositories\gudang\repository\GudangTransactionRepository;
 use App\Repositories\umum\repository\ProdukRepository;
 use App\Repositories\repair\repository\RepairQCRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
@@ -23,14 +25,16 @@ class RepairCaseService
 {
     public function __construct(
         private UmumRepository $umum,
+        private AkuntanDaftarAkun $daftarAkun,
+        private EkspedisiRepository $ekspedisi,
+        private ProdukRepository $product,
+        private GudangTransactionRepository $transactionGudang,
+        private GudangProdukIdItemRepository $idItemGudang,
         private RepairCustomerRepository $customerRepository,
         private RepairCaseRepository $repairCase,
-        private ProdukRepository $product,
         private RepairTimeJurnalRepository $repairTimeJurnal,
-        private EkspedisiRepository $ekspedisi,
         private RepairEstimasiRepository $estimasi,
         private RepairQCRepository $repairQC,
-        private AkuntanDaftarAkun $daftarAkun,
     ){}
 
     // Input New Case
@@ -829,6 +833,7 @@ class RepairCaseService
     public function createPelunasan(Request $request, $id)
     {
         $this->repairCase->beginTransaction();
+        $this->transactionGudang->beginTransaction();
 
         try {
             $employeeId = auth()->user()->id;
@@ -841,6 +846,64 @@ class RepairCaseService
             $nominalDikembalikan = preg_replace("/[^0-9]/", "", $request->input('nominal_dikembalikan')) ?: 0;
             $pendapatanLainLain = preg_replace("/[^0-9]/", "", $request->input('nominal_pll')) ?: 0;
             $tambahSaldoCustomer = preg_replace("/[^0-9]/", "", $request->input('nominal_save_saldo_customer')) ?: 0;
+
+            $dataCase = $this->repairCase->findCase($id);
+            $idEstimasi = $dataCase->estimasi->id;
+            $findEstimasi = $this->estimasi->ensureHaveEstimasi($id);
+
+            $nilaiPJasa = 0;
+            $nilaiPReparasi = 0;
+            $nilaiPResiko = 0;
+            $nilaiSparepartBaru = 0;
+            $nilaiSparepartBekas = 0;
+            
+            if ($findEstimasi) {
+                $estimasiPartActive = $findEstimasi->estimasiPart()->where('active', 'Active');
+                $estimasiJRRActive = $findEstimasi->estimasiJrr()->where('active', 'Active');
+                if ($estimasiPartActive->exists()) {
+
+                    $cekTanggalPenerimaan = $estimasiPartActive->whereNull('tanggal_diterima')->exists();
+                    if ($cekTanggalPenerimaan) {
+                        $this->repairCase->rollBackTransaction();
+                        $this->transactionGudang->rollbackTransaction();
+                        return ['status' => 'error', 'message' => 'Gagal melakukan pelunasan. Terdapat part yang belum di konfirmasi.'];
+                    }
+
+                    $estimasiPartActive->update(['tanggal_lunas' => $tglWaktu]);
+                    foreach ($estimasiPartActive->get() as $estimasiPart) {
+                        $idItemID = $estimasiPart->id_item;
+                        $jenisTPart = $estimasiPart->jenisTransaksi->jenis_transaksi;
+                        $nominalPart = $estimasiPart->harga_customer;
+
+                        if ($jenisTPart === 'Pendapatan Repair Part Baru') {
+                            $nilaiSparepartBaru += $nominalPart;
+                        } elseif ($jenisTPart === 'Pendapatan Repair Part Bekas') {
+                            $nilaiSparepartBekas += $nominalPart;
+                        }
+
+                        $this->idItemGudang->updateIdItem($idItemID, ['status_inventory' => 'Sold']);
+                    }
+                }
+
+                if ($estimasiJRRActive->exists()) {
+                    foreach ($estimasiJRRActive->get() as $estimasiJRR) {
+                        $jenisTransaksi = $estimasiJRR->jenisTransaksi->jenis_transaksi;
+                        $nominal = $estimasiJRR->harga_customer;
+            
+                        if ($jenisTransaksi === 'Pendapatan Repair Jasa') {
+                            $nilaiPJasa += $nominal;
+                        } elseif ($jenisTransaksi === 'Pendapatan Repair Resiko') {
+                            $nilaiPResiko += $nominal;
+                        } elseif ($jenisTransaksi === 'Pendapatan Repair Reparasi') {
+                            $nilaiPReparasi += $nominal;
+                        }
+                    }
+                }
+            } else {
+                $this->repairCase->rollBackTransaction();
+                $this->transactionGudang->rollbackTransaction();
+                return ['status' => 'error', 'message' => 'Tidak bisa menemukan estimasi.'];
+            }
 
             $saldoCustomer = [];
             $statusSC = [];
@@ -870,8 +933,7 @@ class RepairCaseService
             $filesFinance = [];
             $namaAkunFinance = [];
             $nilaiAkunFinance = [];
-
-            $dataCase = $this->repairCase->findCase($id);
+            
             $namaCustomer = $dataCase->customer->first_name . "-" . $dataCase->customer->id;
 
             $dataView = [
@@ -939,50 +1001,6 @@ class RepairCaseService
             ];
             $updateCase = ['jenis_status_id' => 10];
 
-            $idEstimasi = $dataCase->estimasi->id;
-            $findEstimasi = $this->estimasi->ensureHaveEstimasi($id);
-            $nilaiPJasa = 0;
-            $nilaiPReparasi = 0;
-            $nilaiPResiko = 0;
-            $nilaiSparepartBaru = 0;
-            $nilaiSparepartBekas = 0;
-            
-            if ($findEstimasi) {
-                $estimasiPartActive = $findEstimasi->estimasiPart()->where('active', 'Active');
-                $estimasiJRRActive = $findEstimasi->estimasiJrr()->where('active', 'Active');
-                if ($estimasiPartActive->exists()) {
-                    $estimasiPartActive->update(['tanggal_lunas' => $tglWaktu]);
-                    foreach ($estimasiPartActive->get() as $estimasiPart) {
-                        $jenisTPart = $estimasiPart->jenisTransaksi->jenis_transaksi;
-                        $nominalPart = $estimasiPart->harga_customer;
-
-                        if ($jenisTPart === 'Pendapatan Repair Part Baru') {
-                            $nilaiSparepartBaru += $nominalPart;
-                        } elseif ($jenisTPart === 'Pendapatan Repair Part Bekas') {
-                            $nilaiSparepartBekas += $nominalPart;
-                        }
-                    }
-                }
-
-                if ($estimasiJRRActive->exists()) {
-                    foreach ($estimasiJRRActive->get() as $estimasiJRR) {
-                        $jenisTransaksi = $estimasiJRR->jenisTransaksi->jenis_transaksi;
-                        $nominal = $estimasiJRR->harga_customer;
-            
-                        if ($jenisTransaksi === 'Pendapatan Repair Jasa') {
-                            $nilaiPJasa += $nominal;
-                        } elseif ($jenisTransaksi === 'Pendapatan Repair Resiko') {
-                            $nilaiPResiko += $nominal;
-                        } elseif ($jenisTransaksi === 'Pendapatan Repair Reparasi') {
-                            $nilaiPReparasi += $nominal;
-                        }
-                    }
-                }
-            } else {
-                $this->repairCase->rollBackTransaction();
-                return ['status' => 'error', 'message' => 'Tidak bisa menemukan estimasi.'];
-            }
-
             $payloadPembukuan = [
                 'statusSC' => $statusSC,
                 'files' => $filesFinance,
@@ -1017,6 +1035,7 @@ class RepairCaseService
 
         } catch (Exception $e) {
             $this->repairCase->rollBackTransaction();
+            $this->transactionGudang->rollbackTransaction();
             return ['status' => 'error' , 'message' => $e->getMessage()];
         }
     }
