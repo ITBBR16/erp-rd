@@ -69,10 +69,14 @@ class GudangValidasiServices
             $sparepartId = $request->input('sparepart_id');
 
             $findProduk = $this->produk->findBySparepart($sparepartId);
+            $findBelanja = $this->belanja->findBelanja($belnajaId);
             $findDetailBelanja = $this->belanja->getDetailBelanja($belnajaId, $sparepartId);
             
             $modalAwal = $findProduk->modal_awal;
             $hargaPcs = $findDetailBelanja->nominal_pcs;
+            $totalQuantity = $findBelanja->total_quantity;
+            $pcsOngkir = $findBelanja->total_ongkir / $totalQuantity;
+            $pcsPajak = $findBelanja->total_pajak / $totalQuantity;
             $modalProduk = 0;
 
             foreach ($request->input('idItemId') as $index => $item) {
@@ -88,7 +92,7 @@ class GudangValidasiServices
 
                 if ($cekValidasi[$index] === 'Pass') {
                     $this->idItem->updateIdItem($item, ['status_inventory' => 'Ready']);
-                    $modalProduk += $hargaPcs;
+                    $modalProduk += $hargaPcs + $pcsOngkir + $pcsPajak;
                     
                 } elseif ($cekValidasi[$index] === 'Komplain') {
                     $dataKomplain = [
@@ -101,7 +105,7 @@ class GudangValidasiServices
                 }
             }
 
-            $findBelanja = $this->belanja->findBelanja($belnajaId);
+            
             $allValidated = $findBelanja->gudangProdukIdItem()->get()->every(function ($idItem) {
                 return $idItem->qualityControll()->get()->every(fn($qc) => !empty($qc->status_validasi));
             });
