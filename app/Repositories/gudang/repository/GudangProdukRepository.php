@@ -48,6 +48,7 @@ class GudangProdukRepository implements GudangProdukInterface
                     ->orderBy('updated_at', 'desc')
                     ->paginate(35);
     }
+    
     public function createProduk(array $data)
     {
         return $this->produk->create($data);

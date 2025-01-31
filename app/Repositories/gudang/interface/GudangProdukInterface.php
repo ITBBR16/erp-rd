@@ -6,4 +6,5 @@ interface GudangProdukInterface
 {
     public function getListIdItem($idSparepart);
     public function insertProduk(array $data);
+    public function createProduk(array $data);
 }

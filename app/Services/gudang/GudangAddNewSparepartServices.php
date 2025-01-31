@@ -51,8 +51,6 @@ class GudangAddNewSparepartServices
         try {
             $this->transaction->beginTransaction();
 
-            $timestamp = now();
-            $insertedIds = []; // Untuk menyimpan ID yang di-insert
             foreach ($request->input('type_part') as $index => $type) {
                 $data = [
                     'produk_type_id' => $type,
@@ -62,28 +60,19 @@ class GudangAddNewSparepartServices
                     'produk_part_sub_bagian_id' => $request->input('sub_bagian_part')[$index],
                     'produk_part_sifat_id' => $request->input('sifat_part')[$index],
                     'nama_internal' => $request->input('nama_internal')[$index],
-                    'sku_origin' => $request->input('sku_external')[$index],
-                    'nama_origin' => $request->input('nama_eksternal')[$index],
-                    'created_at' => $timestamp,
-                    'updated_at' => $timestamp,
+                    'sku_origin' => $request->input('sku_external')[$index] ?? null,
+                    'nama_origin' => $request->input('nama_eksternal')[$index] ?? null,
                 ];
 
-                // Insert data dan ambil ID
                 $sparepart = $this->sparepart->createNewSparepart($data);
-                $insertedIds[] = $sparepart->id;
-            }
-
-            $dataProduk = [];
-            foreach ($insertedIds as $idPart) {
-                $dataProduk[] = [
-                    'produk_sparepart_id' => $idPart,
+                $dataProduk = [
+                    'produk_sparepart_id' => $sparepart->id,
                     'status' => 'Not Ready',
-                    'created_at' => $timestamp,
-                    'updated_at' => $timestamp,
                 ];
-            }
 
-            $this->produkGudang->insertProduk($dataProduk);
+                $this->produkGudang->createProduk($dataProduk);
+            }
+            
             $this->transaction->commitTransaction();
 
             return ['status' => 'success', 'message' => 'Berhasil menambahkan sparepart baru.'];
