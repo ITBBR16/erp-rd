@@ -856,40 +856,53 @@ class RepairCaseService
             $nilaiPResiko = 0;
             $nilaiSparepartBaru = 0;
             $nilaiSparepartBekas = 0;
+            $modalGudangBaru = 0;
+            $modalGudangBekas = 0;
+            $nilaiGudangPartBaru = 0;
+            $nilaiGudangPartBekas = 0;
             
             if ($findEstimasi) {
                 $estimasiPartActive = $findEstimasi->estimasiPart()->where('active', 'Active');
                 $estimasiJRRActive = $findEstimasi->estimasiJrr()->where('active', 'Active');
-                if ($estimasiPartActive->exists()) {
 
-                    $cekTanggalPenerimaan = $estimasiPartActive->whereNull('tanggal_diterima')->exists();
+                if ($estimasiPartActive->exists()) {
+                    $getEstimasiPart = $estimasiPartActive->get();
+                    $cekTanggalPenerimaan = $getEstimasiPart->contains(function ($item) {
+                        return is_null($item->tanggal_diterima);
+                    });
                     if ($cekTanggalPenerimaan) {
                         $this->repairCase->rollBackTransaction();
                         $this->transactionGudang->rollbackTransaction();
                         return ['status' => 'error', 'message' => 'Gagal melakukan pelunasan. Terdapat part yang belum di konfirmasi.'];
                     }
 
-                    $estimasiPartActive->update(['tanggal_lunas' => $tglWaktu]);
-                    foreach ($estimasiPartActive->get() as $estimasiPart) {
+                    foreach ($getEstimasiPart as $estimasiPart) {
                         $idItemID = $estimasiPart->id_item;
                         $jenisTPart = $estimasiPart->jenisTransaksi->jenis_transaksi;
-                        $nominalPart = $estimasiPart->harga_customer;
+                        $modalGudang = $estimasiPart->modal_gudang;
+                        $labaPartRepair = $estimasiPart->harga_customer - $estimasiPart->harga_repair;
+                        $labaPartGudang = $estimasiPart->harga_repair - $modalGudang;
 
                         if ($jenisTPart === 'Pendapatan Repair Part Baru') {
-                            $nilaiSparepartBaru += $nominalPart;
+                            $nilaiSparepartBaru += $labaPartRepair;
+                            $nilaiGudangPartBaru += $labaPartGudang;
+                            $modalGudangBaru += $modalGudang;
                         } elseif ($jenisTPart === 'Pendapatan Repair Part Bekas') {
-                            $nilaiSparepartBekas += $nominalPart;
+                            $nilaiSparepartBekas += $labaPartRepair;
+                            $nilaiGudangPartBekas += $labaPartGudang;
+                            $modalGudangBekas += $modalGudang;
                         }
 
                         $this->idItemGudang->updateIdItem($idItemID, ['status_inventory' => 'Sold']);
                     }
+                    $estimasiPartActive->update(['tanggal_lunas' => $tglWaktu]);
                 }
 
                 if ($estimasiJRRActive->exists()) {
                     foreach ($estimasiJRRActive->get() as $estimasiJRR) {
                         $jenisTransaksi = $estimasiJRR->jenisTransaksi->jenis_transaksi;
                         $nominal = $estimasiJRR->harga_customer;
-            
+
                         if ($jenisTransaksi === 'Pendapatan Repair Jasa') {
                             $nilaiPJasa += $nominal;
                         } elseif ($jenisTransaksi === 'Pendapatan Repair Resiko') {
@@ -1008,11 +1021,15 @@ class RepairCaseService
                 'inOut' => 'In',
                 'keterangan' => $keteranganLunas,
                 'idEksternal' => "R$id",
-                'idCustomer' => $dataCase->customer->first_name . "-" . $dataCase->customer->last_name . "-" . $dataCase->customer->id,
+                'idCustomer' => $dataCase->customer->first_name . " " . $dataCase->customer->last_name . "-" . $dataCase->customer->id,
                 'totalNominal' => $totalPembayaran,
                 'nilaiJasa' => $nilaiPJasa,
                 'nilaiReparasi' => $nilaiPReparasi,
                 'nilaiResiko' => $nilaiPResiko,
+                'modalGudangBaru' => $modalGudangBaru,
+                'modalGudangBekas' => $modalGudangBekas,
+                'nilaiGudangPartBaru' => $nilaiGudangPartBaru,
+                'nilaiGudangPartBekas' => $nilaiGudangPartBekas,
                 'nilaiSparepartBaru' => $nilaiSparepartBaru,
                 'nilaiSparepartBekas' => $nilaiSparepartBekas,
                 'nilaiLainnya' => $pendapatanLainLain,

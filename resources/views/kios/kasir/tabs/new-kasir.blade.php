@@ -46,32 +46,38 @@
                         </ul>
                     </div>
                     <div>
-                        <label for="kasir-discount" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Discount :</label>
-                        <div class="flex">
-                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="kasir_discount" id="kasir-discount" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                        <div x-data>
+                            <label for="kasir-discount" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Discount :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="kasir_discount" id="kasir-discount" x-model="$store.kasirForm.discount" @change="$store.kasirForm.updateInvoice()" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                            </div>
                         </div>
                     </div>
                     <div>
-                        <input type="hidden" name="kasir_tax" id="kasir-tax">
-                        <label for="kasir-ongkir" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Ongkir :</label>
-                        <div class="flex">
-                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="kasir_ongkir" id="kasir-ongkir" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                        <div x-data>
+                            <input type="hidden" name="kasir_tax" id="kasir-tax">
+                            <label for="kasir-ongkir" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Ongkir :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="kasir_ongkir" id="kasir-ongkir" x-model="$store.kasirForm.ongkir" @change="$store.kasirForm.updateInvoice()" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                            </div>
                         </div>
                     </div>
                     <div>
-                        <label for="kasir-packing" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Packing :</label>
-                        <div class="flex">
-                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="kasir_packing" id="kasir-packing" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                        <div x-data>
+                            <label for="kasir-packing" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Packing :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="kasir_packing" id="kasir-packing" x-model="$store.kasirForm.packing" @change="$store.kasirForm.updateInvoice()" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                            </div>
                         </div>
                     </div>
                     <div>
                         <label for="kasir-asuransi" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Asuransi :</label>
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="kasir_asuransi" id="kasir-asuransi" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                            <input type="text" name="kasir_asuransi" id="kasir-asuransi" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" readonly>
                         </div>
                     </div>
                     <div>
@@ -109,18 +115,18 @@
 
                 <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-t pt-2">Metode Pemabayaran</h2>
                 <div id="container-metode-pembayaran-kasir-kios">
-                    <div id="form-mp-kasir" class="grid grid-cols-4 gap-4 mb-4" style="grid-template-columns: 5fr 5fr 3fr 1fr">
+                    <div id="form-mp-kasir" class="form-mp-kasir grid grid-cols-4 gap-4 mb-4" style="grid-template-columns: 5fr 5fr 3fr 1fr">
                         <div>
-                            <label for="kasir_metode_pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Pilih Metode Pembayaran :</label>
-                            <select name="kasir_metode_pembayaran[]" id="kasir_metode_pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <label for="kasir-metode-pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Pilih Metode Pembayaran :</label>
+                            <select name="kasir_metode_pembayaran[]" id="kasir-metode-pembayaran" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" hidden>Select Metode Pembayaran</option>
-                                @foreach ($akunrd as $akun)
+                                @foreach ($daftarAkun as $akun)
                                     <option value="{{ $akun->id }}">{{ $akun->nama_akun }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div>
-                            <label for="kasir-nominal-bayar" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                            <label for="kasir-nominal-pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
                                 <input type="text" name="kasir_nominal_pembayaran[]" id="kasir-nominal-pembayaran" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
@@ -136,9 +142,9 @@
                             </div>
                         </div>
                         <div class="flex justify-center items-end pb-2">
-                            <button type="button" class="remove-mp-kasir">
+                            {{-- <button type="button" class="remove-mp-kasir">
                                 <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
-                            </button>
+                            </button> --}}
                         </div>
                     </div>
                 </div>
@@ -289,6 +295,7 @@
                             <td class="px-4 py-2">
                                 <select x-model="item.kasirSn" 
                                         name="kasir_sn[]" 
+                                        @change="$store.kasirForm.updateInvoice()"
                                         class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         required>
                                     <option value="" hidden>Pilih SN</option>
@@ -298,6 +305,7 @@
                                 </select>
                             </td>
                             <td class="px-4 py-2">
+                                <input type="text" name="kasir_modal_part[]" x-model="item.modalGudang">
                                 <input type="text" name="kasir_harga[]" x-model="item.kasirHarga" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
                             </td>
                             <td class="px-4 py-2">
@@ -328,6 +336,7 @@
 
     {{-- Function Script --}}
     <script>
+        let daftarAkun = @json($daftarAkun);
         function dropdownCustomerCase() {
             return {
                 open: false,

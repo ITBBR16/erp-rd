@@ -6,8 +6,8 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Models\gudang\GudangProduk;
 use App\Models\kios\KiosTransaksiPart;
-use App\Models\gudang\GudangProdukIdItem;
 use App\Models\repair\RepairEstimasiPart;
+use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
 use App\Repositories\umum\UmumRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\repair\repository\RepairEstimasiRepository;
@@ -20,7 +20,7 @@ class GudangKonfirmasiPengirimanServices
         private GudangTransactionRepository $transaction,
         private RepairCaseRepository $repairCase,
         private RepairEstimasiRepository $repairEstimasi,
-        private GudangProdukIdItem $produkIdITem,
+        private GudangProdukIdItemRepository $produkIdITem,
         private RepairEstimasiPart $estimasiPart,
         private KiosTransaksiPart $transaksiPart,
         private GudangProduk $gudangProduk,
@@ -86,9 +86,14 @@ class GudangKonfirmasiPengirimanServices
             $idItemGudang = $request->input('id_item');
 
             foreach ($idItemGudang as $index => $idItem) {
-                if ($idItem != '') {
-                    
-                }
+                $modalGudang = $this->countModalGudang($partId);
+                $dataEstimasiPart = [
+                    'id_item' => $idItem,
+                    'modal_gudang' => $modalGudang['modalGudang'],
+                    'tanggal_dikirim' => $timeStamp,
+                ];
+                $this->repairEstimasi->updateEstimasiPart($dataEstimasiPart, $idEstimasiPart[$index]);
+                $this->produkIdITem->updateIdItem($idItem, ['status_inventory' => 'Piutang']);
             }
 
             $this->transaction->commitTransaction();
@@ -130,7 +135,7 @@ class GudangKonfirmasiPengirimanServices
         $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
         $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
         $nilai = [
-            'modalGudangg' => $modalGudang,
+            'modalGudang' => $modalGudang,
             'hargaGlobal' => $hargaJualGudang,
             'hargaRepair' => $dataGudang->harga_internal,
             'promoGudang' => $dataGudang->harga_promo

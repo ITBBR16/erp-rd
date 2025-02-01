@@ -17,6 +17,8 @@ use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksiPart;
 use App\Models\kios\KiosTransaksiDetail;
+use App\Models\kios\KiosTransaksiPembayaran;
+use App\Models\management\AkuntanDaftarAkun;
 use App\Models\repair\RepairEstimasiPart;
 use App\Repositories\umum\UmumRepository;
 
@@ -27,6 +29,8 @@ class KiosKasirController extends Controller
         private GudangProduk $gudangProduk,
         private RepairEstimasiPart $estimasiPart,
         private KiosTransaksiPart $transaksiPart,
+        private AkuntanDaftarAkun $daftarAkun,
+        private KiosTransaksiPembayaran $transaksiPembayaran,
     ){}
 
     public function index()
@@ -42,7 +46,7 @@ class KiosKasirController extends Controller
                 'display' => "{$customer->first_name} {$customer->last_name} - {$customer->id}"
             ];
         });
-        $akunRd = KiosAkunRD::all();
+        $akunRd = $this->daftarAkun->where('kode_akun', 'like', '111%')->get();
         $invoiceId = KiosTransaksi::latest()->value('id');
         $dataHoldKasir = KiosTransaksi::where('status', 'Hold')->get();
         $dataTransaksi = '';
@@ -57,7 +61,7 @@ class KiosKasirController extends Controller
             'today' => $today,
             'duedate' => $dueDate,
             'customerdata' => $customerData,
-            'akunrd' => $akunRd,
+            'daftarAkun' => $akunRd,
             'invoiceid' => $invoiceId,
             'dataHold' => $dataHoldKasir,
             'dataTransaksi' => $dataTransaksi,
@@ -72,7 +76,7 @@ class KiosKasirController extends Controller
         $dueDate = $today->copy()->addMonth(2);
         $divisiName = $this->umum->getDivisi($user);
         $dataTransaksi = KiosTransaksi::findOrFail($id);
-        $akunRd = KiosAkunRD::all();
+        $akunRd = $this->daftarAkun->where('kode_akun', 'like', '111%')->get();
 
         return view('kios.kasir.editpage.pelunasan-kasir', [
             'title' => 'Pelunasan Kasir',
@@ -84,7 +88,7 @@ class KiosKasirController extends Controller
             'today' => $today,
             'duedate' => $dueDate,
             'dataTransaksi' => $dataTransaksi,
-            'akunrd' => $akunRd,
+            'daftarAkun' => $akunRd,
         ]);
     }
 
@@ -182,12 +186,11 @@ class KiosKasirController extends Controller
             ]);
             
             $kasirCustomer = $request->input('nama_customer');
-            $kasirMetodePembayaran = $request->input('kasir_metode_pembayaran');
             $kasirOngkir = preg_replace("/[^0-9]/", "", $request->input('kasir_ongkir'));
             $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount'));
-            $kasirTax = $request->input('kasir_tax');
+            $kasirTax = $request->input('kasir_tax') ?: 0;
             $kasirKeterangan = $request->input('keterangan_pembayaran');
-
+            
             $kasirJenisTransaksi = $request->input('jenis_transaksi');
             $kasirItem = $request->input('item_id');
             $kasirSN = $request->input('kasir_sn');
@@ -195,6 +198,7 @@ class KiosKasirController extends Controller
             $kasirModalPart = $request->input('kasir_modal_part');
             $statusTransaksi = $request->input('status_kasir');
 
+            $totalPembayaran = 0;
             $totalHargaKiosBaru = 0;
             $totalHargaKiosBekas = 0;
             $totalHargaGudang = 0;
@@ -204,13 +208,13 @@ class KiosKasirController extends Controller
             $modalGudang = 0;
 
             if(count(array_unique($kasirSN)) !== count($kasirSN)) {
+                $connectionTransaksiKios->rollBack();
                 return back()->with('error', 'Serial Number / Id Item tidak boleh ada yang sama.');
             }
 
             $transaksi = new KiosTransaksi();
             $transaksi->employee_id = $userId;
             $transaksi->customer_id = $kasirCustomer;
-            $transaksi->metode_pembayaran = $kasirMetodePembayaran;
             $transaksi->ongkir = $kasirOngkir;
             $transaksi->discount = $kasirDiscount;
             $transaksi->tax = $kasirTax;
@@ -267,70 +271,56 @@ class KiosKasirController extends Controller
                 }
             }
 
+            $filesFinance = [];
+            $namaAkunFinance = [];
+            $nilaiAkunFinance = [];
+
+            foreach($request->input('kasir_metode_pembayaran') as $index => $metodePembayaran) {
+                $kasirNominalPembayaran = preg_replace("/[^0-9]/", "", $request->input('kasir_nominal_pembayaran')[$index]);
+                $filesFinance[] = base64_encode($request->file('file_bukti_transaksi')[$index]->get());
+
+                $totalPembayaran += $kasirNominalPembayaran;
+
+                $dataPembayaran = [
+                    'transaksi_id' => $transaksi->id,
+                    'metode_pembayaran_id' => $metodePembayaran,
+                    'employee_id' => $userId,
+                    'jumlah_pembayaran' => $kasirNominalPembayaran,
+                ];
+                $namaAkun = $this->daftarAkun->find($metodePembayaran);
+                $namaAkunFinance[] = $namaAkun->nama_akun;
+                $nilaiAkunFinance[] = $kasirNominalPembayaran;
+                $this->transaksiPembayaran->create($dataPembayaran);
+            }
+
             $transaksi->total_harga = $totalHarga;
             $transaksi->save();
 
-            $namaMetodePembayaran = $transaksi->metodepembayaran->nama_akun;
-            $namaCustomer = $transaksi->customer->first_name;
-
-            $decisionLRBaru = $totalHargaKiosBaru - $modalKiosBaru + $kasirTax;
-            $labaKiosBaru = 0;
-            $rugiKiosBaru = 0;
-            if($decisionLRBaru > 0) {
-                $labaKiosBaru = $decisionLRBaru;
-            } else {
-                $rugiKiosBaru = abs($decisionLRBaru);
-            }
-
-            $decisionLRBekas = $totalHargaKiosBekas - $modalKiosBekas;
-            $labaKiosBekas = 0;
-            $rugiKiosBekas = 0;
-            if($decisionLRBekas > 0) {
-                $labaKiosBekas = $decisionLRBekas;
-            } else {
-                $rugiKiosBekas = abs($decisionLRBekas);
-            }
-
-            $decusionLRGudang = $totalHargaGudang - $modalGudang;
-            $labaGudang = 0;
-            $rugiGudang = 0;
-            if($decusionLRGudang > 0) {
-                $labaGudang = $decusionLRGudang;
-            } else {
-                $rugiGudang = abs($decusionLRGudang);
-            }
-
-            $urlFinance = 'https://script.google.com/macros/s/AKfycby_XodelnakZ1ZSi6tnR2vPgQRQ4iFeXY6ZJDyBRSE_dHAZNIxAauYmDu-KWRQcZm8_/exec';
-            $payload = [
-                'status' => 'Pelunasan',
-                'idTransaksi' => $transaksi->id,
-                'dpCustomer' => 0,
-                'namaAkun' => $namaMetodePembayaran,
-                'namaCustomer' => $namaCustomer . '-' . $kasirCustomer,
-                'nominalPembayaran' => $totalHarga,
-                'discount' => $kasirDiscount,
-                'kerugianKios' => $rugiKiosBaru,
-                'kerugianGudang' => $rugiGudang,
-                'labaKiosBaru' => $labaKiosBaru,
-                'labaKiosBekas' => $labaKiosBekas,
-                'modalKiosBaru' => $modalKiosBaru,
-                'modalKiosBekas' => $modalKiosBekas,
-                'pendapatanGudang' => $labaGudang,
-                'modalGudang' => $modalGudang,
-                'ongkir' => $kasirOngkir,
+            $payloadPembukuan = [
+                'statusSC' => true,
+                'files' => $filesFinance,
+                'source' => 'Kios',
+                'inOut' => 'In',
+                'keterangan' => $kasirKeterangan,
+                'idEksternal' => "K$transaksi->id",
+                'idCustomer' => $transaksi->customer->first_name . " " . $transaksi->customer->last_name . $transaksi->customer->id,
+                'totalNominal' => $totalPembayaran,
+                'nilaiJasa' => 0,
+                'nilaiReparasi' => 0,
+                'nilaiResiko' => 0,
+                'nilaiSparepartBaru' => 0,
+                'nilaiSparepartBekas' => 0,
+                'nilaiLainnya' => 0,
+                'nilaiDiskon' => 0,
+                'nilaiKerugian' => 0,
+                'saldoCustomer' => $totalPembayaran,
+                'metodePembayaran' => $namaAkunFinance,
+                'nilaiMP' => $nilaiAkunFinance,
             ];
 
-            $sentData = Http::post($urlFinance, $payload);
-            $response = json_decode($sentData->body(), true);
-            $responseStatus = $response['status'];
+            $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbz1A7V7pNuzyuIPCBVqtZjoMy1TvVG2Gx2Hh_16eifXiOpdWtzf1WKjqSpQ0YEdbmk5/exec';
+            $responseFinance = Http::post($urlJurnalTransit, $payloadPembukuan);
 
-            if($responseStatus == 'success') {
-                $connectionTransaksiKios->commit();
-                return back()->with('success', 'Success melakukan transaksi.');
-            } else {
-                $connectionTransaksiKios->rollBack();
-                return back()->with('error', 'Something Went Wrong.');
-            }
 
         } catch (Exception $e) {
             $connectionTransaksiKios->rollBack();
@@ -423,7 +413,7 @@ class KiosKasirController extends Controller
             $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
             $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
             $nilai = [
-                'modalGudangg' => $modalGudang,
+                'modalGudang' => $modalGudang,
                 'hargaGlobal' => $hargaJualGudang,
             ];
         }

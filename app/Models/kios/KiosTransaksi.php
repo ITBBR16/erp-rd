@@ -49,4 +49,9 @@ class KiosTransaksi extends Model
     {
         return $this->hasOne(KiosRecapBuy::class);
     }
+
+    public function transaksiPembayaran()
+    {
+        return $this->hasMany(KiosTransaksiPembayaran::class);
+    }
 }

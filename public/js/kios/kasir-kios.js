@@ -10,92 +10,6 @@ function formatAngka(angka) {
     return accounting.formatMoney(angka, "", 0, ".", ",");
 }
 
-function updateSubtotalBox() {
-    const inputTax = $("#kasir-tax");
-    let kasirSubtotal = 0;
-    let totalTax = 0;
-    let kasirDiscount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
-    let kasirOngkir = parseFloat($("#kasir-ongkir").val().replace(/\./g, '')) || 0;
-
-    $("#kasir-container tr").each(function() {
-        var kasirPrice = $(this).find("[name='kasir_harga[]']").val();
-        var nilai = parseFloat(kasirPrice.replace(/\D/g, ''));
-        kasirSubtotal += nilai;
-
-        var isChecked = $(this).find("[name='checkbox_tax[]']").prop('checked');
-        
-        if(isChecked) {
-            var taxNilai = nilai * 11 / 100;
-            totalTax += taxNilai;
-        }
-    });
-
-    var totalPayment = kasirSubtotal - kasirDiscount + kasirOngkir + totalTax;
-    var showDiscount = formatRupiah(kasirDiscount);
-    var showOngkir = formatRupiah(kasirOngkir);
-    var showTax = formatRupiah(totalTax);
-
-    inputTax.val(totalTax);
-    $("#kasir-box-subtotal").text(formatRupiah(kasirSubtotal));
-    $("#kasir-box-discount").text(showDiscount);
-    $("#kasir-box-ongkir").text(showOngkir);
-    $("#kasir-box-tax").text(showTax);
-    $("#kasir-box-total").text(formatRupiah(totalPayment));
-}
-
-function updateInvoice() {
-    let subTotal = 0;
-    let totalTax = 0;
-    let discount = parseFloat($("#kasir-discount").val().replace(/\./g, '')) || 0;
-    let ongkir = parseFloat($("#kasir-ongkir").val().replace(/\./g, '')) || 0;
-    let invoiceContent = "";
-
-    $("#kasir-container tr").each(function() {
-        var jenisTransaksiKasir = $(this).find("select[name='jenis_transaksi[]'] option:selected").text();
-        var resultKeteranganProduk = (jenisTransaksiKasir === 'Drone Baru') ? 
-                                        'Unit Baru, Garansi 1 Tahun Serial Number' : 
-                                            ((jenisTransaksiKasir === 'Drone Bekas') 
-                                                ? 'Unit Second, Garansi 6 Bulan Serial Number' : '');
-
-        var itemName = $(this).find("[name='item_name[]']").val();
-        var kasirSn = $(this).find("select[name='kasir_sn[]'] option:selected").text();
-        var price = $(this).find("[name='kasir_harga[]']").val();
-        var totalRupiah = formatRupiah(parseFloat(price.replace(/\D/g, '')));
-        var nilai = parseFloat(price.replace(/\D/g, ''));
-        
-        subTotal += nilai;
-
-        var isChecked = $(this).find("[name='checkbox_tax[]']").prop('checked');
-        
-        if(isChecked) {
-            var taxNilai = nilai * 11 / 100;
-            totalTax += taxNilai;
-        }
-
-        invoiceContent += `
-        <tr class="bg-white dark:bg-gray-800">
-            <td class="px-2 py-1">${itemName}</td>
-            <td class="px-2 py-1 text-xs">${resultKeteranganProduk} ${kasirSn}</td>
-            <td class="px-2 py-1">1</td>
-            <td class="px-2 py-1">${price}</td>
-            <td class="px-2 py-1">${totalRupiah}</td>
-        </tr>
-        `;
-    });
-
-    var totalPayment = subTotal - discount + ongkir + totalTax;
-    var showDiscount = formatRupiah(discount);
-    var showOngkir = formatRupiah(ongkir);
-    var showTax = formatRupiah(totalTax);
-
-    $("#invoice-subtotal").text(formatRupiah(subTotal));
-    $("#invoice-discount").text(showDiscount);
-    $("#invoice-ongkir").text(showOngkir);
-    $("#invoice-tax").text(showTax);
-    $("#invoice-total").text(formatRupiah(totalPayment));
-    $("#invoice-kasir-container").html(invoiceContent);
-}
-
 function downloadPdf() {
     var noInvoice = $('#invoice-number').val();
     var invoiceContent = $('#print-invoice-kios').html();
@@ -122,28 +36,6 @@ function downloadPdf() {
     });
 }
 
-function setupAutocomplete(data, itemNameId) {
-    $(`#item-name-${itemNameId}`).autocomplete({
-        source: (request, response) => {
-            const term = request.term.toLowerCase();
-            const filteredData = data.filter(part => part.nama_part.toLowerCase().includes(term));
-
-            const formattedData = filteredData.map(part => ({
-                label: part.nama_part,
-                value: part.nama_part,
-                id: part.id
-            }));
-
-            response(formattedData);
-        },
-        autoFocus: true,
-        select: (event, ui) => {
-            const { id } = ui.item;
-            $(`#item-id-${itemNameId}`).val(id);
-        }
-    }).autocomplete("widget").addClass("cursor-pointer px-2 w-64 h-60 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500");
-}
-
 // Alphine.js
 document.addEventListener('alpine:init', () => {
     Alpine.store('kasirForm', {
@@ -151,6 +43,11 @@ document.addEventListener('alpine:init', () => {
         items: [],
         invoices: [],
         autocompleteData: {},
+        discount: "0",
+        ongkir: "0",
+        packing: "0",
+        asuransi: "0",
+        subTotal: 0,
 
         addItem() {
             this.itemCount++;
@@ -161,6 +58,7 @@ document.addEventListener('alpine:init', () => {
                 itemId: '',
                 kasirSn: '',
                 kasirHarga: '',
+                modalGudang: '',
                 kasirModalPart: '',
                 checkboxTax: false,
                 itemOptions: [],
@@ -172,6 +70,10 @@ document.addEventListener('alpine:init', () => {
         },
 
         removeItem(id) {
+            const itemToRemove = this.items.find(item => item.id === id);
+            if (itemToRemove) {
+                this.removeFromInvoice(itemToRemove);
+            }
             this.items = this.items.filter(item => item.id !== id);
         },
 
@@ -248,6 +150,8 @@ document.addEventListener('alpine:init', () => {
                     return;
                 }
 
+                item.modalGudang = data.nilai.modalGudang;
+
                 if (item.jenisTransaksi == 'part_baru' || item.jenisTransaksi == 'part_bekas') {
 
                     item.kasirSnOptions = data.data_sn.map(sn => ({
@@ -256,6 +160,7 @@ document.addEventListener('alpine:init', () => {
                     }));
 
                     item.kasirHarga = formatRupiah(data.nilai.hargaGlobal);
+                    item.modalGudang = data.nilai.modalGudang;
 
                 } else {
 
@@ -296,26 +201,104 @@ document.addEventListener('alpine:init', () => {
         removeFromInvoice(item) {
             this.invoices = this.invoices.filter(invItem => invItem.productName !== item.itemName);
         },
+
+        updateInvoice() {
+            const kasirDiscount = parseFloat(this.discount.replace(/\D/g, '')) || 0;
+            const kasirOngkir = parseFloat(this.ongkir.replace(/\D/g, '')) || 0;
+            const kasirPacking = parseFloat(this.packing.replace(/\D/g, '')) || 0;
+            const kasirAsuransi = parseFloat(this.asuransi.replace(/\D/g, '')) || 0;
+            this.subTotal = 0;
+
+            this.items.forEach(item => {
+                const price = parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0;
+                this.subTotal += price;
+            });
+
+            const totalPayment = this.subTotal - kasirDiscount + kasirOngkir;
+            const totalOngkirInvoice = kasirOngkir + kasirPacking + kasirAsuransi;
+
+            document.getElementById("invoice-subtotal").textContent = formatRupiah(this.subTotal);
+            document.getElementById("invoice-discount").textContent = formatRupiah(kasirDiscount);
+            document.getElementById("invoice-ongkir").textContent = formatRupiah(totalOngkirInvoice);
+            document.getElementById("invoice-total").textContent = formatRupiah(totalPayment);
+            document.getElementById("kasir-box-subtotal").textContent = formatRupiah(this.subTotal);
+            document.getElementById("kasir-box-discount").textContent = formatRupiah(kasirDiscount);
+            document.getElementById("kasir-box-ongkir").textContent = formatRupiah(kasirOngkir);
+            document.getElementById("kasir-box-packing").textContent = formatRupiah(kasirPacking);
+            document.getElementById("kasir-box-asuransi").textContent = formatRupiah(kasirAsuransi);
+            document.getElementById("kasir-box-total").textContent = formatRupiah(totalPayment);
+        },
     });
 });
 
 $(document).ready(function(){
-    const kasirContainer = $("#kasir-container");
-    let itemCount = $("#kasir-container tr").length;
 
-    $(document).on('change', '.checkbox-tax', function() {
-        updateInvoice();
-        updateSubtotalBox();
+    $(document).on('click', '#add-metode-pembayaran-lunas', function () {
+        let formLength = $('.form-mp-kasir').length;
+        const containerMPKasirLunas = $('#container-metode-pembayaran-kasir-kios');
+
+        formLength++;
+        let formMP = `
+            <div id="form-mp-kasir-${formLength}" class="form-mp-kasir grid grid-cols-4 gap-4 mb-4" style="grid-template-columns: 5fr 5fr 3fr 1fr">
+                <div>
+                    <label for="kasir-metode-pembayaran-${formLength}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Pilih Metode Pembayaran :</label>
+                    <select name="kasir_metode_pembayaran[]" id="kasir-metode-pembayaran-${formLength}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <option value="" hidden>Select Metode Pembayaran</option>`;
+                        daftarAkun.forEach(function(akun) {
+                            formMP += `<option value="${akun.id}">${akun.nama_akun}</option>`
+                        });
+                        formMP +=
+                        `
+                    </select>
+                </div>
+                <div>
+                    <label for="kasir-nominal-pembayaran-${formLength}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                    <div class="flex">
+                        <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                        <input type="text" name="kasir_nominal_pembayaran[]" id="kasir-nominal-pembayaran-${formLength}" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Files Bukti Transaksi :</label>
+                    <div class="relative z-0 w-full">
+                        <label for="file-bukti-transaksi-${formLength}" id="file-label" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            No file chosen
+                        </label>
+                        <input type="file" name="file_bukti_transaksi[]" id="file-bukti-transaksi-${formLength}" class="hidden" onchange="updateFileName(this)"required>
+                    </div>
+                </div>
+                <div class="flex justify-center items-end pb-2">
+                    <button type="button" class="remove-mp-kasir" data-id="${formLength}">
+                        <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                    </button>
+                </div>
+            </div>
+        `
+        containerMPKasirLunas.append(formMP);
     });
 
-    $(document).on("change", "#kasir-discount", function () {
-        updateSubtotalBox();
-        updateInvoice();
+    $(document).on('click', '.remove-mp-kasir', function () {
+        let idForm = $(this).data("id");
+        $('#form-mp-kasir-' + idForm).remove();
     });
 
-    $(document).on("change", "#kasir-ongkir", function () {
-        updateSubtotalBox();
-        updateInvoice();
+    $(document).on("click", ".review-invoice", function () {
+        var invoiceNamaCus = $('#invoice-nama-customer');
+        var invoiceTlp = $('#invoice-no-tlp');
+        var invoiceJalan = $('#invoice-jalan');
+        var namaCustomer = $('#kasir-nama-customer').val();
+        fetch(`/kios/kasir/getCustomer/${namaCustomer}`)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(customer => {
+                var fullName = customer.first_name + ' ' + customer.last_name;
+
+                invoiceNamaCus.text(fullName);
+                invoiceTlp.text(customer.no_telpon);
+                invoiceJalan.text(customer.nama_jalan);
+            })
+        })
+        .catch(error => console.error('Error:', error));
     });
 
     $(document).on("input", ".kasir-formated-rupiah", function () {
@@ -334,4 +317,4 @@ $(document).ready(function(){
         downloadPdf();
     })
 
- });
+});
