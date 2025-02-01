@@ -266,7 +266,7 @@
                             <p class="font-semibold text-black dark:text-white">Total Tagihan :</p>
                         </div>
                         <div class="flex text-end">
-                            <input type="hidden" id="total-tagihan" name="total_tagihan" value="{{ $totalTagihan }}">
+                            <input type="hidden" id="total-tagihan" name="total_tagihan" value="{{ $totalAkhir }}">
                             <p class="font-normal text-black dark:text-white">Rp. {{ number_format($totalTagihan, 0, ',', '.') }}</p>
                         </div>
                     </div>

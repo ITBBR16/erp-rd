@@ -431,6 +431,9 @@ $(document).ready(function () {
         let totalTagihanAkhir = totalTagihan + nominalDikembalikan + nominalPll + nominalSaveSaldoCustomer;
         let totalPembayaranAkhir = totalPembayaranAwal + nominalDiscount + nominalSaldoCustomerTerpakai + nominalKerugian;
 
+        console.log('Total Tagihan Akhir: ' + totalTagihanAkhir)
+        console.log('Total Pembayaran Akhir: ' + totalTagihanAkhir)
+
         if (totalTagihanAkhir == totalPembayaranAkhir) {
             $('#status-box-lunas').text('Pass');
             $('#btn-kasir-lunas-repair').removeClass('cursor-not-allowed').removeAttr('disabled', true);
