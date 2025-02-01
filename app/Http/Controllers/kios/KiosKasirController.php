@@ -276,6 +276,7 @@ class KiosKasirController extends Controller
 
             $pendapatanKiosBaru = $totalHargaKiosBaru - $modalKiosBaru;
             $pendapatanKiosBekas = $totalHargaKiosBekas - $modalKiosBekas;
+            $pendapatanPartBaru = $totalHargaGudang - $modalGudang;
 
             $filesFinance = [];
             $namaAkunFinance = [];
@@ -323,20 +324,20 @@ class KiosKasirController extends Controller
                 'idEksternal' => "K$transaksi->id",
                 'idCustomer' => $transaksi->customer->first_name . " " . $transaksi->customer->last_name . $transaksi->customer->id,
                 'totalNominal' => $totalPembayaran,
-                'pendapatanKiosBaru' => 0,
-                'pendapatanKiosBekas' => 0,
+                'pendapatanKiosBaru' => $pendapatanKiosBaru,
+                'pendapatanKiosBekas' => $pendapatanKiosBekas,
                 'pendapatanLain' => $pendapatanLainLain,
-                'pendapatanSparepartBaru' => 0,
+                'pendapatanSparepartBaru' => $pendapatanPartBaru,
                 'pendapatanSparepartBekas' => 0,
-                'persediaanKiosBaru' => 0,
-                'persediaanKiosBekas' => 0,
-                'persediaanSparepartBaru' => 0,
+                'persediaanKiosBaru' => $modalKiosBaru,
+                'persediaanKiosBekas' => $modalKiosBekas,
+                'persediaanSparepartBaru' => $modalGudang,
                 'persediaanSparepartBekas' => 0,
-                'nilaiDiscount' => 0,
+                'nilaiDiscount' => $kasirDiscount,
                 'nilaiKerugian' => 0,
                 'metodePembayaran' => '',
                 'nilaiMP' => '',
-                'saldoOngkir' => 0
+                'saldoOngkir' => $kasirOngkir
             ];
 
             $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbz1A7V7pNuzyuIPCBVqtZjoMy1TvVG2Gx2Hh_16eifXiOpdWtzf1WKjqSpQ0YEdbmk5/exec';

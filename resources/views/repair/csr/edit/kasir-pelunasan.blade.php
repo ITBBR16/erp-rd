@@ -123,7 +123,7 @@
                             @endif
                             @endforeach
 
-                            @if (!empty($dataCase->logRequest->biaya_customer_ongkir) && !empty($dataCase->logRequest->biaya_customer_packing))
+                            @if (!empty($dataCase->logRequest->biaya_customer_ongkir) || !empty($dataCase->logRequest->biaya_customer_packing))
                                 <tr class="border-t">
                                     <td class="p-2">
                                         Total Ongkir
@@ -275,7 +275,7 @@
                             <p class="font-semibold text-black dark:text-white">Ongkir :</p>
                         </div>
                         <div class="flex text-end">
-                            <input type="hidden" id="nominal-ongkir" name="nominal_ongkir" value="{{ $biayaOngkir }}">
+                            <input type="hidden" id="nominal-ongkir" name="nominal_ongkir" value="{{ $totalOngkir }}">
                             <p class="font-normal text-black dark:text-white">Rp. {{ number_format($biayaOngkir, 0, ',', '.') }}</p>
                         </div>
                     </div>
