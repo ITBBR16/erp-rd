@@ -98,7 +98,8 @@
                                 @php
                                     $sku = $qc->gudangProduk->produkSparepart->produkType->code . "." . $qc->gudangProduk->produkSparepart->partModel->code . "." . 
                                             $qc->gudangProduk->produkSparepart->produk_jenis_id . "." . $qc->gudangProduk->produkSparepart->partBagian->code . "." . 
-                                            $qc->gudangProduk->produkSparepart->partSubBagian->code . "." . $qc->gudangProduk->produkSparepart->produk_part_sifat_id;
+                                            $qc->gudangProduk->produkSparepart->partSubBagian->code . "." . $qc->gudangProduk->produkSparepart->produk_part_sifat_id . "." .
+                                            $qc->gudangProduk->produkSparepart->id;
                                 @endphp
                                 {{ $sku }}
                             </td>

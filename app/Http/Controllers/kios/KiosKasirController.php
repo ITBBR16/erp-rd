@@ -186,11 +186,14 @@ class KiosKasirController extends Controller
             ]);
             
             $kasirCustomer = $request->input('nama_customer');
-            $kasirOngkir = preg_replace("/[^0-9]/", "", $request->input('kasir_ongkir'));
-            $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount'));
+            $nominalDikembalikan = preg_replace("/[^0-9]/", "", $request->input('kasir_dikembalikan')) ?: 0;
+            $pendapatanLainLain = preg_replace("/[^0-9]/", "", $request->input('kasir_pll')) ?: 0;
+            $tambahSaldoCustomer = preg_replace("/[^0-9]/", "", $request->input('kasir_sc')) ?: 0;
+            $kasirOngkir = preg_replace("/[^0-9]/", "", $request->input('kasir_ongkir')) ?: 0;
+            $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount')) ?: 0;
             $kasirTax = $request->input('kasir_tax') ?: 0;
-            $kasirKeterangan = $request->input('keterangan_pembayaran');
             
+            $kasirKeterangan = $request->input('keterangan_pembayaran');
             $kasirJenisTransaksi = $request->input('jenis_transaksi');
             $kasirItem = $request->input('item_id');
             $kasirSN = $request->input('kasir_sn');
@@ -275,6 +278,17 @@ class KiosKasirController extends Controller
             $namaAkunFinance = [];
             $nilaiAkunFinance = [];
 
+            $saldoCustomer = [];
+            $statusSC = [];
+            // if ($saldoTerpakai > 0) {
+            //     $saldoCustomer[] = $saldoTerpakai;
+            //     $statusSC[] = true;
+            // }
+            if ($tambahSaldoCustomer > 0) {
+                $saldoCustomer[] = $tambahSaldoCustomer + $nominalDikembalikan;
+                $statusSC[] = false;
+            }
+
             foreach($request->input('kasir_metode_pembayaran') as $index => $metodePembayaran) {
                 $kasirNominalPembayaran = preg_replace("/[^0-9]/", "", $request->input('kasir_nominal_pembayaran')[$index]);
                 $filesFinance[] = base64_encode($request->file('file_bukti_transaksi')[$index]->get());
@@ -297,7 +311,8 @@ class KiosKasirController extends Controller
             $transaksi->save();
 
             $payloadPembukuan = [
-                'statusSC' => true,
+                'saldoCustomer' => $saldoCustomer,
+                'statusSC' => $statusSC,
                 'files' => $filesFinance,
                 'source' => 'Kios',
                 'inOut' => 'In',
@@ -305,17 +320,19 @@ class KiosKasirController extends Controller
                 'idEksternal' => "K$transaksi->id",
                 'idCustomer' => $transaksi->customer->first_name . " " . $transaksi->customer->last_name . $transaksi->customer->id,
                 'totalNominal' => $totalPembayaran,
-                'nilaiJasa' => 0,
-                'nilaiReparasi' => 0,
-                'nilaiResiko' => 0,
-                'nilaiSparepartBaru' => 0,
-                'nilaiSparepartBekas' => 0,
-                'nilaiLainnya' => 0,
-                'nilaiDiskon' => 0,
+                'pendapatanKiosBaru' => 0,
+                'pendapatanKiosBekas' => 0,
+                'pendapatanLain' => $pendapatanLainLain,
+                'pendapatanSparepartBaru' => 0,
+                'pendapatanSparepartBekas' => 0,
+                'persediaanKiosBaru' => 0,
+                'persediaanKiosBekas' => 0,
+                'persediaanSparepartBaru' => 0,
+                'persediaanSparepartBekas' => 0,
+                'nilaiDiscount' => 0,
                 'nilaiKerugian' => 0,
-                'saldoCustomer' => $totalPembayaran,
-                'metodePembayaran' => $namaAkunFinance,
-                'nilaiMP' => $nilaiAkunFinance,
+                'metodePembayaran' => '',
+                'nilaiMP' => '',
             ];
 
             $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbz1A7V7pNuzyuIPCBVqtZjoMy1TvVG2Gx2Hh_16eifXiOpdWtzf1WKjqSpQ0YEdbmk5/exec';

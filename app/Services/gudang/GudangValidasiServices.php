@@ -68,10 +68,11 @@ class GudangValidasiServices
             $belnajaId = $request->input('belanja_id');
             $sparepartId = $request->input('sparepart_id');
 
-            $findProduk = $this->produk->findBySparepart($sparepartId);
+            $findProduk = $this->produk->findProduk($sparepartId);
             $findBelanja = $this->belanja->findBelanja($belnajaId);
-            $findDetailBelanja = $this->belanja->getDetailBelanja($belnajaId, $sparepartId);
-            
+            $findDetailBelanja = $this->belanja->getDetailBelanja($belnajaId, $findProduk->produk_sparepart_id);
+
+            $statusProduk = ($findProduk->status == 'Not Ready') ? 'Ready' : $findProduk->status;
             $modalAwal = $findProduk->modal_awal;
             $hargaPcs = $findDetailBelanja->nominal_pcs;
             $totalQuantity = $findBelanja->total_quantity;
@@ -115,7 +116,7 @@ class GudangValidasiServices
             }
 
             $totalModalAwal = $modalAwal + $modalProduk;
-            $this->produk->updateByValidasi($sparepartId, ['modal_awal' => $totalModalAwal]);
+            $this->produk->updateByValidasi($sparepartId, ['modal_awal' => $totalModalAwal, 'status' => $statusProduk]);
             $this->transaction->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil melakukan validasi barang.'];
 

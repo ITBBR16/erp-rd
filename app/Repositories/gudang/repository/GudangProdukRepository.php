@@ -73,7 +73,7 @@ class GudangProdukRepository implements GudangProdukInterface
 
     public function updateByValidasi($id, array $data)
     {
-        $produk = $this->produk->where('produk_sparepart_id', $id)->first();
+        $produk = $this->produk->find($id);
 
         if ($produk) {
             $produk->update($data);
