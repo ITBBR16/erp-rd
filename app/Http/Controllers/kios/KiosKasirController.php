@@ -274,6 +274,9 @@ class KiosKasirController extends Controller
                 }
             }
 
+            $pendapatanKiosBaru = $totalHargaKiosBaru - $modalKiosBaru;
+            $pendapatanKiosBekas = $totalHargaKiosBekas - $modalKiosBekas;
+
             $filesFinance = [];
             $namaAkunFinance = [];
             $nilaiAkunFinance = [];
@@ -333,6 +336,7 @@ class KiosKasirController extends Controller
                 'nilaiKerugian' => 0,
                 'metodePembayaran' => '',
                 'nilaiMP' => '',
+                'saldoOngkir' => 0
             ];
 
             $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbz1A7V7pNuzyuIPCBVqtZjoMy1TvVG2Gx2Hh_16eifXiOpdWtzf1WKjqSpQ0YEdbmk5/exec';

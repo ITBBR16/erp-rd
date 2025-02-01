@@ -31,7 +31,7 @@
             </tr>
         </table>
 
-        <table style="width: 100%; font-size: 10px; margin-bottom: 16px; border-spacing: 0 8px;">
+        <table style="width: 100%; font-size: 8px; margin-bottom: 16px; border-spacing: 0 8px;">
             <tr>
                 <td style="width: 50%; vertical-align: top;">
                     <p style="color: gray; margin: 0;">Nama Customer</p>
@@ -65,9 +65,9 @@
         </table>
     
         <table style="font-size: 8px; width: 100%; text-align: left; margin-bottom: 8px; background-color: #F9FAFB; border-radius: 8px; color: #9CA3AF;">
-            <thead style="font-size: 8px; color: gray;">
+            <thead style="font-size: 8px; color: black;">
                 <tr style="border-bottom: 1px solid black;">
-                    <th style="padding-right: 8px; padding-bottom: 4px; width: 80%;">Analisa Kerusakan</th>
+                    <th style="padding-right: 8px; text-align: left; padding-bottom: 4px; width: 80%;">Analisa Kerusakan</th>
                     <th style="padding-right: 8px; padding-bottom: 4px; width: 20%;">Harga</th>
                 </tr>
             </thead>
@@ -166,7 +166,7 @@
                     <p style="margin: 0; margin-top: 4px;">{{ $dataCase->keluhan }}</p>
                 </td>
                 <!-- Kolom untuk gambar dan tanda tangan -->
-                <td style="width: 33.33%; vertical-align: top; text-align: center;">
+                <td style="width: 33.33%; vertical-align: top; text-align: center; margin-left: 4px">
                     <table style="width: 100%; color: gray; font-size: 8px; margin-top: 8px; border-collapse: collapse;">
                         <tr>
                             <td>Down Payment</td>
@@ -209,7 +209,7 @@
                 </td>
                 <td style="width: 50%; vertical-align: middle; text-align: center;">
                     <h3 style="font-weight: 600; margin-bottom: 2rem;">Hormat Kami</h3>
-                    <p style="color: gray;">( {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} )</p>
+                    <p style="color: gray;">( Rumah Drone )</p>
                 </td>
             </tr>
         </table>        

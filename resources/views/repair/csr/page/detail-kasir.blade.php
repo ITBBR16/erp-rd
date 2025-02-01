@@ -40,9 +40,13 @@
                     <h3 class="text-sm font-semibold mb-1">Jenis Case</h3>
                     <p class="text-gray-500 text-base">{{ $case->jenisCase->jenis_case }}</p>
                 </div>
-                <div class="col-span-2 mb-2">
+                <div class="mb-2">
                     <h3 class="text-sm font-semibold mb-3">Link Drive</h3>
                     <a href="{{ $case->link_doc }}" target="_blank" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Folder Drive</a>
+                </div>
+                <div class="mb-2">
+                    <h3 class="text-sm font-semibold mb-1">No Whatsapp</h3>
+                    <p class="text-gray-500 text-base">{{ $case->customer->no_telpon }}</p>
                 </div>
             </div>
             <h3 class="text-lg font-semibold mb-4 pt-2 border-t text-black dark:text-white">Detail Kronologi</h3>

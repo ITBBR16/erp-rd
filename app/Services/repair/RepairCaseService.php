@@ -639,10 +639,10 @@ class RepairCaseService
             $checkboxCustomer = $request->has('checkbox_customer_kasir');
 
             $layananEkspedisi = $request->input('layanan_ongkir_repair');
-            $nominalOngkir = preg_replace("/[^0-9]/", "",$request->input('nominal_ongkir_repair')) ?? 0;
-            $nominalPacking = preg_replace("/[^0-9]/", "",$request->input('nominal_packing_repair')) ?? 0;
-            $nominalProduk = preg_replace("/[^0-9]/", "",$request->input('nominal_produk')) ?? 0;
-            $nominalAsuransi = preg_replace("/[^0-9]/", "",$request->input('nominal_asuransi')) ?? 0;
+            $nominalOngkir = preg_replace("/[^0-9]/", "",$request->input('nominal_ongkir_repair')) ?: 0;
+            $nominalPacking = preg_replace("/[^0-9]/", "",$request->input('nominal_packing_repair')) ?: 0;
+            $nominalProduk = preg_replace("/[^0-9]/", "",$request->input('nominal_produk')) ?: 0;
+            $nominalAsuransi = preg_replace("/[^0-9]/", "",$request->input('nominal_asuransi')) ?: 0;
 
             if ($checkboxCustomer) {
                 $tipePenerima = 'Other';
@@ -846,6 +846,7 @@ class RepairCaseService
             $nominalDikembalikan = preg_replace("/[^0-9]/", "", $request->input('nominal_dikembalikan')) ?: 0;
             $pendapatanLainLain = preg_replace("/[^0-9]/", "", $request->input('nominal_pll')) ?: 0;
             $tambahSaldoCustomer = preg_replace("/[^0-9]/", "", $request->input('nominal_save_saldo_customer')) ?: 0;
+            $totalOngkir = $request->input('nominal_ongkir');
 
             $dataCase = $this->repairCase->findCase($id);
             $idEstimasi = $dataCase->estimasi->id;
@@ -1038,6 +1039,7 @@ class RepairCaseService
                 'saldoCustomer' => $saldoCustomer,
                 'metodePembayaran' => $namaAkunFinance,
                 'nilaiMP' => $nilaiAkunFinance,
+                'saldoOngkir' => $totalOngkir
             ];
 
             $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbz1A7V7pNuzyuIPCBVqtZjoMy1TvVG2Gx2Hh_16eifXiOpdWtzf1WKjqSpQ0YEdbmk5/exec';
