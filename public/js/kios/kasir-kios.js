@@ -2,38 +2,8 @@ function formatRupiah(angka) {
     return accounting.formatMoney(angka, "Rp. ", 0, ".", ",");
 }
 
-function printInvoice() {
-    window.print();
-}
-
 function formatAngka(angka) {
     return accounting.formatMoney(angka, "", 0, ".", ",");
-}
-
-function downloadPdf() {
-    var noInvoice = $('#invoice-number').val();
-    var invoiceContent = $('#print-invoice-kios').html();
-
-    var requestData = {
-        no_invoice: noInvoice,
-        content: invoiceContent
-    };
-
-    $.ajax({
-        type: 'POST',
-        url: '/kios/kasir/generate-pdf',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        contentType: 'application/json',
-        data: JSON.stringify(requestData),
-        success: function(data) {
-            alert('Success Download Invoice.');
-        },
-        error: function(xhr, status, error) {
-            alert('Terjadi kesalahan saat mengunduh invoice : ' + error);
-        }
-    });
 }
 
 // Alphine.js
@@ -181,42 +151,65 @@ document.addEventListener('alpine:init', () => {
         }, 
 
         addToInvoice(item) {
+            // Create a description based on jenisTransaksi
             var deskripsi = item.jenisTransaksi == 'drone_baru'
                 ? 'Unit Baru, Garansi 1 Tahun'
                 : item.jenisTransaksi == 'drone_bekas'
                     ? 'Unit Second, Garansi 1'
                     : '-';
-
-            const invoiceItem = {
-                productName: item.itemName,
-                description: deskripsi,
-                qty: 1,
-                itemPrice: item.kasirHarga || 0,
-                totalPrice: item.kasirHarga || 0,
-            };
-
-            this.invoices.push(invoiceItem);
+        
+            // Check if the invoice already has this item
+            const existingInvoiceItem = this.invoices.find(invItem => 
+                invItem.productName === item.itemName && 
+                (item.jenisTransaksi === 'part_baru' || item.jenisTransaksi === 'part_bekas')
+            );
+        
+            // If it exists and jenisTransaksi is part_baru or part_bekas, increase the quantity
+            if (existingInvoiceItem) {
+                existingInvoiceItem.qty += 1; // Increment the quantity
+                existingInvoiceItem.totalPrice = formatRupiah(existingInvoiceItem.qty * (parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0));
+            } else {
+                // If it doesn't exist, create a new invoice item
+                const invoiceItem = {
+                    productName: item.itemName,
+                    description: deskripsi,
+                    qty: 1,
+                    itemPrice: item.kasirHarga || 0,
+                    totalPrice: item.kasirHarga || 0,
+                };
+                this.invoices.push(invoiceItem);
+            }
         },
-
+        
         removeFromInvoice(item) {
-            this.invoices = this.invoices.filter(invItem => invItem.productName !== item.itemName);
+            // Remove items based on productName and jenisTransaksi for part_baru and part_bekas
+            this.invoices = this.invoices.filter(invItem => {
+                if (item.jenisTransaksi === 'part_baru' || item.jenisTransaksi === 'part_bekas') {
+                    return invItem.productName !== item.itemName; // Remove the item entirely if it's part_baru or part_bekas
+                }
+                return true; // Keep all other items
+            });
         },
 
         updateInvoice() {
-            const kasirDiscount = parseFloat(this.discount.replace(/\D/g, '')) || 0;
-            const kasirOngkir = parseFloat(this.ongkir.replace(/\D/g, '')) || 0;
-            const kasirPacking = parseFloat(this.packing.replace(/\D/g, '')) || 0;
-            const kasirAsuransi = parseFloat(this.asuransi.replace(/\D/g, '')) || 0;
+            let kasirDiscount = parseFloat(this.discount.replace(/\D/g, '')) || 0;
+            let kasirOngkir = parseFloat(this.ongkir.replace(/\D/g, '')) || 0;
+            let kasirPacking = parseFloat(this.packing.replace(/\D/g, '')) || 0;
+            let kasirAsuransi = parseFloat(this.asuransi.replace(/\D/g, '')) || 0;
             this.subTotal = 0;
 
             this.items.forEach(item => {
-                const price = parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0;
+                let price = parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0;
                 this.subTotal += price;
             });
 
-            const totalOngkirInvoice = kasirOngkir + kasirPacking + kasirAsuransi;
-            const totalPayment = this.subTotal - kasirDiscount + totalOngkirInvoice;
+            let totalOngkirInvoice = kasirOngkir + kasirPacking + kasirAsuransi;
+            let totalPayment = this.subTotal - kasirDiscount + totalOngkirInvoice;
 
+            document.getElementById("input-invoice-subtotal").value = formatRupiah(this.subTotal);
+            document.getElementById("input-invoice-discount").value = formatRupiah(kasirDiscount);
+            document.getElementById("input-invoice-ongkir").value = formatRupiah(totalOngkirInvoice);
+            document.getElementById("input-invoice-total").value = formatRupiah(totalPayment);
             document.getElementById("invoice-subtotal").textContent = formatRupiah(this.subTotal);
             document.getElementById("invoice-discount").textContent = formatRupiah(kasirDiscount);
             document.getElementById("invoice-ongkir").textContent = formatRupiah(totalOngkirInvoice);
@@ -227,8 +220,6 @@ document.addEventListener('alpine:init', () => {
             document.getElementById("kasir-box-packing").textContent = formatRupiah(kasirPacking);
             document.getElementById("kasir-box-asuransi").textContent = formatRupiah(kasirAsuransi);
             document.getElementById("kasir-box-total").textContent = formatRupiah(totalPayment);
-
-            
         },
     });
 });
@@ -293,14 +284,20 @@ $(document).ready(function(){
         .then(response => response.json())
         .then(data => {
             data.forEach(customer => {
-                var fullName = customer.first_name + ' ' + customer.last_name;
+                var fullName = customer.first_name + (customer.last_name ? ' ' + customer.last_name : '');
 
-                invoiceNamaCus.text(fullName);
-                invoiceTlp.text(customer.no_telpon);
-                invoiceJalan.text(customer.nama_jalan);
+                invoiceNamaCus.val(fullName);
+                invoiceTlp.val(customer.no_telpon);
+                invoiceJalan.val(customer.nama_jalan);
             })
         })
         .catch(error => console.error('Error:', error));
+
+        checkPembayaranKasirLunas();
+    });
+
+    $(document).on('change', '#kasir-discount, #kasir-ongkir, #kasir-packing, #kasir-asuransi, #kasir-dikembalikan, #kasir-pll, #kasir-sc, .kasir_sn, .kasir-nominal-pembayaran', function() {
+        checkPembayaranKasirLunas();
     });
 
     $(document).on("input", ".kasir-formated-rupiah", function () {
@@ -312,11 +309,72 @@ $(document).ready(function(){
 
     $(document).on("click", "#button-print-invoice", function (e) {
         e.preventDefault();
-        printInvoice();
+        window.print();
     });
 
-    $('#button-download-invoice').click(function() {
-        downloadPdf();
-    })
+    function checkPembayaranKasirLunas()
+    {
+        let totalTagihan = 0;
+        let totalPembayaran = 0;
+        let nominalDiscount = parseFloat($('#kasir-discount').val().replace(/\./g, '')) || 0;
+        let nominalOngkir = parseFloat($('#kasir-ongkir').val().replace(/\./g, '')) || 0;
+        let nominalPacking = parseFloat($('#kasir-packing').val().replace(/\./g, '')) || 0;
+        let nominalAsuransi = parseFloat($('#kasir-asuransi').val().replace(/\./g, '')) || 0;
+        let nominalDikembalikan = parseFloat($('#kasir-dikembalikan').val().replace(/\./g, '')) || 0;
+        let nominalPll = parseFloat($('#kasir-pll').val().replace(/\./g, '')) || 0;
+        let nominalSaveSaldoCustomer = parseFloat($('#kasir-sc').val().replace(/\./g, '')) || 0;
+        let statusBox = $('#status-box-lunas');
+
+        $("input[name='kasir_harga[]']").each(function() {
+            let harga = parseFloat($(this).val().replace(/\D/g, '')) || 0;
+            totalTagihan += harga;
+        });
+
+        $("input[name='kasir_nominal_pembayaran[]']").each(function() {
+            let pembayaran = parseFloat($(this).val().replace(/\D/g, '')) || 0;
+            totalPembayaran += pembayaran;
+        });
+
+        console.log(`Total Tagihan : ${totalTagihan}`);
+        console.log(`Total Pembayaran : ${totalPembayaran}`);
+
+        let totalTagihanCustomer = totalTagihan + nominalOngkir + nominalPacking + nominalAsuransi + nominalDikembalikan + nominalPll + nominalSaveSaldoCustomer;
+        let totalPembayaranCustomer =  totalPembayaran + nominalDiscount;
+
+        if (totalTagihanCustomer == totalPembayaranCustomer) {
+            statusBox.text('Pass')
+                .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300')
+                .addClass('bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300');
+            $('#form-kelebihan').hide();
+            $('#kasir-dikembalikan').val(0);
+            $('#kasir-pll').val(0);
+            $('#kasir-sc').val(0);
+            $('#btn-kasir-lunas').removeClass('cursor-not-allowed').removeAttr('disabled');
+        } else if (totalTagihanCustomer < totalPembayaranCustomer) {
+            statusBox.text('Overpay')
+                .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300')
+                .addClass('bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300');
+            $('#form-kelebihan').show();
+            $('#kasir-dikembalikan').val(0);
+            $('#kasir-pll').val(0);
+            $('#kasir-sc').val(0);
+            $('#btn-kasir-lunas').addClass('cursor-not-allowed').prop('disabled', true);
+        } else {
+            statusBox.text('Not Pass')
+                .removeClass('bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300 bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300')
+                .addClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300');
+            $('#form-kelebihan').hide();
+            $('#kasir-dikembalikan').val(0);
+            $('#kasir-pll').val(0);
+            $('#kasir-sc').val(0);
+            $('#btn-kasir-lunas').addClass('cursor-not-allowed').prop('disabled', true);
+        }
+    }
+
+    // $('#btn-download-pdf-invoice-kasir').on('click', function() {
+    //     let formData = $("#pdfForm").serialize();
+    //     let url = "/kios/kasir/generate-pdf?" + formData;
+    //     window.open(url, '_blank');
+    // });
 
 });

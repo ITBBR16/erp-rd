@@ -82,7 +82,7 @@
                     </div>
                     <div>
                         <label for="keterangan-pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Keterangan :</label>
-                        <input type="text" name="keterangan_pembayaran" id="keterangan-pembayaran" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pendapatan Kios Sejumlah Rp.xxx.xxx . . .">
+                        <input type="text" name="keterangan_pembayaran" id="keterangan-pembayaran" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pendapatan Kios Sejumlah Rp.xxx.xxx . . ." required>
                     </div>
                 </div>
 
@@ -129,7 +129,7 @@
                             <label for="kasir-nominal-pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                <input type="text" name="kasir_nominal_pembayaran[]" id="kasir-nominal-pembayaran" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                                <input type="text" name="kasir_nominal_pembayaran[]" id="kasir-nominal-pembayaran" class="kasir-formated-rupiah kasir-nominal-pembayaran rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
                             </div>
                         </div>
                         <div>
@@ -166,7 +166,7 @@
                             <p class="text-lg font-bold text-black dark:text-white">Resume Tagihan</p>
                         </div>
                         <div class="flex justify-end ml-auto">
-                            <span class="bg-rose-100 text-rose-700 text-xs font-bold me-2 px-2.5 py-0.5 rounded dark:bg-rose-800 dark:text-rose-300">Not Pass</span>
+                            <span id="status-box-lunas" class="bg-rose-100 text-rose-700 text-xs font-bold me-2 px-2.5 py-0.5 rounded dark:bg-rose-800 dark:text-rose-300">Not Pass</span>
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -305,7 +305,7 @@
                                 </select>
                             </td>
                             <td class="px-4 py-2">
-                                <input type="text" name="kasir_modal_part[]" x-model="item.modalGudang">
+                                <input type="hidden" name="kasir_modal_part[]" x-model="item.modalGudang">
                                 <input type="text" name="kasir_harga[]" x-model="item.kasirHarga" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rp. 0" readonly required>
                             </td>
                             <td class="px-4 py-2">
@@ -329,7 +329,32 @@
                     </button>
                 </div>
             </div>
+
+            <template x-for="invoice in $store.kasirForm.invoices" :key="invoice.productName">
+                <tr>
+                    <td class="px-2 py-1">
+                        <input type="hidden" name="invoiceProductName[]" x-bind:value="invoice.productName">
+                    </td>
+                    <td class="px-2 py-1">
+                        <input type="hidden" name="invoiceDescription[]" x-bind:value="invoice.description">
+                    </td>
+                    <td class="px-2 py-1">
+                        <input type="hidden" name="invoiceQty[]" x-bind:value="invoice.qty">
+                    </td>
+                    <td class="px-2 py-1">
+                        <input type="hidden" name="invoiceItemPrice[]" x-bind:value="invoice.itemPrice">
+                    </td>
+                    <td class="px-2 py-1">
+                        <input type="hidden" name="invoiceTotalPrice[]" x-bind:value="invoice.totalPrice">
+                    </td>
+                </tr>
+            </template>
+            
         </div>
+        <input type="hidden" name="input_invoice_subtotal" id="input-invoice-subtotal">
+        <input type="hidden" name="input_invoice_discount" id="input-invoice-discount">
+        <input type="hidden" name="input_invoice_ongkir" id="input-invoice-ongkir">
+        <input type="hidden" name="input_invoice_total" id="input-invoice-total">
     </form>
     {{-- Modal --}}
     @include('kios.kasir.modal.invoice-modal')

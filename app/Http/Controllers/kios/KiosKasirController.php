@@ -7,12 +7,13 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Http\Request;
-use App\Models\kios\KiosAkunRD;
 use App\Models\kios\KiosProduk;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\customer\Customer;
 use App\Models\kios\KiosTransaksi;
 use Illuminate\Support\Facades\DB;
 use App\Models\gudang\GudangProduk;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosProdukSecond;
@@ -23,6 +24,8 @@ use App\Models\repair\RepairEstimasiPart;
 use App\Repositories\umum\UmumRepository;
 use App\Models\kios\KiosTransaksiPembayaran;
 use App\Models\management\AkuntanDaftarAkun;
+use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
+use App\Repositories\gudang\repository\GudangTransactionRepository;
 
 class KiosKasirController extends Controller
 {
@@ -33,6 +36,8 @@ class KiosKasirController extends Controller
         private KiosTransaksiPart $transaksiPart,
         private AkuntanDaftarAkun $daftarAkun,
         private KiosTransaksiPembayaran $transaksiPembayaran,
+        private GudangProdukIdItemRepository $idItemGudang,
+        private GudangTransactionRepository $transactionGudang,
     ){}
 
     public function index()
@@ -174,19 +179,28 @@ class KiosKasirController extends Controller
     {
         $connectionTransaksiKios = DB::connection('rumahdrone_kios');
         $connectionTransaksiKios->beginTransaction();
+        $this->transactionGudang->beginTransaction();
 
         try{
             $userId = auth()->user()->id;
-            $request->validate([
-                'nama_customer' => 'required',
-                'kasir_metode_pembayaran' => 'required',
-                'kasir_nominal_pembayaran' => 'required',
-                'jenis_transaksi' => 'required|array|min:1',
-                'kasir_sn' => 'required|array|min:1',
-                'item_id' => 'required|array|min:1',
-                'kasir_harga' => 'required|array|min:1',
-            ]);
+            // $request->validate([
+            //     'nama_customer' => 'required',
+            //     'kasir_metode_pembayaran' => 'required|array|min:1',
+            //     'kasir_nominal_pembayaran' => 'required|array|min:1',
+            //     'jenis_transaksi' => 'required|array|min:1',
+            //     'kasir_sn' => 'required|array|min:1',
+            //     'item_id' => 'required|array|min:1',
+            //     'kasir_harga' => 'required|array|min:1',
+            // ]);
             
+            $today = Carbon::now();
+            $dueDate = $today->copy()->addMonth(3);
+            $productNames = $request->input('invoiceProductName');
+            $descriptions = $request->input('invoiceDescription');
+            $quantities = $request->input('invoiceQty');
+            $itemPrices = $request->input('invoiceItemPrice');
+            $totalPrices = $request->input('invoiceTotalPrice');
+
             $kasirCustomer = $request->input('nama_customer');
             $nominalDikembalikan = preg_replace("/[^0-9]/", "", $request->input('kasir_dikembalikan')) ?: 0;
             $pendapatanLainLain = preg_replace("/[^0-9]/", "", $request->input('kasir_pll')) ?: 0;
@@ -194,6 +208,7 @@ class KiosKasirController extends Controller
             $kasirOngkir = preg_replace("/[^0-9]/", "", $request->input('kasir_ongkir')) ?: 0;
             $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount')) ?: 0;
             $kasirTax = $request->input('kasir_tax') ?: 0;
+            $kasirAsuransi = $request->input('kasir_asuransi') ?: 0;
             
             $kasirKeterangan = $request->input('keterangan_pembayaran');
             $kasirJenisTransaksi = $request->input('jenis_transaksi');
@@ -214,6 +229,7 @@ class KiosKasirController extends Controller
 
             if(count(array_unique($kasirSN)) !== count($kasirSN)) {
                 $connectionTransaksiKios->rollBack();
+                $this->transactionGudang->rollbackTransaction();
                 return back()->with('error', 'Serial Number / Id Item tidak boleh ada yang sama.');
             }
 
@@ -268,11 +284,13 @@ class KiosKasirController extends Controller
                     KiosTransaksiPart::create([
                         'transaksi_id' => $transaksi->id,
                         'jenis_transaksi_part' => $jenisTransaksi,
-                        'sku_part' => $item,
-                        'id_item_part' => $serialNumber,
-                        'harga_modal_part' => $kasirModalPart[$index],
+                        'gudang_produk_id' => $item,
+                        'gudang_id_item_id' => $serialNumber,
+                        'modal_gudang' => $kasirModalPart[$index],
                         'harga_jual_part' => $srp
                     ]);
+
+                    $this->idItemGudang->updateIdItem($serialNumber, ['status_inventory' => 'Sold']);
                 }
             }
 
@@ -280,6 +298,7 @@ class KiosKasirController extends Controller
             $pendapatanKiosBekas = $totalHargaKiosBekas - $modalKiosBekas;
             $pendapatanPartBaru = $totalHargaGudang - $modalGudang;
 
+            $products = [];
             $filesFinance = [];
             $namaAkunFinance = [];
             $nilaiAkunFinance = [];
@@ -294,6 +313,36 @@ class KiosKasirController extends Controller
                 $saldoCustomer[] = $tambahSaldoCustomer + $nominalDikembalikan;
                 $statusSC[] = false;
             }
+
+            foreach($productNames as $index => $productName) {
+                $products[] = [
+                    'productName' => $productName ?? '',
+                    'description' => $descriptions[$index] ?? '',
+                    'qty' => $quantities[$index] ?? 0,
+                    'itemPrice' => $itemPrices[$index] ?? 0,
+                    'totalPrice' => $totalPrices[$index] ?? 0,
+                ];
+            }
+
+            $data = [
+                'title' => 'Invoice Kasir',
+                'invoiceid' => $request->input('invoiceid'),
+                'namaCustomer' => $transaksi->customer->first_name . " " . ($transaksi->customer->last_name ?? ''),
+                'noTelpon' => $transaksi->customer->no_telpon,
+                'jalanCustomer' => $transaksi->customer->nama_jalan,
+                'today' => $today,
+                'duedate' => $dueDate,
+                'products' => $products,
+                'subTotal' => $request->input('input_invoice_subtotal', 0),
+                'discount' => $request->input('input_invoice_discount', 0),
+                'ongkir' => $request->input('input_invoice_ongkir', 0),
+                'total' => $request->input('input_invoice_total', 0),
+            ];
+
+            $pdf = Pdf::loadView('kios.kasir.invoice.invoice-kasir', $data);
+            $pdfContent = $pdf->output();
+            $pdfEncode = base64_encode($pdfContent);
+            $filesFinance[] = $pdfEncode;
 
             foreach($request->input('kasir_metode_pembayaran') as $index => $metodePembayaran) {
                 $kasirNominalPembayaran = preg_replace("/[^0-9]/", "", $request->input('kasir_nominal_pembayaran')[$index]);
@@ -324,7 +373,7 @@ class KiosKasirController extends Controller
                 'inOut' => 'In',
                 'keterangan' => $kasirKeterangan,
                 'idEksternal' => "K$transaksi->id",
-                'idCustomer' => $transaksi->customer->first_name . " " . $transaksi->customer->last_name . $transaksi->customer->id,
+                'idCustomer' => $transaksi->customer->first_name . " " . ($transaksi->customer->last_name ?? '') . $transaksi->customer->id,
                 'totalNominal' => $totalPembayaran,
                 'pendapatanKiosBaru' => $pendapatanKiosBaru,
                 'pendapatanKiosBekas' => $pendapatanKiosBekas,
@@ -345,9 +394,14 @@ class KiosKasirController extends Controller
             $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbz1A7V7pNuzyuIPCBVqtZjoMy1TvVG2Gx2Hh_16eifXiOpdWtzf1WKjqSpQ0YEdbmk5/exec';
             $responseFinance = Http::post($urlJurnalTransit, $payloadPembukuan);
 
+            $connectionTransaksiKios->commit();
+            $this->transactionGudang->commitTransaction();
+
+            return back()->with('success', 'Berhasil membuat kasir baru.');
 
         } catch (Exception $e) {
             $connectionTransaksiKios->rollBack();
+            $this->transactionGudang->rollbackTransaction();
             return back()->with('error', $e->getMessage());
         }
 
@@ -453,11 +507,19 @@ class KiosKasirController extends Controller
 
     public function downloadInvoice(Request $request)
     {
+        $data = json_decode($request->getContent(), true);
+
+        if (!$data) {
+            return response()->json(['error' => 'Invalid JSON data'], 400);
+        }
+
+        Log::info('Decoded Data:', $data);
+
         $html = '<html><head><meta charset="UTF-8"></head><body>';
-        $html .= $request->input('content');
+        $html .= $data['content'];
         $html .= '</body></html>';
 
-        $noInvoice = $request->input('no_invoice');
+        $noInvoice = $data['no_invoice'];
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
@@ -468,7 +530,62 @@ class KiosKasirController extends Controller
         $newPdf->setPaper('A5', 'landscape');
         $newPdf->render();
 
-        return $newPdf->stream($noInvoice . ".pdf", ["Attachment" => true]);
+        return response()->stream(function () use ($newPdf) {
+            echo $newPdf->output();
+        }, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $noInvoice . '.pdf"',
+        ]);
+    }
+
+    public function previewPdfKasir(Request $request)
+    {
+        try {
+            Log::info('Request Data: ', $request->all());
+
+            $today = Carbon::now();
+            $dueDate = $today->copy()->addMonth(3);
+            $products = [];
+
+            $productNames = $request->input('productName', []);
+            $descriptions = $request->input('description', []);
+            $quantities = $request->input('qty', []);
+            $itemPrices = $request->input('itemPrice', []);
+            $totalPrices = $request->input('totalPrice', []);
+
+            for ($i = 0; $i < count($productNames); $i++) {
+                $products[] = [
+                    'productName' => $productNames[$i] ?? '',
+                    'description' => $descriptions[$i] ?? '',
+                    'qty' => $quantities[$i] ?? 0,
+                    'itemPrice' => $itemPrices[$i] ?? 0,
+                    'totalPrice' => $totalPrices[$i] ?? 0,
+                ];
+            }
+
+            $data = [
+                'title' => 'Invoice Kasir',
+                'invoiceid' => $request->input('invoiceid'),
+                'namaCustomer' => $request->input('invoice_nama_customer'),
+                'noTelpon' => $request->input('invoice_no_tlp'),
+                'jalanCustomer' => $request->input('invoice_jalan'),
+                'today' => $today,
+                'duedate' => $dueDate,
+                'products' => $products,
+                'subTotal' => $request->input('invoice_subtotal', 0),
+                'discount' => $request->input('invoice_discount', 0),
+                'ongkir' => $request->input('invoice_ongkir', 0),
+                'total' => $request->input('invoice_total', 0),
+            ];
+
+            $pdf = Pdf::loadView('kios.kasir.invoice.invoice-kasir', $data)
+                        ->setPaper('a5', 'landscape');
+
+            return $pdf->stream();
+        } catch (\Exception $e) {
+            Log::error('Error generating PDF: ' . $e->getMessage());
+            return response()->json(['error' => 'Gagal membuat PDF'], 500);
+        }
     }
 
 }

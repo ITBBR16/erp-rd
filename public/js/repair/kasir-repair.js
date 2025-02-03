@@ -422,6 +422,7 @@ $(document).ready(function () {
         let nominalDikembalikan = parseFloat($('#nominal-dikembalikan').val().replace(/\./g, '')) || 0;
         let nominalPll = parseFloat($('#nominal-pll').val().replace(/\./g, '')) || 0;
         let nominalSaveSaldoCustomer = parseFloat($('#nominal-simpan-saldo-customer').val().replace(/\./g, '')) || 0;
+        let statusBox = $('#status-box-lunas');
 
         $('#container-metode-pembayaran-lunas .form-mp-lunas').each(function () {
             let nominal = parseFloat($(this).find('.nominal-lunas-repair').val().replace(/\./g, '')) || 0;
@@ -435,14 +436,25 @@ $(document).ready(function () {
         console.log('Total Pembayaran Akhir: ' + totalTagihanAkhir)
 
         if (totalTagihanAkhir == totalPembayaranAkhir) {
-            $('#status-box-lunas').text('Pass');
+            statusBox.text('Pass')
+                .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300')
+                .addClass('bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300');
+            $('#form-pembayaran-lebih').hide();
+            $('#nominal-dikembalikan').val(0);
+            $('#nominal-pll').val(0);
+            $('#nominal-simpan-saldo-customer').val(0);
             $('#btn-kasir-lunas-repair').removeClass('cursor-not-allowed').removeAttr('disabled', true);
         } else if(totalTagihan < totalPembayaranAkhir) {
-            $('#status-box-lunas').text('Lebih');
+            statusBox.text('Overpay')
+                .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300')
+                .addClass('bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300');
+            $('#form-kelebihan').show();
             $('#form-pembayaran-lebih').show();
             $('#btn-kasir-lunas-repair').addClass('cursor-not-allowed').prop('disabled', true);
         } else {
-            $('#status-box-lunas').text('Not Pass');
+            statusBox.text('Not Pass')
+                .removeClass('bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300 bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300')
+                .addClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300');
             $('#form-pembayaran-lebih').hide();
             $('#nominal-dikembalikan').val(0);
             $('#nominal-pll').val(0);

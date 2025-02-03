@@ -210,7 +210,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/autocomplete/{jenisTransaksi}', 'autocomplete');
                 Route::get('/getSerialNumber/{jenisTransaksi}/{id}', 'getSerialNumber');
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
-                Route::post('/generate-pdf', 'downloadInvoice');
+                Route::get('/generate-pdf', 'previewPdfKasir');
             });
             Route::group(['controller' => KiosPODPController::class], function () {
                 Route::resource('/dp-po', KiosPODPController::class);
