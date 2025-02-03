@@ -171,7 +171,7 @@
                         <tr>
                             <td>Down Payment</td>
                             @php
-                                $totalDp = $dataCase->transaksi->total_pembayaran ?? 0
+                                $totalDp = $dataCase->transaksi->down_payment ?? 0
                             @endphp
                             <td>Rp. {{ number_format($totalDp, 0, ',', '.') }}</td>
                         </tr>
@@ -181,7 +181,10 @@
                         </tr>
                         <tr style="border-top: 1px solid #27292b;">
                             <td>Total Pembayaran</td>
-                            <td>Rp. 0</td>
+                            @php
+                                $totalPembayaran = $dataCase->transaksi->total_pembayaran ?? 0
+                            @endphp
+                            <td>Rp. {{ number_format($totalPembayaran, 0, ',', '.') }}</td>
                         </tr>
                     </table>
                 </td>

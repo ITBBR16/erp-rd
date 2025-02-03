@@ -214,8 +214,8 @@ document.addEventListener('alpine:init', () => {
                 this.subTotal += price;
             });
 
-            const totalPayment = this.subTotal - kasirDiscount + kasirOngkir;
             const totalOngkirInvoice = kasirOngkir + kasirPacking + kasirAsuransi;
+            const totalPayment = this.subTotal - kasirDiscount + totalOngkirInvoice;
 
             document.getElementById("invoice-subtotal").textContent = formatRupiah(this.subTotal);
             document.getElementById("invoice-discount").textContent = formatRupiah(kasirDiscount);
@@ -227,6 +227,8 @@ document.addEventListener('alpine:init', () => {
             document.getElementById("kasir-box-packing").textContent = formatRupiah(kasirPacking);
             document.getElementById("kasir-box-asuransi").textContent = formatRupiah(kasirAsuransi);
             document.getElementById("kasir-box-total").textContent = formatRupiah(totalPayment);
+
+            
         },
     });
 });

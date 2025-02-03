@@ -775,7 +775,7 @@ class RepairCaseService
                 $this->repairCase->createPembayaran($dataPembayaran);
             }
 
-            $this->repairCase->updateTransaksi($transaksi->id, ['total_pembayaran' => $totalPembayaran]);
+            $this->repairCase->updateTransaksi($transaksi->id, ['total_pembayaran' => $totalPembayaran, 'down_payment' => $totalPembayaran]);
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 9);
             if (!$checkTimestamp) {
@@ -992,7 +992,17 @@ class RepairCaseService
                 $this->repairCase->createPembayaran($dataPembayaran);
             }
 
-            $this->repairCase->updateTransaksi($transaksi->id, ['total_pembayaran' => $totalPembayaran, 'status' => 'Lunas']);
+            $dataUpdateTransaksi = [
+                'total_pembayaran' => $totalPembayaran,
+                'down_payment' => $saldoTerpakai,
+                'discount' => $nominalDiscount,
+                'kerugian' => $nominalKerugian,
+                'nominal_dikembalikan' => $nominalDikembalikan,
+                'pendapatan_lain' => $pendapatanLainLain,
+                'status' => 'Lunas'
+            ];
+
+            $this->repairCase->updateTransaksi($transaksi->id, $dataUpdateTransaksi);
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 10);
             if ($checkTimestamp) {

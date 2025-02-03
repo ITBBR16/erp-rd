@@ -4,6 +4,8 @@ namespace App\Http\Controllers\kios;
 
 use Exception;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Http\Request;
 use App\Models\kios\KiosAkunRD;
 use App\Models\kios\KiosProduk;
@@ -17,10 +19,10 @@ use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
 use App\Models\kios\KiosTransaksiPart;
 use App\Models\kios\KiosTransaksiDetail;
-use App\Models\kios\KiosTransaksiPembayaran;
-use App\Models\management\AkuntanDaftarAkun;
 use App\Models\repair\RepairEstimasiPart;
 use App\Repositories\umum\UmumRepository;
+use App\Models\kios\KiosTransaksiPembayaran;
+use App\Models\management\AkuntanDaftarAkun;
 
 class KiosKasirController extends Controller
 {
@@ -449,20 +451,24 @@ class KiosKasirController extends Controller
         return response()->json($dataCustomer);
     }
 
-    // public function downloadInvoice(Request $request)
-    // {
-    //     $html = $request->input('content');
-    //     $noInvoice = $request->input('no_invoice');
+    public function downloadInvoice(Request $request)
+    {
+        $html = '<html><head><meta charset="UTF-8"></head><body>';
+        $html .= $request->input('content');
+        $html .= '</body></html>';
 
-    //     $options = new Options();
-    //     $options->set('isHtml5ParserEnabled', true);
+        $noInvoice = $request->input('no_invoice');
 
-    //     $newPdf = new Dompdf();
-    //     $newPdf->loadHTML($html);
-    //     $newPdf->setPaper('A5', 'landscape');
-    //     $newPdf->render();
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('defaultFont', 'sans-serif');
 
-    //     return $newPdf->download($noInvoice . ".pdf");
-    // }
+        $newPdf = new Dompdf($options);
+        $newPdf->loadHtml($html);
+        $newPdf->setPaper('A5', 'landscape');
+        $newPdf->render();
+
+        return $newPdf->stream($noInvoice . ".pdf", ["Attachment" => true]);
+    }
 
 }
