@@ -386,12 +386,12 @@ class KiosKasirController extends Controller
                 'persediaanSparepartBekas' => 0,
                 'nilaiDiscount' => $kasirDiscount,
                 'nilaiKerugian' => 0,
-                'metodePembayaran' => '',
-                'nilaiMP' => '',
+                'metodePembayaran' => $namaAkunFinance,
+                'nilaiMP' => $nilaiAkunFinance,
                 'saldoOngkir' => $kasirOngkir
             ];
 
-            $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbz1A7V7pNuzyuIPCBVqtZjoMy1TvVG2Gx2Hh_16eifXiOpdWtzf1WKjqSpQ0YEdbmk5/exec';
+            $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbyphX46q41ttogKR_igTGlVvJuTsVurcUIoA6cAPkdrbbPeaigoX1vg9GSRyXcha9km/exec';
             $responseFinance = Http::post($urlJurnalTransit, $payloadPembukuan);
 
             $connectionTransaksiKios->commit();
