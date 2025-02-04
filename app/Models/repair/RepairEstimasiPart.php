@@ -27,7 +27,7 @@ class RepairEstimasiPart extends Model
 
     public function sparepartGudang()
     {
-        return $this->belongsTo(GudangProduk::class, 'gudang_produk_id');
+        return $this->belongsTo(GudangProduk::class, 'gudang_produk_id', 'produk_sparepart_id');
     }
 
     public function partIdITem()

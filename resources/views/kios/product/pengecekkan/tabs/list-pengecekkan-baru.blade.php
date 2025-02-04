@@ -43,7 +43,7 @@
                                 {{ $data->no_resi }}
                             </th>
                             <td class="px-6 py-2">
-                                {{ $data->ekspedisi->ekspedisi }}
+                                {{ $data->ekspedisi->ekspedisi ?? "-" }}
                             </td>
                             <td class="px-6 py-2">
                                 {{ \Carbon\Carbon::parse($data->updated_at)->isoFormat('D MMMM YYYY') }}

@@ -50,8 +50,8 @@
                                                     <li class="flex justify-between text-black">
                                                         <span>
                                                             @if (isset($item->gudang_produk_id))
-                                                                <input type="hidden" name="data_estimasi[]" value="{{ ($item->nama_alias != '') ? $item->nama_alias : $item->sparepartGudang->produkSparepart->nama_internal }}">
-                                                                {{ ($item->nama_alias != '') ? $item->nama_alias : $item->sparepartGudang->produkSparepart->nama_internal }}
+                                                                <input type="hidden" name="data_estimasi[]" value="{{ (!empty($item->nama_alias)) ? $item->nama_alias : $item->sparepartGudang->produkSparepart->nama_internal }}">
+                                                                {{ (!empty($item->nama_alias)) ? $item->nama_alias : $item->sparepartGudang->produkSparepart->nama_internal }}
                                                             @else
                                                                 <input type="hidden" name="data_estimasi[]" value="{{ $item->nama_jasa }}">
                                                                 {{ $item->nama_jasa }}
