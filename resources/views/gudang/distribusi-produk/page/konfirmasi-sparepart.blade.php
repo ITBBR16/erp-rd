@@ -87,7 +87,7 @@
                 </thead>
                 <tbody>
                     @foreach ($dataCase->estimasi->estimasiPart as $item)
-                        @if ($item->tanggal_dikirim == '')
+                        @if ($item->tanggal_konfirmasi != '' && $item->tanggal_dikirim == '')
                             <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                 <td class="px-6 py-2">
                                     <input type="hidden" name="id_estimasi_part[]" value="{{ $item->id }}">
@@ -123,7 +123,7 @@
                                         <option value="" hidden>Pilih ID Item</option>
                                         @if (isset($dataIdItems[$item->id]))
                                             @foreach ($dataIdItems[$item->id] as $idItem)
-                                                <option value="{{ $idItem }}">{{ $idItem }}</option>
+                                                <option value="{{ $idItem['id'] }}">{{ $idItem['nama'] }}</option>
                                             @endforeach
                                         @endif
                                     </select>

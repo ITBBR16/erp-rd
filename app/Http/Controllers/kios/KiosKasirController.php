@@ -183,16 +183,16 @@ class KiosKasirController extends Controller
 
         try{
             $userId = auth()->user()->id;
-            // $request->validate([
-            //     'nama_customer' => 'required',
-            //     'kasir_metode_pembayaran' => 'required|array|min:1',
-            //     'kasir_nominal_pembayaran' => 'required|array|min:1',
-            //     'jenis_transaksi' => 'required|array|min:1',
-            //     'kasir_sn' => 'required|array|min:1',
-            //     'item_id' => 'required|array|min:1',
-            //     'kasir_harga' => 'required|array|min:1',
-            // ]);
-            
+            $request->validate([
+                'nama_customer' => 'required',
+                'kasir_metode_pembayaran' => 'required|array|min:1',
+                'kasir_nominal_pembayaran' => 'required|array|min:1',
+                'jenis_transaksi' => 'required|array|min:1',
+                'kasir_sn' => 'required|array|min:1',
+                'item_id' => 'required|array|min:1',
+                'kasir_harga' => 'required|array|min:1',
+            ]);
+
             $today = Carbon::now();
             $dueDate = $today->copy()->addMonth(3);
             $productNames = $request->input('invoiceProductName');
@@ -324,7 +324,7 @@ class KiosKasirController extends Controller
                 ];
             }
 
-            $data = [
+            $dataInvoiceKasir = [
                 'title' => 'Invoice Kasir',
                 'invoiceid' => $request->input('invoiceid'),
                 'namaCustomer' => $transaksi->customer->first_name . " " . ($transaksi->customer->last_name ?? ''),
@@ -339,7 +339,7 @@ class KiosKasirController extends Controller
                 'total' => $request->input('input_invoice_total', 0),
             ];
 
-            $pdf = Pdf::loadView('kios.kasir.invoice.invoice-kasir', $data);
+            $pdf = Pdf::loadView('kios.kasir.invoice.invoice-kasir', $dataInvoiceKasir)->setPaper('a5', 'landscape');;
             $pdfContent = $pdf->output();
             $pdfEncode = base64_encode($pdfContent);
             $filesFinance[] = $pdfEncode;

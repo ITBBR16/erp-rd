@@ -1,5 +1,5 @@
 <div class="hidden p-4" id="new-kasir" role="tabpanel" aria-labelledby="new-kasir-tab">
-    <form action="{{ route('kasir.store') }}" id="kasir-form" method="POST" autocomplete="off">
+    <form action="{{ route('kasir.store') }}" id="kasir-form" method="POST" autocomplete="off" enctype="multipart/form-data">
         @csrf
         <div class="grid grid-cols-3 w-full">
             <div class="col-span-2 mb-4">
@@ -138,7 +138,7 @@
                                 <label for="file-bukti-transaksi" id="file-label" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     No file chosen
                                 </label>
-                                <input type="file" name="file_bukti_transaksi[]" id="file-bukti-transaksi" class="hidden" onchange="updateFileName(this)"required>
+                                <input type="file" name="file_bukti_transaksi[]" id="file-bukti-transaksi" class="hidden" onchange="updateFileName(this)" required>
                             </div>
                         </div>
                         <div class="flex justify-center items-end pb-2">

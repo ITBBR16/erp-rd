@@ -52,17 +52,26 @@ class GudangKonfirmasiPengirimanServices
         $id = decrypt($encryptId);
         $dataCase = $this->repairCase->findCase($id);
         $dataIdItems = $dataCase
-            ->estimasi
-            ->estimasiPart
-            ->mapWithKeys(function ($estimasiPart) {
-                return [$estimasiPart->id => $estimasiPart->sparepartGudang->gudangIdItem->map(function ($gudangIdItem) {
+        ->estimasi
+        ->estimasiPart
+        ->mapWithKeys(function ($estimasiPart) {
+            return [
+                $estimasiPart->id => $estimasiPart->sparepartGudang->gudangIdItem->map(function ($gudangIdItem) {
+                    $nama = null;
+
                     if ($gudangIdItem->produk_asal === 'Belanja') {
-                        return 'N' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
+                        $nama = 'N' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
                     } elseif ($gudangIdItem->produk_asal == 'Split') {
-                        return 'P' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
+                        $nama = 'P' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
                     }
-                })];
-            });
+
+                    return [
+                        'id' => $gudangIdItem->id,
+                        'nama' => $nama,
+                    ];
+                })
+            ];
+        });
 
         return view('gudang.distribusi-produk.page.konfirmasi-sparepart', [
             'title' => 'Gudang Konfirmasi',
