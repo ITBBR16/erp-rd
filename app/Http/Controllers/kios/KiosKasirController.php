@@ -373,7 +373,7 @@ class KiosKasirController extends Controller
                 'inOut' => 'In',
                 'keterangan' => $kasirKeterangan,
                 'idEksternal' => "K$transaksi->id",
-                'idCustomer' => $transaksi->customer->first_name . " " . ($transaksi->customer->last_name ?? '') . $transaksi->customer->id,
+                'idCustomer' => $transaksi->customer->first_name . " " . ($transaksi->customer->last_name ?? '') . "-" . $transaksi->customer->id,
                 'totalNominal' => $totalPembayaran,
                 'pendapatanKiosBaru' => $pendapatanKiosBaru,
                 'pendapatanKiosBekas' => $pendapatanKiosBekas,
