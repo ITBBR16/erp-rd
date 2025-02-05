@@ -17,7 +17,9 @@ document.addEventListener('alpine:init', () => {
         ongkir: "0",
         packing: "0",
         asuransi: "0",
+        kerugian: "0",
         subTotal: 0,
+        asuransiChecked: false,
 
         addItem() {
             this.itemCount++;
@@ -37,6 +39,28 @@ document.addEventListener('alpine:init', () => {
                 kasirSnOptions: [],
                 showDropdown: false,
             });
+        },
+
+        toggleAsuransi() {
+            if (this.asuransiChecked) {
+                if (this.subTotal >= 20000001) {
+                    this.asuransi = this.subTotal * 0.0027;
+                } else if (this.subTotal >= 10000001) {
+                    this.asuransi = 38000;
+                } else if (this.subTotal >= 5000001) {
+                    this.asuransi = 19000;
+                } else if (this.subTotal >= 3000001) {
+                    this.asuransi = 8550;
+                } else if (this.subTotal >= 1000001) {
+                    this.asuransi = 4750;
+                } else if (this.subTotal <= 1000000) {
+                    this.asuransi = 950
+                }
+            } else {
+                this.asuransi = 0;
+            }
+
+            this.updateInvoice();
         },
 
         removeItem(id) {
@@ -182,20 +206,25 @@ document.addEventListener('alpine:init', () => {
         },
         
         removeFromInvoice(item) {
-            // Remove items based on productName and jenisTransaksi for part_baru and part_bekas
-            this.invoices = this.invoices.filter(invItem => {
-                if (item.jenisTransaksi === 'part_baru' || item.jenisTransaksi === 'part_bekas') {
-                    return invItem.productName !== item.itemName; // Remove the item entirely if it's part_baru or part_bekas
-                }
-                return true; // Keep all other items
-            });
+            const existingInvoiceItem = this.invoices.find(invItem => 
+                invItem.productName === item.itemName &&
+                (item.jenisTransaksi === 'part_baru' || item.jenisTransaksi === 'part_bekas')
+            );
+        
+            if (existingInvoiceItem && existingInvoiceItem.qty > 1) {
+                existingInvoiceItem.qty -= 1;
+                existingInvoiceItem.totalPrice = formatRupiah(existingInvoiceItem.qty * (parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0));
+            } else {
+                this.invoices = this.invoices.filter(invItem => invItem.productName !== item.itemName);
+            }
         },
 
         updateInvoice() {
             let kasirDiscount = parseFloat(this.discount.replace(/\D/g, '')) || 0;
             let kasirOngkir = parseFloat(this.ongkir.replace(/\D/g, '')) || 0;
             let kasirPacking = parseFloat(this.packing.replace(/\D/g, '')) || 0;
-            let kasirAsuransi = parseFloat(this.asuransi.replace(/\D/g, '')) || 0;
+            let kasirAsuransi = this.asuransi || 0;
+            let kasirKerugian = parseFloat(this.kerugian.replace(/\D/g, '')) || 0;
             this.subTotal = 0;
 
             this.items.forEach(item => {
@@ -203,12 +232,18 @@ document.addEventListener('alpine:init', () => {
                 this.subTotal += price;
             });
 
-            let totalOngkirInvoice = kasirOngkir + kasirPacking + kasirAsuransi;
-            let totalPayment = this.subTotal - kasirDiscount + totalOngkirInvoice;
+            // if (this.asuransiChecked) {
+            //     this.toggleAsuransi();
+            // }
 
+            let totalOngkirInvoice = kasirOngkir + kasirPacking + kasirAsuransi;
+            let totalPayment = this.subTotal - kasirDiscount - kasirKerugian + totalOngkirInvoice;
+
+            document.getElementById("kasir-asuransi").value = kasirAsuransi;
             document.getElementById("input-invoice-subtotal").value = formatRupiah(this.subTotal);
             document.getElementById("input-invoice-discount").value = formatRupiah(kasirDiscount);
             document.getElementById("input-invoice-ongkir").value = formatRupiah(totalOngkirInvoice);
+            document.getElementById("input-invoice-total").value = formatRupiah(totalPayment);
             document.getElementById("input-invoice-total").value = formatRupiah(totalPayment);
             document.getElementById("invoice-subtotal").textContent = formatRupiah(this.subTotal);
             document.getElementById("invoice-discount").textContent = formatRupiah(kasirDiscount);
@@ -216,6 +251,7 @@ document.addEventListener('alpine:init', () => {
             document.getElementById("invoice-total").textContent = formatRupiah(totalPayment);
             document.getElementById("kasir-box-subtotal").textContent = formatRupiah(this.subTotal);
             document.getElementById("kasir-box-discount").textContent = formatRupiah(kasirDiscount);
+            document.getElementById("kasir-box-kerugian").textContent = formatRupiah(kasirKerugian);
             document.getElementById("kasir-box-ongkir").textContent = formatRupiah(kasirOngkir);
             document.getElementById("kasir-box-packing").textContent = formatRupiah(kasirPacking);
             document.getElementById("kasir-box-asuransi").textContent = formatRupiah(kasirAsuransi);
@@ -296,7 +332,7 @@ $(document).ready(function(){
         checkPembayaranKasirLunas();
     });
 
-    $(document).on('change', '#kasir-discount, #kasir-ongkir, #kasir-packing, #kasir-asuransi, #kasir-dikembalikan, #kasir-pll, #kasir-sc, .kasir_sn, .kasir-nominal-pembayaran', function() {
+    $(document).on('change', '#kasir-discount, #kasir-kerugian, #kasir-ongkir, #kasir-packing, #kasir-asuransi, #kasir-dikembalikan, #kasir-pll, #kasir-sc, .kasir_sn, .kasir-nominal-pembayaran', function() {
         checkPembayaranKasirLunas();
     });
 
@@ -317,6 +353,7 @@ $(document).ready(function(){
         let totalTagihan = 0;
         let totalPembayaran = 0;
         let nominalDiscount = parseFloat($('#kasir-discount').val().replace(/\./g, '')) || 0;
+        let nominalKerugian = parseFloat($('#kasir-kerugian').val().replace(/\./g, '')) || 0;
         let nominalOngkir = parseFloat($('#kasir-ongkir').val().replace(/\./g, '')) || 0;
         let nominalPacking = parseFloat($('#kasir-packing').val().replace(/\./g, '')) || 0;
         let nominalAsuransi = parseFloat($('#kasir-asuransi').val().replace(/\./g, '')) || 0;
@@ -335,21 +372,24 @@ $(document).ready(function(){
             totalPembayaran += pembayaran;
         });
 
-        console.log(`Total Tagihan : ${totalTagihan}`);
-        console.log(`Total Pembayaran : ${totalPembayaran}`);
-
         let totalTagihanCustomer = totalTagihan + nominalOngkir + nominalPacking + nominalAsuransi + nominalDikembalikan + nominalPll + nominalSaveSaldoCustomer;
-        let totalPembayaranCustomer =  totalPembayaran + nominalDiscount;
+        let totalPembayaranCustomer =  totalPembayaran + nominalDiscount + nominalKerugian;
 
         if (totalTagihanCustomer == totalPembayaranCustomer) {
             statusBox.text('Pass')
                 .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300')
                 .addClass('bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300');
-            $('#form-kelebihan').hide();
-            $('#kasir-dikembalikan').val(0);
-            $('#kasir-pll').val(0);
-            $('#kasir-sc').val(0);
+
             $('#btn-kasir-lunas').removeClass('cursor-not-allowed').removeAttr('disabled');
+            if (!nominalDikembalikan && nominalDikembalikan !== 0 || 
+                !nominalPll && nominalPll !== 0 || 
+                !nominalSaveSaldoCustomer && nominalSaveSaldoCustomer !== 0) {
+                $('#form-kelebihan').hide();
+                $('#kasir-dikembalikan').val(0);
+                $('#kasir-pll').val(0);
+                $('#kasir-sc').val(0);
+            }
+
         } else if (totalTagihanCustomer < totalPembayaranCustomer) {
             statusBox.text('Overpay')
                 .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300')

@@ -132,7 +132,7 @@ class KiosShopController extends Controller
 
             $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
             $messageGroupSupplier = [
-                'no_telp' => '6285156519066',
+                'no_telp' => '6285143003374',
                 'pesan' => $message,
             ];
 

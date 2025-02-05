@@ -209,6 +209,7 @@ class KiosKasirController extends Controller
             $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount')) ?: 0;
             $kasirTax = $request->input('kasir_tax') ?: 0;
             $kasirAsuransi = $request->input('kasir_asuransi') ?: 0;
+            $kasirKerugian = $request->input('kasir_kerugian');
             
             $kasirKeterangan = $request->input('keterangan_pembayaran');
             $kasirJenisTransaksi = $request->input('jenis_transaksi');
@@ -278,6 +279,14 @@ class KiosKasirController extends Controller
                     $detailTransaksi->save();
                     $statusSN = ($statusTransaksi == 'Done') ? 'Sold' : 'Hold';
                     KiosSerialNumber::find($serialNumber)->update(['status' => $statusSN]);
+
+                    $cekReadySN = KiosSerialNumber::where('produk_id', $item)
+                        ->where('status', 'Ready')
+                        ->exists();
+
+                    if (!$cekReadySN) {
+                        KiosProduk::where('id', $item)->update(['status' => 'Not Ready']);
+                    }
                 } else {
                     $totalHargaGudang += $srp;
                     $modalGudang += $kasirModalPart[$index];
@@ -385,7 +394,7 @@ class KiosKasirController extends Controller
                 'persediaanSparepartBaru' => $modalGudang,
                 'persediaanSparepartBekas' => 0,
                 'nilaiDiscount' => $kasirDiscount,
-                'nilaiKerugian' => 0,
+                'nilaiKerugian' => $kasirKerugian,
                 'metodePembayaran' => $namaAkunFinance,
                 'nilaiMP' => $nilaiAkunFinance,
                 'saldoOngkir' => $kasirOngkir

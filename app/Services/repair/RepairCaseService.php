@@ -591,7 +591,6 @@ class RepairCaseService
                 throw new Exception('Data case atau customer tidak ditemukan.');
             }
 
-            $greeting = $this->showTimeForChat();
             $notelpon = $dataCase->customer->no_telpon;
             $provinsi = $dataCase->customer->provinsi->name ?? '-';
             $kota = $dataCase->customer->kota->name ?? '-';
@@ -600,8 +599,7 @@ class RepairCaseService
             $kodePos = $dataCase->customer->kode_pos ?? '-';
             $namaJalan = $dataCase->customer->nama_jalan ?? '-';
 
-            $namaReal = $dataCase->customer->first_name . " " . $dataCase->customer->last_name;
-            $header = "{$greeting} {$namaReal}\n\nMohon Koreksi alamat berikut untuk pengiriman : \n\n";
+            $header = "Mohon Koreksi alamat berikut untuk pengiriman : \n\n";
             $body = "Provinsi : {$provinsi}\nKota / Kabupaten : {$kota}\nKecamatan : {$kecamatan}\nKelurahan : {$kelurahan}\nKode Pos : {$kodePos}\nNama Jalan : {$namaJalan}\n\n";
             $footer = "Jika sudah benar mohon balas pesan ini dengan *YA*";
             $pesan = $header . $body . $footer;

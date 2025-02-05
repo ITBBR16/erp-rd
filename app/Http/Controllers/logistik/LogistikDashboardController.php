@@ -8,7 +8,9 @@ use App\Repositories\umum\UmumRepository;
 
 class LogistikDashboardController extends Controller
 {
-    public function __construct(private UmumRepository $umumRepo){}
+    public function __construct(
+        private UmumRepository $umumRepo
+    ){}
 
     public function index()
     {

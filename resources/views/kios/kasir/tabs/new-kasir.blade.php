@@ -56,11 +56,30 @@
                     </div>
                     <div>
                         <div x-data>
-                            <input type="hidden" name="kasir_tax" id="kasir-tax">
-                            <label for="kasir-ongkir" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Ongkir :</label>
+                            <label for="kasir-kerugian" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Kerugian :</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                                <input type="text" name="kasir_kerugian" id="kasir-kerugian" x-model="$store.kasirForm.kerugian" @change="$store.kasirForm.updateInvoice()" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div x-data>
+                            <input type="hidden" name="kasir_tax" id="kasir-tax" value="0">
+                            <div class="flex justify-between items-center">
+                                <label for="kasir-ongkir" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Ongkir :</label>
+                                <div x-effect="$store.kasirForm.toggleAsuransi()">
+                                    <label class="inline-flex items-center mb-2 cursor-pointer">
+                                        <input type="checkbox" x-model="$store.kasirForm.asuransiChecked" class="sr-only peer">
+                                        <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-orange-600 dark:peer-checked:bg-orange-600"></div>
+                                        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Asuransi</span>
+                                    </label>
+                                </div>
+                            </div>
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
                                 <input type="text" name="kasir_ongkir" id="kasir-ongkir" x-model="$store.kasirForm.ongkir" @change="$store.kasirForm.updateInvoice()" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                                <input type="text" name="kasir_asuransi" id="kasir-asuransi" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="0" oninput="this.value = this.value.replace(/\D/g, '')" readonly>
                             </div>
                         </div>
                     </div>
@@ -71,13 +90,6 @@
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
                                 <input type="text" name="kasir_packing" id="kasir-packing" x-model="$store.kasirForm.packing" @change="$store.kasirForm.updateInvoice()" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
                             </div>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="kasir-asuransi" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Asuransi :</label>
-                        <div class="flex">
-                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="kasir_asuransi" id="kasir-asuransi" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" readonly>
                         </div>
                     </div>
                     <div>
@@ -187,6 +199,14 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex justify-start">
+                            <p class="font-semibold text-gray-900 dark:text-white">Kerugian :</p>
+                        </div>
+                        <div class="flex justify-end ml-auto">
+                            <p id="kasir-box-kerugian" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex justify-start">
                             <p class="font-semibold text-gray-900 dark:text-white">Ongkir :</p>
                         </div>
                         <div class="flex justify-end ml-auto">
@@ -214,7 +234,7 @@
                             <p class="font-semibold text-gray-900 dark:text-white">Total :</p>
                         </div>
                         <div class="flex justify-end ml-auto">
-                            <p id="kasir-box-total" class="text-gray-900 font-normal dark:text-white">Rp. 0</p>
+                            <p id="kasir-box-total" class="text-gray-900 font-semibold dark:text-white">Rp. 0</p>
                         </div>
                     </div>
                 </div>
