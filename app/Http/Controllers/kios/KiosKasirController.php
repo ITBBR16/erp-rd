@@ -75,6 +75,23 @@ class KiosKasirController extends Controller
         ]);
     }
 
+    public function indexHistory()
+    {
+        $user = auth()->user();
+        $divisiName = $this->umum->getDivisi($user);
+        $dataHistory = KiosTransaksi::all();
+
+        return view('kios.kasir.history-transaksi', [
+            'title' => 'History Transaksi',
+            'active' => 'history-transaksi',
+            'navActive' => 'kasir',
+            'divisi' => $divisiName,
+            'dropdown' => '',
+            'dropdownShop' => '',
+            'dataHistory' => $dataHistory,
+        ]);
+    }
+
     public function edit($encryptId)
     {
         $id = decrypt($encryptId);
@@ -547,54 +564,23 @@ class KiosKasirController extends Controller
         ]);
     }
 
-    public function previewPdfKasir(Request $request)
+    public function previewPdfKasir($encryptId)
     {
-        try {
-            Log::info('Request Data: ', $request->all());
+        $id = decrypt($encryptId);
+        $dataTransaksi = KiosTransaksi::find($id);
+        $invoiceid = $dataTransaksi->created_at . $id;
+        $duedate = $dataTransaksi->created_at->copy()->addMonth(3);
+        $dataView = [
+            'title' => 'Preview Invoice',
+            'dataTransaksi' => $dataTransaksi,
+            'invoiceid' => $invoiceid,
+            'duedate' => $duedate
+        ];
 
-            $today = Carbon::now();
-            $dueDate = $today->copy()->addMonth(3);
-            $products = [];
+        $pdf = Pdf::loadView('kios.kasir.invoice.invoice-kasir', $dataView)
+                    ->setPaper('a5', 'portrait');
 
-            $productNames = $request->input('productName', []);
-            $descriptions = $request->input('description', []);
-            $quantities = $request->input('qty', []);
-            $itemPrices = $request->input('itemPrice', []);
-            $totalPrices = $request->input('totalPrice', []);
-
-            for ($i = 0; $i < count($productNames); $i++) {
-                $products[] = [
-                    'productName' => $productNames[$i] ?? '',
-                    'description' => $descriptions[$i] ?? '',
-                    'qty' => $quantities[$i] ?? 0,
-                    'itemPrice' => $itemPrices[$i] ?? 0,
-                    'totalPrice' => $totalPrices[$i] ?? 0,
-                ];
-            }
-
-            $data = [
-                'title' => 'Invoice Kasir',
-                'invoiceid' => $request->input('invoiceid'),
-                'namaCustomer' => $request->input('invoice_nama_customer'),
-                'noTelpon' => $request->input('invoice_no_tlp'),
-                'jalanCustomer' => $request->input('invoice_jalan'),
-                'today' => $today,
-                'duedate' => $dueDate,
-                'products' => $products,
-                'subTotal' => $request->input('invoice_subtotal', 0),
-                'discount' => $request->input('invoice_discount', 0),
-                'ongkir' => $request->input('invoice_ongkir', 0),
-                'total' => $request->input('invoice_total', 0),
-            ];
-
-            $pdf = Pdf::loadView('kios.kasir.invoice.invoice-kasir', $data)
-                        ->setPaper('a5', 'landscape');
-
-            return $pdf->stream();
-        } catch (\Exception $e) {
-            Log::error('Error generating PDF: ' . $e->getMessage());
-            return response()->json(['error' => 'Gagal membuat PDF'], 500);
-        }
+        return $pdf;
     }
 
 }

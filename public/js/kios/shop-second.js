@@ -158,7 +158,7 @@ $(document).ready(function () {
                         value: kelengkapan.id,
                         text: kelengkapan.kelengkapan
                     })
-                    .addClass('dark:bg-gray-700');
+                    .addClass('bg-white dark:bg-gray-700');
                     ddKelengkapanSecond.append(option);
                 });
             })

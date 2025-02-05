@@ -207,6 +207,7 @@ Route::middleware('kios')->group(function () {
         Route::prefix('/kasir')->group(function () {
             Route::group(['controller' => KiosKasirController::class], function () {
                 Route::resource('/kasir', KiosKasirController::class)->only(['index', 'store', 'edit', 'update']);
+                Route::get('history-transaksi', 'indexHistory')->name('indexHistory');
                 Route::get('/autocomplete/{jenisTransaksi}', 'autocomplete');
                 Route::get('/getSerialNumber/{jenisTransaksi}/{id}', 'getSerialNumber');
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
@@ -229,6 +230,7 @@ Route::middleware('kios')->group(function () {
 Route::middleware('logistik')->group(function () {
     Route::prefix('/logistik')->group(function () {
         Route::get('/', [LogistikDashboardController::class, 'index']);
+         
         Route::resource('/penerimaan-logistik', LogistikPenerimaanController::class)->only(['index', 'update']);
         Route::group(['controller' => LogistikSentToRepairController::class], function () {
             Route::resource('/sent-to-rapair', LogistikSentToRepairController::class)->only(['index', 'update', 'edit']);

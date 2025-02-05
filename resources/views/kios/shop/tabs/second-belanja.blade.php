@@ -9,8 +9,8 @@
                     <label for="come_from" class="sr-only">Come From</label>
                     <select name="come_from" id="come_from" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                         <option value="" hidden>Dapat Dari Mana ?</option>
-                        <option value="Customer" class="dark:bg-gray-700">Customer</option>
-                        <option value="Hunting" class="dark:bg-gray-700">Hunting</option>
+                        <option value="Customer" class="bg-white dark:bg-gray-700">Customer</option>
+                        <option value="Hunting" class="bg-white dark:bg-gray-700">Hunting</option>
                     </select>
                 </div>
                 <div class="relative z-0 w-full mb-6 group" id="marketplaceContainer" style="display: none">
@@ -19,7 +19,7 @@
                         <select name="marketplace" id="shop-second-marketplace" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                             <option value="" hidden>Pilih Asal</option>
                             @foreach ($marketplace as $market)
-                                <option value="{{ $market->id }}" class="dark:bg-gray-700">{{ $market->nama }}</option>
+                                <option value="{{ $market->id }}" class="bg-white dark:bg-gray-700">{{ $market->nama }}</option>
                             @endforeach
                         </select>
                         @error('shop-second-marketplace')
@@ -41,7 +41,7 @@
                     <select name="metode_pembelian" id="metode_pembelian" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                         <option value="" hidden>Metode Pembelian</option>
                         @foreach ($metodePembelian as $mp)
-                            <option value="{{ $mp->id }}" class="dark:bg-gray-700">{{ $mp->metode_pembelian }}</option>
+                            <option value="{{ $mp->id }}" class="bg-white dark:bg-gray-700">{{ $mp->metode_pembelian }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -69,7 +69,7 @@
                     <select name="paket_penjualan_second" id="paket_penjualan_second" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                         <option value="" hidden>Pilih Paket Penjualan</option>
                         @foreach ($produkKios as $pk)
-                            <option value="{{ $pk->id }}" class="dark:bg-gray-700">{{ $pk->paket_penjualan }}</option>
+                            <option value="{{ $pk->id }}" class="bg-white dark:bg-gray-700">{{ $pk->paket_penjualan }}</option>
                         @endforeach
                     </select>
                 </div>
