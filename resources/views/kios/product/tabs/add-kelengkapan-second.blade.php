@@ -1,5 +1,5 @@
 <div class="hidden p-4" id="createPaket" role="tabpanel" aria-labelledby="createPaket-tab">
-    <form action="{{ route('add-paket-penjualan-second.store') }}" method="POST" autocomplete="off">
+    <form action="{{ route('add-paket-penjualan-second.store') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
         @csrf
         <h3 class="text-gray-900 dark:text-white font-semibold text-xl">Data Paket Penjualan Produk</h3>
         <div class="w-10/12">

@@ -45,13 +45,13 @@ class KiosBuatPaketSecondController extends Controller
         try {
             $request->validate([
                 'paket_penjualan_produk_second' => 'required',
-                'cc_produk_second' => 'required',
                 'modal_produk_second' => 'required|min:1',
                 'harga_jual_produk_second' => 'required',
                 'kelengkapan_second' => 'required|array',
             ]);
 
             $srpSecond = preg_replace("/[^0-9]/", "", $request->input('harga_jual_produk_second'));
+            $modalSecond = preg_replace("/[^0-9]/", "", $request->input('modal_produk_second'));
             $snSecond = $request->input('sn_second');
 
             if(count(array_unique($snSecond)) !== count($snSecond)) {
@@ -64,7 +64,7 @@ class KiosBuatPaketSecondController extends Controller
             $urlApiProdukSecond = 'https://script.google.com/macros/s/AKfycbwzPkDQn1MbdVOHLRfozYviDzoIl3UwfvTeCLyIuLo--_azk7oqNitRFBt6XAlhpKB3bg/exec';
             $idProdukSecond = $request->paket_penjualan_produk_second;
             $findNama = ProdukSubJenis::findOrFail($idProdukSecond);
-            $namaProdukSecond = $findNama->produkjenis->jenis_produk . " " . $findNama->paket_penjualan;
+            $namaProdukSecond = $findNama->paket_penjualan;
 
             $fileData = base64_encode($request->file('file_paket_produk')->get());
             $filesDataKelengkapan = $request->file('file_kelengkapan_produk');
@@ -115,6 +115,8 @@ class KiosBuatPaketSecondController extends Controller
 
                 $produkSecond = KiosProdukSecond::create([
                     'sub_jenis_id' => $request->input('paket_penjualan_produk_second'),
+                    'produk_image_id' => $imageProductSecond->id,
+                    'modal_bekas' => $modalSecond,
                     'srp' => $srpSecond,
                     'cc_produk_second' => $request->input('cc_produk_second'),
                     'serial_number' => $snProduk,
