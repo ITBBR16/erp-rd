@@ -505,6 +505,12 @@ class KiosKasirController extends Controller
                         'id' => $item->id,
                         'id_item' => 'P.' . $item->gudang_belanja_id . '.' . $supplierId . '.' . $item->id,
                     ];
+                } else {
+                    $supplierId = optional($item->gudangBelanja)->gudang_supplier_id;
+                    return [
+                        'id' => $item->id,
+                        'id_item' => 'E.' . $item->gudang_belanja_id . '.' . $supplierId . '.' . $item->id,
+                    ];
                 }
             });
             $totalSN = $dataSubGudang->count();
