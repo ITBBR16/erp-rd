@@ -7,10 +7,10 @@
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="paket_penjualan_produk_second" class="sr-only">Nama Paket Penjualan</label>
-                        <select name="paket_penjualan_produk_second" id="paket_penjualan_produk_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('paket_penjualan_produk_second') border-red-600 dark:border-red-500 @enderror" required>
+                        <select name="paket_penjualan_produk_second" id="paket_penjualan_produk_second" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('paket_penjualan_produk_second') border-red-600 dark:border-red-500 @enderror" required>
                             <option value="" hidden>Nama Paket Penjualan</option>
                             @foreach ($kiosproduks as $produk)
-                                <option value="{{ $produk->id }}" class="dark:bg-gray-700">{{ $produk->paket_penjualan }}</option>
+                                <option value="{{ $produk->id }}" class="bg-white dark:bg-gray-700">{{ $produk->paket_penjualan }}</option>
                             @endforeach
                         </select>
                         @error('paket_penjualan_produk_second')
@@ -18,7 +18,7 @@
                         @enderror
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="cc_produk_second" id="cc_produk_second" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                        <input type="text" name="cc_produk_second" id="cc_produk_second" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" oninput="this.value = this.value.replace(/\D/g, '')">
                         <label for="cc_produk_second" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">CC Produk</label>
                         @error('cc_produk_second')
                             <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>

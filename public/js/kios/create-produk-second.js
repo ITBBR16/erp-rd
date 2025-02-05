@@ -18,13 +18,13 @@ $(document).ready(function(){
         <div id="form-kelengkapan-second-${nomorKelengkapan}" class="grid grid-cols-7 gap-4 md:gap-6 mt-5">
             <div class="relative z-0 col-span-2 w-full mb-6 group">
                 <label for="kelengkapan-second-${nomorKelengkapan}"></label>
-                <select name="kelengkapan_second[]" id="kelengkapan-second-${nomorKelengkapan}" data-id="${nomorKelengkapan}" class="kelengkapan-second block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                <select name="kelengkapan_second[]" id="kelengkapan-second-${nomorKelengkapan}" data-id="${nomorKelengkapan}" class="kelengkapan-second block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                     <option value="" hidden>Kelengkapan Produk</option>
                 </select>
             </div>
             <div class="relative z-0 col-span-2 w-full mb-6 group">
                 <label for="sn-second-${nomorKelengkapan}"></label>
-                <select name="sn_second[]" id="sn-second-${nomorKelengkapan}" data-id="${nomorKelengkapan}" class="sn-second block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
+                <select name="sn_second[]" id="sn-second-${nomorKelengkapan}" data-id="${nomorKelengkapan}" class="sn-second block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
                     <option value="" hidden>SN Produk</option>
                 </select>
             </div>
@@ -152,7 +152,7 @@ $(document).ready(function(){
         let parsedSrp = parseFloat(hargaJualSecond.replace(/\D/g, ''));
         let parsedModal = parseFloat(hargaModalSecond.replace(/\D/g, ''));
 
-        if (parsedModal == parsedSrp) {
+        if (parsedModal < parsedSrp) {
             $('#btn-create-paket-second').removeClass('cursor-not-allowed').removeAttr('disabled', true);
         } else {
             $('#btn-create-paket-second').addClass('cursor-not-allowed').prop('disabled', true);
