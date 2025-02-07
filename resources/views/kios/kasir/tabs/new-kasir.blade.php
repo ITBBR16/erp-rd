@@ -98,6 +98,28 @@
                     </div>
                 </div>
 
+                <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-t pt-2">Ekspedisi</h2>
+                    <div class="grid grid-cols-3 gap-4 w-full mb-4">
+                        <div>
+                            <label for="ekspedisi0" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Pilih Ekspedisi :</label>
+                            <select name="ekspedisi" id="ekspedisi0" data-id="0" class="ekspedisi bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="" hidden>Pilih Ekspedisi</option>
+                                @foreach ($ekspedisi as $ekspedisi)
+                                    <option value="{{ $ekspedisi->id }}" class="bg-white dark:bg-gray-700">{{ $ekspedisi->ekspedisi }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="layanan0" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Pilih Ekspedisi :</label>
+                            <select name="layanan" id="layanan0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="" hidden>Jenis Pengiriman</option>
+                            </select>
+                        </div>
+                        <div>
+                            
+                        </div>
+                    </div>
+
                 <div id="form-kelebihan" style="display: none">
                     <h2 class="text-base font-semibold mb-4 text-black dark:text-white border-t pt-2">Pembayaran Lebih</h2>
                     <div class="grid grid-cols-3 gap-4 w-full mb-4">

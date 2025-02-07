@@ -483,6 +483,11 @@ class RepairEstimasiService
                 'jenis_status_id' => $jenisStatusId,
             ];
 
+            if($status == 'lanjut') {
+                $case = $this->repairCaseService->findCase($id);
+                $case->estimasi->estimasiPart()->update(['tanggal_konfirmasi' => now()]);
+            }
+
             $this->repairCase->updateCase($id, $dataUpdateCase);
 
             $dataTimestamp = [
@@ -612,6 +617,26 @@ class RepairEstimasiService
         }
     }
     
+    // 
+    public function indexPenerimaanPart()
+    {
+        $user = auth()->user();
+        $divisiName = $this->umum->getDivisi($user);
+        $repairCase = $this->repairCase->getAllDataNeededNewCase();
+        $case = $repairCase['data_case'];
+        $sortedCase = $case->sortByDesc(function ($singleCase) {
+            return $singleCase->estimasi->updated_at ?? null;
+        });
+
+        return view('repair.estimasi.penerimaan-sparepart', [
+            'title' => 'Penerimaan Sparepart Estimasi',
+            'active' => 'penerimaan-part-estimasi',
+            'navActive' => 'estimasi',
+            'dropdown' => 'req-part',
+            'divisi' => $divisiName,
+            'dataCase' => $sortedCase,
+        ]);
+    }
     public function konfirmasiReqPart(Request $request)
     {
         $this->repairEstimasi->beginTransaction();
@@ -833,7 +858,7 @@ class RepairEstimasiService
             $checkboxData = $request->input('checkbox_select_penerimaan');
 
             foreach ($checkboxData as $id) {
-                $dataEstimasiPart = ['active' => 'Active'];
+                $dataEstimasiPart = ['tanggal_diterima' => now()];
                 $this->repairEstimasi->updateEstimasiPart($dataEstimasiPart, $id);
             }
 

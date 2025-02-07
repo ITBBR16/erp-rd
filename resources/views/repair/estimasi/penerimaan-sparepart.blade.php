@@ -52,74 +52,80 @@
     </div>
 
     <div class="relative">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        No Nota
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Jenis Case
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Customer
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Jenis Drone
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Teknisi
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($dataCase as $case)
-                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                        <td class="px-6 py-2">
-                            R-{{ $case->id }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $case->jenisCase->jenis_case }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $case->jenisProduk->jenis_produk }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $case->teknisi->first_name }} {{ $case->teknisi->last_name }}
-                        </td>
-                        <td class="px-6 py-2">
-                            <button id="ddKQC{{ $case->id }}" data-dropdown-toggle="dropdownKQC{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                </svg>
-                            </button>
-                        </td>
+        <div class="overflow-y-auto max-h-[550px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            No Nota
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Jenis Case
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nama Customer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Jenis Drone
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Teknisi
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
                     </tr>
-                    <!-- Dropdown menu -->
-                    <div id="dropdownKQC{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="ddKQC{{ $case->id }}">
-                            <li>
-                                <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">visibility</span>
-                                    <span class="whitespace-nowrap">Detail</span>
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" data-modal-target="penerimaan-part-estimasi-{{ $case->id }}" data-modal-toggle="penerimaan-part-estimasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">live_help</span>
-                                    <span class="whitespace-nowrap">Req. Sparepart</span>
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($dataCase as $case)
+                        @if ($case->estimasi && $case->estimasi->estimasiPart->contains(function($item) {
+                            return !empty($item->tanggal_dikirim) && empty($item->tanggal_diterima);
+                        }))
+                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                <td class="px-6 py-2">
+                                    R-{{ $case->id }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->jenisCase->jenis_case }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->jenisProduk->jenis_produk }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ $case->teknisi->first_name }} {{ $case->teknisi->last_name }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    <button id="dropdownPenerimaanPart{{ $case->id }}" data-dropdown-toggle="ddpp{{ $case->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Dropdown menu -->
+                            <div id="ddpp{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
+                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownPenerimaanPart{{ $case->id }}">
+                                    <li>
+                                        <button type="button" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                            <span class="whitespace-nowrap">Detail</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" data-modal-target="penerimaan-part-estimasi-{{ $case->id }}" data-modal-toggle="penerimaan-part-estimasi-{{ $case->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">live_help</span>
+                                            <span class="whitespace-nowrap">Req. Sparepart</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         <div class="mt-4 ">
             {{-- {{ $dataCustomer->links() }} --}}
         </div>

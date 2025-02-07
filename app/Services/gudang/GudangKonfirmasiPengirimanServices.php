@@ -63,6 +63,8 @@ class GudangKonfirmasiPengirimanServices
                         $nama = 'N' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
                     } elseif ($gudangIdItem->produk_asal == 'Split') {
                         $nama = 'P' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
+                    } else {
+                        $nama = 'E' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
                     }
 
                     return [

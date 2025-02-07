@@ -12,6 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\customer\Customer;
 use App\Models\kios\KiosTransaksi;
 use Illuminate\Support\Facades\DB;
+use App\Models\ekspedisi\Ekspedisi;
 use App\Models\gudang\GudangProduk;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -24,8 +25,9 @@ use App\Models\repair\RepairEstimasiPart;
 use App\Repositories\umum\UmumRepository;
 use App\Models\kios\KiosTransaksiPembayaran;
 use App\Models\management\AkuntanDaftarAkun;
-use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
+use App\Repositories\logistik\repository\EkspedisiRepository;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
+use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
 
 class KiosKasirController extends Controller
 {
@@ -38,6 +40,7 @@ class KiosKasirController extends Controller
         private KiosTransaksiPembayaran $transaksiPembayaran,
         private GudangProdukIdItemRepository $idItemGudang,
         private GudangTransactionRepository $transactionGudang,
+        private EkspedisiRepository $ekspedisi,
     ){}
 
     public function index()
@@ -57,6 +60,7 @@ class KiosKasirController extends Controller
         $invoiceId = KiosTransaksi::latest()->value('id');
         $dataHoldKasir = KiosTransaksi::where('status', 'Hold')->get();
         $dataTransaksi = '';
+        $ekspedisi = Ekspedisi::all();
 
         return view('kios.kasir.index', [
             'title' => 'Kasir Kios',
@@ -72,6 +76,7 @@ class KiosKasirController extends Controller
             'invoiceid' => $invoiceId,
             'dataHold' => $dataHoldKasir,
             'dataTransaksi' => $dataTransaksi,
+            'ekspedisi' => $ekspedisi
         ]);
     }
 
@@ -197,9 +202,12 @@ class KiosKasirController extends Controller
         $connectionTransaksiKios = DB::connection('rumahdrone_kios');
         $connectionTransaksiKios->beginTransaction();
         $this->transactionGudang->beginTransaction();
+        $this->ekspedisi->beginTransaction();
 
         try{
-            $userId = auth()->user()->id;
+            $user = auth()->user();
+            $userId = $user->id;
+            $divisiId = $user->divisi_id;
             $request->validate([
                 'nama_customer' => 'required',
                 'kasir_metode_pembayaran' => 'required|array|min:1',
@@ -223,11 +231,14 @@ class KiosKasirController extends Controller
             $pendapatanLainLain = preg_replace("/[^0-9]/", "", $request->input('kasir_pll')) ?: 0;
             $tambahSaldoCustomer = preg_replace("/[^0-9]/", "", $request->input('kasir_sc')) ?: 0;
             $kasirOngkir = preg_replace("/[^0-9]/", "", $request->input('kasir_ongkir')) ?: 0;
+            $kasirPacking = preg_replace("/[^0-9]/", "", $request->input('kasir_packing')) ?: 0;
             $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount')) ?: 0;
             $kasirTax = $request->input('kasir_tax') ?: 0;
             $kasirAsuransi = $request->input('kasir_asuransi') ?: 0;
             $kasirKerugian = $request->input('kasir_kerugian');
-            
+            $layananEkspedisi = $request->input('layanan');
+            $totalOngkirKasir = $kasirOngkir + $kasirAsuransi + $kasirPacking;
+
             $kasirKeterangan = $request->input('keterangan_pembayaran');
             $kasirJenisTransaksi = $request->input('jenis_transaksi');
             $kasirItem = $request->input('item_id');
@@ -247,6 +258,7 @@ class KiosKasirController extends Controller
 
             if(count(array_unique($kasirSN)) !== count($kasirSN)) {
                 $connectionTransaksiKios->rollBack();
+                $this->ekspedisi->rollbackTransaction();
                 $this->transactionGudang->rollbackTransaction();
                 return back()->with('error', 'Serial Number / Id Item tidak boleh ada yang sama.');
             }
@@ -254,7 +266,7 @@ class KiosKasirController extends Controller
             $transaksi = new KiosTransaksi();
             $transaksi->employee_id = $userId;
             $transaksi->customer_id = $kasirCustomer;
-            $transaksi->ongkir = $kasirOngkir;
+            $transaksi->ongkir = $totalOngkirKasir;
             $transaksi->discount = $kasirDiscount;
             $transaksi->tax = $kasirTax;
             $transaksi->status = $statusTransaksi;
@@ -391,6 +403,25 @@ class KiosKasirController extends Controller
             $transaksi->total_harga = $totalHarga;
             $transaksi->save();
 
+            if ($totalOngkirKasir > 0) {
+                $dataRequestLogistik = [
+                    'employee_id' => $userId,
+                    'divisi_id' => $divisiId,
+                    'source_id' => $transaksi->id,
+                    'penerima_id' => $kasirCustomer,
+                    'layanan_id' => $layananEkspedisi,
+                    'biaya_customer_ongkir' => $kasirOngkir,
+                    'biaya_customer_packing' => $kasirPacking,
+                    'nominal_produk' => $totalHarga,
+                    'nominal_asuransi' => $kasirAsuransi,
+                    'tipe_penerima' => 'Customer',
+                    'tanggal_request' => now(),
+                    'status_request' => 'Request Packing',
+                ];
+    
+                $this->ekspedisi->createLogRequest($dataRequestLogistik);
+            }
+
             $payloadPembukuan = [
                 'saldoCustomer' => $saldoCustomer,
                 'statusSC' => $statusSC,
@@ -414,19 +445,21 @@ class KiosKasirController extends Controller
                 'nilaiKerugian' => $kasirKerugian,
                 'metodePembayaran' => $namaAkunFinance,
                 'nilaiMP' => $nilaiAkunFinance,
-                'saldoOngkir' => $kasirOngkir
+                'saldoOngkir' => $totalOngkirKasir
             ];
 
             $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbyphX46q41ttogKR_igTGlVvJuTsVurcUIoA6cAPkdrbbPeaigoX1vg9GSRyXcha9km/exec';
             $responseFinance = Http::post($urlJurnalTransit, $payloadPembukuan);
 
             $connectionTransaksiKios->commit();
+            $this->ekspedisi->commitTransaction();
             $this->transactionGudang->commitTransaction();
 
             return back()->with('success', 'Berhasil membuat kasir baru.');
 
         } catch (Exception $e) {
             $connectionTransaksiKios->rollBack();
+            $this->ekspedisi->rollbackTransaction();
             $this->transactionGudang->rollbackTransaction();
             return back()->with('error', $e->getMessage());
         }
