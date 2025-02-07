@@ -11,6 +11,7 @@ use App\Models\kios\KiosImageSecond;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosQcProdukSecond;
+use App\Models\produk\KiosKelengkapanSecondList;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
 
@@ -146,11 +147,11 @@ class KiosBuatPaketSecondController extends Controller
 
     public function getKelengkapanSecond()
     {
-        $data = KiosQcProdukSecond::with(['kelengkapans' => function ($query) {
-            $query->wherePivot('status', 'Ready');
-        }])
+        $data = KiosKelengkapanSecondList::with('kelengkapans')
+        ->where('status', 'Ready')
         ->get()
-        ->unique('produk_kelengkapan_id');
+        ->unique('produk_kelengkapan_id')
+        ->values();
     
         return response()->json($data);
     }

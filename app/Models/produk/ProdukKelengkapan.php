@@ -42,4 +42,9 @@ class ProdukKelengkapan extends Model
         return $this->hasMany(RepairKelengkapan::class);
     }
 
+    public function kiosKelengkapanSecond()
+    {
+        return $this->hasMany(KiosKelengkapanSecondList::class, 'produk_kelengkapan_id');
+    }
+
 }

@@ -26,7 +26,7 @@ $(document).ready(function(){
                         const option = $('<option>', {
                             value: produk_kelengkapan.id,
                             text: produk_kelengkapan.kelengkapan
-                        }).addClass('dark:bg-gray-700');
+                        }).addClass('bg-white dark:bg-gray-700');
                         kelengkapanSelect.append(option);
                     });
                 })
@@ -80,12 +80,12 @@ $(document).ready(function(){
                         const option = $('<option>', {
                             value: produk_kelengkapan.id,
                             text: produk_kelengkapan.kelengkapan
-                        }).addClass('dark:bg-gray-700');
+                        }).addClass('bg-white dark:bg-gray-700');
                         $('#kelengkapan-' + nomorKelengkapan).append(option);
                     });
                 })
                 .catch(error => {
-                    console.error('Error fetching data:', error);
+                    alert('Error fetching data:' + error);
                 });
         } else {
             $('#kelengkapan-' + nomorKelengkapan).html('');

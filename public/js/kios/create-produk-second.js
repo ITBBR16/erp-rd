@@ -45,36 +45,37 @@ $(document).ready(function(){
         fetch(`/kios/product/getKelengkapanSecond`)
         .then(response => response.json())
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                alert("Format data not valid");
+                return;
+            }
+
             $('#kelengkapan-second-' + nomorKelengkapan).html('');
 
+            const defaultOption = $('<option>', {
+                text: 'Kelengkapan Produk',
+                hidden: true
+            });
+            $('#kelengkapan-second-' + nomorKelengkapan).append(defaultOption);
+
+            const kelengkapanUnique = new Set();
+
             data.forEach(entry => {
-                if (entry.kelengkapans && entry.kelengkapans.length > 0) {
-                    const defaultOption = $('<option>', {
-                        text: 'Kelengkapan Produk',
-                        hidden: true
+                if (entry.produk_kelengkapan_id && !kelengkapanUnique.has(entry.produk_kelengkapan_id)) {
+                    kelengkapanUnique.add(entry.produk_kelengkapan_id);
+
+                    const option = $('<option>', {
+                        value: entry.produk_kelengkapan_id,
+                        text: entry.kelengkapans.kelengkapan
                     });
-                    $('#kelengkapan-second-' + nomorKelengkapan).append(defaultOption);
 
-                    const kelengkapanUnique = new Set();
-
-                    entry.kelengkapans.forEach(kelengkapan => {
-                        if (!kelengkapanUnique.has(kelengkapan.kelengkapan)) {
-                            kelengkapanUnique.add(kelengkapan.kelengkapan);
-
-                            const option = $('<option>', {
-                                value: kelengkapan.pivot.produk_kelengkapan_id,
-                                text: kelengkapan.kelengkapan
-                            });
-                            $('#kelengkapan-second-' + nomorKelengkapan).append(option);
-                        }
-                    });
-                } else {
-                    console.log('Data kelengkapans kosong untuk entri dengan id ' + entry.id);
+                    $('#kelengkapan-second-' + nomorKelengkapan).append(option);
                 }
             });
         })
         .catch(error => {
-            console.error('Error fetching data:', error);
+            alert('Error fetching data: ' + error);
         });
     });
 
@@ -111,12 +112,12 @@ $(document).ready(function(){
                         $('#sn-second-' + ksId).append(option);
                     });
                 } else {
-                    console.log('Data kelengkapans kosong untuk entri dengan id ' + entry.id);
+                    alert('Data kelengkapans kosong untuk entri dengan id ' + entry.id);
                 }
             });
         })
         .catch(error => {
-            console.error('Error fetching data:', error);
+            consoalert('Error fetching data:' + error);
         });
 
     });

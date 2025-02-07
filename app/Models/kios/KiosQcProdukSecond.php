@@ -3,6 +3,7 @@
 namespace App\Models\kios;
 
 use App\Models\kios\KiosOrderSecond;
+use App\Models\produk\KiosKelengkapanSecondList;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\produk\ProdukKelengkapan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,11 @@ class KiosQcProdukSecond extends Model
     public function ordersecond()
     {
         return $this->belongsTo(KiosOrderSecond::class, 'order_second_list');
+    }
+
+    public function pivotKelengkapans()
+    {
+        return $this->hasMany(KiosKelengkapanSecondList::class, 'qc_id');
     }
 
 }
