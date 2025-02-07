@@ -439,11 +439,18 @@ $(document).ready(function () {
             statusBox.text('Pass')
                 .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300')
                 .addClass('bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300');
-            $('#form-pembayaran-lebih').hide();
-            $('#nominal-dikembalikan').val(0);
-            $('#nominal-pll').val(0);
-            $('#nominal-simpan-saldo-customer').val(0);
             $('#btn-kasir-lunas-repair').removeClass('cursor-not-allowed').removeAttr('disabled', true);
+
+            if(!nominalDikembalikan && nominalDikembalikan !== 0 || 
+                !nominalPll && nominalPll !== 0 || 
+                !nominalSaveSaldoCustomer && nominalSaveSaldoCustomer !== 0) {
+
+                    $('#form-pembayaran-lebih').hide();
+                    $('#nominal-dikembalikan').val(0);
+                    $('#nominal-pll').val(0);
+                    $('#nominal-simpan-saldo-customer').val(0);
+            
+            }
         } else if(totalTagihan < totalPembayaranAkhir) {
             statusBox.text('Overpay')
                 .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300')
