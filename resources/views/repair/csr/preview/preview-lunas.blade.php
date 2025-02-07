@@ -100,7 +100,7 @@
                     @endif
                 @endforeach
     
-                @if (!empty($dataCase->logRequest->biaya_customer_ongkir) && !empty($dataCase->logRequest->biaya_customer_packing))
+                @if (!empty($dataCase->logRequest->biaya_customer_ongkir) || !empty($dataCase->logRequest->biaya_customer_packing))
                     <tr style="border-top: 1px solid;">
                         <td style="padding: 8px;">Total Ongkir</td>
                         <td style="padding: 8px;">

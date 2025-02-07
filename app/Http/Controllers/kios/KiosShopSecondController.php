@@ -297,7 +297,7 @@ class KiosShopSecondController extends Controller
     public function getKelengkapanSecond($id)
     {
         $searchSub = ProdukSubJenis::find($id);
-        $kelengkapans = $searchSub->allKelengkapans();
+        $kelengkapans = $searchSub->kelengkapans;
 
         return $kelengkapans;
     }

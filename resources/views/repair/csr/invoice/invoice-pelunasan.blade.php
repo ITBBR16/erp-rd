@@ -83,10 +83,10 @@
                     <tr style="border-top: 1px solid #e5e7eb;">
                         <td style="padding: 8px;">
                             {{ 
-                                (isset($estimasi->sku)) ? 
+                                (isset($estimasi->gudang_produk_id)) ? 
                                     ($estimasi->nama_alias != '' ? $estimasi->nama_alias :
-                                        $estimasi->nama_produk) :
-                                            $estimasi->nama_jasa 
+                                        $estimasi->sparepartGudang->produkSparepart->nama_internal) :
+                                                $estimasi->nama_jasa 
                             }}
                         </td>
                         <td style="padding: 8px;">
@@ -95,12 +95,12 @@
                     </tr>
                 @endif
             @endforeach
-            @if (!empty($dataCase->logRequest->biaya_customer_ongkir) && !empty($dataCase->logRequest->biaya_customer_packing))
+            @if (!empty($dataCase->logRequest->biaya_customer_ongkir) || !empty($dataCase->logRequest->biaya_customer_packing))
                 <tr style="border-top: 1px solid #e5e7eb;">
                     @php
-                        $biayaOngkir = $dataCase->logRequest->biaya_customer_ongkir ?? 0;
-                        $biayaPacking = $dataCase->logRequest->biaya_customer_packing ?? 0;
-                        $totalOngkir = $biayaOngkir + $biayaPacking;
+                        $biayaOngkir = $dataCase?->logRequest->biaya_customer_ongkir ?? 0;
+                        $biayaPacking = $dataCase?->logRequest->biaya_customer_packing ?? 0;
+                        $totalOngkir += $biayaOngkir + $biayaPacking;
                     @endphp
                     <td style="padding: 8px;">Total Ongkir</td>
                     <td style="padding: 8px;">Rp. {{ number_format($totalOngkir, 0, ',', '.') }}</td>
@@ -173,7 +173,7 @@
                                     @php
                                         $sisaTagihan = $totalTagihan + $biayaOngkir + $biayaPacking + ($nominalAsuransi ?? 0) - $totalDp
                                     @endphp
-                                    <th style="text-align: left; font-weight: 600; color: #374151;">Sisa Tagihan</th>
+                                    <th style="text-align: left; font-weight: 600; color: #374151;">Total Pembayaran</th>
                                     <td style="color: #6b7280; text-align: right;">Rp. {{ number_format($sisaTagihan, 0, ',', '.') }}</td>
                                 </tr>
                             </tbody>
