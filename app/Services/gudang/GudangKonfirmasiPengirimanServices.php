@@ -96,7 +96,15 @@ class GudangKonfirmasiPengirimanServices
             $idEstimasiPart = $request->input('id_estimasi_part');
             $idItemGudang = $request->input('id_item');
 
-            foreach ($idItemGudang as $index => $idItem) {
+            $filteredItems = array_filter($idItemGudang, function ($item) {
+                return !empty($item);
+            });
+
+            if (empty($filteredItems)) {
+                throw new Exception('Minimal satu id_item harus diisi.');
+            }
+
+            foreach ($filteredItems as $index => $idItem) {
                 $modalGudang = $this->countModalGudang($partId);
                 $dataEstimasiPart = [
                     'id_item' => $idItem,
