@@ -47,7 +47,7 @@
                                     </thead>
                                     <tbody id="container-data-penerimaan-req-part-{{ $case->id }}">
                                         @foreach ($case->estimasi->estimasiPart as $epart)
-                                            @if ($epart->active == 'Active' && $epart->tanggal_diterima == '')
+                                            @if ($epart->active == 'Active' && $epart->tanggal_diterima == '' && $epart->id_item != '')
                                                 <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                                     <td class="p-4">
                                                         <div class="flex items-center">
