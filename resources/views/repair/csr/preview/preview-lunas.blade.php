@@ -135,29 +135,31 @@
             </tbody>
         </table>
     
-        {{-- Data Kelengkapan --}}
-        <table style="font-size: 8px; width: 100%; text-align: left; margin-bottom: 8px; background-color: #F9FAFB; border-radius: 8px; color: #9CA3AF;">
-            <thead style="text-align: left; color: #111827;">
-                <tr>
-                    <th style="padding: 8px; width: 35%;">Kelengkapan</th>
-                    <th style="padding: 8px; width: 10%;">Quantity</th>
-                    <th style="padding: 8px; width: 20%;">Serial Number</th>
-                    <th style="padding: 8px; width: 35%;">Keterangan</th>
-                </tr>
-            </thead>
-            <tbody style="color: #374151;">
-                @foreach ($dataCase->detailKelengkapan as $kelengkapan)
-                    <tr style="border-top: 1px solid;">
-                        <td style="padding: 8px;">
-                            {{ ($kelengkapan->item_kelengkapan_id == null) ? $kelengkapan->nama_data_lama : $kelengkapan->itemKelengkapan->kelengkapan }}
-                        </td>
-                        <td style="padding: 8px;">{{ $kelengkapan->quantity }}</td>
-                        <td style="padding: 8px;">{{ $kelengkapan->serial_number }}</td>
-                        <td style="padding: 8px;">{{ $kelengkapan->keterangan }}</td>
+        <page break-before="always">
+            {{-- Data Kelengkapan --}}
+            <table style="font-size: 8px; width: 100%; text-align: left; margin-bottom: 8px; background-color: #F9FAFB; border-radius: 8px; color: #9CA3AF;">
+                <thead style="text-align: left; color: #111827;">
+                    <tr>
+                        <th style="padding: 8px; width: 35%;">Kelengkapan</th>
+                        <th style="padding: 8px; width: 10%;">Quantity</th>
+                        <th style="padding: 8px; width: 20%;">Serial Number</th>
+                        <th style="padding: 8px; width: 35%;">Keterangan</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody style="color: #374151;">
+                    @foreach ($dataCase->detailKelengkapan as $kelengkapan)
+                        <tr style="border-top: 1px solid;">
+                            <td style="padding: 8px;">
+                                {{ ($kelengkapan->item_kelengkapan_id == null) ? $kelengkapan->nama_data_lama : $kelengkapan->itemKelengkapan->kelengkapan }}
+                            </td>
+                            <td style="padding: 8px;">{{ $kelengkapan->quantity }}</td>
+                            <td style="padding: 8px;">{{ $kelengkapan->serial_number }}</td>
+                            <td style="padding: 8px;">{{ $kelengkapan->keterangan }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </page>
         
         <table style="width: 100%; color: gray; font-size: 8px; margin-top: 8px; border-collapse: collapse;">
             <tr>
