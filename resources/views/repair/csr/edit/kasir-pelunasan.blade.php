@@ -15,9 +15,9 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
                     <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Lunas {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}-{{ $dataCase->customer->id }}-{{ $dataCase->id }} 
-                        @if ($dataCase->estimasi->estimasiPart->whereNull('tanggal_diterima'))
+                        @if ($dataCase->estimasi->estimasiPart && $dataCase->estimasi->estimasiPart->whereNull('tanggal_dikirim')->isNotEmpty())
                             <span class="text-sm ml-2 text-red-500 bg-red-100 px-2 py-1 rounded-full">
-                                Terdapat Sparepart Belum Diterima
+                                Terdapat Sparepart Belum Dikirim
                             </span>
                         @endif
                     </span>
@@ -88,6 +88,10 @@
                     </div>
                 </div>
 
+                @foreach ($dataCase->estimasi->estimasiJrr as $item)
+                    {{ $item->id ?? "Tolol" }}
+                @endforeach
+
                 <table class="text-sm mt-6 w-full bg-gray-50 rounded-lg dark:text-gray-400 dark:bg-gray-700">
                     <thead class="text-left text-gray-900 dark:text-white">
                         <tr>
@@ -127,48 +131,48 @@
                                     </td>
                                 </tr>
                             @endif
-                            @endforeach
+                        @endforeach
 
-                            @if (!empty($dataCase->logRequest->biaya_customer_ongkir) || !empty($dataCase->logRequest->biaya_customer_packing))
-                                <tr class="border-t">
-                                    <td class="p-2">
-                                        Total Ongkir
-                                    </td>
-                                    <td class="p-2">
-                                        @php
-                                            $biayaOngkir = $dataCase?->logRequest->biaya_customer_ongkir ?? 0;
-                                            $biayaPacking = $dataCase?->logRequest->biaya_customer_packing ?? 0;
-                                            $totalOngkir += $biayaOngkir + $biayaPacking;
-                                        @endphp
-                                        Rp. {{ number_format($totalOngkir, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                            @endif
-                            @if (!empty($dataCase->logRequest->nominal_asuransi))
-                                @php
-                                    $nominalAsuransi += $dataCase->logRequest->nominal_asuransi;
-                                    $totalOngkir += $nominalAsuransi;
-                                @endphp
-                                <tr class="border-t">
-                                    <td class="p-2">
-                                        Asuransi
-                                    </td>
-                                    <td class="p-2">
-                                        Rp. {{ number_format($nominalAsuransi, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                            @endif
-                            <tr class="border-t-2 border-gray-800">
-                                <td class="p-2 font-bold">
-                                    Total Tagihan
+                        @if (!empty($dataCase->logRequest->biaya_customer_ongkir) || !empty($dataCase->logRequest->biaya_customer_packing))
+                            <tr class="border-t">
+                                <td class="p-2">
+                                    Total Ongkir
                                 </td>
                                 <td class="p-2">
                                     @php
-                                        $totalAkhir = $totalTagihan + $totalOngkir;
+                                        $biayaOngkir = $dataCase?->logRequest->biaya_customer_ongkir ?? 0;
+                                        $biayaPacking = $dataCase?->logRequest->biaya_customer_packing ?? 0;
+                                        $totalOngkir += $biayaOngkir + $biayaPacking;
                                     @endphp
-                                    Rp. {{ number_format($totalAkhir, 0, ',', '.') }}
+                                    Rp. {{ number_format($totalOngkir, 0, ',', '.') }}
                                 </td>
                             </tr>
+                        @endif
+                        @if (!empty($dataCase->logRequest->nominal_asuransi))
+                            @php
+                                $nominalAsuransi += $dataCase->logRequest->nominal_asuransi;
+                                $totalOngkir += $nominalAsuransi;
+                            @endphp
+                            <tr class="border-t">
+                                <td class="p-2">
+                                    Asuransi
+                                </td>
+                                <td class="p-2">
+                                    Rp. {{ number_format($nominalAsuransi, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        @endif
+                        <tr class="border-t-2 border-gray-800">
+                            <td class="p-2 font-bold">
+                                Total Tagihan
+                            </td>
+                            <td class="p-2">
+                                @php
+                                    $totalAkhir = $totalTagihan + $totalOngkir;
+                                @endphp
+                                Rp. {{ number_format($totalAkhir, 0, ',', '.') }}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
 
