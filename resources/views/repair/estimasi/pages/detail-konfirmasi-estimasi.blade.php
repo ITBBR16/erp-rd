@@ -74,8 +74,9 @@
                     <h3>Total Biaya:</h3>
                     @php
                         $totalHargaCustomer = collect($case->estimasi->estimasiPart->all())
-                                            ->merge($case->estimasi->estimasiJrr->all())
-                                            ->sum('harga_customer');
+                                                ->merge($case->estimasi->estimasiJrr->all())
+                                                ->filter(fn($item) => $item->status === 'Active')
+                                                ->sum('harga_customer');
                     @endphp
                     <span id="total-nominal-estimasi-biaya" class="font-bold text-red-500">Rp {{ number_format($totalHargaCustomer, 0, ',', '.') }}</span>
                 </div>

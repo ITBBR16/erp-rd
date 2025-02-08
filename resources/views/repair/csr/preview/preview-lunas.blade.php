@@ -135,6 +135,7 @@
             </tbody>
         </table>
     
+        {{-- Data Kelengkapan --}}
         <table style="font-size: 8px; width: 100%; text-align: left; margin-bottom: 8px; background-color: #F9FAFB; border-radius: 8px; color: #9CA3AF;">
             <thead style="text-align: left; color: #111827;">
                 <tr>
