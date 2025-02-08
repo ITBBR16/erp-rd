@@ -88,10 +88,6 @@
                     </div>
                 </div>
 
-                @foreach ($dataCase->estimasi->estimasiJrr as $item)
-                    {{ $item->id ?? "Tolol" }}
-                @endforeach
-
                 <table class="text-sm mt-6 w-full bg-gray-50 rounded-lg dark:text-gray-400 dark:bg-gray-700">
                     <thead class="text-left text-gray-900 dark:text-white">
                         <tr>
