@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosRecapKeperluan;
+use App\Services\repair\CustomerService;
 use App\Models\kios\KiosTechnicalSupport;
 use App\Repositories\kios\KiosRepository;
 use App\Repositories\umum\UmumRepository;
@@ -29,6 +30,7 @@ class KiosDailyRecapController extends Controller
     public function __construct(
         private UmumRepository $umum,
         private RepairCustomerRepository $customerRepository,
+        private CustomerService $customerService,
     ){}
 
     public function index()
@@ -146,72 +148,8 @@ class KiosDailyRecapController extends Controller
 
     public function newCustomer(Request $request)
     {
-        $connectionCustomer = DB::connection('rumahdrone_customer');
-        $connectionCustomer->beginTransaction();
-
-        $divisiId = auth()->user()->divisi_id;
-
-            try {
-
-                $request->merge([
-                    'no_telpon' => preg_replace('/^0/', '62', $request->input('no_telpon')),
-                ]);
-
-                $request->validate([
-                    'first_name' => 'required|max:50',
-                    'no_telpon' => 'required',
-                    'email' => 'nullable|email:dns',
-                    'instansi' => 'max:50',
-                    'provinsi' => 'required',
-                    'nama_jalan' => 'max:255'
-                ]);
-
-                $existingCustomer = $this->customerRepository->findByPhoneNumber($request->input('no_telpon'));
-
-                if ($existingCustomer) {
-                    $dataCustomer = $existingCustomer;
-                    $namaCustomer = $dataCustomer->first_name . ' ' . $dataCustomer->last_name . ' - ' . $dataCustomer->id;
-                    return back()->with('success', 'No telpon sudah tersimpan dengan nama: ' . $namaCustomer);
-                } else {
-                    $dataInput = [
-                        'first_name' => $request->input('first_name'),
-                        'last_name' => $request->input('last_name'),
-                        'asal_informasi' => 1,
-                        'no_telpon' => $request->input('no_telpon'),
-                        'by_divisi' => $divisiId,
-                        'email' => $request->input('email'),
-                        'instansi' => $request->input('instansi'),
-                        'provinsi_id' => $request->input('provinsi'),
-                        'kota_kabupaten_id' => $request->input('kota_kabupaten'),
-                        'kecamatan_id' => $request->input('kecamatan'),
-                        'kelurahan_id' => $request->input('kelurahan'),
-                        'kode_pos' => $request->input('kode_pos'),
-                        'nama_jalan' => $request->input('nama_jalan')
-                    ];
-
-                    $dataCustomer = $this->customerRepository->createCustomer($dataInput);
-                    $appScriptUrl = 'https://script.google.com/macros/s/AKfycbyFTLvq0HaGhnZBjSWH3JLKuRntth2wBKoltkFrGwWQM0UHjG6BMLeaM3guaz9mLCS8/exec';
-                    $response = Http::post($appScriptUrl, [
-                        'first_name' => $dataInput['first_name'],
-                        'last_name' => $dataInput['last_name'] . ' - ' . $dataCustomer->id,
-                        'email' => $dataInput['email'],
-                        'no_telpon' => $dataInput['no_telpon'],
-                    ]);
-        
-                    if ($response->failed()) {
-                        throw new Exception('Something Went Wrong. Error: ' . $response->body());
-                    }
-        
-                    $responseBody = $response->body();
-                    Log::info("Response from App Script: " . $responseBody);
-                    $connectionCustomer->commit();
-                    return back()->with('success', 'Contact berhasil di simpan');
-                }
-
-            } catch (Exception $e) {
-                $connectionCustomer->rollBack();
-                return back()->with('error', $e->getMessage());
-            }
+        $result = $this->customerService->createNewCustomer($request);
+        return back()->with($result['status'], $result['message']);
     }
 
     public function update(Request $request, $id)

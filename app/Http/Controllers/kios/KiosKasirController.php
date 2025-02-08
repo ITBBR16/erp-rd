@@ -297,7 +297,7 @@ class KiosKasirController extends Controller
                         $detailTransaksi->support_supplier = 0;
                     } elseif ($jenisTransaksi == 'drone_bekas') {
                         $totalHargaKiosBekas += $srp;
-                        $dataProdukBekas = KiosProdukSecond::where('serial_number', $serialNumber)->first();
+                        $dataProdukBekas = KiosProdukSecond::find($serialNumber);
                         $modalKiosBekas += $dataProdukBekas->modal_bekas;
 
                         $detailTransaksi->harga_jual = $srp;
