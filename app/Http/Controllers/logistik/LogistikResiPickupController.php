@@ -16,4 +16,9 @@ class LogistikResiPickupController extends Controller
     {
         return $this->logService->indexPIR();
     }
+
+    public function getDataByEkspedisi($status, $id)
+    {
+        return $this->logService->getDataByEkspedisi($status, $id);
+    }
 }

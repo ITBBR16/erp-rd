@@ -5,11 +5,15 @@ namespace App\Services\logistik;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Repositories\umum\UmumRepository;
 use App\Repositories\logistik\repository\LogistikRequestPackingRepository;
+use App\Repositories\logistik\repository\LogistikTransactionRepository;
+use Exception;
+use Illuminate\Http\Request;
 
 class LogistikServices
 {
     public function __construct(
         private UmumRepository $umum,
+        private LogistikTransactionRepository $logTransaction,
         private LogistikRequestPackingRepository $reqPacking,
     ){}
 
@@ -18,7 +22,9 @@ class LogistikServices
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $dataRequest = $this->reqPacking->getDataRequest();
+        $dataRequest = $this->reqPacking->getDataRequest()->filter(function ($item) {
+            return $item->status_request === 'Request Packing';
+        });
 
         return view('logistik.lrp.list-request-packing', [
             'title' => 'List Request Packing',
@@ -55,6 +61,22 @@ class LogistikServices
         return $pdf;
     }
 
+    public function storeLRP(Request $request)
+    {
+        try {
+            $this->logTransaction->beginTransaction();
+
+            $idPacking = $request->input('id_request');
+            $this->reqPacking->updateRequestPacking($idPacking, ['status_request' => 'Belum Pickup']);
+
+            $this->logTransaction->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil update data packing.'];
+        } catch (Exception $e) {
+            $this->logTransaction->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
     // I Req Packing
     public function indexFRP()
     {
@@ -73,13 +95,33 @@ class LogistikServices
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $dataRequest = $this->reqPacking->getDataRequest();
+        $dataRequest = $this->reqPacking->getDataRequest()->filter(function ($item) {
+            return $item->status_request === 'Belum Pickup';
+        });
+        $ekspedisis = $this->reqPacking->getEkspedisi();
 
         return view('logistik.unpicked.index', [
             'title' => 'Form Request Packing',
             'active' => 'pir',
             'divisi' => $divisiName,
-            'dataRequest' => $dataRequest
+            'dataRequest' => $dataRequest,
+            'ekspedisis' => $ekspedisis,
         ]);
     }
+
+    public function getDataByEkspedisi($status, $id)
+    {
+        $statusReq = ($status == 'form-pickup') ? 'Belum Pickup' : 'Belum Ada Resi';
+
+        $dataRequest = $this->reqPacking->getDataRequest()
+            ->where('status_request', $statusReq)
+            ->filter(function ($item) use ($id) {
+                return optional($item->layananEkspedisi)->ekspedisi?->id == $id;
+            })
+            ->values();
+        $dataRequest->load('customer');
+
+        return response()->json($dataRequest);
+    }
+
 }

@@ -235,7 +235,7 @@ Route::middleware('logistik')->group(function () {
         Route::get('/', [LogistikDashboardController::class, 'index']);
 
         Route::group(['controller' => LogistikListRequestPackingController::class], function () {
-            Route::get('/list-request-packing', 'index')->name('lrpIndex');
+            Route::resource('/list-request-packing', LogistikListRequestPackingController::class)->only(['index', 'store']);
             // Route::get('/detail-request-packing/{id}', 'detailListCase')->name('detailListCase');
             Route::get('/review-label-pengiriman/{id}', 'reviewPdf')->name('reviewPdf');
         });
@@ -244,6 +244,7 @@ Route::middleware('logistik')->group(function () {
 
         Route::group(['controller' => LogistikResiPickupController::class], function () {
             Route::resource('/list-unpicked', LogistikResiPickupController::class)->only(['index', 'store', 'edit']);
+            Route::get('/get-data-req-packing/{jenis}/{id}', 'getDataByEkspedisi');
         });
 
         Route::resource('/penerimaan-logistik', LogistikPenerimaanController::class)->only(['index', 'update']);

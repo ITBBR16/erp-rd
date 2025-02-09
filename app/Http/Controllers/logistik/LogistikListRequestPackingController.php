@@ -22,4 +22,12 @@ class LogistikListRequestPackingController extends Controller
         $pdf = $this->logistikServices->previewLabel($encryptId);
         return $pdf->stream();
     }
+
+    public function store(Request $request)
+    {
+        $result = $this->logistikServices->storeLRP($request);
+
+        return back()->with($result['status'], $result['message']);
+    }
+
 }
