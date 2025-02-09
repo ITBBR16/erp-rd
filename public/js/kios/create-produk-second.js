@@ -46,11 +46,6 @@ $(document).ready(function(){
         .then(response => response.json())
         .then(data => {
 
-            if (!Array.isArray(data)) {
-                alert("Format data not valid");
-                return;
-            }
-
             $('#kelengkapan-second-' + nomorKelengkapan).html('');
 
             const defaultOption = $('<option>', {
@@ -97,27 +92,21 @@ $(document).ready(function(){
             $('#sn-second-' + ksId).html('');
 
             data.forEach(entry => {
-                if (entry.kelengkapans && entry.kelengkapans.length > 0) {
-                    const defaultOption = $('<option>', {
-                        text: 'SN Produk',
-                        hidden: true
-                    });
-                    $('#sn-second-' + ksId).append(defaultOption);
-    
-                    entry.kelengkapans.forEach(kelengkapan => {
-                        const option = $('<option>', {
-                            value: kelengkapan.pivot.pivot_qc_id,
-                            text: kelengkapan.pivot.serial_number
-                        });
-                        $('#sn-second-' + ksId).append(option);
-                    });
-                } else {
-                    alert('Data kelengkapans kosong untuk entri dengan id ' + entry.id);
-                }
+                const defaultOption = $('<option>', {
+                    text: 'SN Produk',
+                    hidden: true
+                });
+                $('#sn-second-' + ksId).append(defaultOption);
+
+                const option = $('<option>', {
+                    value: entry.pivot_qc_id,
+                    text: entry.serial_number
+                });
+                $('#sn-second-' + ksId).append(option);
             });
         })
         .catch(error => {
-            consoalert('Error fetching data:' + error);
+            alert('Error fetching data:' + error);
         });
 
     });

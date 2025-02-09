@@ -23,8 +23,17 @@ class KiosBuatPaketSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $dataKelengkapan = KiosQcProdukSecond::with('kelengkapans')->get();
+        // $dataKelengkapan = KiosQcProdukSecond::with('kelengkapans')->get();
         $kiosProduks = ProdukSubJenis::all();
+        $dataKelengkapan = KiosKelengkapanSecondList::orderByRaw("
+                                    CASE 
+                                        WHEN status = 'Ready' THEN 1 
+                                        WHEN status = 'Done QC' THEN 2 
+                                        WHEN status = 'On Sell' THEN 3 
+                                        ELSE 4 
+                                    END
+                                ")
+                                ->get();
 
         return view('kios.product.add-produk-second', [
             'title' => 'Create Paket Second',
@@ -33,7 +42,7 @@ class KiosBuatPaketSecondController extends Controller
             'dropdown' => 'pengecekkan-second',
             'dropdownShop' => '',
             'divisi' => $divisiName,
-            'kelengkapansecond' => $dataKelengkapan,
+            'dataKelengkapan' => $dataKelengkapan,
             'kiosproduks' => $kiosProduks,
         ]);
     }
@@ -148,31 +157,26 @@ class KiosBuatPaketSecondController extends Controller
     public function getKelengkapanSecond()
     {
         $data = KiosKelengkapanSecondList::with('kelengkapans')
-        ->where('status', 'Ready')
-        ->get()
-        ->unique('produk_kelengkapan_id')
-        ->values();
+                ->where('status', 'Ready')
+                ->get()
+                ->unique('produk_kelengkapan_id')
+                ->values();
     
         return response()->json($data);
     }
 
     public function getSNSecond($id)
     {
-        $data = KiosQcProdukSecond::with(['kelengkapans' => function ($query) use($id) {
-            $query->wherePivot('produk_kelengkapan_id', $id)
-                  ->wherePivot('status', 'Ready');
-        }])
-        ->get();
+        $data = KiosKelengkapanSecondList::where('produk_kelengkapan_id', $id)
+                ->where('status', 'Ready')
+                ->get();
     
         return response()->json($data);
     }
 
     public function getPriceSecond($id)
     {
-        $dataPrice = DB::connection('rumahdrone_produk')
-                        ->table('kios_kelengkapan_second_list')
-                        ->where('pivot_qc_id', $id)
-                        ->pluck('harga_satuan');
+        $dataPrice = KiosKelengkapanSecondList::where('pivot_qc_id', $id)->pluck('harga_satuan');
 
         return response()->json($dataPrice);
     }

@@ -34,23 +34,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($kelengkapansecond as $kelengkapan)
-                        @foreach ($kelengkapan->kelengkapans as $item)
-                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                                <td class="px-6 py-2">
-                                    {{ $item->kelengkapan }}
-                                </td>
-                                <td class="px-6 py-2">
-                                    {{ $item->pivot->serial_number }}
-                                </td>
-                                <td class="px-6 py-2">
-                                    Rp. {{ number_format($item->pivot->harga_satuan, 0, ',', '.') }}
-                                </td>
-                                <td class="px-6 py-2">
-                                    <span class="bg-{{ ($item->pivot->status == 'On Sell') ? 'red' : (($item->pivot->status == 'Ready') ? 'green' : 'yellow') }}-500 rounded-md px-2 py-0 text-white">{{ $item->pivot->status }}</span>
-                                </td>
-                            </tr>
-                        @endforeach
+                    @foreach ($dataKelengkapan as $kelengkapan)
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <td class="px-6 py-2">
+                                {{ $kelengkapan->kelengkapans->kelengkapan }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $kelengkapan->serial_number }}
+                            </td>
+                            <td class="px-6 py-2">
+                                Rp. {{ number_format($kelengkapan->harga_satuan, 0, ',', '.') }}
+                            </td>
+                            <td class="px-6 py-2">
+
+                                <span class="bg-{{ ($kelengkapan->status == 'On Sell') ? 'red' : (($kelengkapan->status == 'Ready') ? 'green' : 'orange') }}-500 rounded-md px-2 py-0 text-white">{{ $kelengkapan->status }}</span>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
