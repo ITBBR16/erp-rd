@@ -2,6 +2,7 @@
 
 namespace App\Models\customer;
 
+use App\Models\ekspedisi\LogRequest;
 use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosOrderSecond;
 use App\Models\kios\KiosTransaksi;
@@ -76,5 +77,10 @@ class Customer extends Model
     public function customerReviewRepair()
     {
         return $this->hasMany(RepairReviewCustomer::class);
+    }
+
+    public function logRequest()
+    {
+        return $this->hasMany(LogRequest::class);
     }
 }

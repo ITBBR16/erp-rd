@@ -19,8 +19,8 @@ class JenisPelayanan extends Model
         return $this->belongsTo(Ekspedisi::class, 'ekspedisi_id');
     }
 
-    public function pengiriman()
+    public function logRequest()
     {
-        return $this->hasMany(JenisPelayanan::class);
+        return $this->hasMany(LogRequest::class);
     }
 }

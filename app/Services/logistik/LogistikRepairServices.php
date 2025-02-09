@@ -13,6 +13,7 @@ use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
 use App\Repositories\logistik\repository\LogistikTransactionRepository;
 use App\Repositories\logistik\repository\LogistikAPIFormRepairRepository;
+use App\Repositories\logistik\repository\LogistikRequestPackingRepository;
 
 class LogistikRepairServices
 {

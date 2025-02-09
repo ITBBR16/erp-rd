@@ -303,6 +303,8 @@ class KiosKasirController extends Controller
                         $detailTransaksi->harga_jual = $srp;
                         $detailTransaksi->harga_promo = 0;
                         $detailTransaksi->support_supplier = 0;
+
+                        $dataProdukBekas->update(['status' => 'Sold']);
                     }
 
                     $detailTransaksi->save();

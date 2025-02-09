@@ -2,6 +2,7 @@
 
 namespace App\Models\divisi;
 
+use App\Models\ekspedisi\LogRequest;
 use App\Models\employee\Employee;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ekspedisi\PengirimanEkspedisi;
@@ -24,5 +25,10 @@ class Divisi extends Model
     public function pengiriman()
     {
         return $this->hasMany(PengirimanEkspedisi::class);
+    }
+
+    public function requestLogistik()
+    {
+        return $this->hasMany(LogRequest::class);
     }
 }

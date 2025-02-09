@@ -2,6 +2,8 @@
 
 namespace App\Models\ekspedisi;
 
+use App\Models\customer\Customer;
+use App\Models\divisi\Divisi;
 use App\Models\employee\Employee;
 use App\Models\repair\RepairCase;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +20,21 @@ class LogRequest extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function divisi()
+    {
+        return $this->belongsTo(Divisi::class, 'divisi_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'penerima_id');
+    }
+
+    public function layananEkspedisi()
+    {
+        return $this->belongsTo(JenisPelayanan::class, 'layanan_id');
     }
 
     public function logPenerima()

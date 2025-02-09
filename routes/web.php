@@ -71,6 +71,9 @@ use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
 use App\Http\Controllers\logistik\LogistikListCaseRepairController;
+use App\Http\Controllers\logistik\LogistikListRequestPackingController;
+use App\Http\Controllers\logistik\LogistikRequestPackingController;
+use App\Http\Controllers\logistik\LogistikResiPickupController;
 use App\Http\Controllers\logistik\LogistikSentToRepairController;
 use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
@@ -230,7 +233,19 @@ Route::middleware('kios')->group(function () {
 Route::middleware('logistik')->group(function () {
     Route::prefix('/logistik')->group(function () {
         Route::get('/', [LogistikDashboardController::class, 'index']);
-         
+
+        Route::group(['controller' => LogistikListRequestPackingController::class], function () {
+            Route::get('/list-request-packing', 'index')->name('lrpIndex');
+            // Route::get('/detail-request-packing/{id}', 'detailListCase')->name('detailListCase');
+            Route::get('/review-label-pengiriman/{id}', 'reviewPdf')->name('reviewPdf');
+        });
+
+        Route::resource('/form-req-packing', LogistikRequestPackingController::class)->only(['index', 'store']);
+
+        Route::group(['controller' => LogistikResiPickupController::class], function () {
+            Route::resource('/list-unpicked', LogistikResiPickupController::class)->only(['index', 'store', 'edit']);
+        });
+
         Route::resource('/penerimaan-logistik', LogistikPenerimaanController::class)->only(['index', 'update']);
         Route::group(['controller' => LogistikSentToRepairController::class], function () {
             Route::resource('/sent-to-rapair', LogistikSentToRepairController::class)->only(['index', 'update', 'edit']);
@@ -241,10 +256,10 @@ Route::middleware('logistik')->group(function () {
             Route::get('/list-case-repair/{id}', 'pageDetailListCaseLogistik')->name('pageDetailListCaseLogistik');
         });
         // Route lama
-        Route::resource('/validasi', LogistikValidasiProdukController::class)->only(['index', 'store']);
-        Route::get('/getOrderList/{orderId}', [LogistikValidasiProdukController::class, 'getOrderList']);
-        Route::get('/getQtyOrderList/{orderListId}', [LogistikValidasiProdukController::class, 'getQtyOrderList']);
-        Route::get('/testFormId/{orderListId}', [LogistikValidasiProdukController::class, 'testFormId']);
+        // Route::resource('/validasi', LogistikValidasiProdukController::class)->only(['index', 'store']);
+        // Route::get('/getOrderList/{orderId}', [LogistikValidasiProdukController::class, 'getOrderList']);
+        // Route::get('/getQtyOrderList/{orderListId}', [LogistikValidasiProdukController::class, 'getQtyOrderList']);
+        // Route::get('/testFormId/{orderListId}', [LogistikValidasiProdukController::class, 'testFormId']);
     });
 });
 
