@@ -20,7 +20,7 @@ $(document).ready(function () {
                 .text('Pilih ID Item')
                 .val('')
                 .attr('hidden', true)
-                .addClass('dark:bg-gray-700');
+                .addClass('bg-white dark:bg-gray-700');
             selectIdItem.append(defaultOption);
 
             data.listIdItem.forEach(idItem => {
@@ -68,7 +68,7 @@ $(document).ready(function () {
             <div id="form-list-split-${number}" class="form-list-split grid grid-cols-4 gap-6" style="grid-template-columns: 5fr 3fr 3fr 1fr">
                 <div>
                     <label for="sparepart-split-${number}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Sparepart :</label>
-                    <select name="sparepart_split[]" id="sparepart-split-${number}" data-id="0" class="sparepart-split bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <select name="sparepart_split[]" id="sparepart-split-${number}" data-id="${number}" class="sparepart-split bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Pilih Sparepart</option>
                     </select>
                 </div>
@@ -106,7 +106,7 @@ $(document).ready(function () {
                     .text('Pilih Sparepart')
                     .val('')
                     .attr('hidden', true)
-                    .addClass('dark:bg-gray-700');
+                    .addClass('bg-white dark:bg-gray-700');
                 select.append(defaultOption);
 
                 data.forEach(part => {
@@ -121,7 +121,7 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '#tambah-split-optional-part', function () {
-        let optionalLength = $('.optional-split-produk').length;
+        let optionalLength = $('.optional-produk-split').length;
         let lastSelect = $('#produk-optional-split-' + optionalLength);
         if (lastSelect.length && lastSelect.val() === '') {
             alert("Selesaikan optional sebelumnya.");
@@ -132,14 +132,14 @@ $(document).ready(function () {
         let formOptional = `
             <div id="form-list-optional-split-${optionalLength}" class="form-list-optional-split grid grid-cols-5 gap-6" style="grid-template-columns: 5fr 5fr 3fr 3fr 1fr">
                 <div>
-                    <label for="produk-optional-split-${optionalLength}" class="optional-produk-split block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone :</label>
-                    <select name="optional_produk[]" id="produk-optional-split-${optionalLength}" data-id="${optionalLength}" class="optional-split-produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <label for="produk-optional-split-${optionalLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone :</label>
+                    <select name="optional_produk[]" id="produk-optional-split-${optionalLength}" data-id="${optionalLength}" class="optional-produk-split bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Pilih Produk</option>
                     </select>
                 </div>
                 <div>
                     <label for="sparepart-optional-split-${optionalLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Sparepart :</label>
-                    <select name="optional_sparepart[]" id="sparepart-optional-split-${optionalLength}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <select name="sparepart_split[]" id="sparepart-optional-split-${optionalLength}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         <option value="" hidden>Pilih Sparepart</option>
                     </select>
                 </div>
@@ -147,12 +147,12 @@ $(document).ready(function () {
                     <label for="nominal-optional-split-${optionalLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nominal / Pcs :</label>
                     <div class="flex">
                         <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                        <input type="text" name="optional_nominal_split[]" id="nominal-optional-split-${optionalLength}" data-id="${optionalLength}" class="format-angka-rupiah  rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                        <input type="text" name="nominal_split[]" id="nominal-optional-split-${optionalLength}" data-id="${optionalLength}" class="format-angka-rupiah  rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
                     </div>
                 </div>
                 <div>
                     <label for="qty-optional-split-${optionalLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Quantity : </label>
-                    <input type="text" name="optional_qty[]" id="qty-optional-split-${optionalLength}" data-id="${optionalLength}" class="number-format qty-optional-split bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                    <input type="text" name="qty_split[]" id="qty-optional-split-${optionalLength}" data-id="${optionalLength}" class="number-format qty-optional-split bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
                 </div>
                 <div class="flex justify-center mt-10">
                     <button type="button" class="remove-list-optional-split" data-id="${optionalLength}">
@@ -162,6 +162,31 @@ $(document).ready(function () {
             </div>
         `;
         containerOptional.append(formOptional);
+
+        var optionalJenisDrone = $('#produk-optional-split-' + optionalLength)
+        fetch(`/gudang/produk/get-list-jenis-drone`)
+        .then(response => response.json())
+        .then(data => {
+            optionalJenisDrone.each(function () {
+                const select = $(this);
+                select.empty();
+
+                const defaultOption = $('<option>')
+                    .text('Pilih Produk')
+                    .val('')
+                    .attr('hidden', true)
+                    .addClass('bg-white dark:bg-gray-700');
+                select.append(defaultOption);
+
+                data.forEach(drone => {
+                    const option = $('<option>')
+                        .val(drone.id)
+                        .text(drone.jenis_produk);
+                    select.append(option);
+                });
+            });
+        })
+        .catch(error => alert('Error fetching data: ' + error));
     });
 
     $(document).on('click', '.remove-list-split', function () {
@@ -232,7 +257,7 @@ $(document).ready(function () {
                     .text('Pilih Sparepart')
                     .val('')
                     .attr('hidden', true)
-                    .addClass('dark:bg-gray-700');
+                    .addClass('bg-white dark:bg-gray-700');
                 select.append(defaultOption);
 
                 data.forEach(part => {
@@ -259,7 +284,7 @@ $(document).ready(function () {
                 .text('Pilih Sparepart')
                 .val('')
                 .attr('hidden', true)
-                .addClass('dark:bg-gray-700');
+                .addClass('bg-white dark:bg-gray-700');
             formSparepart.append(defaultOption);
 
             data.forEach(part => {

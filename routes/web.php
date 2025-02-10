@@ -441,6 +441,7 @@ Route::middleware('gudang')->group(function () {
             });
             Route::group(['controller' => GudangSplitPartController::class], function () {
                 Route::resource('/split-sku', GudangSplitPartController::class)->only(['index', 'store']);
+                Route::get('/get-list-jenis-drone', 'getListJenisDrone');
                 Route::get('/get-list-id-item/{id}', 'getListIdItem');
                 Route::get('/get-db-id-item/{id}', 'detailBelanjaIdItem');
             });

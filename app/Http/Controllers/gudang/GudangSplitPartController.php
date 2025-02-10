@@ -24,6 +24,11 @@ class GudangSplitPartController extends Controller
         return back()->with($resultSplit['status'], $resultSplit['message']);
     }
 
+    public function getListJenisDrone()
+    {
+        return $this->split->getJenisDrone();
+    }
+
     public function getListIdItem($idSparepart)
     {
         return $this->split->getIdItem($idSparepart);

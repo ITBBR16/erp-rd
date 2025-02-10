@@ -86,6 +86,11 @@ class GudangSplitSKUServices
         }
     }
 
+    public function getJenisDrone()
+    {
+        return $this->produk->getAllJenisProduct();
+    }
+
     public function getIdItem($idSparepart)
     {
         $findProduk = $this->produkGudang->findBySparepart($idSparepart);
