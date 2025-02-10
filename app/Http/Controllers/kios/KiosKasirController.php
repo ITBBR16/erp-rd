@@ -566,6 +566,13 @@ class KiosKasirController extends Controller
         return response()->json(['data_sn' => $dataSN, 'nilai' => $nilai]);
     }
 
+    public function getNilaiDroneSecond($id)
+    {
+        $nilai = KiosProdukSecond::where('id', $id)->where('status', 'Ready')->value('srp');
+
+        return response()->json(['nilai' => $nilai]);
+    }
+
     public function getCustomer($customerId)
     {
         $dataCustomer = Customer::where('id', $customerId)->get();

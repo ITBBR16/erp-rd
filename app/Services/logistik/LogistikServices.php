@@ -143,7 +143,7 @@ class LogistikServices
                         'no_resi' => $noResi,
                         'biaya_ekspedisi_ongkir' => $nominalOngkir,
                         'biaya_ekspedisi_packing' => $nominalPacking,
-                        'status_request' => ''
+                        'status_request' => 'Menunggu Request Pembayaran'
                     ];
                     $this->reqPacking->updateRequestPacking($resi, $dataResi);
                 }
@@ -175,5 +175,7 @@ class LogistikServices
 
         return response()->json($dataRequest);
     }
+
+    // Request Payment
 
 }

@@ -4,12 +4,12 @@ namespace App\Http\Controllers\logistik;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\logistik\LogistikRepairServices;
+use App\Services\logistik\LogistikServices;
 
 class LogistikRequestPaymentController extends Controller
 {
     public function __construct(
-        private LogistikRepairServices $penerimaan
+        private LogistikServices $penerimaan
     ){}
 
     public function index()

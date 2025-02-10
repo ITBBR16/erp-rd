@@ -337,7 +337,13 @@
                             <td class="px-4 py-2">
                                 <select x-model="item.kasirSn" 
                                         name="kasir_sn[]" 
-                                        @change="$store.kasirForm.updateInvoice()"
+                                        @change="
+                                            $store.kasirForm.updateNilaiDroneBekas(item, $event.target.value)
+                                                .then(() => {
+                                                    $store.kasirForm.addToInvoice(item);
+                                                });
+                                            $nextTick(() => $store.kasirForm.updateInvoice());
+                                        "
                                         class="kasir_sn bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         required>
                                     <option value="" hidden>Pilih SN</option>

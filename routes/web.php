@@ -213,6 +213,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('history-transaksi', 'indexHistory')->name('indexHistory');
                 Route::get('/autocomplete/{jenisTransaksi}', 'autocomplete');
                 Route::get('/getSerialNumber/{jenisTransaksi}/{id}', 'getSerialNumber');
+                Route::get('/getNilaiDroneSecond/{id}', 'getNilaiDroneSecond');
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
                 Route::get('/generate-pdf', 'previewPdfKasir');
             });
@@ -252,10 +253,12 @@ Route::middleware('logistik')->group(function () {
             Route::resource('/sent-to-rapair', LogistikSentToRepairController::class)->only(['index', 'update', 'edit']);
             Route::get('/logistik-get-kelengkapan/{id}', 'getKelengkapan');
         });
+
         Route::group(['controller' => LogistikListCaseRepairController::class], function () {
             Route::get('/list-case-repair', 'index')->name('logistiklcr');
             Route::get('/list-case-repair/{id}', 'pageDetailListCaseLogistik')->name('pageDetailListCaseLogistik');
         });
+
         // Route lama
         // Route::resource('/validasi', LogistikValidasiProdukController::class)->only(['index', 'store']);
         // Route::get('/getOrderList/{orderId}', [LogistikValidasiProdukController::class, 'getOrderList']);

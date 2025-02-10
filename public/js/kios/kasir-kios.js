@@ -156,7 +156,7 @@ document.addEventListener('alpine:init', () => {
                     item.kasirHarga = formatRupiah(data.nilai.hargaGlobal);
                     item.modalGudang = data.nilai.modalGudang;
 
-                } else {
+                } else if (item.jenisTransaksi == 'drone_baru') {
 
                     item.kasirSnOptions = data.data_sn.map(sn => ({
                         label: sn.serial_number,
@@ -165,35 +165,60 @@ document.addEventListener('alpine:init', () => {
 
                     item.kasirHarga = formatRupiah(data.nilai);
 
+                } else if (item.jenisTransaksi == 'drone_bekas') {
+
+                    item.kasirSnOptions = data.data_sn.map(sn => ({
+                        label: sn.serial_number,
+                        value: sn.id
+                    }));
+
                 }
 
-                this.addToInvoice(item);
+                if (item.jenisTransaksi != 'drone_bekas') {
+                    this.addToInvoice(item);
+                }
 
             } catch (error) {
                 alert('Terjadi kesalahan saat mengambil data serial number. Error : ' + error);
             }
-        }, 
+        },
+
+        updateNilaiDroneBekas(item, option) {
+            return new Promise((resolve, reject) => {
+                if (item.jenisTransaksi === 'drone_bekas' && option !== '') {
+                    fetch(`/kios/kasir/getNilaiDroneSecond/${option}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            item.kasirHarga = formatRupiah(data.nilai);
+                            resolve();
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                            reject(error);
+                        });
+                } else {
+                    resolve();
+                }
+            });
+        },        
 
         addToInvoice(item) {
-            // Create a description based on jenisTransaksi
             var deskripsi = item.jenisTransaksi == 'drone_baru'
                 ? 'Unit Baru, Garansi 1 Tahun'
                 : item.jenisTransaksi == 'drone_bekas'
                     ? 'Unit Second, Garansi 1'
                     : '-';
-        
-            // Check if the invoice already has this item
+
             const existingInvoiceItem = this.invoices.find(invItem => 
                 invItem.productName === item.itemName && 
                 (item.jenisTransaksi === 'part_baru' || item.jenisTransaksi === 'part_bekas')
             );
-        
-            // If it exists and jenisTransaksi is part_baru or part_bekas, increase the quantity
+
             if (existingInvoiceItem) {
-                existingInvoiceItem.qty += 1; // Increment the quantity
+                existingInvoiceItem.qty += 1;
                 existingInvoiceItem.totalPrice = formatRupiah(existingInvoiceItem.qty * (parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0));
             } else {
-                // If it doesn't exist, create a new invoice item
+                console.log(item.kasirHarga);
                 const invoiceItem = {
                     productName: item.itemName,
                     description: deskripsi,
@@ -204,7 +229,7 @@ document.addEventListener('alpine:init', () => {
                 this.invoices.push(invoiceItem);
             }
         },
-        
+
         removeFromInvoice(item) {
             const existingInvoiceItem = this.invoices.find(invItem => 
                 invItem.productName === item.itemName &&
@@ -220,6 +245,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         updateInvoice() {
+
             let kasirDiscount = parseFloat(this.discount.replace(/\D/g, '')) || 0;
             let kasirOngkir = parseFloat(this.ongkir.replace(/\D/g, '')) || 0;
             let kasirPacking = parseFloat(this.packing.replace(/\D/g, '')) || 0;
@@ -231,10 +257,6 @@ document.addEventListener('alpine:init', () => {
                 let price = parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0;
                 this.subTotal += price;
             });
-
-            // if (this.asuransiChecked) {
-            //     this.toggleAsuransi();
-            // }
 
             let totalOngkirInvoice = kasirOngkir + kasirPacking + kasirAsuransi;
             let totalPayment = this.subTotal - kasirDiscount - kasirKerugian + totalOngkirInvoice;
