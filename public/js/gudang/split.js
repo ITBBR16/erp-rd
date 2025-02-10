@@ -44,15 +44,14 @@ $(document).ready(function () {
         fetch(`/gudang/produk/get-db-id-item/${idItem}`)
         .then(response => response.json())
         .then(data => {
-            const item = data[0];
-            const date = new Date(item.created_at);
+            const date = new Date(data.created_at);
             const options = { day: 'numeric', month: 'short', year: 'numeric' };
             const formattedDate = date.toLocaleDateString('id-ID', options);
             
             tanggalMasuk.text(formattedDate);
-            belanjaId.val(item.gudang_belanja_id);
-            nilaiAwal.val(item.nominal_pcs);
-            nilaiAwalText.text("Rp. " + formatAngka(item.nominal_pcs));
+            belanjaId.val(data.gudang_belanja_id);
+            nilaiAwal.val(data.nominal_pcs);
+            nilaiAwalText.text("Rp. " + formatAngka(data.nominal_pcs));
         })
         .catch(error => alert('Error fetching data : ' + error))
     });

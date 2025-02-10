@@ -46,7 +46,7 @@ class GudangSplitSKUServices
         try {
             $this->transaction->beginTransaction();
 
-            $idItem = $request->input('id_item');
+            $itemId = $request->input('id_item');
             $belanjaId = $request->input('belanja_id');
             $nominalAwal = $request->input('nominal_sparepart');
 
@@ -55,7 +55,7 @@ class GudangSplitSKUServices
             $splitNominal = preg_replace("/[^0-9]/", "", $request->input('nominal_split')) ?: 0;
             $splitQty = $request->input('qty_split');
 
-            $historyPart = $this->idItem->createHistoryPart(['gudang_produk_id_item_id' => $idItem, 'nominal' => $nominalAwal]);
+            $historyPart = $this->idItem->createHistoryPart(['gudang_produk_id_item_id' => $itemId, 'nominal' => $nominalAwal]);
 
             foreach ($splitSparepart as $index => $part) {
                 for ($i = 0; $i < $splitQty[$index]; $i++) {
@@ -76,7 +76,7 @@ class GudangSplitSKUServices
                 }
             }
 
-            $this->idItem->updateIdItem($idItem, ['status_inventory' => 'Split']);
+            $this->idItem->updateIdItem($itemId, ['status_inventory' => 'Split']);
             $this->transaction->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil melakukan split sparepart'];
 
@@ -91,7 +91,7 @@ class GudangSplitSKUServices
         $findProduk = $this->produkGudang->findBySparepart($idSparepart);
         $sku = $findProduk->produkSparepart->produkType->code . "." . $findProduk->produkSparepart->partModel->code . "." . 
                 $findProduk->produkSparepart->produk_jenis_id . "." . $findProduk->produkSparepart->partBagian->code . "." . 
-                $findProduk->produkSparepart->partSubBagian->code . "." . $findProduk->produkSparepart->produk_part_sifat_id;
+                $findProduk->produkSparepart->partSubBagian->code . "." . $findProduk->produkSparepart->produk_part_sifat_id . "." . $findProduk->produkSparepart->id;
         $listIdItem = $this->produkGudang->getListIdItem($idSparepart);
         return response()->json(['sku' => $sku, 'listIdItem' => $listIdItem]);
     }

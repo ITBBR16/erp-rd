@@ -96,7 +96,7 @@ class LogistikServices
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
         $dataRequest = $this->reqPacking->getDataRequest()->filter(function ($item) {
-            return $item->status_request === 'Belum Pickup';
+            return $item->status_request === 'Belum Pickup' || $item->status_request === 'Belum Ada Resi';
         });
         $ekspedisis = $this->reqPacking->getEkspedisi();
 
@@ -107,6 +107,58 @@ class LogistikServices
             'dataRequest' => $dataRequest,
             'ekspedisis' => $ekspedisis,
         ]);
+    }
+
+    public function storePIR(Request $request)
+    {
+        try {
+            $this->logTransaction->beginTransaction();
+
+            $timeStamps = now();
+            $jenisForm = $request->input('option_jenis_form');
+
+            if ($jenisForm == 'form-pickup') {
+                $checkboxPickup = $request->input('checkbox_select_pickup', []);
+
+                foreach ($checkboxPickup as $pickUp) {
+                    $dataPickup = [
+                        'tanggal_pickup' => $timeStamps,
+                        'status_request' => 'Belum Ada Resi',
+                    ];
+                    $this->reqPacking->updateRequestPacking($pickUp, $dataPickup);
+                }
+
+                $this->logTransaction->commitTransaction();
+                return ['status' => 'success', 'message' => 'Berhasil update data menunggu resi.'];
+
+            } elseif ($jenisForm == 'form-input-resi') {
+                $checkboxResi = $request->input('checkbox_select_resi', []);
+                
+                foreach ($checkboxResi as $index => $resi) {
+                    $noResi = $request->input('no_resi')[$index] ?? '';
+                    $nominalOngkir = preg_replace("/[^0-9]/", "", $request->input('nominal_ongkir')[$index] ?? 0);
+                    $nominalPacking = preg_replace("/[^0-9]/", "", $request->input('nominal_packing')[$index] ?? 0);
+
+                    $dataResi = [
+                        'no_resi' => $noResi,
+                        'biaya_ekspedisi_ongkir' => $nominalOngkir,
+                        'biaya_ekspedisi_packing' => $nominalPacking,
+                        'status_request' => ''
+                    ];
+                    $this->reqPacking->updateRequestPacking($resi, $dataResi);
+                }
+
+                $this->logTransaction->commitTransaction();
+                return ['status' => 'success', 'message' => 'Berhasil update data menunggu request pembayaran.'];
+            } else {
+                $this->logTransaction->rollbackTransaction();
+                return ['status' => 'error', 'message' => 'Jenis form tidak teridentifikasi.'];
+            }
+
+        } catch (Exception $e) {
+            $this->logTransaction->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
     }
 
     public function getDataByEkspedisi($status, $id)

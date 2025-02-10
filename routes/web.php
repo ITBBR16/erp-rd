@@ -243,7 +243,7 @@ Route::middleware('logistik')->group(function () {
         Route::resource('/form-req-packing', LogistikRequestPackingController::class)->only(['index', 'store']);
 
         Route::group(['controller' => LogistikResiPickupController::class], function () {
-            Route::resource('/list-unpicked', LogistikResiPickupController::class)->only(['index', 'store', 'edit']);
+            Route::resource('/list-unpicked', LogistikResiPickupController::class)->only(['index', 'store']);
             Route::get('/get-data-req-packing/{jenis}/{id}', 'getDataByEkspedisi');
         });
 
