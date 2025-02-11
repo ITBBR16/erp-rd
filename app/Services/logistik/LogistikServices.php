@@ -134,17 +134,24 @@ class LogistikServices
             } elseif ($jenisForm == 'form-input-resi') {
                 $checkboxResi = $request->input('checkbox_select_resi', []);
                 
-                foreach ($checkboxResi as $index => $resi) {
-                    $noResi = $request->input('no_resi')[$index] ?? '';
-                    $nominalOngkir = preg_replace("/[^0-9]/", "", $request->input('nominal_ongkir')[$index] ?? 0);
-                    $nominalPacking = preg_replace("/[^0-9]/", "", $request->input('nominal_packing')[$index] ?? 0);
-
+                foreach ($checkboxResi as $resi) {
+                    $noResi = $request->input("no_resi.$resi") ?: '';
+                
+                    if ($noResi == '') {
+                        $this->logTransaction->rollbackTransaction();
+                        return ['status' => 'error', 'message' => 'Pada pilihan data terdapat resi yang kosong.'];
+                    }
+                
+                    $nominalOngkir = preg_replace("/[^0-9]/", "", $request->input("nominal_ongkir.$resi") ?: 0);
+                    $nominalPacking = preg_replace("/[^0-9]/", "", $request->input("nominal_packing.$resi") ?: 0);
+                
                     $dataResi = [
                         'no_resi' => $noResi,
                         'biaya_ekspedisi_ongkir' => $nominalOngkir,
                         'biaya_ekspedisi_packing' => $nominalPacking,
                         'status_request' => 'Menunggu Request Pembayaran'
                     ];
+                    
                     $this->reqPacking->updateRequestPacking($resi, $dataResi);
                 }
 
@@ -177,5 +184,20 @@ class LogistikServices
     }
 
     // Request Payment
+    public function indexRP()
+    {
+        $user = auth()->user();
+        $divisiName = $this->umum->getDivisi($user);
+        $dataRequest = $this->reqPacking->getDataRequest()->filter(function ($item) {
+            return $item->status_request === 'Menunggu Request Pembayaran';
+        });
+
+        return view('logistik.req-payment.index', [
+            'title' => 'Request Payment',
+            'active' => 'rp',
+            'divisi' => $divisiName,
+            'dataRequest' => $dataRequest
+        ]);
+    }
 
 }

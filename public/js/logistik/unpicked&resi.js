@@ -69,13 +69,13 @@ $(document).ready(function () {
                                 ${item.customer.first_name} ${item.customer.last_name} - ${item.customer.id}
                             </td>
                             <td class="px-6 py-2">
-                                <input type="text" name="no_resi[]" id="no-resi-${item.id}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="No Resi" required>
+                                <input type="text" name="no_resi[${item.id}]" id="no-resi-${item.id}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="No Resi">
                             </td>
                             <td class="px-6 py-2">
-                                <input type="text" name="nominal_ongkir[]" id="nominal-ongkir-${item.id}" class="format-angka-logistik rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nominal Ongkir">
+                                <input type="text" name="nominal_ongkir[${item.id}]" id="nominal-ongkir-${item.id}" class="format-angka-logistik rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nominal Ongkir">
                             </td>
                             <td class="px-6 py-2">
-                                <input type="text" name="nominal_packing[]" id="nominal-packing-${item.id}" class="format-angka-logistik rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nominal Packing">
+                                <input type="text" name="nominal_packing[${item.id}]" id="nominal-packing-${item.id}" class="format-angka-logistik rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nominal Packing">
                             </td>
                         </tr>
                     `;

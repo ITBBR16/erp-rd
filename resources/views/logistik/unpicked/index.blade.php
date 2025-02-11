@@ -177,13 +177,13 @@
                                     <th scope="col" class="px-6 py-3" style="width: 19%">
                                         Nama Customer 
                                     </th>
-                                    <th scope="col" class="px-6 py-3" style="width: 20%">
+                                    <th scope="col" class="px-6 py-3" style="width: 22%">
                                         No Resi
                                     </th>
-                                    <th scope="col" class="px-6 py-3" style="width: 20%">
+                                    <th scope="col" class="px-6 py-3" style="width: 14%">
                                         Nominal Ongkir
                                     </th>
-                                    <th scope="col" class="px-6 py-3" style="width: 20%">
+                                    <th scope="col" class="px-6 py-3" style="width: 14%">
                                         Nominal Packing
                                     </th>
                                 </tr>

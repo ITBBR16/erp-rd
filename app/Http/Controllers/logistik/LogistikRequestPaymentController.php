@@ -9,11 +9,11 @@ use App\Services\logistik\LogistikServices;
 class LogistikRequestPaymentController extends Controller
 {
     public function __construct(
-        private LogistikServices $penerimaan
+        private LogistikServices $logistikServices
     ){}
 
     public function index()
     {
-        
+        return $this->logistikServices->indexRP();
     }
 }

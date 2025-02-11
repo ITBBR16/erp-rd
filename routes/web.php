@@ -73,6 +73,7 @@ use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
 use App\Http\Controllers\logistik\LogistikListCaseRepairController;
 use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\logistik\LogistikRequestPackingController;
+use App\Http\Controllers\logistik\LogistikRequestPaymentController;
 use App\Http\Controllers\logistik\LogistikResiPickupController;
 use App\Http\Controllers\logistik\LogistikSentToRepairController;
 use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
@@ -257,6 +258,10 @@ Route::middleware('logistik')->group(function () {
         Route::group(['controller' => LogistikListCaseRepairController::class], function () {
             Route::get('/list-case-repair', 'index')->name('logistiklcr');
             Route::get('/list-case-repair/{id}', 'pageDetailListCaseLogistik')->name('pageDetailListCaseLogistik');
+        });
+
+        Route::group(['controller' => LogistikRequestPaymentController::class], function () {
+            Route::resource('/req-payment', LogistikRequestPaymentController::class)->only(['index']);
         });
 
         // Route lama
