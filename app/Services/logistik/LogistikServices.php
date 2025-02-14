@@ -2,12 +2,14 @@
 
 namespace App\Services\logistik;
 
-use Barryvdh\DomPDF\Facade\Pdf;
-use App\Repositories\umum\UmumRepository;
-use App\Repositories\logistik\repository\LogistikRequestPackingRepository;
-use App\Repositories\logistik\repository\LogistikTransactionRepository;
 use Exception;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Repositories\umum\UmumRepository;
+use App\Models\management\AkuntanDaftarAkun;
+use App\Repositories\logistik\repository\LogistikTransactionRepository;
+use App\Repositories\logistik\repository\LogistikRequestPackingRepository;
+use Illuminate\Support\Facades\Http;
 
 class LogistikServices
 {
@@ -15,6 +17,7 @@ class LogistikServices
         private UmumRepository $umum,
         private LogistikTransactionRepository $logTransaction,
         private LogistikRequestPackingRepository $reqPacking,
+        private AkuntanDaftarAkun $daftarAkun
     ){}
 
     // List Request Packing
@@ -191,13 +194,129 @@ class LogistikServices
         $dataRequest = $this->reqPacking->getDataRequest()->filter(function ($item) {
             return $item->status_request === 'Menunggu Request Pembayaran';
         });
+        $ekspedisis = $this->reqPacking->getEkspedisi();
+        $daftarAkun = $this->daftarAkun->where('kode_akun', 'like', '111%')->get();
 
         return view('logistik.req-payment.index', [
             'title' => 'Request Payment',
             'active' => 'rp',
             'divisi' => $divisiName,
-            'dataRequest' => $dataRequest
+            'dataRequest' => $dataRequest,
+            'ekspedisis' => $ekspedisis,
+            'daftarAkun' => $daftarAkun
         ]);
+    }
+
+    public function storeReqPayment(Request $request)
+    {
+        try {
+            $this->logTransaction->beginTransaction();
+
+            $invoice = $request->input('invoice_logistik');
+            $ekspedisiId = $request->input('ekspedisi_id');
+            $namaEkspedisi = $this->reqPacking->findEkspedisi($ekspedisiId);
+
+            $paymentEkspedisi = $request->input('payment_ekspedisi');
+            $biayaLainLain = preg_replace("/[^0-9]/", "", $request->input("biaya_lain_lain") ?: 0);
+            $keteranganPayment = $request->input('keterangan_payment');
+            $checkboxPayment = $request->input('check_box_payment');
+            $totalPembayaran = 0;
+
+            $ongkirChecked = $request->has('check_box_ongkir');
+            $packingChecked = $request->has('check_box_packing');
+
+            foreach ($checkboxPayment as $payment) {
+                $nominalOngkir = preg_replace("/[^0-9]/", "", $request->input("nominal_ongkir.$payment") ?: 0);
+                $nominalPacking = preg_replace("/[^0-9]/", "", $request->input("nominal_packing.$payment") ?: 0);
+                $nominalAsuransi = preg_replace("/[^0-9]/", "", $request->input("nominal_asuransi.$payment") ?: 0);
+
+                $dataRequest = $this->reqPacking->findDataRequest($payment);
+                
+                $biayaPackingAwal = $dataRequest->biaya_ekspedisi_packing ?? 0;
+                $biayaOngkirAwal = $dataRequest->biaya_ekspedisi_ongkir ?? 0;
+
+                $statusUpdated = false;
+
+                if ($ongkirChecked) {
+                    $dataResi = ['biaya_ekspedisi_ongkir_akhir' => $nominalOngkir];
+                    $this->reqPacking->updateRequestPacking($payment, $dataResi);
+                    $totalPembayaran += $nominalOngkir + $nominalAsuransi;
+
+                    if ($biayaOngkirAwal > 0 && $nominalOngkir > 0) {
+                        $statusUpdated = true;
+                    }
+                }
+
+                if ($packingChecked) {
+                    $dataResi = ['biaya_ekspedisi_packing_akhir' => $nominalPacking];
+                    $this->reqPacking->updateRequestPacking($payment, $dataResi);
+                    $totalPembayaran += $nominalPacking;
+
+                    if ($biayaPackingAwal > 0 && $nominalPacking > 0) {
+                        $statusUpdated = true;
+                    }
+                }
+
+                if ($statusUpdated) {
+                    $this->reqPacking->updateRequestPacking($payment, ['status_request' => 'Done Payment']);
+                }
+            }
+
+            $files = [];
+
+            if ($request->hasFile('file_bukti_transaksi')) {
+                foreach ($request->file('file_bukti_transaksi') as $file) {
+                    if ($file->isValid()) {
+                        $files[] = base64_encode(file_get_contents($file->getRealPath()));
+                    }
+                }
+            } else {
+                $this->logTransaction->rollbackTransaction();
+                return ['status' => 'error', 'message' => 'Files tidak teridentifikasi.'];
+            }
+
+            $totalPayment = $totalPembayaran + $biayaLainLain;
+            $namaAkun = $this->daftarAkun->find($paymentEkspedisi);
+            $payload = [
+                'idEksternal' => $invoice,
+                'idCustomer' => $namaEkspedisi->ekspedisi,
+                'inOut' => 'out',
+                'source' => 'Logistik',
+                'metodePembayaran' => $namaAkun->nama_akun,
+                'totalPayment' => $totalPayment,
+                'nilaiOngkir' => $totalPembayaran,
+                'keterangan' => $keteranganPayment,
+                'biayaLainLain' => $biayaLainLain,
+                'files' => $files,
+            ];
+
+            $urlFinance = 'https://script.google.com/macros/s/AKfycbwVeUQ7qmpUypB8g-bukUFTpHWXjstgvpWGxY7l9-IMOdyyVQKlykg72nXzLDAveOaJtw/exec';
+            $responseFinance = Http::post($urlFinance, $payload);
+
+            if ($responseFinance->successful()) {
+                $this->logTransaction->commitTransaction();
+                return ['status' => 'success', 'message' => 'Berhasil melakukan request payment.'];
+            } else {
+                $this->logTransaction->rollbackTransaction();
+                return ['status' => 'error', 'message' => 'Terjadi kesalahan ketika menghubungkan dengan finance. Error: '];
+            }
+
+        } catch (Exception $e) {
+            $this->logTransaction->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getDataReqPayment($id)
+    {
+        $dataRequest = $this->reqPacking->getDataRequest()
+            ->where('status_request', 'Menunggu Request Pembayaran')
+            ->filter(function ($item) use ($id) {
+                return optional($item->layananEkspedisi)->ekspedisi?->id == $id;
+            })
+            ->values();
+
+        return response()->json($dataRequest);
     }
 
 }

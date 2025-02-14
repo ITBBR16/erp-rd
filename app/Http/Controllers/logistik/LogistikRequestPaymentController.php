@@ -16,4 +16,16 @@ class LogistikRequestPaymentController extends Controller
     {
         return $this->logistikServices->indexRP();
     }
+
+    public function store(Request $request)
+    {
+        $result = $this->logistikServices->storeReqPayment($request);
+
+        return back()->with($result['status'], $result['message']);
+    }
+
+    public function getDataReqPayment($id)
+    {
+        return $this->logistikServices->getDataReqPayment($id);
+    }
 }

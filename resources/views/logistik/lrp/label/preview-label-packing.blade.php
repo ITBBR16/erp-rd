@@ -21,7 +21,7 @@
                     <h2 style="font-size: 16px; font-weight: 600; color: black;"><strong>Nama :</strong></h2>
                 </td>
                 <td style="text-align: left; vertical-align: top; width: 90%;">
-                    <h2 style="font-size: 14px;">{{ $dataReq->customer->first_nama }} {{ $dataReq->customer->last_name ?? '' }} - {{ $dataReq->customer->id }}</h2>
+                    <h2 style="font-size: 14px;">{{ $dataReq->customer->first_name }} {{ $dataReq->customer->last_name ?? '' }} - {{ $dataReq->customer->id }}</h2>
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,9 @@
             </tr>
         </table>
 
-        <strong>Lion Parcel, Regpack</strong>
+        <strong>Lion Parcel, Regpack{{ ($dataReq->biaya_customer_packing > 0) ? ', Pack Kayu' : '' }}{{ ($dataReq->nominal_produk == 0) ? '' : ($dataReq->nominal_produk < 10000000 
+            ? ', RD' . substr($dataReq->nominal_produk, 0, 1) 
+            : ', RD' . substr($dataReq->nominal_produk, 0, 2)) }}</strong>
 
         <table style="width: 100%; font-size: 16px; margin-bottom: 10px">
             <tr>

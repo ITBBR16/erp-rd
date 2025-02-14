@@ -23,6 +23,11 @@ class LogistikRequestPackingRepository implements LogistikRequestPackingInterfac
         return $this->ekspedisi->all();
     }
 
+    public function findEkspedisi($id)
+    {
+        return $this->ekspedisi->find($id);
+    }
+
     public function findDataRequest($id)
     {
         return $this->logRequest->find($id);

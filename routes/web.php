@@ -261,7 +261,8 @@ Route::middleware('logistik')->group(function () {
         });
 
         Route::group(['controller' => LogistikRequestPaymentController::class], function () {
-            Route::resource('/req-payment', LogistikRequestPaymentController::class)->only(['index']);
+            Route::resource('/req-payment', LogistikRequestPaymentController::class)->only(['index', 'store']);
+            Route::get('/get-data-req-payment/{id}', 'getDataReqPayment');
         });
 
         // Route lama
