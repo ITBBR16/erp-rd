@@ -92,31 +92,35 @@ $(document).ready(function () {
         var totalOngkir = 0;
         var totalPacking = 0;
         var totalAsuransi = 0;
-        var biayaLainlain = parseFloat(($('#biaya-lain-lain').val() || "0").replace(/\D/g, '')) || 0
+        var biayaLainlain = parseFloat(($('#biaya-lain-lain').val() || "0").replace(/\D/g, '')) || 0;
 
-        $('.payment-ongkir').each(function () {
-            var row = $(this).closest('tr');
-            if (row.find('.check-data-payment').prop('checked')) {
-                let ongkir = parseFloat(($(this).val() || "0").replace(/\D/g, '')) || 0;
-                totalOngkir += ongkir;
-            }
-        });
+        if ($('#checkbox-input-ongkir').prop('checked')) {
+            $('.payment-ongkir').each(function () {
+                var row = $(this).closest('tr');
+                if (row.find('.check-data-payment').prop('checked')) {
+                    let ongkir = parseFloat(($(this).val() || "0").replace(/\D/g, '')) || 0;
+                    totalOngkir += ongkir;
+                }
+            });
+    
+            $('.payment-asuransi').each(function () {
+                var row = $(this).closest('tr');
+                if (row.find('.check-data-payment').prop('checked')) {
+                    let asuransi = parseFloat(($(this).val() || "0").replace(/\D/g, '')) || 0;
+                    totalAsuransi += asuransi;
+                }
+            });
+        }
 
-        $('.payment-packing').each(function () {
-            var row = $(this).closest('tr');
-            if (row.find('.check-data-payment').prop('checked')) {
-                let packing = parseFloat(($(this).val() || "0").replace(/\D/g, '')) || 0;
-                totalPacking += packing;
-            }
-        });
-
-        $('.payment-asuransi').each(function () {
-            var row = $(this).closest('tr');
-            if (row.find('.check-data-payment').prop('checked')) {
-                let asuransi = parseFloat(($(this).val() || "0").replace(/\D/g, '')) || 0;
-                totalAsuransi += asuransi;
-            }
-        });
+        if ($('#checkbox-input-packing').prop('checked')) {
+            $('.payment-packing').each(function () {
+                var row = $(this).closest('tr');
+                if (row.find('.check-data-payment').prop('checked')) {
+                    let packing = parseFloat(($(this).val() || "0").replace(/\D/g, '')) || 0;
+                    totalPacking += packing;
+                }
+            });
+        }
 
         var nilaiTotal = totalOngkir + totalPacking + totalAsuransi + biayaLainlain;
 
