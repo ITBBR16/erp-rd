@@ -163,4 +163,50 @@ class GudangKonfirmasiPengirimanServices
         return $nilai;
     }
 
+    public function checkCount($id)
+    {
+        $dataGudangEstimasi = $this->estimasiPart
+            ->where('gudang_produk_id', $id)
+            ->whereNotNull('tanggal_dikirim')
+            ->where('active', 'Active')
+            ->sum('modal_gudang');
+
+        $dataEstimasi = $this->estimasiPart
+            ->where('gudang_produk_id', $id)
+            ->whereNotNull('tanggal_dikirim')
+            ->where('active', 'Active')
+            ->get();
+
+        $dataGudangTransaksi = $this->transaksiPart
+            ->where('gudang_produk_id', $id)
+            ->sum('modal_gudang');
+
+        $dataGudang = $this->gudangProduk
+            ->where('id', $id)
+            ->whereIn('status', ['Ready', 'Promo'])
+            ->first();
+
+        if (!$dataGudang) {
+            throw new \Exception("Data gudang tidak ditemukan");
+        }
+
+        $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get();
+        $totalSN = $dataSubGudang->count();
+        $modalAwal = $dataGudang->modal_awal ?? 0;
+        $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
+        $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
+        $nilai = [
+            'dataEstimasi' => $dataEstimasi,
+            'dataEstimasiSum' => $dataGudangEstimasi,
+            'dataTransaksi' => $dataGudangTransaksi,
+            'dataGudang' => $dataGudang,
+            'modalGudang' => $modalGudang,
+            'hargaGlobal' => $hargaJualGudang,
+            'hargaRepair' => $dataGudang->harga_internal,
+            'promoGudang' => $dataGudang->harga_promo
+        ];
+            
+        return $nilai;
+    }
+
 }

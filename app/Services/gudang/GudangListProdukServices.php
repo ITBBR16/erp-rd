@@ -5,6 +5,7 @@ namespace App\Services\gudang;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\gudang\GudangProduk;
 use App\Repositories\umum\UmumRepository;
 use App\Repositories\gudang\repository\GudangProdukRepository;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
@@ -14,7 +15,8 @@ class GudangListProdukServices
     public function __construct(
         private UmumRepository $umum,
         private GudangTransactionRepository $transaction,
-        private GudangProdukRepository $produk
+        private GudangProdukRepository $produk,
+        private GudangProduk $sparepart
     ){}
 
     public function index()
@@ -29,6 +31,19 @@ class GudangListProdukServices
             'navActive' => 'produk',
             'divisi' => $divisiName,
             'dataProduk' => $dataProduk,
+        ]);
+    }
+
+    public function showListProduk(Request $request)
+    {
+        $products = $this->produk->getAllProduk();
+
+        if ($request->keyword != '') {
+            $products = $this->sparepart->produkSparepart->where('nama_internal', 'LIKE', '%' . $request->keyword . '%')->get();
+        }
+
+        return response()->json([
+            'dataProduk' => $products
         ]);
     }
 
@@ -83,6 +98,14 @@ class GudangListProdukServices
             $this->transaction->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
+    }
+
+    public function listIdItem($id)
+    {
+        $findProduk = $this->produk->findBySparepart($id);
+        $idItem = $findProduk->gudangIdItem;
+
+        return response()->json($idItem);
     }
 
 }

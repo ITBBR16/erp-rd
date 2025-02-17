@@ -147,7 +147,7 @@ $(document).ready(function () {
                     <label for="nominal-optional-split-${optionalLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nominal / Pcs :</label>
                     <div class="flex">
                         <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                        <input type="text" name="nominal_split[]" id="nominal-optional-split-${optionalLength}" data-id="${optionalLength}" class="format-angka-rupiah  rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
+                        <input type="text" name="nominal_split[]" id="nominal-optional-split-${optionalLength}" data-id="${optionalLength}" class="format-angka-rupiah nominal-split-optional rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
                     </div>
                 </div>
                 <div>
@@ -208,7 +208,7 @@ $(document).ready(function () {
         getSparepartOptional(idForm);
     });
 
-    $(document).on('change', '.qty-split, .nominal-split, .qty-split-optional, .nominal-split-optional', function () {
+    $(document).on('change', '.qty-split, .nominal-split, .qty-optional-split, .nominal-split-optional', function () {
         updateBoxSplit();
     });
 
@@ -225,7 +225,7 @@ $(document).ready(function () {
         });
         
         $('#container-optional-split-part .form-list-optional-split').each(function () {
-            let qtyOptional = parseFloat($(this).find('.qty-split-optional').val().replace(/\./g, '')) || 0
+            let qtyOptional = parseFloat($(this).find('.qty-optional-split').val().replace(/\./g, '')) || 0
             let nominalOptional = parseFloat($(this).find('.nominal-split-optional').val().replace(/\./g, '')) || 0
             let hasilNominalOptional = qtyOptional * nominalOptional;
             totalNominal += hasilNominalOptional;

@@ -447,6 +447,7 @@ Route::middleware('gudang')->group(function () {
             Route::group(['controller' => GudangListProdukController::class], function () {
                 Route::resource('/list-produk', GudangListProdukController::class)->only(['index', 'update']);
                 Route::post('/update-harga-sparepart/{id}', 'updateHarga');
+                Route::get('/listIdItemProduk/{id}', 'listIdItemProduk');
             });
             Route::group(['controller' => GudangSplitPartController::class], function () {
                 Route::resource('/split-sku', GudangSplitPartController::class)->only(['index', 'store']);
@@ -461,6 +462,7 @@ Route::middleware('gudang')->group(function () {
         Route::prefix('/distribusi')->group(function () {
             Route::resource('/konfirmasi-pengiriman', GudangKonfirmasiPengirimanController::class)->only(['index', 'edit', 'store']);
             Route::resource('/retur-sparepart', GudangReturSparepartController::class)->only(['index']);
+            Route::get('/checkCountModal/{id}', [GudangKonfirmasiPengirimanController::class, 'checkCountModal']);
         });
     });
 });

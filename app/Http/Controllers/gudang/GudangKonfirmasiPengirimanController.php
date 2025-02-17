@@ -32,4 +32,9 @@ class GudangKonfirmasiPengirimanController extends Controller
             return back()->with($resultSendPart['status'], $resultSendPart['message']);
         }
     }
+
+    public function checkCountModal($id)
+    {
+        return $this->konfirmasi->checkCount($id);
+    }
 }

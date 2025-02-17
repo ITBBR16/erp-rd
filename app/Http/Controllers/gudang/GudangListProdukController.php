@@ -36,4 +36,9 @@ class GudangListProdukController extends Controller
             return back()->with('error', $resultHarga['message']);
         }
     }
+
+    public function listIdItemProduk($id)
+    {
+        return $this->produk->listIdItem($id);
+    }
 }
