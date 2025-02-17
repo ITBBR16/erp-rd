@@ -295,6 +295,18 @@ class KiosKasirController extends Controller
                         $detailTransaksi->harga_jual = $dataProduk->srp;
                         $detailTransaksi->harga_promo = $dataProduk->harga_promo;
                         $detailTransaksi->support_supplier = 0;
+
+                        $statusSN = ($statusTransaksi == 'Done') ? 'Sold' : 'Hold';
+                        $findSN->update(['status' => $statusSN]);
+
+                        $cekReadySN = KiosSerialNumber::where('produk_id', $item)
+                            ->where('status', 'Ready')
+                            ->exists();
+
+                        if (!$cekReadySN) {
+                            KiosProduk::where('id', $item)->update(['status' => 'Not Ready']);
+                        }
+
                     } elseif ($jenisTransaksi == 'drone_bekas') {
                         $totalHargaKiosBekas += $srp;
                         $dataProdukBekas = KiosProdukSecond::find($serialNumber);
@@ -308,16 +320,7 @@ class KiosKasirController extends Controller
                     }
 
                     $detailTransaksi->save();
-                    $statusSN = ($statusTransaksi == 'Done') ? 'Sold' : 'Hold';
-                    KiosSerialNumber::find($serialNumber)->update(['status' => $statusSN]);
 
-                    $cekReadySN = KiosSerialNumber::where('produk_id', $item)
-                        ->where('status', 'Ready')
-                        ->exists();
-
-                    if (!$cekReadySN) {
-                        KiosProduk::where('id', $item)->update(['status' => 'Not Ready']);
-                    }
                 } else {
                     $totalHargaGudang += $srp;
                     $modalGudang += $kasirModalPart[$index];

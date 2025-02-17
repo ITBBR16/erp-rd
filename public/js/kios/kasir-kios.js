@@ -174,10 +174,6 @@ document.addEventListener('alpine:init', () => {
 
                 }
 
-                if (item.jenisTransaksi != 'drone_bekas') {
-                    this.addToInvoice(item);
-                }
-
             } catch (error) {
                 alert('Terjadi kesalahan saat mengambil data serial number. Error : ' + error);
             }
@@ -209,16 +205,26 @@ document.addEventListener('alpine:init', () => {
                     ? 'Unit Second, Garansi 1'
                     : '-';
 
-            const existingInvoiceItem = this.invoices.find(invItem => 
-                invItem.productName === item.itemName && 
-                (item.jenisTransaksi === 'part_baru' || item.jenisTransaksi === 'part_bekas')
-            );
-
-            if (existingInvoiceItem) {
-                existingInvoiceItem.qty += 1;
-                existingInvoiceItem.totalPrice = formatRupiah(existingInvoiceItem.qty * (parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0));
+            if (item.jenisTransaksi === 'part_baru' || item.jenisTransaksi === 'part_bekas') {
+                const existingInvoiceItem = this.invoices.find(invItem => 
+                    invItem.productName === item.itemName &&
+                    invItem.description === deskripsi
+                );
+        
+                if (existingInvoiceItem) {
+                    existingInvoiceItem.qty += 1;
+                    existingInvoiceItem.totalPrice = formatRupiah(existingInvoiceItem.qty * (parseFloat(item.kasirHarga.replace(/\D/g, '')) || 0));
+                } else {
+                    const invoiceItem = {
+                        productName: item.itemName,
+                        description: deskripsi,
+                        qty: 1,
+                        itemPrice: item.kasirHarga || 0,
+                        totalPrice: item.kasirHarga || 0,
+                    };
+                    this.invoices.push(invoiceItem);
+                }
             } else {
-                console.log(item.kasirHarga);
                 const invoiceItem = {
                     productName: item.itemName,
                     description: deskripsi,
