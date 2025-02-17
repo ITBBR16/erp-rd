@@ -235,7 +235,7 @@ class KiosKasirController extends Controller
             $kasirDiscount = preg_replace("/[^0-9]/", "", $request->input('kasir_discount')) ?: 0;
             $kasirTax = $request->input('kasir_tax') ?: 0;
             $kasirAsuransi = $request->input('kasir_asuransi') ?: 0;
-            $kasirKerugian = $request->input('kasir_kerugian');
+            $kasirKerugian = preg_replace("/[^0-9]/", "", $request->input('kasir_kerugian')) ?: 0;
             $layananEkspedisi = $request->input('layanan');
             $totalOngkirKasir = $kasirOngkir + $kasirAsuransi + $kasirPacking;
 

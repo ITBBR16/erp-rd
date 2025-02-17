@@ -37,8 +37,8 @@ class GudangListProdukController extends Controller
         }
     }
 
-    public function listIdItemProduk($id)
+    public function searchListProduk(Request $request)
     {
-        return $this->produk->listIdItem($id);
+        return $this->produk->searchListProduk($request);
     }
 }

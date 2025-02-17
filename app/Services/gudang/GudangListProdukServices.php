@@ -34,6 +34,38 @@ class GudangListProdukServices
         ]);
     }
 
+    public function searchListProduk(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $divisiName = $this->umum->getDivisi($user);
+            $query = $request->input('query');
+
+            $dataProduk = GudangProduk::with([
+                    'produkSparepart.produkType', 
+                    'produkSparepart.partModel', 
+                    'produkSparepart.produkJenis', 
+                    'produkSparepart.partBagian', 
+                    'produkSparepart.partSubBagian', 
+                    'gudangIdItem'
+                ])
+                ->whereHas('produkSparepart', function ($q) use ($query) {
+                    $q->where('nama_internal', 'like', "%{$query}%");
+                })
+                ->paginate(50);
+
+            return view('gudang.produk.list-produk.list-produk', [
+                'title' => 'Gudang Produk',
+                'active' => 'gudang-produk',
+                'navActive' => 'produk',
+                'divisi' => $divisiName,
+                'dataProduk' => $dataProduk,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function showListProduk(Request $request)
     {
         $products = $this->produk->getAllProduk();
@@ -98,14 +130,6 @@ class GudangListProdukServices
             $this->transaction->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
-    }
-
-    public function listIdItem($id)
-    {
-        $findProduk = $this->produk->findBySparepart($id);
-        $idItem = $findProduk->gudangIdItem;
-
-        return response()->json($idItem);
     }
 
 }
