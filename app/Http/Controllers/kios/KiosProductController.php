@@ -32,7 +32,7 @@ class KiosProductController extends Controller
                         END
                     ")
                     ->orderBy('updated_at', 'desc')
-                    ->paginate(15);
+                    ->paginate(30);
         $kategori = ProdukKategori::all();
         $types = ProdukType::all();
         $jenisProduk = ProdukJenis::all();

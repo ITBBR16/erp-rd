@@ -70,6 +70,7 @@ use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
+use App\Http\Controllers\kios\KiosSplitDroneBaruController;
 use App\Http\Controllers\logistik\LogistikListCaseRepairController;
 use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\logistik\LogistikRequestPackingController;
@@ -173,11 +174,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getLayanan/{ekspedisiId}', 'getLayanan');
             });
 
-            Route::group(['controller' => AddKelengkapanKiosController::class], function () {
-                Route::get('/add-product', 'index');
-                Route::post('/add-product', 'store')->name('form-kelengkapan');
-                Route::get('/getKelengkapan/{jenisId}', 'getKelengkapan');
-            });
+            Route::resource('/penerimaan-produk', KiosPenerimaanProdukController::class)->only(['index', 'update']);
 
             Route::group(['controller' => KiosBuatPaketSecondController::class], function () {
                 Route::resource('add-paket-penjualan-second', KiosBuatPaketSecondController::class)->only(['index', 'store']);
@@ -185,8 +182,6 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getSNSecond/{id}', 'getSNSecond');
                 Route::get('/getPriceSecond/{id}', 'getPriceSecond');
             });
-
-            Route::resource('/penerimaan-produk', KiosPenerimaanProdukController::class)->only(['index', 'update']);
             
             Route::group(['controller' => KiosPengecekkanProdukBaruController::class], function () {
                 Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
@@ -203,6 +198,18 @@ Route::middleware('kios')->group(function () {
             Route::group(['controller' => KiosSupplierController::class], function () {
                 Route::resource('/supplier-kios', KiosSupplierController::class);
                 Route::put('/supplier/update-support', 'supportSupplier')->name('support-supplier');
+            });
+
+            Route::group(['controller' => AddKelengkapanKiosController::class], function () {
+                Route::get('/add-product', 'index');
+                Route::post('/add-product', 'store')->name('form-kelengkapan');
+                Route::get('/getKelengkapan/{jenisId}', 'getKelengkapan');
+            });
+
+            Route::group(['controller' => KiosSplitDroneBaruController::class], function () {
+                Route::resource('/split-produk-baru', KiosSplitDroneBaruController::class)->only(['index', 'store']);
+                Route::get('/get-sn-split/{id}', 'getSnSplit');
+                Route::get('/get-kelengkapan-split/{id}/{idSn}', 'getKelengkapanSplitBaru');
             });
 
             Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);

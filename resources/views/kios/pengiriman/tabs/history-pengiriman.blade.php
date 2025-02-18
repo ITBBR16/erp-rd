@@ -13,88 +13,90 @@
         </div>
     </div>
     <div class="relative shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Order ID
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        No Resi
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Pengirim
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Ekspedisi
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($dataIncoming as $data)
-                    @if ($data->status == 'Diterima' || $data->status == 'InRD')
-                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                            <th class="px-6 py-2">
-                                {{ ($data->status_order == 'Baru' && $data->order ? 'N.' . $data->order->id : ($data->status_order == 'Bekas' && $data->ordersecond ? 'S.' . $data->ordersecond->id : '')) }}
-                            </th>
-                            <td class="px-6 py-2">
-                                {{ $data->no_resi }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{
-                                    ($data->status_order == 'Baru' && $data->order && $data->order->supplier ? 
-                                        $data->order->supplier->nama_perusahaan : 
-                                        (
-                                            $data->ordersecond && $data->ordersecond->come_from == 'Customer' && $data->ordersecond->customer ? 
-                                                $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->last_name : 
-                                                (
-                                                    $data->ordersecond && $data->ordersecond->marketplace ? 
-                                                        $data->ordersecond->marketplace->nama : 
-                                                        ''
-                                                )
-                                        )
-                                    ) 
-                                 }}
-                            </td>
-                            <td class="px-6 py-2">
-                                @if ($data->ekspedisi_id != '')
-                                    {{ $data->ekspedisi->ekspedisi }}
-                                @endif
-                            </td>
-                            <td class="px-6 py-2">
-                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $data->status }}</span>
-                            </td>
-                            <td class="px-6 py-2">
-                                <div class="flex flex-wrap">
-                                    <button id="dropdownHistoryPenerimaanButton{{ $data->id }}" data-dropdown-toggle="dropdownHistoryPenerimaan{{ $data->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                        </svg>
-                                    </button>
-                                    <!-- Dropdown menu -->
-                                    <div id="dropdownHistoryPenerimaan{{ $data->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHistoryPenerimaanButton{{ $data->id }}">
-                                            <li>
-                                                <button type="button" data-modal-target="view-img-penerimaan{{ $data->id }}" data-modal-toggle="view-img-penerimaan{{ $data->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                                    <i class="material-symbols-outlined text-base mr-3">photo</i>
-                                                    <span class="whitespace-nowrap">Detail Produk</span>
-                                                </button>
-                                            </li>
-                                        </ul>
+        <div class="overflow-y-auto max-h-[580px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Order ID
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            No Resi
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Pengirim
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Ekspedisi
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($dataIncoming as $data)
+                        @if ($data->status == 'Diterima' || $data->status == 'InRD')
+                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                <th class="px-6 py-2">
+                                    {{ ($data->status_order == 'Baru' && $data->order ? 'N.' . $data->order->id : ($data->status_order == 'Bekas' && $data->ordersecond ? 'S.' . $data->ordersecond->id : '')) }}
+                                </th>
+                                <td class="px-6 py-2">
+                                    {{ $data->no_resi }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{
+                                        ($data->status_order == 'Baru' && $data->order && $data->order->supplier ? 
+                                            $data->order->supplier->nama_perusahaan : 
+                                            (
+                                                $data->ordersecond && $data->ordersecond->come_from == 'Customer' && $data->ordersecond->customer ? 
+                                                    $data->ordersecond->customer->first_name . ' ' . $data->ordersecond->customer->last_name : 
+                                                    (
+                                                        $data->ordersecond && $data->ordersecond->marketplace ? 
+                                                            $data->ordersecond->marketplace->nama : 
+                                                            ''
+                                                    )
+                                            )
+                                        ) 
+                                     }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    @if ($data->ekspedisi_id != '')
+                                        {{ $data->ekspedisi->ekspedisi }}
+                                    @endif
+                                </td>
+                                <td class="px-6 py-2">
+                                    <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $data->status }}</span>
+                                </td>
+                                <td class="px-6 py-2">
+                                    <div class="flex flex-wrap">
+                                        <button id="dropdownHistoryPenerimaanButton{{ $data->id }}" data-dropdown-toggle="dropdownHistoryPenerimaan{{ $data->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                            </svg>
+                                        </button>
+                                        <!-- Dropdown menu -->
+                                        <div id="dropdownHistoryPenerimaan{{ $data->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHistoryPenerimaanButton{{ $data->id }}">
+                                                <li>
+                                                    <button type="button" data-modal-target="view-img-penerimaan{{ $data->id }}" data-modal-toggle="view-img-penerimaan{{ $data->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                        <i class="material-symbols-outlined text-base mr-3">photo</i>
+                                                        <span class="whitespace-nowrap">Detail Produk</span>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+    
                                     </div>
-
-                                </div>
-                            </td>
-                        </tr>
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
     @if (!$dataIncoming->contains('status', 'Diterima') && !$dataIncoming->contains('status', 'InRD'))
         <div class="p-4 mt-4">

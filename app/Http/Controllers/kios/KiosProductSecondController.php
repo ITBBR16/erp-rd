@@ -15,7 +15,15 @@ class KiosProductSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $produkSeconds = KiosProdukSecond::with('subjenis')->get();
+        $produkSeconds = KiosProdukSecond::orderByRaw("
+                            CASE 
+                                WHEN status = 'Ready' THEN 1
+                                WHEN status = 'Sold' THEN 2
+                                ELSE 3
+                            END
+                        ")
+                        ->orderBy('updated_at', 'desc')
+                        ->paginate(30);
 
         return view('kios.product.produk-second', [
             'title' => 'Product Second',

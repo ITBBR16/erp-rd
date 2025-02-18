@@ -86,7 +86,7 @@ class KiosDashboardProduk extends Controller
                     ->sum(function ($transaction) {
                         return $transaction->detailtransaksi->sum(function ($detail) {
                             return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual) - $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai;
-                        }) + $transaction->tax - $transaction->discount;
+                        }) + $transaction->tax - $transaction->discount + $transaction->ongkir;
                     });
 
             array_push($salesThisWeek, $sales);
@@ -114,7 +114,7 @@ class KiosDashboardProduk extends Controller
                 ->sum(function ($transaction) {
                     return $transaction->detailtransaksi->sum(function ($detail) {
                         return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual) - $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai;
-                    }) + $transaction->tax - $transaction->discount;
+                    }) + $transaction->tax - $transaction->discount + $transaction->ongkir;
                 });
             array_push($salesLastWeek, $sales);
         }

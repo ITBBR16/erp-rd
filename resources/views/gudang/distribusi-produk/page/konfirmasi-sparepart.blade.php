@@ -87,7 +87,7 @@
                 </thead>
                 <tbody>
                     @foreach ($dataCase->estimasi->estimasiPart as $item)
-                        @if ($item->tanggal_konfirmasi != '' && $item->tanggal_dikirim == '')
+                        @if ($item->tanggal_konfirmasi != '' && $item->tanggal_dikirim == '' && $item->active == 'Active')
                             <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                 <td class="px-6 py-2">
                                     <input type="hidden" name="id_estimasi_part[]" value="{{ $item->id }}">

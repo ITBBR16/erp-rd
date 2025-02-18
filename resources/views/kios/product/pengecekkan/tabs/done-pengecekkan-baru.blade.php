@@ -15,64 +15,66 @@
         </div>
     </div>
     <div class="relative">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        No Resi
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Ekspedisi
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Tanggal Penerimaan
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($historyPenerimaan as $history)
-                    @if ($history?->pengiriman?->status == 'Diterima' || $history?->pengiriman?->status == 'InRD')
-                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                            <th class="px-6 py-2">
-                                {{ $history->pengiriman->no_resi }}
-                            </th>
-                            <td class="px-6 py-2">
-                                {{ $history->pengiriman->ekspedisi->ekspedisi }}
-                            </td>
-                            <td class="px-6 py-2">
-                                {{ \Carbon\Carbon::parse($history->tanggal_diterima)->isoFormat('D MMMM YYYY') }}
-                            </td>
-                            <td class="px-6 py-2">
-                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $history->pengiriman->status }}</span>
-                            </td>
-                            <td class="px-6 py-2">
-                                <button id="dropdownListDroneBaruButton{{ $history->id }}" data-dropdown-toggle="dropdownListDroneBaru{{ $history->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Dropdown menu -->
-                        <div id="dropdownListDroneBaru{{ $history->id }}" class="z-10 hidden bg-white rounded-lg shadow w-auto dark:bg-gray-700">
-                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListDroneBaruButton{{ $history->id }}">
-                                <li>
-                                    <button type="button" data-modal-target="view-done-penerimaan-{{ $history->id }}" data-modal-toggle="view-done-penerimaan-{{ $history->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base mr-3">visibility</i>
-                                        <span class="whitespace-nowrap">History Penerimaan</span>
+        <div class="overflow-y-auto max-h-[580px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            No Resi
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Ekspedisi
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tanggal Penerimaan
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($historyPenerimaan as $history)
+                        @if ($history?->pengiriman?->status == 'Diterima' || $history?->pengiriman?->status == 'InRD')
+                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                                <th class="px-6 py-2">
+                                    {{ $history->pengiriman->no_resi }}
+                                </th>
+                                <td class="px-6 py-2">
+                                    {{ $history->pengiriman->ekspedisi->ekspedisi }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    {{ \Carbon\Carbon::parse($history->tanggal_diterima)->isoFormat('D MMMM YYYY') }}
+                                </td>
+                                <td class="px-6 py-2">
+                                    <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $history->pengiriman->status }}</span>
+                                </td>
+                                <td class="px-6 py-2">
+                                    <button id="dropdownListDroneBaruButton{{ $history->id }}" data-dropdown-toggle="dropdownListDroneBaru{{ $history->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                        </svg>
                                     </button>
-                                </li>
-                            </ul>
-                        </div>
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
+                                </td>
+                            </tr>
+                            <!-- Dropdown menu -->
+                            <div id="dropdownListDroneBaru{{ $history->id }}" class="z-10 hidden bg-white rounded-lg shadow w-auto dark:bg-gray-700">
+                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListDroneBaruButton{{ $history->id }}">
+                                    <li>
+                                        <button type="button" data-modal-target="view-done-penerimaan-{{ $history->id }}" data-modal-toggle="view-done-penerimaan-{{ $history->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base mr-3">visibility</i>
+                                            <span class="whitespace-nowrap">History Penerimaan</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         <div class="mt-4 ">
             {{-- {{ $suppliers->links() }} --}}
         </div>

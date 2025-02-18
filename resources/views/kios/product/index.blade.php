@@ -103,121 +103,123 @@
     </div> --}}
 
     <div class="relative mt-2">
-        <table id="produk-table" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs sticky text-gray-700 uppercase tracking-wider bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3" style="width: 30%;">
-                        Paket Penjualan
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 10%;">
-                        Stok
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 15%;">
-                        Harga Jual
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 15%;">
-                        Harga Promo
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 12%;">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 9%;">
-                        Tanggal Promo
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 9%;">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($produks as $key => $pd)
-                <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
-                    <td class="px-6 py-2">
-                        <div class="flex flex-row items-center">
-                            @php
-                                $imageLink = $pd->imageprodukbaru->link_drive ?? "";
-                                preg_match('/\/file\/d\/(.*?)\/view/', $imageLink, $matches);
-                                $fileId = isset($matches[1]) ? $matches[1] : null;
-                            @endphp
-                            @if (!empty($imageLink))
-                                <div class="w-14 -h-10 mr-4">
-                                    <img src="https://drive.google.com/thumbnail?id={{ $fileId }}" alt="{{ $pd->subjenis->paket_penjualan }}">
+        <div class="overflow-y-auto h-[580px]">
+            <table id="produk-table" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase tracking-wider bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3" style="width: 30%;">
+                            Paket Penjualan
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 10%;">
+                            Stok
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 15%;">
+                            Harga Jual
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 15%;">
+                            Harga Promo
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 12%;">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 9%;">
+                            Tanggal Promo
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 9%;">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($produks as $key => $pd)
+                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
+                        <td class="px-6 py-2">
+                            <div class="flex flex-row items-center">
+                                @php
+                                    $imageLink = $pd->imageprodukbaru->link_drive ?? "";
+                                    preg_match('/\/file\/d\/(.*?)\/view/', $imageLink, $matches);
+                                    $fileId = isset($matches[1]) ? $matches[1] : null;
+                                @endphp
+                                @if (!empty($imageLink))
+                                    <div class="w-14 -h-10 mr-4">
+                                        <img src="https://drive.google.com/thumbnail?id={{ $fileId }}" alt="{{ $pd->subjenis->paket_penjualan }}">
+                                    </div>
+                                @endif
+                                <span>
+                                    {{ $pd->subjenis->paket_penjualan }}
+                                </span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-2">
+                            {{ $pd->serialnumber->where('produk_id', $pd->id)->where('status', 'Ready')->count() }}
+                        </td>
+                        <td class="px-6 py-2">
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
+                                <input type="text" id="update-srp-baru-{{ $pd->id }}" data-id="{{ $pd->id }}" class="update-srp-baru rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($pd->srp, 0, ',', '.') }}">
+                            </div>
+                        </td>
+                        <td class="px-6 py-2">
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
+                                <input type="text" class="update-srp-baru rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($pd->harga_promo, 0, ',', '.') }}" disabled>
+                            </div>
+                        </td>
+                        <td class="px-6 py-2">
+                            <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'orange') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
+                        </td>
+                        <td class="px-6 py-2">
+                            @if ($pd->status == 'Promo')
+                                <div class="flex flex-col justify-center items-center font-semibold">
+                                    <span>{{ \Carbon\Carbon::parse($pd->start_promo)->format('d/m/Y') }}</span>
+                                    <span>-</span>
+                                    <span>{{ \Carbon\Carbon::parse($pd->end_promo)->format('d/m/Y') }}</span>
                                 </div>
                             @endif
-                            <span>
-                                {{ $pd->subjenis->paket_penjualan }}
-                            </span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-2">
-                        {{ $pd->serialnumber->where('produk_id', $pd->id)->where('status', 'Ready')->count() }}
-                    </td>
-                    <td class="px-6 py-2">
-                        <div class="flex">
-                            <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
-                            <input type="text" id="update-srp-baru-{{ $pd->id }}" data-id="{{ $pd->id }}" class="update-srp-baru rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($pd->srp, 0, ',', '.') }}">
-                        </div>
-                    </td>
-                    <td class="px-6 py-2">
-                        <div class="flex">
-                            <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
-                            <input type="text" class="update-srp-baru rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($pd->harga_promo, 0, ',', '.') }}" disabled>
-                        </div>
-                    </td>
-                    <td class="px-6 py-2">
-                        <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'orange') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
-                    </td>
-                    <td class="px-6 py-2">
-                        @if ($pd->status == 'Promo')
-                            <div class="flex flex-col justify-center items-center font-semibold">
-                                <span>{{ \Carbon\Carbon::parse($pd->start_promo)->format('d/m/Y') }}</span>
-                                <span>-</span>
-                                <span>{{ \Carbon\Carbon::parse($pd->end_promo)->format('d/m/Y') }}</span>
+                        </td>
+                        <td class="px-6 py-2">
+                            <button id="dropdownListDroneBaruButton{{ $pd->id }}" data-dropdown-toggle="dropdownListDroneBaru{{ $pd->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </button>
+    
+                            <!-- Dropdown menu -->
+                            <div id="dropdownListDroneBaru{{ $pd->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                                <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListDroneBaruButton{{ $pd->id }}">
+                                    <li>
+                                        <button type="button" data-modal-target="view-detail-produk{{ $pd->id }}" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <i class="material-symbols-outlined text-base mr-3">visibility</i>
+                                            <span class="whitespace-nowrap">Detail Produk</span>
+                                        </button>
+                                    </li>
+                                    @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
+                                        <li>
+                                            <button type="button" data-modal-target="promo-produk{{ $pd->id }}" data-modal-toggle="promo-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <i class="material-symbols-outlined text-base mr-3">sell</i>
+                                                <span class="whitespace-nowrap">Promo</span>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" data-id="{{ $pd->id }}" data-modal-target="edit-produk{{ $pd->id }}" data-modal-toggle="edit-produk{{ $pd->id }}" class="edit-list-produk-baru flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <i class="material-symbols-outlined text-base mr-3">edit</i>
+                                                <span class="whitespace-nowrap">Edit</span>
+                                            </button>
+                                        </li>
+                                        {{-- <li>
+                                            <button type="button" data-modal-target="delete-produk{{ $pd->id }}" data-modal-toggle="delete-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                                <i class="material-symbols-outlined text-base mr-3">delete</i>
+                                                <span class="whitespace-nowrap">Hapus Produk</span>
+                                            </button>
+                                        </li> --}}
+                                    @endif
+                                </ul>
                             </div>
-                        @endif
-                    </td>
-                    <td class="px-6 py-2">
-                        <button id="dropdownListDroneBaruButton{{ $pd->id }}" data-dropdown-toggle="dropdownListDroneBaru{{ $pd->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                        </button>
-
-                        <!-- Dropdown menu -->
-                        <div id="dropdownListDroneBaru{{ $pd->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListDroneBaruButton{{ $pd->id }}">
-                                <li>
-                                    <button type="button" data-modal-target="view-detail-produk{{ $pd->id }}" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <i class="material-symbols-outlined text-base mr-3">visibility</i>
-                                        <span class="whitespace-nowrap">Detail Produk</span>
-                                    </button>
-                                </li>
-                                @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
-                                    <li>
-                                        <button type="button" data-modal-target="promo-produk{{ $pd->id }}" data-modal-toggle="promo-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base mr-3">sell</i>
-                                            <span class="whitespace-nowrap">Promo</span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button type="button" data-id="{{ $pd->id }}" data-modal-target="edit-produk{{ $pd->id }}" data-modal-toggle="edit-produk{{ $pd->id }}" class="edit-list-produk-baru flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base mr-3">edit</i>
-                                            <span class="whitespace-nowrap">Edit</span>
-                                        </button>
-                                    </li>
-                                    {{-- <li>
-                                        <button type="button" data-modal-target="delete-produk{{ $pd->id }}" data-modal-toggle="delete-produk{{ $pd->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                            <i class="material-symbols-outlined text-base mr-3">delete</i>
-                                            <span class="whitespace-nowrap">Hapus Produk</span>
-                                        </button>
-                                    </li> --}}
-                                @endif
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         <div class="mt-4 ">
             {{ $produks->links() }}
         </div>

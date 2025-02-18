@@ -50,69 +50,71 @@
     </div>
     
     <div class="relative">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3" style="width: 35%;">
-                        Paket Penjualan
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 16%">
-                        Serial Number
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 5%">
-                        CC Produk
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 20%">
-                        Harga Jual Produk
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 10%">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 20%">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($produkseconds as $key => $pd)
-                <tr class="bg-white border-b hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
-                    <td class="px-6 py-2">
-                        {{ $pd->subjenis->paket_penjualan }}
-                    </td>
-                    <td class="px-6 py-2">
-                        {{ $pd->serial_number }}
-                    </td>
-                    <td class="px-6 py-2">
-                        {{ $pd->cc_produk_second }}
-                    </td>
-                    <td class="px-6 py-2">
-                        <div class="flex">
-                            <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
-                            <input type="text" id="srp-daftar-produk-second-{{ $pd->id }}" data-id="{{ $pd->id }}" class="srp-daftar-produk-second rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($pd->srp, 0, ',', '.') }}">
-                        </div>
-                    </td>
-                    <td class="px-6 py-2">
-                        <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
-                    </td>
-                    <td class="px-6 py-2">
-                        {{-- <div class="flex flex-wrap">
-                            <button type="button" data-modal-target="view-detail-produk" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                <i class="material-symbols-outlined text-base">visibility</i>
-                            </button>
-                            @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
-                                <button type="button" data-modal-target="update-produk" data-modal-toggle="update-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">edit</i>
+        <div class="overflow-y-auto h-[580px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3" style="width: 35%;">
+                            Paket Penjualan
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 16%">
+                            Serial Number
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 5%">
+                            CC Produk
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 20%">
+                            Harga Jual Produk
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 10%">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 20%">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($produkseconds as $key => $pd)
+                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
+                        <td class="px-6 py-2">
+                            {{ $pd->subjenis->paket_penjualan }}
+                        </td>
+                        <td class="px-6 py-2">
+                            {{ $pd->serial_number }}
+                        </td>
+                        <td class="px-6 py-2">
+                            {{ $pd->cc_produk_second }}
+                        </td>
+                        <td class="px-6 py-2">
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
+                                <input type="text" id="srp-daftar-produk-second-{{ $pd->id }}" data-id="{{ $pd->id }}" class="srp-daftar-produk-second rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($pd->srp, 0, ',', '.') }}">
+                            </div>
+                        </td>
+                        <td class="px-6 py-2">
+                            <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
+                        </td>
+                        <td class="px-6 py-2">
+                            {{-- <div class="flex flex-wrap">
+                                <button type="button" data-modal-target="view-detail-produk" data-modal-toggle="view-detail-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                    <i class="material-symbols-outlined text-base">visibility</i>
                                 </button>
-                                <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base">delete</i>
-                                </button>
-                            @endif
-                        </div> --}}
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                                @if (auth()->user()->is_admin === 1 || auth()->user()->is_admin === 2)
+                                    <button type="button" data-modal-target="update-produk" data-modal-toggle="update-produk{{ $pd->id }}" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">edit</i>
+                                    </button>
+                                    <button type="button" class="text-gray-400 hover:text-gray-800 mx-2 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base">delete</i>
+                                    </button>
+                                @endif
+                            </div> --}}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         <div class="mt-4 ">
             {{-- {{ $dataCustomer->links() }} --}}
         </div>
