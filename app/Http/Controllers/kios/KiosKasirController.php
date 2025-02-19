@@ -318,6 +318,16 @@ class KiosKasirController extends Controller
                         $detailTransaksi->support_supplier = 0;
 
                         $dataProdukBekas->update(['status' => 'Sold']);
+                    } elseif ($jenisTransaksi == 'drone_bnob') {
+                        $totalHargaKiosBaru += $srp;
+                        $dataProdukBnob = KiosProdukBnob::find($serialNumber);
+                        $modalKiosBaru += $dataProdukBnob->modal_bnob;
+
+                        $detailTransaksi->harga_jual = $srp;
+                        $detailTransaksi->harga_promo = 0;
+                        $detailTransaksi->support_supplier = 0;
+
+                        $dataProdukBnob->update(['status' => 'Sold']);
                     }
 
                     $detailTransaksi->save();
