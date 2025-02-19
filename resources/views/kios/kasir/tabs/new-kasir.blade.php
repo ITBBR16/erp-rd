@@ -297,6 +297,7 @@
                                 <select name="jenis_transaksi[]" x-model="item.jenisTransaksi" @change="$store.kasirForm.fetchItemOptions(item)" class="jenis_produk bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="" hidden>Pilih Jenis Transaksi</option>
                                     <option value="drone_baru">Drone Baru</option>
+                                    <option value="drone_bnob">Drone Baru BNOB</option>
                                     <option value="drone_bekas">Drone Bekas</option>
                                     <option value="part_baru">Part Baru</option>
                                     <option value="part_bekas">Part Bekas</option>

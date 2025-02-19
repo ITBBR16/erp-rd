@@ -172,6 +172,13 @@ document.addEventListener('alpine:init', () => {
                         value: sn.id
                     }));
 
+                } else if (item.jenisTransaksi == 'drone_bnob') {
+
+                    item.kasirSnOptions = data.data_sn.map(sn => ({
+                        label: sn.serial_number,
+                        value: sn.id
+                    }));
+
                 }
 
             } catch (error) {
@@ -183,6 +190,17 @@ document.addEventListener('alpine:init', () => {
             return new Promise((resolve, reject) => {
                 if (item.jenisTransaksi === 'drone_bekas' && option !== '') {
                     fetch(`/kios/kasir/getNilaiDroneSecond/${option}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            item.kasirHarga = formatRupiah(data.nilai);
+                            resolve();
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                            reject(error);
+                        });
+                } else if (item.jenisTransaksi === 'drone_bnob' && option !== '') {
+                    fetch(`/kios/kasir/get-nilai-bnob/${option}`)
                         .then(response => response.json())
                         .then(data => {
                             item.kasirHarga = formatRupiah(data.nilai);

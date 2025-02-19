@@ -208,6 +208,7 @@ Route::middleware('kios')->group(function () {
 
             Route::group(['controller' => KiosSplitDroneBaruController::class], function () {
                 Route::resource('/split-produk-baru', KiosSplitDroneBaruController::class)->only(['index', 'store']);
+                Route::post('/create-paket-bnob', 'createPaketPenjualanBnob')->name('createbnob');
                 Route::get('/get-sn-split/{id}', 'getSnSplit');
                 Route::get('/get-kelengkapan-split/{id}/{idSn}', 'getKelengkapanSplitBaru');
                 Route::get('/get-kelengkapan-bnob', 'getKelengkapanSplitBnob');
@@ -225,6 +226,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/autocomplete/{jenisTransaksi}', 'autocomplete');
                 Route::get('/getSerialNumber/{jenisTransaksi}/{id}', 'getSerialNumber');
                 Route::get('/getNilaiDroneSecond/{id}', 'getNilaiDroneSecond');
+                Route::get('/get-nilai-bnob/{id}', 'getNilaiBnob');
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
                 Route::get('/generate-pdf', 'previewPdfKasir');
             });

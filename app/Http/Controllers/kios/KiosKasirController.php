@@ -16,6 +16,7 @@ use App\Models\ekspedisi\Ekspedisi;
 use App\Models\gudang\GudangProduk;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\kios\KiosProdukBnob;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
@@ -509,6 +510,9 @@ class KiosKasirController extends Controller
         } elseif($jenisTransaksi == 'drone_bekas') {
             $nilai = KiosProdukSecond::where('sub_jenis_id', $id)->value('srp');
             $dataSN = KiosProdukSecond::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
+        } elseif ($jenisTransaksi == 'drone_bnob') {
+            $nilai = KiosProdukBnob::where('sub_jenis_id', $id)->value('srp');
+            $dataSN = KiosProdukBnob::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
         } elseif ($jenisTransaksi == 'part_baru' || $jenisTransaksi == 'part_bekas') {
             $dataGudangEstimasi = $this->estimasiPart
                 ->where('gudang_produk_id', $id)
@@ -573,6 +577,12 @@ class KiosKasirController extends Controller
     {
         $nilai = KiosProdukSecond::where('id', $id)->where('status', 'Ready')->value('srp');
 
+        return response()->json(['nilai' => $nilai]);
+    }
+
+    public function getNilaiBnob($id)
+    {
+        $nilai = KiosProdukBnob::where('id', $id)->where('status', 'Ready')->value('srp');
         return response()->json(['nilai' => $nilai]);
     }
 

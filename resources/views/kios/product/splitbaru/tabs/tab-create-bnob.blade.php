@@ -1,5 +1,5 @@
 <div class="hidden p-4" id="createBnob" role="tabpanel" aria-labelledby="createBnob-tab">
-    <form action="{{ route('split-produk-baru.index') }}" method="POST" autocomplete="off">
+    <form action="{{ route('createbnob') }}" method="POST" autocomplete="off">
         @csrf
         <div class="grid grid-cols-3">
             <div class="col-span-2">
