@@ -122,12 +122,11 @@ class KiosSplitDroneBaruController extends Controller
             $snBnob = $request->input('sn_bnob');
 
             foreach ($snBnob as $sn) {
-                $findKelengkapanSplit = KiosListKelengkapanSplit::find($sn);
                 $dataUpdate = [
                     'kios_produk_bnob_id' => $produkBnob->id,
                     'status' => 'On Sell'
                 ];
-                $findKelengkapanSplit->update($sn, $dataUpdate);
+                KiosListKelengkapanSplit::find($sn)->update($dataUpdate);
             }
 
             $connectionKios->commit();
