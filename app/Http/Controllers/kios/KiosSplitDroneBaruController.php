@@ -67,6 +67,7 @@ class KiosSplitDroneBaruController extends Controller
             $connectionKios->beginTransaction();
 
             $employeeId = auth()->user()->id;
+            $paketPenjualanId = $request->input('paket_penjualan_awal_split');
             $serialNumberAwal = $request->input('sn_awal_split');
             $kelengkapanId = $request->input('id_kelengkapan');
             $serialNumberBaru = $request->input('serial_number');
@@ -89,6 +90,14 @@ class KiosSplitDroneBaruController extends Controller
             }
 
             KiosSerialNumber::find($serialNumberAwal)->update(['status' => 'Split']);
+
+            $cekReadySN = KiosSerialNumber::where('produk_id', $paketPenjualanId)
+                            ->where('status', 'Ready')
+                            ->exists();
+
+            if (!$cekReadySN) {
+                KiosProduk::where('id', $paketPenjualanId)->update(['status' => 'Not Ready']);
+            }
 
             $connectionKios->commit();
             return back()->with('success', 'Berhasil melakukan split produk baru.');

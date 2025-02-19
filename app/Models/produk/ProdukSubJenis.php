@@ -9,6 +9,7 @@ use App\Models\kios\KiosDailyRecap;
 use App\Models\kios\KiosImageProduk;
 use App\Models\kios\KiosImageSecond;
 use App\Models\kios\KiosOrderSecond;
+use App\Models\kios\KiosProdukBnob;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosWTB;
 use App\Models\kios\KiosWTS;
@@ -72,6 +73,11 @@ class ProdukSubJenis extends Model
     public function kiosproduksecond()
     {
         return $this->hasMany(KiosProdukSecond::class, 'sub_jenis_id');
+    }
+
+    public function kiosProdukBnob()
+    {
+        return $this->hasMany(KiosProdukBnob::class, 'sub_jenis_id');
     }
 
     public function produktype()
