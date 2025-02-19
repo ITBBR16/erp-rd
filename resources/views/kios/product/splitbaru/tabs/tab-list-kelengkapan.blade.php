@@ -34,27 +34,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @foreach ($dataIncoming as $data) --}}
+                    @foreach ($dataKelengkapanSplit as $data)
                         <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <th class="px-6 py-2">
-                                {{-- {{ \Carbon\Carbon::parse($data->updated_at)->isoFormat('D MMMM YYYY') }} --}}
+                                {{ \Carbon\Carbon::parse($data->updated_at)->isoFormat('D MMMM YYYY') }}
                             </th>
                             <td class="px-6 py-2">
-                                
+                                {{ $data->kelengkapanProduk->kelengkapan }}
                             </td>
                             <td class="px-6 py-2">
-                                
+                                {{ $data->serial_number_split }}
                             </td>
                             <td class="px-6 py-2">
-                                {{-- <span class="bg-orange-400 rounded-md px-2 py-0 text-white">{{ $data->status }}</span> --}}
+                                <span class="bg-green-400 rounded-md px-2 py-0 text-white">{{ $data->status }}</span>
                             </td>
                         </tr>
-                    {{-- @endforeach --}}
+                    @endforeach
                 </tbody>
             </table>
         </div>
         <div class="mt-4 ">
-            {{-- {{ $suppliers->links() }} --}}
+            {{-- {{ $kelengkapanSplit->links() }} --}}
         </div>
     </div>
 </div>

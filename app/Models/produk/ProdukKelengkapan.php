@@ -2,6 +2,7 @@
 
 namespace App\Models\produk;
 
+use App\Models\kios\KiosListKelengkapanSplit;
 use App\Models\produk\ProdukJenis;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\produk\ProdukSubJenis;
@@ -45,6 +46,11 @@ class ProdukKelengkapan extends Model
     public function kiosKelengkapanSecond()
     {
         return $this->hasMany(KiosKelengkapanSecondList::class, 'produk_kelengkapan_id');
+    }
+
+    public function kiosKelengkapanSplit()
+    {
+        return $this->hasMany(KiosListKelengkapanSplit::class);
     }
 
 }

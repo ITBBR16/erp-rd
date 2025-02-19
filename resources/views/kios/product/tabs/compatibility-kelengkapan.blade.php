@@ -21,19 +21,19 @@
                 <div id="edit-kelengkapan-form-1" class="grid grid-cols-4 gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="edit_kelengkapan_produk"></label>
-                        <select name="edit_kelengkapan_produk[]" id="edit_kelengkapan_produk" data-id="1" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                            <option value="" hidden>-- Kelengkapan Produk --</option>
+                        <select name="edit_kelengkapan_produk[]" id="edit_kelengkapan_produk" data-id="1" class="block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                            <option value="" hidden>Kelengkapan Produk</option>
                             @foreach ($kelengkapan as $klp)
-                                <option value="{{ $klp->id }}" class="dark:bg-gray-700">{{ $klp->kelengkapan }}</option>
+                                <option value="{{ $klp->id }}" class="bg-white dark:bg-gray-700">{{ $klp->kelengkapan }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="edit_produk_jenis1"></label>
-                        <select name="edit_produk_jenis[]" id="edit_produk_jenis1" data-id="1" class="edit_produk_jenis block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                            <option value="" hidden>-- Jenis Produk --</option>
+                        <select name="edit_produk_jenis[]" id="edit_produk_jenis1" data-id="1" class="edit_produk_jenis block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                            <option value="" hidden>Jenis Produk</option>
                             @foreach ($jenis_produk as $jp)
-                                <option value="{{ $jp->id }}" class="dark:bg-gray-700">{{ $jp->jenis_produk }}</option>
+                                <option value="{{ $jp->id }}" class="bg-white dark:bg-gray-700">{{ $jp->jenis_produk }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -55,15 +55,15 @@
                 <div id="jenis-kelengkapan">
                     <div id="jenis-kelengkapan-1" class="grid grid-cols-4 gap-4 md:gap-6">
                         <div class="relative z-0 w-full mb-6 group">
-                            <input type="text" name="jenis_kelengkapan[]" id="jenis_kelengkapan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
+                            <input type="text" name="jenis_kelengkapan[]" id="jenis_kelengkapan" class="block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="">
                             <label for="jenis_kelengkapan" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nama Kelengkapan</label>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
                             <label for="produk_jenis1"></label>
-                            <select name="produk_jenis[]" id="produk_jenis1" data-id="1" class="produk_jenis block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                                <option value="" hidden>-- Jenis Produk --</option>
+                            <select name="produk_jenis[]" id="produk_jenis1" data-id="1" class="produk_jenis block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                                <option value="" hidden>Jenis Produk</option>
                                 @foreach ($jenis_produk as $jp)
-                                    <option value="{{ $jp->id }}" class="dark:bg-gray-700">{{ $jp->jenis_produk }}</option>
+                                    <option value="{{ $jp->id }}" class="bg-white dark:bg-gray-700">{{ $jp->jenis_produk }}</option>
                                 @endforeach
                             </select>
                         </div>

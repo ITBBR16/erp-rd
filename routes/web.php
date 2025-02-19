@@ -210,6 +210,9 @@ Route::middleware('kios')->group(function () {
                 Route::resource('/split-produk-baru', KiosSplitDroneBaruController::class)->only(['index', 'store']);
                 Route::get('/get-sn-split/{id}', 'getSnSplit');
                 Route::get('/get-kelengkapan-split/{id}/{idSn}', 'getKelengkapanSplitBaru');
+                Route::get('/get-kelengkapan-bnob', 'getKelengkapanSplitBnob');
+                Route::get('/get-sn-bnob/{id}', 'getSerialNumberSplitBnob');
+                Route::get('/get-modal-bnob/{id}', 'getNominalKelengkapanSplit');
             });
 
             Route::resource('/komplain', KiosKomplainController::class)->only(['index', 'update']);

@@ -9,13 +9,13 @@
                 <div class="grid grid-cols-2 gap-4 md:gap-6">
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="kategori_paket"></label>
-                        <select name="kategori_paket" id="kategori_paket" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_paket') border-red-600 dark:border-red-500 @enderror" required>
-                            <option value="" hidden>-- Kategori Paket --</option>
+                        <select name="kategori_paket" id="kategori_paket" class="block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_paket') border-red-600 dark:border-red-500 @enderror" required>
+                            <option value="" hidden>Kategori Paket</option>
                             @foreach ($types as $type)
                                 @if (old('kategori_paket') == $type->id)
-                                    <option value="{{ $type->id }}" class="dark:bg-gray-700" selected>{{ $type->type }}</option>
+                                    <option value="{{ $type->id }}" class="bg-white dark:bg-gray-700" selected>{{ $type->type }}</option>
                                 @else
-                                    <option value="{{ $type->id }}" class="dark:bg-gray-700">{{ $type->type }}</option>
+                                    <option value="{{ $type->id }}" class="bg-white dark:bg-gray-700">{{ $type->type }}</option>
                                 @endif
                             @endforeach
                         </select>
@@ -25,13 +25,13 @@
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
                         <label for="jenis_id"></label>
-                        <select name="jenis_id" id="jenis_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_id') border-red-600 dark:border-red-500 @enderror" required>
-                            <option value="" hidden>-- Jenis Produk --</option>
+                        <select name="jenis_id" id="jenis_id" class="block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('jenis_id') border-red-600 dark:border-red-500 @enderror" required>
+                            <option value="" hidden>Jenis Produk</option>
                             @foreach ($jenis_produk as $jp)
                                 @if (old('jenis_id') == $jp->id)
-                                    <option value="{{ $jp->id }}" class="dark:bg-gray-700" selected>{{ $jp->jenis_produk }}</option>
+                                    <option value="{{ $jp->id }}" class="bg-white dark:bg-gray-700" selected>{{ $jp->jenis_produk }}</option>
                                 @else
-                                    <option value="{{ $jp->id }}" class="dark:bg-gray-700">{{ $jp->jenis_produk }}</option>
+                                    <option value="{{ $jp->id }}" class="bg-white dark:bg-gray-700">{{ $jp->jenis_produk }}</option>
                                 @endif
                             @endforeach
                         </select>
@@ -77,7 +77,7 @@
                         <div class="relative z-0 w-full mb-6 group">
                             <label for="kelengkapan"></label>
                             <select name="kelengkapan[]" id="kelengkapan" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                                <option value="" hidden>-- Kelengkapan Produk --</option>
+                                <option value="" hidden>Kelengkapan Produk</option>
                             </select>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">

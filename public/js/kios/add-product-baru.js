@@ -17,7 +17,7 @@ $(document).ready(function(){
                     kelengkapanSelect.html('');
 
                     const defaultOption = $('<option>', {
-                        text: '-- Kelengkapan Produk --',
+                        text: 'Kelengkapan Produk',
                         hidden: true
                     });
                     kelengkapanSelect.append(defaultOption);
@@ -45,8 +45,8 @@ $(document).ready(function(){
             <div id="form-kelengkapan-dd-${nomorKelengkapan}" class="grid grid-cols-3 gap-4 md:gap-6 mt-5">
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="kelengkapan"></label>
-                    <select name="kelengkapan[]" id="kelengkapan-${nomorKelengkapan}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                        <option value="" hidden>-- Kelengkapan Produk --</option>
+                    <select name="kelengkapan[]" id="kelengkapan-${nomorKelengkapan}" class="block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-white dark:border-gray-700 dark:bg-gray-800 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                        <option value="" hidden>Kelengkapan Produk</option>
                     </select>
                 </div>
                 <div class="relative z-0 w-full mb-6 group">
@@ -71,7 +71,7 @@ $(document).ready(function(){
                     $('#kelengkapan-' + nomorKelengkapan).html('');
 
                     const defaultOption = $('<option>', {
-                        text: '-- Kelengkapan Produk --',
+                        text: 'Kelengkapan Produk',
                         hidden: true
                     });
                     $('#kelengkapan-' + nomorKelengkapan).append(defaultOption);
@@ -109,10 +109,10 @@ $(document).ready(function(){
                 </div>
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="produk_jenis${kelengkapanCount}"></label>
-                    <select name="produk_jenis[]" id="produk_jenis${kelengkapanCount}" data-id="${kelengkapanCount}" class="produk_jenis block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                        <option value="" hidden>-- Jenis Produk --</option>`;
+                    <select name="produk_jenis[]" id="produk_jenis${kelengkapanCount}" data-id="${kelengkapanCount}" class="produk_jenis block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                        <option value="" hidden>Jenis Produk</option>`;
                         jenisProduk.forEach(function(item) {
-                            addKelengkapanForm += `<option value="${item.id}" class="dark:bg-gray-700">${item.jenis_produk}</option>`;
+                            addKelengkapanForm += `<option value="${item.id}" class="bg-white dark:bg-gray-700">${item.jenis_produk}</option>`;
                         });
                         addKelengkapanForm += `
                     </select>
@@ -140,20 +140,20 @@ $(document).ready(function(){
             <div id="edit-kelengkapan-form-${kelengkapanCount}" class="grid grid-cols-4 gap-4 md:gap-6">
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="edit_kelengkapan_produk${kelengkapanCount}"></label>
-                    <select name="edit_kelengkapan_produk[]" id="edit_kelengkapan_produk${kelengkapanCount}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                        <option value="" hidden>-- Kelengkapan Produk --</option>`;
+                    <select name="edit_kelengkapan_produk[]" id="edit_kelengkapan_produk${kelengkapanCount}" class="block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                        <option value="" hidden>Kelengkapan Produk</option>`;
                         kelengkapanProduk.forEach(function(item) {
-                            editKelengkapanForm += `<option value="${item.id}" class="dark:bg-gray-700">${item.kelengkapan}</option>`;
+                            editKelengkapanForm += `<option value="${item.id}" class="bg-white dark:bg-gray-700">${item.kelengkapan}</option>`;
                         });
                         editKelengkapanForm += `
                     </select>
                 </div>
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="edit_produk_jenis${kelengkapanCount}"></label>
-                    <select name="edit_produk_jenis[]" id="edit_produk_jenis${kelengkapanCount}" data-id="${kelengkapanCount}" class="edit_produk_jenis block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                        <option value="" hidden>-- Jenis Produk --</option>`;
+                    <select name="edit_produk_jenis[]" id="edit_produk_jenis${kelengkapanCount}" data-id="${kelengkapanCount}" class="edit_produk_jenis block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                        <option value="" hidden>Jenis Produk</option>`;
                         jenisProduk.forEach(function(item) {
-                            editKelengkapanForm += `<option value="${item.id}" class="dark:bg-gray-700">${item.jenis_produk}</option>`;
+                            editKelengkapanForm += `<option value="${item.id}" class="bg-white dark:bg-gray-700">${item.jenis_produk}</option>`;
                         });
                         editKelengkapanForm += `
                     </select>

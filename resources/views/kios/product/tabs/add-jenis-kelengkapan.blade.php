@@ -6,10 +6,10 @@
                 <h3 class="text-gray-900 font-semibold text-lg mb-3 dark:text-white dark:border-gray-200">Add Jenis Produk : </h3>
                 <div class="relative z-0 w-full mb-6 group">
                     <label for="kategori_id"></label>
-                    <select name="kategori_id" id="kategori_id" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_id') border-red-600 dark:border-red-500 @enderror" required>
-                        <option value="" hidden>-- Kategori Produk --</option>
+                    <select name="kategori_id" id="kategori_id" class="block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('kategori_id') border-red-600 dark:border-red-500 @enderror" required>
+                        <option value="" hidden>Kategori Produk</option>
                         @foreach ($kategori as $ktg)
-                            <option value="{{ $ktg->id }}" class="dark:bg-gray-700">{{ $ktg->nama }}</option>
+                            <option value="{{ $ktg->id }}" class="bg-white dark:bg-gray-700">{{ $ktg->nama }}</option>
                         @endforeach
                     </select>
                     @error('kategori_id')
@@ -17,7 +17,7 @@
                     @enderror
                 </div>
                 <div class="relative z-0 w-full mb-6 group">
-                    <input type="text" name="jenis_produk" id="jenis_produk" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
+                    <input type="text" name="jenis_produk" id="jenis_produk" class="block py-2.5 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" required>
                     <label for="jenis_produk" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jenis Produk</label>
                     @error('jenis_produk')
                         <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>

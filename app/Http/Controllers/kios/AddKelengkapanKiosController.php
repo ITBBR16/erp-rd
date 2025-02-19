@@ -59,8 +59,6 @@ class AddKelengkapanKiosController extends Controller
                     'jenis_produk' => ['required', Rule::unique('rumahdrone_produk.produk_jenis', 'jenis_produk')],
                 ]);
 
-                $validate['jenis_produk'] = strtoupper($validate['jenis_produk']);
-
                 ProdukJenis::create($validate);
 
                 $connectionProduk->commit();
@@ -89,7 +87,7 @@ class AddKelengkapanKiosController extends Controller
                     ]);
 
                     $jenisKelengkapan = collect($request->jenis_kelengkapan)->map(function ($jk) {
-                        return ['kelengkapan' => ucwords(strtolower($jk))];
+                        return ['kelengkapan' => $jk];
                     });
 
                     $jenisKelengkapan->each(function ($kelengkapan, $index) use ($request) {
@@ -134,8 +132,6 @@ class AddKelengkapanKiosController extends Controller
                     'file_paket_produk' => 'image|mimes:jpeg,png,jpg',
                     'file_kelengkapan_produk.*' => 'image|mimes:jpeg,png,jpg',
                 ]);
-    
-                $validatePenjualan['paket_penjualan'] = strtoupper($validatePenjualan['paket_penjualan']);
     
                 $produkJenis = ProdukSubJenis::create([
                     'jenis_id' => $request->jenis_id,

@@ -29,19 +29,19 @@
                                         <div class="grid grid-cols-2 gap-2 text-[10px] mb-3">
                                             <div>
                                                 <p class="text-gray-700 dark:text-gray-300">Nama Customer</p>
-                                                <h3 class="font-semibold dark:text-white">{{ $case->customer->first_name }} {{ $case->customer->last_name }}</h3>
+                                                <h3 class="font-semibold text-black dark:text-white">{{ $case->customer->first_name }} {{ $case->customer->last_name }}</h3>
                                             </div>
                                             <div>
                                                 <p class="text-gray-700 dark:text-gray-300">No Telpon</p>
-                                                <h3 class="font-semibold dark:text-white">{{ $case->customer->no_telpon }}</h3>
+                                                <h3 class="font-semibold text-black dark:text-white">{{ $case->customer->no_telpon }}</h3>
                                             </div>
                                             <div>
                                                 <p class="text-gray-700 dark:text-gray-300">Jenis Drone</p>
-                                                <h3 class="font-semibold dark:text-white">{{ $case->jenisProduk->jenis_produk }}</h3>
+                                                <h3 class="font-semibold text-black dark:text-white">{{ $case->jenisProduk->jenis_produk }}</h3>
                                             </div>
                                             <div>
                                                 <p class="text-gray-700 dark:text-gray-300">Kota</p>
-                                                <h3 class="font-semibold dark:text-white">{{ $case->customer->kota->name ?? '' }}</h3>
+                                                <h3 class="font-semibold text-black dark:text-white">{{ $case->customer->kota->name ?? '' }}</h3>
                                             </div>
                                         </div>
                                         <!-- Body -->

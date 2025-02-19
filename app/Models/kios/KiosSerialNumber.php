@@ -29,4 +29,9 @@ class KiosSerialNumber extends Model
         return $this->hasOne(KiosTransaksiDetail::class);
     }
 
+    public function listKelengkapanSplit()
+    {
+        return $this->hasMany(KiosListKelengkapanSplit::class);
+    }
+
 }
