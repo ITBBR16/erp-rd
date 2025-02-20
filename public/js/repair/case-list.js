@@ -1,6 +1,7 @@
 $(document).ready(function () {
     const caseContainer = $("#container-data-kelengkapan-case");
     let formLength = 1;
+    var formEditLength = 20;
 
     // For new case
     $("#add-kelengkapan-case").on("click", function () {
@@ -44,7 +45,7 @@ $(document).ready(function () {
             alert('Pilih jenis produk dulu.');
         }
 
-    })
+    });
 
     $(document).on('jenis-drone-changed', (e) => {
         const jenisProduk = e.originalEvent.detail.id;
@@ -69,6 +70,53 @@ $(document).ready(function () {
 
         var parsedNumber = parseInt(inputNumber, 10);
         $(this).val(parsedNumber);
+    });
+
+    // For edit case
+    $("#add-kelengkapan-edit-case").on("click", function () {
+        const jenisProduk = $("#case-jenis-drone-edit").val();
+        var statusTambah = "Tambah Kelengkapan";
+        var containerEdit = $('#container-data-edit-kelengkapan-case');
+
+        formEditLength++
+        let itemForm = `
+            <div id="form-data-kelengkapan-edit-case-${formEditLength}" class="form-data-kelengkapan-edit-case grid grid-cols-4 gap-4 mt-5">
+                <div>
+                    <label for="case-kelengkapan-${formEditLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Kelengkapan :</label>
+                    <select name="case_kelengkapan[]" id="case-kelengkapan-${formEditLength}" class="dd-kelengkapan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <option value="" hidden>Select Kelengkapan</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="case-quantity-${formEditLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Quantity : </label>
+                    <input type="text" name="case_quantity[]" id="case-quantity-${formEditLength}" class="format-number bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
+                </div>
+                <div>
+                    <label for="case-sn-${formEditLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Serial Number : </label>
+                    <input type="text" name="case_sn[]" id="case-sn-${formEditLength}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="">
+                </div>
+                <div class="grid grid-cols-2" style="grid-template-columns: 5fr 1fr">
+                    <div>
+                        <label for="case-keterangan-${formEditLength}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Keterangan : </label>
+                        <input type="text" name="case_keterangan[]" id="case-keterangan-${formEditLength}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="">
+                    </div>
+                    <div class="flex justify-center items-end pb-1.5">
+                        <button type="button" class="remove-form-dkcs-edit" data-id="${formEditLength}">
+                            <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        containerEdit.append(itemForm);
+        getKelengkapan(jenisProduk, statusTambah, formEditLength);
+
+    });
+
+    $(document).on('click', '.remove-form-dkcs-edit', function () {
+        let formId = $(this).data("id");
+        $("#form-data-kelengkapan-edit-case-"+formId).remove();
     });
 
     function getKelengkapan(jenisProduk, status, id) {

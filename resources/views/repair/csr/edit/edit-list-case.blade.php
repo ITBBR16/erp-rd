@@ -57,10 +57,10 @@
                 </div>
                 <div class="grid grid-cols-3 mb-4">
                     <div class="col-span-1 text-end pr-6">
-                        <label for="case-jenis-drone" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone :</label>
+                        <label for="case-jenis-drone-edit" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone :</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <select name="case_jenis_drone" id="case-jenis-drone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                        <select name="case_jenis_drone" id="case-jenis-drone-edit" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                             <option value="" hidden>Select Jenis Drone</option>
                             @foreach ($jenisDrone as $drone)
                                 @if ($dataCase->produk_jenis_id == $drone->id)
@@ -150,9 +150,9 @@
             <h3 class="text-gray-900 font-semibold text-xl dark:text-white">Data Kelengkapan</h3>
         </div>
         {{-- Form Data Kelengkapan --}}
-        <div id="container-data-kelengkapan-case">
+        <div id="container-data-edit-kelengkapan-case">
             @foreach ($dataCase->detailKelengkapan as $index => $item)
-            <div id="form-data-kelengkapan-case-{{ $index }}" class="grid grid-cols-4 gap-4 mt-5">
+            <div id="form-data-kelengkapan-edit-case-{{ $index }}" class="form-data-kelengkapan-edit-case grid grid-cols-4 gap-4 mt-5">
                     <div>
                         <label for="case-kelengkapan-{{ $index }}" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Kelengkapan :</label>
                         <select name="case_kelengkapan[]" id="case-kelengkapan-{{ $index }}" class="dd-kelengkapan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
@@ -180,7 +180,7 @@
                             <input type="text" name="case_keterangan[]" id="case-keterangan-{{ $index }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" value="{{ $item->keterangan }}">
                         </div>
                         <div class="flex justify-center items-end pb-2">
-                            <button type="button" class="remove-form-dkcs" data-id="{{ $index }}">
+                            <button type="button" class="remove-form-dkcs-edit" data-id="{{ $index }}">
                                 <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                             </button>
                         </div>
@@ -190,7 +190,7 @@
         </div>
         <div class="flex justify-start text-red-500 mt-6">
             <div class="flex cursor-pointer my-2 hover:text-rose-700">
-                <button type="button" id="add-kelengkapan-case" class="flex flex-row justify-between gap-2">
+                <button type="button" id="add-kelengkapan-edit-case" class="flex flex-row justify-between gap-2">
                     <span class="material-symbols-outlined">add_circle</span>
                     <span>Tambah Kelengkapan</span>
                 </button>
