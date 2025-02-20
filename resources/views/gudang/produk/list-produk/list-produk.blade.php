@@ -54,36 +54,33 @@
     </div>
 
     <div class="relative mt-2">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs sticky text-gray-700 uppercase tracking-wider bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3" style="width: 14%;">
-                        SKU
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 30%;">
-                        Nama Sparepart
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 10%;">
-                        Stok
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 13%;">
-                        Harga Internal
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 13%;">
-                        Harga Global
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 10%;">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width: 10%;">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-        </table>
-        <!-- Scrollable body -->
         <div class="overflow-y-auto max-h-[550px]">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase tracking-wider bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3" style="width: 14%;">
+                            SKU
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 30%;">
+                            Nama Sparepart
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 10%;">
+                            Stok
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 13%;">
+                            Harga Internal
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 13%;">
+                            Harga Global
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 10%;">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3" style="width: 10%;">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
                 <tbody>
                     @foreach ($dataProduk as $produk)
                         <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
@@ -91,7 +88,7 @@
                                 @php
                                     $sku = $produk->produkSparepart->produkType->code . "." . $produk->produkSparepart->partModel->code . "." . 
                                             $produk->produkSparepart->produkJenis->code . "." . $produk->produkSparepart->partBagian->code . "." . 
-                                            $produk->produkSparepart->partSubBagian->code . "." . $produk->produkSparepart->produk_part_sifat_id;
+                                            $produk->produkSparepart->partSubBagian->code . "." . $produk->produkSparepart->produk_part_sifat_id . "." . $produk->produkSparepart->id;
                                 @endphp
                                 {{ $sku }}
                             </td>
@@ -162,9 +159,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4 ">
-            {{ $dataProduk->links() }}
-        </div>
+    </div>
+    <div class="mt-4 ">
+        {{ $dataProduk->links() }}
     </div>
     
 

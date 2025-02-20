@@ -36,17 +36,7 @@ class GudangProdukRepository implements GudangProdukInterface
 
     public function getAllProduk()
     {
-        return $this->produk
-                    ->orderByRaw("
-                        CASE 
-                            WHEN status = 'Promo' THEN 1 
-                            WHEN status = 'Ready' THEN 2 
-                            WHEN status = 'Not Ready' THEN 3 
-                            ELSE 4 
-                        END
-                    ")
-                    ->orderBy('updated_at', 'desc')
-                    ->paginate(35);
+        return $this->produk->paginate(70);
     }
     
     public function createProduk(array $data)
