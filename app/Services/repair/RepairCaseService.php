@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
 use App\Models\customer\CustomerInfoPerusahaan;
 use App\Models\management\AkuntanDaftarAkun;
+use App\Models\repair\RepairCase;
 use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
 use App\Repositories\umum\repository\ProdukRepository;
@@ -31,6 +32,7 @@ class RepairCaseService
         private GudangTransactionRepository $transactionGudang,
         private GudangProdukIdItemRepository $idItemGudang,
         private RepairCustomerRepository $customerRepository,
+        private RepairCase $modelCase,
         private RepairCaseRepository $repairCase,
         private RepairTimeJurnalRepository $repairTimeJurnal,
         private RepairEstimasiRepository $estimasi,
@@ -385,7 +387,11 @@ class RepairCaseService
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
         $caseService = $this->getDataDropdown();
-        $dataCase = $caseService['data_case']->sortByDesc('updated_at');
+        $dataCase = $caseService['data_case']
+                    ->filter(function ($case) {
+                        return $case->jenisStatus->jenis_status == 'Proses Konfirmasi Hasil QC';
+                    })
+                    ->sortByDesc('updated_at');
 
         return view('repair.csr.konfirmasi-qc', [
             'title' => 'Konfirmasi QC',
@@ -513,7 +519,16 @@ class RepairCaseService
         $dataProvinsi = $this->customerRepository->getProvinsi();
         $caseService = $this->getDataDropdown();
         $dataEkspedisi = $this->ekspedisi->getDataEkspedisi();
-        $dataCase = $caseService['data_case']->sortByDesc('updated_at');
+        $dataCaseBelumLunas = $caseService['data_case']
+                            ->filter(function ($case) {
+                                return $case->jenisStatus->jenis_status == 'Proses Menunggu Pembayaran (Lanjut)';
+                            })
+                            ->sortByDesc('updated_at');
+        $dataCaseLunas = $this->modelCase->whereHas('jenisStatus', function ($query) {
+                                $query->where('jenis_status', 'Close Case (Done)');
+                            })
+                            ->orderByDesc('updated_at')
+                            ->paginate(70);
 
         return view('repair.csr.kasir-repair', [
             'title' => 'List Kasir Repair',
@@ -522,7 +537,8 @@ class RepairCaseService
             'dropdown' => '',
             'divisi' => $divisiName,
             'dataProvinsi' => $dataProvinsi,
-            'dataCase' => $dataCase,
+            'dataCaseBelumLunas' => $dataCaseBelumLunas,
+            'dataCaseLunas' => $dataCaseLunas,
             'dataEkspedisi' => $dataEkspedisi,
         ]);
     }

@@ -39,4 +39,22 @@ $(document).ready(function(){
             });
         }
     });
+
+    $('.search-input-repair').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        const targetTable = $(this).data('target');
+        const $rows = $('#' + targetTable + ' tbody tr');
+
+        $rows.each(function() {
+            const customerName = $(this).find('.customer-name').text().toLowerCase();
+            if (customerName.includes(searchTerm)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+
+    });
+
+
 });

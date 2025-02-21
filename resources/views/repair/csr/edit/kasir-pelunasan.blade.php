@@ -15,7 +15,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
                     <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Lunas {{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}-{{ $dataCase->customer->id }}-{{ $dataCase->id }} 
-                        @if ($dataCase->estimasi->estimasiPart && $dataCase->estimasi->estimasiPart->whereNull('tanggal_dikirim')->isNotEmpty())
+                        @if ($dataCase->estimasi->estimasiPart && $dataCase->estimasi->estimasiPart->where('status', 'Active')->whereNull('tanggal_dikirim')->isNotEmpty())
                             <span class="text-sm ml-2 text-red-500 bg-red-100 px-2 py-1 rounded-full">
                                 Terdapat Sparepart Belum Dikirim
                             </span>
