@@ -455,7 +455,6 @@ $(document).ready(function () {
             statusBox.text('Overpay')
                 .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300')
                 .addClass('bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300');
-            $('#form-kelebihan').show();
             $('#form-pembayaran-lebih').show();
             $('#btn-kasir-lunas-repair').addClass('cursor-not-allowed').prop('disabled', true);
         } else {

@@ -426,13 +426,14 @@ $(document).ready(function(){
                 .addClass('bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300');
 
             $('#btn-kasir-lunas').removeClass('cursor-not-allowed').removeAttr('disabled');
+
             if (!nominalDikembalikan && nominalDikembalikan !== 0 || 
                 !nominalPll && nominalPll !== 0 || 
                 !nominalSaveSaldoCustomer && nominalSaveSaldoCustomer !== 0) {
-                $('#form-kelebihan').hide();
-                $('#kasir-dikembalikan').val(0);
-                $('#kasir-pll').val(0);
-                $('#kasir-sc').val(0);
+                    $('#form-kelebihan').hide();
+                    $('#kasir-dikembalikan').val(0);
+                    $('#kasir-pll').val(0);
+                    $('#kasir-sc').val(0);
             }
 
         } else if (totalTagihanCustomer < totalPembayaranCustomer) {
@@ -440,9 +441,6 @@ $(document).ready(function(){
                 .removeClass('bg-rose-100 text-rose-700 dark:bg-rose-800 dark:text-rose-300 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-300')
                 .addClass('bg-orange-100 text-orange-700 dark:bg-orange-800 dark:text-orange-300');
             $('#form-kelebihan').show();
-            $('#kasir-dikembalikan').val(0);
-            $('#kasir-pll').val(0);
-            $('#kasir-sc').val(0);
             $('#btn-kasir-lunas').addClass('cursor-not-allowed').prop('disabled', true);
         } else {
             statusBox.text('Not Pass')
