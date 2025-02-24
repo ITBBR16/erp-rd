@@ -35,6 +35,13 @@
     <div id="print-label-container" class="flex flex-wrap gap-4 items-center justify-center font-bold">
         @foreach ($dataLabel as $item)
             @if ($item->qualityControll->status_validasi == 'Pass')
+                @php
+                    $sku = $item->gudangProduk->produkSparepart->produkType->code . "." . $item->gudangProduk->produkSparepart->partModel->code . "." . 
+                            $item->gudangProduk->produkSparepart->produk_jenis_id . "." . $item->gudangProduk->produkSparepart->partBagian->code . "." . 
+                            $item->gudangProduk->produkSparepart->partSubBagian->code . "." . $item->gudangProduk->produkSparepart->produk_part_sifat_id;
+                    $idItem = "N." . $item->gudang_belanja_id . "." . $item->gudangBelanja->gudang_supplier_id . "." . $item->id;
+                    $forQrCode = $sku . " - " . $idItem;
+                @endphp
                 <div id="print-label-{{ $item->id }}" class="w-full max-w-md border rounded-md shadow-md p-2">
                     <div class="flex p-2 border-b border-black justify-between">
                         <div class="justify-start">
@@ -58,21 +65,16 @@
                                     <label>SKU :</label>
                                 </div>
                                 <div class="text-sm">
-                                    <label>N.{{ $item->gudang_belanja_id }}.{{ $item->gudangBelanja->gudang_supplier_id }}.{{ $item->id }}</label>
+                                    <label>{{ $idItem }}</label>
                                 </div>
                             </div>
                             <div>
-                                @php
-                                    $sku = $item->gudangProduk->produkSparepart->produkType->code . "." . $item->gudangProduk->produkSparepart->partModel->code . "." . 
-                                            $item->gudangProduk->produkSparepart->produk_jenis_id . "." . $item->gudangProduk->produkSparepart->partBagian->code . "." . 
-                                            $item->gudangProduk->produkSparepart->partSubBagian->code . "." . $item->gudangProduk->produkSparepart->produk_part_sifat_id;
-                                @endphp
                                 <p>{{ $sku }}</p>
                             </div>
                         </div>
                         <div class="flex items-center justify-end pr-4">
-                            <div class="h-16 w-16 flex items-center justify-center border border-black">
-                                {!! QrCode::size(200)->generate('Hai Sayang') !!}
+                            <div class="h-16 w-16 flex items-center justify-center">
+                                {!! QrCode::size(200)->generate($forQrCode) !!}
                             </div>
                         </div>
                     </div>
