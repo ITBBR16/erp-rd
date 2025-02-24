@@ -45,57 +45,59 @@
         </div>
     </div>
     <div class="relative shadow-md sm:rounded-lg mt-2 mb-4">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">Ref Gudang</th>
-                    <th scope="col" class="px-6 py-3">Keterangan</th>
-                    <th scope="col" class="px-6 py-3">Nominal</th>
-                    <th scope="col" class="px-6 py-3">Date</th>
-                    <th scope="col" class="px-6 py-3">Status</th>
-                    <th scope="col" class="px-6 py-3">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($reqPayments as $reqPayment)
-                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                        <th class="px-6 py-2">
-                            Gudang-{{ $reqPayment->id }}
-                        </th>
-                        <td scope="row" class="px-6 py-2">
-                            {{ $reqPayment->keterangan }}
-                        </td>
-                        <td class="px-6 py-2">
-                            Rp. {{ number_format($reqPayment->nominal, 0, ',', '.') }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $reqPayment->created_at->format('d M Y') }}
-                        </td>
-                        <td class="px-6 py-2">
-                            <span class="bg-teal-500 rounded-md px-2 py-0 text-white">
-                                {{ $reqPayment->status }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-2">
-                            <button id="dropdownReqPayment{{ $reqPayment }}" data-dropdown-toggle="dropdownRP{{ $reqPayment }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                </svg>
-                            </button>
-                        </td>
+        <div class="overflow-y-auto max-h-[580px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Ref Gudang</th>
+                        <th scope="col" class="px-6 py-3">Keterangan</th>
+                        <th scope="col" class="px-6 py-3">Nominal</th>
+                        <th scope="col" class="px-6 py-3">Date</th>
+                        <th scope="col" class="px-6 py-3">Status</th>
+                        <th scope="col" class="px-6 py-3">Action</th>
                     </tr>
-                    <div id="dropdownRP{{ $reqPayment }}" class="z-10 hidden bg-white rounded-lg shadow w-48 dark:bg-gray-700">
-                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownReqPayment{{ $reqPayment }}">
-                            <li>
-                                <button type="button" data-modal-target="detail-req-payment-{{ $reqPayment->id }}" data-modal-toggle="detail-req-payment-{{ $reqPayment->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">visibility</span>
-                                    <span class="whitespace-nowrap">Detail</span>
+                </thead>
+                <tbody>
+                    @foreach ($reqPayments as $reqPayment)
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <th class="px-6 py-2">
+                                Gudang-{{ $reqPayment->id }}
+                            </th>
+                            <td scope="row" class="px-6 py-2">
+                                {{ $reqPayment->keterangan }}
+                            </td>
+                            <td class="px-6 py-2">
+                                Rp. {{ number_format($reqPayment->nominal, 0, ',', '.') }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $reqPayment->created_at->format('d M Y') }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <span class="bg-teal-500 rounded-md px-2 py-0 text-white">
+                                    {{ $reqPayment->status }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-2">
+                                <button id="dropdownReqPayment{{ $reqPayment }}" data-dropdown-toggle="dropdownRP{{ $reqPayment }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
                                 </button>
-                            </li>
-                        </ul>
-                    </div>
-                @endforeach
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                        <div id="dropdownRP{{ $reqPayment }}" class="z-10 hidden bg-white rounded-lg shadow w-48 dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownReqPayment{{ $reqPayment }}">
+                                <li>
+                                    <button type="button" data-modal-target="detail-req-payment-{{ $reqPayment->id }}" data-modal-toggle="detail-req-payment-{{ $reqPayment->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                        <span class="whitespace-nowrap">Detail</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
     {{-- Modal Req Payment --}}
     @include('gudang.purchasing.modal.add-payment')

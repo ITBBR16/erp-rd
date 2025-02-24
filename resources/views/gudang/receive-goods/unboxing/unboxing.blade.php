@@ -52,82 +52,84 @@
     </div>
 
     <div class="relative">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Order ID
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Supplier
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Invoice
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        No Resi
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Tanggal Dikirim
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($dataUnboxing as $unboxing)
-                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                        <th class="px-6 py-2">
-                            N.{{ $unboxing->gudang_belanja_id }}
+        <div class="overflow-y-auto max-h-[580px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Order ID
                         </th>
-                        <td class="px-6 py-2">
-                            {{ $unboxing->gudangBelanja->gudangSupplier->nama }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $unboxing->gudangBelanja->invoice }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $unboxing->gudangPengiriman->no_resi }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ \Carbon\Carbon::parse($unboxing->gudangPengiriman->tanggal_pengiriman)->format('d M Y') }}
-                        </td>
-                        <td class="px-6 py-2">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $unboxing->status }}</span>
-                        </td>
-                        <td class="px-6 py-2">
-                            <button id="dropdownListUnboxing{{ $unboxing->id }}" data-dropdown-toggle="dropdownLU{{ $unboxing->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                </svg>
-                            </button>
-                        </td>
+                        <th scope="col" class="px-6 py-3">
+                            Supplier
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Invoice
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            No Resi
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tanggal Dikirim
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
                     </tr>
-                    <!-- Dropdown menu -->
-                    <div id="dropdownLU{{ $unboxing->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListUnboxing{{ $unboxing->id }}">
-                            <li>
-                                <button type="button" data-modal-target="detail-unboxing-{{ $unboxing->id }}" data-modal-toggle="detail-unboxing-{{ $unboxing->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">visibility</span>
-                                    <span class="whitespace-nowrap">Detail</span>
+                </thead>
+                <tbody>
+                    @foreach ($dataUnboxing as $unboxing)
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <th class="px-6 py-2">
+                                N.{{ $unboxing->gudang_belanja_id }}
+                            </th>
+                            <td class="px-6 py-2">
+                                {{ $unboxing->gudangBelanja->gudangSupplier->nama }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $unboxing->gudangBelanja->invoice }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $unboxing->gudangPengiriman->no_resi }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ \Carbon\Carbon::parse($unboxing->gudangPengiriman->tanggal_pengiriman)->format('d M Y') }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $unboxing->status }}</span>
+                            </td>
+                            <td class="px-6 py-2">
+                                <button id="dropdownListUnboxing{{ $unboxing->id }}" data-dropdown-toggle="dropdownLU{{ $unboxing->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
                                 </button>
-                            </li>
-                            @if ($unboxing->status == 'Process Shipping')
+                            </td>
+                        </tr>
+                        <!-- Dropdown menu -->
+                        <div id="dropdownLU{{ $unboxing->id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListUnboxing{{ $unboxing->id }}">
                                 <li>
-                                    <button type="button" data-modal-target="upload-unboxing-{{ $unboxing->id }}" data-modal-toggle="upload-unboxing-{{ $unboxing->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                        <span class="material-symbols-outlined text-base mr-3">orders</span>
-                                        <span class="whitespace-nowrap">Unboxing</span>
+                                    <button type="button" data-modal-target="detail-unboxing-{{ $unboxing->id }}" data-modal-toggle="detail-unboxing-{{ $unboxing->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                        <span class="whitespace-nowrap">Detail</span>
                                     </button>
                                 </li>
-                            @endif
-                        </ul>
-                    </div>
-                @endforeach
-            </tbody>
-        </table>
+                                @if ($unboxing->status == 'Process Shipping')
+                                    <li>
+                                        <button type="button" data-modal-target="upload-unboxing-{{ $unboxing->id }}" data-modal-toggle="upload-unboxing-{{ $unboxing->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                            <span class="material-symbols-outlined text-base mr-3">orders</span>
+                                            <span class="whitespace-nowrap">Unboxing</span>
+                                        </button>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         <div class="mt-4 ">
             {{-- {{ $dataCustomer->links() }} --}}
         </div>

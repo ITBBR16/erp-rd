@@ -25,7 +25,7 @@
     <div class="relative">
         <div class="flex items-center gap-4 mb-4">
             <div x-data="dropdownSparepart()">
-                <label for="label-id-belanja" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nama Sparepart</label>
+                <label class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nama Sparepart</label>
                 <div class="relative">
                     <input x-model="search" 
                         @focus="open = true" 
@@ -66,75 +66,31 @@
     </div>
 
     <div class="relative">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Order ID
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        SKU
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Produk
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Quantity
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                    <th class="px-6 py-2">
-                        {{-- N.{{ $qc->gudang_belanja_id }} --}}
-                    </th>
-                    <td class="px-6 py-2">
-                        {{-- @php
-                            $sku = $qc->gudangProduk->produkSparepart->produkType->code . "." . $qc->gudangProduk->produkSparepart->partModel->code . "." . 
-                                    $qc->gudangProduk->produkSparepart->produk_jenis_id . "." . $qc->gudangProduk->produkSparepart->partBagian->code . "." . 
-                                    $qc->gudangProduk->produkSparepart->partSubBagian->code . "." . $qc->gudangProduk->produkSparepart->produk_part_sifat_id;
-                        @endphp
-                        {{ $sku }} --}}
-                    </td>
-                    <td class="px-6 py-2">
-                        {{-- {{ $qc->gudangProduk->produkSparepart->nama_internal }} --}}
-                    </td>
-                    <td class="px-6 py-2">
-                        {{-- {{ $quantityCount }} --}}
-                    </td>
-                    <td class="px-6 py-2">
-                        {{-- <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{{ $qc->qualityControll->status_qc }}</span> --}}
-                    </td>
-                    <td class="px-6 py-2">
-                        {{-- <button id="dropdownListLabel{{ $qc->id }}{{ $qc->produk_gudang_id }}" data-dropdown-toggle="dropdownLL{{ $qc->id }}{{ $qc->produk_gudang_id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">
-                            Atur
-                            <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                        </button> --}}
-                    </td>
-                </tr>
-                <!-- Dropdown menu -->
-                {{-- <div id="dropdownLL{{ $qc->id }}{{ $qc->produk_gudang_id }}" class="z-10 hidden bg-white rounded-lg shadow w-40 dark:bg-gray-700">
-                    <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownListLabel{{ $qc->id }}{{ $qc->produk_gudang_id }}">
-                        <li>
-                            <a href="{{ route('printLabel', ['idBelanja' => $qc->gudang_belanja_id, 'idProduk' => $qc->gudang_produk_id]) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                <i class="material-symbols-outlined text-xl mr-3">label</i>
-                                <span class="whitespace-nowrap">Print Label</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div> --}}
-            </tbody>
-        </table>
-        <div class="mt-4 ">
-            {{-- {{ $dataSparepart->links() }} --}}
+        <div class="overflow-y-auto max-h-[580px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Order ID
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            SKU
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nama Produk
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Quantity
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="container-table-label">
+                    
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -165,6 +121,12 @@
                     this.selected = id;
                     this.search = display;
                     this.open = false;
+
+                    // Emit event
+                    const event = new CustomEvent('nama-sparepart-label', {
+                        detail: { id: this.selected },
+                    });
+                    document.dispatchEvent(event);
                 }
             }
         }

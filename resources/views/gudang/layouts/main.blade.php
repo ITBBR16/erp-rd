@@ -9,6 +9,23 @@
         @vite('resources/css/app.css')
         @vite('resources/js/app.js')
         @vite('resources/js/gudang/app.js')
+
+        <style>
+            @media print {
+                body * {
+                    visibility: hidden;
+                }
+                #print-label-container, #print-label-container * {
+                    visibility: visible;
+                }
+                #print-label-container {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                }
+            }
+        </style>
     </head>
     <body>
 

@@ -450,7 +450,10 @@ Route::middleware('gudang')->group(function () {
             });
             Route::group(['controller' => GudangLabelController::class], function () {
                 Route::get('/list-label', 'index')->name('list-label');
+                Route::get('/get-id-pembelanjaan/{id}', 'getIdBelanja');
+                Route::get('/get-data-pembelanjaan/{id}', 'getDataBelanja');
                 Route::get('/print-label/{idBelanja}/{idProduk}', 'printLabel')->name('printLabel');
+                Route::get('/review-pdf-label/{idBelanja}/{idProduk}', 'previewLabelPdf')->name('pdf-label-gudang');
                 Route::resource('/komplain-supplier', GudangKomplainSupplierController::class)->only(['index']);
             });
         });

@@ -1,7 +1,7 @@
 @extends('gudang.layouts.main')
 
 @section('container')
-    <nav class="flex my-6">
+    <nav class="flex justify-between items-center my-6">
         <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li class="flex items-center">
                 <a href="{{ route('list-label') }}" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
@@ -18,14 +18,24 @@
                 </div>
             </li>
         </ol>
+        <div class="flex items-center">
+            <button onclick="window.print()" class="flex text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 dark:focus:ring-indigo-800">
+                <span class="material-symbols-outlined">print</span>
+                <span class="ml-2"> Print</span>
+            </button>
+            {{-- <a href="{{ route('pdf-label-gudang', ['idBelanja' => $idBelanja, 'idProduk' => $idProduk]) }}" target="_blank" class="flex text-indigo-600 hover:text-white border border-indigo-600 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-indigo-500 dark:text-indigo-500 dark:hover:text-white dark:hover:bg-indigo-500 dark:focus:ring-indigo-800">
+                <span class="material-symbols-outlined">print</span>
+                <span class="ml-2"> Print</span>
+            </a> --}}
+        </div>
     </nav>
 
     <div class="pt-4 border-t-2 my-4"></div>
 
-    <div class="flex flex-col items-center justify-center font-bold">
+    <div id="print-label-container" class="flex flex-wrap gap-4 items-center justify-center font-bold">
         @foreach ($dataLabel as $item)
             @if ($item->qualityControll->status_validasi == 'Pass')
-                <div class="w-full max-w-md border rounded-md shadow-md p-2">
+                <div id="print-label-{{ $item->id }}" class="w-full max-w-md border rounded-md shadow-md p-2">
                     <div class="flex p-2 border-b border-black justify-between">
                         <div class="justify-start">
                             <div class="flex items-center space-x-2">
@@ -70,6 +80,5 @@
             @endif
         @endforeach
     </div>
-      
 
 @endsection

@@ -46,61 +46,63 @@
     </div>
     
     <div class="relative shadow-md sm:rounded-lg mt-2">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">Nama Supplier</th>
-                    <th scope="col" class="px-6 py-3">Negara</th>
-                    <th scope="col" class="px-6 py-3">Kontak Person</th>
-                    <th scope="col" class="px-6 py-3">No Telpon</th>
-                    <th scope="col" class="px-6 py-3">Status</th>
-                    <th scope="col" class="px-6 py-3">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($suppliers as $supplier)
-                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-                        <th class="px-6 py-2">
-                            {{ $supplier->nama }}
-                        </th>
-                        <td class="px-6 py-2">
-                            {{ $supplier->negara }}
-                        </td>
-                        <td class="px-6 py-2">
-                            {{ $supplier->kontak_person }}
-                        </td>
-                        <td class="px-6 py-2">
-                            +{{ $supplier->no_telpon }}
-                        </td>
-                        <td class="px-6 py-2">
-                            <span class="bg-green-500 rounded-md px-2 py-0 text-white">{{ $supplier->status }}</span>
-                        </td>
-                        <td class="px-6 py-2">
-                            <button id="dropdownSupplier{{ $supplier->id }}" data-dropdown-toggle="dropdownSup{{ $supplier->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                </svg>
-                            </button>
-                        </td>
+        <div class="overflow-y-auto max-h-[580px]">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Nama Supplier</th>
+                        <th scope="col" class="px-6 py-3">Negara</th>
+                        <th scope="col" class="px-6 py-3">Kontak Person</th>
+                        <th scope="col" class="px-6 py-3">No Telpon</th>
+                        <th scope="col" class="px-6 py-3">Status</th>
+                        <th scope="col" class="px-6 py-3">Action</th>
                     </tr>
-                    <div id="dropdownSup{{ $supplier->id }}" class="z-10 hidden bg-white rounded-lg shadow w-48 dark:bg-gray-700">
-                        <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSupplier{{ $supplier->id }}">
-                            <li>
-                                <button type="button" data-modal-target="detail-supplier-{{ $supplier->id }}" data-modal-toggle="detail-supplier-{{ $supplier->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">visibility</span>
-                                    <span class="whitespace-nowrap">Detail</span>
+                </thead>
+                <tbody>
+                    @foreach ($suppliers as $supplier)
+                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+                            <th class="px-6 py-2">
+                                {{ $supplier->nama }}
+                            </th>
+                            <td class="px-6 py-2">
+                                {{ $supplier->negara }}
+                            </td>
+                            <td class="px-6 py-2">
+                                {{ $supplier->kontak_person }}
+                            </td>
+                            <td class="px-6 py-2">
+                                +{{ $supplier->no_telpon }}
+                            </td>
+                            <td class="px-6 py-2">
+                                <span class="bg-green-500 rounded-md px-2 py-0 text-white">{{ $supplier->status }}</span>
+                            </td>
+                            <td class="px-6 py-2">
+                                <button id="dropdownSupplier{{ $supplier->id }}" data-dropdown-toggle="dropdownSup{{ $supplier->id }}" data-dropdown-placement="bottom" class="text-gray-500 border border-gray-300 font-bold rounded-lg text-sm p-2 w-32 text-start inline-flex items-center dark:text-gray-300 dark:border-gray-300" type="button">Atur <svg class="w-2.5 h-2.5 ms-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                    </svg>
                                 </button>
-                            </li>
-                            <li>
-                                <button type="button" data-modal-target="edit-supplier-{{ $supplier->id }}" data-modal-toggle="edit-supplier-{{ $supplier->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <span class="material-symbols-outlined text-base mr-3">edit</span>
-                                    <span class="whitespace-nowrap">Edit</span>
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                @endforeach
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                        <div id="dropdownSup{{ $supplier->id }}" class="z-10 hidden bg-white rounded-lg shadow w-48 dark:bg-gray-700">
+                            <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSupplier{{ $supplier->id }}">
+                                <li>
+                                    <button type="button" data-modal-target="detail-supplier-{{ $supplier->id }}" data-modal-toggle="detail-supplier-{{ $supplier->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">visibility</span>
+                                        <span class="whitespace-nowrap">Detail</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" data-modal-target="edit-supplier-{{ $supplier->id }}" data-modal-toggle="edit-supplier-{{ $supplier->id }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <span class="material-symbols-outlined text-base mr-3">edit</span>
+                                        <span class="whitespace-nowrap">Edit</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
     {{-- Modal Input Resi --}}
     @include('gudang.purchasing.modal.add-supplier')
