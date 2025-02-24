@@ -231,36 +231,45 @@ class LogistikServices
                 $nominalAsuransi = preg_replace("/[^0-9]/", "", $request->input("nominal_asuransi.$payment") ?: 0);
 
                 $dataRequest = $this->reqPacking->findDataRequest($payment);
-                
+
                 $biayaPackingAwal = $dataRequest->biaya_ekspedisi_packing ?? 0;
                 $biayaOngkirAwal = $dataRequest->biaya_ekspedisi_ongkir ?? 0;
 
                 $statusUpdated = false;
 
+                // Jika biaya ongkir diinput
                 if ($ongkirChecked) {
                     $dataResi = ['biaya_ekspedisi_ongkir_akhir' => $nominalOngkir];
                     $this->reqPacking->updateRequestPacking($payment, $dataResi);
                     $totalPembayaran += $nominalOngkir + $nominalAsuransi;
 
-                    if ($biayaOngkirAwal > 0 && $nominalOngkir > 0) {
+                    // Cek kondisi khusus untuk status
+                    if (($biayaPackingAwal > 0 && $nominalPacking > 0) || ($biayaPackingAwal <= 0)) {
                         $statusUpdated = true;
                     }
                 }
 
+                // Jika biaya packing diinput
                 if ($packingChecked) {
                     $dataResi = ['biaya_ekspedisi_packing_akhir' => $nominalPacking];
                     $this->reqPacking->updateRequestPacking($payment, $dataResi);
                     $totalPembayaran += $nominalPacking;
 
-                    if ($biayaPackingAwal > 0 && $nominalPacking > 0) {
+                    // Cek kondisi khusus untuk status
+                    if ($biayaOngkirAwal <= 0) {
                         $statusUpdated = true;
                     }
+                }
+
+                // Jika keduanya diinput, selalu ubah status
+                if ($ongkirChecked && $packingChecked) {
+                    $statusUpdated = true;
                 }
 
                 if ($statusUpdated) {
                     $this->reqPacking->updateRequestPacking($payment, ['status_request' => 'Done Payment']);
                 }
-            }
+            }            
 
             $files = [];
 
