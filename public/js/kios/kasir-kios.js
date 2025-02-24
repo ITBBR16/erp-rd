@@ -290,7 +290,6 @@ document.addEventListener('alpine:init', () => {
             document.getElementById("input-invoice-discount").value = formatRupiah(kasirDiscount);
             document.getElementById("input-invoice-ongkir").value = formatRupiah(totalOngkirInvoice);
             document.getElementById("input-invoice-total").value = formatRupiah(totalPayment);
-            document.getElementById("input-invoice-total").value = formatRupiah(totalPayment);
             document.getElementById("invoice-subtotal").textContent = formatRupiah(this.subTotal);
             document.getElementById("invoice-discount").textContent = formatRupiah(kasirDiscount);
             document.getElementById("invoice-ongkir").textContent = formatRupiah(totalOngkirInvoice);

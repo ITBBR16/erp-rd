@@ -487,9 +487,17 @@ class KiosKasirController extends Controller
         if ($jenisTransaksi == 'drone_baru') {
             $items = KiosProduk::with('subjenis')->where('status', 'Ready')->orWhere('status', 'Promo')->get();
         } elseif ($jenisTransaksi == 'drone_bnob') {
-            $items = KiosProdukBnob::with('subjenis')->where('status', 'Ready')->get();
+            $items = KiosProdukBnob::with('subjenis')
+                    ->where('status', 'Ready')
+                    ->get()
+                    ->unique('sub_jenis_id')
+                    ->values();
         } elseif ($jenisTransaksi == 'drone_bekas') {
-            $items = KiosProdukSecond::with('subjenis')->where('status', 'Ready')->get();
+            $items = KiosProdukSecond::with('subjenis')
+                    ->where('status', 'Ready')
+                    ->get()
+                    ->unique('sub_jenis_id')
+                    ->values();
         } elseif ($jenisTransaksi == 'part_baru' || $jenisTransaksi == 'part_bekas') {
             $dataPart = $this->gudangProduk->where('status', 'Ready')->orWhere('status', 'Promo')->get();
             $resultData = $dataPart->map(function ($part) {
