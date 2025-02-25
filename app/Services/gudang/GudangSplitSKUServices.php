@@ -52,12 +52,20 @@ class GudangSplitSKUServices
 
             // Data many
             $splitSparepart = $request->input('sparepart_split');
-            $splitNominal = preg_replace("/[^0-9]/", "", $request->input('nominal_split')) ?: 0;
+            $splitNominal = array_map(function ($value) {
+                return preg_replace("/[^0-9]/", "", $value) ?: 0;
+            }, $request->input('nominal_split'));
             $splitQty = $request->input('qty_split');
 
-            $historyPart = $this->idItem->createHistoryPart(['gudang_produk_id_item_id' => $itemId, 'nominal' => $nominalAwal]);
+            $historyPart = $this->idItem->createHistoryPart([
+                'gudang_produk_id_item_id' => $itemId,
+                'nominal' => $nominalAwal
+            ]);
 
             foreach ($splitSparepart as $index => $part) {
+                $findProdukGudang = $this->produkGudang->findBySparepart($part);
+                $modalAwal = (int) $findProdukGudang->modal_awal;
+
                 for ($i = 0; $i < $splitQty[$index]; $i++) {
                     $dataSplitIdItem = [
                         'gudang_belanja_id' => $belanjaId,
@@ -73,16 +81,24 @@ class GudangSplitSKUServices
                         'nominal' => $splitNominal[$index],
                     ];
                     $this->idItem->createHistorySplit($dataHistorySplit);
+
+                    $modalAwal += (int) $splitNominal[$index];
                 }
+
+                $findProdukGudang->update([
+                    'modal_awal' => $modalAwal,
+                    'status' => 'Ready'
+                ]);
             }
 
             $this->idItem->updateIdItem($itemId, ['status_inventory' => 'Split']);
             $this->transaction->commitTransaction();
+
             return ['status' => 'success', 'message' => 'Berhasil melakukan split sparepart'];
 
         } catch (Exception $e) {
             $this->transaction->rollbackTransaction();
-            return ['status' => 'status', 'message' => $e->getMessage()];
+            return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
 
