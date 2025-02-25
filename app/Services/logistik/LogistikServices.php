@@ -41,17 +41,24 @@ class LogistikServices
     {
         $id = decrypt($encryptId);
         $dataReq = $this->reqPacking->findDataRequest($id);
-        $namaCustomer = $dataReq->customer->first_nama . ($dataReq->customer->last_nama ?? '') . ' - ' . $dataReq->customer->id;
-        $noTelponCustomer = $dataReq->customer->no_telpon;
-        $alamatCustomer = $dataReq->customer->nama_jalan 
-                            . ',' . $dataReq->customer->provinsi->name
-                            . ',' . $dataReq->customer->kota->name
-                            . ',' . $dataReq->customer->kecamatan->name
-                            . ',' . $dataReq->customer->kelurahan->name
-                            . ',' . $dataReq->customer->kode_pos;
+
+        $customer = $dataReq->customer ?? null;
+
+        $namaCustomer = ($customer->first_nama ?? '') . ' ' . ($customer->last_nama ?? '') . ' - ' . ($customer->id ?? '');
+        $noTelponCustomer = $customer->no_telpon ?? '';
+        
+        $alamatCustomer = ($customer->nama_jalan ?? '') 
+                            . ',' . ($customer->provinsi->name ?? '')
+                            . ',' . ($customer->kota->name ?? '')
+                            . ',' . ($customer->kecamatan->name ?? '')
+                            . ',' . ($customer->kelurahan->name ?? '')
+                            . ',' . ($customer->kode_pos ?? '');
+
+        $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
 
         $dataString = "Nama: $namaCustomer\nNo Telpon: $noTelponCustomer\nAlamat: $alamatCustomer";
         $barcodeUrl = 'https://quickchart.io/chart?cht=qr&chl=' . urlencode($dataString);
+
         $dataView = [
             'dataReq' => $dataReq,
             'barcode' => $barcodeUrl,
@@ -60,7 +67,7 @@ class LogistikServices
         
         $pdf = Pdf::loadView('logistik.lrp.label.preview-label-packing', $dataView)
                     ->setPaper('a5', 'landscape');
-        
+
         return $pdf;
     }
 

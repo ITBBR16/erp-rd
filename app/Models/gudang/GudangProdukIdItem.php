@@ -2,6 +2,7 @@
 
 namespace App\Models\gudang;
 
+use App\Models\produk\ProdukSparepart;
 use App\Models\repair\RepairEstimasiPart;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +20,7 @@ class GudangProdukIdItem extends Model
         return $this->belongsTo(GudangBelanja::class, 'gudang_belanja_id');
     }
 
-    public function gudangProduk()
+    public function gudangProduk() // Salah
     {
         return $this->belongsTo(GudangProduk::class, 'gudang_produk_id');
     }
@@ -47,6 +48,11 @@ class GudangProdukIdItem extends Model
     public function estimasiRepair()
     {
         return $this->hasOne(RepairEstimasiPart::class);
+    }
+
+    public function produkSparepart()
+    {
+        return $this->belongsTo(ProdukSparepart::class, 'gudang_produk_id');
     }
 
 }

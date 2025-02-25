@@ -143,7 +143,7 @@ Route::middleware('kios')->group(function () {
             });
 
             Route::group(['controller' => KiosProductController::class], function () {
-                Route::resource('/list-product', KiosProductController::class)->only(['index', 'update', 'destroy']);
+                Route::resource('/list-product', KiosProductController::class)->only(['index', 'edit', 'update', 'destroy']);
                 Route::post('/update-srp-baru', 'updateSrpBaru');
                 Route::put('/update-produk-baru', 'updateProdukBaru')->name('updateProdukBaru');
                 Route::get('/get-paket-penjualan/{paketPenjualanId}', 'getPaketPenjualan');

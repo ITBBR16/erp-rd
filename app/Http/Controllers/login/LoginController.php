@@ -42,31 +42,37 @@ class LoginController extends Controller
     {
         $credentials = $request->only('username', 'password');
 
-        $user = Employee::whereRaw('BINARY username = ?', [$credentials['username']])->first();
+        $user = Employee::where('username', $credentials['username'])->first();
 
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            $token = JWTAuth::fromUser($user);
-
-            $now = now();
-            $midnight = $now->copy()->endOfDay();
-            $minutesUntilMidnight = $now->diffInMinutes($midnight);
-
-            $cookie = cookie('jwt_token', $token, $minutesUntilMidnight);
-
-            if ($user->statusEmployee->status == 'Super Admin') {
-                return redirect('/')->withCookie($cookie);
-            } elseif ($user->statusEmployee->status == 'Admin' && $user->divisiEmployee->nama == 'Kios') {
-                return redirect()->intended('/kios/analisa/dashboard')->withCookie($cookie);
-            } elseif ($user->statusEmployee->status == 'Admin' && $user->divisiEmployee->nama == 'Logistik') {
-                return redirect()->intended('/logistik')->withCookie($cookie);
-            } elseif ($user->statusEmployee->status == 'Admin' && $user->divisiEmployee->nama == 'Repair') {
-                return redirect('/repair/csr/case-list')->withCookie($cookie);
-            } elseif ($user->statusEmployee->status == 'Admin' && $user->divisiEmployee->nama == 'Gudang') {
-                return redirect('/gudang/purchasing/belanja-sparepart')->withCookie($cookie);
-            }
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            Hash::check('dummy_password', '$2y$10$1234567890123456789012345678901234567890123456789012');
+            return back()->with('loginError', 'Failed to Login!');
         }
 
-        return back()->with('loginError', 'Failed to Login!');
+        if (!$user->statusEmployee || !$user->divisiEmployee) {
+            return back()->with('loginError', 'User data is incomplete!');
+        }
+
+        $token = JWTAuth::fromUser($user);
+
+        $now = now();
+        $midnight = $now->copy()->endOfDay();
+        $minutesUntilMidnight = $now->diffInMinutes($midnight);
+
+        $cookie = cookie('jwt_token', $token, $minutesUntilMidnight, '/', null, true, true);
+
+        $redirects = [
+            'Super Admin' => '/',
+            'Admin-Kios' => '/kios/analisa/dashboard',
+            'Admin-Logistik' => '/logistik',
+            'Admin-Repair' => '/repair/csr/case-list',
+            'Admin-Gudang' => '/gudang/purchasing/belanja-sparepart',
+        ];
+
+        $key = $user->statusEmployee->status . '-' . $user->divisiEmployee->nama;
+        $redirectUrl = $redirects[$key] ?? '/';
+
+        return redirect()->intended($redirectUrl)->withCookie($cookie);
     }
 
     public function logout()

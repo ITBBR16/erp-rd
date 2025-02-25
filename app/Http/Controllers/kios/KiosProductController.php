@@ -53,6 +53,25 @@ class KiosProductController extends Controller
         ]);
     }
 
+    public function edit($id)
+    {
+        $user = auth()->user();
+        $divisiName = $this->suppKiosRepo->getDivisi($user);
+        $dataProduk = KiosProduk::find($id);
+        $jenisProduk = ProdukJenis::all();
+
+        return view('kios.product.edit.edit-new-product', [
+            'title' => 'Edit Product',
+            'active' => 'product',
+            'navActive' => 'product',
+            'dropdown' => 'list-produk',
+            'dropdownShop' => '',
+            'divisi' => $divisiName,
+            'dataProduk' => $dataProduk,
+            'jenisproduks' => $jenisProduk,
+        ]);
+    }
+
     public function update(Request $request, $id)
     {
         $connectionKios = DB::connection('rumahdrone_kios');

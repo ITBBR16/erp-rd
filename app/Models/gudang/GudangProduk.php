@@ -20,7 +20,7 @@ class GudangProduk extends Model
         return $this->belongsTo(ProdukSparepart::class, 'produk_sparepart_id');
     }
 
-    public function gudangIdItem()
+    public function gudangIdItem() // Salah
     {
         return $this->hasMany(GudangProdukIdItem::class);
     }

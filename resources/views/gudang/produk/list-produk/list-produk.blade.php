@@ -97,7 +97,7 @@
                             </td>
                             <td class="px-6 py-2">
                                 @php
-                                    $stock = $produk->gudangIdItem->where('status_inventory', 'Ready')->count()
+                                    $stock = $produk->produkSparepart->gudangIdItem->where('status_inventory', 'Ready')->count()
                                 @endphp
                                 {{ $stock }}
                             </td>

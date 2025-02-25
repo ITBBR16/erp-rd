@@ -4,6 +4,7 @@ namespace App\Models\produk;
 
 use App\Models\gudang\GudangBelanjaDetail;
 use App\Models\gudang\GudangProduk;
+use App\Models\gudang\GudangProdukIdItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -53,5 +54,10 @@ class ProdukSparepart extends Model
     public function gudangProduk()
     {
         return $this->hasOne(GudangProduk::class);
+    }
+
+    public function gudangIdItem()
+    {
+        return $this->hasMany(GudangProdukIdItem::class, 'gudang_produk_id');
     }
 }
