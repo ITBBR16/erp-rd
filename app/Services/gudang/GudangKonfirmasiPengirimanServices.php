@@ -156,7 +156,7 @@ class GudangKonfirmasiPengirimanServices
         $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
         $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
         $nilai = [
-            'modalGudang' => $modalGudang,
+            'modalGudang' => round($modalGudang),
             'hargaGlobal' => $hargaJualGudang,
             'hargaRepair' => $dataGudang->harga_internal,
             'promoGudang' => $dataGudang->harga_promo
@@ -202,7 +202,7 @@ class GudangKonfirmasiPengirimanServices
             'dataEstimasiSum' => $dataGudangEstimasi,
             'dataTransaksi' => $dataGudangTransaksi,
             'dataGudang' => $dataGudang,
-            'modalGudang' => $modalGudang,
+            'modalGudang' => round($modalGudang),
             'hargaGlobal' => $hargaJualGudang,
             'hargaRepair' => $dataGudang->harga_internal,
             'promoGudang' => $dataGudang->harga_promo

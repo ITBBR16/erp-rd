@@ -45,8 +45,8 @@
                                                 <dd class="col-span-1 text-gray-500">{{ $today->format('Ymd') }}{{ $invoiceid + 1 }}</dd>
                                             </dl>
                                             <dl class="-mt-1 grid sm:grid-cols-5 gap-x-3">
-                                                <dt class="col-span-4 font-semibold text-gray-800 dark:text-gray-200">Due date:</dt>
-                                                <dd class="col-span-1 text-gray-500">{{ $duedate->format('d/m/Y') }}</dd>
+                                                <dt class="col-span-4 font-semibold text-gray-800 dark:text-gray-200">Date:</dt>
+                                                <dd class="col-span-1 text-gray-500">{{ $today->format('d/M/Y') }}</dd>
                                             </dl>
                                         </div>
                                     </div>

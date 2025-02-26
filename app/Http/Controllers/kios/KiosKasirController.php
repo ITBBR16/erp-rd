@@ -585,7 +585,7 @@ class KiosKasirController extends Controller
             $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
             $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
             $nilai = [
-                'modalGudang' => $modalGudang,
+                'modalGudang' => round($modalGudang),
                 'hargaGlobal' => $hargaJualGudang,
             ];
         }

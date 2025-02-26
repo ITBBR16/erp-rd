@@ -40,20 +40,22 @@ $(document).ready(function () {
         const belanjaId = $('#belanja-id');
         const nilaiAwal = $('#nominal-awal-part-split');
         const nilaiAwalText = $('#text-sisa-nilai');
-
+    
         fetch(`/gudang/produk/get-db-id-item/${idItem}`)
         .then(response => response.json())
         .then(data => {
             const date = new Date(data.created_at);
             const options = { day: 'numeric', month: 'short', year: 'numeric' };
             const formattedDate = date.toLocaleDateString('id-ID', options);
-            
+
+            const nominalPcsRounded = Math.round(data.nominal_pcs);
+    
             tanggalMasuk.text(formattedDate);
             belanjaId.val(data.gudang_belanja_id);
-            nilaiAwal.val(data.nominal_pcs);
-            nilaiAwalText.text("Rp. " + formatAngka(data.nominal_pcs));
+            nilaiAwal.val(nominalPcsRounded);
+            nilaiAwalText.text("Rp. " + formatAngka(nominalPcsRounded));
         })
-        .catch(error => alert('Error fetching data : ' + error))
+        .catch(error => alert('Error fetching data : ' + error));
     });
 
     $(document).on('click', '#tambah-split-part', function () {
