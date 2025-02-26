@@ -56,22 +56,24 @@ class GudangKonfirmasiPengirimanServices
         ->estimasiPart
         ->mapWithKeys(function ($estimasiPart) {
             return [
-                $estimasiPart->id => $estimasiPart->sparepartGudang->produkSparepart->gudangIdItem->map(function ($gudangIdItem) {
-                    $nama = null;
+                $estimasiPart->id => $estimasiPart->sparepartGudang->produkSparepart->gudangIdItem
+                    ->where('status_inventory', 'Ready')
+                    ->map(function ($gudangIdItem) {
+                        $nama = null;
 
-                    if ($gudangIdItem->produk_asal === 'Belanja') {
-                        $nama = 'N' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
-                    } elseif ($gudangIdItem->produk_asal == 'Split') {
-                        $nama = 'P' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
-                    } else {
-                        $nama = 'E' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
-                    }
+                        if ($gudangIdItem->produk_asal === 'Belanja') {
+                            $nama = 'N' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
+                        } elseif ($gudangIdItem->produk_asal == 'Split') {
+                            $nama = 'P' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
+                        } else {
+                            $nama = 'E' . $gudangIdItem->gudang_belanja_id . '.' . $gudangIdItem->gudangBelanja->gudang_supplier_id . '.' . $gudangIdItem->id;
+                        }
 
-                    return [
-                        'id' => $gudangIdItem->id,
-                        'nama' => $nama,
-                    ];
-                })
+                        return [
+                            'id' => $gudangIdItem->id,
+                            'nama' => $nama,
+                        ];
+                    })
             ];
         });
 
