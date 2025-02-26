@@ -56,7 +56,7 @@ class GudangKonfirmasiPengirimanServices
         ->estimasiPart
         ->mapWithKeys(function ($estimasiPart) {
             return [
-                $estimasiPart->id => $estimasiPart->sparepartGudang->gudangIdItem->map(function ($gudangIdItem) {
+                $estimasiPart->id => $estimasiPart->sparepartGudang->produkSparepart->gudangIdItem->map(function ($gudangIdItem) {
                     $nama = null;
 
                     if ($gudangIdItem->produk_asal === 'Belanja') {

@@ -51,7 +51,7 @@
                     </div>
                     <h2 class="my-2 text-base font-semibold text-gray-900 dark:text-white">ID Item Ready :</h2>
                     <ul class="max-w-full space-y-1 text-gray-500 list-inside dark:text-gray-400 columns-2">
-                        @foreach ($produk->gudangIdItem as $idItem)
+                        @foreach ($produk->produkSparepart->gudangIdItem as $idItem)
                             @if ($idItem->status_inventory == 'Ready')
                                 <li class="flex items-center">
                                     <svg class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">

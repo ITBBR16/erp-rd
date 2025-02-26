@@ -2,15 +2,13 @@
 
 namespace App\Repositories\gudang\repository;
 
-use App\Models\gudang\GudangProdukIdItem;
 use App\Models\gudang\GudangQualityControll;
 use App\Repositories\gudang\interface\GudangQualityControllInterface;
 
 class GudangQualityControllRepository implements GudangQualityControllInterface
 {
     public function __construct(
-        private GudangQualityControll $qc,
-        private GudangProdukIdItem $pit
+        private GudangQualityControll $qc
     ){}
 
     public function createQc(array $data)

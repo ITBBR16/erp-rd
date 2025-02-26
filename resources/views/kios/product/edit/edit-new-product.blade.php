@@ -44,7 +44,7 @@
                 </div>
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-white">Kompatibel Jenis Produk :</label>
-                    <div class="flex flex-wrap border rounded-lg items-center w-full h-40 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
+                    <div class="flex flex-wrap border rounded-lg items-center w-full h-20 border-gray-300 mb-6 gap-3 p-2 text-sm overflow-y-auto">
                         @foreach ($dataProduk->subjenis->produkjenis as $item)
                             <div class="flex items-center text-gray-800 border-gray-300 bg-transparent dark:text-white dark:border-gray-800">
                                 <div class="text-sm">

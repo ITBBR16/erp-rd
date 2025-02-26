@@ -102,6 +102,12 @@
                                         <span class="whitespace-nowrap">Down Payment</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('reviewPdfInvoiceLunas', encrypt($case->id)) }}" target="_blank" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base mr-3">receipt_long</i>
+                                        <span class="whitespace-nowrap">Print Invoice</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     @endforeach

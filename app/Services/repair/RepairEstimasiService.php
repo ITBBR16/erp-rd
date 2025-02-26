@@ -925,7 +925,7 @@ class RepairEstimasiService
                 throw new \Exception("Data gudang tidak ditemukan");
             }
 
-            $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get() ?? 0;
+            $dataSubGudang = $dataGudang->produkSparepart->gudangIdItem()->where('status_inventory', 'Ready')->get() ?? 0;
             $totalSN = $dataSubGudang->count();
             $modalAwal = $dataGudang->modal_awal ?? 0;
             $modalGudang = ($totalSN > 0) ? ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN : 0;
