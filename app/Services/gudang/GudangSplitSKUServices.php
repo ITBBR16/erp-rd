@@ -46,25 +46,42 @@ class GudangSplitSKUServices
         try {
             $this->transaction->beginTransaction();
 
+            $idSparepart = $request->input('id_sparepart_awal');
             $itemId = $request->input('id_item');
             $belanjaId = $request->input('belanja_id');
             $nominalAwal = $request->input('nominal_sparepart');
 
             // Data many
-            $splitSparepart = $request->input('sparepart_split');
+            $splitSparepart = array_values(array_filter($request->input('sparepart_split')));
+            $splitNominal = array_values(array_filter($request->input('nominal_split'), function ($value) {
+                return $value !== null && $value !== '';
+            }));
             $splitNominal = array_map(function ($value) {
                 return preg_replace("/[^0-9]/", "", $value) ?: 0;
-            }, $request->input('nominal_split'));
-            $splitQty = $request->input('qty_split');
+            }, $splitNominal);
+            $splitQty = array_values(array_filter($request->input('qty_split')));
 
+            // Kurang Modal Awal
+            $findProdukAwal = $this->produkGudang->findBySparepart($idSparepart);
+            $modalProdukAwal = $findProdukAwal->modal_awal;
+            $newModalAwal = $modalProdukAwal - $nominalAwal;
+            $findProdukAwal->update([
+                'modal_awal' => $newModalAwal,
+            ]);
+
+            // Buat History Part
             $historyPart = $this->idItem->createHistoryPart([
                 'gudang_produk_id_item_id' => $itemId,
                 'nominal' => $nominalAwal
             ]);
 
             foreach ($splitSparepart as $index => $part) {
+                if (!isset($splitQty[$index]) || !isset($splitNominal[$index])) {
+                    continue;
+                }
+
                 $findProdukGudang = $this->produkGudang->findBySparepart($part);
-                $modalAwal = (int) $findProdukGudang->modal_awal;
+                $modalAwal = $findProdukGudang->modal_awal;
 
                 for ($i = 0; $i < $splitQty[$index]; $i++) {
                     $dataSplitIdItem = [
@@ -82,7 +99,7 @@ class GudangSplitSKUServices
                     ];
                     $this->idItem->createHistorySplit($dataHistorySplit);
 
-                    $modalAwal += (int) $splitNominal[$index];
+                    $modalAwal += $splitNominal[$index];
                 }
 
                 $findProdukGudang->update([
@@ -91,6 +108,7 @@ class GudangSplitSKUServices
                 ]);
             }
 
+            // Update status item menjadi Split
             $this->idItem->updateIdItem($itemId, ['status_inventory' => 'Split']);
             $this->transaction->commitTransaction();
 

@@ -19,7 +19,7 @@ class GudangProdukRepository implements GudangProdukInterface
             return [];
         }
 
-        $listIdItem = $findProduk->gudangIdItem()->with('gudangBelanja', 'gudangProduk.produkSparepart')->where('status_inventory', 'Ready')->get();
+        $listIdItem = $findProduk->produkSparepart->gudangIdItem()->with('gudangBelanja', 'gudangProduk.produkSparepart')->where('status_inventory', 'Ready')->get();
 
         return $listIdItem;
     }
