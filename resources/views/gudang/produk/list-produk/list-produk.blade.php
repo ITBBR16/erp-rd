@@ -81,7 +81,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="dataContainerListGudang">
                     @foreach ($dataProduk as $produk)
                         <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
                             <td class="px-6 py-2">
@@ -161,7 +161,7 @@
         </div>
     </div>
     <div class="mt-4 ">
-        {{ $dataProduk->links() }}
+        {{ $dataProduk->appends(['search' => request('search')])->links() }}
     </div>
     
 

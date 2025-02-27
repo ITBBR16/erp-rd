@@ -142,7 +142,7 @@ class GudangKonfirmasiPengirimanServices
             ->sum('modal_gudang');
 
         $dataGudang = $this->gudangProduk
-            ->where('id', $id)
+            ->where('produk_sparepart_id', $id)
             ->whereIn('status', ['Ready', 'Promo'])
             ->first();
 
@@ -150,7 +150,7 @@ class GudangKonfirmasiPengirimanServices
             throw new \Exception("Data gudang tidak ditemukan");
         }
 
-        $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get();
+        $dataSubGudang = $dataGudang->produkSparepart->gudangIdItem()->where('status_inventory', 'Ready')->get();
         $totalSN = $dataSubGudang->count();
         $modalAwal = $dataGudang->modal_awal ?? 0;
         $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
@@ -184,7 +184,7 @@ class GudangKonfirmasiPengirimanServices
             ->sum('modal_gudang');
 
         $dataGudang = $this->gudangProduk
-            ->where('id', $id)
+            ->where('produk_sparepart_id', $id)
             ->whereIn('status', ['Ready', 'Promo'])
             ->first();
 
@@ -192,7 +192,7 @@ class GudangKonfirmasiPengirimanServices
             throw new \Exception("Data gudang tidak ditemukan");
         }
 
-        $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get();
+        $dataSubGudang = $dataGudang->produkSparepart->gudangIdItem()->where('status_inventory', 'Ready')->get();
         $totalSN = $dataSubGudang->count();
         $modalAwal = $dataGudang->modal_awal ?? 0;
         $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;

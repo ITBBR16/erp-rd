@@ -502,7 +502,7 @@ class KiosKasirController extends Controller
             $dataPart = $this->gudangProduk->where('status', 'Ready')->orWhere('status', 'Promo')->get();
             $resultData = $dataPart->map(function ($part) {
                 return [
-                    'id' => $part->id,
+                    'id' => $part->produkSparepart->id,
                     'nama_part' => $part->produkSparepart->nama_internal
                 ];
             });
@@ -545,7 +545,7 @@ class KiosKasirController extends Controller
                 ->sum('modal_gudang');
 
             $dataGudang = $this->gudangProduk
-                ->where('id', $id)
+                ->where('produk_sparepart_id', $id)
                 ->whereIn('status', ['Ready', 'Promo'])
                 ->first();
 
@@ -553,7 +553,7 @@ class KiosKasirController extends Controller
                 throw new \Exception("Data gudang tidak ditemukan");
             }
 
-            $dataSubGudang = $dataGudang->gudangIdItem()->where('status_inventory', 'Ready')->get();
+            $dataSubGudang = $dataGudang->produkSparepart->gudangIdItem()->where('status_inventory', 'Ready')->get();
             $dataSN = $dataSubGudang->map(function ($item) {
                 if ($item->produk_asal == 'Belanja') {
                     $supplierId = optional($item->gudangBelanja)->gudang_supplier_id;

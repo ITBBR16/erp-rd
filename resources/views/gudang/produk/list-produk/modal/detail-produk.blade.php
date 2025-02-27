@@ -18,6 +18,11 @@
                     <div class="grid grid-cols-2 gap-4 mb-2">
                         <div>
                             <h3 class="text-xs font-semibold mb-1">SKU Internal</h3>
+                            @php
+                                $sku = $produk->produkSparepart->produkType->code . "." . $produk->produkSparepart->partModel->code . "." . 
+                                        $produk->produkSparepart->produkJenis->code . "." . $produk->produkSparepart->partBagian->code . "." . 
+                                        $produk->produkSparepart->partSubBagian->code . "." . $produk->produkSparepart->produk_part_sifat_id . "." . $produk->produkSparepart->id;
+                            @endphp
                             <p class="text-gray-500 text-sm">{{ $sku }}</p>
                         </div>
                         <div>
