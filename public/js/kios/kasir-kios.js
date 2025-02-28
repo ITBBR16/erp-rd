@@ -44,7 +44,7 @@ document.addEventListener('alpine:init', () => {
         toggleAsuransi() {
             if (this.asuransiChecked) {
                 if (this.subTotal >= 20000001) {
-                    this.asuransi = this.subTotal * 0.0027;
+                    this.asuransi = Math.round(this.subTotal * 0.0027);
                 } else if (this.subTotal >= 10000001) {
                     this.asuransi = 38000;
                 } else if (this.subTotal >= 5000001) {
@@ -378,7 +378,7 @@ $(document).ready(function(){
         checkPembayaranKasirLunas();
     });
 
-    $(document).on('change', '#kasir-discount, #kasir-kerugian, #kasir-ongkir, #kasir-packing, #kasir-asuransi, #kasir-dikembalikan, #kasir-pll, #kasir-sc, .kasir_sn, .kasir-nominal-pembayaran', function() {
+    $(document).on('change', '#kasir-discount, #kasir-kerugian, #kasir-ongkir, #kasir-packing, #checkbox-asuransi, #kasir-dikembalikan, #kasir-pll, #kasir-sc, .kasir_sn, .kasir-nominal-pembayaran', function() {
         checkPembayaranKasirLunas();
     });
 
@@ -402,7 +402,7 @@ $(document).ready(function(){
         let nominalKerugian = parseFloat($('#kasir-kerugian').val().replace(/\./g, '')) || 0;
         let nominalOngkir = parseFloat($('#kasir-ongkir').val().replace(/\./g, '')) || 0;
         let nominalPacking = parseFloat($('#kasir-packing').val().replace(/\./g, '')) || 0;
-        let nominalAsuransi = parseFloat($('#kasir-asuransi').val().replace(/\./g, '')) || 0;
+        let nominalAsuransi = parseFloat($('#kasir-asuransi').val().replace(/\D/g, '')) || 0;
         let nominalDikembalikan = parseFloat($('#kasir-dikembalikan').val().replace(/\./g, '')) || 0;
         let nominalPll = parseFloat($('#kasir-pll').val().replace(/\./g, '')) || 0;
         let nominalSaveSaldoCustomer = parseFloat($('#kasir-sc').val().replace(/\./g, '')) || 0;
@@ -420,6 +420,10 @@ $(document).ready(function(){
 
         let totalTagihanCustomer = totalTagihan + nominalOngkir + nominalPacking + nominalAsuransi + nominalDikembalikan + nominalPll + nominalSaveSaldoCustomer;
         let totalPembayaranCustomer =  totalPembayaran + nominalDiscount + nominalKerugian;
+
+        console.log('nominalAsuransi : ' + nominalAsuransi);
+        console.log('Total Tagihan Customer : ' + totalTagihanCustomer);
+        console.log('Total Pembayaran Customer : ' + totalPembayaranCustomer);
 
         if (totalTagihanCustomer == totalPembayaranCustomer) {
             statusBox.text('Pass')

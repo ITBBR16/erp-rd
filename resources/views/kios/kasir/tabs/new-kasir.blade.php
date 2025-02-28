@@ -70,7 +70,7 @@
                                 <label for="kasir-ongkir" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Ongkir :</label>
                                 <div x-effect="$store.kasirForm.toggleAsuransi()">
                                     <label class="inline-flex items-center mb-2 cursor-pointer">
-                                        <input type="checkbox" x-model="$store.kasirForm.asuransiChecked" class="sr-only peer">
+                                        <input id="checkbox-asuransi" type="checkbox" x-model="$store.kasirForm.asuransiChecked" class="sr-only peer">
                                         <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-orange-600 dark:peer-checked:bg-orange-600"></div>
                                         <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Asuransi</span>
                                     </label>
@@ -79,7 +79,7 @@
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
                                 <input type="text" name="kasir_ongkir" id="kasir-ongkir" x-model="$store.kasirForm.ongkir" @change="$store.kasirForm.updateInvoice()" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
-                                <input type="hidden" name="kasir_asuransi" id="kasir-asuransi" x-model="$store.kasirForm.asuransi" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="0" oninput="this.value = this.value.replace(/\D/g, '')" readonly>
+                                <input type="hidden" name="kasir_asuransi" id="kasir-asuransi" x-model="$store.kasirForm.asuransi" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
                         </div>
                     </div>
