@@ -74,7 +74,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <template x-for="invoice in $store.kasirForm.invoices" :key="invoice.productName">
+                                                <template x-for="(invoice, index) in $store.kasirForm.invoices" :key="index">
                                                     <tr>
                                                         <td class="px-2 py-1" x-text="invoice.productName"></td>
                                                         <td class="px-2 py-1" x-text="invoice.description"></td>

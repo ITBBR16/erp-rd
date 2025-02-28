@@ -75,6 +75,7 @@
                             $qc = $items->first();
                             $quantityCount = $items->count();
                         @endphp
+
                         @if ($qc->qualityControll->status_validasi == 'Komplain')
                             <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                                 <th class="px-6 py-2">
@@ -84,7 +85,8 @@
                                     @php
                                         $sku = $qc->gudangProduk->produkSparepart->produkType->code . "." . $qc->gudangProduk->produkSparepart->partModel->code . "." . 
                                                 $qc->gudangProduk->produkSparepart->produk_jenis_id . "." . $qc->gudangProduk->produkSparepart->partBagian->code . "." . 
-                                                $qc->gudangProduk->produkSparepart->partSubBagian->code . "." . $qc->gudangProduk->produkSparepart->produk_part_sifat_id;
+                                                $qc->gudangProduk->produkSparepart->partSubBagian->code . "." . $qc->gudangProduk->produkSparepart->produk_part_sifat_id . "." .
+                                                $qc->gudangProduk->produkSparepart->id;
                                     @endphp
                                     {{ $sku }}
                                 </td>

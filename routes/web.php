@@ -454,8 +454,8 @@ Route::middleware('gudang')->group(function () {
                 Route::get('/get-data-pembelanjaan/{id}', 'getDataBelanja');
                 Route::get('/print-label/{idBelanja}/{idProduk}', 'printLabel')->name('printLabel');
                 Route::get('/review-pdf-label/{idBelanja}/{idProduk}', 'previewLabelPdf')->name('pdf-label-gudang');
-                Route::resource('/komplain-supplier', GudangKomplainSupplierController::class)->only(['index']);
             });
+            Route::resource('/komplain-supplier', GudangKomplainSupplierController::class)->only(['index']);
         });
 
         Route::prefix('/produk')->group(function () {
