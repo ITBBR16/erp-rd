@@ -107,7 +107,7 @@ class GudangKonfirmasiPengirimanServices
             }
 
             foreach ($filteredItems as $index => $idItem) {
-                $modalGudang = $this->countModalGudang($partId);
+                $modalGudang = $this->countModalGudang($partId[$index]);
                 $dataEstimasiPart = [
                     'id_item' => $idItem,
                     'modal_gudang' => $modalGudang['modalGudang'],
