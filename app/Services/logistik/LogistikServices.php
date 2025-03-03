@@ -220,6 +220,7 @@ class LogistikServices
             $this->logTransaction->beginTransaction();
 
             $invoice = $request->input('invoice_logistik');
+            $invoiceEkternal = $request->input('invoice_eksternal');
             $ekspedisiId = $request->input('ekspedisi_id');
             $namaEkspedisi = $this->reqPacking->findEkspedisi($ekspedisiId);
 
@@ -294,7 +295,8 @@ class LogistikServices
             $totalPayment = $totalPembayaran + $biayaLainLain;
             $namaAkun = $this->daftarAkun->find($paymentEkspedisi);
             $payload = [
-                'idEksternal' => $invoice,
+                'idInternal' => $invoice,
+                'idEksternal' => $invoiceEkternal,
                 'idCustomer' => $namaEkspedisi->ekspedisi,
                 'inOut' => 'out',
                 'source' => 'Logistik',

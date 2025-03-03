@@ -242,10 +242,16 @@
                             <input type="text" name="biaya_lain_lain" id="biaya-lain-lain" class="format-angka-logistik rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
                         </div>
                         <div class="col-span-1 text-start pr-6">
-                            <label for="invoice-logistik" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Invoice :</label>
+                            <label for="invoice-logistik" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Invoice Internal :</label>
                         </div>
                         <div class="col-span-2 text-start">
-                            <input type="text" name="invoice_logistik" id="invoice-logistik" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="SO/R/2025/02/47685">
+                            <input type="text" name="invoice_logistik" id="invoice-logistik" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="INV/2025/03/L/3">
+                        </div>
+                        <div class="col-span-1 text-start pr-6">
+                            <label for="invoice-ekternal" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Invoice Eksternal :</label>
+                        </div>
+                        <div class="col-span-2 text-start">
+                            <input type="text" name="invoice_eksternal" id="invoice-ekternal" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="SO/R/2025/02/47685">
                         </div>
                         <div class="col-span-1 text-start pr-6">
                             <label for="file-bukti-transaksi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Bukti Files :</label>
