@@ -42,24 +42,26 @@ document.addEventListener('alpine:init', () => {
         },
 
         toggleAsuransi() {
+            let netTotal = this.subTotal - this.discount;
+        
             if (this.asuransiChecked) {
-                if (this.subTotal >= 20000001) {
-                    this.asuransi = Math.round(this.subTotal * 0.0027);
-                } else if (this.subTotal >= 10000001) {
+                if (netTotal >= 20000001) {
+                    this.asuransi = Math.round(netTotal * 0.0027);
+                } else if (netTotal >= 10000001) {
                     this.asuransi = 38000;
-                } else if (this.subTotal >= 5000001) {
+                } else if (netTotal >= 5000001) {
                     this.asuransi = 19000;
-                } else if (this.subTotal >= 3000001) {
+                } else if (netTotal >= 3000001) {
                     this.asuransi = 8550;
-                } else if (this.subTotal >= 1000001) {
+                } else if (netTotal >= 1000001) {
                     this.asuransi = 4750;
-                } else if (this.subTotal <= 1000000) {
-                    this.asuransi = 950
+                } else {
+                    this.asuransi = 950;
                 }
             } else {
                 this.asuransi = 0;
             }
-
+        
             this.updateInvoice();
         },
 

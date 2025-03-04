@@ -420,6 +420,7 @@ class KiosKasirController extends Controller
             $transaksi->save();
 
             if ($totalOngkirKasir > 0) {
+                $nominalProduk = $totalHarga - $kasirDiscount;
                 $dataRequestLogistik = [
                     'employee_id' => $userId,
                     'divisi_id' => $divisiId,
@@ -428,7 +429,7 @@ class KiosKasirController extends Controller
                     'layanan_id' => $layananEkspedisi,
                     'biaya_customer_ongkir' => $kasirOngkir,
                     'biaya_customer_packing' => $kasirPacking,
-                    'nominal_produk' => $totalHarga,
+                    'nominal_produk' => $nominalProduk,
                     'nominal_asuransi' => $kasirAsuransi,
                     'tipe_penerima' => 'Customer',
                     'tanggal_request' => now(),
