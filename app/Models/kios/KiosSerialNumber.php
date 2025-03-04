@@ -31,7 +31,7 @@ class KiosSerialNumber extends Model
 
     public function listKelengkapanSplit()
     {
-        return $this->hasMany(KiosListKelengkapanSplit::class);
+        return $this->hasMany(KiosListKelengkapanSplit::class, 'serial_number_id');
     }
 
 }

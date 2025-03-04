@@ -12,6 +12,9 @@
             <li class="mr-2" role="presentation">
                 <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="createBnob-tab" data-tabs-target="#createBnob" type="button" role="tab" aria-controls="createBnob" aria-selected="false">Crate Produk BNOB</button>
             </li>
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="historySplit-tab" data-tabs-target="#historySplit" type="button" role="tab" aria-controls="historySplit" aria-selected="false">History Split</button>
+            </li>
         </ul>
     </div>
 
@@ -50,6 +53,7 @@
         @include('kios.product.splitbaru.tabs.tab-list-kelengkapan')
         @include('kios.product.splitbaru.tabs.tab-split-produk')
         @include('kios.product.splitbaru.tabs.tab-create-bnob')
+        @include('kios.product.splitbaru.tabs.history-split')
     </div>
 
 @endsection

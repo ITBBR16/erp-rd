@@ -23,4 +23,9 @@ class KiosProdukBnob extends Model
     {
         return $this->belongsTo(ProdukSubJenis::class, 'sub_jenis_id');
     }
+
+    public function detailTransaksi()
+    {
+        return $this->hasOne(KiosTransaksiDetail::class, 'serial_number_id');
+    }
 }

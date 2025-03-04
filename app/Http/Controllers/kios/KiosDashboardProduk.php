@@ -74,18 +74,22 @@ class KiosDashboardProduk extends Controller
         for ($i = 6; $i >= 0; $i--) {
             $date = $today->copy()->subDays($i);
             $sales = KiosTransaksi::whereDate('updated_at', $date)
-                    ->where(function ($query) {
-                        $query->where('status_dp', null)
-                            ->orWhere('status_dp', 'Lunas');
-                    })
-                    ->where(function ($query) {
-                        $query->where('status_po', null)
-                            ->orWhere('status_po', 'Lunas');
-                    })
+                    ->where('status', 'Done')
                     ->get()
                     ->sum(function ($transaction) {
                         return $transaction->detailtransaksi->sum(function ($detail) {
-                            return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual) - $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai;
+                            $orderNilai = 0;
+                            if (in_array($detail->jenis_transaksi, ['drone_baru', 'drone_bekas', 'drone_bnob'])) {
+                                $orderNilai = match ($detail->jenis_transaksi) {
+                                    'drone_baru'  => $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai ?? 0,
+                                    'drone_bekas' => $detail->produkKiosBekas->modal_bekas ?? 0,
+                                    'drone_bnob'  => $detail->produkKiosBnob->modal_bnob ?? 0,
+                                    default       => 0
+                                };
+                            }
+    
+                            return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual)
+                                - $orderNilai;
                         }) + $transaction->tax - $transaction->discount + $transaction->ongkir;
                     });
 
@@ -94,26 +98,31 @@ class KiosDashboardProduk extends Controller
 
         return $salesThisWeek;
     }
+
     private function lastWeekSales()
     {
-        $lastWeekStartDate = Carbon::now()->subWeek();;
+        $lastWeekStartDate = Carbon::now()->subWeek();
         $salesLastWeek = [];
 
         for ($i = 6; $i >= 0; $i--) {
             $date = $lastWeekStartDate->copy()->subDays($i);
             $sales = KiosTransaksi::whereDate('updated_at', $date)
-                ->where(function ($query) {
-                    $query->where('status_dp', null)
-                        ->orWhere('status_dp', 'Lunas');
-                })
-                ->where(function ($query) {
-                    $query->where('status_po', null)
-                        ->orWhere('status_po', 'Lunas');
-                })
+                ->where('status', 'Done')
                 ->get()
                 ->sum(function ($transaction) {
                     return $transaction->detailtransaksi->sum(function ($detail) {
-                        return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual) - $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai;
+                        $orderNilai = 0;
+                        if (in_array($detail->jenis_transaksi, ['drone_baru', 'drone_bekas', 'drone_bnob'])) {
+                            $orderNilai = match ($detail->jenis_transaksi) {
+                                'drone_baru'  => $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai ?? 0,
+                                'drone_bekas' => $detail->produkKiosBekas->modal_bekas ?? 0,
+                                'drone_bnob'  => $detail->produkKiosBnob->modal_bnob ?? 0,
+                                default       => 0
+                            };
+                        }
+
+                        return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual)
+                            - $orderNilai;
                     }) + $transaction->tax - $transaction->discount + $transaction->ongkir;
                 });
             array_push($salesLastWeek, $sales);

@@ -46,6 +46,7 @@ class KiosSplitDroneBaruController extends Controller
                 'display' => $subJenis->paket_penjualan
             ];
         });
+        $dataSplit = KiosSerialNumber::where('status', 'Split')->get();
 
         return view('kios.product.splitbaru.index', [
             'title' => 'Split Drone Baru',
@@ -56,7 +57,8 @@ class KiosSplitDroneBaruController extends Controller
             'divisi' => $divisiName,
             'produks' => $dataProduk,
             'dataKelengkapanSplit' => $kelengkapanSplit,
-            'dataBnob' => $dataBnob
+            'dataBnob' => $dataBnob,
+            'dataSplit' => $dataSplit
         ]);
     }
 
