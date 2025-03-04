@@ -80,6 +80,7 @@ use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
 use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
 use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
+use App\Http\Controllers\repair\RepairRubahEstimasiGeneralController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
@@ -406,6 +407,8 @@ Route::middleware('repair')->group(function () {
                 Route::resource('/konfirmasi-req-sparepart', RepairKonfirmasiReqPartController::class)->only(['index', 'store']);
                 Route::get('/getDataRequestPart/{id}', 'getListPart');
             });
+
+            Route::resource('/rubah-estimasi', RepairRubahEstimasiGeneralController::class)->only(['index', 'update']);
             
         });
 

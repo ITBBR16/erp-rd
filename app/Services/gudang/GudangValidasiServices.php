@@ -68,7 +68,7 @@ class GudangValidasiServices
             $belnajaId = $request->input('belanja_id');
             $sparepartId = $request->input('sparepart_id');
 
-            $findProduk = $this->produk->findProduk($sparepartId);
+            $findProduk = $this->produk->findBySparepart($sparepartId);
             $findBelanja = $this->belanja->findBelanja($belnajaId);
             $findDetailBelanja = $this->belanja->getDetailBelanja($belnajaId, $findProduk->produk_sparepart_id);
 

@@ -42,7 +42,7 @@
             </tr>
         </table>
 
-        <strong>Lion Parcel, Regpack{{ ($dataReq->biaya_customer_packing > 0) ? ', Pack Kayu' : '' }}{{ ($dataReq->nominal_produk == 0) ? '' : ($dataReq->nominal_produk < 10000000 
+        <strong>Lion Parcel, Regpack{{ ($dataReq->biaya_customer_packing > 0) ? ', Pack Kayu' : '' }}{{ ($dataReq->nominal_asuransi == 0) ? '' : ($dataReq->nominal_produk < 10000000 
             ? ', RD' . substr($dataReq->nominal_produk, 0, 1) 
             : ', RD' . substr($dataReq->nominal_produk, 0, 2)) }}</strong>
 

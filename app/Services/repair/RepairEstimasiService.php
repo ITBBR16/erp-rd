@@ -145,6 +145,31 @@ class RepairEstimasiService
         ]);
     }
 
+    // View Rubah Estimasi General
+    public function indexRubahEstimasi()
+    {
+        $user = auth()->user();
+        $caseService = $this->repairCaseService->getDataDropdown();
+        $divisiName = $this->umum->getDivisi($user);
+
+        $dataCase = $caseService['data_case']->filter(function ($case) {
+            return in_array($case->jenisStatus->jenis_status, [
+                'Proses Pengerjaan', 
+                'Proses Quality Control', 
+                'Proses Menunggu Pembayaran (Lanjut)'
+            ]);
+        })->sortByDesc('created_at');
+
+        return view('repair.estimasi.rubah-estimasi-general', [
+            'title' => 'List Case Estimasi',
+            'active' => 'rubah-estimasi',
+            'navActive' => 'estimasi',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+        ]);
+    }
+
     // Function Proses
     public function addJurnalEstimasi(Request $request)
     {
@@ -637,6 +662,7 @@ class RepairEstimasiService
             'dataCase' => $sortedCase,
         ]);
     }
+
     public function konfirmasiReqPart(Request $request)
     {
         $this->repairEstimasi->beginTransaction();

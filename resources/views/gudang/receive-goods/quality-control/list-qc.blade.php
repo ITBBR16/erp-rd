@@ -97,14 +97,14 @@
                                 </th>
                                 <td class="px-6 py-2">
                                     @php
-                                        $sku = $qc->gudangProduk->produkSparepart->produkType->code . "." . $qc->gudangProduk->produkSparepart->partModel->code . "." . 
-                                                $qc->gudangProduk->produkSparepart->produk_jenis_id . "." . $qc->gudangProduk->produkSparepart->partBagian->code . "." . 
-                                                $qc->gudangProduk->produkSparepart->partSubBagian->code . "." . $qc->gudangProduk->produkSparepart->produk_part_sifat_id;
+                                        $sku = $qc->produkSparepart->produkType->code . "." . $qc->produkSparepart->partModel->code . "." . 
+                                                $qc->produkSparepart->produk_jenis_id . "." . $qc->produkSparepart->partBagian->code . "." . 
+                                                $qc->produkSparepart->partSubBagian->code . "." . $qc->produkSparepart->produk_part_sifat_id . "." . $qc->produkSparepart->id;
                                     @endphp
                                     {{ $sku }}
                                 </td>
                                 <td class="px-6 py-2">
-                                    {{ $qc->gudangProduk->produkSparepart->nama_internal }}
+                                    {{ $qc->produkSparepart->nama_internal }}
                                 </td>
                                 <td class="px-6 py-2">
                                     {{ $quantityCount }}

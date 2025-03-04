@@ -86,14 +86,14 @@
                             <td class="px-6 py-2">
                                 <input type="hidden" name="idItemId[]" value="{{ $item->id }}">
                                 @php
-                                    $sku = $item->gudangProduk->produkSparepart->produkType->code . "." . $item->gudangProduk->produkSparepart->partModel->code . "." . 
-                                            $item->gudangProduk->produkSparepart->produk_jenis_id . "." . $item->gudangProduk->produkSparepart->partBagian->code . "." . 
-                                            $item->gudangProduk->produkSparepart->partSubBagian->code . "." . $item->gudangProduk->produkSparepart->produk_part_sifat_id
+                                    $sku = $item->produkSparepart->produkType->code . "." . $item->produkSparepart->partModel->code . "." . 
+                                            $item->produkSparepart->produk_jenis_id . "." . $item->produkSparepart->partBagian->code . "." . 
+                                            $item->produkSparepart->partSubBagian->code . "." . $item->produkSparepart->produk_part_sifat_id . "." . $item->produkSparepart->id
                                 @endphp
                                 {{ $sku }}
                             </td>
                             <td class="px-6 py-2">
-                                {{ $item->gudangProduk->produkSparepart->nama_internal }}
+                                {{ $item->produkSparepart->nama_internal }}
                             </td>
                             <td class="px-6 py-2">
                                 {{ $item->qualityControll->checked_fisik }}
