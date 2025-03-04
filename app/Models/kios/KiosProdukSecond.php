@@ -35,4 +35,9 @@ class KiosProdukSecond extends Model
         return $this->belongsTo(KiosImageSecond::class, 'produk_image_id');
     }
 
+    public function detailTransaksiKios()
+    {
+        return $this->hasOne(KiosTransaksiDetail::class);
+    }
+
 }

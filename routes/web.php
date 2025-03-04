@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use App\Exports\KiosFinanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KiosDailyRecapExport;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,7 @@ use App\Http\Controllers\repair\RepairTeknisiNCController;
 use App\Http\Controllers\gudang\GudangListProdukController;
 use App\Http\Controllers\gudang\GudangValidasiQCController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
+use App\Http\Controllers\kios\KiosSplitDroneBaruController;
 use App\Http\Controllers\repair\RepairPengerjaanController;
 use App\Http\Controllers\gudang\GudangAdjustStockController;
 use App\Http\Controllers\kios\KiosBuatPaketSecondController;
@@ -57,27 +59,26 @@ use App\Http\Controllers\gudang\GudangRequestPaymentController;
 use App\Http\Controllers\gudang\GudangReturSparepartController;
 use App\Http\Controllers\kios\KiosFilterProdukSecondController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
+use App\Http\Controllers\logistik\LogistikResiPickupController;
 use App\Http\Controllers\repair\RepairRecapTransaksiController;
 use App\Http\Controllers\gudang\GudangAddNewSparepartController;
 use App\Http\Controllers\repair\RepairTroubleshootingController;
 use App\Http\Controllers\gudang\GudangKomplainSupplierController;
+use App\Http\Controllers\logistik\LogistikSentToRepairController;
 use App\Http\Controllers\repair\RepairRequestSparepartController;
 use App\Http\Controllers\gudang\GudangPengirimanBelanjaController;
 use App\Http\Controllers\kios\DashboardTechnicalSupportController;
 use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
 use App\Http\Controllers\repair\RepairKonfirmasiReqPartController;
+use App\Http\Controllers\logistik\LogistikListCaseRepairController;
+use App\Http\Controllers\logistik\LogistikRequestPackingController;
+use App\Http\Controllers\logistik\LogistikRequestPaymentController;
 use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
-use App\Http\Controllers\kios\KiosSplitDroneBaruController;
-use App\Http\Controllers\logistik\LogistikListCaseRepairController;
-use App\Http\Controllers\logistik\LogistikListRequestPackingController;
-use App\Http\Controllers\logistik\LogistikRequestPackingController;
-use App\Http\Controllers\logistik\LogistikRequestPaymentController;
-use App\Http\Controllers\logistik\LogistikResiPickupController;
-use App\Http\Controllers\logistik\LogistikSentToRepairController;
 use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
+use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
 
@@ -103,7 +104,7 @@ Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
 
         Route::get('/test-export', function () {
-            $export = new KiosDailyRecapExport();
+            $export = new KiosFinanceExport();
             return response()->json($export->collection());
         });
         Route::get('/download-recap', function () {

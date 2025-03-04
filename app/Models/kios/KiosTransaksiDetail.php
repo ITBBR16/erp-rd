@@ -27,4 +27,9 @@ class KiosTransaksiDetail extends Model
     {
         return $this->belongsTo(KiosProduk::class, 'kios_produk_id');
     }
+
+    public function produkKiosBekas()
+    {
+        return $this->belongsTo(KiosProdukSecond::class, 'serial_number_id');
+    }
 }

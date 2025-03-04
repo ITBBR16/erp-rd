@@ -78,7 +78,7 @@ class GudangUnboxingServices
                 $timestamp = now();
 
                 foreach ($detailBelanja as $detail) {
-                    $gudangProdukId = $detail->sparepart?->gudangProduk?->id;
+                    $gudangProdukId = $detail->sparepart->id;
                     if ($gudangProdukId === null) {
                         continue;
                     }
