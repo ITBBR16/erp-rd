@@ -326,6 +326,7 @@ Route::middleware('repair')->group(function () {
                 Route::get('/getKelengkapan/{id}', 'getKelengkapan');
                 Route::get('/reviewPdfTandaTerima/{id}', 'reviewPdfTandaTerima');
                 Route::get('/reviewPdfInvoiceLunas/{id}', 'reviewPdfInvoiceLunas')->name('reviewPdfInvoiceLunas');
+                Route::get('/invoiceBuktiPembayaran/{id}', 'invoiceBuktiPembayaran')->name('invoiceBuktiPembayaran');
                 Route::get('/downloadPdf/{id}', 'downloadPdf')->name('downloadPdf');
                 Route::post('/kirimTandaTerima/{id}', 'kirimTandaTerimaCustomer')->name('kirimTandaTerima');
             });

@@ -290,6 +290,24 @@ class RepairCaseService
 
         return $pdf;
     }
+
+    public function reviewBuktiPembayaran($id)
+    {
+        $user = auth()->user();
+        $employee = $user->first_name . " " . $user->last_name;
+        $dataCase = $this->repairCase->findCase($id);
+        $dataView = [
+            'title' => 'Preview Tanda Terima',
+            'dataCase' => $dataCase,
+            'employee' => $employee,
+        ];
+
+        $pdf = Pdf::loadView('repair.csr.preview.preview-bukti-pembayaran', $dataView)
+                    ->setPaper('a5', 'portrait');
+
+        return $pdf;
+    }
+
     public function reviewPdfTandaTerima($id)
     {
         $user = auth()->user();

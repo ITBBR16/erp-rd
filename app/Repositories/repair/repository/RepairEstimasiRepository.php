@@ -77,6 +77,11 @@ class RepairEstimasiRepository implements RepairEstimasiInterface
         throw new \Exception('Case Not Found');
     }
 
+    public function findEstimasiChat($id)
+    {
+        return $this->modelEstimasiChat->where('estimasi_id', $id)->first();
+    }
+
     public function createEstimasiChat(array $data)
     {
         return $this->modelEstimasiChat->create($data);

@@ -486,17 +486,24 @@ class RepairEstimasiService
             $dataChatEstimasi = [
                 'isi_chat' => $pesanHasilTs,
             ];
-    
+
+            $existingChat = $this->repairEstimasi->findEstimasiChat($id);
+
+            if ($existingChat) {
+                $this->repairEstimasi->updateEstimasiChat($dataChatEstimasi, $id);
+            } else {
+                $dataChatEstimasi['estimasi_id'] = $id;
+                $this->repairEstimasi->createEstimasiChat($dataChatEstimasi);
+            }
+
             $dataJurnal = [
                 'employee_id' => $employeeId,
                 'jenis_substatus_id' => 2,
                 'timestamps_status_id' => $timestamp->id,
                 'isi_jurnal' => 'Rubah hasil estimasi.',
             ];
-    
-            $this->repairTimeJurnal->addJurnal($dataJurnal);
-            $this->repairEstimasi->updateEstimasiChat($dataChatEstimasi, $id);
 
+            $this->repairTimeJurnal->addJurnal($dataJurnal);
             $this->repairEstimasi->commitTransaction();
 
             return ['status' => 'success', 'message' => 'Berhasil merubah hasil estimasi.'];

@@ -60,6 +60,13 @@ class RepairListCaseController extends Controller
         return $pdf->stream();
     }
 
+    public function invoiceBuktiPembayaran($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $pdf = $this->repairCaseService->reviewBuktiPembayaran($id);
+        return $pdf->stream();
+    }
+
     public function reviewPdfTandaTerima($id)
     {
         $pdf = $this->repairCaseService->reviewPdfTandaTerima($id);
