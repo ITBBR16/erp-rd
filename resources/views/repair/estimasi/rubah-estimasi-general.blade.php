@@ -54,7 +54,7 @@
     <div class="relative">
         <div class="overflow-y-auto max-h-[550px]">
             <table id="rubah-estimasi" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                     <tr>
                         <th scope="col" class="px-6 py-3">
                             Tanggal Masuk
@@ -105,7 +105,7 @@
                         <div id="ddUE{{ $case->id }}" class="z-10 hidden bg-white rounded-lg shadow w-44 dark:bg-gray-700">
                             <ul class="h-auto py-2 text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUbahEstimasi{{ $case->id }}">
                                 <li>
-                                    <a href="{{ route('konfirmasi-estimasi.edit', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('rubah-estimasi.edit', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-xl mr-3">playlist_add_check_circle</i>
                                         <span class="whitespace-nowrap">Ubah Estimasi</span>
                                     </a>

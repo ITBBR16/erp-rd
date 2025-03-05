@@ -408,7 +408,7 @@ Route::middleware('repair')->group(function () {
                 Route::get('/getDataRequestPart/{id}', 'getListPart');
             });
 
-            Route::resource('/rubah-estimasi', RepairRubahEstimasiGeneralController::class)->only(['index', 'update']);
+            Route::resource('/rubah-estimasi', RepairRubahEstimasiGeneralController::class)->only(['index', 'edit', 'update']);
             
         });
 

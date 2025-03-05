@@ -170,6 +170,27 @@ class RepairEstimasiService
         ]);
     }
 
+    public function pageGeneralUbah($encryptId)
+    {
+        $id = decrypt($encryptId);
+        $user = auth()->user();
+        $jenisTransaksi = $this->getJenisTransaksi();
+        $jenisProduk = $this->getJenisDrone();
+        $dataCase = $this->repairCaseService->findCase($id);
+        $divisiName = $this->umum->getDivisi($user);
+
+        return view('repair.estimasi.edit.general-rubah-estimasi', [
+            'title' => 'List Case Estimasi',
+            'active' => 'rubah-estimasi',
+            'navActive' => 'estimasi',
+            'divisi' => $divisiName,
+            'dropdown' => '',
+            'dataCase' => $dataCase,
+            'jenisTransaksi' => $jenisTransaksi,
+            'jenisProduk' => $jenisProduk,
+        ]);
+    }
+
     // Function Proses
     public function addJurnalEstimasi(Request $request)
     {

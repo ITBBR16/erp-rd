@@ -4,7 +4,7 @@
     <nav class="flex">
         <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li class="flex items-center">
-                <a href="{{ route("konfirmasi-estimasi.index") }}" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                <a href="{{ route("rubah-estimasi.index") }}" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                     <span class="material-symbols-outlined text-base mr-2.5">playlist_add_check_circle</span>
                     Konfirmasi Estimasi
                 </a>
@@ -35,7 +35,7 @@
         </div>
     @endif
 
-    <form action="{{ route('konfirmasi-estimasi.update', $dataCase->estimasi->id) }}" method="POST" autocomplete="off">
+    <form action="{{ route('rubah-estimasi.update', $dataCase->estimasi->id) }}" method="POST" autocomplete="off">
         @csrf
         @method('PUT')
         <div class="grid grid-row-2 gap-6 mt-4">
@@ -207,7 +207,7 @@
                                                         @foreach ($jenisProduk as $produk)
                                                             @if ($estimasi->sparepartGudang->produkSparepart->produkJenis->id == $produk->id)
                                                                 <option value="{{ $produk->id }}" selected>{{ $produk->jenis_produk }}</option>
-                                                            @else
+                                                            @endif
                                                         @endforeach
                                                     </select>
                                                 @else
@@ -370,7 +370,9 @@
                                                 <select name="jenis_transaksi_lama[]" id="konfirmasi-jt-{{ $index }}" data-id="{{ $index }}" class="konfirmasi-jt bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                                     <option value="" hidden>Pilih Jenis Transaksi</option>
                                                     @foreach ($jenisTransaksi as $jt)
-                                                        <option value="{{ $jt->id }}" {{ $jt->id == $estimasi->jenis_transaksi_id ? 'selected' : '' }}>{{ $jt->code_jt }}</option>
+                                                        @if ($jt->id == $estimasi->jenis_transaksi_id)
+                                                            <option value="{{ $jt->id }}" selected>{{ $jt->code_jt }}</option>
+                                                        @endif
                                                     @endforeach
                                                 </select>
                                             </td>

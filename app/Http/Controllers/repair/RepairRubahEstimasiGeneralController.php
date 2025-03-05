@@ -17,8 +17,19 @@ class RepairRubahEstimasiGeneralController extends Controller
         return $this->estimasiService->indexRubahEstimasi();
     }
 
+    public function edit($encryptId)
+    {
+        return $this->estimasiService->pageGeneralUbah($encryptId);
+    }
+
     public function update(Request $request, $id)
     {
+        $result = $this->estimasiService->ubahEstimasi($request, $id);
 
+        if ($result['status'] == 'success') {
+            return redirect()->route('rubah-estimasi.index')->with($result['status'], $result['message']);
+        } else {
+            return back()->with($result['status'], $result['message']);
+        }
     }
 }

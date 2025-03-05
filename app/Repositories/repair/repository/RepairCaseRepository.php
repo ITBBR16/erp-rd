@@ -112,7 +112,7 @@ class RepairCaseRepository implements RepairCaseInterface
     public function getAllDataNeededNewCase()
     {
         return [
-            'data_case' => $this->modelCase->all(),
+            'data_case' => $this->modelCase->with('jenisStatus')->get(),
             'jenis_case' => $this->modelJenisCase->all(),
             'fungsional_drone' => $this->modelFungsional->all(),
         ];
