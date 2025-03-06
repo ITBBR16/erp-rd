@@ -34,9 +34,17 @@ class GudangProdukRepository implements GudangProdukInterface
         return $this->produk->where('produk_sparepart_id', $id)->first();
     }
 
-    public function getAllProduk()
+    public function getAllProduk($search = null)
     {
-        return $this->produk->paginate(70);
+        $query = GudangProduk::query(); // Model utama
+
+        if ($search) {
+            $query->whereHas('produkSparepart', function ($q) use ($search) {
+                $q->where('nama_internal', 'LIKE', "%$search%");
+            });
+        }
+
+        return $query->with('produkSparepart')->paginate(70);
     }
     
     public function createProduk(array $data)

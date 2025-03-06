@@ -23,8 +23,9 @@ class GudangListProdukServices
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $dataProduk = $this->produk->getAllProduk();
         
+        $dataProduk = $this->produk->getAllProduk();
+
         return view('gudang.produk.list-produk.list-produk', [
             'title' => 'Gudang Produk',
             'active' => 'gudang-produk',
@@ -37,9 +38,7 @@ class GudangListProdukServices
     public function searchListProduk(Request $request)
     {
         try {
-            $user = auth()->user();
-            $divisiName = $this->umum->getDivisi($user);
-            $query = $request->input('query');
+            $query = $request->input('search_list_produk_gudang');
 
             $dataProduk = GudangProduk::with([
                     'produkSparepart.produkType', 
@@ -52,14 +51,10 @@ class GudangListProdukServices
                 ->whereHas('produkSparepart', function ($q) use ($query) {
                     $q->where('nama_internal', 'like', "%{$query}%");
                 })
-                ->paginate(50);
+                ->paginate(70);
 
-            return view('gudang.produk.list-produk.list-produk', [
-                'title' => 'Gudang Produk',
-                'active' => 'gudang-produk',
-                'navActive' => 'produk',
-                'divisi' => $divisiName,
-                'dataProduk' => $dataProduk,
+            return response()->json([
+                'html' => view('gudang.produk.list-produk.partial.partial-list-produk', compact('dataProduk'))->render()
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

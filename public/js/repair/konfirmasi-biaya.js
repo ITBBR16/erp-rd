@@ -152,14 +152,10 @@ $(document).ready(function () {
     $(document).on('change', '.konfirmasi-part', function () {
         let partId = $(this).data("id");
         var sku = $(this).val();
-        var textNamaPart = $('#konfirmasi-part-' + partId + ' option:selected').text();
-        var inputNamaPart = $('#nama-part-' + partId);
         var jenisTransaksi = $('#estimasi-jt-' + partId + ' option:selected').text();
-        inputNamaPart.val('');
-
+        console.log(sku);
         if (jenisTransaksi  == 'P.Baru' || jenisTransaksi == 'P.Bekas') {
-            inputNamaPart.val(textNamaPart);
-            konfirmasiGetDetailPart(jenisTransaksi, partId, sku);
+            konfirmasiGetDetailPart(partId, sku);
         }
     });
 

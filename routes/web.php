@@ -466,7 +466,7 @@ Route::middleware('gudang')->group(function () {
         Route::prefix('/produk')->group(function () {
             Route::group(['controller' => GudangListProdukController::class], function () {
                 Route::resource('/list-produk', GudangListProdukController::class)->only(['index', 'update']);
-                Route::get('/list-produk/search', 'searchListProduk');
+                Route::get('/list-produk/search', 'searchListProduk')->name('search.list.produk');
                 Route::post('/update-harga-sparepart/{id}', 'updateHarga');
             });
             Route::group(['controller' => GudangSplitPartController::class], function () {
