@@ -17,7 +17,7 @@ class GudangProduk extends Model
 
     public function produkSparepart()
     {
-        return $this->belongsTo(ProdukSparepart::class, 'produk_sparepart_id');
+        return $this->belongsTo(ProdukSparepart::class, 'produk_sparepart_id', 'id');
     }
 
     public function gudangIdItem() // Salah

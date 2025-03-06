@@ -47,11 +47,11 @@
                         </div>
                         <div>
                             <h3 class="text-xs font-semibold mb-1">Start Promo</h3>
-                            <p class="text-gray-500 text-sm">{{ \Carbon\Carbon::parse($produk->tanggal_start_promo)->format('d M Y') ?? '-' }}</p>
+                            <p class="text-gray-500 text-sm">{{ $produk->tanggal_start_promo ? \Carbon\Carbon::parse($produk->tanggal_start_promo)->format('d M Y') : '-' }}</p>
                         </div>
                         <div>
                             <h3 class="text-xs font-semibold mb-1">End Promo</h3>
-                            <p class="text-gray-500 text-sm">{{ \Carbon\Carbon::parse($produk->tanggal_end_promo)->format('d M Y') ?? '-' }}</p>
+                            <p class="text-gray-500 text-sm">{{ $produk->tanggal_start_promo ? \Carbon\Carbon::parse($produk->tanggal_end_promo)->format('d M Y') : '-' }}</p>
                         </div>
                     </div>
                     <h2 class="my-2 text-base font-semibold text-gray-900 dark:text-white">ID Item Ready :</h2>

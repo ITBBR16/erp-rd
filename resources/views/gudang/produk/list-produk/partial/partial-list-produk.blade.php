@@ -92,17 +92,20 @@
                                     <span class="whitespace-nowrap">Add Promo</span>
                                 </button>
                             </li>
-                            {{-- <li>
-                                <button type="button" data-modal-target="disabled-part" data-modal-toggle="disabled-part" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
-                                    <i class="material-symbols-outlined text-base mr-3">block</i>
-                                    <span class="whitespace-nowrap">Disable</span>
-                                </button>
-                            </li> --}}
                         </ul>
                     </div>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center p-4">Tidak ada data ditemukan</td>
+                        <td colspan="7" class="text-center p-4">
+                            <div class="p-4">
+                                <div class="flex items-center justify-center">
+                                    <figure class="max-w-lg">
+                                        <img class="h-auto max-w-full rounded-lg" src="/img/security-system.png" alt="Not Found" width="250" height="150">
+                                        <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Data Tidak Ada.</figcaption>
+                                    </figure>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 @endforelse
             </tbody>
@@ -117,4 +120,3 @@
 {{-- Modal --}}
 @include('gudang.produk.list-produk.modal.detail-produk')
 @include('gudang.produk.list-produk.modal.promo-produk')
-{{-- @include('gudang.produk.list-produk.modal.disabled') --}}

@@ -64,14 +64,35 @@
             </div>
             <h3 class="my-4 text-gray-900 dark:text-white font-semibold text-xl">Informasi Pembelian</h3>
             <div class="grid md:grid-cols-2 md:gap-6">
-                <div class="relative z-0 w-full mb-6 group">
-                    <label for="paket_penjualan_second" class="sr-only">Jenis Paket Produk</label>
-                    <select name="paket_penjualan_second" id="paket_penjualan_second" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required>
-                        <option value="" hidden>Pilih Paket Penjualan</option>
-                        @foreach ($produkKios as $pk)
-                            <option value="{{ $pk->id }}" class="bg-white dark:bg-gray-700">{{ $pk->paket_penjualan }}</option>
-                        @endforeach
-                    </select>
+                <div x-data="dropdownJenisDrone()" class="relative mb-6">
+                    <div class="relative">
+                        <input x-model="search"
+                            @focus="open = true" 
+                            @keydown.escape="open = false" 
+                            @click.outside="open = false"
+                            type="text" 
+                            class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" 
+                            placeholder="Search or select paket penjualan . . .">
+                            <svg :class="{ 'rotate-180': open }" class="absolute inset-y-0 right-2 top-2.5 w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        <input type="hidden" id="paket_penjualan_second" name="paket_penjualan_second" :value="selected" required>
+                    </div>
+                
+                    <ul x-show="open" 
+                        x-transition 
+                        class="absolute z-10 bg-white border border-gray-300 rounded-lg mt-1 max-h-60 w-full overflow-y-auto shadow-md dark:bg-gray-700 dark:border-gray-600">
+                        <template x-for="jenis in filteredJenis" :key="jenis.id">
+                            <li @click="select(jenis.id, jenis.display)"
+                                class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
+                                <span x-text="jenis.display" class="text-black dark:text-white"></span>
+                            </li>
+                        </template>
+                        <li x-show="filteredJenis.length === 0" 
+                            class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                            Data Jenis Drone tidak ditemukan.
+                        </li>
+                    </ul>
                 </div>
                 <div class="relative w-full group">
                     <div class="absolute start-0 bottom-9 ps-1 font-bold text-gray-500 dark:text-gray-400 pointer-events-none">
@@ -135,4 +156,42 @@
             </div>
         </div>
     </form>
+
+    <script>
+        function dropdownJenisDrone() {
+            return {
+                open: false,
+                search: '',
+                selected: '',
+                jenis: Object.values(@json($produkKios)),
+                filteredJenis: [],
+                debounceSearch: null,
+                init() {
+                    if (!Array.isArray(this.jenis)) {
+                        this.customers = [];
+                    }
+                    this.filteredJenis = this.jenis;
+                    this.$watch('search', (value) => {
+                        clearTimeout(this.debounceSearch);
+                        this.debounceSearch = setTimeout(() => {
+                            this.filteredJenis = this.jenis.filter(jenis =>
+                                jenis.display.toLowerCase().includes(value.toLowerCase())
+                            );
+                        }, 300);
+                    });
+                },
+                select(id, display) {
+                    this.selected = id;
+                    this.search = display;
+                    this.open = false;
+                    
+                    // Emit event
+                    // const event = new CustomEvent('jenis-drone-changed', {
+                    //     detail: { id: this.selected },
+                    // });
+                    // document.dispatchEvent(event);
+                }
+            }
+        }
+    </script>
 </div>

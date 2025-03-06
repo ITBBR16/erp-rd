@@ -23,7 +23,6 @@ class GudangListProdukServices
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        
         $dataProduk = $this->produk->getAllProduk();
 
         return view('gudang.produk.list-produk.list-produk', [
@@ -38,19 +37,11 @@ class GudangListProdukServices
     public function searchListProduk(Request $request)
     {
         try {
-            $query = $request->input('search_list_produk_gudang');
+            $query = $request->input('search');
 
-            $dataProduk = GudangProduk::with([
-                    'produkSparepart.produkType', 
-                    'produkSparepart.partModel', 
-                    'produkSparepart.produkJenis', 
-                    'produkSparepart.partBagian', 
-                    'produkSparepart.partSubBagian', 
-                    'gudangIdItem'
-                ])
-                ->whereHas('produkSparepart', function ($q) use ($query) {
-                    $q->where('nama_internal', 'like', "%{$query}%");
-                })
+            $dataProduk = GudangProduk::join('rumahdrone_produk.produk_sparepart as ps', 'gudang_produk.produk_sparepart_id', '=', 'ps.id')
+                ->whereRaw("LOWER(ps.nama_internal) LIKE LOWER(?)", ["%{$query}%"])
+                ->select('gudang_produk.*', 'ps.nama_internal')
                 ->paginate(70);
 
             return response()->json([

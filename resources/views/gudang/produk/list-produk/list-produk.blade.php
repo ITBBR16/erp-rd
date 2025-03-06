@@ -58,15 +58,19 @@
     </div>
 
     <script>
+        let debounceTimer;
         document.getElementById('search-list-produk-gudang').addEventListener('input', function() {
+            clearTimeout(debounceTimer);
             let query = this.value;
 
-            fetch("{{ route('search.list.produk') }}?search=" + encodeURIComponent(query))
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('productTable').innerHTML = data.html;
-                })
-                .catch(error => console.error('Error:' + error));
+            debounceTimer = setTimeout(() => {
+                fetch("{{ route('search.list.produk') }}?search=" + encodeURIComponent(query))
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('productTable').innerHTML = data.html;
+                    })
+                    .catch(error => console.error('Error:' + error));
+            }, 500);
         });
     </script>
     

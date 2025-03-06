@@ -38,7 +38,13 @@ class KiosShopSecondController extends Controller
         $statusPembayaran = KiosStatusPembayaran::all();
         $customer = Customer::all();
         $marketplace = KiosMarketplace::all();
-        $kiosProduk = ProdukSubJenis::all();
+        $dataPaketPenjualan = ProdukSubJenis::all();
+        $kiosProduk = $dataPaketPenjualan->map(function ($paket) {
+            return [
+                'id' => $paket->id,
+                'display' => $paket->paket_penjualan,
+            ];
+        });
         $kelengkapan = ProdukKelengkapan::all();
         $alasanJual = KiosAlasanJual::all();
         $secondOrder = KiosOrderSecond::orderBy('created_at', 'desc')->get();
