@@ -536,7 +536,7 @@ class RepairCaseService
         $divisiName = $this->umum->getDivisi($user);
         $dataProvinsi = $this->customerRepository->getProvinsi();
         $caseService = $this->getDataDropdown();
-        $dataEkspedisi = $this->ekspedisi->getDataEkspedisi();
+        $dataEkspedisi = $this->ekspedisi->getDataEkspedisi(); // get data ekspedisi
         $dataCaseBelumLunas = $caseService['data_case']
                             ->filter(function ($case) {
                                 return $case->jenisStatus->jenis_status == 'Proses Menunggu Pembayaran (Lanjut)';
@@ -576,6 +576,26 @@ class RepairCaseService
             'divisi' => $divisiName,
             'case' => $dataCase,
         ]);
+    }
+
+    public function pageInputOngkir($encryptId)
+    {
+        $user = auth()->user();
+        $divisiName = $this->umum->getDivisi($user);
+        $id = decrypt($encryptId);
+        $dataCase = $this->findCase($id);
+        $dataEkspedisi = $this->ekspedisi->getDataEkspedisi();
+
+        return view('repair.csr.edit.kasir-ongkir', [
+            'title' => 'Kasir Ongkir Repair',
+            'active' => 'kasir-repair',
+            'navActive' => 'csr',
+            'dropdown' => '',
+            'divisi' => $divisiName,
+            'dataCase' => $dataCase,
+            'dataEkspedisi' => $dataEkspedisi,
+        ]);
+        
     }
 
     public function pagePelunasan($id)

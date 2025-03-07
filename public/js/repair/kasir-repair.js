@@ -308,10 +308,6 @@ $(document).ready(function () {
                             }
                             containerKecamatan.append(option);
                         });
-
-                        if (kecamatanId) {
-                            getDataKelurahan(id, kecamatanId, null);
-                        }
                     }
                 })
                 .catch(error => console.error('Error fetching data:', error));
@@ -326,7 +322,7 @@ $(document).ready(function () {
             fetch(`/getKelurahan/${selectedKecamatan}`)
                 .then(response => response.json())
                 .then(data => {
-                    containerKelurahan.html('');
+                    containerKelurahan.empty();
                     if (data.length > 0) {
                         const defaultOption = $('<option>')
                             .text('Pilih Kelurahan')
@@ -335,6 +331,8 @@ $(document).ready(function () {
                             .addClass('bg-white dark:bg-gray-700');
                         containerKelurahan.append(defaultOption);
 
+                        let isOptionSelected = false;
+
                         data.forEach(kelurahan => {
                             const option = $('<option>')
                                 .val(kelurahan.id)
@@ -342,6 +340,7 @@ $(document).ready(function () {
 
                             if (kelurahanId && kelurahan.id == kelurahanId) {
                                 option.attr('selected', true);
+                                isOptionSelected = true;
                             }
                             containerKelurahan.append(option);
                         });
