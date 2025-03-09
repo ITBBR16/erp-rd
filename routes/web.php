@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\GudangProdukExport;
 use Carbon\Carbon;
 use App\Exports\KiosFinanceExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -105,13 +106,14 @@ Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
 
         Route::get('/test-export', function () {
-            $export = new KiosFinanceExport();
+            $export = new GudangProdukExport();
             return response()->json($export->collection());
         });
+        // Route::get('/test-export', [GudangProdukExport::class, 'collection']);
         Route::get('/download-recap', function () {
             $timestamp = Carbon::now()->format('d M Y');
-            $fileName = "Kios Daily Recap - {$timestamp}.csv";
-            return Excel::download(new KiosDailyRecapExport, $fileName);
+            $fileName = "Produk Gudang - {$timestamp}.csv";
+            return Excel::download(new GudangProdukExport, $fileName);
         })->name('download.recap');
 
         Route::prefix('/analisa')->group(function () {

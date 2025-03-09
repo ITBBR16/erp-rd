@@ -351,6 +351,7 @@ class KiosKasirController extends Controller
             $pendapatanKiosBaru = $totalHargaKiosBaru - $modalKiosBaru;
             $pendapatanKiosBekas = $totalHargaKiosBekas - $modalKiosBekas;
             $pendapatanPartBaru = $totalHargaGudang - $modalGudang;
+            $nilaiKerugianGudang = $modalGudang - $totalHargaGudang;
 
             $products = [];
             $filesFinance = [];
@@ -460,6 +461,7 @@ class KiosKasirController extends Controller
                 'persediaanSparepartBekas' => 0,
                 'nilaiDiscount' => $kasirDiscount,
                 'nilaiKerugian' => $kasirKerugian,
+                'nilaiKerugianGudang' => $nilaiKerugianGudang,
                 'metodePembayaran' => $namaAkunFinance,
                 'nilaiMP' => $nilaiAkunFinance,
                 'saldoOngkir' => $totalOngkirKasir
