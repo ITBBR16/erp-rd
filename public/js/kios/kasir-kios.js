@@ -396,6 +396,80 @@ $(document).ready(function(){
         window.print();
     });
 
+    // Update Customer
+    $(document).on('click', '.done-update-data-customer', function () {
+        var idCustomer = $('#kasir-nama-customer').val();
+        var provinsiId = $('#update-kasir-provinsi').val();
+        var kotaId = $('#update-kasir-kota').val();
+        var kecamatanId = $('#update-kasir-kecamatan').val();
+        var kelurahanId = $('#update-kasir-kelurahan').val();
+        var kodePos = $('#update-kasir-kodepos').val();
+        var alamat = $('#update-kasir-alamat').val();
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            url: '/kios/kasir/updateDataCustomer',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            data: {
+                id_customer: idCustomer,
+                provinsi_customer: provinsiId,
+                kota_customer: kotaId,
+                kecamatan_customer: kecamatanId,
+                kelurahan_customer: kelurahanId,
+                kode_pos_customer: kodePos,
+                alamat_customer: alamat
+            },
+            success: function(response) {
+                // console.log(response);
+            },
+            error: function(xhr, status, error) {
+                aler(xhr.responseText);
+            }
+        });
+    });
+
+    $(document).on('click', '.update-alamat-kasir', function () {
+        var idCustomer = $('#kasir-nama-customer').val();
+        var containerKodePos = $('#update-kasir-kodepos');
+        var containerAlamat = $('#update-kasir-alamat');
+
+        if (idCustomer == '') {
+            alert('Silahkan pilih customer terlebih dahulu.');
+            return;
+        }
+
+        fetch(`/kios/kasir/getCustomer/${idCustomer}`)
+            .then(response => response.json())
+            .then(data => {
+                console.table(data);
+                let provinsiId = data[0].provinsi_id;
+                let kotaId = data[0].kota_kabupaten_id;
+                let kecamatanId = data[0].kecamatan_id;
+                let kelurahanId = data[0].kelurahan_id;
+
+                getProvinsi(provinsiId);
+                
+                if (provinsiId) {
+                    getDataKota(provinsiId, kotaId);
+                    
+                    if (kotaId) {
+                        getDataKecamatan(kotaId, kecamatanId);
+    
+                        if (kecamatanId) {
+                            getDataKelurahan(kecamatanId, kelurahanId);
+                        }
+                    }
+                }
+
+                containerKodePos.val(data[0].kode_pos);
+                containerAlamat.val(data[0].nama_jalan);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
     function checkPembayaranKasirLunas()
     {
         let totalTagihan = 0;
@@ -461,10 +535,152 @@ $(document).ready(function(){
         }
     }
 
-    // $('#btn-download-pdf-invoice-kasir').on('click', function() {
-    //     let formData = $("#pdfForm").serialize();
-    //     let url = "/kios/kasir/generate-pdf?" + formData;
-    //     window.open(url, '_blank');
-    // });
+    function getProvinsi(provinsiId) {
+        const containerProvinsi = $('#update-kasir-provinsi');
+        const containerKota = $('#update-kasir-kota');
+        const containerKecamatan = $('#update-kasir-kecamatan');
+        const containerKelurahan = $('#update-kasir-kelurahan');
+
+        containerKota.html('');
+        containerKecamatan.html('');
+        containerKelurahan.html('');
+
+        fetch('/getProvinsi')
+            .then(response => response.json())
+            .then(data => {
+                containerProvinsi.html('');
+                if (data.length > 0) {
+                    const defaultOption = $('<option>')
+                        .text('Pilih Provinsi')
+                        .val('')
+                        .attr('hidden', true);
+                    containerProvinsi.append(defaultOption);
+
+                    data.forEach(provinsi => {
+                        const option = $('<option>')
+                            .val(provinsi.id)
+                            .text(provinsi.name)
+                            .addClass('bg-white dark:bg-gray-700');
+                        
+                        if (provinsiId && provinsi.id == provinsiId) {
+                            option.attr('selected', true);
+                        }
+
+                        containerProvinsi.append(option);
+                    });
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    function getDataKota(provinsiId, kotaId) {
+        const selectedProvinsi = (provinsiId != null) ? provinsiId : $('#update-kasir-provinsi').val();
+        const containerKota = $('#update-kasir-kota');
+        const containerKecamatan = $('#update-kasir-kecamatan');
+        const containerKelurahan = $('#update-kasir-kelurahan');
+
+        containerKecamatan.html('');
+        containerKelurahan.html('');
+
+        if (selectedProvinsi) {
+            fetch(`/getKota/${selectedProvinsi}`)
+                .then(response => response.json())
+                .then(data => {
+                    containerKota.html('');
+                    if (data.length > 0) {
+                        const defaultOption = $('<option>')
+                            .text('Pilih Kota / Kabupaten')
+                            .val('')
+                            .attr('hidden', true);
+                        containerKota.append(defaultOption);
+
+                        data.forEach(kota => {
+                            const option = $('<option>')
+                                .val(kota.id)
+                                .text(kota.name)
+                                .addClass('bg-white dark:bg-gray-700');
+
+                            if (kotaId && kota.id == kotaId) {
+                                option.attr('selected', true);
+                            }
+                            containerKota.append(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+    }
+
+    function getDataKecamatan(kotaId, kecamatanId) {
+        const selectedKota = (kotaId != null) ? kotaId : $('#update-kasir-kota').val();
+        const containerKecamatan = $('#update-kasir-kecamatan');
+        const containerKelurahan = $('#update-kasir-kelurahan');
+
+        containerKelurahan.html('');
+
+        if (selectedKota) {
+            fetch(`/getKecamatan/${selectedKota}`)
+                .then(response => response.json())
+                .then(data => {
+                    containerKecamatan.html('');
+                    if (data.length > 0) {
+                        const defaultOption = $('<option>')
+                            .text('Pilih Kecamatan')
+                            .val('')
+                            .attr('hidden', true);
+                        containerKecamatan.append(defaultOption);
+
+                        data.forEach(kecamatan => {
+                            const option = $('<option>')
+                                .val(kecamatan.id)
+                                .text(kecamatan.name)
+                                .addClass('bg-white dark:bg-gray-700');
+
+                            if (kecamatanId && kecamatan.id == kecamatanId) {
+                                option.attr('selected', true);
+                            }
+                            containerKecamatan.append(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+    }
+
+    function getDataKelurahan(kecamatanId, kelurahanId) {
+        const selectedKecamatan = (kecamatanId != null) ? kecamatanId : $('#update-kasir-kecamatan').val();
+        const containerKelurahan = $('#update-kasir-kelurahan');
+
+        if (selectedKecamatan) {
+            fetch(`/getKelurahan/${selectedKecamatan}`)
+                .then(response => response.json())
+                .then(data => {
+                    containerKelurahan.empty();
+                    if (data.length > 0) {
+                        const defaultOption = $('<option>')
+                            .text('Pilih Kelurahan')
+                            .val('')
+                            .attr('hidden', true)
+                            .addClass('bg-white dark:bg-gray-700');
+                        containerKelurahan.append(defaultOption);
+
+                        let isOptionSelected = false;
+
+                        data.forEach(kelurahan => {
+                            const option = $('<option>')
+                                .val(kelurahan.id)
+                                .text(kelurahan.name);
+
+                            if (kelurahanId && kelurahan.id == kelurahanId) {
+                                option.attr('selected', true);
+                                isOptionSelected = true;
+                            }
+                            containerKelurahan.append(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+    }
 
 });

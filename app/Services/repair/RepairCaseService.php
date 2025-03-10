@@ -718,7 +718,7 @@ class RepairCaseService
                     'kota_kabupaten_id' => $request->input('kota_customer'),
                     'kecamatan_id' => $request->input('kecamatan_customer'),
                     'kelurahan_id' => $request->input('kelurahan_customer'),
-                    'kedo_pos' => $request->input('kode_pos_customer'),
+                    'kode_pos' => $request->input('kode_pos_customer'),
                     'nama_jalan' => $request->input('alamat_customer'),
                 ];
 

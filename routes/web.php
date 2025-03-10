@@ -74,7 +74,6 @@ use App\Http\Controllers\repair\RepairKonfirmasiReqPartController;
 use App\Http\Controllers\logistik\LogistikListCaseRepairController;
 use App\Http\Controllers\logistik\LogistikRequestPackingController;
 use App\Http\Controllers\logistik\LogistikRequestPaymentController;
-use App\Http\Controllers\logistik\LogistikValidasiProdukController;
 use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
@@ -83,12 +82,17 @@ use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
 use App\Http\Controllers\repair\RepairRubahEstimasiGeneralController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
+use App\Models\wilayah\Provinsi;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Dependent Dropdown 
+Route::get('/getProvinsi', function () {
+    $provinsi = Provinsi::all();
+    return response()->json($provinsi);
+});
 Route::get('/getKota/{provinsiId}', [KotaController::class, 'getKota']);
 Route::get('/getKecamatan/{kotaId}', [KecamatanController::class, 'getKecamatan']);
 Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelurahan']);
@@ -233,6 +237,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/get-nilai-bnob/{id}', 'getNilaiBnob');
                 Route::get('/getCustomer/{customerId}', 'getCustomer');
                 Route::get('/generate-pdf', 'previewPdfKasir');
+                Route::post('/updateDataCustomer', 'updateDataCustomer');
             });
             Route::group(['controller' => KiosPODPController::class], function () {
                 Route::resource('/dp-po', KiosPODPController::class);

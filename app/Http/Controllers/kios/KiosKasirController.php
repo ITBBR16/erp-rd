@@ -485,6 +485,33 @@ class KiosKasirController extends Controller
 
     }
 
+    public function updateDataCustomer(Request $request)
+    {
+        try {
+
+            $connectionTransaksiKios = DB::connection('rumahdrone_kios');
+            $connectionTransaksiKios->beginTransaction();
+
+            $dataCustomer = [
+                'provinsi_id' => $request->input('provinsi_customer'),
+                'kota_kabupaten_id' => $request->input('kota_customer'),
+                'kecamatan_id' => $request->input('kecamatan_customer'),
+                'kelurahan_id' => $request->input('kelurahan_customer'),
+                'kode_pos' => $request->input('kode_pos_customer'),
+                'nama_jalan' => $request->input('alamat_customer'),
+            ];
+
+            $customer = Customer::findOrFail($request->input('id_customer'));
+            $customer->update($dataCustomer);
+
+            $connectionTransaksiKios->commit();
+
+        } catch (Exception $e) {
+            $connectionTransaksiKios->rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
     public function autocomplete($jenisTransaksi)
     {
         if ($jenisTransaksi == 'drone_baru') {

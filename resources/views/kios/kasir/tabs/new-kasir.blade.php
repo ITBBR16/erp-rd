@@ -261,7 +261,7 @@
                     </div>
                 </div>
                 <button type="button" data-modal-target="kasir-invoice" data-modal-toggle="kasir-invoice" class="review-invoice text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-80 mx-auto">Review Invoice</button>
-                {{-- <button type="submit" name="status_kasir" value="Hold" class="text-white mt-4 bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full">Hold Payment</button> --}}
+                <button type="button" data-modal-target="update-alamat-kasir" data-modal-toggle="update-alamat-kasir" class="update-alamat-kasir text-white mt-4 bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full">Update Alamat</button>
             </div>
         </div>
 
@@ -407,6 +407,7 @@
     </form>
     {{-- Modal --}}
     @include('kios.kasir.modal.invoice-modal')
+    @include('kios.kasir.modal.update-customer')
 
     {{-- Function Script --}}
     <script>
