@@ -470,6 +470,18 @@ $(document).ready(function(){
             .catch(error => console.error('Error:', error));
     });
 
+    $(document).on('change', '#update-kasir-provinsi', function () {
+        getDataKota();
+    });
+
+    $(document).on('change', '#update-kasir-kota', function () {
+        getDataKecamatan();
+    });
+
+    $(document).on('change', '#update-kasir-kecamatan', function () {
+        getDataKelurahan();
+    });
+
     function checkPembayaranKasirLunas()
     {
         let totalTagihan = 0;
