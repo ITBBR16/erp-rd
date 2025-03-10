@@ -455,26 +455,26 @@
                                     <tr id="konfirmasi-data-gudang-{{ $indexGudang }}" class="bg-white dark:bg-gray-800">
                                         <td class="px-2 py-4">
                                             <div class="relative z-0 w-full">
-                                                <input name="stok_part[]" id="stok-part-{{ $indexGudang }}" type="text" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="-" readonly>
+                                                <input id="stok-part-{{ $indexGudang }}" type="text" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="-" readonly>
                                             </div>
                                         </td>
                                         <td class="px-2 py-4">
                                             <div class="relative z-0 w-full group flex items-center">
                                                 <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                                                <input name="harga_promo_part[]" id="harga-promo-part-{{ $indexGudang }}" type="text" class="format-angka-estimasi block py-2.5 ps-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="0" readonly>
+                                                <input id="harga-promo-part-{{ $indexGudang }}" type="text" class="format-angka-estimasi block py-2.5 ps-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="0" readonly>
                                             </div>
                                         </td>
                                         <td class="px-2 py-4">
                                             <div class="relative z-0 w-full group flex items-center">
                                                 <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                                                <input name="harga_repair[]" id="harga-repair-{{ $indexGudang }}" type="text" class="format-angka-estimasi block py-2.5 ps-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ number_format($gudang->harga_repair, 0, ',', '.') }}" readonly>
+                                                <input id="harga-repair-{{ $indexGudang }}" type="text" class="format-angka-estimasi block py-2.5 ps-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ number_format($gudang->harga_repair, 0, ',', '.') }}" readonly>
                                             </div>
                                         </td>
                                         <td class="px-2 py-4">
-                                            <input type="hidden" name="modal_gudang[]" id="estimasi-modal-gudang-{{ $indexGudang }}" value="{{ $gudang->modal_gudang }}">
+                                            <input type="hidden" id="estimasi-modal-gudang-{{ $indexGudang }}" value="{{ $gudang->modal_gudang }}">
                                             <div class="relative z-0 w-full group flex items-center">
                                                 <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                                                <input name="harga_gudang[]" id="harga-gudang-{{ $indexGudang }}" type="text" class="format-angka-estimasi block py-2.5 ps-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ number_format($gudang->harga_gudang, 0, ',', '.') }}" readonly>
+                                                <input id="harga-gudang-{{ $indexGudang }}" type="text" class="format-angka-estimasi block py-2.5 ps-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ number_format($gudang->harga_gudang, 0, ',', '.') }}" readonly>
                                             </div>
                                         </td>
                                     </tr>

@@ -383,6 +383,7 @@ class RepairEstimasiService
     public function ubahEstimasi(Request $request, $id)
     {
         try {
+            $this->repairEstimasi->beginTransaction();
 
             $employeeId = auth()->user()->id;
             $tglWaktu = Carbon::now();
@@ -394,7 +395,6 @@ class RepairEstimasiService
             $namaPartJasa = $request->input('nama_part_jasa');
             $namaAlias = $request->input('nama_alias');
             $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
-            $namaPartGudang = $request->input('nama_part');
             
             // Data Part
             $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
@@ -416,7 +416,7 @@ class RepairEstimasiService
                     $idHasilEstimasi = $idEstimasiLama[$index];
                     if ($jt == 1) {
                         $dataUpdateEstimasiPart = [
-                            'nama_alias' => $namaAliasLama[$index],
+                            'nama_alias' => $namaAliasLama[$index] ?? '',
                             'harga_customer' => $hargaCustomerLama[$index],
                             'active' => $statusActive[$index],
                         ];
@@ -439,18 +439,16 @@ class RepairEstimasiService
                     // Insert new data
                     if ($jt == 1) {
                         $createPart = [
-                            'estimasi_id' => $id,
-                            'jenis_transaksi_id' => $jt,
-                            'sku' => $namaPartJasa[$index],
-                            'jenis_produk' => $jenisPartJasa[$index],
-                            'nama_produk' => $namaPartGudang[$index],
-                            'nama_alias' => $namaAlias[$index],
-                            'harga_customer' => $hargaCustomer[$index],
-                            'harga_repair' => $hargaRepair[$index],
-                            'harga_gudang' => $hargaGudang[$index],
-                            'modal_gudang' => $modalGudang[$index],
-                            'status_proses_id' => 3,
-                            'active' => 'Active',
+                        'estimasi_id' => $id,
+                        'jenis_transaksi_id' => $jt,
+                        'gudang_produk_id' => $namaPartJasa[$index],
+                        'nama_alias' => $namaAlias[$index] ?? '',
+                        'harga_customer' => $hargaCustomer[$index],
+                        'harga_repair' => $hargaRepair[$index],
+                        'harga_gudang' => $hargaGudang[$index],
+                        'modal_gudang' => $modalGudang[$index],
+                        'status_proses_id' => 3,
+                        'active' => 'Active',
                         ];
                         $this->repairEstimasi->createEstimasiPart($createPart);
 
