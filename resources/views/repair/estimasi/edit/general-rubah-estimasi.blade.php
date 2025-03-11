@@ -6,7 +6,7 @@
             <li class="flex items-center">
                 <a href="{{ route("rubah-estimasi.index") }}" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                     <span class="material-symbols-outlined text-base mr-2.5">playlist_add_check_circle</span>
-                    Konfirmasi Estimasi
+                    Rubah Estimasi
                 </a>
             </li>
             <li aria-current="page">
@@ -309,7 +309,6 @@
                                             </div>
                                         </td>
                                         <td class="px-2 py-4">
-                                            <input type="hidden" name="modal_gudang[]" id="estimasi-modal-gudang-{{ $indexGudang }}" value="{{ $gudang->modal_gudang }}">
                                             <div class="relative z-0 w-full group flex items-center">
                                                 <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
                                                 <input name="harga_gudang[]" id="harga-gudang-{{ $indexGudang }}" type="text" class="format-angka-estimasi block py-2.5 ps-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ number_format($gudang->harga_gudang, 0, ',', '.') }}" readonly>
@@ -471,7 +470,6 @@
                                             </div>
                                         </td>
                                         <td class="px-2 py-4">
-                                            <input type="hidden" id="estimasi-modal-gudang-{{ $indexGudang }}" value="{{ $gudang->modal_gudang }}">
                                             <div class="relative z-0 w-full group flex items-center">
                                                 <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
                                                 <input id="harga-gudang-{{ $indexGudang }}" type="text" class="format-angka-estimasi block py-2.5 ps-6 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ number_format($gudang->harga_gudang, 0, ',', '.') }}" readonly>

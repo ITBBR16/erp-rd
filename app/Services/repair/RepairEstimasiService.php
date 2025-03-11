@@ -399,8 +399,7 @@ class RepairEstimasiService
             // Data Part
             $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
             $hargaGudang = preg_replace("/[^0-9]/", "",$request->input('harga_gudang'));
-            $modalGudang = preg_replace("/[^0-9]/", "",$request->input('modal_gudang'));
-            
+
             // Data Lama
             $idEstimasiLama = $request->input('id_hasil_estimasi');
             $jenisTransaksiLama = $request->input('jenis_transaksi_lama');
@@ -446,7 +445,6 @@ class RepairEstimasiService
                         'harga_customer' => $hargaCustomer[$index],
                         'harga_repair' => $hargaRepair[$index],
                         'harga_gudang' => $hargaGudang[$index],
-                        'modal_gudang' => $modalGudang[$index],
                         'status_proses_id' => 3,
                         'active' => 'Active',
                         ];
