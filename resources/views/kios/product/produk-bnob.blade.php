@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="flex text-3xl font-bold mb-8 text-gray-700 border-b border-gray-400 py-3 dark:text-gray-300">
-        <span>Daftar Produk Second</span>
+        <span>Daftar Produk BNOB</span>
     </div>
 
     @if (session()->has('success'))
@@ -61,9 +61,6 @@
                             Serial Number
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            CC Produk
-                        </th>
-                        <th scope="col" class="px-6 py-3">
                             Modal Produk
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -75,28 +72,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($produkseconds as $key => $pd)
+                    @foreach ($productsBnob as $produk)
                     <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600 customer-row">
                         <td class="px-6 py-2">
-                            {{ $pd->subjenis->paket_penjualan }}
+                            {{ $produk->subjenis->paket_penjualan }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $pd->serial_number }}
+                            {{ $produk->serial_number }}
                         </td>
                         <td class="px-6 py-2">
-                            {{ $pd->cc_produk_second }}
-                        </td>
-                        <td class="px-6 py-2">
-                            Rp. {{ number_format($pd->modal_bekas, 0, ',', '.') }}
+                            Rp. {{ number_format($produk->modal_bnob, 0, ',', '.') }}
                         </td>
                         <td class="px-6 py-2">
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-bold text-gray-700 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-300 dark:border-gray-600">RP</span>
-                                <input type="text" id="srp-daftar-produk-second-{{ $pd->id }}" data-id="{{ $pd->id }}" class="srp-daftar-produk-second rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($pd->srp, 0, ',', '.') }}" {{ ($pd->status == 'Sold') ? 'disabled' : '' }}>
+                                <input type="text" id="srp-daftar-produk-bnob-{{ $produk->id }}" data-id="{{ $produk->id }}" class="update-srp-baru rounded-none rounded-e-lg bg-gray-50 border text-base text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-12 border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($produk->srp, 0, ',', '.') }}" {{ ($produk->status == 'Sold') ? 'disabled' : '' }}>
                             </div>
                         </td>
                         <td class="px-6 py-2">
-                            <span class="bg-{{ ($pd->status == 'Ready') ? 'green' : (($pd->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $pd->status }}</span>
+                            <span class="bg-{{ ($produk->status == 'Ready') ? 'green' : (($produk->status == 'Promo') ? 'red' : 'gray') }}-500 text-white font-medium me-2 px-2.5 py-0.5 rounded-full">{{ $produk->status }}</span>
                         </td>
                     </tr>
                     @endforeach

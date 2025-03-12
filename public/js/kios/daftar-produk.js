@@ -152,6 +152,32 @@ $(document).ready(function () {
         });
     });
 
+    // Change SRP produk bnob
+    $('input[id^="srp-daftar-produk-bnob-"]').on('input', function() {
+        var productId = $(this).data('id');
+        var srp = $(this).val();
+        var newSrp = srp.replace(/[^\d]/g, '');
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            url: '/kios/product/update-srp-bnob',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            data: {
+                productId: productId,
+                newSrp: newSrp
+            },
+            success: function(response) {
+                // console.log(response);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
     $(document).on('change', '.category-checkbox', function () {
         var categoryId = $(this).data("id");
         var categoryText = $(this).next('label').text();
@@ -191,6 +217,8 @@ $(document).ready(function () {
             }
         });
     });
+
+
 
     // Filter produk baru
     function showFilterData(id, text) {

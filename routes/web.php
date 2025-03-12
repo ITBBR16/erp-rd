@@ -1,8 +1,9 @@
 <?php
 
-use App\Exports\GudangProdukExport;
 use Carbon\Carbon;
+use App\Models\wilayah\Provinsi;
 use App\Exports\KiosFinanceExport;
+use App\Exports\GudangProdukExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KiosDailyRecapExport;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,7 @@ use App\Http\Controllers\kios\KiosPengirimanController;
 use App\Http\Controllers\kios\KiosShopSecondController;
 use App\Http\Controllers\customer\AddCustomerController;
 use App\Http\Controllers\gudang\GudangBelanjaController;
+use App\Http\Controllers\kios\KiosProductBnobController;
 use App\Http\Controllers\customer\DataCustomerController;
 use App\Http\Controllers\gudang\GudangSupplierController;
 use App\Http\Controllers\gudang\GudangUnboxingController;
@@ -78,11 +80,10 @@ use App\Http\Controllers\repair\RepairKonfirmasiEstimasiController;
 use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
 use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
+use App\Http\Controllers\repair\RepairRubahEstimasiGeneralController;
 use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
-use App\Http\Controllers\repair\RepairRubahEstimasiGeneralController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
-use App\Models\wilayah\Provinsi;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -110,14 +111,14 @@ Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
 
         Route::get('/test-export', function () {
-            $export = new GudangProdukExport();
+            $export = new KiosDailyRecapExport();
             return response()->json($export->collection());
         });
-        // Route::get('/test-export', [GudangProdukExport::class, 'collection']);
+
         Route::get('/download-recap', function () {
             $timestamp = Carbon::now()->format('d M Y');
-            $fileName = "Produk Gudang - {$timestamp}.csv";
-            return Excel::download(new GudangProdukExport, $fileName);
+            $fileName = "Daily Recap - {$timestamp}.csv";
+            return Excel::download(new KiosDailyRecapExport, $fileName);
         })->name('download.recap');
 
         Route::prefix('/analisa')->group(function () {
@@ -159,8 +160,13 @@ Route::middleware('kios')->group(function () {
             });
 
             Route::group(['controller' => KiosProductSecondController::class], function () {
-                Route::resource('/list-product-second', KiosProductSecondController::class);
+                Route::resource('/list-product-second', KiosProductSecondController::class)->only(['index']);
                 Route::post('/update-srp-second', 'updateSRPSecond');
+            });
+
+            Route::group(['controller' => KiosProductBnobController::class], function () {
+                Route::resource('/list-product-bnob', KiosProductBnobController::class)->only(['index']);
+                Route::post('/update-srp-bnob', 'updateSRPBnob');
             });
 
             Route::resource('/shop', KiosShopController::class);

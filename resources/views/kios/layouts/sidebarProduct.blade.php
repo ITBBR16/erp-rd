@@ -20,12 +20,17 @@
                 </button>
                 <ul x-show="openProduk" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="py-2 space-y-1">
                     <li>
-                        <a href="/kios/product/list-product" class="{{ ($active === 'product') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                        <a href="{{ route('list-product.index') }}" class="{{ ($active === 'product') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                             <span class="flex-1 ml-3 whitespace-nowrap">Produk Baru</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/kios/product/list-product-second" class="{{ ($active === 'product-second') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                        <a href="{{ route('list-product-bnob.index') }}" class="{{ ($active === 'product-bnob') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
+                            <span class="flex-1 ml-3 whitespace-nowrap">Produk BNOB</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('list-product-second.index') }}" class="{{ ($active === 'product-second') ? 'bg-gray-100 dark:bg-gray-700' : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group pl-11">
                             <span class="flex-1 ml-3 whitespace-nowrap">Produk Second</span>
                         </a>
                     </li>

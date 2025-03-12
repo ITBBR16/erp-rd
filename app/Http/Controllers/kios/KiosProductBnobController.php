@@ -4,10 +4,10 @@ namespace App\Http\Controllers\kios;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\kios\KiosProdukSecond;
+use App\Models\kios\KiosProdukBnob;
 use App\Repositories\kios\KiosRepository;
 
-class KiosProductSecondController extends Controller
+class KiosProductBnobController extends Controller
 {
     public function __construct(private KiosRepository $suppKiosRepo){}
 
@@ -15,7 +15,7 @@ class KiosProductSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        $produkSeconds = KiosProdukSecond::orderByRaw("
+        $productsBnob = KiosProdukBnob::orderByRaw("
                             CASE 
                                 WHEN status = 'Ready' THEN 1
                                 WHEN status = 'Sold' THEN 2
@@ -25,25 +25,24 @@ class KiosProductSecondController extends Controller
                         ->orderBy('updated_at', 'desc')
                         ->paginate(50);
 
-        return view('kios.product.produk-second', [
-            'title' => 'Product Second',
-            'active' => 'product-second',
+        return view('kios.product.produk-bnob', [
+            'title' => 'Product BNOB',
+            'active' => 'product-bnob',
             'navActive' => 'product',
             'dropdown' => 'list-produk',
             'dropdownShop' => '',
             'divisi' => $divisiName,
-            'produkseconds' => $produkSeconds,
+            'productsBnob' => $productsBnob,
         ]);
     }
 
-    public function updateSRPSecond(Request $request)
+    public function updateSRPBnob(Request $request)
     {
         $productSecondId = $request->input('productId');
         $newSrp = $request->input('newSrp');
 
-        $productSecond = KiosProdukSecond::findOrFail($productSecondId);
+        $productSecond = KiosProdukBnob::findOrFail($productSecondId);
         $productSecond->srp = $newSrp;
         $productSecond->save();
     }
-
 }
