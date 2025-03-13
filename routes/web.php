@@ -72,6 +72,7 @@ use App\Http\Controllers\repair\RepairRequestSparepartController;
 use App\Http\Controllers\gudang\GudangPengirimanBelanjaController;
 use App\Http\Controllers\kios\DashboardTechnicalSupportController;
 use App\Http\Controllers\kios\KiosPengecekkanProdukBaruController;
+use App\Http\Controllers\repair\RepairDashboardEstimasiController;
 use App\Http\Controllers\repair\RepairKonfirmasiReqPartController;
 use App\Http\Controllers\logistik\LogistikListCaseRepairController;
 use App\Http\Controllers\logistik\LogistikRequestPackingController;
@@ -396,6 +397,7 @@ Route::middleware('repair')->group(function () {
         });
 
         Route::prefix('/estimasi')->group(function () {
+            Route::get('dashboard-estimasi', [RepairDashboardEstimasiController::class, 'index'])->name('dashboard-estimasi');
             Route::group(['controller' => RepairEstimasiBiayaController::class], function () {
                 Route::resource('/estimasi-biaya', RepairEstimasiBiayaController::class)->only(['index', 'update', 'edit']);
                 Route::get('/detail-estimasi/{id}', 'detailEstimasi')->name('detailEstimasi');
