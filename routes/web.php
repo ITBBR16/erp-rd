@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\EstimasiPartExport;
 use Carbon\Carbon;
 use App\Models\wilayah\Provinsi;
 use App\Exports\KiosFinanceExport;
@@ -112,14 +113,14 @@ Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
 
         Route::get('/test-export', function () {
-            $export = new KiosDailyRecapExport();
+            $export = new EstimasiPartExport();
             return response()->json($export->collection());
         });
 
         Route::get('/download-recap', function () {
             $timestamp = Carbon::now()->format('d M Y');
-            $fileName = "Daily Recap - {$timestamp}.csv";
-            return Excel::download(new KiosDailyRecapExport, $fileName);
+            $fileName = "Sparepart Estimasi - {$timestamp}.csv";
+            return Excel::download(new EstimasiPartExport, $fileName);
         })->name('download.recap');
 
         Route::prefix('/analisa')->group(function () {

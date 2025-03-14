@@ -14,15 +14,37 @@ class EstimasiPartExport implements FromCollection, WithHeadings
                         ->get()
                         ->groupBy('gudang_produk_id')
                         ->map(function ($items) {
-                            $namaPart = optional($items->first()->sparepartGudang->produkSparepart)->nama_internal;
+                            $namaPart = optional(optional($items->first())->sparepartGudang->produkSparepart)->nama_internal;
+
+                            $stockPartSystem = $items->first()?->sparepartGudang?->produkSparepart?->gudangIdItem
+                                            ->where('status_inventory', 'Ready')
+                                            ->count();
 
                             return [
                                 'List Part'                => $namaPart,
-                                'Total Part Laku'          => $items->whereNotNull('tanggal_lunas')->count(),
-                                'Total Part Dikirim'       => $items->whereNotNull('tanggal_dikirim')->count(),
-                                'Total Part Belum Dikirim' => $items->whereNull('tanggal_dikirim')->count(),
-                                'Total Part Estimasi'      => 0,
-                                'Stock Part System'        => 0,
+                                'Total Part Laku'          => $items->filter(fn($item) => 
+                                                                !is_null($item->tanggal_lunas) && 
+                                                                $item->tanggal_lunas !== ''
+                                                            )->count(),
+
+                                'Total Part Dikirim'       => $items->filter(fn($item) => 
+                                                                !is_null($item->tanggal_dikirim) && 
+                                                                $item->tanggal_dikirim !== '' && 
+                                                                (is_null($item->tanggal_lunas) || $item->tanggal_lunas === '')
+                                                            )->count(),
+
+                                'Total Part Belum Dikirim' => $items->filter(fn($item) => 
+                                                                !is_null($item->tanggal_konfirmasi) && 
+                                                                $item->tanggal_konfirmasi !== '' && 
+                                                                (is_null($item->tanggal_dikirim) || $item->tanggal_dikirim === '')
+                                                            )->count(),
+
+                                'Total Part Estimasi'      => $items->filter(fn($item) => 
+                                                                is_null($item->tanggal_konfirmasi) || 
+                                                                $item->tanggal_konfirmasi === ''
+                                                            )->count(),
+
+                                'Stock Part System'        => $stockPartSystem ?? 0,
                                 'Part SO'                  => 0,
                             ];
                         })
