@@ -20,6 +20,9 @@
                 <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                     <tr>
                         <th scope="col" class="px-6 py-3">
+                            Nama Customer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Nama Kelengkapan
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -37,6 +40,9 @@
                     @foreach ($dataKelengkapan as $kelengkapan)
                         <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
                             <td class="px-6 py-2">
+                                {{ $kelengkapan->kiosQCSecond->ordersecond->customer->first_name }} {{ $kelengkapan->kiosQCSecond->ordersecond->customer->last_name }} - {{ $kelengkapan->kiosQCSecond->ordersecond->customer->id }}
+                            </td>
+                            <td class="px-6 py-2">
                                 {{ $kelengkapan->kelengkapans->kelengkapan }}
                             </td>
                             <td class="px-6 py-2">
@@ -46,7 +52,6 @@
                                 Rp. {{ number_format($kelengkapan->harga_satuan, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-2">
-
                                 <span class="bg-{{ ($kelengkapan->status == 'On Sell') ? 'red' : (($kelengkapan->status == 'Ready') ? 'green' : 'orange') }}-500 rounded-md px-2 py-0 text-white">{{ $kelengkapan->status }}</span>
                             </td>
                         </tr>

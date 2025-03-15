@@ -2,11 +2,12 @@
 
 namespace App\Models\produk;
 
-use App\Models\gudang\GudangBelanjaDetail;
 use App\Models\gudang\GudangProduk;
-use App\Models\gudang\GudangProdukIdItem;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\kios\KiosTransaksiPart;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\gudang\GudangProdukIdItem;
+use App\Models\gudang\GudangBelanjaDetail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProdukSparepart extends Model
 {
@@ -59,5 +60,10 @@ class ProdukSparepart extends Model
     public function gudangIdItem()
     {
         return $this->hasMany(GudangProdukIdItem::class, 'gudang_produk_id');
+    }
+
+    public function transaksiPart()
+    {
+        return $this->hasMany(KiosTransaksiPart::class, 'gudang_produk_id');
     }
 }

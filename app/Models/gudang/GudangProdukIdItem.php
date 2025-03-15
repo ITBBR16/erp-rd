@@ -2,10 +2,11 @@
 
 namespace App\Models\gudang;
 
+use App\Models\kios\KiosTransaksiPart;
 use App\Models\produk\ProdukSparepart;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\repair\RepairEstimasiPart;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class GudangProdukIdItem extends Model
 {
@@ -53,6 +54,11 @@ class GudangProdukIdItem extends Model
     public function produkSparepart()
     {
         return $this->belongsTo(ProdukSparepart::class, 'gudang_produk_id');
+    }
+
+    public function transaksiKios()
+    {
+        return $this->hasOne(KiosTransaksiPart::class);
     }
 
 }

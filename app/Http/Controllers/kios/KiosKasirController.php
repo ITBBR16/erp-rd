@@ -85,7 +85,7 @@ class KiosKasirController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $dataHistory = KiosTransaksi::all();
+        $dataHistory = KiosTransaksi::orderBy('id', 'desc')->get();
 
         return view('kios.kasir.history-transaksi', [
             'title' => 'History Transaksi',
