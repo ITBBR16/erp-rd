@@ -132,10 +132,11 @@ class GudangKonfirmasiPengirimanServices
     public function countModalGudang($id)
     {
         $dataGudangEstimasi = $this->estimasiPart
-            ->where('gudang_produk_id', $id)
-            ->whereNotNull('tanggal_dikirim')
-            ->where('active', 'Active')
-            ->sum('modal_gudang');
+                ->where('gudang_produk_id', $id)
+                ->whereNotNull('tanggal_dikirim')
+                ->where('tanggal_dikirim', '!=', '')
+                ->where('active', 'Active')
+                ->sum('modal_gudang');
 
         $dataGudangTransaksi = $this->transaksiPart
             ->where('gudang_produk_id', $id)

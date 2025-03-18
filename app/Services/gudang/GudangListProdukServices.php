@@ -6,6 +6,8 @@ use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\gudang\GudangProduk;
+use App\Models\kios\KiosTransaksiPart;
+use App\Models\repair\RepairEstimasiPart;
 use App\Repositories\umum\UmumRepository;
 use App\Repositories\gudang\repository\GudangProdukRepository;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
@@ -16,7 +18,9 @@ class GudangListProdukServices
         private UmumRepository $umum,
         private GudangTransactionRepository $transaction,
         private GudangProdukRepository $produk,
-        private GudangProduk $sparepart
+        private GudangProduk $sparepart,
+        private RepairEstimasiPart $estimasiPart,
+        private KiosTransaksiPart $transaksiPart,
     ){}
 
     public function index()
@@ -24,6 +28,15 @@ class GudangListProdukServices
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
         $dataProduk = $this->produk->getAllProduk();
+
+        foreach ($dataProduk as $produk) {
+            try {
+                $modalGudang = $this->countModalGudang($produk->produkSparepart->id);
+                $produk->modal_gudang = $modalGudang['modalGudang'];
+            } catch (\Exception $e) {
+                $produk->modal_gudang = 0;
+            }
+        }
 
         return view('gudang.produk.list-produk.list-produk', [
             'title' => 'Gudang Produk',
@@ -116,6 +129,42 @@ class GudangListProdukServices
             $this->transaction->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
+    }
+
+    public function countModalGudang($id)
+    {
+        $dataGudangEstimasi = $this->estimasiPart
+            ->where('gudang_produk_id', $id)
+            ->whereNotNull('tanggal_dikirim')
+            ->where('active', 'Active')
+            ->sum('modal_gudang');
+
+        $dataGudangTransaksi = $this->transaksiPart
+            ->where('gudang_produk_id', $id)
+            ->sum('modal_gudang');
+
+        $dataGudang = $this->sparepart
+            ->where('produk_sparepart_id', $id)
+            ->whereIn('status', ['Ready', 'Promo'])
+            ->first();
+
+        if (!$dataGudang) {
+            throw new \Exception("Data gudang tidak ditemukan");
+        }
+
+        $dataSubGudang = $dataGudang->produkSparepart->gudangIdItem()->where('status_inventory', 'Ready')->get();
+        $totalSN = $dataSubGudang->count();
+
+        if ($totalSN == 0) {
+            return ['modalGudang' => 0];
+        }
+
+        $modalAwal = $dataGudang->modal_awal ?? 0;
+        $modalGudang = ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN;
+
+        return [
+            'modalGudang' => round($modalGudang),
+        ];
     }
 
 }

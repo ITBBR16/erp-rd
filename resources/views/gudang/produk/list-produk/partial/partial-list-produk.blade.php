@@ -6,11 +6,14 @@
                     <th scope="col" class="px-6 py-3" style="width: 14%;">
                         SKU
                     </th>
-                    <th scope="col" class="px-6 py-3" style="width: 30%;">
+                    <th scope="col" class="px-6 py-3" style="width: 25%;">
                         Nama Sparepart
                     </th>
-                    <th scope="col" class="px-6 py-3" style="width: 10%;">
+                    <th scope="col" class="px-6 py-3" style="width: 5%;">
                         Stok
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="width: 10%;">
+                        Modal
                     </th>
                     <th scope="col" class="px-6 py-3" style="width: 13%;">
                         Harga Internal
@@ -45,6 +48,9 @@
                                 $stock = $produk->produkSparepart->gudangIdItem->where('status_inventory', 'Ready')->count()
                             @endphp
                             {{ $stock }}
+                        </td>
+                        <td class="px-6 py-2">
+                            Rp. {{ number_format($produk->modal_gudang, 0, ',', '.') }}
                         </td>
                         <td class="px-6 py-2">
                             <div class="flex">
