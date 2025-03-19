@@ -106,6 +106,10 @@ class GudangKonfirmasiPengirimanServices
                 throw new Exception('Minimal satu id_item harus diisi.');
             }
 
+            if (count($filteredItems) !== count(array_unique($filteredItems))) {
+                throw new Exception('Tidak boleh ada ID item yang sama.');
+            }
+
             foreach ($filteredItems as $index => $idItem) {
                 $modalGudang = $this->countModalGudang($partId[$index]);
                 $dataEstimasiPart = [

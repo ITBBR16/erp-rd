@@ -24,7 +24,7 @@ class RepairRubahEstimasiGeneralController extends Controller
 
     public function update(Request $request, $id)
     {
-        $result = $this->estimasiService->ubahEstimasi($request, $id);
+        $result = $this->estimasiService->ubahEstimasiGeneral($request, $id);
 
         if ($result['status'] == 'success') {
             return redirect()->route('rubah-estimasi.index')->with($result['status'], $result['message']);

@@ -191,6 +191,137 @@ class RepairEstimasiService
         ]);
     }
 
+    public function ubahEstimasiGeneral(Request $request, $id)
+    {
+        try {
+            $this->repairEstimasi->beginTransaction();
+
+            $employeeId = auth()->user()->id;
+            $tglWaktu = Carbon::now();
+            $pesanHasilTs = $request->input('pesan_hasil_ts');
+    
+            // Data Estimasi JRR
+            $jenisTransaksi = $request->input('jenis_transaksi');
+            $jenisPartJasa = $request->input('jenis_part_jasa');
+            $namaPartJasa = $request->input('nama_part_jasa');
+            $namaAlias = $request->input('nama_alias');
+            $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
+            
+            // Data Part
+            $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
+            $hargaGudang = preg_replace("/[^0-9]/", "",$request->input('harga_gudang'));
+
+            // Data Lama
+            $idEstimasiLama = $request->input('id_hasil_estimasi');
+            $jenisTransaksiLama = $request->input('jenis_transaksi_lama');
+            $statusActive = $request->input('status');
+            $jenisPartJasaLama = $request->input('jenis_part_jasa_lama');
+            $namaPartJasaLama = $request->input('nama_part_jasa_lama');
+            $namaAliasLama = $request->input('nama_alias_lama');
+            $hargaCustomerLama = preg_replace("/[^0-9]/", "",$request->input('harga_customer_lama'));
+
+            if ($jenisTransaksiLama) {
+                // Update data lama
+                foreach ($jenisTransaksiLama as $index => $jt) {
+                    $idHasilEstimasi = $idEstimasiLama[$index];
+                    if ($jt == 1) {
+                        $dataUpdateEstimasiPart = [
+                            'nama_alias' => $namaAliasLama[$index] ?? '',
+                            'harga_customer' => $hargaCustomerLama[$index],
+                            'active' => $statusActive[$index],
+                        ];
+                        $this->repairEstimasi->updateEstimasiPart($dataUpdateEstimasiPart, $idHasilEstimasi);
+            
+                    } else {
+                        $dataUpdateEstimasiJrr = [
+                            'jenis_jasa' => $jenisPartJasaLama[$index],
+                            'nama_jasa' => $namaPartJasaLama[$index],
+                            'harga_customer' => $hargaCustomerLama[$index],
+                            'active' => $statusActive[$index],
+                        ];
+                        $this->repairEstimasi->updateEstimasiJrr($dataUpdateEstimasiJrr, $idHasilEstimasi);
+                    }
+                }
+            }
+
+            if ($jenisTransaksi) {
+                foreach ($jenisTransaksi as $index => $jt) {
+                    // Insert new data
+                    if ($jt == 1) {
+                        $createPart = [
+                        'estimasi_id' => $id,
+                        'jenis_transaksi_id' => $jt,
+                        'gudang_produk_id' => $namaPartJasa[$index],
+                        'nama_alias' => $namaAlias[$index] ?? '',
+                        'harga_customer' => $hargaCustomer[$index],
+                        'harga_repair' => $hargaRepair[$index],
+                        'harga_gudang' => $hargaGudang[$index],
+                        'status_proses_id' => 3,
+                        'active' => 'Active',
+                        ];
+                        $this->repairEstimasi->createEstimasiPart($createPart);
+
+                    } else {
+                        $createJrr = [
+                            'estimasi_id' => $id,
+                            'jenis_transaksi_id' => $jt,
+                            'jenis_jasa' => $jenisPartJasa[$index],
+                            'nama_jasa' => $namaPartJasa[$index],
+                            'harga_customer' => $hargaCustomer[$index],
+                            'active' => 'Active',
+                        ];
+                        $this->repairEstimasi->createEstimasiJrr($createJrr);
+
+                    }
+                }
+            }
+
+            $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 3);
+    
+            if ($checkTimestamp) {
+                $timestamp = $checkTimestamp;
+            } else {
+                $dataTimestamp = [
+                    'case_id' => $id,
+                    'jenis_status_id' => 4,
+                    'tanggal_waktu' => $tglWaktu,
+                ];
+    
+                $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
+            }
+
+            $dataChatEstimasi = [
+                'isi_chat' => $pesanHasilTs,
+            ];
+
+            $existingChat = $this->repairEstimasi->findEstimasiChat($id);
+
+            if ($existingChat) {
+                $this->repairEstimasi->updateEstimasiChat($dataChatEstimasi, $id);
+            } else {
+                $dataChatEstimasi['estimasi_id'] = $id;
+                $this->repairEstimasi->createEstimasiChat($dataChatEstimasi);
+            }
+
+            $dataJurnal = [
+                'employee_id' => $employeeId,
+                'jenis_substatus_id' => 2,
+                'timestamps_status_id' => $timestamp->id,
+                'isi_jurnal' => 'Rubah hasil estimasi.',
+            ];
+
+            $this->repairTimeJurnal->addJurnal($dataJurnal);
+            $this->repairEstimasi->commitTransaction();
+
+            return ['status' => 'success', 'message' => 'Berhasil merubah hasil estimasi.'];
+
+        } catch (Exception $e) {
+            $this->repairEstimasi->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+
+    }
+
     // Function Proses
     public function addJurnalEstimasi(Request $request)
     {
