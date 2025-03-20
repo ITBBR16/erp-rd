@@ -91,11 +91,14 @@
                 <table class="text-sm mt-6 w-full bg-gray-50 rounded-lg dark:text-gray-400 dark:bg-gray-700">
                     <thead class="text-left text-gray-900 dark:text-white">
                         <tr>
-                            <th class="p-2" style="width: 80%">
+                            <th class="p-2" style="width: 75%">
                                 Analisa Kerusakan
                             </th>
                             <th class="p-2" style="width: 20%">
                                 Harga
+                            </th>
+                            <th class="p-2" style="width: 5%">
+                                
                             </th>
                         </tr>
                     </thead>
@@ -124,6 +127,15 @@
                                     </td>
                                     <td class="p-2">
                                         Rp. {{ number_format($estimasi->harga_customer, 0, ',', '.') }}
+                                    </td>
+                                    <td class="p-2">
+                                        @if (isset($estimasi->gudang_produk_id))
+                                            @if ($estimasi->tanggal_diterima != null || $estimasi->tanggal_diterima != '')
+                                                <span class="material-symbols-outlined text-base mr-2.5 text-green-500 font-extrabold">check</span>
+                                            @else
+                                                <span class="material-symbols-outlined text-base mr-2.5 text-red-500 font-extrabold">close</span>
+                                            @endif
+                                        @endif
                                     </td>
                                 </tr>
                             @endif
