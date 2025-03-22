@@ -66,6 +66,7 @@ use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikResiPickupController;
 use App\Http\Controllers\repair\RepairRecapTransaksiController;
 use App\Http\Controllers\gudang\GudangAddNewSparepartController;
+use App\Http\Controllers\gudang\GudangDashboardDistributionController;
 use App\Http\Controllers\repair\RepairTroubleshootingController;
 use App\Http\Controllers\gudang\GudangKomplainSupplierController;
 use App\Http\Controllers\logistik\LogistikSentToRepairController;
@@ -496,6 +497,7 @@ Route::middleware('gudang')->group(function () {
         });
 
         Route::prefix('/distribusi')->group(function () {
+            Route::get('/dashboard-distribusi', [GudangDashboardDistributionController::class, 'index'])->name('dashboard-distribusi.index');
             Route::resource('/konfirmasi-pengiriman', GudangKonfirmasiPengirimanController::class)->only(['index', 'edit', 'store']);
             Route::resource('/retur-sparepart', GudangReturSparepartController::class)->only(['index']);
             Route::get('/checkCountModal/{id}', [GudangKonfirmasiPengirimanController::class, 'checkCountModal']);

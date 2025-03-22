@@ -8,8 +8,7 @@ use App\Services\repair\RepairDashboardEstimasiServices;
 
 class RepairDashboardEstimasiController extends Controller
 {
-    public function __construct
-    (
+    public function __construct(
         private RepairDashboardEstimasiServices $dashboardService
     ){}
 
