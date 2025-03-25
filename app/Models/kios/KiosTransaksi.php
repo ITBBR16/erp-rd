@@ -15,7 +15,7 @@ class KiosTransaksi extends Model
     protected $table = 'kios_transaksi';
     protected $guarded = ['id'];
 
-    public function metodepembayaran()
+    public function metodepembayaran() // Salah
     {
         return $this->belongsTo(KiosAkunRD::class, 'metode_pembayaran');
     }
@@ -52,6 +52,6 @@ class KiosTransaksi extends Model
 
     public function transaksiPembayaran()
     {
-        return $this->hasMany(KiosTransaksiPembayaran::class);
+        return $this->hasMany(KiosTransaksiPembayaran::class, 'transaksi_id');
     }
 }

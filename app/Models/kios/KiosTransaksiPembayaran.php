@@ -2,7 +2,6 @@
 
 namespace App\Models\kios;
 
-use App\Models\employee\Employee;
 use App\Models\management\AkuntanDaftarAkun;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

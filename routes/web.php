@@ -7,6 +7,7 @@ use App\Exports\KiosFinanceExport;
 use App\Exports\GudangProdukExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KiosDailyRecapExport;
+use App\Exports\KiosSalesExport;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
@@ -114,14 +115,14 @@ Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
 
         Route::get('/test-export', function () {
-            $export = new EstimasiPartExport();
+            $export = new KiosSalesExport();
             return response()->json($export->collection());
         });
 
         Route::get('/download-recap', function () {
             $timestamp = Carbon::now()->format('d M Y');
             $fileName = "Sparepart Estimasi - {$timestamp}.csv";
-            return Excel::download(new EstimasiPartExport, $fileName);
+            return Excel::download(new KiosSalesExport, $fileName);
         })->name('download.recap');
 
         Route::prefix('/analisa')->group(function () {

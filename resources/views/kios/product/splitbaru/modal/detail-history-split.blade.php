@@ -1,6 +1,6 @@
 @foreach ($dataSplit as $split)
     <div id="view-detail-history-split-{{ $split->id }}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-full max-w-2xl max-h-full">
+        <div class="relative w-full max-w-3xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -18,13 +18,16 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-6 py-3" style="width: 30%;">
                                         Kelengkapan
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-6 py-3" style="width: 25%;">
                                         Serial Number
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-6 py-3" style="width: 25%;">
+                                        Modal
+                                    </th>
+                                    <th scope="col" class="px-6 py-3" style="width: 20%;">
                                         Status
                                     </th>
                                 </tr>
@@ -37,6 +40,9 @@
                                         </td>
                                         <td class="px-6 py-2">
                                             {{ $kelengkapan->serial_number_split }}
+                                        </td>
+                                        <td class="px-6 py-2">
+                                            Rp. {{ number_format($kelengkapan->nominal, 0, ',', '.') }}
                                         </td>
                                         <td class="px-6 py-2">
                                             <span class="bg-indigo-500 rounded-md px-2 py-0 text-white">{{ $kelengkapan->status }}</span>
