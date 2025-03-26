@@ -12,8 +12,8 @@ class KiosDailyRecapExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        $startOfMonth = Carbon::createFromDate(2025, 2, 8)->startOfDay();
-        $endOfMonth = Carbon::createFromDate(2025, 3, 10)->endOfMonth();
+        $startOfMonth = Carbon::createFromDate(2025, 3, 11)->startOfDay();
+        $endOfMonth = Carbon::createFromDate(2025, 3, 25)->endOfMonth();
         $last7Day = Carbon::now()->subDays(7)->toDateString();
 
         $dailyRecap = KiosDailyRecap::with('customer', 'keperluan', 'recapTs', 'kiosWtb', 'kiosWts')
@@ -53,32 +53,6 @@ class KiosDailyRecapExport implements FromCollection, WithHeadings
             'Status'
         ];
     }
-
-    // public function collection()
-    // {
-    //     $transactions = KiosTransaksiDetail::with('kiosSerialnumbers', 'produkKios.subjenis', 'produkKiosBnob')
-    //         ->whereIn('jenis_transaksi', ['drone_baru', 'drone_bnob'])
-    //         ->whereYear('created_at', 2025)
-    //         ->whereMonth('created_at', 3)
-    //         ->get();
-
-    //     return $transactions->map(function ($transaction) {
-    //         return [
-    //             $transaction->created_at,
-    //             $transaction->produkKios->subjenis->paket_penjualan,
-    //             $transaction->kiosSerialnumbers->serial_number,
-    //         ];
-    //     });
-    // }
-
-    // public function headings(): array
-    // {
-    //     return [
-    //         'Tanggal Laku',
-    //         'Paket Penjualan',
-    //         'Serial Number',
-    //     ];
-    // }
 
     public function writerType(): string
     {

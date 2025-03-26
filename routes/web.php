@@ -88,6 +88,7 @@ use App\Http\Controllers\repair\RepairRubahEstimasiGeneralController;
 use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
+use App\Models\kios\KiosDailyRecap;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -115,14 +116,14 @@ Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
 
         Route::get('/test-export', function () {
-            $export = new KiosSalesExport();
+            $export = new KiosDailyRecapExport();
             return response()->json($export->collection());
         });
 
         Route::get('/download-recap', function () {
             $timestamp = Carbon::now()->format('d M Y');
-            $fileName = "Sparepart Estimasi - {$timestamp}.csv";
-            return Excel::download(new KiosSalesExport, $fileName);
+            $fileName = "Daily Recap - {$timestamp}.csv";
+            return Excel::download(new KiosDailyRecapExport, $fileName);
         })->name('download.recap');
 
         Route::prefix('/analisa')->group(function () {

@@ -1007,7 +1007,7 @@ class RepairCaseService
                 'dataCase' => $dataCase,
             ];
 
-            $pdf = Pdf::loadView('repair.csr.invoice.invoice-pelunasan', $dataView);
+            $pdf = Pdf::loadView('repair.csr.preview.preview-bukti-pembayaran', $dataView);
             $pdfContent = $pdf->output();
             $pdfEncode = base64_encode($pdfContent);
             $filesFinance[] = $pdfEncode;
