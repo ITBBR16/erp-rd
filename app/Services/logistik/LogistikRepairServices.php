@@ -104,8 +104,8 @@ class LogistikRepairServices
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $noRegister = decrypt($encryptId);
-        $dataCustomer = $this->formRepair->findRegister($noRegister);
+        $idForm = decrypt($encryptId);
+        $dataCustomer = $this->formRepair->findDataForm($idForm);
         $dataProvinsi = $this->customerRepository->getProvinsi();
         $jenisDrone = $this->product->getAllJenisProduct();
         $dataJenisDrone = $jenisDrone->map(function ($jenis) {
@@ -128,7 +128,7 @@ class LogistikRepairServices
         ]);
     }
 
-    public function sentToRepair($noRegister, Request $request)
+    public function sentToRepair($id, Request $request)
     {
         try {
             $this->repairCase->beginTransaction();
@@ -258,7 +258,7 @@ class LogistikRepairServices
                 }
 
                 $this->repairCase->createDetailKelengkapan($dataToDetailKelengkapan);
-                $this->formRepair->updateDataFormRepair($noRegister, ['status' => 'Done InRD']);
+                $this->formRepair->updateDataForm($id, ['status' => 'Done InRD']);
 
                 $this->repairCase->commitTransaction();
                 $this->transaction->commitTransaction();

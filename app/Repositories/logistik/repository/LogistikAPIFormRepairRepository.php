@@ -36,4 +36,20 @@ class LogistikAPIFormRepairRepository implements LogistikAPIFormRepairInterface
     {
         return $this->modelFormRepair->where('no_register', $id)->first();
     }
+
+    public function findDataForm($id)
+    {
+        return $this->modelFormRepair->findOrFail($id);
+    }
+
+    public function updateDataForm($id, array $data)
+    {
+        $formData = $this->modelFormRepair->findOrFail($id);
+        if ($formData) {
+            $formData->update($data);
+            return $formData;
+        }
+
+        throw new \Exception("Data customer not found.");
+    }
 }

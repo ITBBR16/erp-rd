@@ -35,7 +35,7 @@
         </div>
     @endif
 
-    <form action="{{ route('sent-to-rapair.update', $dataCustomer->no_register) }}" method="POST" autocomplete="off">
+    <form action="{{ route('sent-to-rapair.update', $dataCustomer->id) }}" method="POST" autocomplete="off">
         @csrf
         @method('PUT')
         <div class="grid grid-cols-2 gap-8 mt-6">

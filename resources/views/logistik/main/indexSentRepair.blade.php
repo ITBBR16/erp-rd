@@ -123,7 +123,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('sent-to-rapair.edit', encrypt($data->no_register)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('sent-to-rapair.edit', encrypt($data->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <i class="material-symbols-outlined text-xl mr-3">data_table</i>
                                         <span class="whitespace-nowrap">Validasi Data</span>
                                     </a>
