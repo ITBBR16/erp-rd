@@ -48,7 +48,7 @@ class GudangProdukIdItem extends Model
 
     public function estimasiRepair()
     {
-        return $this->hasOne(RepairEstimasiPart::class);
+        return $this->hasOne(RepairEstimasiPart::class, 'id_item', 'id');
     }
 
     public function produkSparepart()
@@ -58,7 +58,7 @@ class GudangProdukIdItem extends Model
 
     public function transaksiKios()
     {
-        return $this->hasOne(KiosTransaksiPart::class);
+        return $this->hasOne(KiosTransaksiPart::class, 'gudang_id_item_id', 'id');
     }
 
 }

@@ -1,13 +1,15 @@
 <?php
 
-use App\Exports\EstimasiPartExport;
 use Carbon\Carbon;
+use App\Exports\KiosSalesExport;
 use App\Models\wilayah\Provinsi;
 use App\Exports\KiosFinanceExport;
+use App\Exports\EstimasiPartExport;
+use App\Exports\GudangIdItemExport;
 use App\Exports\GudangProdukExport;
+use App\Models\kios\KiosDailyRecap;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KiosDailyRecapExport;
-use App\Exports\KiosSalesExport;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
@@ -67,7 +69,6 @@ use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikResiPickupController;
 use App\Http\Controllers\repair\RepairRecapTransaksiController;
 use App\Http\Controllers\gudang\GudangAddNewSparepartController;
-use App\Http\Controllers\gudang\GudangDashboardDistributionController;
 use App\Http\Controllers\repair\RepairTroubleshootingController;
 use App\Http\Controllers\gudang\GudangKomplainSupplierController;
 use App\Http\Controllers\logistik\LogistikSentToRepairController;
@@ -85,10 +86,10 @@ use App\Http\Controllers\repair\RepairPenerimaanSparepartController;
 use App\Http\Controllers\gudang\GudangKonfirmasiPengirimanController;
 use App\Http\Controllers\repair\RepairEstimasiReqSparepartController;
 use App\Http\Controllers\repair\RepairRubahEstimasiGeneralController;
+use App\Http\Controllers\gudang\GudangDashboardDistributionController;
 use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
-use App\Models\kios\KiosDailyRecap;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('form-login');
@@ -105,6 +106,28 @@ Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelur
 
 Route::get('/review-customer/{increment}', [ReviewCustomerController::class, 'index']);
 Route::post('/review-customer', [ReviewCustomerController::class, 'store'])->name('createReviewCustomer');
+
+Route::get('/preview-export-id-item', function () {
+    $export = new GudangIdItemExport();
+    return response()->json($export->collection());
+});
+
+Route::get('/download-export-id-item', function () {
+    $timestamp = Carbon::now()->format('d M Y');
+    $fileName = "Id Item - {$timestamp}.csv";
+    return Excel::download(new GudangIdItemExport, $fileName);
+});
+
+Route::get('/preview-export', function () {
+    $export = new GudangProdukExport();
+    return response()->json($export->collection());
+});
+
+Route::get('/download-export-produk', function () {
+    $timestamp = Carbon::now()->format('d M Y');
+    $fileName = "Produk Gudang - {$timestamp}.csv";
+    return Excel::download(new GudangProdukExport, $fileName);
+});
 
 Route::middleware('superadmin')->group(function () {
     Route::get('/', function() {
@@ -501,8 +524,8 @@ Route::middleware('gudang')->group(function () {
         Route::prefix('/distribusi')->group(function () {
             Route::get('/dashboard-distribusi', [GudangDashboardDistributionController::class, 'index'])->name('dashboard-distribusi.index');
             Route::resource('/konfirmasi-pengiriman', GudangKonfirmasiPengirimanController::class)->only(['index', 'edit', 'store']);
-            Route::resource('/retur-sparepart', GudangReturSparepartController::class)->only(['index']);
             Route::get('/checkCountModal/{id}', [GudangKonfirmasiPengirimanController::class, 'checkCountModal']);
+            Route::resource('/retur-sparepart', GudangReturSparepartController::class)->only(['index']);
         });
     });
 });

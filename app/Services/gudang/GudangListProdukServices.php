@@ -136,6 +136,7 @@ class GudangListProdukServices
         $dataGudangEstimasi = $this->estimasiPart
             ->where('gudang_produk_id', $id)
             ->whereNotNull('tanggal_dikirim')
+            ->where('tanggal_dikirim', '!=', '')
             ->where('active', 'Active')
             ->sum('modal_gudang');
 
