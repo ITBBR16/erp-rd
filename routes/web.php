@@ -10,6 +10,7 @@ use App\Exports\GudangProdukExport;
 use App\Models\kios\KiosDailyRecap;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KiosDailyRecapExport;
+use App\Exports\RepairEstimasiExport;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
@@ -125,7 +126,7 @@ Route::get('/preview-export', function () {
 
 Route::get('/download-export-produk', function () {
     $timestamp = Carbon::now()->format('d M Y');
-    $fileName = "Produk Gudang - {$timestamp}.csv";
+    $fileName = "Estimasi Part - {$timestamp}.csv";
     return Excel::download(new GudangProdukExport, $fileName);
 });
 
