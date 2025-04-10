@@ -91,10 +91,14 @@
                                     </button>
                                 </li>
                                 <li>
-                                    <button type="button" data-modal-target="ongkir-kasir-{{ $case->id }}" data-modal-toggle="ongkir-kasir-{{ $case->id }}" data-id="{{ $case->id }}" data-customer-id="{{ $case->customer->id }}" class="ongkir-kasir-repair flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                    <a href="{{ route('pageOngkirKasir', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                                        <i class="material-symbols-outlined text-base mr-3">local_shipping</i>
+                                        <span class="whitespace-nowrap">Ongkir</span>
+                                    </a>
+                                    {{-- <button type="button" data-modal-target="ongkir-kasir-{{ $case->id }}" data-modal-toggle="ongkir-kasir-{{ $case->id }}" data-id="{{ $case->id }}" data-customer-id="{{ $case->customer->id }}" class="ongkir-kasir-repair flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
                                         <span class="material-symbols-outlined text-base mr-3">local_shipping</span>
                                         <span class="whitespace-nowrap">Ongkir</span>
-                                    </button>
+                                    </button> --}}
                                 </li>
                                 <li>
                                     <a href="{{ route('downpaymentKasir', encrypt($case->id)) }}" class="flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">

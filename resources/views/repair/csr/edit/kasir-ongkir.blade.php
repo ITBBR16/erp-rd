@@ -14,7 +14,7 @@
                     <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
-                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Data Ongkir Customer</span>
+                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Data Ongkir Customer {{ $dataCase->customer->first_name }} - {{ $dataCase->customer->id }}</span>
                 </div>
             </li>
         </ol>
@@ -37,25 +37,25 @@
 
     <form action="{{ route('createOngkirKasir', $dataCase->id) }}" method="POST" autocomplete="off">
         @csrf
-        <div class="px-2 py-2 lg:px-8 lg:py-6 bg-gray-50 dark:bg-gray-600">
+        <div class="px-2 py-2 lg:px-8 lg:py-6">
             <div class="grid grid-cols-2 gap-x-4 relative">
-                <div class="relative px-4 py-4 rounded-md shadow-lg border border-gray-200 bg-white dark:bg-gray-700 dark:border-gray-600">
+                <div class="relative space-y-4 px-4 py-4 rounded-md shadow-lg border border-gray-200 bg-white dark:bg-gray-700 dark:border-gray-600">
                     <div class="pb-2 border-b flex justify-between items-center">
                         <h2 class="text-base font-semibold mb-4 text-black dark:text-white">Data Customer</h2>
                         <label class="inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="checkbox_customer_kasir" id="checkbox-ongkir-kasir-repair-{{ $dataCase->id }}" data-id="{{ $dataCase->id }}" class="checkbox-ongkir-kasir-repair sr-only peer">
+                            <input type="checkbox" name="checkbox_customer_kasir" id="checkbox-ongkir-kasir-repair" class="checkbox-ongkir-kasir-repair sr-only peer">
                             <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-500"></div>
                             <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Beda Penerima</span>
                         </label>
                     </div>
-                    <div id="ongkir-repair-customer-{{ $dataCase->id }}" class="space-y-4">
+                    <div id="ongkir-repair-customer" class="space-y-4">
                         <div class="grid grid-cols-3 items-center">
                             <div class="col-span-1">
                                 Nama Customer :
                             </div>
                             <div class="col-span-2">
                                 <input type="hidden" name="customer_id" value="{{ $dataCase->customer_id }}">
-                                <input type="text" id="nama-customer-ori-{{ $dataCase->id }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Customer" value="{{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}" readonly>
+                                <input type="text" id="nama-customer" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Customer" value="{{ $dataCase->customer->first_name }} {{ $dataCase->customer->last_name }}" readonly>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 items-center">
@@ -63,14 +63,12 @@
                                 Provinsi :
                             </div>
                             <div class="col-span-2">
-                                <select name="provinsi_customer" id="ongkir-provinsi-ori-{{ $dataCase->id }}" data-id="{{ $dataCase->id }}" class="ongkir-provinsi-ori bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <select name="provinsi_customer" id="ongkir-provinsi" data-selected="{{ $selectedProvinsi }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="" hidden>Pilih Provinsi</option>
                                     @foreach ($dataProvinsi as $provinsi)
-                                        @if ($dataCase->customer->provinsi_id == $provinsi->id)
-                                            <option value="{{ $provinsi->id }}" selected>{{ $provinsi->name }}</option>
-                                        @else
-                                            <option value="{{ $provinsi->id }}">{{ $provinsi->name }}</option>
-                                        @endif
+                                    <option value="{{ $provinsi->id }}" {{ $provinsi->id == $dataCase->customer->provinsi_id ? 'selected' : '' }}>
+                                        {{ $provinsi->name }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -80,7 +78,7 @@
                                 Kota / Kabupaten :
                             </div>
                             <div class="col-span-2">
-                                <select name="kota_customer" id="ongkir-kota-ori-{{ $dataCase->id }}" data-id="{{ $dataCase->id }}" class="ongkir-kota-ori bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <select name="kota_customer" id="ongkir-kota" data-selected="{{ $selectedKota }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="" hidden>Pilih Kota / Kabupaten</option>
                                 </select>
                             </div>
@@ -90,7 +88,7 @@
                                 Kecamatan :
                             </div>
                             <div class="col-span-2">
-                                <select name="kecamatan_customer" id="ongkir-kecamatan-ori-{{ $dataCase->id }}" data-id="{{ $dataCase->id }}" class="ongkir-kecamatan-ori bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <select name="kecamatan_customer" id="ongkir-kecamatan" data-selected="{{ $selectedKecamatan }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="" hidden>Pilih Kecamatan</option>
                                 </select>
                             </div>
@@ -100,7 +98,7 @@
                                 Kelurahan :
                             </div>
                             <div class="col-span-2">
-                                <select name="kelurahan_customer" id="ongkir-kelurahan-ori-{{ $dataCase->id }}" data-id="{{ $dataCase->id }}" class="ongkir-kelurahan-ori bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                <select name="kelurahan_customer" id="ongkir-kelurahan" data-selected="{{ $selectedKelurahan }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                     <option value="" hidden>Pilih Kelurahan</option>
                                 </select>
                             </div>
@@ -110,7 +108,7 @@
                                 Kode Pos :
                             </div>
                             <div class="col-span-2">
-                                <input type="text" name="kode_pos_customer" id="ongkir-kodepos-ori-{{ $dataCase->id }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Kode Pos" value="{{ $dataCase->customer->kode_pos }}" required>
+                                <input type="text" name="kode_pos_customer" id="ongkir-kodepos" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Kode Pos" value="{{ $dataCase->customer->kode_pos }}" required>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 items-center">
@@ -118,12 +116,12 @@
                                 Nama Jalan :
                             </div>
                             <div class="col-span-2">
-                                <input type="text" name="alamat_customer" id="ongkir-alamat-ori-{{ $dataCase->id }}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jalan" value="{{ $dataCase->customer->nama_jalan }}" required>
+                                <input type="text" name="alamat_customer" id="ongkir-alamat" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Jalan" value="{{ $dataCase->customer->nama_jalan }}" required>
                             </div>
                         </div>
                     </div>
                     {{-- Form Beda Penerima --}}
-                    <div id="ongkir-repair-beda-penerima-{{ $dataCase->id }}" class="space-y-4" style="display: none">
+                    <div id="ongkir-repair-beda-penerima" class="space-y-4" style="display: none">
                         <div class="grid grid-cols-3 items-center">
                             <div class="col-span-1">
                                 Nama Customer :
@@ -205,10 +203,11 @@
                             Ekspedisi :
                         </div>
                         <div class="col-span-2">
-                            <select id="ongkir-ekspedisi-repair-{{ $dataCase->id }}" data-id="{{ $dataCase->id }}" class="ongkir-ekspedisi-repair bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <input type="hidden" name="relasi-logistik" value="{{ optional($dataCase->logRequest)->id !== null ? $dataCase->logRequest->id : '' }}">
+                            <select id="ongkir-ekspedisi-repair" class="ongkir-ekspedisi-repair bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" hidden>Pilih Ekspedisi</option>
                                 @foreach ($dataEkspedisi as $ekspedisi)
-                                    <option value="{{ $ekspedisi->id }}">{{ $ekspedisi->ekspedisi }}</option>
+                                    <option value="{{ $ekspedisi->id }}" {{ $ekspedisi->id == $dataCase?->logRequest?->layananEkspedisi?->ekspedisi?->id ? 'selected' : '' }}>{{ $ekspedisi->ekspedisi }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -218,8 +217,11 @@
                             Layanan :
                         </div>
                         <div class="col-span-2">
-                            <select name="layanan_ongkir_repair" id="ongkir-layanan-repair-{{ $dataCase->id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select name="layanan_ongkir_repair" id="ongkir-layanan-repair" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" hidden>Pilih Layanan</option>
+                                @foreach ($dataLayanan as $layanan)
+                                    <option value="{{ $layanan->id }}" {{ $layanan->id == $dataCase?->logRequest?->layanan_id ? 'selected' : '' }}>{{ $layanan->nama_layanan }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -230,7 +232,7 @@
                         <div class="col-span-2">
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                <input type="text" name="nominal_ongkir_repair" id="nominal-ongkir-repair-{{ $dataCase->id }}" class="format-angka-ongkir-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                                <input type="text" name="nominal_ongkir_repair" id="nominal-ongkir-repair" class="format-angka-ongkir-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ optional($dataCase->logRequest)->biaya_customer_ongkir !== null ? number_format($dataCase->logRequest->biaya_customer_ongkir, 0, '.', ',') : '' }}" required>
                             </div>
                         </div>
                     </div>
@@ -241,7 +243,7 @@
                         <div class="col-span-2">
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                <input type="text" name="nominal_packing_repair" id="nominal-packing-repair-{{ $dataCase->id }}" class="format-angka-ongkir-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                                <input type="text" name="nominal_packing_repair" id="nominal-packing-repair" class="format-angka-ongkir-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ optional($dataCase->logRequest)->biaya_customer_packing !== null ? number_format($dataCase->logRequest->biaya_customer_packing, 0, '.', ',') : '' }}">
                             </div>
                         </div>
                     </div>
@@ -253,7 +255,7 @@
                         <div class="col-span-2">
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                <input type="text" name="nominal_produk" id="nominal-produk-repair-{{ $dataCase->id }}" data-id="{{ $dataCase->id }}" class="format-angka-ongkir-repair nominal-produk-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')">
+                                <input type="text" name="nominal_produk" id="nominal-produk-repair" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ optional($dataCase->logRequest)->nominal_produk !== null ? number_format($dataCase->logRequest->nominal_produk, 0, '.', ',') : '' }}" oninput="this.value = this.value.replace(/\D/g, '')">
                             </div>
                         </div>
                     </div>
@@ -264,7 +266,7 @@
                         <div class="col-span-2">
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                <input type="text" name="nominal_asuransi" id="nominal-asuransi-repair-{{ $dataCase->id }}" class="format-angka-ongkir-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" readonly>
+                                <input type="text" name="nominal_asuransi" id="nominal-asuransi-repair" class="format-angka-ongkir-repair rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ optional($dataCase->logRequest)->nominal_asuransi !== null ? number_format($dataCase->logRequest->nominal_asuransi, 0, '.', ',') : '' }}" readonly>
                             </div>
                         </div>
                     </div>

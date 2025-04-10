@@ -32,13 +32,53 @@ class LogistikRepairServices
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
         $dataFormRepair = $this->formRepair->getDataForm();
+        $dataProvinsi = $this->customerRepository->getProvinsi();
 
         return view('logistik.main.index', [
             'title' => 'Penerimaan Barang',
             'active' => 'penerimaan',
             'divisi' => $divisiName,
-            'dataFormRepair' => $dataFormRepair
+            'dataFormRepair' => $dataFormRepair,
+            'dataProvinsi' => $dataProvinsi,
         ]);
+    }
+
+    public function manualForm(Request $request)
+    {
+        try {
+            $this->transaction->beginTransaction();
+
+            $dataForm = [
+                'no_register' => $request->input('no_register'),
+                'nama_lengkap' => $request->input('nama_lengkap'),
+                'no_wa' => preg_replace('/^0/', '62', $request->input('no_whatsapp')),
+                'provinsi' => $request->input('provinsi'),
+                'kabupaten_kota' => $request->input('kota_kabupaten'),
+                'kecamatan' => $request->input('kecamatan'),
+                'kelurahan' => $request->input('kelurahan'),
+                'kode_pos' => $request->input('kode_pos'),
+                'alamat' => $request->input('alamat'),
+                'tipe_produk' => $request->input('jenis_drone'),
+                'fungsioanal_produk' => $request->input('fungsional_drone'),
+                'keluhan' => $request->input('keluhan'),
+                'kronologi_kerusakan' => $request->input('kronologi_kerusakan'),
+                'penanganan_after_crash' => $request->input('penanganan_crash'),
+                'riwayat_penggunaan' => $request->input('riwayat_penggunaan'),
+                'dokumen_customer' => $request->input('dokumen_customer'),
+                'ekspedisi' => $request->input('ekspedisi'),
+                'no_resi' => $request->input('no_resi'),
+                'tanggal_dikirim' => Carbon::parse($request->input('tanggal_dikirim'))->format('Y-m-d H:i:s'),
+            ];
+
+            $this->formRepair->createDataFormRepair($dataForm);
+            $this->transaction->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil menyimpan data penerimaan barang.'];
+
+        } catch (Exception $e) {
+            Log::error('Error in manualForm: ' . $e->getMessage());
+            $this->transaction->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
     }
 
     public function konfirmasiPenerimaan($noRegister)

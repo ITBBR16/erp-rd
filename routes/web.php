@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\EkspedisiExport;
 use Carbon\Carbon;
 use App\Exports\KiosSalesExport;
 use App\Models\wilayah\Provinsi;
@@ -108,26 +109,15 @@ Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelur
 Route::get('/review-customer/{increment}', [ReviewCustomerController::class, 'index']);
 Route::post('/review-customer', [ReviewCustomerController::class, 'store'])->name('createReviewCustomer');
 
-Route::get('/preview-export-id-item', function () {
-    $export = new GudangIdItemExport();
-    return response()->json($export->collection());
-});
-
-Route::get('/download-export-id-item', function () {
-    $timestamp = Carbon::now()->format('d M Y');
-    $fileName = "Id Item - {$timestamp}.csv";
-    return Excel::download(new GudangIdItemExport, $fileName);
-});
-
 Route::get('/preview-export', function () {
-    $export = new GudangProdukExport();
+    $export = new EkspedisiExport();
     return response()->json($export->collection());
 });
 
 Route::get('/download-export-produk', function () {
     $timestamp = Carbon::now()->format('d M Y');
-    $fileName = "Estimasi Part - {$timestamp}.csv";
-    return Excel::download(new GudangProdukExport, $fileName);
+    $fileName = "Request Logistik - {$timestamp}.csv";
+    return Excel::download(new EkspedisiExport, $fileName);
 });
 
 Route::middleware('superadmin')->group(function () {
@@ -305,7 +295,7 @@ Route::middleware('logistik')->group(function () {
             Route::get('/get-data-req-packing/{jenis}/{id}', 'getDataByEkspedisi');
         });
 
-        Route::resource('/penerimaan-logistik', LogistikPenerimaanController::class)->only(['index', 'update']);
+        Route::resource('/penerimaan-logistik', LogistikPenerimaanController::class)->only(['index', 'store', 'update']);
         Route::group(['controller' => LogistikSentToRepairController::class], function () {
             Route::resource('/sent-to-rapair', LogistikSentToRepairController::class)->only(['index', 'update', 'edit']);
             Route::get('/logistik-get-kelengkapan/{id}', 'getKelengkapan');
@@ -377,6 +367,7 @@ Route::middleware('repair')->group(function () {
                 Route::resource('/kasir-repair', KasirRepairController::class)->only(['index', 'edit']);
                 Route::get('/detail-kasir/{id}', 'detailKasir')->name('detailKasir');
                 Route::post('/add-ongkir-repair/{id}', 'createOngkirKasir')->name('createOngkirKasir');
+                Route::get('/kasir-ongkir-customer/{encryptId}', 'pageOngkirKasir')->name('pageOngkirKasir');
                 Route::get('/kasir-repair-dp/{encryptId}', 'downpaymentKasir')->name('downpaymentKasir');
                 Route::get('/getDataCustomer/{id}', 'getDataCustomer');
                 Route::get('/getLayanan/{id}', 'getLayanan');

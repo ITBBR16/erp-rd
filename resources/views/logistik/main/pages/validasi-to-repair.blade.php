@@ -235,7 +235,7 @@
                 </div>
                 <div class="grid grid-cols-3 mb-4">
                     <div class="col-span-1 text-end pr-6">
-                        <label for="nama-jalan" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone</label>
+                        <label class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Drone</label>
                     </div>
                     <div x-data="dropdownJenisDrone()" class="relative col-span-2 text-start">
                         <div class="relative">

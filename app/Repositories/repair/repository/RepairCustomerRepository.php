@@ -4,6 +4,9 @@ namespace App\Repositories\repair\repository;
 
 use App\Models\wilayah\Provinsi;
 use App\Models\customer\Customer;
+use App\Models\wilayah\Kecamatan;
+use App\Models\wilayah\Kelurahan;
+use App\Models\wilayah\Kota;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\repair\interface\RepairCustomerInterface;
 
@@ -56,6 +59,24 @@ class RepairCustomerRepository implements RepairCustomerInterface
     public function getProvinsi()
     {
         $dataProvinsi = Provinsi::all();
+        return $dataProvinsi;
+    }
+
+    public function getKota()
+    {
+        $dataProvinsi = Kota::all();
+        return $dataProvinsi;
+    }
+
+    public function getKecamatan()
+    {
+        $dataProvinsi = Kecamatan::all();
+        return $dataProvinsi;
+    }
+
+    public function getKelurahan()
+    {
+        $dataProvinsi = Kelurahan::all();
         return $dataProvinsi;
     }
 

@@ -18,6 +18,7 @@ use App\Repositories\umum\repository\ProdukRepository;
 use App\Repositories\repair\repository\RepairQCRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\logistik\repository\EkspedisiRepository;
+use App\Repositories\logistik\repository\LogistikTransactionRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
 use App\Repositories\repair\repository\RepairEstimasiRepository;
 use App\Repositories\repair\repository\RepairTimeJurnalRepository;
@@ -28,6 +29,7 @@ class RepairCaseService
         private UmumRepository $umum,
         private AkuntanDaftarAkun $daftarAkun,
         private EkspedisiRepository $ekspedisi,
+        private LogistikTransactionRepository $logistikTransaction,
         private ProdukRepository $product,
         private GudangTransactionRepository $transactionGudang,
         private GudangProdukIdItemRepository $idItemGudang,
@@ -585,6 +587,12 @@ class RepairCaseService
         $id = decrypt($encryptId);
         $dataCase = $this->findCase($id);
         $dataEkspedisi = $this->ekspedisi->getDataEkspedisi();
+        $dataLayanan = $this->ekspedisi->getLayananEkspedisi();
+        $dataProvinsi = $this->customerRepository->getProvinsi();
+        $selectedProvinsi = $dataCase->customer->provinsi_id;
+        $selectedKota = $dataCase->customer->kota_kabupaten_id;
+        $selectedKecamatan = $dataCase->customer->kecamatan_id;
+        $selectedKelurahan = $dataCase->customer->kelurahan_id;
 
         return view('repair.csr.edit.kasir-ongkir', [
             'title' => 'Kasir Ongkir Repair',
@@ -594,6 +602,12 @@ class RepairCaseService
             'divisi' => $divisiName,
             'dataCase' => $dataCase,
             'dataEkspedisi' => $dataEkspedisi,
+            'dataLayanan' => $dataLayanan,
+            'dataProvinsi' => $dataProvinsi,
+            'selectedProvinsi' => $selectedProvinsi,
+            'selectedKota' => $selectedKota,
+            'selectedKecamatan' => $selectedKecamatan,
+            'selectedKelurahan' => $selectedKelurahan,
         ]);
         
     }
@@ -679,7 +693,7 @@ class RepairCaseService
 
     public function createOngkirKasir(Request $request, $id)
     {
-        $this->ekspedisi->beginTransaction();
+        $this->logistikTransaction->beginTransaction();
         $this->customerRepository->beginTransaction();
         $tanggalRequest = Carbon::now();
 
@@ -740,15 +754,20 @@ class RepairCaseService
                 'status_request' => 'Request Packing',
             ];
 
-            $this->ekspedisi->createLogRequest($dataRequestLogistik);
-            $this->ekspedisi->commitTransaction();
+            if ($request->input('relasi-logistik')) {
+                $this->ekspedisi->updateLogRequest($request->input('relasi-logistik'), $dataRequestLogistik);
+            } else {
+                $this->ekspedisi->createLogRequest($dataRequestLogistik);
+            }
+
+            $this->logistikTransaction->commitTransaction();
             $this->customerRepository->commitTransaction();
 
             return ['status' => 'success', 'message' => 'Berhasil menambahkan ongkir baru.'];
 
         } catch (Exception $e) {
             Log::error('Error menambahkan ongkir: ' . $e->getMessage());
-            $this->ekspedisi->rollbackTransaction();
+            $this->logistikTransaction->rollbackTransaction();
             $this->customerRepository->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }

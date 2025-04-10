@@ -33,6 +33,11 @@ class KasirRepairController extends Controller
         return $this->caseService->pagePelunasan($id);
     }
 
+    public function pageOngkirKasir($encryptId)
+    {
+        return $this->caseService->pageInputOngkir($encryptId);
+    }
+
     public function downpaymentKasir($encryptId)
     {
         return $this->caseService->pageDp($encryptId);

@@ -11,34 +11,27 @@ use App\Repositories\logistik\interface\EkspedisiInterface;
 
 class EkspedisiRepository implements EkspedisiInterface
 {
-    protected $modelEkspedisi, $modelLayanan, $connection, $modelLogRequest, $modelLogPenerima;
-    public function __construct(Ekspedisi $ekspedisi, JenisPelayanan $jenisPelayanan, LogRequest $logRequest, LogPenerima $logPenerima)
-    {
-        $this->modelEkspedisi = $ekspedisi;
-        $this->modelLayanan = $jenisPelayanan;
-        $this->modelLogRequest = $logRequest;
-        $this->modelLogPenerima = $logPenerima;
-        $this->connection = DB::connection('rumahdrone_ekspedisi');
-    }
-
-    public function beginTransaction()
-    {
-        $this->connection->beginTransaction();
-    }
-
-    public function rollbackTransaction()
-    {
-        $this->connection->rollBack();
-    }
-
-    public function commitTransaction()
-    {
-        $this->connection->commit();
-    }
+    public function __construct(
+        private Ekspedisi $modelEkspedisi,
+        private JenisPelayanan $modelLayanan,
+        private LogRequest $modelLogRequest,
+        private LogPenerima $modelLogPenerima)
+    {}
 
     public function createLogRequest(array $data)
     {
         return $this->modelLogRequest->create($data);
+    }
+
+    public function updateLogRequest($id, array $data)
+    {
+        $logReq = $this->modelLogRequest->find($id);
+        if ($logReq) {
+            $logReq->update($data);
+            return $logReq;
+        }
+
+        throw new \Exception("Case not found.");
     }
 
     public function createLogPenerima(array $data)
@@ -49,6 +42,11 @@ class EkspedisiRepository implements EkspedisiInterface
     public function getDataEkspedisi()
     {
         return $this->modelEkspedisi->all();
+    }
+
+    public function getLayananEkspedisi()
+    {
+        return $this->modelLayanan->all();
     }
 
     public function getDataLayanan($id)

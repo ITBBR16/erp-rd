@@ -23,4 +23,10 @@ class LogistikPenerimaanController extends Controller
         return back()->with($resultKonfirmasi['status'], $resultKonfirmasi['message']);
     }
 
+    public function store(Request $request)
+    {
+        $resultKonfirmasi = $this->penerimaan->manualForm($request);
+        return back()->with($resultKonfirmasi['status'], $resultKonfirmasi['message']);
+    }
+
 }
