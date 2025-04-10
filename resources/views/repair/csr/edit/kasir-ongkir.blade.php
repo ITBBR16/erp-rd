@@ -204,7 +204,7 @@
                         </div>
                         <div class="col-span-2">
                             <input type="hidden" name="relasi-logistik" value="{{ optional($dataCase->logRequest)->id !== null ? $dataCase->logRequest->id : '' }}">
-                            <select id="ongkir-ekspedisi-repair" class="ongkir-ekspedisi-repair bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select id="ongkir-ekspedisi-repair" data-selected="{{ $selectedEkspedisi }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" hidden>Pilih Ekspedisi</option>
                                 @foreach ($dataEkspedisi as $ekspedisi)
                                     <option value="{{ $ekspedisi->id }}" {{ $ekspedisi->id == $dataCase?->logRequest?->layananEkspedisi?->ekspedisi?->id ? 'selected' : '' }}>{{ $ekspedisi->ekspedisi }}</option>
@@ -217,11 +217,8 @@
                             Layanan :
                         </div>
                         <div class="col-span-2">
-                            <select name="layanan_ongkir_repair" id="ongkir-layanan-repair" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select name="layanan_ongkir_repair" id="ongkir-layanan-repair" data-selected="{{ $selectedLayanan }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" hidden>Pilih Layanan</option>
-                                @foreach ($dataLayanan as $layanan)
-                                    <option value="{{ $layanan->id }}" {{ $layanan->id == $dataCase?->logRequest?->layanan_id ? 'selected' : '' }}>{{ $layanan->nama_layanan }}</option>
-                                @endforeach
                             </select>
                         </div>
                     </div>

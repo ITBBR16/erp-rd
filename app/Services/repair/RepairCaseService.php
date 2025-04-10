@@ -593,6 +593,8 @@ class RepairCaseService
         $selectedKota = $dataCase->customer->kota_kabupaten_id;
         $selectedKecamatan = $dataCase->customer->kecamatan_id;
         $selectedKelurahan = $dataCase->customer->kelurahan_id;
+        $selectedEkspedisi = $dataCase?->logRequest?->layananEkspedisi?->ekspedisi?->id;
+        $selectedLayanan = $dataCase?->logRequest?->layanan_id;
 
         return view('repair.csr.edit.kasir-ongkir', [
             'title' => 'Kasir Ongkir Repair',
@@ -608,6 +610,8 @@ class RepairCaseService
             'selectedKota' => $selectedKota,
             'selectedKecamatan' => $selectedKecamatan,
             'selectedKelurahan' => $selectedKelurahan,
+            'selectedEkspedisi' => $selectedEkspedisi,
+            'selectedLayanan' => $selectedLayanan,
         ]);
         
     }

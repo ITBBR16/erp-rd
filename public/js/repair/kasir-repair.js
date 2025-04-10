@@ -54,11 +54,15 @@ $(document).ready(function () {
     });
 
     // Ekspedisi
+    let selectedEkspedisi = $('#ongkir-ekspedisi-repair').data('selected');
+    let selectedLayanan = $('#ongkir-layanan-repair').data('selected');
 
-    $(document).on('change', '.ongkir-ekspedisi-repair', function () {
-        let dataId = $(this).data("id");
-        let ekspedisiId = $('#ongkir-ekspedisi-repair-' + dataId).val();
-        getDataLayanan(dataId, ekspedisiId);
+    if (selectedEkspedisi) {
+        getDataLayanan(selectedEkspedisi, selectedLayanan);
+    }
+
+    $(document).on('change', '#ongkir-ekspedisi-repair', function () {
+        getDataLayanan(null);
     });
 
     $(document).on('input', '.format-angka-ongkir-repair', function () {
@@ -335,29 +339,39 @@ $(document).ready(function () {
         }
     }
 
-    function getDataLayanan(id, ekspedisiId) {
-        const containerLayanan = $('#ongkir-layanan-repair-' + id);
+    function getDataLayanan(ekspedisiId, layananId) {
+        const selectedEkspedisi = (ekspedisiId != null) ? ekspedisiId : $('#ongkir-ekspedisi-repair').val();
+        const containerLayanan = $('#ongkir-layanan-repair');
 
-        fetch(`/repair/csr/getLayanan/${ekspedisiId}`)
-        .then(response => response.json())
-        .then(data => {
-            containerLayanan.empty();
+        if (selectedEkspedisi) {
+            fetch(`/repair/csr/getLayanan/${selectedEkspedisi}`)
+            .then(response => response.json())
+            .then(data => {
+                containerLayanan.empty();
+    
+                const defaultOption = $('<option>')
+                        .text('Pilih Layanan')
+                        .val('')
+                        .attr('hidden', true)
+                        .addClass('bg-white dark:bg-gray-700');
+                containerLayanan.append(defaultOption);
 
-            const defaultOption = $('<option>')
-                    .text('Pilih Layanan')
-                    .val('')
-                    .attr('hidden', true)
-                    .addClass('bg-white dark:bg-gray-700');
-            containerLayanan.append(defaultOption);
+                let isOptionSelected = false;
+    
+                data.forEach(layanan => {
+                    const option = $('<option>')
+                            .val(layanan.id)
+                            .text(layanan.nama_layanan);
+                    if (layananId && layananId == layanan.id) {
+                        option.attr('selected', true);
+                        isOptionSelected = true;
+                    }
+                    containerLayanan.append(option);
+                });
+            })
+            .catch(error => alert('Error fetching data: ' + error));
 
-            data.forEach(layanan => {
-                const option = $('<option>')
-                        .val(layanan.id)
-                        .text(layanan.nama_layanan);
-                containerLayanan.append(option);
-            });
-        })
-        .catch(error => alert('Error fetching data: ' + error));
+        }
     }
 
     function formatAngka(angka) {
