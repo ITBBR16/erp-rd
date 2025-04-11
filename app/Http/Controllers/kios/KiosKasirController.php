@@ -29,6 +29,7 @@ use App\Models\management\AkuntanDaftarAkun;
 use App\Repositories\logistik\repository\EkspedisiRepository;
 use App\Repositories\gudang\repository\GudangTransactionRepository;
 use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
+use App\Repositories\logistik\repository\LogistikTransactionRepository;
 
 class KiosKasirController extends Controller
 {
@@ -42,6 +43,7 @@ class KiosKasirController extends Controller
         private GudangProdukIdItemRepository $idItemGudang,
         private GudangTransactionRepository $transactionGudang,
         private EkspedisiRepository $ekspedisi,
+        private LogistikTransactionRepository $ekspedisiTransaction,
     ){}
 
     public function index()
@@ -203,7 +205,7 @@ class KiosKasirController extends Controller
         $connectionTransaksiKios = DB::connection('rumahdrone_kios');
         $connectionTransaksiKios->beginTransaction();
         $this->transactionGudang->beginTransaction();
-        $this->ekspedisi->beginTransaction();
+        $this->ekspedisiTransaction->beginTransaction();
 
         try{
             $user = auth()->user();
@@ -259,7 +261,7 @@ class KiosKasirController extends Controller
 
             if(count(array_unique($kasirSN)) !== count($kasirSN)) {
                 $connectionTransaksiKios->rollBack();
-                $this->ekspedisi->rollbackTransaction();
+                $this->ekspedisiTransaction->rollbackTransaction();
                 $this->transactionGudang->rollbackTransaction();
                 return back()->with('error', 'Serial Number / Id Item tidak boleh ada yang sama.');
             }
@@ -471,14 +473,14 @@ class KiosKasirController extends Controller
             $responseFinance = Http::post($urlJurnalTransit, $payloadPembukuan);
 
             $connectionTransaksiKios->commit();
-            $this->ekspedisi->commitTransaction();
+            $this->ekspedisiTransaction->commitTransaction();
             $this->transactionGudang->commitTransaction();
 
             return back()->with('success', 'Berhasil membuat kasir baru.');
 
         } catch (Exception $e) {
             $connectionTransaksiKios->rollBack();
-            $this->ekspedisi->rollbackTransaction();
+            $this->ekspedisiTransaction->rollbackTransaction();
             $this->transactionGudang->rollbackTransaction();
             return back()->with('error', $e->getMessage());
         }

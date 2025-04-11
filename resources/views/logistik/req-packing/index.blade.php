@@ -38,5 +38,11 @@
         </div>
     @endif
 
+    <form action="#" method="POST" autocomplete="off">
+        @csrf
+        <div class="grid grid-cols-2 gap-4">
+            
+        </div>
+    </form>
 
 @endsection
