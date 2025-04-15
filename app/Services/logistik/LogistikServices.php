@@ -3,13 +3,18 @@
 namespace App\Services\logistik;
 
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\customer\Customer;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
 use App\Models\management\AkuntanDaftarAkun;
+use App\Repositories\logistik\repository\EkspedisiRepository;
+use App\Repositories\repair\repository\RepairCustomerRepository;
 use App\Repositories\logistik\repository\LogistikTransactionRepository;
 use App\Repositories\logistik\repository\LogistikRequestPackingRepository;
-use Illuminate\Support\Facades\Http;
 
 class LogistikServices
 {
@@ -17,7 +22,9 @@ class LogistikServices
         private UmumRepository $umum,
         private LogistikTransactionRepository $logTransaction,
         private LogistikRequestPackingRepository $reqPacking,
-        private AkuntanDaftarAkun $daftarAkun
+        private AkuntanDaftarAkun $daftarAkun,
+        private RepairCustomerRepository $customerRepo,
+        private EkspedisiRepository $ekspedisiRepo,
     ){}
 
     // List Request Packing
@@ -92,12 +99,107 @@ class LogistikServices
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
+        $dataProvinsi = $this->customerRepo->getProvinsi();
+        $dataCustomer = $this->customerRepo->getDataCustomer();
+        $dataEkspedisi = $this->ekspedisiRepo->getDataEkspedisi();
+
+        $dataCustomers = $dataCustomer->map(function ($customer) {
+            return [
+                'id' => $customer->id,
+                'display' => "{$customer->first_name} {$customer->last_name} - {$customer->id}"
+            ];
+        });
 
         return view('logistik.req-packing.index', [
             'title' => 'Form Request Packing',
             'active' => 'frp',
             'divisi' => $divisiName,
+            'dataProvinsi' => $dataProvinsi,
+            'dataEkspedisi' => $dataEkspedisi,
+            'dataCustomers' => $dataCustomers,
         ]);
+    }
+
+    public function storeReqPacking(Request $request)
+    {
+        try {
+
+            $this->logTransaction->beginTransaction();
+
+            $user = auth()->user();
+            $employeeId = $user->id;
+            $tanggalRequest = Carbon::now();
+            $checkboxCustomer = $request->input('checkbox_customer');
+            $nominalOngkir = preg_replace("/[^0-9]/", "",$request->input('nominal_ongkir')) ?: 0;
+            $nominalPacking = preg_replace("/[^0-9]/", "",$request->input('nominal_packing')) ?: 0;
+            $nominalAsuransi = preg_replace("/[^0-9]/", "",$request->input('nominal_asuransi')) ?: 0;
+
+            if ($checkboxCustomer) {
+                $dataCustomerNonRD = [
+                    'nama' => $request->input('nama_penerima'),
+                    'no_telpon' => $request->input('no_whatsapp'),
+                    'provinsi_id' => $request->input('provinsi_customer'),
+                    'kabupaten_kota_id' => $request->input('kota_kabupaten'),
+                    'kecamatan_id' => $request->input('kecamatan'),
+                    'kelurahan_id' => $request->input('kelurahan'),
+                    'kode_pos' => $request->input('kode_pos'),
+                    'nama_jalan' => $request->input('alamat'),
+                ];
+
+                $jenisPenerima = 'Non RD';
+                $idCustomer = $this->reqPacking->createLogPenerima($dataCustomerNonRD);
+            } else {
+                $idCustomer = $request->input('customer_rd');
+                $jenisPenerima = 'RD';
+            }
+
+            $dataLogCase = [
+                'penerima_id' => $idCustomer,
+                'asal_divisi_id' => $request->input('asal_divisi'),
+                'jenis_pengiriman' => $request->input('jenis_pengiriman'),
+                'jenis_penerima' => $jenisPenerima,
+                'opsi_transaksi' => $request->input('opsi_transaksi'),
+                'nama_akun_id' => $request->input('rekening_pembayaran'),
+                'keterangan' => $request->input('keterangan'),
+            ];
+
+            $logCase = $this->reqPacking->createLogCase($dataLogCase);
+
+            foreach ($request->input('nama_item') as $index => $item) {
+                $dataKelengkapan = [
+                    'log_case_id' => $logCase->id,
+                    'nama_item' => $item,
+                    'quantity' => $request->input("quantity")[$index],
+                    'keterangan' => $request->input("keterangan")[$index] ?? '',
+                ];
+
+                $this->reqPacking->createLogKelengkapan($dataKelengkapan);
+            }
+
+            $dataRequestLogistik = [
+                'employee_id' => $employeeId,
+                'divisi_id' => 6,
+                'source_id' => $logCase->id,
+                'penerima_id' => $idCustomer,
+                'layanan_id' => $request->input('layanan_ekspedisi'),
+                'biaya_customer_ongkir' => $nominalOngkir,
+                'biaya_customer_packing' => $nominalPacking,
+                'nominal_produk' => 0,
+                'nominal_asuransi' => $nominalAsuransi,
+                'tipe_penerima' => 'Other',
+                'tanggal_request' => $tanggalRequest,
+                'status_request' => 'Request Packing',
+            ];
+
+            $this->reqPacking->createLogRequest($dataRequestLogistik);
+            $this->logTransaction->commitTransaction();
+            return ['status' => 'success', 'message' => 'Berhasil menyimpan request packing.'];
+
+        } catch (Exception $e) {
+            Log::error('Error storing request packing: ' . $e->getMessage());
+            $this->logTransaction->rollbackTransaction();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
     }
 
     // Pickup & Input Resi
@@ -335,6 +437,12 @@ class LogistikServices
             ->values();
 
         return response()->json($dataRequest);
+    }
+
+    public function getCustomer($id)
+    {
+        $dataCustomer = Customer::where('id', $id)->get();
+        return response()->json($dataCustomer);
     }
 
 }

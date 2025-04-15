@@ -288,7 +288,10 @@ Route::middleware('logistik')->group(function () {
             Route::get('/review-label-pengiriman/{id}', 'reviewPdf')->name('reviewPdf');
         });
 
-        Route::resource('/form-req-packing', LogistikRequestPackingController::class)->only(['index', 'store']);
+        Route::group(['controller' => LogistikRequestPackingController::class], function () {
+            Route::resource('/form-req-packing', LogistikRequestPackingController::class)->only(['index', 'store']);
+            Route::get('/get-customer-packing/{id}', 'getCustomer');
+        });
 
         Route::group(['controller' => LogistikResiPickupController::class], function () {
             Route::resource('/list-unpicked', LogistikResiPickupController::class)->only(['index', 'store']);

@@ -49,7 +49,6 @@ $(document).ready(function () {
 
     $(document).on('jenis-drone-changed', (e) => {
         const jenisProduk = e.originalEvent.detail.id;
-        console.log('Jenis Drone Changed:', jenisProduk);
         const statusGanti = "Rubah Jenis";
         getKelengkapan(jenisProduk, statusGanti);
     });
@@ -61,15 +60,9 @@ $(document).ready(function () {
     });
 
     $(document).on('input', '.format-number', function () {
-        var inputNumber = $(this).val();
-        inputNumber = inputNumber.replace(/[^\d]/g, '');
-
-        if (inputNumber === '') {
-            inputNumber = '0';
-        }
-
-        var parsedNumber = parseInt(inputNumber, 10);
-        $(this).val(parsedNumber);
+        let value = $(this).val();
+        value = value.replace(/[^0-9]/g, '');
+        $(this).val(value);
     });
 
     // For edit case

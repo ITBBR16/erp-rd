@@ -37,11 +37,6 @@ class LogRequest extends Model
         return $this->belongsTo(JenisPelayanan::class, 'layanan_id');
     }
 
-    public function logPenerima()
-    {
-        return $this->belongsTo(LogPenerima::class);
-    }
-
     public function repairCase()
     {
         return $this->belongsTo(RepairCase::class, 'source_id');

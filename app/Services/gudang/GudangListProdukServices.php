@@ -57,6 +57,15 @@ class GudangListProdukServices
                 ->select('gudang_produk.*', 'ps.nama_internal')
                 ->paginate(70);
 
+            foreach ($dataProduk as $produk) {
+                try {
+                    $modalGudang = $this->countModalGudang($produk->produkSparepart->id);
+                    $produk->modal_gudang = $modalGudang['modalGudang'];
+                } catch (\Exception $e) {
+                    $produk->modal_gudang = 0;
+                }
+            }
+
             return response()->json([
                 'html' => view('gudang.produk.list-produk.partial.partial-list-produk', compact('dataProduk'))->render()
             ]);

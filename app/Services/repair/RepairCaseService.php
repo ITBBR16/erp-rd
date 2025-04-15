@@ -287,7 +287,7 @@ class RepairCaseService
             'employee' => $employee,
         ];
 
-        $pdf = Pdf::loadView('repair.csr.preview.preview-lunas', $dataView)
+        $pdf = Pdf::loadView('repair.csr.preview.preview-dp', $dataView)
                     ->setPaper('a5', 'portrait');
 
         return $pdf;
@@ -813,7 +813,7 @@ class RepairCaseService
                 'dataCase' => $dataCase,
             ];
 
-            $pdf = Pdf::loadView('repair.csr.invoice.invoice-dp', $dataView);
+            $pdf = Pdf::loadView('repair.csr.preview.preview-dp', $dataView);
             $pdfContent = $pdf->output();
             $pdfEncode = base64_encode($pdfContent);
             $filesFinance[] = $pdfEncode;

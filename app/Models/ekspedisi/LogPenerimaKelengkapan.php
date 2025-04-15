@@ -13,4 +13,6 @@ class LogPenerimaKelengkapan extends Model
     protected $table = 'log_penerima_kelengkapan';
     protected $guarded = ['id'];
 
+    
+
 }

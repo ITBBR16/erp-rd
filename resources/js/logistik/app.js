@@ -3,3 +3,4 @@ import '../../../public/js/logistik/dropdown-wilayah';
 import '../../../public/js/logistik/logistik-validasi';
 import '../../../public/js/logistik/unpicked&resi';
 import '../../../public/js/logistik/req-payment';
+import '../../../public/js/logistik/i-req-packing';

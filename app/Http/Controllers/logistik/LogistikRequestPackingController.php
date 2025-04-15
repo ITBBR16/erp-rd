@@ -16,4 +16,15 @@ class LogistikRequestPackingController extends Controller
     {
         return $this->logService->indexFRP();
     }
+
+    public function getCustomer($id)
+    {
+        return $this->logService->getCustomer($id);
+    }
+
+    public function store(Request $request)
+    {
+        $result = $this->logService->storeReqPacking($request);
+        return back()->with($result['status'], $result['message']);
+    }
 }

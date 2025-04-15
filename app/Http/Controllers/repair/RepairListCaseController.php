@@ -55,8 +55,8 @@ class RepairListCaseController extends Controller
 
     public function reviewPdfInvoiceLunas($encryptId)
     {
-        $id = decrypt($encryptId);
-        $pdf = $this->repairCaseService->reviewPdfLunas($id);
+        // $id = decrypt($encryptId);
+        $pdf = $this->repairCaseService->reviewPdfLunas($encryptId);
         return $pdf->stream();
     }
 

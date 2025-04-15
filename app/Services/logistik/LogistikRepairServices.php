@@ -59,7 +59,7 @@ class LogistikRepairServices
                 'kode_pos' => $request->input('kode_pos'),
                 'alamat' => $request->input('alamat'),
                 'tipe_produk' => $request->input('jenis_drone'),
-                'fungsioanal_produk' => $request->input('fungsional_drone'),
+                'fungsional_produk' => $request->input('fungsional_drone'),
                 'keluhan' => $request->input('keluhan'),
                 'kronologi_kerusakan' => $request->input('kronologi_kerusakan'),
                 'penanganan_after_crash' => $request->input('penanganan_crash'),

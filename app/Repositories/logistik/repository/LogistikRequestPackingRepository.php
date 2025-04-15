@@ -2,8 +2,11 @@
 
 namespace App\Repositories\logistik\repository;
 
+use App\Models\ekspedisi\LogCase;
 use App\Models\ekspedisi\Ekspedisi;
 use App\Models\ekspedisi\LogRequest;
+use App\Models\ekspedisi\LogPenerima;
+use App\Models\ekspedisi\LogPenerimaKelengkapan;
 use App\Repositories\logistik\interface\LogistikRequestPackingInterface;
 
 class LogistikRequestPackingRepository implements LogistikRequestPackingInterface
@@ -11,6 +14,9 @@ class LogistikRequestPackingRepository implements LogistikRequestPackingInterfac
     public function __construct(
         private LogRequest $logRequest,
         private Ekspedisi $ekspedisi,
+        private LogCase $logCase,
+        private LogPenerima $logPenerima,
+        private LogPenerimaKelengkapan $logKelengkapan,
     ){}
 
     public function getDataRequest()
@@ -33,6 +39,11 @@ class LogistikRequestPackingRepository implements LogistikRequestPackingInterfac
         return $this->logRequest->find($id);
     }
 
+    public function createLogRequest(array $data)
+    {
+        return $this->logRequest->create($data);
+    }
+
     public function updateRequestPacking($id, array $data)
     {
         $logRequest = $this->logRequest->find($id);
@@ -42,5 +53,20 @@ class LogistikRequestPackingRepository implements LogistikRequestPackingInterfac
         }
 
         throw new \Exception("Request packing not found.");
+    }
+
+    public function createLogPenerima(array $data)
+    {
+        return $this->logPenerima->create($data);
+    }
+
+    public function createLogCase(array $data)
+    {
+        return $this->logCase->create($data);
+    }
+
+    public function createLogKelengkapan(array $data)
+    {
+        return $this->logKelengkapan->create($data);
     }
 }

@@ -211,7 +211,7 @@
                 </td>
                 <td style="text-align: center; vertical-align: top; width: 50%;">
                     <h1 style="font-size: 12px; font-weight: 600; margin: 0; margin-bottom: 40px">Hormat Kami</h1>
-                    <p style="font-size: 10px; margin: 0;">( {{ auth()->user()->first_name }} {{ auth()->user()->last_name }} )</p>
+                    <p style="font-size: 10px; margin: 0;">( Rumah Drone )</p>
                 </td>
             </tr>
         </table>
