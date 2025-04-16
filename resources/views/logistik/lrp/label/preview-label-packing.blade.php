@@ -21,7 +21,7 @@
                     <h2 style="font-size: 16px; font-weight: 600; color: black;"><strong>Nama :</strong></h2>
                 </td>
                 <td style="text-align: left; vertical-align: top; width: 90%;">
-                    <h2 style="font-size: 14px;">{{ $dataReq->customer->first_name }} {{ $dataReq->customer->last_name ?? '' }} - {{ $dataReq->customer->id }}</h2>
+                    <h2 style="font-size: 14px;">{{ $namaCustomer }}</h2>
                 </td>
             </tr>
             <tr>
@@ -29,7 +29,7 @@
                     <h2 style="font-size: 16px; font-weight: 600; color: black;"><strong>No Tlp :</strong></h2>
                 </td>
                 <td style="text-align: left; vertical-align: top; width: 90%;">
-                    <h2 style="font-size: 14px;">{{ $dataReq->customer->no_telpon }}</h2>
+                    <h2 style="font-size: 14px;">{{ $noTelponCustomer }}</h2>
                 </td>
             </tr>
             <tr>

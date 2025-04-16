@@ -2,6 +2,7 @@
 
 namespace App\Models\ekspedisi;
 
+use App\Models\customer\Customer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,5 +17,15 @@ class LogCase extends Model
     public function logRequest()
     {
         return $this->hasOne(LogRequest::class, 'source_id')->where('divisi_id', 6);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'penerima_id');
+    }
+
+    public function logPenerima()
+    {
+        return $this->belongsTo(LogPenerima::class, 'penerima_id');
     }
 }

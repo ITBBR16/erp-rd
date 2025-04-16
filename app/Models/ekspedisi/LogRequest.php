@@ -41,4 +41,9 @@ class LogRequest extends Model
     {
         return $this->belongsTo(RepairCase::class, 'source_id');
     }
+
+    public function logCase()
+    {
+        return $this->belongsTo(LogCase::class, 'source_id');
+    }
 }

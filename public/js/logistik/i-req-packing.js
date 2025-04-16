@@ -1,6 +1,7 @@
 $(document).ready(function () {
     let iReqPackingLength = 1;
 
+    // Data Customer
     $(document).on('customer-changed', (e) => {
         const customerId = e.originalEvent.detail.id;
         
@@ -102,6 +103,34 @@ $(document).ready(function () {
         
     });
 
+    // Data Logistik
+    $(document).on('change', '#ekspedisi-req-packing', function () {
+        const selectedEkspedisi = $(this).val();
+        const containerLayanan = $('#layanan-ekspedisi');
+
+        fetch(`/logistik/get-layanan-ekspedisi/${selectedEkspedisi}`)
+            .then(response => response.json())
+            .then(data => {
+                containerLayanan.empty();
+    
+                const defaultOption = $('<option>')
+                        .text('Pilih Jenis Layanan')
+                        .val('')
+                        .attr('hidden', true)
+                        .addClass('bg-white dark:bg-gray-700');
+                containerLayanan.append(defaultOption);
+    
+                data.forEach(layanan => {
+                    const option = $('<option>')
+                            .val(layanan.id)
+                            .text(layanan.nama_layanan);
+                    containerLayanan.append(option);
+                });
+            })
+            .catch(error => alert('Error fetching data: ' + error));
+    });
+
+    // Isi Paket
     $(document).on('click', '#add-item-ireq', function () {
         var containerIsiPaket = $('#iReqPacking');
 
@@ -115,7 +144,7 @@ $(document).ready(function () {
                     <input type="text" name="quantity[]" class="format-number block py-2.5 px-0 w-full text-xs text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" placeholder="0" required>
                 </td>
                 <td class="px-6 py-4">
-                    <input type="text" name="keterangan[]" class="block py-2.5 px-0 w-full text-xs text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" placeholder="Keterangan">
+                    <input type="text" name="keterangan_isi_paket[]" class="block py-2.5 px-0 w-full text-xs text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" placeholder="Keterangan">
                 </td>
                 <td class="px-6 py-4 text-center">
                     <button type="button" class="remove-isi-paket" data-id="${iReqPackingLength}">

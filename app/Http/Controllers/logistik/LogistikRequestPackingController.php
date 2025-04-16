@@ -27,4 +27,9 @@ class LogistikRequestPackingController extends Controller
         $result = $this->logService->storeReqPacking($request);
         return back()->with($result['status'], $result['message']);
     }
+
+    public function getLayanan($id)
+    {
+        return $this->logService->getLayanan($id);
+    }
 }

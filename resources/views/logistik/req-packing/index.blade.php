@@ -176,10 +176,10 @@
                     </div>
 
                     <div class="col-span-1 text-end pr-6">
-                        <label for="ekspedisi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi</label>
+                        <label for="ekspedisi-req-packing" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <select id="ekspedisi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <select id="ekspedisi-req-packing" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Pilih Ekspedisi</option>
                             @foreach ($dataEkspedisi as $ekspedisi)
                                 <option value="{{ $ekspedisi->id }}">{{ $ekspedisi->ekspedisi }}</option>
@@ -212,7 +212,10 @@
                     </div>
                     <div class="col-span-2 text-start">
                         <select name="asal_divisi" id="divisi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>Pilih Divisi</option>
+                            <option value="" hidden>Pilih Department</option>
+                            @foreach ($dataDivisi as $divisi)
+                                <option value="{{ $divisi->id }}">Department {{ $divisi->nama }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -222,6 +225,9 @@
                     <div class="col-span-2 text-start">
                         <select name="rekening_pembayaran" id="rekening" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Pilih Rekening</option>
+                            @foreach ($daftarAkun as $akun)
+                                <option value="{{ $akun->id }}">{{ $akun->nama_akun }}</option>
+                            @endforeach
                         </select>
                     </div>
 

@@ -2,19 +2,20 @@
 
 namespace App\Models\customer;
 
-use App\Models\ekspedisi\LogRequest;
-use App\Models\kios\KiosDailyRecap;
-use App\Models\kios\KiosOrderSecond;
-use App\Models\kios\KiosTransaksi;
-use App\Models\repair\RepairCase;
-use App\Models\repair\RepairReviewCustomer;
-use App\Models\repair\RepairTransaksi;
-use App\Models\wilayah\Kecamatan;
-use App\Models\wilayah\Kelurahan;
 use App\Models\wilayah\Kota;
 use App\Models\wilayah\Provinsi;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ekspedisi\LogCase;
+use App\Models\repair\RepairCase;
+use App\Models\wilayah\Kecamatan;
+use App\Models\wilayah\Kelurahan;
+use App\Models\kios\KiosTransaksi;
+use App\Models\kios\KiosDailyRecap;
+use App\Models\ekspedisi\LogRequest;
+use App\Models\kios\KiosOrderSecond;
+use App\Models\repair\RepairTransaksi;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\repair\RepairReviewCustomer;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Customer extends Model
 {
@@ -82,5 +83,10 @@ class Customer extends Model
     public function logRequest()
     {
         return $this->hasMany(LogRequest::class);
+    }
+
+    public function logCase()
+    {
+        return $this->hasMany(LogCase::class, 'penerima_id');
     }
 }

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\customer\Customer;
+use App\Models\divisi\Divisi;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
@@ -25,6 +26,7 @@ class LogistikServices
         private AkuntanDaftarAkun $daftarAkun,
         private RepairCustomerRepository $customerRepo,
         private EkspedisiRepository $ekspedisiRepo,
+        private Divisi $divisi,
     ){}
 
     // List Request Packing
@@ -49,19 +51,49 @@ class LogistikServices
         $id = decrypt($encryptId);
         $dataReq = $this->reqPacking->findDataRequest($id);
 
-        $customer = $dataReq->customer ?? null;
+        if ($dataReq->divisi->nama == 'Logistik') {
+            if ($dataReq->logCase->jenis_penerima == 'RD') {
+                $customer = $dataReq->logCase->customer;
 
-        $namaCustomer = ($customer->first_nama ?? '') . ' ' . ($customer->last_nama ?? '') . ' - ' . ($customer->id ?? '');
-        $noTelponCustomer = $customer->no_telpon ?? '';
+                $namaCustomer = ($customer->first_nama ?? '') . ' ' . ($customer->last_nama ?? '') . ' - ' . ($customer->id ?? '');
+                $noTelponCustomer = $customer->no_telpon ?? '';
+                
+                $alamatCustomer = ($customer->nama_jalan ?? '') 
+                                    . ',' . ($customer->provinsi->name ?? '')
+                                    . ',' . ($customer->kota->name ?? '')
+                                    . ',' . ($customer->kecamatan->name ?? '')
+                                    . ',' . ($customer->kelurahan->name ?? '')
+                                    . ',' . ($customer->kode_pos ?? '');
         
-        $alamatCustomer = ($customer->nama_jalan ?? '') 
-                            . ',' . ($customer->provinsi->name ?? '')
-                            . ',' . ($customer->kota->name ?? '')
-                            . ',' . ($customer->kecamatan->name ?? '')
-                            . ',' . ($customer->kelurahan->name ?? '')
-                            . ',' . ($customer->kode_pos ?? '');
+                $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
+            } else {
+                $namaCustomer = $dataReq->logCase->logPenerima->nama;
+                $noTelponCustomer = $dataReq->logCase->logPenerima->no_telpon;
 
-        $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
+                $alamatCustomer = ($dataReq->logCase->logPenerima->nama_jalan ?? '') 
+                                    . ',' . ($dataReq->logCase->logPenerima->provinsi->name ?? '')
+                                    . ',' . ($dataReq->logCase->logPenerima->kota->name ?? '')
+                                    . ',' . ($dataReq->logCase->logPenerima->kecamatan->name ?? '')
+                                    . ',' . ($dataReq->logCase->logPenerima->kelurahan->name ?? '')
+                                    . ',' . ($dataReq->logCase->logPenerima->kode_pos ?? '');
+                
+                $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
+            }
+        } else {
+            $customer = $dataReq->customer;
+    
+            $namaCustomer = ($customer->first_nama ?? '') . ' ' . ($customer->last_nama ?? '') . ' - ' . ($customer->id ?? '');
+            $noTelponCustomer = $customer->no_telpon ?? '';
+            
+            $alamatCustomer = ($customer->nama_jalan ?? '') 
+                                . ',' . ($customer->provinsi->name ?? '')
+                                . ',' . ($customer->kota->name ?? '')
+                                . ',' . ($customer->kecamatan->name ?? '')
+                                . ',' . ($customer->kelurahan->name ?? '')
+                                . ',' . ($customer->kode_pos ?? '');
+    
+            $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
+        }
 
         $dataString = "Nama: $namaCustomer\nNo Telpon: $noTelponCustomer\nAlamat: $alamatCustomer";
         $barcodeUrl = 'https://quickchart.io/chart?cht=qr&chl=' . urlencode($dataString);
@@ -69,6 +101,8 @@ class LogistikServices
         $dataView = [
             'dataReq' => $dataReq,
             'barcode' => $barcodeUrl,
+            'namaCustomer' => $namaCustomer,
+            'noTelponCustomer' => $noTelponCustomer,
             'alamat' => $alamatCustomer
         ];
         
@@ -98,10 +132,12 @@ class LogistikServices
     public function indexFRP()
     {
         $user = auth()->user();
+        $dataDivisi = $this->divisi->all();
         $divisiName = $this->umum->getDivisi($user);
         $dataProvinsi = $this->customerRepo->getProvinsi();
         $dataCustomer = $this->customerRepo->getDataCustomer();
         $dataEkspedisi = $this->ekspedisiRepo->getDataEkspedisi();
+        $daftarAkun = $this->daftarAkun->where('kode_akun', 'like', '111%')->get();
 
         $dataCustomers = $dataCustomer->map(function ($customer) {
             return [
@@ -117,6 +153,8 @@ class LogistikServices
             'dataProvinsi' => $dataProvinsi,
             'dataEkspedisi' => $dataEkspedisi,
             'dataCustomers' => $dataCustomers,
+            'dataDivisi' => $dataDivisi,
+            'daftarAkun' => $daftarAkun,
         ]);
     }
 
@@ -147,7 +185,8 @@ class LogistikServices
                 ];
 
                 $jenisPenerima = 'Non RD';
-                $idCustomer = $this->reqPacking->createLogPenerima($dataCustomerNonRD);
+                $createPenerima = $this->reqPacking->createLogPenerima($dataCustomerNonRD);
+                $idCustomer = $createPenerima->id;
             } else {
                 $idCustomer = $request->input('customer_rd');
                 $jenisPenerima = 'RD';
@@ -170,7 +209,7 @@ class LogistikServices
                     'log_case_id' => $logCase->id,
                     'nama_item' => $item,
                     'quantity' => $request->input("quantity")[$index],
-                    'keterangan' => $request->input("keterangan")[$index] ?? '',
+                    'keterangan' => $request->input("keterangan_isi_paket")[$index] ?? '',
                 ];
 
                 $this->reqPacking->createLogKelengkapan($dataKelengkapan);
@@ -290,7 +329,7 @@ class LogistikServices
                 return optional($item->layananEkspedisi)->ekspedisi?->id == $id;
             })
             ->values();
-        $dataRequest->load('customer');
+        $dataRequest->load('customer', 'divisi', 'logCase.customer', 'logCase.logPenerima');
 
         return response()->json($dataRequest);
     }
@@ -443,6 +482,11 @@ class LogistikServices
     {
         $dataCustomer = Customer::where('id', $id)->get();
         return response()->json($dataCustomer);
+    }
+
+    public function getLayanan($id)
+    {
+        return $this->ekspedisiRepo->getDataLayanan($id);
     }
 
 }

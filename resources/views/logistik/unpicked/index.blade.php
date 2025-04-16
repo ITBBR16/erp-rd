@@ -71,7 +71,15 @@
                                         {{ \Carbon\Carbon::parse($data->tanggal_request)->isoFormat('D MMMM YYYY') }}
                                     </th>
                                     <td class="px-6 py-2">
-                                        {{ $data->customer->first_name }} {{ $data->customer->last_name ?? '' }} - {{ $data->customer->id }}
+                                        @if ($data->divisi->nama == 'Logistik')
+                                            @if ($data->logCase->jenis_penerima == 'RD')
+                                                {{ $data->logCase->customer->first_name }} {{ $data->logCase->customer->last_name ?? '' }} - {{ $data->logCase->customer->id }}
+                                            @else
+                                                {{ $data->logCase->logPenerima->nama }}
+                                            @endif
+                                        @else
+                                            {{ $data->customer->first_name }} {{ $data->customer->last_name ?? '' }} - {{ $data->customer->id }}
+                                        @endif
                                     </td>
                                     <td class="px-6 py-2">
                                         {{ $data->layananEkspedisi->ekspedisi->ekspedisi }}

@@ -50,7 +50,11 @@ $(document).ready(function () {
                                 </div>
                             </td>
                             <td class="px-6 py-2">
-                                ${item.customer.first_name} ${item.customer.last_name} - ${item.customer.id}
+                            ${item.divisi.nama === 'Logistik' 
+                                ? (item.log_case.jenis_penerima == 'RD' 
+                                    ? item.log_case.customer.first_name + ' ' + item.log_case.customer.last_name + ' - ' + item.log_case.customer.id
+                                    : item.log_case.log_penerima.nama )
+                                : item.customer.first_name + ' ' + item.customer.last_name + ' - ' + item.customer.id}
                             </td>
                             <td class="px-6 py-2">
                                 ${item.layanan_ekspedisi.ekspedisi.ekspedisi}
@@ -66,7 +70,11 @@ $(document).ready(function () {
                                 </div>
                             </td>
                             <td class="px-6 py-2">
-                                ${item.customer.first_name} ${item.customer.last_name} - ${item.customer.id}
+                            ${item.divisi.nama === 'Logistik' 
+                                ? (item.log_case.jenis_penerima == 'RD' 
+                                    ? item.log_case.customer.first_name + ' ' + item.log_case.customer.last_name + ' - ' + item.log_case.customer.id
+                                    : item.log_case.log_penerima.nama )
+                                : item.customer.first_name + ' ' + item.customer.last_name + ' - ' + item.customer.id}
                             </td>
                             <td class="px-6 py-2">
                                 <input type="text" name="no_resi[${item.id}]" id="no-resi-${item.id}" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="No Resi">

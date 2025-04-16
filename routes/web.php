@@ -291,6 +291,7 @@ Route::middleware('logistik')->group(function () {
         Route::group(['controller' => LogistikRequestPackingController::class], function () {
             Route::resource('/form-req-packing', LogistikRequestPackingController::class)->only(['index', 'store']);
             Route::get('/get-customer-packing/{id}', 'getCustomer');
+            Route::get('/get-layanan-ekspedisi/{id}', 'getLayanan');
         });
 
         Route::group(['controller' => LogistikResiPickupController::class], function () {
