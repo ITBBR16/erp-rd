@@ -287,7 +287,7 @@ class RepairCaseService
             'employee' => $employee,
         ];
 
-        $pdf = Pdf::loadView('repair.csr.preview.preview-dp', $dataView)
+        $pdf = Pdf::loadView('repair.csr.preview.preview-lunas', $dataView)
                     ->setPaper('a5', 'portrait');
 
         return $pdf;

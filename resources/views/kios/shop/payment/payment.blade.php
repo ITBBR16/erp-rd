@@ -69,6 +69,9 @@
                         Order ID
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Supplier
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Tanggal Belanja
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -92,6 +95,9 @@
                             <th class="px-6 py-2">
                                 {{ ($py->order_type == 'Baru') ? 'N.' . $py->order_id : 'S.' . $py->order_id }}
                             </th>
+                            <td class="px-6 py-2">
+                                {{ ($py->order_type == 'Baru') ? $py->order->supplier->nama_perusahaan : $py->ordersecond->customer->first_name ." ". $py->ordersecond->customer->last_name }}
+                            </td>
                             <td class="px-6 py-2">
                                 {{ \Carbon\Carbon::parse(($py->order_type == 'Baru') ? $py->order->created_at : '')->isoFormat('D MMMM YYYY') }}
                             </td>

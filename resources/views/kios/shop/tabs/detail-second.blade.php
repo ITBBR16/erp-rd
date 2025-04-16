@@ -24,7 +24,7 @@
                             Metode Pembelian
                         </th>
                         <th scope="col" class="px-6 py-3" style="width: 15%">
-                            Nama Customer
+                            Supplier
                         </th>
                         <th scope="col" class="px-6 py-3" style="width: 15%">
                             Tanggal Pembelian

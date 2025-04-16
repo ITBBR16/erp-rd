@@ -23,7 +23,7 @@
                         No Resi
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Pengirim
+                        Supplier
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Ekspedisi
