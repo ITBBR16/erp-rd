@@ -23,3 +23,4 @@ import '../../../public/js/kios/toggle-payment-kios';
 import '../../../public/js/kios/daily-recap';
 import '../../../public/js/kios/technical-support';
 import '../../../public/js/kios/split-produk-baru';
+import '../../../public/js/kios/form-request-packing';

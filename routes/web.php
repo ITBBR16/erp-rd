@@ -1,7 +1,7 @@
 <?php
 
-use App\Exports\EkspedisiExport;
 use Carbon\Carbon;
+use App\Exports\EkspedisiExport;
 use App\Exports\KiosSalesExport;
 use App\Models\wilayah\Provinsi;
 use App\Exports\KiosFinanceExport;
@@ -51,6 +51,7 @@ use App\Http\Controllers\repair\RepairTeknisiNCController;
 use App\Http\Controllers\gudang\GudangListProdukController;
 use App\Http\Controllers\gudang\GudangValidasiQCController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
+use App\Http\Controllers\kios\KiosRequestPackingController;
 use App\Http\Controllers\kios\KiosSplitDroneBaruController;
 use App\Http\Controllers\repair\RepairPengerjaanController;
 use App\Http\Controllers\gudang\GudangAdjustStockController;
@@ -264,10 +265,13 @@ Route::middleware('kios')->group(function () {
                 Route::get('/generate-pdf', 'previewPdfKasir');
                 Route::post('/updateDataCustomer', 'updateDataCustomer');
             });
+
             Route::group(['controller' => KiosPODPController::class], function () {
                 Route::resource('/dp-po', KiosPODPController::class);
                 Route::get('/getSrpProduk/{jenisTransaksi}/{id}', 'getSrpProduk');
             });
+
+            Route::resource('/req-packing-kios', KiosRequestPackingController::class)->only(['index', 'store']);
         });
 
         Route::prefix('/technical-support')->group(function () {

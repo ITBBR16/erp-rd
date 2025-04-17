@@ -70,8 +70,6 @@ class KiosKasirController extends Controller
             'active' => 'kasir-kios',
             'navActive' => 'kasir',
             'divisi' => $divisiName,
-            'dropdown' => '',
-            'dropdownShop' => '',
             'today' => $today,
             'duedate' => $dueDate,
             'customerdata' => $customerData,
@@ -94,8 +92,6 @@ class KiosKasirController extends Controller
             'active' => 'history-transaksi',
             'navActive' => 'kasir',
             'divisi' => $divisiName,
-            'dropdown' => '',
-            'dropdownShop' => '',
             'dataHistory' => $dataHistory,
         ]);
     }
