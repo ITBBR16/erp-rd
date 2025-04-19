@@ -8,3 +8,4 @@ import '../../../public/js/repair/konfirmasi-biaya';
 import '../../../public/js/repair/penerimaan-req-part';
 import '../../../public/js/repair/kasir-repair';
 import '../../../public/js/repair/recap-transaksi';
+import '../../../public/js/repair/form-request-packing';

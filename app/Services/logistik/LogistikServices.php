@@ -55,7 +55,7 @@ class LogistikServices
             if ($dataReq->logCase->jenis_penerima == 'RD') {
                 $customer = $dataReq->logCase->customer;
 
-                $namaCustomer = ($customer->first_nama ?? '') . ' ' . ($customer->last_nama ?? '') . ' - ' . ($customer->id ?? '');
+                $namaCustomer = ($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '') . ' - ' . ($customer->id ?? '');
                 $noTelponCustomer = $customer->no_telpon ?? '';
                 
                 $alamatCustomer = ($customer->nama_jalan ?? '') 
@@ -82,7 +82,7 @@ class LogistikServices
         } else {
             $customer = $dataReq->customer;
     
-            $namaCustomer = ($customer->first_nama ?? '') . ' ' . ($customer->last_nama ?? '') . ' - ' . ($customer->id ?? '');
+            $namaCustomer = ($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '') . ' - ' . ($customer->id ?? '');
             $noTelponCustomer = $customer->no_telpon ?? '';
             
             $alamatCustomer = ($customer->nama_jalan ?? '') 

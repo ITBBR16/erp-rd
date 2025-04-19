@@ -92,6 +92,7 @@ use App\Http\Controllers\repair\RepairRubahEstimasiGeneralController;
 use App\Http\Controllers\gudang\GudangDashboardDistributionController;
 use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
+use App\Http\Controllers\repair\RepairRequestPackingController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
@@ -407,6 +408,8 @@ Route::middleware('repair')->group(function () {
             Route::resource('/request-sparepart', RepairRequestSparepartController::class)->only(['index', 'update']);
 
             Route::resource('/penerimaan-sparepart', RepairPenerimaanSparepartController::class)->only(['index']);
+
+            Route::resource('/form-req-packing-repair', RepairRequestPackingController::class)->only(['index', 'store']);
         });
 
         Route::prefix('/teknisi')->group(function () {

@@ -1,10 +1,10 @@
-@extends('logistik.layouts.main')
+@extends('repair.layouts.main')
 
 @section('container')
-
+    
     <div class="grid grid-cols-2 gap-8 mb-8 border-b border-gray-400 py-3">
         <div class="flex text-3xl font-bold text-gray-700 dark:text-gray-300">
-            Input Request Packing
+            Form Request Packing
         </div>
     </div>
 
@@ -38,7 +38,7 @@
         </div>
     @endif
 
-    <form action="{{ route('form-req-packing.store') }}" method="POST" autocomplete="off">
+    <form action="{{ route('form-req-packing-repair.store') }}" method="POST" autocomplete="off">
         @csrf
         <div class="grid grid-cols-3 gap-4">
             {{-- Box Customer --}}
@@ -46,7 +46,7 @@
                 <div class="pb-2 border-b flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold text-black dark:text-white">Data Customer</h2>
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" name="checkbox_customer" id="checkbox-data-customer" class="sr-only peer">
+                        <input type="checkbox" name="checkbox_customer" id="checkbox-data-customer-req-packing" class="sr-only peer">
                         <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-500"></div>
                         <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Customer RD</span>
                     </label>
@@ -176,10 +176,10 @@
                     </div>
 
                     <div class="col-span-1 text-end pr-6">
-                        <label for="ekspedisi-req-packing" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi</label>
+                        <label for="ongkir-ekspedisi-repair" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Ekspedisi</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <select id="ekspedisi-req-packing" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <select id="ongkir-ekspedisi-repair" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option value="" hidden>Pilih Ekspedisi</option>
                             @foreach ($dataEkspedisi as $ekspedisi)
                                 <option value="{{ $ekspedisi->id }}">{{ $ekspedisi->ekspedisi }}</option>
@@ -188,11 +188,11 @@
                     </div>
 
                     <div class="col-span-1 text-end pr-6">
-                        <label for="layanan-ekspedisi" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Layanan</label>
+                        <label for="ongkir-layanan-repair" class="block py-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Layanan</label>
                     </div>
                     <div class="col-span-2 text-start">
-                        <select name="layanan_ekspedisi" id="layanan-ekspedisi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                            <option value="" hidden>Pilih Jenis Layanan</option>
+                        <select name="layanan_ekspedisi" id="ongkir-layanan-repair" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <option value="" hidden>Pilih Layanan</option>
                         </select>
                     </div>
 
@@ -237,7 +237,7 @@
                     <div class="col-span-2 text-start">
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="nominal_ongkir" id="nominal-ongkir" class="format-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
+                            <input type="text" name="nominal_ongkir" id="nominal-ongkir" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
                         </div>
                     </div>
 
@@ -247,7 +247,7 @@
                     <div class="col-span-2 text-start">
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="nominal_packing" id="nominal-packing" class="format-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
+                            <input type="text" name="nominal_packing" id="nominal-packing" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
                         </div>
                     </div>
 
@@ -257,7 +257,7 @@
                     <div class="col-span-2 text-start">
                         <div class="flex">
                             <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                            <input type="text" name="nominal_asuransi" id="nominal-asuransi" class="format-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
+                            <input type="text" name="nominal_asuransi" id="nominal-asuransi" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0">
                         </div>
                     </div>
 
@@ -302,7 +302,7 @@
                                         <div class="flex items-center justify-between text-violet-600">
                                             <!-- Tombol Tambah Item -->
                                             <div class="flex cursor-pointer hover:text-violet-400">
-                                                <button type="button" id="add-item-ireq" class="flex flex-row items-center gap-2">
+                                                <button type="button" id="add-item-kasir-req-packing" class="flex flex-row items-center gap-2">
                                                     <span class="material-symbols-outlined">add_circle</span>
                                                     <span>Tambah Item</span>
                                                 </button>
@@ -363,7 +363,7 @@
                     this.search = display;
                     this.open = false;
 
-                    const event = new CustomEvent('customer-changed', {
+                    const event = new CustomEvent('kasir-customer-req-packing-changed', {
                         detail: { id: this.selected, display: this.search }
                     });
                     document.dispatchEvent(event);
