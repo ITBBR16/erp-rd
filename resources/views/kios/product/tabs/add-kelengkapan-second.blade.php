@@ -1,46 +1,69 @@
 <div class="hidden p-4" id="createPaket" role="tabpanel" aria-labelledby="createPaket-tab">
     <form action="{{ route('add-paket-penjualan-second.store') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
         @csrf
-        <h3 class="text-gray-900 dark:text-white font-semibold text-xl">Data Paket Penjualan Produk</h3>
+        <h3 class="text-gray-900 dark:text-white font-semibold text-xl mb-2">Data Paket Penjualan Produk</h3>
         <div class="w-10/12">
-            <div class="bg-white p-4 text-white border-0 border-transparent border-solid shadow-md rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+            <div class="bg-white p-4 text-white border border-solid shadow-md rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-200">
                 <div class="grid md:grid-cols-2 md:gap-6">
-                    <div class="relative z-0 w-full mb-6 group">
-                        <label for="paket_penjualan_produk_second" class="sr-only">Nama Paket Penjualan</label>
-                        <select name="paket_penjualan_produk_second" id="paket_penjualan_produk_second" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('paket_penjualan_produk_second') border-red-600 dark:border-red-500 @enderror" required>
-                            <option value="" hidden>Nama Paket Penjualan</option>
-                            @foreach ($kiosproduks as $produk)
-                                <option value="{{ $produk->id }}" class="bg-white dark:bg-gray-700">{{ $produk->paket_penjualan }}</option>
-                            @endforeach
-                        </select>
-                        @error('paket_penjualan_produk_second')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
+                    <div>
+                        <div x-data="dropdownPaketPenjualanSecond()" class="relative text-start">
+                            <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Pilih Paket Penjualan :</label>
+                            <div class="relative">
+                                <input x-model="search" 
+                                    @focus="open = true" 
+                                    @keydown.escape="open = false" 
+                                    @click.outside="open = false"
+                                    type="text" 
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    placeholder="Search or select varian product...">
+                                    <svg :class="{ 'rotate-180': open }" class="absolute inset-y-0 right-2 top-2.5 w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                    </svg>
+                                <input type="hidden" id="paket_penjualan_produk_second" name="paket_penjualan_produk_second" :value="selected" required>
+                            </div>
+    
+                            <ul x-show="open" 
+                                x-transition 
+                                class="absolute z-30 bg-white border border-gray-300 rounded-lg mt-1 max-h-60 w-full overflow-y-auto shadow-md dark:bg-gray-700 dark:border-gray-600">
+                                <template x-for="varian in filteredVarians" :key="varian.id">
+                                    <li @click="select(varian.id, varian.display)" 
+                                        class="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 dark:hover:text-white">
+                                        <span x-text="varian.display" class="text-black dark:text-white"></span>
+                                    </li>
+                                </template>
+                                <li 
+                                    x-show="filteredVarians.length === 0" 
+                                    class="px-4 py-2 text-gray-500 dark:text-gray-400">
+                                    Data paket penjualan tidak ditemukan.
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        <input type="text" name="cc_produk_second" id="cc_produk_second" class="block py-2.5 px-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" oninput="this.value = this.value.replace(/\D/g, '')">
-                        <label for="cc_produk_second" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">CC Produk</label>
-                        @error('cc_produk_second')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
+
+                    <div>
+                        <label for="cc_produk_second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">CC Produk</label>
+                        <input type="text" name="cc_produk_second" id="cc_produk_second" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="CC Produk" oninput="this.value = this.value.replace(/\D/g, '')">
                     </div>
-                </div>
-                <div class="grid md:grid-cols-2 md:gap-6">
-                    <div class="relative z-0 w-full group flex items-center">
-                        <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                        <input type="text" name="modal_produk_second" id="modal_produk_second" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " readonly>
-                        <label for="modal_produk_second" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Modal Awal</label>
-                        @error('modal_produk_second')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
+
+                    <div>
+                        <label for="modal_produk_second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="modal_produk_second" id="modal_produk_second" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" readonly>
+                        </div>
                     </div>
-                    <div class="relative z-0 w-full group flex items-center">
-                        <span class="absolute start-0 font-bold text-gray-500 dark:text-gray-400">RP</span>
-                        <input type="text" name="harga_jual_produk_second" id="harga_jual_produk_second" class="block py-2.5 ps-8 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " oninput="this.value = this.value.replace(/\D/g, '')" required>
-                        <label for="harga_jual_produk_second" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-placeholder-shown:start-8 peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Harga Jual</label>
-                        @error('harga_jual_produk_second')
-                            <p class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
+
+                    <div>
+                        <label for="harga_jual_produk_second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Pembayaran :</label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
+                            <input type="text" name="harga_jual_produk_second" id="harga_jual_produk_second" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" oninput="this.value = this.value.replace(/\D/g, '')" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="serial-number-second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Serial Number :</label>
+                        <input type="text" name="serial_number_second" id="serial-number-second" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="SN123456QWERT" required>
                     </div>
                 </div>
                 <h3 class="my-4 text-gray-900 dark:text-white font-semibold text-xl">Isi Kelengkapan</h3>
@@ -56,8 +79,8 @@
                     </div>
                 </div>
             </div>
-            <h3 class="mt-6 text-gray-900 dark:text-white font-semibold text-xl">Data File Upload</h3>
-            <div class="bg-white p-4 text-white border-0 border-transparent border-solid shadow-md rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-600">
+            <h3 class="mt-6 text-gray-900 dark:text-white font-semibold text-xl mb-2">Data File Upload</h3>
+            <div class="bg-white p-4 text-white border border-solid shadow-md rounded-2xl bg-clip-border dark:bg-gray-800 dark:border-gray-200">
                 <div class="mt-3 grid grid-cols-2 gap-4 md:gap-6">
                     <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">File Utama Produk :</label>
                     <div class="flex items-center justify-center w-full">
@@ -105,4 +128,36 @@
             </div>
         </div>
     </form>
+
+    <script>
+        function dropdownPaketPenjualanSecond() {
+            return {
+                open: false,
+                search: '',
+                selected: '',
+                varians: Object.values(@json($kiosproduks)),
+                filteredVarians: [],
+                debounceSearch: null,
+                init() {
+                    if (!Array.isArray(this.varians)) {
+                        this.varians = [];
+                    }
+                    this.filteredVarians = this.varians;
+                    this.$watch('search', (value) => {
+                        clearTimeout(this.debounceSearch);
+                        this.debounceSearch = setTimeout(() => {
+                            this.filteredVarians = this.varians.filter(varian =>
+                                varian.display.toLowerCase().includes(value.toLowerCase())
+                            );
+                        }, 300);
+                    });
+                },
+                select(id, display) {
+                    this.selected = id;
+                    this.search = display;
+                    this.open = false;
+                }
+            }
+        }
+    </script>
 </div>

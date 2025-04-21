@@ -26,6 +26,9 @@
                             Kelengkapan
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Modal Split
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Serial Number
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -41,6 +44,9 @@
                             </th>
                             <td class="px-6 py-2">
                                 {{ $data->kelengkapanProduk->kelengkapan }}
+                            </td>
+                            <td class="px-6 py-2">
+                                Rp. {{ number_format($data->nominal, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-2">
                                 {{ $data->serial_number_split }}

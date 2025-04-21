@@ -242,7 +242,7 @@ Route::middleware('kios')->group(function () {
             });
 
             Route::group(['controller' => KiosSplitDroneBaruController::class], function () {
-                Route::resource('/split-produk-baru', KiosSplitDroneBaruController::class)->only(['index', 'store']);
+                Route::resource('/split-produk-baru', KiosSplitDroneBaruController::class)->only(['index', 'store', 'edit', 'update']);
                 Route::post('/create-paket-bnob', 'createPaketPenjualanBnob')->name('createbnob');
                 Route::get('/get-sn-split/{id}', 'getSnSplit');
                 Route::get('/get-kelengkapan-split/{id}/{idSn}', 'getKelengkapanSplitBaru');

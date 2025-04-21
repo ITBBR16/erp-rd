@@ -62,6 +62,56 @@ class KiosSplitDroneBaruController extends Controller
         ]);
     }
 
+    public function edit($encryptId)
+    {
+        $user = auth()->user();
+        $divisiName = $this->umum->getDivisi($user);
+        $id = decrypt($encryptId);
+        $dataSplit = KiosSerialNumber::find($id);
+
+        return view('kios.product.splitbaru.pages.change-modal-split-baru', [
+            'title' => 'Change Modal Split Baru',
+            'active' => 'splitdb',
+            'navActive' => 'product',
+            'dropdown' => '',
+            'dropdownShop' => '',
+            'divisi' => $divisiName,
+            'dataSplit' => $dataSplit
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $connectionKios = DB::connection('rumahdrone_kios');
+            $connectionKios->beginTransaction();
+
+            $idKelengkapan = $request->input('id_kelengkapan');
+            $serialNumber = $request->input('serial_number');
+            $nilaiSplit = $request->input('nilai_split');
+
+            foreach ($idKelengkapan as $index => $kelengkapan) {
+                $existing = KiosListKelengkapanSplit::find($kelengkapan);
+                $newSerial = $serialNumber[$index];
+                $newNominal = preg_replace("/[^0-9]/", "", $nilaiSplit[$index]);
+            
+                if ($existing->serial_number_split !== $newSerial || $existing->nominal != $newNominal) {
+                    $existing->update([
+                        'serial_number_split' => $newSerial,
+                        'nominal' => $newNominal,
+                    ]);
+                }
+            }
+
+            $connectionKios->commit();
+            return redirect()->route('split-produk-baru.index')->with('success', 'Hasil split berhasil di perbarui.');
+
+        } catch (Exception $e) {
+            $connectionKios->rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
     public function store(Request $request)
     {
         try {

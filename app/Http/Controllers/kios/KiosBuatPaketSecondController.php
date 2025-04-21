@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Models\kios\KiosImageSecond;
 use Illuminate\Support\Facades\Http;
 use App\Models\kios\KiosProdukSecond;
-use App\Models\kios\KiosQcProdukSecond;
 use App\Models\produk\KiosKelengkapanSecondList;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
@@ -23,8 +22,13 @@ class KiosBuatPaketSecondController extends Controller
     {
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
-        // $dataKelengkapan = KiosQcProdukSecond::with('kelengkapans')->get();
         $kiosProduks = ProdukSubJenis::all();
+        $dataPaketPenjualan = $kiosProduks->map(function ($produk) {
+            return [
+                'id' => $produk->id,
+                'display' => $produk->paket_penjualan,
+            ];
+        });
         $dataKelengkapan = KiosKelengkapanSecondList::orderByRaw("
                                     CASE 
                                         WHEN status = 'Ready' THEN 1 
@@ -43,7 +47,7 @@ class KiosBuatPaketSecondController extends Controller
             'dropdownShop' => '',
             'divisi' => $divisiName,
             'dataKelengkapan' => $dataKelengkapan,
-            'kiosproduks' => $kiosProduks,
+            'kiosproduks' => $dataPaketPenjualan,
         ]);
     }
 
@@ -68,8 +72,7 @@ class KiosBuatPaketSecondController extends Controller
                 return back()->with('error', 'Serial Number tidak boleh ada yang sama.');
             }
 
-            $randString = Str::random(10);
-            $snProduk = 'Sec-' . $randString;
+            $snProduk = $request->input('serial_number_second');
 
             $urlApiProdukSecond = 'https://script.google.com/macros/s/AKfycbwzPkDQn1MbdVOHLRfozYviDzoIl3UwfvTeCLyIuLo--_azk7oqNitRFBt6XAlhpKB3bg/exec';
             $idProdukSecond = $request->paket_penjualan_produk_second;
