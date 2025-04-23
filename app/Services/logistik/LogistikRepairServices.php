@@ -68,6 +68,7 @@ class LogistikRepairServices
                 'ekspedisi' => $request->input('ekspedisi'),
                 'no_resi' => $request->input('no_resi'),
                 'tanggal_dikirim' => Carbon::parse($request->input('tanggal_dikirim'))->format('Y-m-d H:i:s'),
+                'status' => 'On Shipping'
             ];
 
             $this->formRepair->createDataFormRepair($dataForm);

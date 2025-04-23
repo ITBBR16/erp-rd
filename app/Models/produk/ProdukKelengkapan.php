@@ -25,7 +25,8 @@ class ProdukKelengkapan extends Model
     }
 
     public function jenisProduks() {
-        return $this->belongsToMany(ProdukJenis::class, 'produk_jenis_kelengkapan');
+        return $this->belongsToMany(ProdukJenis::class, 'produk_jenis_kelengkapan')
+                    ->withPivot('quantity');
     }
 
     public function qcprodukseconds() {

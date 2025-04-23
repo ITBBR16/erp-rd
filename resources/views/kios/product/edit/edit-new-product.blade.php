@@ -6,7 +6,7 @@
         <ol class="inline-flex items-center mt-2 space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li class="flex items-center">
                 <a href="{{ route("list-product.index") }}" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                    <span class="material-symbols-outlined text-base mr-2.5">list_alt</span>
+                    <span class="material-symbols-outlined text-base mr-2.5">helicopter</span>
                     List Produk Baru
                 </a>
             </li>
@@ -37,7 +37,8 @@
     @endif
 
     <div class="grid grid-cols-2 gap-6 mt-6">
-        <div class="flex flex-col gap-6 mx-auto">
+        {{-- Box Data Produk --}}
+        <div class="flex gap-6 mx-auto">
             <div class="border bg-white shadow-lg p-4 rounded-lg h-fit">
                 <div class="mb-4 pb-2">
                     <h3 class="text-gray-900 font-semibold text-xl dark:text-white">Data Product : </h3>
@@ -97,64 +98,37 @@
                     </div>
                 </div>
             </div>
-            <div class="border bg-white shadow-lg p-4 rounded-lg h-fit">
-                <div class="mb-4 pb-2">
-                    <h3 class="text-gray-900 font-semibold text-xl dark:text-white">Data Kelengkapan : </h3>
-                </div>
-                <div class="grid grid-cols-3 gap-4" style="grid-template-columns: 5fr 2fr 1fr">
-                    @foreach ($dataProduk->subjenis->kelengkapans as $item)
-                        <div class="relative z-0 w-full mb-6 group">
-                            <input type="hidden" name="edit_kelengkapan[]" value="{{ $item->id }}">
-                            <input type="text" id="edit-kelengkapan-{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->kelengkapan }}" required>
-                            <label for="edit-kelengkapan-{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Kelengkapan</label>
-                        </div>
-                        <div class="relative w-full">
-                            <input type="text" name="edit_quantity_produk_baru[]" id="edit-quantity-produk-baru-{{ $item->id }}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->pivot->quantity }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
-                            <label for="edit-quantity-produk-baru-{{ $item->id }}" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Kelengkapan</label>
-                        </div>
-                        <div class="flex justify-center items-center">
-                            <button type="button" class="remove-edit-kelengkapan-produk-baru" data-id="{{ $item->id }}">
-                                <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
-                            </button>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
         </div>
+
+        {{-- Box Kelengkapan --}}
         <div class="border bg-white shadow-lg p-4 rounded-lg h-fit">
             <div class="mb-4 pb-2">
-                <h3 class="text-gray-900 font-semibold text-xl dark:text-white">Data Files : </h3>
+                <h3 class="text-gray-900 font-semibold text-xl dark:text-white">Data Kelengkapan : </h3>
             </div>
-            <div class="mt-3 grid grid-cols-2 gap-4 md:gap-6">
-                <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">File Utama Produk :</label>
-                <div class="flex items-center justify-center w-full">
-                    <label for="edit-file-paket-produk" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                        <div id="default-img-edit-paket" class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                            </svg>
-                            <p class="mb-2 w text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
-                        </div>
-                        <div id="selected-img-paktet" class="flex flex-col items-center justify-center pt-5 pb-6" style="display: none"></div>
-                        <input name="file_paket_produk" id="edit-file-paket-produk" type="file" class="hidden files-paket-penjualan">
-                    </label>
+
+            @foreach ($dataProduk->subjenis->kelengkapans as $item)
+                <div id="container-data-kelengkapan-produk-baru-{{ $item->id }}" class="container-data-kelengkapan-produk-baru grid grid-cols-3 gap-4 mb-4" style="grid-template-columns: 5fr 2fr 1fr">
+                    <div class="relative w-full">
+                        <select name="edit_kelengkapan_produk_baru[]" id="edit-kelengkapan-produk-baru" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600" required>
+                            <option value="" hidden>Kelengkapan Produk</option>
+                            @foreach ($dataProduk->subjenis->produkjenis as $produkKelengkapan)
+                                @foreach ($produkKelengkapan->kelengkapans as $itemKelengkapan)
+                                    <option value="{{ $itemKelengkapan->id }}" {{ ($item->id == $itemKelengkapan->id) ? 'selected' : '' }}>{{ $itemKelengkapan->kelengkapan }}</option>
+                                @endforeach
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="relative z-0 w-full">
+                        <input type="text" name="edit_quantity_produk_baru[]" id="edit-quantity-produk-baru" class="edit-quantity-produk-baru block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" value="{{ $item->pivot->quantity }}" required>
+                        <label for="edit-quantity-produk-baru" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Jumlah Item</label>
+                    </div>
+                    <div class="flex justify-center items-center">
+                        <button type="button" class="remove-edit-kelengkapan-produk-baru" data-id="{{ $item->id }}">
+                            <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
+                        </button>
+                    </div>
                 </div>
-                <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Files Kelengkapan :</label>
-                <div class="flex items-center justify-center w-full">
-                    <label for="edit-file-kelengkapan" class="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                        <div id="default-img-edit-kelengkapan" class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG or JPG</p>
-                        </div>
-                        <div id="selected-img-kelengkapan" class="flex flex-wrap justify-evenly" style="display: none"></div>
-                        <input name="file_kelengkapan_produk[]" id="edit-file-kelengkapan" type="file" class="hidden files-kelengkapan-produk" multiple>
-                    </label>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 

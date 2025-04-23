@@ -218,8 +218,6 @@ $(document).ready(function () {
         });
     });
 
-
-
     // Filter produk baru
     function showFilterData(id, text) {
         var containerFilter = $('#container-filter');

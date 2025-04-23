@@ -27,8 +27,13 @@ class GudangRequestPaymentService
         $listDataRP = $this->reqPayment->getDataRequestPayment();
         $namaAkunBank = $this->akunBank->getNamaBank();
         $listBelanja = $this->belanja->indexBelanja();
-        $filterBelanja = $listBelanja->where('status', ['Menunggu Konfirmasi Belanja', 'Menunggu Resi', 'Waiting Payment', 'Process Shipping']);
-        
+        $filterBelanja = $listBelanja->whereIn('status', [
+            'Menunggu Konfirmasi Belanja',
+            'Menunggu Resi',
+            'Waiting Payment',
+            'Process Shipping'
+        ]);
+
         return view('gudang.purchasing.reqpayment.payment', [
             'title' => 'Gudang Payment',
             'active' => 'gudang-payment',
