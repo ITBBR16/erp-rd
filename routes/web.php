@@ -409,7 +409,10 @@ Route::middleware('repair')->group(function () {
 
             Route::resource('/penerimaan-sparepart', RepairPenerimaanSparepartController::class)->only(['index']);
 
-            Route::resource('/form-req-packing-repair', RepairRequestPackingController::class)->only(['index', 'store']);
+            Route::group(['controller' => RepairRequestPackingController::class], function () {
+                Route::resource('/form-req-packing-repair', RepairRequestPackingController::class)->only(['index', 'store']);
+                Route::get('/list-req-packing-repair', 'indexLRP')->name('listReqPackingRepair');
+            });
         });
 
         Route::prefix('/teknisi')->group(function () {

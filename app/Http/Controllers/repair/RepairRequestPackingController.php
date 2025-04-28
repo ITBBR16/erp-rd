@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\repair;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\divisi\Divisi;
+use App\Http\Controllers\Controller;
+use App\Repositories\umum\UmumRepository;
+use App\Services\logistik\LogistikServices;
 use App\Models\management\AkuntanDaftarAkun;
 use App\Repositories\logistik\repository\EkspedisiRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
-use App\Repositories\umum\UmumRepository;
-use App\Services\logistik\LogistikServices;
-use Illuminate\Http\Request;
+use App\Repositories\logistik\repository\LogistikRequestPackingRepository;
 
 class RepairRequestPackingController extends Controller
 {
@@ -20,6 +21,7 @@ class RepairRequestPackingController extends Controller
         private LogistikServices $logistikServices,
         private EkspedisiRepository $ekspedisiRepo,
         private RepairCustomerRepository $repairCustomerRepo,
+        private LogistikRequestPackingRepository $logistikRequestPackingRepo
     ){}
 
     public function index()
@@ -56,5 +58,23 @@ class RepairRequestPackingController extends Controller
     {
         $result = $this->logistikServices->storeReqPacking($request);
         return back()->with($result['status'], $result['message']);
+    }
+
+    // List Request Packing
+    public function indexLRP()
+    {
+        $user = auth()->user();
+        $divisiName = $this->umumRepo->getDivisi($user);
+        $dataRequest = $this->logistikRequestPackingRepo->getDataRequest()->filter(function ($item) {
+            return $item->status_request === 'Request Packing' && $item->divisi->nama == 'Repair';
+        });
+
+        return view('repair.csr.list-request-packing', [
+            'title' => 'List Request Packing',
+            'active' => 'kasir-lrp',
+            'navActive' => 'csr',
+            'divisi' => $divisiName,
+            'dataRequest' => $dataRequest,
+        ]);
     }
 }

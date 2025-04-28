@@ -780,8 +780,8 @@ class RepairCaseService
                 'status_request' => 'Menunggu Pelunasan',
             ];
 
-            if ($request->input('relasi-logistik')) {
-                $this->ekspedisi->updateLogRequest($request->input('relasi-logistik'), $dataRequestLogistik);
+            if ($request->input('relasi_logistik')) {
+                $this->ekspedisi->updateLogRequest($request->input('relasi_logistik'), $dataRequestLogistik);
             } else {
                 $this->ekspedisi->createLogRequest($dataRequestLogistik);
             }
@@ -931,6 +931,7 @@ class RepairCaseService
     {
         $this->repairCase->beginTransaction();
         $this->transactionGudang->beginTransaction();
+        $this->logistikTransaction->beginTransaction();
 
         try {
             $employeeId = auth()->user()->id;
@@ -958,7 +959,7 @@ class RepairCaseService
             $modalGudangBekas = 0;
             $nilaiGudangPartBaru = 0;
             $nilaiGudangPartBekas = 0;
-            
+
             if ($findEstimasi) {
                 $estimasiPartActive = $findEstimasi->estimasiPart()->where('active', 'Active');
                 $estimasiJRRActive = $findEstimasi->estimasiJrr()->where('active', 'Active');
@@ -1152,16 +1153,23 @@ class RepairCaseService
             $urlJurnalTransit = 'https://script.google.com/macros/s/AKfycbz1A7V7pNuzyuIPCBVqtZjoMy1TvVG2Gx2Hh_16eifXiOpdWtzf1WKjqSpQ0YEdbmk5/exec';
             $responseFinance = Http::post($urlJurnalTransit, $payloadPembukuan);
 
+            if ($request->input('relasi_logistik')) {
+                $this->ekspedisi->updateLogRequest($request->input('relasi_logistik'), ['status_request' => 'Menunggu Pelunasan']);
+            }
+
             $this->estimasi->updateEstimasi(['status' => 'Lunas'], $idEstimasi);
             $this->repairTimeJurnal->addJurnal($dataJurnal);
             $this->repairCase->updateCase($id, $updateCase);
             $this->repairCase->commitTransaction();
+            $this->transactionGudang->commitTransaction();
+            $this->logistikTransaction->commitTransaction();
             
             return ['status' => 'success', 'message' => 'Berhasil melakukan pelunasan.'];
 
         } catch (Exception $e) {
             $this->repairCase->rollBackTransaction();
             $this->transactionGudang->rollbackTransaction();
+            $this->logistikTransaction->rollbackTransaction();
             return ['status' => 'error' , 'message' => $e->getMessage()];
         }
     }

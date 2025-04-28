@@ -216,7 +216,7 @@
                             Ekspedisi :
                         </div>
                         <div class="col-span-2">
-                            <input type="hidden" name="relasi-logistik" value="{{ optional($dataCase->logRequest)->id !== null ? $dataCase->logRequest->id : '' }}">
+                            <input type="hidden" name="relasi_logistik" value="{{ optional($dataCase->logRequest)->id !== null ? $dataCase->logRequest->id : '' }}">
                             <select id="ongkir-ekspedisi-repair" data-selected="{{ $selectedEkspedisi }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="" hidden>Pilih Ekspedisi</option>
                                 @foreach ($dataEkspedisi as $ekspedisi)

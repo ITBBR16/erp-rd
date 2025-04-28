@@ -371,6 +371,7 @@
                 <div id="container-metode-pembayaran-lunas">
                     <div id="form-mp-lunas" class="form-mp-lunas grid grid-cols-4 gap-4 mb-4" style="grid-template-columns: 5fr 5fr 3fr 1fr">
                         <div>
+                            <input type="text" name="relasi_logistik" value="{{ optional($dataCase->logRequest)->id !== null ? $dataCase->logRequest->id : '' }}">
                             <input type="hidden" name="link_doc" value="{{ $dataCase->link_doc }}">
                             <input type="hidden" name="sisa_tagihan" value="0">
                             <label for="metode-pembayaran-pembayaran" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Select Metode Pembayaran :</label>
