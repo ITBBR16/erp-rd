@@ -46,4 +46,9 @@ class LogRequest extends Model
     {
         return $this->belongsTo(LogCase::class, 'source_id');
     }
+
+    public function logPenerima()
+    {
+        return $this->belongsTo(LogPenerima::class, 'penerima_id');
+    }
 }

@@ -27,7 +27,8 @@ class KiosProdukSecond extends Model
 
     public function kelengkapanSeconds()
     {
-        return $this->belongsToMany(ProdukKelengkapan::class, 'kios_kelengkapan_second_list', 'kios_produk_second_id', 'produk_kelengkapan_id')->withPivot('qc_id');
+        return $this->belongsToMany(ProdukKelengkapan::class, 'kios_kelengkapan_second_list', 'kios_produk_second_id', 'produk_kelengkapan_id')
+                    ->withPivot('pivot_qc_id', 'qc_id', 'serial_number', 'harga_satuan');
     }
 
     public function imageprodukbaru()

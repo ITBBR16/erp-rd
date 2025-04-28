@@ -18,6 +18,11 @@ class EkspedisiRepository implements EkspedisiInterface
         private LogPenerima $modelLogPenerima)
     {}
 
+    public function findLogRequestBySourceId($sourceId, $divisiId)
+    {
+        return $this->modelLogRequest->where('source_id', $sourceId)->where('divisi_id', $divisiId)->first();
+    }
+
     public function createLogRequest(array $data)
     {
         return $this->modelLogRequest->create($data);

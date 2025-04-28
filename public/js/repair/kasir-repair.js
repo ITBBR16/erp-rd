@@ -1,57 +1,80 @@
 $(document).ready(function () {
     
     // Data Customer
+    const idProvinsi = '#ongkir-provinsi';
+    const idKota = '#ongkir-kota';
+    const idKecamatan = '#ongkir-kecamatan';
+    const idKelurahan = '#ongkir-kelurahan';
+    
+    const otherProvinsi = '#other-ongkir-provinsi';
+    const otherKota = '#other-ongkir-kota';
+    const otherKecamatan = '#other-ongkir-kecamatan';
+    const otherKelurahan = '#other-ongkir-kelurahan';
+
     let selectedProvinsi = $('#ongkir-provinsi').data('selected');
     let selectedKota = $('#ongkir-kota').data('selected');
     let selectedKecamatan = $('#ongkir-kecamatan').data('selected');
     let selectedKelurahan = $('#ongkir-kelurahan').data('selected');
 
     if (selectedProvinsi) {
-        getDataKota(selectedKota);
+        getDataKota(selectedKota, idProvinsi, idKota, idKecamatan, idKelurahan);
 
         if (selectedKota) {
-            getDataKecamatan(selectedKota, selectedKecamatan);
+            getDataKecamatan(selectedKota, selectedKecamatan, idKota, idKecamatan, idKelurahan);
 
             if (selectedKecamatan) {
-                getDataKelurahan(selectedKecamatan, selectedKelurahan);
+                getDataKelurahan(selectedKecamatan, selectedKelurahan, idKecamatan, idKelurahan);
             }
         }
     }
 
     $('#ongkir-provinsi').on('change', function () {
-        getDataKota(null);
+        getDataKota(null, idProvinsi, idKota, idKecamatan, idKelurahan);
     });
 
     $('#ongkir-kota').on('change', function () {
-        getDataKecamatan(null);
+        getDataKecamatan(null, null, idKota, idKecamatan, idKelurahan);
     });
 
     $('#ongkir-kecamatan').on('change', function () {
-        getDataKelurahan(null);
+        getDataKelurahan(null, null, idKecamatan, idKelurahan);
     });
 
-    $(document).on('change', '.checkbox-ongkir-kasir-repair', function () {
-        var checkbox = $('#checkbox-ongkir-kasir-repair');
+    // Data Customer Other
+    $('#other-ongkir-provinsi').on('change', function () {
+        getDataKota(null, otherProvinsi, otherKota, otherKecamatan, otherKelurahan);
+    });
+
+    $('#other-ongkir-kota').on('change', function () {
+        getDataKecamatan(null, null, otherKota, otherKecamatan, otherKelurahan);
+    });
+
+    $('#other-ongkir-kecamatan').on('change', function () {
+        getDataKelurahan(null, null, otherKecamatan, otherKelurahan);
+    });
+
+    $(document).on('change', '#checkbox-ongkir-kasir-repair', function () {
         var formOngkirCustomer = $('#ongkir-repair-customer');
         var formOngkirBeda = $('#ongkir-repair-beda-penerima');
-        var inputsBeda = formOngkirBeda.find('input, select');
-        var inputsCustomer = formOngkirCustomer.find('input, select');
-
-        if (checkbox.is(':checked')) {
+    
+        // Misal hanya input tertentu yang wajib
+        var requiredInputsCustomer = formOngkirCustomer.find('input.required, select.required');
+        var requiredInputsBeda = formOngkirBeda.find('input.required, select.required');
+    
+        if ($(this).is(':checked')) {
             formOngkirBeda.show();
             formOngkirCustomer.hide();
-
-            inputsBeda.prop('required', true);
-            inputsCustomer.prop('required', false);
+    
+            requiredInputsBeda.prop('required', true);
+            requiredInputsCustomer.prop('required', false);
         } else {
             formOngkirBeda.hide();
             formOngkirCustomer.show();
-
-            inputsCustomer.prop('required', true);
-            inputsBeda.prop('required', false);
+    
+            requiredInputsCustomer.prop('required', true);
+            requiredInputsBeda.prop('required', false);
         }
-        
-    });
+    });    
 
     // Ekspedisi
     let selectedEkspedisi = $('#ongkir-ekspedisi-repair').data('selected');
@@ -229,11 +252,11 @@ $(document).ready(function () {
     });
 
     // Function Ongkir Kasir
-    function getDataKota(kotaId) {
-        const selectedProvinsi = $('#ongkir-provinsi').val();
-        const containerKota = $('#ongkir-kota');
-        const containerKecamatan = $('#ongkir-kecamatan');
-        const containerKelurahan = $('#ongkir-kelurahan');
+    function getDataKota(kotaId, idProvinsi, idKota, idKecamatan, idKelurahan) {
+        const selectedProvinsi = $(idProvinsi).val();
+        const containerKota = $(idKota);
+        const containerKecamatan = $(idKecamatan);
+        const containerKelurahan = $(idKelurahan);
 
         containerKecamatan.html('');
         containerKelurahan.html('');
@@ -267,10 +290,10 @@ $(document).ready(function () {
         }
     }
 
-    function getDataKecamatan(kotaId, kecamatanId) {
-        const selectedKota = (kotaId != null) ? kotaId : $('#ongkir-kota').val();
-        const containerKecamatan = $('#ongkir-kecamatan');
-        const containerKelurahan = $('#ongkir-kelurahan');
+    function getDataKecamatan(kotaId, kecamatanId, idKota, idKecamatan, idKelurahan) {
+        const selectedKota = (kotaId != null) ? kotaId : $(idKota).val();
+        const containerKecamatan = $(idKecamatan);
+        const containerKelurahan = $(idKelurahan);
 
         containerKelurahan.html('');
 
@@ -303,9 +326,9 @@ $(document).ready(function () {
         }
     }
 
-    function getDataKelurahan(kecamatanId, kelurahanId) {
-        const selectedKecamatan = (kecamatanId != null) ? kecamatanId : $('#ongkir-kecamatan').val();
-        const containerKelurahan = $('#ongkir-kelurahan');
+    function getDataKelurahan(kecamatanId, kelurahanId, idKecamatan, idKelurahan) {
+        const selectedKecamatan = (kecamatanId != null) ? kecamatanId : $(idKecamatan).val();
+        const containerKelurahan = $(idKelurahan);
 
         if (selectedKecamatan) {
             fetch(`/getKelurahan/${selectedKecamatan}`)

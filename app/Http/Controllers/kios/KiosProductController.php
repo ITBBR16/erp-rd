@@ -8,11 +8,13 @@ use App\Models\kios\KiosProduk;
 use App\Models\produk\ProdukType;
 use App\Models\produk\ProdukJenis;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\produk\ProdukKategori;
 use App\Models\produk\ProdukSubJenis;
 use App\Models\produk\ProdukKelengkapan;
 use App\Repositories\kios\KiosRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class KiosProductController extends Controller
 {
@@ -53,8 +55,9 @@ class KiosProductController extends Controller
         ]);
     }
 
-    public function edit($id)
+    public function edit($encryptId)
     {
+        $id = decrypt($encryptId);
         $user = auth()->user();
         $divisiName = $this->suppKiosRepo->getDivisi($user);
         $dataProduk = KiosProduk::find($id);
@@ -129,16 +132,22 @@ class KiosProductController extends Controller
     {
         $connectionProduk = DB::connection('rumahdrone_produk');
         $connectionProduk->beginTransaction();
+
         try {
-            $editJenisProduk = $request->input('edit_jenis_produk_baru');
+            $editJenisProduk = $request->input('edit_jenis_produk_baru', []);
             $editPaketPenjualanId = $request->input('edit_paket_penjualan_produk_baru_id');
             $editPaketPenjualan = $request->input('edit_paket_penjualan_produk_baru');
             $editBeratProduk = $request->input('berat_edit_produk_baru');
             $editPanjangProduk = $request->input('length');
             $editLebarProduk = $request->input('width');
             $editTinggiProduk = $request->input('height');
-            $editKelengkapanProduk = $request->input('edit_kelengkapan_produk_baru');
-            $editQuantityProduk = $request->input('edit_quantity_produk_baru');
+            $editKelengkapanProduk = $request->input('edit_kelengkapan_produk_baru', []);
+            $editQuantityProduk = $request->input('edit_quantity_produk_baru', []);
+
+            // Validasi panjang array quantity dan kelengkapan
+            if (count($editKelengkapanProduk) !== count($editQuantityProduk)) {
+                throw new \Exception('Jumlah kelengkapan dan quantity tidak sesuai.');
+            }
 
             $subJenisKelengkapan = ProdukSubJenis::findOrFail($editPaketPenjualanId);
             $subJenisKelengkapan->update([
@@ -149,34 +158,31 @@ class KiosProductController extends Controller
                 'tinggi' => $editTinggiProduk,
             ]);
 
-            $syncData = [];
-            foreach ($editKelengkapanProduk as $index => $kelengkapan) {
-                $syncData[$kelengkapan] = ['quantity' => $editQuantityProduk[$index]];
-            }
+            // Siapkan data kelengkapan dan quantity
+            $syncData = collect($editKelengkapanProduk)->mapWithKeys(function ($id, $index) use ($editQuantityProduk) {
+                return [$id => ['quantity' => $editQuantityProduk[$index]]];
+            })->toArray();
 
             $subJenisKelengkapan->kelengkapans()->sync($syncData);
 
-            $currentProdukJenis = $subJenisKelengkapan->produkjenis->pluck('id')->toArray();
-            $removedJenis = array_diff($currentProdukJenis, $editJenisProduk);
-
-            if (!empty($removedJenis)) {
-                ProdukJenis::whereIn('id', $removedJenis)->each(function ($jenis) use ($editKelengkapanProduk) {
-                    $jenis->kelengkapans()->detach($editKelengkapanProduk);
-                });
-            }
-
+            // Sync produk jenis
             $subJenisKelengkapan->produkjenis()->sync($editJenisProduk);
 
-            foreach ($editJenisProduk as $jenisId) {
-                ProdukJenis::find($jenisId)->kelengkapans()->sync($editKelengkapanProduk);
-            }
+            // Sync kelengkapan untuk masing-masing produk jenis
+            ProdukJenis::whereIn('id', $editJenisProduk)->each(function ($jenis) use ($editKelengkapanProduk) {
+                $jenis->kelengkapans()->syncWithoutDetaching($editKelengkapanProduk);
+            });
 
             $connectionProduk->commit();
             return back()->with('success', 'Success update detail product.');
 
-        } catch (Exception $e) {
+        } catch (ModelNotFoundException $e) {
             $connectionProduk->rollBack();
-            return back()->with('error', $e->getMessage());
+            return back()->with('error', 'Produk atau SubJenis tidak ditemukan.');
+        } catch (\Exception $e) {
+            $connectionProduk->rollBack();
+            Log::error('Update Produk Gagal: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memperbarui produk: ' . $e->getMessage());
         }
     }
 

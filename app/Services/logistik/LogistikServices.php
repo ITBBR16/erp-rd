@@ -329,7 +329,7 @@ class LogistikServices
                 return optional($item->layananEkspedisi)->ekspedisi?->id == $id;
             })
             ->values();
-        $dataRequest->load('customer', 'divisi', 'logCase.customer', 'logCase.logPenerima');
+        $dataRequest->load('customer', 'divisi', 'logCase.customer', 'logCase.logPenerima', 'logPenerima');
 
         return response()->json($dataRequest);
     }

@@ -90,14 +90,16 @@
                                 {{ $data->divisi->nama }}
                             </td>
                             <td class="px-6 py-2">
-                                @if ($data->divisi->nama == 'Logistik')
+                                @if ($data->tipe_penerima == 'Other')
                                     @if ($data->logCase->jenis_penerima == 'RD')
                                         {{ $data->logCase->customer->first_name }} {{ $data->logCase->customer->last_name ?? '' }} - {{ $data->logCase->customer->id }}
                                     @else
                                         {{ $data->logCase->logPenerima->nama }}
                                     @endif
-                                @else
+                                @elseif ($data->tipe_penerima == 'Customer')
                                     {{ $data->customer->first_name }} {{ $data->customer->last_name ?? '' }} - {{ $data->customer->id }}
+                                @elseif ($data->tipe_penerima == 'Beda Penerima')
+                                    {{ $data->logPenerima->nama }}
                                 @endif
                             </td>
                             <td class="px-6 py-2">

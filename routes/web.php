@@ -181,7 +181,7 @@ Route::middleware('kios')->group(function () {
             });
 
             Route::group(['controller' => KiosProductSecondController::class], function () {
-                Route::resource('/list-product-second', KiosProductSecondController::class)->only(['index']);
+                Route::resource('/list-product-second', KiosProductSecondController::class)->only(['index', 'edit', 'update']);
                 Route::post('/update-srp-second', 'updateSRPSecond');
             });
 

@@ -23,6 +23,11 @@ class LogPenerima extends Model
         return $this->hasOne(LogCase::class, 'penerima_id');
     }
 
+    public function logRequest()
+    {
+        return $this->hasOne(LogRequest::class, 'penerima_id');
+    }
+
     public function provinsi()
     {
         return $this->belongsTo(Provinsi::class, 'provinsi_id');

@@ -39,6 +39,11 @@ class LogistikRequestPackingRepository implements LogistikRequestPackingInterfac
         return $this->logRequest->find($id);
     }
 
+    public function findPenerimaById($id)
+    {
+        return $this->logPenerima->find($id);
+    }
+
     public function createLogRequest(array $data)
     {
         return $this->logRequest->create($data);

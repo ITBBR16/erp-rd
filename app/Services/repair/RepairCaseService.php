@@ -6,22 +6,23 @@ use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\repair\RepairCase;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
-use App\Models\customer\CustomerInfoPerusahaan;
 use App\Models\management\AkuntanDaftarAkun;
-use App\Models\repair\RepairCase;
-use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
-use App\Repositories\gudang\repository\GudangTransactionRepository;
+use App\Models\customer\CustomerInfoPerusahaan;
 use App\Repositories\umum\repository\ProdukRepository;
 use App\Repositories\repair\repository\RepairQCRepository;
 use App\Repositories\repair\repository\RepairCaseRepository;
 use App\Repositories\logistik\repository\EkspedisiRepository;
-use App\Repositories\logistik\repository\LogistikTransactionRepository;
 use App\Repositories\repair\repository\RepairCustomerRepository;
 use App\Repositories\repair\repository\RepairEstimasiRepository;
 use App\Repositories\repair\repository\RepairTimeJurnalRepository;
+use App\Repositories\gudang\repository\GudangTransactionRepository;
+use App\Repositories\gudang\repository\GudangProdukIdItemRepository;
+use App\Repositories\logistik\repository\LogistikTransactionRepository;
+use App\Repositories\logistik\repository\LogistikRequestPackingRepository;
 
 class RepairCaseService
 {
@@ -30,6 +31,7 @@ class RepairCaseService
         private AkuntanDaftarAkun $daftarAkun,
         private EkspedisiRepository $ekspedisi,
         private LogistikTransactionRepository $logistikTransaction,
+        private LogistikRequestPackingRepository $reqPacking,
         private ProdukRepository $product,
         private GudangTransactionRepository $transactionGudang,
         private GudangProdukIdItemRepository $idItemGudang,
@@ -702,20 +704,40 @@ class RepairCaseService
         $tanggalRequest = Carbon::now();
 
         try {
-
             $user = auth()->user();
             $employeeId = $user->id;
             $divisiId = $user->divisi_id;
+            $action = $request->input('action');
+
+            if ($action === 'cancel') {
+                $logRequest = $this->ekspedisi->findLogRequestBySourceId($id, $divisiId);
+
+                if (!$logRequest) {
+                    return redirect()->back()->with('error', 'Belum terdapat request pengiriman.');
+                }
+                $penerima = $this->reqPacking->findPenerimaById($logRequest->penerima_id);
+                $logRequest->delete();
+
+                if ($penerima) {
+                    $penerima->delete();
+                }
+
+                $this->logistikTransaction->commitTransaction();
+                $this->customerRepository->commitTransaction();
+
+                return redirect()->back()->with('success', 'Berhasil membatalkan request pengiriman.');
+            }
+
             $checkboxCustomer = $request->has('checkbox_customer_kasir');
 
             $layananEkspedisi = $request->input('layanan_ongkir_repair');
-            $nominalOngkir = preg_replace("/[^0-9]/", "",$request->input('nominal_ongkir_repair')) ?: 0;
-            $nominalPacking = preg_replace("/[^0-9]/", "",$request->input('nominal_packing_repair')) ?: 0;
-            $nominalProduk = preg_replace("/[^0-9]/", "",$request->input('nominal_produk')) ?: 0;
-            $nominalAsuransi = preg_replace("/[^0-9]/", "",$request->input('nominal_asuransi')) ?: 0;
+            $nominalOngkir = preg_replace("/[^0-9]/", "", $request->input('nominal_ongkir_repair')) ?: 0;
+            $nominalPacking = preg_replace("/[^0-9]/", "", $request->input('nominal_packing_repair')) ?: 0;
+            $nominalProduk = preg_replace("/[^0-9]/", "", $request->input('nominal_produk')) ?: 0;
+            $nominalAsuransi = preg_replace("/[^0-9]/", "", $request->input('nominal_asuransi')) ?: 0;
 
             if ($checkboxCustomer) {
-                $tipePenerima = 'Other';
+                $tipePenerima = 'Beda Penerima';
                 $dataPenerima = [
                     'nama' => $request->input('nama_penerima'),
                     'no_telpon' => $request->input('no_telpon'),
@@ -726,8 +748,8 @@ class RepairCaseService
                     'kode_pos' => $request->input('kode_pos_penerima'),
                     'nama_jalan' => $request->input('nama_jalan_penerima'),
                 ];
-        
-                $resultPenerima = $this->ekspedisi->createLogPenerima($dataPenerima);
+
+                $resultPenerima = $this->reqPacking->createLogPenerima($dataPenerima);
             } else {
                 $tipePenerima = 'Customer';
                 $customerId = $request->input('customer_id');
@@ -755,7 +777,7 @@ class RepairCaseService
                 'nominal_asuransi' => $nominalAsuransi,
                 'tipe_penerima' => $tipePenerima,
                 'tanggal_request' => $tanggalRequest,
-                'status_request' => 'Request Packing',
+                'status_request' => 'Menunggu Pelunasan',
             ];
 
             if ($request->input('relasi-logistik')) {
@@ -770,7 +792,7 @@ class RepairCaseService
             return ['status' => 'success', 'message' => 'Berhasil menambahkan ongkir baru.'];
 
         } catch (Exception $e) {
-            Log::error('Error menambahkan ongkir: ' . $e->getMessage());
+            Log::error('Error menambahkan/cancel ongkir: ' . $e->getMessage());
             $this->logistikTransaction->rollbackTransaction();
             $this->customerRepository->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
