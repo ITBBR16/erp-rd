@@ -74,7 +74,11 @@ class KasirRepairController extends Controller
     public function createOngkirKasir(Request $request, $id)
     {
         $resultOngkir = $this->caseService->createOngkirKasir($request, $id);
-        return back()->with($resultOngkir['status'], $resultOngkir['message']);
+        if ($resultOngkir['status'] == 'success') {
+            return redirect()->route('kasir-repair.index')->with($resultOngkir['status'], $resultOngkir['message']);
+        } else {
+            return back()->with($resultOngkir['status'], $resultOngkir['message']);
+        }
     }
 
     public function previewPdfPelunasan($id)

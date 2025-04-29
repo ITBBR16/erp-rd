@@ -81,16 +81,16 @@ $(document).ready(function () {
         buttonCheckbox();
     });
 
-    $(document).on('change', '.nilai-estimasi', function () {
-        sumNiali();
-    });
-
     $(document).on('click', '.remove-form-estimasi', function () {
         let idForm = $(this).data("id");
         $('#input-estimasi-' + idForm).remove();
         $('#data-gudang-' + idForm).remove();
         countForm--;
         buttonCheckbox();
+        sumNiali();
+    });
+
+    $(document).on('change', '.nilai-estimasi', function () {
         sumNiali();
     });
 

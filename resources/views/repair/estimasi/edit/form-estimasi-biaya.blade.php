@@ -157,6 +157,7 @@
 
             <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600">
                 <div class="grid grid-cols-3 gap-5">
+                    {{-- Form input Estimasi --}}
                     <div class="relative col-span-2 overflow-x-auto">
                         <div class="border-b flex justify-between text-sm pb-2">
                             <div class="text-start">
