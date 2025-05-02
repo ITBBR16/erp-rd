@@ -701,7 +701,6 @@ class RepairCaseService
     {
         $this->logistikTransaction->beginTransaction();
         $this->customerRepository->beginTransaction();
-        $tanggalRequest = Carbon::now();
 
         try {
             $user = auth()->user();
@@ -776,7 +775,6 @@ class RepairCaseService
                 'nominal_produk' => $nominalProduk,
                 'nominal_asuransi' => $nominalAsuransi,
                 'tipe_penerima' => $tipePenerima,
-                'tanggal_request' => $tanggalRequest,
                 'status_request' => 'Menunggu Pelunasan',
             ];
 
@@ -1154,7 +1152,7 @@ class RepairCaseService
             $responseFinance = Http::post($urlJurnalTransit, $payloadPembukuan);
 
             if ($request->input('relasi_logistik')) {
-                $this->ekspedisi->updateLogRequest($request->input('relasi_logistik'), ['status_request' => 'Menunggu Pelunasan']);
+                $this->ekspedisi->updateLogRequest($request->input('relasi_logistik'), ['tanggal_request' => $tglWaktu, 'status_request' => 'Request Packing']);
             }
 
             $this->estimasi->updateEstimasi(['status' => 'Lunas'], $idEstimasi);

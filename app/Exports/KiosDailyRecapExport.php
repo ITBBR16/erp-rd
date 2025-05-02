@@ -12,8 +12,8 @@ class KiosDailyRecapExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        $startOfMonth = Carbon::createFromDate(2025, 3, 26)->startOfDay();
-        $endOfMonth = Carbon::createFromDate(2025, 4, 6)->endOfMonth();
+        $startOfMonth = Carbon::createFromDate(2025, 4, 7)->startOfDay();
+        $endOfMonth = Carbon::createFromDate(2025, 4, 29)->endOfMonth();
         $last7Day = Carbon::now()->subDays(7)->toDateString();
 
         $dailyRecap = KiosDailyRecap::with('customer', 'keperluan', 'recapTs', 'kiosWtb', 'kiosWts')
