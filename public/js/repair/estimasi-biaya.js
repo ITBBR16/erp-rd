@@ -1,3 +1,7 @@
+function formatAngka(angka) {
+    return accounting.formatMoney(angka, "", 0, ".", ",");
+}
+
 document.addEventListener('alpine:init', () => {
     Alpine.store('estimasiBiaya', {
         itemCount: 0,
