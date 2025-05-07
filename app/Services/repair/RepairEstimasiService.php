@@ -414,7 +414,6 @@ class RepairEstimasiService
         try {
             $this->repairEstimasi->beginTransaction();
 
-            dd($request->all());
             // Data estimasi
             $employeeId = auth()->user()->id;
             $tglWaktu = Carbon::now();
