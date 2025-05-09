@@ -80,19 +80,35 @@ class LogistikServices
                 $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
             }
         } else {
-            $customer = $dataReq->customer;
-    
-            $namaCustomer = ($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '') . ' - ' . ($customer->id ?? '');
-            $noTelponCustomer = $customer->no_telpon ?? '';
-            
-            $alamatCustomer = ($customer->nama_jalan ?? '') 
-                                . ',' . ($customer->provinsi->name ?? '')
-                                . ',' . ($customer->kota->name ?? '')
-                                . ',' . ($customer->kecamatan->name ?? '')
-                                . ',' . ($customer->kelurahan->name ?? '')
-                                . ',' . ($customer->kode_pos ?? '');
-    
-            $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
+            if ($dataReq->tipe_penerima == 'Beda Penerima') {
+                $customer = $dataReq->logPenerima;
+
+                $namaCustomer = $customer->nama;
+                $noTelponCustomer = $customer->no_telpon;
+
+                $alamatCustomer = ($customer->nama_jalan ?? '') 
+                                    . ',' . ($customer->provinsi->name ?? '')
+                                    . ',' . ($customer->kota->name ?? '')
+                                    . ',' . ($customer->kecamatan->name ?? '')
+                                    . ',' . ($customer->kelurahan->name ?? '')
+                                    . ',' . ($customer->kode_pos ?? '');
+                
+                $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
+            } else {
+                $customer = $dataReq->customer;
+        
+                $namaCustomer = ($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '') . ' - ' . ($customer->id ?? '');
+                $noTelponCustomer = $customer->no_telpon ?? '';
+                
+                $alamatCustomer = ($customer->nama_jalan ?? '') 
+                                    . ',' . ($customer->provinsi->name ?? '')
+                                    . ',' . ($customer->kota->name ?? '')
+                                    . ',' . ($customer->kecamatan->name ?? '')
+                                    . ',' . ($customer->kelurahan->name ?? '')
+                                    . ',' . ($customer->kode_pos ?? '');
+        
+                $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
+            }
         }
 
         $dataString = "Nama: $namaCustomer\nNo Telpon: $noTelponCustomer\nAlamat: $alamatCustomer";
