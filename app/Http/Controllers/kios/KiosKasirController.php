@@ -487,8 +487,8 @@ class KiosKasirController extends Controller
     {
         try {
 
-            $connectionTransaksiKios = DB::connection('rumahdrone_kios');
-            $connectionTransaksiKios->beginTransaction();
+            $connectionTransaksi = DB::connection('rumahdrone_customer');
+            $connectionTransaksi->beginTransaction();
 
             $dataCustomer = [
                 'provinsi_id' => $request->input('provinsi_customer'),
@@ -502,10 +502,10 @@ class KiosKasirController extends Controller
             $customer = Customer::findOrFail($request->input('id_customer'));
             $customer->update($dataCustomer);
 
-            $connectionTransaksiKios->commit();
+            $connectionTransaksi->commit();
 
         } catch (Exception $e) {
-            $connectionTransaksiKios->rollBack();
+            $connectionTransaksi->rollBack();
             return back()->with('error', $e->getMessage());
         }
     }

@@ -5,9 +5,10 @@ namespace App\Services\logistik;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\divisi\Divisi;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\customer\Customer;
-use App\Models\divisi\Divisi;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Repositories\umum\UmumRepository;
@@ -191,6 +192,8 @@ class LogistikServices
     {
         try {
 
+            $customerTransaction = DB::connection('rumahdrone_customer');
+            $customerTransaction->beginTransaction();
             $this->logTransaction->beginTransaction();
 
             $user = auth()->user();
@@ -219,6 +222,21 @@ class LogistikServices
             } else {
                 $idCustomer = $request->input('customer_rd');
                 $jenisPenerima = 'RD';
+
+                $dataUpdateCustomer = [
+                    'no_telpon' => $request->input('no_whatsapp'),
+                    'provinsi_id' => $request->input('provinsi_customer'),
+                    'kabupaten_kota_id' => $request->input('kota_kabupaten'),
+                    'kecamatan_id' => $request->input('kecamatan'),
+                    'kelurahan_id' => $request->input('kelurahan'),
+                    'kode_pos' => $request->input('kode_pos'),
+                    'nama_jalan' => $request->input('alamat'),
+                ];
+
+                $customer = Customer::findOrFail($idCustomer);
+                $customer->update($dataUpdateCustomer);
+
+                $customerTransaction->commit();
             }
 
             $dataLogCase = [
@@ -266,6 +284,7 @@ class LogistikServices
         } catch (Exception $e) {
             Log::error('Error storing request packing: ' . $e->getMessage());
             $this->logTransaction->rollbackTransaction();
+            $customerTransaction->rollBack();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
