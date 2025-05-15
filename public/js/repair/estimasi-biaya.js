@@ -50,7 +50,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         formatAngka(angka) {
-            if (!angka) return '';
+            if (!angka) return 0;
             return accounting.formatMoney(angka, "", 0, ".", ",");
         },
 
@@ -168,15 +168,4 @@ document.addEventListener('alpine:init', () => {
                 });
         },
     });
-});
-
-$(document).ready(function () {
-
-    $(document).on('input', '.format-angka-estimasi', function () {
-        var inputActive = $(this).val();
-        inputActive = inputActive.replace(/[^\d]/g, '');
-        var parsedNumber = parseInt(inputActive, 10);
-        $(this).val(formatAngka(parsedNumber));
-    });
-
 });

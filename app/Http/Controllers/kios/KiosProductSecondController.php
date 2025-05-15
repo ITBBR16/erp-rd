@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\kios;
 
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\kios\KiosProdukSecond;
-use App\Models\produk\KiosKelengkapanSecondList;
 use App\Models\produk\ProdukSubJenis;
 use App\Repositories\kios\KiosRepository;
+use App\Models\produk\KiosKelengkapanSecondList;
 
 class KiosProductSecondController extends Controller
 {
@@ -63,22 +66,16 @@ class KiosProductSecondController extends Controller
             ->unique('produk_kelengkapan_id')
             ->values();
 
-        $serialNumber = $kelengkapanTerpakai->flatMap(function ($kelengkapan) {
-            $readyItems = KiosKelengkapanSecondList::where('produk_kelengkapan_id', $kelengkapan->produk_kelengkapan_id)
-                ->where('status', 'Ready')
-                ->get();
-
-            if (!$readyItems->contains('id', $kelengkapan->id)) {
-                $readyItems->push($kelengkapan);
-            }
-
-            return $readyItems->map(function ($item) {
-                return [
-                    'id' => $item->pivot->pivot_qc_id,
-                    'serial_number' => $item->pivot->serial_number,
-                ];
-            });
-        });
+        $serialNumberMap = $kelengkapanSecond
+                            ->groupBy('produk_kelengkapan_id')
+                            ->map(function ($items) {
+                                return $items->map(function ($item) {
+                                    return [
+                                        'pivot_qc_id' => $item->pivot_qc_id,
+                                        'serial_number' => $item->serial_number,
+                                    ];
+                                })->values();
+                            });
 
         return view('kios.product.edit.edit-second-product', [
             'title' => 'Edit Product Second',
@@ -90,8 +87,66 @@ class KiosProductSecondController extends Controller
             'produkSecond' => $produkSecond,
             'kiosproduks' => $dataPaketPenjualan,
             'kelengkapanSecond' => $kelengkapanSecond,
-            'serialNumber' => $serialNumber,
+            'serialNumberMap' => $serialNumberMap,
         ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $connectionProduk = DB::connection('rumahdrone_produk');
+            $connectionKios = DB::connection('rumahdrone_kios');
+            $connectionProduk->beginTransaction();
+            $connectionKios->beginTransaction();
+
+            $produkSecond = KiosProdukSecond::findOrFail($id);
+            $paketPenjualan = $request->input('paket_penjualan_produk_second');
+            $ccProduk = $request->input('edit_cc_produk_second');
+            $serialNumberPaket = $request->input('edit_serial_number_second');
+            $garansiBulan = $request->input('garansi_produk_second');
+            $modalAwalSecond = preg_replace("/[^0-9]/", "", $request->input('modal_awal_second')) ?: 0;
+            $hargaJual = preg_replace("/[^0-9]/", "", $request->input('harga_jual_second')) ?: 0;
+
+            $dataProdukSecond = [
+                'sub_jenis_id' => $paketPenjualan,
+                'modal_bekas' => $modalAwalSecond,
+                'srp' => $hargaJual,
+                'cc_produk_second' => $ccProduk,
+                'serial_number' => $serialNumberPaket,
+                'garansi' => $garansiBulan
+            ];
+            $produkSecond->update($dataProdukSecond);
+            
+            $kelengkapanBaru = $request->input('sn_second');
+            $kelengkapanLama = $produkSecond->kelengkapanSeconds()->pluck('produk_kelengkapan_id')->toArray();
+
+            $yangDihapus = array_diff($kelengkapanLama, $kelengkapanBaru);
+            $yangDitambah = array_diff($kelengkapanBaru, $kelengkapanLama);
+
+            if (!empty($yangDihapus)) {
+                KiosKelengkapanSecondList::whereIn('id', $yangDihapus)
+                    ->update([
+                        'status' => 'Ready',
+                        'kios_produk_second_id' => null,
+                    ]);
+            }
+
+            if (!empty($yangDitambah)) {
+                KiosKelengkapanSecondList::whereIn('id', $yangDitambah)
+                    ->update([
+                        'status' => 'On Sell',
+                        'kios_produk_second_id' => $id,
+                    ]);
+            }
+
+            $connectionProduk->commit();
+            $connectionKios->commit();
+
+            return redirect()->route('list-product-second.index')->with('success', 'Berhasil merubah data produk second.');
+        } catch (Exception $e) {
+            $connectionProduk->rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function updateSRPSecond(Request $request)

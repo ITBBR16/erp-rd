@@ -623,9 +623,21 @@ class KiosKasirController extends Controller
 
     public function getNilaiDroneSecond($id)
     {
-        $nilai = KiosProdukSecond::where('id', $id)->where('status', 'Ready')->value('srp');
+        $produk = KiosProdukSecond::where('id', $id)
+            ->where('status', 'Ready')
+            ->select('srp as nilai', 'garansi')
+            ->first();
 
-        return response()->json(['nilai' => $nilai]);
+        if (!$produk) {
+            return response()->json(['nilai' => null, 'garansi' => 6]);
+        }
+
+        $garansi = $produk->garansi ?: 6;
+
+        return response()->json([
+            'nilai' => $produk->nilai,
+            'garansi' => $garansi
+        ]);
     }
 
     public function getNilaiBnob($id)

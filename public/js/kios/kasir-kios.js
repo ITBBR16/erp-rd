@@ -30,6 +30,7 @@ document.addEventListener('alpine:init', () => {
                 itemId: '',
                 kasirSn: '',
                 kasirHarga: '',
+                garansiSecond: '',
                 modalGudang: '',
                 kasirModalPart: '',
                 checkboxTax: false,
@@ -195,6 +196,7 @@ document.addEventListener('alpine:init', () => {
                         .then(response => response.json())
                         .then(data => {
                             item.kasirHarga = formatRupiah(data.nilai);
+                            item.garansiSecond = data.garansi
                             resolve();
                         })
                         .catch(error => {
@@ -221,7 +223,7 @@ document.addEventListener('alpine:init', () => {
         addToInvoice(item) {
             var selectedSnLabel = item.kasirSnOptions.find(sn => sn.value == item.kasirSn)?.label || item.kasirSn;
             var deskripsi = item.jenisTransaksi == 'drone_bekas'
-                ? 'Unit Second, Garansi 6 Bulan Serial Number ' + selectedSnLabel
+                ? 'Unit Second, Garansi ' + item.garansiSecond + ' Bulan Serial Number ' + selectedSnLabel
                 : item.jenisTransaksi == 'drone_baru'
                     ? 'Unit Baru, Garansi 1 Tahun Serial Number ' + selectedSnLabel
                     : '-';

@@ -36,9 +36,9 @@
         </div>
     @endif
 
-    <form action="#" method="POST" autocomplete="off">
+    <form action="{{ route('list-product-second.update', $produkSecond->id) }}" method="POST" autocomplete="off">
         @csrf
-        
+        @method('PUT')
         <div class="grid grid-cols-3 gap-6 mt-6">
 
             <div class="col-span-2 flex flex-col gap-6 h-fit">
@@ -98,7 +98,7 @@
                         <div>
                             <label for="garansi-produk-second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Garansi Produk :</label>
                             <div class="flex">
-                                <input type="text" name="harga_jual_second" id="harga-jual-second" class="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="6" required>
+                                <input type="text" name="garansi_produk_second" id="garansi-produk-second" class="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="6" value="{{ $produkSecond->garansi ?? '' }}" oninput="this.value = this.value.replace(/\D/g, '')" required>
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-l border-gray-300 rounded-r-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Bulan</span>
                             </div>
                         </div>
@@ -112,38 +112,33 @@
                     </div>
 
                     <div id="container-edit-kelengkapan-second">
-                        @foreach ($produkSecond->kelengkapanSeconds as $item)
-                            <div id="form-edit-kelengkapan-second-" class="grid grid-cols-7 gap-4 mb-4 md:gap-6">
+                        @foreach ($produkSecond->kelengkapanSeconds as $index => $item)
+                            <div id="form-edit-kelengkapan-second-{{ $index }}" class="form-edit-kelengkapan-second grid grid-cols-7 gap-4 mb-4 md:gap-6">
                                 <div class="relative z-0 col-span-2 w-full group">
-                                    <label for="edit-harga-satuan" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Kelengkapan Produk :</label>
-                                    <select name="kelengkapan_second[]" id="edit-kelengkapan-second-" data-id="" class="edit-kelengkapan-second bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <label for="select-edit-kelengkapan-second-{{ $index }}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Kelengkapan Produk :</label>
+                                    <select name="kelengkapan_second[]" id="select-edit-kelengkapan-second-{{ $index }}" data-id="{{ $index }}" class="select-edit-kelengkapan-second bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                         <option value="" hidden>Pilih Kelengkapan Produk</option>
                                         @foreach ($kelengkapanSecond as $option)
-                                            <option value="{{ $option->pivot_qc_id }}" {{ ($option->produk_kelengkapan_id == $item->id) ? 'selected' : '' }}>{{ $option->kelengkapans->kelengkapan }}</option>
+                                            <option value="{{ $option->produk_kelengkapan_id }}" {{ ($option->produk_kelengkapan_id == $item->id) ? 'selected' : '' }}>{{ $option->kelengkapans->kelengkapan }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="relative z-0 col-span-2 w-full group">
-                                    <label for="edit-harga-satuan" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Serial Number :</label>
-                                    <select name="sn_second[]" id="edit-sn-second-" data-id="" class="edit-sn-second bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                    <label for="edit-sn-second-{{ $index }}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Serial Number :</label>
+                                    <select name="sn_second[]" id="edit-sn-second-{{ $index }}" data-id="{{ $index }}" class="edit-sn-second bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                         <option value="" hidden>Pilih Serial Number</option>
-                                        @foreach ($serialNumber as $sn)
-                                            <option value="{{ $sn['id'] }}" 
-                                                {{ ($item->pivot->pivot_qc_id == $sn['id']) ? 'selected' : '' }}>
-                                                {{ $sn['serial_number'] }}
-                                            </option>
-                                        @endforeach
+                                        <option value="{{ $item->pivot->pivot_qc_id }}" selected>{{ $item->pivot->serial_number }}</option>
                                     </select>
                                 </div>
                                 <div class="relative z-0 col-span-2 w-full group items-center">
-                                    <label for="edit-harga-satuan" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Harga Satuan :</label>
+                                    <label for="edit-harga-satuan-{{ $index }}" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Harga Satuan :</label>
                                     <div class="flex">
                                         <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                        <input type="text" name="harga_satuan_second[]" id="edit-harga-satuan" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($item->pivot->harga_satuan, 0, ',', '.') }}" readonly>
+                                        <input type="text" name="harga_satuan_second[]" id="edit-harga-satuan-{{ $index }}" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($item->pivot->harga_satuan, 0, ',', '.') }}" readonly>
                                     </div>
                                 </div>
                                 <div class="flex col-span-1 justify-center items-center">
-                                    <button type="button" class="remove-edit-kelengkapan-second" data-id="">
+                                    <button type="button" class="remove-edit-kelengkapan-second" data-id="{{ $index }}">
                                         <span class="material-symbols-outlined text-red-600 hover:text-red-500">delete</span>
                                     </button>
                                 </div>
@@ -151,7 +146,8 @@
                         @endforeach
                     </div>
 
-                    <div class="flex justify-between text-rose-600">
+                    {{-- Button tambah kelengkapan --}}
+                    <div class=" flex justify-between text-rose-600">
                         <div class="flex cursor-pointer mt-4 hover:text-red-400">
                             <button type="button" id="add-edit-kelengkapan-second" class="flex flex-row justify-between gap-2">
                                 <span class="material-symbols-outlined">add_circle</span>
@@ -163,7 +159,7 @@
             </div>
 
             {{-- Form Harga Jual --}}
-            <div class="flex flex-col gap-6 w-fit h-fit mx-auto">
+            <div class="sticky top-16 flex flex-col gap-6 w-fit h-fit mx-auto">
                 <div class="border bg-white shadow-lg p-4 rounded-lg">
                     <div class="flex mb-4 items-center justify-between">
                         <div class="flex justify-start min-w-full pb-4 border-b border-gray-300">
@@ -172,29 +168,29 @@
                     </div>
                     <div class="flex items-center justify-between mb-4 gap-x-4">
                         <div class="flex justify-start">
-                            <label for="modal-awal-second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Modal :</label>
+                            <label for="edit-modal-awal-second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Modal :</label>
                         </div>
                         <div class="justify-end ml-auto">
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                <input type="text" name="modal_awal_second" id="modal-awal-second" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($produkSecond->modal_bekas, 0, ',', '.') }}" readonly>
+                                <input type="text" name="modal_awal_second" id="edit-modal-awal-second" class="rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($produkSecond->modal_bekas, 0, ',', '.') }}" readonly>
                             </div>
                         </div>
                     </div>
                     <div class="flex items-center justify-between mb-4 gap-x-4">
                         <div class="flex justify-start">
-                            <label for="harga-jual-second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Penjualan :</label>
+                            <label for="edit-harga-jual-second" class="block mb-2 text-xs font-medium text-gray-900 dark:text-white">Nominal Penjualan :</label>
                         </div>
                         <div class="justify-end ml-auto">
                             <div class="flex">
                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                <input type="text" name="harga_jual_second" id="harga-jual-second" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($produkSecond->srp, 0, ',', '.') }}" required>
+                                <input type="text" name="harga_jual_second" id="edit-harga-jual-second" class="kasir-formated-rupiah rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($produkSecond->srp, 0, ',', '.') }}" required>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <button type="submit" id="ubah-data-produk-second" class="submit-button-form cursor-not-allowed text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-bold rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full" disabled>Submit</button>
+                    <button type="submit" id="edit-data-produk-second" class="submit-button-form cursor-not-allowed text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-bold rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 w-full" disabled>Submit</button>
                     <div class="loader-button-form" style="display: none">
                         <button class="cursor-not-allowed text-white border border-purple-700 bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-purple-500 dark:text-white dark:bg-purple-500 dark:focus:ring-purple-800 w-full" disabled>
                             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

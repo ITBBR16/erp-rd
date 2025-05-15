@@ -77,7 +77,6 @@ $(document).ready(function(){
     $(document).on("click", ".remove-kelengkapan-second", function() {
         let formId = $(this).data("id");
         $("#form-kelengkapan-second-"+formId).remove();
-        nomorKelengkapan--;
         hitungModal();
         checkHarga();
     });
