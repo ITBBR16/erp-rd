@@ -26,7 +26,7 @@
                                 <input type="hidden" name="jenis_drone" value="{{ $case->jenisProduk->jenis_produk }}">
                                 <input type="hidden" name="serial_number" value="-">
 
-                                <h3 class="text-black dark:text-white">Selamat {{ $greeting }} {{ $case->customer->first_name }} {{ $case->customer->last_name }} 😊</h3><br>
+                                <h3 class="text-black dark:text-white">Selamat {{ $greeting }} kak {{ $case->customer->first_name }} {{ $case->customer->last_name }} 😊</h3><br>
                                 <p class="text-black dark:text-white">Kami dari Rumah Drone ingin menginformasikan hasil troubleshooting dari :</p><br>
                                 <p class="text-black dark:text-white">Drone Atas Nama : {{ $case->customer->first_name }} {{ $case->customer->last_name }}-{{ $case->customer->id }}-{{ $case->id }}</p>
                                 <p class="text-black dark:text-white">Jenis Drone : {{ $case->jenisProduk->jenis_produk }}</p>

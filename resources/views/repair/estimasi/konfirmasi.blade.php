@@ -5,7 +5,7 @@
     <div class="mb-4 border-b border-gray-200">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="caseList" data-tabs-toggle="#konfirmasiTabs" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="KonEs-tab" data-tabs-target="#KonEs" type="button" role="tab" aria-controls="KonEs" aria-selected="false">Konfiramasi Estimasi</button>
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="KonEs-tab" data-tabs-target="#KonEs" type="button" role="tab" aria-controls="KonEs" aria-selected="false">Konfirmasi Estimasi</button>
             </li>
             <li class="mr-2" role="presentation">
                 <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="KonPen-tab" data-tabs-target="#KonPen" type="button" role="tab" aria-controls="KonPen" aria-selected="false">Konfirmasi Pengerjaan</button>
