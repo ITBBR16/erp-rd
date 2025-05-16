@@ -744,7 +744,7 @@ class RepairEstimasiService
             $hargaCustomer = $request->input('estimasi_harga_customer');
             $linkDoc = $request->input('link_doc');
 
-            $greetingMessage = "*Selamat " . $greeting . " " . $namaCustomer . "* 😊\n\n";
+            $greetingMessage = "*Selamat " . $greeting . " kak " . $namaCustomer . "* 😊\n\n";
             $introMessage = "Kami dari Rumah Drone ingin menginformasikan hasil troubleshooting dari:\n";
             $droneInfo = "Drone Atas Nama: " . $namaNota . "\n";
             $droneType = "Jenis Drone:" . $jenisDrone . " \n";
