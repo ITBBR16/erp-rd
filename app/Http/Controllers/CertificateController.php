@@ -34,7 +34,7 @@ class CertificateController extends Controller
         $senderEmail = $request->input('sender');
         $bodyEmail = $request->input('body');
 
-        $pdf = Pdf::loadView('certificate.template', compact('name'))->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('certificate.certificate-template', compact('name'))->setPaper('a4', 'landscape');
         $pdfContent = $pdf->output();
 
         Mail::send([], [], function ($message) use ($email, $name, $senderEmail, $bodyEmail, $pdfContent) {
