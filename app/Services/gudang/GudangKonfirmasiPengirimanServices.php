@@ -33,7 +33,13 @@ class GudangKonfirmasiPengirimanServices
         $repairCase = $this->repairCase->getAllDataNeededNewCase();
         $case = $repairCase['data_case'];
         $sortedCase = $case->sortByDesc(function ($singleCase) {
-            return $singleCase->estimasi->created_at ?? null;
+            if (!$singleCase->estimasi) {
+                return null;
+            }
+
+            $estimasiPart = $singleCase->estimasi->estimasiPart->first();
+
+            return optional($estimasiPart)->tanggal_konfirmasi;
         });
 
         return view('gudang.distribusi-produk.konfirmasi.main-distribusi', [

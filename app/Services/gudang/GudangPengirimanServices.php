@@ -25,7 +25,7 @@ class GudangPengirimanServices
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $listPengiriman = $this->pengiriman->getPengiriman();
+        $listPengiriman = $this->pengiriman->getPengiriman()->sortByDesc('id');
         $listBelanja = $this->belanja->indexBelanja();
         $filterBelanja = $listBelanja->whereNotIn('status', ['Menunggu Konfirmasi Belanja', 'Waiting Payment', 'Received']);
         

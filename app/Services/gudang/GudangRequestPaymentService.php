@@ -24,7 +24,7 @@ class GudangRequestPaymentService
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $listDataRP = $this->reqPayment->getDataRequestPayment();
+        $listDataRP = $this->reqPayment->getDataRequestPayment()->sortByDesc('id');
         $namaAkunBank = $this->akunBank->getNamaBank();
         $listBelanja = $this->belanja->indexBelanja();
         $filterBelanja = $listBelanja->whereIn('status', [

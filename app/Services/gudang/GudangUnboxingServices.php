@@ -30,7 +30,7 @@ class GudangUnboxingServices
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $dataUnboxing = $this->unboxing->getDataUnboxing();
+        $dataUnboxing = $this->unboxing->getDataUnboxing()->sortByDesc('id');
         
         return view('gudang.receive-goods.unboxing.unboxing', [
             'title' => 'Gudang Unboxing',

@@ -4,38 +4,11 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use App\Models\ekspedisi\LogRequest;
-use App\Models\kios\KiosTransaksi;
-use App\Models\kios\KiosTransaksiDetail;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class EkspedisiExport implements FromCollection, WithHeadings
 {
-    // public function collection()
-    // {
-    //     $dataLaku = KiosTransaksi::with('detailtransaksi')
-    //     return $dataLaku->map(function ($item) {
-    //         $modal = $item->kiosSerialnumbers->validasiproduk->orderLists->nilai;
-    //         $hargaJual = $item->produkKios->srp;
-    //         $laba = $hargaJual - $modal;
-    //         return [
-    //             'Id Transaksi' => '',
-    //             'Nama Produk' => '',
-    //             'Laba' => '',
-    //             'Kerugian Transaksi'
-    //         ];
-    //     });
-    // }
-
-    // public function headings(): array
-    // {
-    //     return [
-    //         'Id Transaksi',
-    //         'Nama Produk',
-    //         'Laba',
-    //         'Kerugian Transaksi'
-    //     ];
-    // }
     public function collection()
     {
         $startOfMonth = Carbon::createFromDate(2025, 3, 1)->startOfDay();

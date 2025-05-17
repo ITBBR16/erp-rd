@@ -35,7 +35,7 @@ class GudangBelanjaServices
         $suppliers = $this->supplier->getSuppliers();
         $jenisProduk = $this->produk->getAllJenisProduct();
         $namaAkunBank = $this->akunBank->getNamaBank();
-        $listBelanja = $this->belanja->indexBelanja();
+        $listBelanja = $this->belanja->indexBelanja()->sortByDesc('id');
         
         return view('gudang.purchasing.belanja.belanja', [
             'title' => 'Gudang Belanja',
