@@ -12,6 +12,7 @@ use App\Models\kios\KiosDailyRecap;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KiosDailyRecapExport;
 use App\Exports\RepairEstimasiExport;
+use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
@@ -110,6 +111,8 @@ Route::get('/getKelurahan/{kecamatanId}', [KelurahanController::class, 'getKelur
 
 Route::get('/review-customer/{increment}', [ReviewCustomerController::class, 'index']);
 Route::post('/review-customer', [ReviewCustomerController::class, 'store'])->name('createReviewCustomer');
+
+Route::get('/preview-sertificate', [CertificateController::class, 'previewSertificate']);
 
 Route::get('/preview-export', function () {
     $export = new EkspedisiExport();
