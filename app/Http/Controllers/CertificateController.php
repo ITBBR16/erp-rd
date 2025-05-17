@@ -47,7 +47,7 @@ class CertificateController extends Controller
                         ->attachData($pdfContent, "Certificate - $name.pdf", [
                             'mime' => 'application/pdf',
                         ])
-                        ->setBody($bodyEmail, 'text/html');
+                        ->html($bodyEmail);
             });
     
             Log::info("Certificate sent to $name <$email> by $senderEmail");
