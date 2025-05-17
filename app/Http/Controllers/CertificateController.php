@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mail\CertificateMail;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -37,17 +38,23 @@ class CertificateController extends Controller
         $pdf = Pdf::loadView('certificate.certificate-template', compact('name'))->setPaper('a4', 'landscape');
         $pdfContent = $pdf->output();
 
-        Mail::send([], [], function ($message) use ($email, $name, $senderEmail, $bodyEmail, $pdfContent) {
-            $message->from($senderEmail, 'Certificate Sender')
-                    ->to($email)
-                    ->subject("Certificate for $name")
-                    ->attachData($pdfContent, "Certificate - $name.pdf", [
-                        'mime' => 'application/pdf',
-                    ])
-                    ->setBody($bodyEmail, 'text/html');
-        });
+        try {
+            Mail::send([], [], function ($message) use ($email, $name, $senderEmail, $bodyEmail, $pdfContent) {
+                $message->from($senderEmail, 'Certificate Sender')
+                        ->to($email)
+                        ->subject("Certificate for $name")
+                        ->attachData($pdfContent, "Certificate - $name.pdf", [
+                            'mime' => 'application/pdf',
+                        ])
+                        ->setBody($bodyEmail, 'text/html');
+            });
+    
+            Log::info("Certificate sent to $name <$email> by $senderEmail");
+            return response()->json(['message' => 'Sertifikat terkirim ke ' . $email], 200);
 
-        Log::info("Certificate sent to $name <$email> by $senderEmail");
-        return response()->json(['message' => 'Sertifikat terkirim ke ' . $email], 200);
+        } catch (Exception $e) {
+            Log::error('Error in sendSertificate: ' . $e->getMessage());
+            return response()->json(['message' => 'Server Error', 'error' => $e->getMessage()], 500);
+        }
     }
 }
