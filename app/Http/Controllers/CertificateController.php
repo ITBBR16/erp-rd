@@ -23,22 +23,23 @@ class CertificateController extends Controller
 
     public function sendSertificate(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'sender' => 'required|email',
-            'body' => 'required|string',
-        ]);
-
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $senderEmail = $request->input('sender');
-        $bodyEmail = $request->input('body');
-
-        $pdf = Pdf::loadView('certificate.certificate-template', compact('name'))->setPaper('a4', 'landscape');
-        $pdfContent = $pdf->output();
-
         try {
+            $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email',
+                'sender' => 'required|email',
+                'body' => 'required|string',
+            ]);
+
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $senderEmail = $request->input('sender');
+            $bodyEmail = $request->input('body');
+
+            $pdf = Pdf::loadView('certificate.certificate-template', compact('name'))->setPaper('a4', 'landscape');
+            $pdfContent = $pdf->output();
+
+        
             Mail::send([], [], function ($message) use ($email, $name, $senderEmail, $bodyEmail, $pdfContent) {
                 $message->from($senderEmail, 'Certificate Sender')
                         ->to($email)
