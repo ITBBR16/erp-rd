@@ -41,7 +41,7 @@ class CertificateController extends Controller
 
         
             Mail::send([], [], function ($message) use ($email, $name, $senderEmail, $bodyEmail, $pdfContent) {
-                $message->from($senderEmail, 'Certificate Sender')
+                $message->from($senderEmail, 'Certificate Webinar DJI Mavic 4 Pro')
                         ->to($email)
                         ->subject("Certificate for $name")
                         ->attachData($pdfContent, "Certificate - $name.pdf", [
