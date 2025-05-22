@@ -80,6 +80,7 @@ class GudangDashboardDistributionController extends Controller
                         'nama_sparepart' => $items->first()->sparepartGudang->produkSparepart->nama_internal,
                         'modal_gudang' => $items->sum('modal_gudang'),
                         'total_quantity' => $items->count(),
+                        'stock' => $items->first()->sparepartGudang->produkSparepart->gudangIdItem->where('status_inventory', 'Ready')->count()
                     ];
                 })
                 ->sortByDesc('total_quantity')
@@ -103,6 +104,7 @@ class GudangDashboardDistributionController extends Controller
                     'nama_sparepart' => $items->first()->sparepartGudang->produkSparepart->nama_internal,
                     'modal_gudang' => $items->sum('modal_gudang'),
                     'total_quantity' => $items->count(),
+                    'stock' => $items->first()->sparepartGudang->produkSparepart->gudangIdItem->where('status_inventory', 'Ready')->count()
                 ];
             })
             ->sortByDesc('total_quantity')
@@ -124,6 +126,7 @@ class GudangDashboardDistributionController extends Controller
                         'nama_sparepart' => $items->first()->sparepartGudang->produkSparepart->nama_internal,
                         'modal_gudang' => $items->sum('modal_gudang'),
                         'total_quantity' => $items->count(),
+                        'stock' => $items->first()->sparepartGudang->produkSparepart->gudangIdItem->where('status_inventory', 'Ready')->count()
                     ];
                 })
                 ->sortByDesc('total_quantity')
@@ -143,6 +146,7 @@ class GudangDashboardDistributionController extends Controller
                         'nama_sparepart' => $items->first()->sparepart->nama_internal,
                         'modal_gudang' => $items->sum('modal_gudang'),
                         'total_quantity' => $items->count(),
+                        'stock' => $items->first()->sparepart->gudangIdItem->where('status_inventory', 'Ready')->count()
                     ];
                 })
                 ->sortByDesc('total_quantity')

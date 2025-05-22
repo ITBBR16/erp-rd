@@ -7,12 +7,13 @@
                 List Estimasi Sudah Dikirim
             </h2>
             <div class="overflow-y-auto max-h-[250px]">
-                <table id="list-case-csr" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <table id="list-case-csr" class="w-full text-xs text-left text-gray-500 dark:text-gray-400">
                     <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                         <tr>
                             <th scope="col" class="px-6 py-3">Jenis Drone</th>
                             <th scope="col" class="px-6 py-3">Nama Sparepart</th>
                             <th scope="col" class="px-6 py-3">Quantity</th>
+                            <th scope="col" class="px-6 py-3">Stok</th>
                             <th scope="col" class="px-6 py-3">Modal Gudang</th>
                         </tr>
                     </thead>
@@ -22,6 +23,7 @@
                                 <td class="px-6 py-2">{{ $lsd['jenis_drone'] }}</td>
                                 <td class="px-6 py-2">{{ $lsd['nama_sparepart'] }}</td>
                                 <td class="px-6 py-2">{{ $lsd['total_quantity'] }}</td>
+                                <td class="px-6 py-2">{{ $lsd['stock'] }}</td>
                                 <td class="px-6 py-2">Rp. {{ number_format($lsd['modal_gudang'], 0,',','.') }}</td>
                             </tr>
                         @endforeach
@@ -40,6 +42,7 @@
                             <th scope="col" class="px-6 py-3">Jenis Drone</th>
                             <th scope="col" class="px-6 py-3">Nama Sparepart</th>
                             <th scope="col" class="px-6 py-3">Quantity</th>
+                            <th scope="col" class="px-6 py-3">Stok</th>
                             <th scope="col" class="px-6 py-3">Modal Gudang</th>
                         </tr>
                     </thead>
@@ -49,6 +52,7 @@
                                 <td class="px-6 py-2">{{ $lsd['jenis_drone'] }}</td>
                                 <td class="px-6 py-2">{{ $lsd['nama_sparepart'] }}</td>
                                 <td class="px-6 py-2">{{ $lsd['total_quantity'] }}</td>
+                                <td class="px-6 py-2">{{ $lsd['stock'] }}</td>
                                 <td class="px-6 py-2">Rp. {{ number_format($lsd['modal_gudang'], 0,',','.') }}</td>
                             </tr>
                         @endforeach
@@ -67,6 +71,7 @@
                             <th scope="col" class="px-6 py-3">Jenis Drone</th>
                             <th scope="col" class="px-6 py-3">Nama Sparepart</th>
                             <th scope="col" class="px-6 py-3">Quantity</th>
+                            <th scope="col" class="px-6 py-3">Stok</th>
                             <th scope="col" class="px-6 py-3">Modal Gudang</th>
                         </tr>
                     </thead>
@@ -76,6 +81,7 @@
                                 <td class="px-6 py-2">{{ $lsd['jenis_drone'] }}</td>
                                 <td class="px-6 py-2">{{ $lsd['nama_sparepart'] }}</td>
                                 <td class="px-6 py-2">{{ $lsd['total_quantity'] }}</td>
+                                <td class="px-6 py-2">{{ $lsd['stock'] }}</td>
                                 <td class="px-6 py-2">Rp. {{ number_format($lsd['modal_gudang'], 0,',','.') }}</td>
                             </tr>
                         @endforeach
@@ -94,6 +100,7 @@
                             <th scope="col" class="px-6 py-3">Jenis Drone</th>
                             <th scope="col" class="px-6 py-3">Nama Sparepart</th>
                             <th scope="col" class="px-6 py-3">Quantity</th>
+                            <th scope="col" class="px-6 py-3">Stok</th>
                             <th scope="col" class="px-6 py-3">Modal Gudang</th>
                         </tr>
                     </thead>
@@ -103,6 +110,7 @@
                                 <td class="px-6 py-2">{{ $lkk['jenis_drone'] }}</td>
                                 <td class="px-6 py-2">{{ $lkk['nama_sparepart'] }}</td>
                                 <td class="px-6 py-2">{{ $lkk['total_quantity'] }}</td>
+                                <td class="px-6 py-2">{{ $lkk['stock'] }}</td>
                                 <td class="px-6 py-2">Rp. {{ number_format($lkk['modal_gudang'], 0,',','.') }}</td>
                             </tr>
                         @endforeach
