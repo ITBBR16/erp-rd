@@ -9,7 +9,7 @@
         body {
             margin: 0cm;
             padding: 0cm;
-            background-image: url('data:image/png;base64,{{ base64_encode(file_get_contents(public_path("img/sertifikat/new-sertifikat.jpg"))) }}');
+            background-image: url('data:image/png;base64,{{ base64_encode(file_get_contents(public_path("img/sertifikat/Sertifikat RDXAPDI.jpg"))) }}');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;

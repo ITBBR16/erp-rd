@@ -28,20 +28,22 @@ class CertificateController extends Controller
                 'name' => 'required|string',
                 'email' => 'required|email',
                 'sender' => 'required|email',
+                'title' => 'required|string',
                 'body' => 'required|string',
             ]);
 
             $name = $request->input('name');
             $email = $request->input('email');
             $senderEmail = $request->input('sender');
+            $titleEmail = $request->input('title');
             $bodyEmail = $request->input('body');
 
             $pdf = Pdf::loadView('certificate.certificate-template', compact('name'))->setPaper('a4', 'landscape');
             $pdfContent = $pdf->output();
 
         
-            Mail::send([], [], function ($message) use ($email, $name, $senderEmail, $bodyEmail, $pdfContent) {
-                $message->from($senderEmail, 'Certificate Webinar DJI Mavic 4 Pro')
+            Mail::send([], [], function ($message) use ($email, $name, $senderEmail, $titleEmail, $bodyEmail, $pdfContent) {
+                $message->from($senderEmail, $titleEmail)
                         ->to($email)
                         ->subject("Certificate for $name")
                         ->attachData($pdfContent, "Certificate - $name.pdf", [

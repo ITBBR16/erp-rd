@@ -115,14 +115,14 @@ Route::post('/review-customer', [ReviewCustomerController::class, 'store'])->nam
 Route::get('/preview-sertificate', [CertificateController::class, 'previewSertificate']);
 
 Route::get('/preview-export', function () {
-    $export = new EkspedisiExport();
+    $export = new EstimasiPartExport();
     return response()->json($export->collection());
 });
 
 Route::get('/download-export-produk', function () {
     $timestamp = Carbon::now()->format('d M Y');
-    $fileName = "Request Logistik - {$timestamp}.csv";
-    return Excel::download(new EkspedisiExport, $fileName);
+    $fileName = "Konfirmasi Estimasi April & Mei - {$timestamp}.csv";
+    return Excel::download(new EstimasiPartExport, $fileName);
 });
 
 Route::middleware('superadmin')->group(function () {
