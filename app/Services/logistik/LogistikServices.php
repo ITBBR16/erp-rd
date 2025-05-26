@@ -470,8 +470,6 @@ class LogistikServices
 
             $files = [];
 
-            Log::info('hasFile:', ['hasFile' => $request->hasFile('file_bukti_transaksi')]);
-            Log::info('all files:', $request->file('file_bukti_transaksi'));
             if ($request->hasFile('file_bukti_transaksi')) {
                 foreach ($request->file('file_bukti_transaksi') as $file) {
                     if ($file->isValid()) {
