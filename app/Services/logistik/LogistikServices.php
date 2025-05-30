@@ -477,6 +477,12 @@ class LogistikServices
                     }
                 }
             } else {
+                Log::error('File upload tidak terdeteksi', [
+                    'hasFile' => $request->hasFile('file_bukti_transaksi'),
+                    'all_files' => $request->file('file_bukti_transaksi'),
+                    'request_all' => $request->all(),
+                ]);
+
                 $this->logTransaction->rollbackTransaction();
                 return ['status' => 'error', 'message' => 'Files tidak teridentifikasi.'];
             }
