@@ -18,8 +18,9 @@ class GudangRequestPaymentService
         private GudangRequestPaymentRepository $reqPayment,
         private GudangTransactionRepository $transaction,
         private AkuntanTransaksiRepository $akunBank,
-    ){}
+    ) {}
 
+    // Request Payment Index Controller
     public function index()
     {
         $user = auth()->user();
@@ -82,7 +83,7 @@ class GudangRequestPaymentService
 
             $metodePembayaran = $this->reqPayment->createOrNotMp(
                 [
-                    'gudang_supplier_id' => $dataMetodePembayaran['gudang_supplier_id'], 
+                    'gudang_supplier_id' => $dataMetodePembayaran['gudang_supplier_id'],
                     'media_transaksi' => $dataMetodePembayaran['media_transaksi']
                 ],
                 $dataMetodePembayaran
@@ -112,4 +113,59 @@ class GudangRequestPaymentService
         }
     }
 
+    // Konfirmasi Pembayaran
+    public function konfirmasiIndex()
+    {
+        $user = auth()->user();
+        $divisiName = $this->umum->getDivisi($user);
+        $listDataRP = $this->reqPayment->getDataRequestPayment()
+            ->filter(function ($item) {
+                return $item->status == 'Waiting Payment';
+            })
+            ->sortByDesc('id');
+
+        return view('gudang.purchasing.konfirmasi_pembayaran.konfirmasi-pembayaran', [
+            'title' => 'Gudang Konfirmasi Pembayaran',
+            'active' => 'gudang-konfirmasi',
+            'navActive' => 'purchasing',
+            'divisi' => $divisiName,
+            'reqPayments' => $listDataRP,
+        ]);
+    }
+
+    public function konfirmasiUpdate(Request $reqPayment)
+    {
+        try {
+            $this->transaction->beginTransaction();
+
+            $reff = $reqPayment->input('reff_gudang');
+            $payment = $this->reqPayment->findPayment($reff);
+
+            if (!$payment) {
+                throw new Exception("Request payment not found.");
+            }
+
+            $this->reqPayment->updatePayment($payment->id, [
+                'status' => 'Done Payment',
+            ]);
+
+            $this->belanja->updateBelanja($payment->gudang_belanja_id, [
+                'status' => 'Waiting Shipment',
+            ]);
+
+            $this->transaction->commitTransaction();
+
+            return [
+                'status' => 'success',
+                'message' => 'Berhasil mengkonfirmasi pembayaran',
+            ];
+        } catch (Exception $e) {
+            $this->transaction->rollbackTransaction();
+
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
 }

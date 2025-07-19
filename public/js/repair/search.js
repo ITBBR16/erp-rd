@@ -1,4 +1,4 @@
-// Mencari data customer on repair
+// // Mencari data customer on repair
 $(document).ready(function(){
     $('#repair-customer-search').on('input', function () {
         const query = $(this).val();

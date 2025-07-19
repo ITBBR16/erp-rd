@@ -11,7 +11,7 @@ class GudangRequestPaymentRepository implements GudangRequestPaymentInterface
     public function __construct(
         private GudangRequestPembayaran $reqPayment,
         private GudangMetodePembayaran $metodePembayaran
-    ){}
+    ) {}
 
     public function getDataRequestPayment()
     {
@@ -28,6 +28,17 @@ class GudangRequestPaymentRepository implements GudangRequestPaymentInterface
         return $this->reqPayment->create($data);
     }
 
+    public function updatePayment($id, array $data)
+    {
+        $payment = $this->reqPayment->find($id);
+        if ($payment) {
+            $payment->update($data);
+            return $payment;
+        }
+
+        throw new \Exception("Payment not found.");
+    }
+
     public function createOrNotMp(array $attributes, array $values = [])
     {
         $model = $this->metodePembayaran->where($attributes)->first();
@@ -38,5 +49,4 @@ class GudangRequestPaymentRepository implements GudangRequestPaymentInterface
 
         return $model;
     }
-
 }

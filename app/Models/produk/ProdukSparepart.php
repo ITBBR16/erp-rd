@@ -49,7 +49,7 @@ class ProdukSparepart extends Model
 
     public function detailBelanja()
     {
-        return $this->hasMany(GudangBelanjaDetail::class);
+        return $this->hasMany(GudangBelanjaDetail::class, 'sparepart_id');
     }
 
     public function gudangProduk()

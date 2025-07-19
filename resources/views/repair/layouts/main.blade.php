@@ -6,9 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title }} | RD</title>
     <link rel="icon" href="{{ asset('/img/RD Tab Icon.png') }}" sizes="16x16 32x32" type="image/png">
-    @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
-    @vite('resources/js/repair/app.js')
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/repair/app.js'])
+
     <style>
         @media print {
             body * {

@@ -89,7 +89,7 @@ class RepairCaseService
     {
         $user = auth()->user();
         $id = decrypt($encryptId);
-        $caseService = $this->getDataDropdown();
+        $caseService = $this->getDataDropdown(null);
         $divisiName = $this->umum->getDivisi($user);
         $dataCase = $this->findCase($id);
         $dataProvinsi = $caseService['data_provinsi'];
@@ -408,7 +408,7 @@ class RepairCaseService
     {
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
-        $caseService = $this->getDataDropdown();
+        $caseService = $this->getDataDropdown(null);
         $dataCase = $caseService['data_case']
                     ->filter(function ($case) {
                         return $case->jenisStatus->jenis_status == 'Proses Konfirmasi Hasil QC';
@@ -539,7 +539,7 @@ class RepairCaseService
         $user = auth()->user();
         $divisiName = $this->umum->getDivisi($user);
         $dataProvinsi = $this->customerRepository->getProvinsi();
-        $caseService = $this->getDataDropdown();
+        $caseService = $this->getDataDropdown(null);
         $dataEkspedisi = $this->ekspedisi->getDataEkspedisi(); // get data ekspedisi
         $dataCaseBelumLunas = $caseService['data_case']
                             ->filter(function ($case) {

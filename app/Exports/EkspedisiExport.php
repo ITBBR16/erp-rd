@@ -11,14 +11,14 @@ class EkspedisiExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        $startOfMonth = Carbon::createFromDate(2025, 3, 1)->startOfDay();
-        $endOfMonth = Carbon::createFromDate(2025, 4, 30)->endOfMonth();
+        $startOfMonth = Carbon::createFromDate(2025, 5, 1)->startOfDay();
+        $endOfMonth = Carbon::createFromDate(2025, 7, 17)->endOfMonth();
         $dataEkspedisi = LogRequest::with('customer')->whereBetween('tanggal_request', [$startOfMonth, $endOfMonth])->get();
 
         return $dataEkspedisi->map(function ($ekspedisi) {
             $namaCustomer = $ekspedisi->customer->first_name . ' ' . $ekspedisi->customer->last_name . ' - ' . $ekspedisi->customer->id;
             return [
-                'Tanggal' => $ekspedisi->created_at,
+                'Tanggal' => $ekspedisi->tanggal_request,
                 'Divisi' => $ekspedisi->divisi->nama,
                 'Nama Customer' => $namaCustomer,
                 'No Resi' => $ekspedisi->no_resi,

@@ -1,9 +1,11 @@
 <?php
 
 use Carbon\Carbon;
+use App\Exports\AkademiExport;
 use App\Exports\EkspedisiExport;
 use App\Exports\KiosSalesExport;
 use App\Models\wilayah\Provinsi;
+use App\Exports\GudangRequestData;
 use App\Exports\KiosFinanceExport;
 use App\Exports\EstimasiPartExport;
 use App\Exports\GudangIdItemExport;
@@ -12,8 +14,8 @@ use App\Models\kios\KiosDailyRecap;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KiosDailyRecapExport;
 use App\Exports\RepairEstimasiExport;
-use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\login\LoginController;
 use App\Http\Controllers\wilayah\KotaController;
 use App\Http\Controllers\kios\KiosPODPController;
@@ -49,6 +51,7 @@ use App\Http\Controllers\kios\KiosProductSecondController;
 use App\Http\Controllers\repair\RepairProdukSedangDikirim;
 use App\Http\Controllers\repair\RepairTeknisiLCController;
 use App\Http\Controllers\repair\RepairTeknisiNCController;
+use App\Http\Controllers\gudang\GudangKonfirmasiPembayaran;
 use App\Http\Controllers\gudang\GudangListProdukController;
 use App\Http\Controllers\gudang\GudangValidasiQCController;
 use App\Http\Controllers\kios\AddKelengkapanKiosController;
@@ -72,6 +75,7 @@ use App\Http\Controllers\kios\KiosFilterProdukSecondController;
 use App\Http\Controllers\logistik\LogistikPenerimaanController;
 use App\Http\Controllers\logistik\LogistikResiPickupController;
 use App\Http\Controllers\repair\RepairRecapTransaksiController;
+use App\Http\Controllers\repair\RepairRequestPackingController;
 use App\Http\Controllers\gudang\GudangAddNewSparepartController;
 use App\Http\Controllers\repair\RepairTroubleshootingController;
 use App\Http\Controllers\gudang\GudangKomplainSupplierController;
@@ -93,7 +97,6 @@ use App\Http\Controllers\repair\RepairRubahEstimasiGeneralController;
 use App\Http\Controllers\gudang\GudangDashboardDistributionController;
 use App\Http\Controllers\logistik\LogistikListRequestPackingController;
 use App\Http\Controllers\repair\RepairPenerimaanPartEstimasiController;
-use App\Http\Controllers\repair\RepairRequestPackingController;
 use App\Http\Controllers\repair\RepairTeknisiRequestSparepartController;
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
@@ -115,18 +118,18 @@ Route::post('/review-customer', [ReviewCustomerController::class, 'store'])->nam
 Route::get('/preview-sertificate', [CertificateController::class, 'previewSertificate']);
 
 Route::get('/preview-export', function () {
-    $export = new EstimasiPartExport();
+    $export = new KiosDailyRecapExport();
     return response()->json($export->collection());
 });
 
 Route::get('/download-export-produk', function () {
     $timestamp = Carbon::now()->format('d M Y');
-    $fileName = "Konfirmasi Estimasi April & Mei - {$timestamp}.csv";
-    return Excel::download(new EstimasiPartExport, $fileName);
+    $fileName = "Data Daily Recap {$timestamp}.csv";
+    return Excel::download(new KiosDailyRecapExport, $fileName);
 });
 
 Route::middleware('superadmin')->group(function () {
-    Route::get('/', function() {
+    Route::get('/', function () {
         return view('admin.index');
     });
 });
@@ -141,7 +144,7 @@ Route::middleware('kios')->group(function () {
 
         Route::get('/download-recap', function () {
             $timestamp = Carbon::now()->format('d M Y');
-            $fileName = "Daily Recap - {$timestamp}.csv";
+            $fileName = "Data Daily Recap - {$timestamp}.csv";
             return Excel::download(new KiosDailyRecapExport, $fileName);
         })->name('download.recap');
 
@@ -220,7 +223,7 @@ Route::middleware('kios')->group(function () {
                 Route::get('/getSNSecond/{id}', 'getSNSecond');
                 Route::get('/getPriceSecond/{id}', 'getPriceSecond');
             });
-            
+
             Route::group(['controller' => KiosPengecekkanProdukBaruController::class], function () {
                 Route::resource('/qc-produk-baru', KiosPengecekkanProdukBaruController::class)->only(['index', 'store']);
                 Route::get('/getOrderList/{orderId}', 'getOrderList');
@@ -282,7 +285,6 @@ Route::middleware('kios')->group(function () {
             Route::get('/dashboard', [DashboardTechnicalSupportController::class, 'index']);
             Route::resource('/input', KiosInputTSController::class);
         });
-
     });
 });
 
@@ -334,13 +336,13 @@ Route::middleware('logistik')->group(function () {
 Route::middleware('access')->group(function () {
     Route::prefix('/customer')->group(function () {
         Route::get('/', [DashboardCustomerController::class, 'index']);
-        
+
         Route::resource('/data-customer', DataCustomerController::class)->only(['index', 'update', 'destroy']);
         Route::get('/data-customer/search', [DataCustomerController::class, 'search']);
-        
+
         Route::get('/add-customer', [AddCustomerController::class, 'index']);
         Route::post('/add-customer', [AddCustomerController::class, 'store'])->name('form-customer');
-        
+
         Route::middleware('superadmin')->group(function () {
             Route::get('/add-user', [EmployeeController::class, 'index']);
             Route::post('/add-user', [EmployeeController::class, 'store'])->name('form-user');
@@ -426,7 +428,7 @@ Route::middleware('repair')->group(function () {
             Route::put('/change-to-estimasi/{id}', [RepairTroubleshootingController::class, 'changeStatus'])->name('change-to-estimasi');
 
             Route::resource('/pengerjaan', RepairPengerjaanController::class)->only(['index', 'update']);
-            Route::get('/detail-pengerjaan-teknisi/{id}',[RepairPengerjaanController::class, 'detailPengerjaan'])->name('detailPengerjaan');
+            Route::get('/detail-pengerjaan-teknisi/{id}', [RepairPengerjaanController::class, 'detailPengerjaan'])->name('detailPengerjaan');
             Route::put('/changeStatusPengerjaan/{id}', [RepairPengerjaanController::class, 'changeStatusPengerjaan'])->name('changeStatusPengerjaan');
 
             Route::resource('/req-sparepart-teknisi', RepairTeknisiRequestSparepartController::class)->only(['index', 'update']);
@@ -461,7 +463,6 @@ Route::middleware('repair')->group(function () {
             });
 
             Route::resource('/rubah-estimasi', RepairRubahEstimasiGeneralController::class)->only(['index', 'edit', 'update']);
-            
         });
 
         Route::prefix('/quality-control')->group(function () {
@@ -475,7 +476,6 @@ Route::middleware('repair')->group(function () {
                 Route::get('/list-case-qc', 'indexListCase')->name('listCaseQC');
             });
         });
-
     });
 });
 
@@ -488,6 +488,7 @@ Route::middleware('gudang')->group(function () {
                 Route::post('/belanja-req-payment/{id}', 'requestPaymentBelanja')->name('requestPB');
             });
             Route::resource('/request-payment', GudangRequestPaymentController::class)->only(['index', 'store']);
+            Route::resource('/konfirmasi-payment', GudangKonfirmasiPembayaran::class)->only(['index', 'store']);
             Route::resource('/pengiriman-belanja', GudangPengirimanBelanjaController::class)->only(['index', 'store', 'update']);
             Route::resource('/supplier', GudangSupplierController::class)->only(['index', 'store', 'update']);
         });
