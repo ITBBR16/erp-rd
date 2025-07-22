@@ -117,16 +117,16 @@ Route::post('/review-customer', [ReviewCustomerController::class, 'store'])->nam
 
 Route::get('/preview-sertificate', [CertificateController::class, 'previewSertificate']);
 
-Route::get('/preview-export', function () {
-    $export = new KiosDailyRecapExport();
-    return response()->json($export->collection());
-});
+// Route::get('/preview-export', function () {
+//     $export = new KiosDailyRecapExport();
+//     return response()->json($export->collection());
+// });
 
-Route::get('/download-export-produk', function () {
-    $timestamp = Carbon::now()->format('d M Y');
-    $fileName = "Data Daily Recap {$timestamp}.csv";
-    return Excel::download(new KiosDailyRecapExport, $fileName);
-});
+// Route::get('/download-export-produk', function () {
+//     $timestamp = Carbon::now()->format('d M Y');
+//     $fileName = "Data Daily Recap {$timestamp}.csv";
+//     return Excel::download(new KiosDailyRecapExport, $fileName);
+// });
 
 Route::middleware('superadmin')->group(function () {
     Route::get('/', function () {
@@ -137,20 +137,21 @@ Route::middleware('superadmin')->group(function () {
 Route::middleware('kios')->group(function () {
     Route::prefix('/kios')->group(function () {
 
-        Route::get('/test-export', function () {
-            $export = new KiosDailyRecapExport();
-            return response()->json($export->collection());
-        });
+        // Route::get('/test-export', function () {
+        //     $export = new KiosDailyRecapExport();
+        //     return response()->json($export->collection());
+        // });
 
-        Route::get('/download-recap', function () {
-            $timestamp = Carbon::now()->format('d M Y');
-            $fileName = "Data Daily Recap - {$timestamp}.csv";
-            return Excel::download(new KiosDailyRecapExport, $fileName);
-        })->name('download.recap');
+        // Route::get('/download-recap', function () {
+        //     $timestamp = Carbon::now()->format('d M Y');
+        //     $fileName = "Data Daily Recap - {$timestamp}.csv";
+        //     return Excel::download(new KiosDailyRecapExport, $fileName);
+        // })->name('download.recap');
 
         Route::prefix('/analisa')->group(function () {
             Route::get('/dashboard', [DashboardKiosController::class, 'index']);
             Route::get('/analisa-daily-recap', [KiosAnalisaDailyRecapController::class, 'index'])->name('analisa-dr');
+            Route::get('/export-daily-recap', [KiosAnalisaDailyRecapController::class, 'exportDailyRecap'])->name('export-daily-recap');
             Route::get('/analisa-chart', [DashboardKiosController::class, 'analisaChart']);
         });
 

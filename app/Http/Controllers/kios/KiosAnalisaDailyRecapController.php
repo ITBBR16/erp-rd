@@ -10,10 +10,15 @@ class KiosAnalisaDailyRecapController extends Controller
 {
     public function __construct(
         private KiosAnalisaDailyRecapServices $dailyRecap
-    ){}
+    ) {}
 
     public function index()
     {
         return $this->dailyRecap->index();
+    }
+
+    public function exportDailyRecap(Request $request)
+    {
+        return $this->dailyRecap->exportDailyRecap($request);
     }
 }

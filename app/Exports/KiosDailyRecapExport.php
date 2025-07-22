@@ -3,83 +3,25 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
-use App\Models\kios\KiosTransaksi;
-use Illuminate\Support\Facades\DB;
 use App\Models\kios\KiosDailyRecap;
-use App\Models\kios\KiosTransaksiDetail;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class KiosDailyRecapExport implements FromCollection, WithHeadings
 {
-    // public function collection()
-    // {
-    //     $connection = (new KiosTransaksi)->getConnection();
+    protected $startDate;
+    protected $endDate;
 
-    //     $dataLaku = KiosTransaksi::with([
-    //         'detailtransaksi.produkKios.subjenis',
-    //         'detailtransaksi.kiosSerialnumbers.validasiproduk.orderLists',
-    //         'detailtransaksi.produkKiosBekas.subjenis',
-    //         'detailtransaksi.produkKiosBnob.subjenis'
-    //     ])
-    //         ->whereYear('created_at', 2025)
-    //         ->whereBetween($connection->raw('MONTH(created_at)'), [4, 6])
-    //         ->get()
-    //         ->filter(function ($item) {
-    //             return $item->detailtransaksi->isNotEmpty();
-    //         });
-
-
-    //     return $dataLaku->map(function ($item) {
-    //         return $item->detailtransaksi->map(function ($detail) use ($item) {
-    //             $jenisDrone = ucwords(str_replace('_', ' ', $detail->jenis_transaksi));
-    //             $namaProduk = '';
-    //             $modalAwal = '';
-
-    //             if ($detail->jenis_transaksi === 'drone_baru') {
-    //                 $namaProduk = $detail->produkKios->subjenis->paket_penjualan ?? '';
-    //                 $modalAwal = $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai ?? '';
-    //             } elseif ($detail->jenis_transaksi === 'drone_bekas') {
-    //                 $namaProduk = $detail->produkKiosBekas->subjenis->paket_penjualan ?? '';
-    //                 $modalAwal = $detail->produkKiosBekas->modal_bekas ?? '';
-    //             } elseif ($detail->jenis_transaksi === 'drone_bnob') {
-    //                 $namaProduk = $detail->produkKiosBnob->subjenis->paket_penjualan ?? '';
-    //                 $modalAwal = $detail->produkKiosBnob->modal_bnob ?? '';
-    //             }
-
-    //             return [
-    //                 'No Nota' => $item->id,
-    //                 'Tanggal' => $item->created_at,
-    //                 'Jenis Drone' => $jenisDrone,
-    //                 'Nama Produk' => $namaProduk,
-    //                 'STP' => $modalAwal,
-    //                 'SRP' => $detail->harga_jual ?? '',
-    //                 'Discount Transaksi' => $item->discount
-    //             ];
-    //         });
-    //     });
-    // }
-
-    // public function headings(): array
-    // {
-    //     return [
-    //         'No Nota',
-    //         'Tanggal',
-    //         'Jenis Drone',
-    //         'Nama Produk',
-    //         'STP',
-    //         'SRP',
-    //     ];
-    // }
+    public function __construct($startDate, $endDate)
+    {
+        $this->startDate = Carbon::parse($startDate);
+        $this->endDate = Carbon::parse($endDate);
+    }
 
     public function collection()
     {
-        $startOfMonth = Carbon::createFromDate(2025, 7, 12)->startOfDay();
-        $endOfMonth = Carbon::createFromDate(2025, 7, 19)->endOfMonth();
-        $last7Day = Carbon::now()->subDays(7)->toDateString();
-
         $dailyRecap = KiosDailyRecap::with('customer', 'keperluan', 'recapTs', 'kiosWtb', 'kiosWts')
-            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->get();
         return $dailyRecap->map(function ($recap) {
             return [

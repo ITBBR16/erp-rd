@@ -1,60 +1,66 @@
-// // Mencari data customer on repair
-$(document).ready(function(){
-    $('#repair-customer-search').on('input', function () {
+// Mencari data customer on repair
+$(document).ready(function () {
+    $("#repair-customer-search").on("input", function () {
         const query = $(this).val();
-        const dataNotFound = document.getElementById('dataCRNotFound');
+        const dataNotFound = document.getElementById("dataCRNotFound");
 
         if (!query) {
-            $('.repair-customer-row').show();
-            dataNotFound.style.display = 'none';
+            $(".repair-customer-row").show();
+            dataNotFound.style.display = "none";
         } else {
-            $('.repair-customer-row').hide();
+            $(".repair-customer-row").hide();
 
-            fetch('/repair/customer/list-customer-repair/search?query=' + encodeURIComponent(query), {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.hasOwnProperty('data')) {
-                    const customers = data.data;
-
-                    if (customers.length === 0) {
-                        dataNotFound.style.display = 'block';
-                    } else {
-                        customers.forEach(customer => {
-                            $('#resultCustomerRepair' + customer.id).show();
-                        });
-
-                        dataNotFound.style.display = 'none';
-                    }
-                } else {
-                    console.log('Invalid response format: missing "data" property');
+            fetch(
+                "/repair/customer/list-customer-repair/search?query=" +
+                    encodeURIComponent(query),
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 }
-            })
-            .catch(error => {
-                console.log('Fetch error: ' + error);
-            });
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.hasOwnProperty("data")) {
+                        const customers = data.data;
+
+                        if (customers.length === 0) {
+                            dataNotFound.style.display = "block";
+                        } else {
+                            customers.forEach((customer) => {
+                                $("#resultCustomerRepair" + customer.id).show();
+                            });
+
+                            dataNotFound.style.display = "none";
+                        }
+                    } else {
+                        console.log(
+                            'Invalid response format: missing "data" property'
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.log("Fetch error: " + error);
+                });
         }
     });
 
-    $('.search-input-repair').on('input', function() {
+    $(".search-input-repair").on("input", function () {
         const searchTerm = $(this).val().toLowerCase();
-        const targetTable = $(this).data('target');
-        const $rows = $('#' + targetTable + ' tbody tr');
+        const targetTable = $(this).data("target");
+        const $rows = $("#" + targetTable + " tbody tr");
 
-        $rows.each(function() {
-            const customerName = $(this).find('.customer-name').text().toLowerCase();
+        $rows.each(function () {
+            const customerName = $(this)
+                .find(".customer-name")
+                .text()
+                .toLowerCase();
             if (customerName.includes(searchTerm)) {
                 $(this).show();
             } else {
                 $(this).hide();
             }
         });
-
     });
-
-
 });
