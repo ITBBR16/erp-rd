@@ -20,6 +20,17 @@
                         <div class="relative px-4 py-4 rounded-md shadow-lg border border-gray-200 bg-white dark:bg-gray-700 dark:border-gray-600">
                             <div class="space-y-4">
                                 <div class="grid grid-cols-3 items-center">
+                                    <div class="font-semibold">
+                                        Nama Customer :
+                                    </div>
+                                    <div class="mr-2">
+                                        <input type="text" name="first_name" id="update-first-name" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="First Name" required>
+                                    </div>
+                                    <div class="ml-2">
+                                        <input type="text" name="last_name" id="update-last-name" class="rounded-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Last Name" required>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 items-center">
                                     <div class="col-span-1 font-semibold">
                                         Provinsi :
                                     </div>

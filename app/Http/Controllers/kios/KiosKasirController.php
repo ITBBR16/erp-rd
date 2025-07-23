@@ -44,7 +44,7 @@ class KiosKasirController extends Controller
         private GudangTransactionRepository $transactionGudang,
         private EkspedisiRepository $ekspedisi,
         private LogistikTransactionRepository $ekspedisiTransaction,
-    ){}
+    ) {}
 
     public function index()
     {
@@ -125,7 +125,7 @@ class KiosKasirController extends Controller
         // $connectionKios = DB::connection('rumahdrone_kios');
         // $connectionKios->beginTransaction();
 
-        $userId =auth()->user()->id;
+        $userId = auth()->user()->id;
 
         try {
 
@@ -142,9 +142,9 @@ class KiosKasirController extends Controller
             $pelunasanCustomerId = $request->input('id_customer');
             $pelunasanMetodePembayaran = $request->input('kasir_metode_pembayaran');
             $pelunasanDiscount = $request->input('kasir_discount');
-            $pelunasanOngkir = preg_replace("/[^0-9]/", "",$request->input('kasir_ongkir'));
-            $pelunasanTax = preg_replace("/[^0-9]/", "",$request->input('kasir_tax'));
-            $pelunasanNominalPembayaran = preg_replace("/[^0-9]/", "",$request->input('kasir_nominal_pembayaran'));
+            $pelunasanOngkir = preg_replace("/[^0-9]/", "", $request->input('kasir_ongkir'));
+            $pelunasanTax = preg_replace("/[^0-9]/", "", $request->input('kasir_tax'));
+            $pelunasanNominalPembayaran = preg_replace("/[^0-9]/", "", $request->input('kasir_nominal_pembayaran'));
             $pelunasanKeterangan = $request->input('keterangan_pembayaran');
 
             $pelunasanJenisTransaksi = $request->input('jenis_transaksi');
@@ -184,7 +184,7 @@ class KiosKasirController extends Controller
             //     $totalHarga += $srp;
 
             //     if ($jenisTransaksi != 'part_baru' || $jenisTransaksi != 'part_bekas') {
-                    
+
             //     }
             // }
 
@@ -203,7 +203,7 @@ class KiosKasirController extends Controller
         $this->transactionGudang->beginTransaction();
         $this->ekspedisiTransaction->beginTransaction();
 
-        try{
+        try {
             $user = auth()->user();
             $userId = $user->id;
             $divisiId = $user->divisi_id;
@@ -255,7 +255,7 @@ class KiosKasirController extends Controller
             $modalKiosBekas = 0;
             $modalGudang = 0;
 
-            if(count(array_unique($kasirSN)) !== count($kasirSN)) {
+            if (count(array_unique($kasirSN)) !== count($kasirSN)) {
                 $connectionTransaksiKios->rollBack();
                 $this->ekspedisiTransaction->rollbackTransaction();
                 $this->transactionGudang->rollbackTransaction();
@@ -272,7 +272,7 @@ class KiosKasirController extends Controller
             $transaksi->keterangan = $kasirKeterangan;
             $transaksi->save();
 
-            foreach($kasirItem as $index => $item) {
+            foreach ($kasirItem as $index => $item) {
                 $totalHarga += $kasirSrp[$index];
                 $jenisTransaksi = $kasirJenisTransaksi[$index];
                 $serialNumber = $kasirSN[$index];
@@ -305,7 +305,6 @@ class KiosKasirController extends Controller
                         if (!$cekReadySN) {
                             KiosProduk::where('id', $item)->update(['status' => 'Not Ready']);
                         }
-
                     } elseif ($jenisTransaksi == 'drone_bekas') {
                         $totalHargaKiosBekas += $srp;
                         $dataProdukBekas = KiosProdukSecond::find($serialNumber);
@@ -329,7 +328,6 @@ class KiosKasirController extends Controller
                     }
 
                     $detailTransaksi->save();
-
                 } else {
                     $totalHargaGudang += $srp;
                     $modalGudang += $kasirModalPart[$index];
@@ -367,7 +365,7 @@ class KiosKasirController extends Controller
                 $statusSC[] = false;
             }
 
-            foreach($productNames as $index => $productName) {
+            foreach ($productNames as $index => $productName) {
                 $products[] = [
                     'productName' => $productName ?? '',
                     'description' => $descriptions[$index] ?? '',
@@ -397,7 +395,7 @@ class KiosKasirController extends Controller
             $pdfEncode = base64_encode($pdfContent);
             $filesFinance[] = $pdfEncode;
 
-            foreach($request->input('kasir_metode_pembayaran') as $index => $metodePembayaran) {
+            foreach ($request->input('kasir_metode_pembayaran') as $index => $metodePembayaran) {
                 $kasirNominalPembayaran = preg_replace("/[^0-9]/", "", $request->input('kasir_nominal_pembayaran')[$index]);
                 $filesFinance[] = base64_encode($request->file('file_bukti_transaksi')[$index]->get());
 
@@ -434,7 +432,7 @@ class KiosKasirController extends Controller
                     'tanggal_request' => now(),
                     'status_request' => 'Request Packing',
                 ];
-    
+
                 $this->ekspedisi->createLogRequest($dataRequestLogistik);
             }
 
@@ -473,14 +471,12 @@ class KiosKasirController extends Controller
             $this->transactionGudang->commitTransaction();
 
             return back()->with('success', 'Berhasil membuat kasir baru.');
-
         } catch (Exception $e) {
             $connectionTransaksiKios->rollBack();
             $this->ekspedisiTransaction->rollbackTransaction();
             $this->transactionGudang->rollbackTransaction();
             return back()->with('error', $e->getMessage());
         }
-
     }
 
     public function updateDataCustomer(Request $request)
@@ -491,6 +487,8 @@ class KiosKasirController extends Controller
             $connectionTransaksi->beginTransaction();
 
             $dataCustomer = [
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
                 'provinsi_id' => $request->input('provinsi_customer'),
                 'kota_kabupaten_id' => $request->input('kota_customer'),
                 'kecamatan_id' => $request->input('kecamatan_customer'),
@@ -503,7 +501,6 @@ class KiosKasirController extends Controller
             $customer->update($dataCustomer);
 
             $connectionTransaksi->commit();
-
         } catch (Exception $e) {
             $connectionTransaksi->rollBack();
             return back()->with('error', $e->getMessage());
@@ -516,16 +513,16 @@ class KiosKasirController extends Controller
             $items = KiosProduk::with('subjenis')->where('status', 'Ready')->orWhere('status', 'Promo')->get();
         } elseif ($jenisTransaksi == 'drone_bnob') {
             $items = KiosProdukBnob::with('subjenis')
-                    ->where('status', 'Ready')
-                    ->get()
-                    ->unique('sub_jenis_id')
-                    ->values();
+                ->where('status', 'Ready')
+                ->get()
+                ->unique('sub_jenis_id')
+                ->values();
         } elseif ($jenisTransaksi == 'drone_bekas') {
             $items = KiosProdukSecond::with('subjenis')
-                    ->where('status', 'Ready')
-                    ->get()
-                    ->unique('sub_jenis_id')
-                    ->values();
+                ->where('status', 'Ready')
+                ->get()
+                ->unique('sub_jenis_id')
+                ->values();
         } elseif ($jenisTransaksi == 'part_baru' || $jenisTransaksi == 'part_bekas') {
             $dataPart = $this->gudangProduk->where('status', 'Ready')->orWhere('status', 'Promo')->get();
             $resultData = $dataPart->map(function ($part) {
@@ -536,16 +533,14 @@ class KiosKasirController extends Controller
             });
 
             $items = $resultData;
-
         }
 
         return response()->json($items);
-
     }
 
     public function getSerialNumber($jenisTransaksi, $id)
     {
-        if($jenisTransaksi == 'drone_baru') {
+        if ($jenisTransaksi == 'drone_baru') {
             $produkId = KiosProduk::where('sub_jenis_id', $id)->value('id');
             $dataProduk = KiosProduk::where('sub_jenis_id', $id)->first();
             if ($dataProduk->status === 'Promo') {
@@ -555,7 +550,7 @@ class KiosKasirController extends Controller
             }
 
             $dataSN = KiosSerialNumber::where('produk_id', $produkId)->where('status', 'Ready')->get();
-        } elseif($jenisTransaksi == 'drone_bekas') {
+        } elseif ($jenisTransaksi == 'drone_bekas') {
             $nilai = KiosProdukSecond::where('sub_jenis_id', $id)->value('srp');
             $dataSN = KiosProdukSecond::where('sub_jenis_id', $id)->where('status', 'Ready')->get();
         } elseif ($jenisTransaksi == 'drone_bnob') {
@@ -699,9 +694,8 @@ class KiosKasirController extends Controller
         ];
 
         $pdf = Pdf::loadView('kios.kasir.invoice.invoice-kasir', $dataView)
-                    ->setPaper('a5', 'portrait');
+            ->setPaper('a5', 'portrait');
 
         return $pdf;
     }
-
 }
