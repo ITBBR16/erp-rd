@@ -8,14 +8,14 @@
                 <div class="flex-auto p-4">
                     <div class="flex flex-row -mx-3">
                         <div class="px-3 py-3">
-                            <span class="material-symbols-outlined text-green-500 text-4xl dark:text-green-400">monetization_on</span>
+                            <span class="material-symbols-outlined text-green-500 text-4xl dark:text-green-400">playlist_add_check_circle</span>
                         </div>
                         <div>
                             <div class="flex-none w-2/3 max-w-full px-3">
-                                <span class="flex whitespace-nowrap font-semibold text-gray-700 dark:text-white">Pendapatan Bulan Ini</span>
+                                <span class="flex whitespace-nowrap font-semibold text-gray-700 dark:text-white">Total Estimasi</span>
                             </div>
                             <div class="px-3 py-0">
-                                <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400"></div>
+                                <div class="font-bold text-base mb-1 text-slate-900 dark:text-gray-400">{{ $totalEstimasi }} Case Estimasi</div>
                             </div>
                         </div>
                     </div>

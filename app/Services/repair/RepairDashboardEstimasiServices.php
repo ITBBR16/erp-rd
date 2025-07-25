@@ -13,7 +13,7 @@ class RepairDashboardEstimasiServices
         private UmumRepository $umumRepository,
         private RepairEstimasiPart $estimasiPart,
         private RepairCase $repairCase,
-    ){}
+    ) {}
 
     public function index()
     {
@@ -24,6 +24,7 @@ class RepairDashboardEstimasiServices
         $listbelumlanjut = $this->listBelumLanjut();
         $totalNewCase = $this->newCaseThisMonth();
         $totalCloseCase = $this->closedCasesThisMonth();
+        $totalEstimasi = $this->countCaseEstimasi();
 
         return view('repair.estimasi.dashboard.index', [
             'title' => 'Dashboard Estimasi',
@@ -36,7 +37,18 @@ class RepairDashboardEstimasiServices
             'listbelumlanjut' => $listbelumlanjut,
             'totalNewCase' => $totalNewCase,
             'totalCloseCase' => $totalCloseCase,
+            'totalEstimasi' => $totalEstimasi,
         ]);
+    }
+
+    private function countCaseEstimasi()
+    {
+        $countEstimasi = $this->repairCase
+            ->whereHas('jenisStatus', function ($query) {
+                $query->where('jenis_status', 'Proses Estimasi Biaya');
+            })
+            ->count();
+        return $countEstimasi;
     }
 
     private function newCaseThisMonth()
@@ -65,20 +77,20 @@ class RepairDashboardEstimasiServices
     private function listSudahDikirim()
     {
         $listSudahDikirim = $this->estimasiPart
-                ->whereNotNull('tanggal_dikirim')
-                ->where('tanggal_dikirim', '!=', '')
-                ->get()
-                ->groupBy('gudang_produk_id')
-                ->map(function ($items) {
-                    return [
-                        'jenis_drone' => $items->first()->sparepartGudang->produkSparepart->produkJenis->jenis_produk,
-                        'nama_sparepart' => $items->first()->sparepartGudang->produkSparepart->nama_internal,
-                        'modal_gudang' => $items->sum('modal_gudang'),
-                        'total_quantity' => $items->count(),
-                    ];
-                })
-                ->sortByDesc('total_quantity')
-                ->values();
+            ->whereNotNull('tanggal_dikirim')
+            ->where('tanggal_dikirim', '!=', '')
+            ->get()
+            ->groupBy('gudang_produk_id')
+            ->map(function ($items) {
+                return [
+                    'jenis_drone' => $items->first()->sparepartGudang->produkSparepart->produkJenis->jenis_produk,
+                    'nama_sparepart' => $items->first()->sparepartGudang->produkSparepart->nama_internal,
+                    'modal_gudang' => $items->sum('modal_gudang'),
+                    'total_quantity' => $items->count(),
+                ];
+            })
+            ->sortByDesc('total_quantity')
+            ->values();
 
         return $listSudahDikirim;
     }
@@ -102,28 +114,28 @@ class RepairDashboardEstimasiServices
             })
             ->sortByDesc('total_quantity')
             ->values();
-        
+
         return $listBelumDikirim;
     }
 
     private function listBelumLanjut()
     {
         $listBelumLanjut = $this->estimasiPart
-                ->whereNull('tanggal_konfirmasi')
-                ->orWhere('tanggal_konfirmasi', '')
-                ->get()
-                ->groupBy('gudang_produk_id')
-                ->map(function ($items) {
-                    return [
-                        'jenis_drone' => $items->first()->sparepartGudang->produkSparepart->produkJenis->jenis_produk,
-                        'nama_sparepart' => $items->first()->sparepartGudang->produkSparepart->nama_internal,
-                        'modal_gudang' => $items->sum('modal_gudang'),
-                        'total_quantity' => $items->count(),
-                    ];
-                })
-                ->sortByDesc('total_quantity')
-                ->values();
-            
+            ->whereNull('tanggal_konfirmasi')
+            ->orWhere('tanggal_konfirmasi', '')
+            ->get()
+            ->groupBy('gudang_produk_id')
+            ->map(function ($items) {
+                return [
+                    'jenis_drone' => $items->first()->sparepartGudang->produkSparepart->produkJenis->jenis_produk,
+                    'nama_sparepart' => $items->first()->sparepartGudang->produkSparepart->nama_internal,
+                    'modal_gudang' => $items->sum('modal_gudang'),
+                    'total_quantity' => $items->count(),
+                ];
+            })
+            ->sortByDesc('total_quantity')
+            ->values();
+
         return $listBelumLanjut;
     }
 }

@@ -149,9 +149,12 @@ class GudangRequestPaymentService
                 'status' => 'Done Payment',
             ]);
 
-            $this->belanja->updateBelanja($payment->gudang_belanja_id, [
-                'status' => 'Waiting Shipment',
-            ]);
+            $belanja = $this->belanja->findBelanja($payment->gudang_belanja_id);
+            if (!$belanja) {
+                throw new Exception("Belanja not found for the given payment.");
+            }
+
+            $belanja->update(['status' => 'Waiting Shipment']);
 
             $this->transaction->commitTransaction();
 
