@@ -12,36 +12,30 @@ class KiosSOExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        // Kolom Pertama
         $orderListBaru = KiosOrderList::with([
             'order.supplier',
             'paket',
-            'order.paymentkios' => function ($query) {
-                $query->where('order_type', 'Baru');
-            },
-            'order.paymentkios.metodepembayaran.akunBank'
-        ])->get();
-        $orderListSecond = KiosOrderSecond::with(['customer', 'subjenis']);
+        ])
+            ->whereMonth('created_at', 7)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'Paket Penjualan' => $item->paket->paket_penjualan ?? 'N/A',
+                    'Nama Supplier' => $item->order->supplier->nama_perusahaan ?? 'N/A',
+                    'Quantity' => $item->quantity ?? 0,
+                    'Harga Satuan' => $item->nilai,
+                ];
+            });
 
-        // Kolom Kedua
-        $dataTransaksi = KiosTransaksiDetail::with(['kiosSerialnumbers', 'transaksi.customer', 'produkKiosBekas']);
+        return collect($orderListBaru);
     }
     public function headings(): array
     {
         return [
-            'Jenis Transaksi',
-            'Order Id Pembelanjaan',
-            'Supplier',
             'Paket Penjualan',
+            'Nama Supplier',
             'Quantity',
-            'Nilai Satuan',
-            '',
-            'Jenis Transaksi',
-            'Transaksi ID Kasir',
-            'Customer',
-            'Paket Penjualan',
-            'Serial Number',
-            'Harga Jual'
+            'Harga Satuan',
         ];
     }
 

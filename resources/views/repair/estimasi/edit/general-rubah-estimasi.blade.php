@@ -157,10 +157,34 @@
 
             <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-lg dark:bg-gray-800 dark:border-gray-600">
                 <div class="grid grid-cols-3 gap-5">
+                    @php
+                        $estimasiParts = array_filter($dataCase->estimasi->estimasiPart->all(), function ($item) {
+                            return $item->active == 'Active';
+                        });
+
+                        $estimasiJrrs = array_filter($dataCase->estimasi->estimasiJrr->all(), function ($item) {
+                            return $item->active == 'Active';
+                        });
+
+                        $estimasiListActive = array_merge($estimasiParts, $estimasiJrrs);
+
+                        $totalBiaya = array_sum(array_map(function ($item) {
+                            return $item->harga_customer ?? 0;
+                        }, $estimasiListActive));
+                    @endphp
                     <div class="relative col-span-2 overflow-x-auto">
-                        <div class="border-b">
-                            <h3 class="font-semibold text-sm pb-2">Input Estimasi</h3>
-                        </div>
+                        <div class="border-b flex justify-between text-sm pb-2">
+                                <div class="text-start">
+                                    <h3 class="font-semibold">Input Estimasi</h3>
+                                </div>
+                                <div class="text-end flex items-center space-x-2">
+                                    <h3>Total Biaya:</h3>
+                                    <span id="total-nominal-ubah-estimasi-biaya"  
+                                          class="font-bold text-red-500">
+                                          Rp. {{ number_format($totalBiaya, 0, ',', '.') }}
+                                    </span>
+                                </div>
+                            </div>
                         <table class="w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-[10px] text-gray-900 border-b-2 uppercase dark:text-white">
                                 <tr>
@@ -185,17 +209,6 @@
                                 </tr>
                             </thead>
                             <tbody id="container-estimasi-active">
-                                @php
-                                    $estimasiParts = array_filter($dataCase->estimasi->estimasiPart->all(), function ($item) {
-                                        return $item->active == 'Active';
-                                    });
-
-                                    $estimasiJrrs = array_filter($dataCase->estimasi->estimasiJrr->all(), function ($item) {
-                                        return $item->active == 'Active';
-                                    });
-
-                                    $estimasiListActive = array_merge($estimasiParts, $estimasiJrrs);
-                                @endphp
                                 @foreach ($estimasiListActive as $index => $estimasi)
                                     <tr id="konfirmasi-estimasi-{{ $index }}" class="bg-white dark:bg-gray-800">
                                         <td class="px-2 py-4">
@@ -240,7 +253,7 @@
                                         <td class="px-2 py-4">
                                             <div class="flex">
                                                 <span class="inline-flex items-center px-3 text-base font-semibold text-gray-900 bg-gray-200 border rounded-r border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">Rp</span>
-                                                <input type="text" name="harga_customer_lama[]" id="harga-customer-{{ $index }}" class="format-angka-estimasi rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($estimasi->harga_customer, 0, ',', '.') }}" required>
+                                                <input type="text" name="harga_customer_lama[]" id="harga-customer-{{ $index }}" class="format-angka-estimasi nominal_customer rounded-none rounded-r-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" value="{{ number_format($estimasi->harga_customer, 0, ',', '.') }}" required>
                                             </div>
                                         </td>
                                         <td class="px-2 py-4 text-center">

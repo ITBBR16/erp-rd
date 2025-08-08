@@ -11,7 +11,7 @@ use App\Repositories\kios\KiosRepository;
 
 class DashboardKiosController extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(private KiosRepository $suppKiosRepo) {}
 
     public function index()
     {
@@ -131,5 +131,4 @@ class DashboardKiosController extends Controller
 
         return $salesLastYearThisMonth;
     }
-
 }

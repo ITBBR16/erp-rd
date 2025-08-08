@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\kios;
 
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\kios\KiosOrder;
 use App\Models\kios\KiosProduk;
+use App\Models\kios\KiosTransaksi;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Models\kios\KiosProdukSecond;
 use App\Models\kios\KiosSerialNumber;
-use App\Models\kios\KiosTransaksi;
 use App\Models\kios\KiosTransaksiDetail;
 use App\Repositories\kios\KiosRepository;
-use Carbon\Carbon;
 
 class KiosDashboardProduk extends Controller
 {
-    public function __construct(private KiosRepository $suppKiosRepo){}
+    public function __construct(private KiosRepository $suppKiosRepo) {}
 
     public function index()
     {
@@ -26,11 +29,12 @@ class KiosDashboardProduk extends Controller
         $totalModal = $this->getTotalModal();
         $totalPbaru = $this->getTotalProdukBaru();
         $totalPbekas = $this->getTotalProdukBekas();
-        $topProduct = $this->topProductThisMonth();
-        $topCustomer = $this->topCustomerThisMonth();
         $listBelanja = $this->listBelanjaBulanIni();
         $produkPromo = $this->listProdukPromo();
         $listTransaksi = $this->listTransaksiBulanIni();
+        $thisWeekSales = $this->thisWeekSales();
+        $lastWeekSales = $this->lastWeekSales();
+        $dataTransaksi = $this->dataTransaksiBulanIni();
 
         $percentSales = ($totalSalesLastWeek != 0) ? (($totalSalesThisWeek - $totalSalesLastWeek) / $totalSalesLastWeek) * 100 : 0;
         $formattedPercentSales = number_format($percentSales, 2);
@@ -47,22 +51,12 @@ class KiosDashboardProduk extends Controller
             'totalmodal' => $totalModal,
             'totalpbaru' => $totalPbaru,
             'totalpbekas' => $totalPbekas,
-            'topproduct' => $topProduct,
-            'topcustomer' => $topCustomer,
             'listBelanja' => $listBelanja,
             'produkPromo' => $produkPromo,
             'listTransaksi' => $listTransaksi,
-        ]);
-    }
-
-    public function getWeeklySalesData()
-    {
-        $thisWeekSales = $this->thisWeekSales();
-        $lastWeekSales = $this->lastWeekSales();
-
-        return response()->json([
-            'this_week' => $thisWeekSales,
-            'last_week' => $lastWeekSales,
+            'thisWeek' => $thisWeekSales,
+            'lastWeek' => $lastWeekSales,
+            'dataTransaksi' => $dataTransaksi,
         ]);
     }
 
@@ -74,24 +68,24 @@ class KiosDashboardProduk extends Controller
         for ($i = 6; $i >= 0; $i--) {
             $date = $today->copy()->subDays($i);
             $sales = KiosTransaksi::whereDate('updated_at', $date)
-                    ->where('status', 'Done')
-                    ->get()
-                    ->sum(function ($transaction) {
-                        return $transaction->detailtransaksi->sum(function ($detail) {
-                            $orderNilai = 0;
-                            if (in_array($detail->jenis_transaksi, ['drone_baru', 'drone_bekas', 'drone_bnob'])) {
-                                $orderNilai = match ($detail->jenis_transaksi) {
-                                    'drone_baru'  => $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai ?? 0,
-                                    'drone_bekas' => $detail->produkKiosBekas->modal_bekas ?? 0,
-                                    'drone_bnob'  => $detail->produkKiosBnob->modal_bnob ?? 0,
-                                    default       => 0
-                                };
-                            }
-    
-                            return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual)
-                                - $orderNilai;
-                        }) + $transaction->tax - $transaction->discount + $transaction->ongkir;
-                    });
+                ->where('status', 'Done')
+                ->get()
+                ->sum(function ($transaction) {
+                    return $transaction->detailtransaksi->sum(function ($detail) {
+                        $orderNilai = 0;
+                        if (in_array($detail->jenis_transaksi, ['drone_baru', 'drone_bekas', 'drone_bnob'])) {
+                            $orderNilai = match ($detail->jenis_transaksi) {
+                                'drone_baru'  => $detail->kiosSerialnumbers->validasiproduk->orderLists->nilai ?? 0,
+                                'drone_bekas' => $detail->produkKiosBekas->modal_bekas ?? 0,
+                                'drone_bnob'  => $detail->produkKiosBnob->modal_bnob ?? 0,
+                                default       => 0
+                            };
+                        }
+
+                        return ($detail->harga_promo > 0 ? $detail->harga_promo : $detail->harga_jual)
+                            - $orderNilai;
+                    }) + $transaction->tax - $transaction->discount + $transaction->ongkir;
+                });
 
             array_push($salesThisWeek, $sales);
         }
@@ -134,10 +128,10 @@ class KiosDashboardProduk extends Controller
     private function getTotalModal()
     {
         $totalModal = KiosSerialNumber::where('status', 'Ready')
-                      ->get()
-                      ->sum(function ($total) {
-                            return $total->validasiproduk->orderLists->nilai;
-                      });
+            ->get()
+            ->sum(function ($total) {
+                return $total->validasiproduk->orderLists->nilai;
+            });
 
         return $totalModal;
     }
@@ -154,57 +148,15 @@ class KiosDashboardProduk extends Controller
         return $totalProdukBekas;
     }
 
-    private function topProductThisMonth()
-    {
-        $thisYear = date('Y');
-        $thisMonth = date('m');
-
-        $topProducts = KiosTransaksiDetail::select('kios_produk_id')
-                        ->selectRaw('COUNT(*) as total_penjualan')
-                        ->whereRaw('YEAR(updated_at) = ? AND MONTH(updated_at) = ?', [$thisYear, $thisMonth])
-                        ->whereNotNull('serial_number_id')
-                        ->groupBy('kios_produk_id')
-                        ->orderByDesc('total_penjualan')
-                        ->limit(5)
-                        ->get();
-
-        return $topProducts;
-    }
-
-    private function topCustomerThisMonth()
-    {
-        $thisYear = date('Y');
-        $thisMonth = date('m');
-
-        $topCustomer = KiosTransaksi::select('customer_id')
-                       ->selectRaw('SUM(total_harga + tax + ongkir - discount + COALESCE(dp.jumlah_pembayaran, 0)) as total_transaksi')
-                       ->leftJoin('kios_transaksi_dp as dp', 'dp.kios_transaksi_id', '=', 'kios_transaksi.id')
-                       ->whereRaw('YEAR(kios_transaksi.updated_at) = ? AND MONTH(kios_transaksi.updated_at) = ?', [$thisYear, $thisMonth])
-                       ->where(function ($query) {
-                            $query->where('status_dp', null)
-                                ->orWhere('status_dp', 'Lunas');
-                        })
-                        ->where(function ($query) {
-                            $query->where('status_po', null)
-                                ->orWhere('status_po', 'Lunas');
-                        })
-                       ->groupBy('customer_id')
-                       ->orderByDesc('total_transaksi')
-                       ->limit(5)
-                       ->get();
-
-        return $topCustomer;
-    }
-
     private function listBelanjaBulanIni()
     {
         $thisYear = date('Y');
         $thisMonth = date('m');
 
         $listBelanjaBulanIni = KiosOrder::whereRaw('YEAR(order.created_at) = ? AND MONTH(order.created_at) = ?', [$thisYear, $thisMonth])
-                                  ->orderBy('created_at', 'desc')
-                                  ->limit(5)
-                                  ->get();
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
 
         return $listBelanjaBulanIni;
     }
@@ -213,6 +165,22 @@ class KiosDashboardProduk extends Controller
     {
         $produkPromo = KiosProduk::where('status', 'Promo')->get();
         return $produkPromo;
+    }
+
+    private function dataTransaksiBulanIni()
+    {
+        return KiosTransaksiDetail::select(
+            DB::raw("REPLACE(jenis_transaksi, '_', ' ') as jenis_transaksi"),
+            'produk_sub_jenis.paket_penjualan',
+            DB::raw('COUNT(*) as total')
+        )
+            ->join('kios_produk', 'kios_transaksi_detail.kios_produk_id', '=', 'kios_produk.id')
+            ->join('rumahdrone_produk.produk_sub_jenis as produk_sub_jenis', 'kios_produk.sub_jenis_id', '=', 'produk_sub_jenis.id')
+            ->whereYear('kios_transaksi_detail.created_at', date('Y'))
+            ->whereMonth('kios_transaksi_detail.created_at', date('m'))
+            ->groupBy(DB::raw("REPLACE(jenis_transaksi, '_', ' ')"), 'produk_sub_jenis.paket_penjualan')
+            ->orderByDesc('total')
+            ->get();
     }
 
     private function listTransaksiBulanIni()
@@ -239,5 +207,4 @@ class KiosDashboardProduk extends Controller
 
         return $listTransaksiBulanIni;
     }
-
 }

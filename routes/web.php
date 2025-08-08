@@ -117,16 +117,16 @@ Route::post('/review-customer', [ReviewCustomerController::class, 'store'])->nam
 
 Route::get('/preview-sertificate', [CertificateController::class, 'previewSertificate']);
 
-// Route::get('/preview-export', function () {
-//     $export = new KiosDailyRecapExport();
-//     return response()->json($export->collection());
-// });
+Route::get('/preview-export', function () {
+    $export = new KiosSalesExport();
+    return response()->json($export->collection());
+});
 
-// Route::get('/download-export-produk', function () {
-//     $timestamp = Carbon::now()->format('d M Y');
-//     $fileName = "Data Daily Recap {$timestamp}.csv";
-//     return Excel::download(new KiosDailyRecapExport, $fileName);
-// });
+Route::get('/download-export-produk', function () {
+    $timestamp = Carbon::now()->format('d M Y');
+    $fileName = "Data Request Transaksi {$timestamp}.csv";
+    return Excel::download(new KiosSalesExport, $fileName);
+});
 
 Route::middleware('superadmin')->group(function () {
     Route::get('/', function () {
@@ -176,7 +176,6 @@ Route::middleware('kios')->group(function () {
         Route::prefix('/product')->group(function () {
             Route::group(['controller' => KiosDashboardProduk::class], function () {
                 Route::get('/dashboard-produk', 'index');
-                Route::get('/weekly-sales-data', 'getWeeklySalesData');
             });
 
             Route::group(['controller' => KiosProductController::class], function () {

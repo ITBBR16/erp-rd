@@ -30,7 +30,7 @@ class RepairEstimasiService
         private RepairCaseRepository $repairCase,
         private RepairEstimasiRepository $repairEstimasi,
         private RepairTimeJurnalRepository $repairTimeJurnal
-    ){}
+    ) {}
 
     // View Estimasi Biaya
     public function index()
@@ -84,7 +84,6 @@ class RepairEstimasiService
             'dataCase' => $dataCase,
             'jenisTransaksi' => $jenisTransaksi,
         ]);
-
     }
 
     // View Konfirmasi Estimasi
@@ -154,8 +153,8 @@ class RepairEstimasiService
 
         $dataCase = $caseService['data_case']->filter(function ($case) {
             return in_array($case->jenisStatus->jenis_status, [
-                'Proses Pengerjaan', 
-                'Proses Quality Control', 
+                'Proses Pengerjaan',
+                'Proses Quality Control',
                 'Proses Menunggu Pembayaran (Lanjut)'
             ]);
         })->sortByDesc('created_at');
@@ -199,17 +198,17 @@ class RepairEstimasiService
             $employeeId = auth()->user()->id;
             $tglWaktu = Carbon::now();
             $pesanHasilTs = $request->input('pesan_hasil_ts');
-    
+
             // Data Estimasi JRR
             $jenisTransaksi = $request->input('jenis_transaksi');
             $jenisPartJasa = $request->input('jenis_part_jasa');
             $namaPartJasa = $request->input('nama_part_jasa');
             $namaAlias = $request->input('nama_alias');
-            $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
-            
+            $hargaCustomer = preg_replace("/[^0-9]/", "", $request->input('harga_customer'));
+
             // Data Part
-            $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
-            $hargaGudang = preg_replace("/[^0-9]/", "",$request->input('harga_gudang'));
+            $hargaRepair = preg_replace("/[^0-9]/", "", $request->input('harga_repair'));
+            $hargaGudang = preg_replace("/[^0-9]/", "", $request->input('harga_gudang'));
 
             // Data Lama
             $idEstimasiLama = $request->input('id_hasil_estimasi');
@@ -218,7 +217,7 @@ class RepairEstimasiService
             $jenisPartJasaLama = $request->input('jenis_part_jasa_lama');
             $namaPartJasaLama = $request->input('nama_part_jasa_lama');
             $namaAliasLama = $request->input('nama_alias_lama');
-            $hargaCustomerLama = preg_replace("/[^0-9]/", "",$request->input('harga_customer_lama'));
+            $hargaCustomerLama = preg_replace("/[^0-9]/", "", $request->input('harga_customer_lama'));
 
             if ($jenisTransaksiLama) {
                 // Update data lama
@@ -231,7 +230,6 @@ class RepairEstimasiService
                             'active' => $statusActive[$index],
                         ];
                         $this->repairEstimasi->updateEstimasiPart($dataUpdateEstimasiPart, $idHasilEstimasi);
-            
                     } else {
                         $dataUpdateEstimasiJrr = [
                             'jenis_jasa' => $jenisPartJasaLama[$index],
@@ -249,18 +247,17 @@ class RepairEstimasiService
                     // Insert new data
                     if ($jt == 1) {
                         $createPart = [
-                        'estimasi_id' => $id,
-                        'jenis_transaksi_id' => $jt,
-                        'gudang_produk_id' => $namaPartJasa[$index],
-                        'nama_alias' => $namaAlias[$index] ?? '',
-                        'harga_customer' => $hargaCustomer[$index],
-                        'harga_repair' => $hargaRepair[$index],
-                        'harga_gudang' => $hargaGudang[$index],
-                        'status_proses_id' => 3,
-                        'active' => 'Active',
+                            'estimasi_id' => $id,
+                            'jenis_transaksi_id' => $jt,
+                            'gudang_produk_id' => $namaPartJasa[$index],
+                            'nama_alias' => $namaAlias[$index] ?? '',
+                            'harga_customer' => $hargaCustomer[$index],
+                            'harga_repair' => $hargaRepair[$index],
+                            'harga_gudang' => $hargaGudang[$index],
+                            'status_proses_id' => 3,
+                            'active' => 'Active',
                         ];
                         $this->repairEstimasi->createEstimasiPart($createPart);
-
                     } else {
                         $createJrr = [
                             'estimasi_id' => $id,
@@ -271,13 +268,12 @@ class RepairEstimasiService
                             'active' => 'Active',
                         ];
                         $this->repairEstimasi->createEstimasiJrr($createJrr);
-
                     }
                 }
             }
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 3);
-    
+
             if ($checkTimestamp) {
                 $timestamp = $checkTimestamp;
             } else {
@@ -286,7 +282,7 @@ class RepairEstimasiService
                     'jenis_status_id' => 4,
                     'tanggal_waktu' => $tglWaktu,
                 ];
-    
+
                 $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
             }
 
@@ -314,12 +310,10 @@ class RepairEstimasiService
             $this->repairEstimasi->commitTransaction();
 
             return ['status' => 'success', 'message' => 'Berhasil merubah hasil estimasi.'];
-
         } catch (Exception $e) {
             $this->repairEstimasi->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
-
     }
 
     // Function Proses
@@ -344,7 +338,7 @@ class RepairEstimasiService
                     'jenis_status_id' => 4,
                     'tanggal_waktu' => $tglWaktu,
                 ];
-    
+
                 $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
             }
 
@@ -359,7 +353,6 @@ class RepairEstimasiService
 
             $this->repairEstimasi->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil membuat jurnal baru.'];
-
         } catch (Exception $e) {
             $this->repairEstimasi->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -387,7 +380,7 @@ class RepairEstimasiService
                     'jenis_status_id' => 5,
                     'tanggal_waktu' => $tglWaktu,
                 ];
-    
+
                 $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
             }
 
@@ -402,7 +395,6 @@ class RepairEstimasiService
 
             $this->repairEstimasi->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil membuat jurnal baru.'];
-
         } catch (Exception $e) {
             $this->repairEstimasi->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -423,19 +415,19 @@ class RepairEstimasiService
                 'case_id' => $id,
                 'status' => 'Estimasi',
             ];
-        
+
             $createEstimasi = $this->repairEstimasi->createEstimasi($dataEstimasi);
-        
+
             // Data Estimasi JRR
             $jenisTransaksi = $request->input('jenis_transaksi');
             $namaPartJasa = $request->input('nama_part_jasa');
             $namaAlias = $request->input('nama_alias');
-            $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
-        
+            $hargaCustomer = preg_replace("/[^0-9]/", "", $request->input('harga_customer'));
+
             // Data Part
-            $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
-            $hargaGudang = preg_replace("/[^0-9]/", "",$request->input('harga_gudang'));
-        
+            $hargaRepair = preg_replace("/[^0-9]/", "", $request->input('harga_repair'));
+            $hargaGudang = preg_replace("/[^0-9]/", "", $request->input('harga_gudang'));
+
             foreach ($jenisTransaksi as $index => $jt) {
                 if ($jt == 1) {
                     $dataEstimasiPart = [
@@ -478,7 +470,7 @@ class RepairEstimasiService
                     'jenis_status_id' => 3,
                     'tanggal_waktu' => $tglWaktu,
                 ];
-    
+
                 $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
             }
 
@@ -493,7 +485,7 @@ class RepairEstimasiService
                 'jenis_status_id' => 4,
             ];
 
-            
+
             $this->repairCase->updateCase($id, $dataUpdate);
             $this->repairTimeJurnal->addJurnal($dataJurnal);
 
@@ -501,12 +493,10 @@ class RepairEstimasiService
             $this->repairEstimasi->commitTransaction();
 
             return ['status' => 'success', 'message' => 'Berhasil membuat estimasi baru.'];
-
         } catch (Exception $e) {
             $this->repairEstimasi->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
-
     }
 
     public function ubahEstimasi(Request $request, $id)
@@ -517,17 +507,17 @@ class RepairEstimasiService
             $employeeId = auth()->user()->id;
             $tglWaktu = Carbon::now();
             $pesanHasilTs = $request->input('pesan_hasil_ts');
-    
+
             // Data Estimasi JRR
             $jenisTransaksi = $request->input('jenis_transaksi');
             $jenisPartJasa = $request->input('jenis_part_jasa');
             $namaPartJasa = $request->input('nama_part_jasa');
             $namaAlias = $request->input('nama_alias');
-            $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
-            
+            $hargaCustomer = preg_replace("/[^0-9]/", "", $request->input('harga_customer'));
+
             // Data Part
-            $hargaRepair = preg_replace("/[^0-9]/", "",$request->input('harga_repair'));
-            $hargaGudang = preg_replace("/[^0-9]/", "",$request->input('harga_gudang'));
+            $hargaRepair = preg_replace("/[^0-9]/", "", $request->input('harga_repair_baru'));
+            $hargaGudang = preg_replace("/[^0-9]/", "", $request->input('harga_gudang_baru'));
 
             // Data Lama
             $idEstimasiLama = $request->input('id_hasil_estimasi');
@@ -536,7 +526,7 @@ class RepairEstimasiService
             $jenisPartJasaLama = $request->input('jenis_part_jasa_lama');
             $namaPartJasaLama = $request->input('nama_part_jasa_lama');
             $namaAliasLama = $request->input('nama_alias_lama');
-            $hargaCustomerLama = preg_replace("/[^0-9]/", "",$request->input('harga_customer_lama'));
+            $hargaCustomerLama = preg_replace("/[^0-9]/", "", $request->input('harga_customer_lama'));
 
             if ($jenisTransaksiLama) {
                 // Update data lama
@@ -549,7 +539,6 @@ class RepairEstimasiService
                             'active' => $statusActive[$index],
                         ];
                         $this->repairEstimasi->updateEstimasiPart($dataUpdateEstimasiPart, $idHasilEstimasi);
-            
                     } else {
                         $dataUpdateEstimasiJrr = [
                             'jenis_jasa' => $jenisPartJasaLama[$index],
@@ -567,18 +556,18 @@ class RepairEstimasiService
                     // Insert new data
                     if ($jt == 1) {
                         $createPart = [
-                        'estimasi_id' => $id,
-                        'jenis_transaksi_id' => $jt,
-                        'gudang_produk_id' => $namaPartJasa[$index],
-                        'nama_alias' => $namaAlias[$index] ?? '',
-                        'harga_customer' => $hargaCustomer[$index],
-                        'harga_repair' => $hargaRepair[$index],
-                        'harga_gudang' => $hargaGudang[$index],
-                        'status_proses_id' => 3,
-                        'active' => 'Active',
+                            'estimasi_id' => $id,
+                            'jenis_transaksi_id' => $jt,
+                            'gudang_produk_id' => $namaPartJasa[$index],
+                            'nama_alias' => $namaAlias[$index] ?? '',
+                            'harga_customer' => $hargaCustomer[$index],
+                            'harga_repair' => $hargaRepair[$index],
+                            'harga_gudang' => $hargaGudang[$index],
+                            'tanggal_konfirmasi' => now(),
+                            'status_proses_id' => 3,
+                            'active' => 'Active',
                         ];
                         $this->repairEstimasi->createEstimasiPart($createPart);
-
                     } else {
                         $createJrr = [
                             'estimasi_id' => $id,
@@ -589,13 +578,12 @@ class RepairEstimasiService
                             'active' => 'Active',
                         ];
                         $this->repairEstimasi->createEstimasiJrr($createJrr);
-
                     }
                 }
             }
 
             $checkTimestamp = $this->repairTimeJurnal->findTimestime($id, 3);
-    
+
             if ($checkTimestamp) {
                 $timestamp = $checkTimestamp;
             } else {
@@ -604,7 +592,7 @@ class RepairEstimasiService
                     'jenis_status_id' => 4,
                     'tanggal_waktu' => $tglWaktu,
                 ];
-    
+
                 $timestamp = $this->repairTimeJurnal->createTimestamp($dataTimestamp);
             }
 
@@ -632,12 +620,10 @@ class RepairEstimasiService
             $this->repairEstimasi->commitTransaction();
 
             return ['status' => 'success', 'message' => 'Berhasil merubah hasil estimasi.'];
-
         } catch (Exception $e) {
             $this->repairEstimasi->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
-
     }
 
     public function konfirmasiEstimasi(Request $request, $id)
@@ -649,19 +635,19 @@ class RepairEstimasiService
 
             $tglWaktu = Carbon::now();
             $status = $request->input('konfirmasi_customer');
-            
+
             if ($status == '') {
                 $this->repairEstimasi->rollbackTransaction();
                 return ['status' => 'error', 'message' => 'Data inputan invalid.'];
             }
-            
+
             $isiJurnal = ($status == 'lanjut') ? 'Mulai Proses Pengerjaan' : 'Cancel customer tidak lanjut';
             $jenisStatusId = ($status == 'lanjut') ? 6 : 10;
             $dataUpdateCase = [
                 'jenis_status_id' => $jenisStatusId,
             ];
 
-            if($status == 'lanjut') {
+            if ($status == 'lanjut') {
                 $case = $this->repairCaseService->findCase($id);
                 $case->estimasi->estimasiPart()->update(['tanggal_konfirmasi' => now()]);
             }
@@ -749,33 +735,33 @@ class RepairEstimasiService
             $droneInfo = "Drone Atas Nama: " . $namaNota . "\n";
             $droneType = "Jenis Drone:" . $jenisDrone . " \n";
             $serialNumber = "SN: *" . $SN . "* \n\n";
-    
+
             $analysisMessage = "Berikut hasil analisa dan troubleshooting teknisi kami:\n";
             $analysisDetails = $hasilAnalisaTs . "\n\n";
-    
+
             $estimasiHeader = "*Estimasi Biaya:* \n";
             $totalNilai = $request->input('total_biaya_estimasi');
             $estimasiDetails = "";
-    
+
             foreach ($dataEstimasi as $index => $item) {
                 $estimasiDetails .= "- " . $item . "    " . $hargaCustomer[$index] . "\n";
             }
-    
+
             $totalCostMessage = "\n*TOTAL BIAYA:* Rp. " . $totalNilai . "\n\n";
-    
+
             $documentationMessage = "Untuk foto dokumentasi saat troubleshooting dapat dilihat pada link dibawah:\n";
             $documentationLink = $linkDoc . "\n\n";
-    
+
             $conclusionMessage = "Mohon konfirmasi apakah pengerjaan di lanjut atau di batalkan.\nJika ada kerusakan lain di tengah pengerjaan kami akan menginformasikan ulang.\nMisal informasi yang kami sampaikan kurang jelas bisa langsung ngobrol via telfon ya kak 🙏😊\n\n";
-    
+
             $noteMessage = "*Note:* \n- Jasa sudah termasuk include kalibrasi IMU, Gimbal, Vision, pembersihan total dan pergantian pasta.\n- Garansi 1 Bulan *Syarat dan Ketentukan berlaku.\n- Khusus Mavic 3, mavic air 3 dan case masuk air, akan dikenakan biaya minimal Rp 300.000 tergantung penanganan yang telah diberikan (jika dicancel).\n- Jika tidak segera dilakukan konfirmasi maka biaya dapat berubah tergantung harga sparepart saat konfirmasi pengerjaan.\n\n";
-    
+
             $closingMessage = "Terimakasih, Salam satu langit 🙏😊🚁";
-    
+
             $fullMessage = $greetingMessage . $introMessage . $droneInfo . $droneType . $serialNumber . $analysisMessage . $analysisDetails . $estimasiHeader . $estimasiDetails . $totalCostMessage . $documentationMessage . $documentationLink . $conclusionMessage . $noteMessage . $closingMessage;
-        
+
             $urlAPi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
-            $response = Http::post($urlAPi,[
+            $response = Http::post($urlAPi, [
                 'no_telpon' => $noTelpon,
                 'pesan' => $fullMessage,
             ]);
@@ -789,12 +775,11 @@ class RepairEstimasiService
             } else {
                 return ['status' => 'error', 'message' => $message];
             }
-
         } catch (Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
-    
+
     // Penerimaan Part
     public function indexPenerimaanPart()
     {
@@ -819,7 +804,7 @@ class RepairEstimasiService
     public function konfirmasiReqPart(Request $request)
     {
         $this->repairEstimasi->beginTransaction();
-        
+
         try {
 
             $tanggalKonfirmasi = Carbon::now();
@@ -833,7 +818,7 @@ class RepairEstimasiService
             $findCase = $this->repairCase->findCase($selectCustomer);
             $estimasiId = ($findCase->estimasi) ? $findCase->estimasi->id : '';
             $namaCustomer = $findCase->customer->first_name . ' ' . $findCase->customer->last_name . '-' . $findCase->customer->id . '-' . $findCase->id;
-            
+
             $reqPartId = $request->input('req_part_id');
             $skuPart = $request->input('sku_part');
             $jenisDrone = $request->input('jenis_drone');
@@ -841,7 +826,7 @@ class RepairEstimasiService
             $modalGudang = $request->input('modal_gudang');
             $hargaGudang = $request->input('harga_gudang');
             $hargaRepair = $request->input('harga_repair');
-            $hargaCustomer = preg_replace("/[^0-9]/", "",$request->input('harga_customer'));
+            $hargaCustomer = preg_replace("/[^0-9]/", "", $request->input('harga_customer'));
             $dataReqGudang = [];
             $dataPinjam = [];
 
@@ -885,13 +870,13 @@ class RepairEstimasiService
                     $resultEstimasiPart = $this->repairEstimasi->createEstimasiPart($dataEstimasiPart);
 
                     $dataReqGudang[] = [
-                        'idPart' => $resultEstimasiPart->id, 
-                        'namaCustomer' => $namaCustomer, 
-                        'statusCustomer' => $namaStatus, 
-                        'skuPart' => $skuPart[$index], 
-                        'jenisDrone' => $jenisDrone[$index], 
-                        'namaPart' => $namaPart[$index], 
-                        'namaTeknisi' => $namaTeknisi, 
+                        'idPart' => $resultEstimasiPart->id,
+                        'namaCustomer' => $namaCustomer,
+                        'statusCustomer' => $namaStatus,
+                        'skuPart' => $skuPart[$index],
+                        'jenisDrone' => $jenisDrone[$index],
+                        'namaPart' => $namaPart[$index],
+                        'namaTeknisi' => $namaTeknisi,
                         'tanggalRequest' => $tanggalKonfirmasiString,
                     ];
                 }
@@ -899,8 +884,7 @@ class RepairEstimasiService
 
                 $urlReqPart = 'https://script.google.com/macros/s/AKfycbxGE0TO2PkO3DnyI1f3HtBuKf-3CM-5XJlhXPLtPbiqzILy9iO7Qh_ru7uWcKeoJFa0/exec';
                 $responseEstimasi = Http::post($urlReqPart, $dataReqGudang);
-
-            } elseif($statusKonfirmasi == 'Pinjam') {
+            } elseif ($statusKonfirmasi == 'Pinjam') {
 
                 foreach ($reqPartId as $index => $partId) {
                     $getStatus = $this->repairCase->getNameStatus($statusRequest[$index]);
@@ -920,13 +904,12 @@ class RepairEstimasiService
                         'tanggal_konfirmasi' => $tanggalKonfirmasi,
                         'status' => 'Menunggu Konfirmasi Pinjaman',
                     ];
-    
+
                     $this->repairEstimasi->updateReqPart($dataReqPart, $partId);
                 }
 
                 $urlPinjamPart = 'https://script.google.com/macros/s/AKfycbxDbaNfKcE9LHA502clUkSYdX85mHYQgpSGO6z3gdnud_OJsnw7R6LspXeAIJDtxghpgg/exec';
                 $response = Http::post($urlPinjamPart, $dataPinjam);
-
             } else {
                 $this->repairEstimasi->rollbackTransaction();
                 return ['status' => 'error', 'message' => 'Something Went Wrong.'];
@@ -934,7 +917,6 @@ class RepairEstimasiService
 
             $this->repairEstimasi->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil melakukan konfirmasi request sparepart.'];
-
         } catch (Exception $e) {
             $this->repairEstimasi->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -967,12 +949,12 @@ class RepairEstimasiService
             $promoGudang = $request->input('promo_gudang');
             $dataToGudang = [];
 
-            $resultEstimasi = $this->repairEstimasi->ensureHaveEstimasi($estimasiId) ?? 
-                              $this->repairEstimasi->createEstimasi([
-                                  'employee_id' => $employeeId,
-                                  'case_id' => $id,
-                                  'status' => 'Estimasi',
-                              ]);
+            $resultEstimasi = $this->repairEstimasi->ensureHaveEstimasi($estimasiId) ??
+                $this->repairEstimasi->createEstimasi([
+                    'employee_id' => $employeeId,
+                    'case_id' => $id,
+                    'status' => 'Estimasi',
+                ]);
 
             foreach ($jenisProduk as $index => $drone) {
                 $dataEstimasiPart = [
@@ -993,7 +975,7 @@ class RepairEstimasiService
 
                 $dataToGudang[] = [
                     'caseId' => $id,
-                    'idPart' => $resultEstimasiPart->id, 
+                    'idPart' => $resultEstimasiPart->id,
                     'namaCustomer' => $namaCustomer,
                     'skuPart' => $skuPart[$index],
                     'namaProduk' => $drone,
@@ -1022,12 +1004,10 @@ class RepairEstimasiService
                 $this->repairEstimasi->rollbackTransaction();
                 return ['status' => 'error', 'message' => 'Failed to send request to Gudang API. Error: ' . $e->getMessage()];
             }
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->repairEstimasi->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
-        
     }
 
     public function penerimaanSparepartEstimasi(Request $request)
@@ -1043,7 +1023,6 @@ class RepairEstimasiService
 
             $this->repairEstimasi->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil melakukan penerimaan part'];
-
         } catch (Exception $e) {
             $this->repairEstimasi->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -1078,7 +1057,7 @@ class RepairEstimasiService
     {
         return $this->produk->getAllJenisProduct();
     }
-    
+
     public function getNamaPart($jenisDrone)
     {
         return $this->produk->getSparepartbyJenis($jenisDrone);
@@ -1087,35 +1066,35 @@ class RepairEstimasiService
     public function getDetailPart($id)
     {
         $dataGudangEstimasi = $this->estimasiPart
-                ->where('gudang_produk_id', $id)
-                ->whereNotNull('tanggal_dikirim')
-                ->where('active', 'Active')
-                ->sum('modal_gudang');
+            ->where('gudang_produk_id', $id)
+            ->whereNotNull('tanggal_dikirim')
+            ->where('active', 'Active')
+            ->sum('modal_gudang');
 
-            $dataGudangTransaksi = $this->transaksiPart
-                ->where('gudang_produk_id', $id)
-                ->sum('modal_gudang');
+        $dataGudangTransaksi = $this->transaksiPart
+            ->where('gudang_produk_id', $id)
+            ->sum('modal_gudang');
 
-            $dataGudang = $this->gudangProduk
-                ->where('produk_sparepart_id', $id)
-                ->first();
+        $dataGudang = $this->gudangProduk
+            ->where('produk_sparepart_id', $id)
+            ->first();
 
-            if (!$dataGudang) {
-                throw new \Exception("Data gudang tidak ditemukan");
-            }
+        if (!$dataGudang) {
+            throw new \Exception("Data gudang tidak ditemukan");
+        }
 
-            $dataSubGudang = $dataGudang->produkSparepart->gudangIdItem()->where('status_inventory', 'Ready')->get() ?? 0;
-            $totalSN = $dataSubGudang->count();
-            $modalAwal = $dataGudang->modal_awal ?? 0;
-            $modalGudang = ($totalSN > 0) ? ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN : 0;
-            $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
-            $nilai = [
-                'modalGudangg' => $modalGudang,
-                'hargaGlobal' => $hargaJualGudang,
-                'hargaRepair' => $dataGudang->harga_internal,
-                'promoGudang' => $dataGudang->harga_promo
-            ];
-            
+        $dataSubGudang = $dataGudang->produkSparepart->gudangIdItem()->where('status_inventory', 'Ready')->get() ?? 0;
+        $totalSN = $dataSubGudang->count();
+        $modalAwal = $dataGudang->modal_awal ?? 0;
+        $modalGudang = ($totalSN > 0) ? ($modalAwal - ($dataGudangEstimasi + $dataGudangTransaksi)) / $totalSN : 0;
+        $hargaJualGudang = ($dataGudang->status == 'Promo') ? $dataGudang->harga_promo : $dataGudang->harga_global;
+        $nilai = [
+            'modalGudangg' => $modalGudang,
+            'hargaGlobal' => $hargaJualGudang,
+            'hargaRepair' => $dataGudang->harga_internal,
+            'promoGudang' => $dataGudang->harga_promo
+        ];
+
         $gudangProduk = $this->produkGudang->findBySparepart($id);
         $stock = $gudangProduk->gudangIdItem->where('status_inventory', 'Ready')->count();
         return response()->json(['stock' => $stock, 'detail' => $gudangProduk]);
@@ -1125,5 +1104,4 @@ class RepairEstimasiService
     {
         return $this->repairCase->getListReqPart($id);
     }
-    
 }

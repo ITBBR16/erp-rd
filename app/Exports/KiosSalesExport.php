@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\kios\KiosTransaksiDetail;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -62,9 +63,11 @@ class KiosSalesExport implements FromCollection, WithHeadings
         $detailTransaksi = KiosTransaksiDetail::with([
             'transaksi',
             'produkKios.subjenis',
-            'kiosSerialnumbers.validasiproduk.orderLists'
+            'kiosSerialnumbers.validasiproduk.orderLists',
+            'produkKiosBekas',
+            'produkKiosBnob',
         ])
-            ->where('jenis_transaksi', 'drone_baru')
+            // ->where('jenis_transaksi', 'drone_baru')
             ->whereYear('created_at', 2025)
             ->whereMonth('created_at', 7)
             // ->where(function ($query) {
@@ -72,13 +75,28 @@ class KiosSalesExport implements FromCollection, WithHeadings
             // })
             ->get()
             ->map(function ($item) {
+                $modal = 0;
+
+                switch ($item->jenis_transaksi) {
+                    case 'drone_baru':
+                        $modal = $item->kiosSerialnumbers->validasiproduk->orderLists->nilai ?? 0;
+                        break;
+                    case 'drone_bnob':
+                        $modal = $item->produkKiosBnob->modal_bnob ?? 0;
+                        break;
+                    case 'drone_bekas':
+                        $modal = $item->produkKiosBekas->modal_bekas ?? 0;
+                        break;
+                }
+
                 return [
                     'Tanggal Laku' => $item->created_at,
                     'Id Transaksi' => 'K' . $item->transaksi->id,
-                    'Jenis Drone' => 'Drone Baru',
+                    'Jenis Transaksi' => Str::title(str_replace('_', ' ', $item->jenis_transaksi)),
                     'Nama Paket Penjualan' => $item->produkKios->subjenis->paket_penjualan ?? 'Not Found',
-                    'Modal' => $item->kiosSerialnumbers->validasiproduk->orderLists->nilai ?? 0,
+                    'Modal' => $modal,
                     'SRP' => $item->harga_jual ?? 0,
+                    'Diskon' => $item->transaksi->discount ?? 0,
                 ];
             });
 
@@ -90,10 +108,11 @@ class KiosSalesExport implements FromCollection, WithHeadings
         return [
             'Tanggal Laku',
             'Id Transaksi',
-            'Jenis Drone',
+            'Jenis Transaksi',
             'Nama Paket Penjualan',
             'Modal',
             'SRP',
+            'Diskon',
         ];
     }
 

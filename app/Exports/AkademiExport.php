@@ -12,8 +12,8 @@ class AkademiExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        $startDate = Carbon::createFromDate(2025, 7, 1)->startOfDay();
-        $endDate = Carbon::createFromDate(2025, 7, 15)->endOfDay();
+        $startDate = Carbon::createFromDate(2025, 7, 16)->startOfDay();
+        $endDate = Carbon::createFromDate(2025, 7, 31)->endOfDay();
 
         $dataRepair = RepairCase::with(['customer'])
             ->whereBetween('updated_at', [$startDate, $endDate])
@@ -22,7 +22,7 @@ class AkademiExport implements FromCollection, WithHeadings
                 return [
                     'Tanggal' => $item->updated_at->format('Y-m-d'),
                     'Divisi' => 'Repair',
-                    'Nama Customer' => optional($item->customer)->first_name . optional($item->customer)->last_name,
+                    'Nama Customer' => optional($item->customer)->first_name . " " . optional($item->customer)->last_name,
                     'No Telepon' => optional($item->customer)->no_telpon,
                 ];
             });
