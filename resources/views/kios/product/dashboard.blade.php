@@ -140,7 +140,7 @@
 
             <div class="relative border border-gray-200 rounded-lg">
                 <div class="overflow-y-auto max-h-[420px]">
-                    <table class="w-full text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+                    <table class="w-full text-xs text-left text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                         <thead class="sticky top-0 bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <th scope="col" class="px-6 py-3">Jenis Transaksi</th>

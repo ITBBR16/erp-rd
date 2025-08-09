@@ -22,7 +22,16 @@
 
     <div class="grid grid-cols-2 gap-4 mt-4">
         <div class="p-4 rounded-lg bg-white border border-gray-100 shadow-md dark:bg-gray-700 dark:border-gray-600">
-            <h3 class="text-lg font-semibold mb-4 text-black dark:text-white">Detail Customer</h3>
+            <div class="flex items-center gap-x-4">
+                <h3 class="text-lg font-semibold text-black dark:text-white">
+                    Detail Customer
+                </h3>
+                <a href="{{ $case->link_doc }}" target="_blank"
+                class="flex items-center hover:bg-gray-100 dark:hover:bg-gray-600 
+                        text-gray-400 hover:text-gray-800 dark:hover:text-gray-300">
+                    <i class="material-symbols-outlined text-xl">drive_file_move</i>
+                </a>
+            </div>
             <div class="grid grid-cols-2 gap-4 mb-2">
                 <div>
                     <h3 class="text-sm font-semibold mb-1">Nama Customer</h3>
@@ -41,8 +50,8 @@
                     <p class="text-gray-500 text-base">{{ $case->jenisCase->jenis_case }}</p>
                 </div>
                 <div class="mb-2">
-                    <h3 class="text-sm font-semibold mb-3">Link Drive</h3>
-                    <a href="{{ $case->link_doc }}" target="_blank" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Folder Drive</a>
+                    <h3 class="text-sm font-semibold mb-1">Tanggal Masuk</h3>
+                    <p class="text-gray-500 text-base">{{ \Carbon\Carbon::parse($case->created_at)->isoFormat('D MMMM YYYY') }}</p>
                 </div>
                 <div class="mb-2">
                     <h3 class="text-sm font-semibold mb-1">No Whatsapp</h3>
