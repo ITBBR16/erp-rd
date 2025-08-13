@@ -1,19 +1,19 @@
-$(document).ready(function(){
-    const hargaModal = $('#modal_produk_second');
-    const hargaJual = $('#harga_jual_produk_second');
-    const tambahKelengkapanSecond = $('#add-kelengkapan-second');
-    const kelengkapanSecondContainer = $('#kelengkapan-jual-second');
+$(document).ready(function () {
+    const hargaModal = $("#modal_produk_second");
+    const hargaJual = $("#harga_jual_produk_second");
+    const tambahKelengkapanSecond = $("#add-kelengkapan-second");
+    const kelengkapanSecondContainer = $("#kelengkapan-jual-second");
     let nomorKelengkapan = 1;
 
-    hargaJual.on('input', function () {
+    hargaJual.on("input", function () {
         var inputValue = $(this).val();
-        inputValue = inputValue.replace(/[^\d]/g, '');
+        inputValue = inputValue.replace(/[^\d]/g, "");
         var parsedValue = parseInt(inputValue, 10);
         $(this).val(formatRupiah(parsedValue));
     });
 
-    tambahKelengkapanSecond.on('click', function () {
-        nomorKelengkapan++
+    tambahKelengkapanSecond.on("click", function () {
+        nomorKelengkapan++;
         let tambahFormKelengkapan = `
         <div id="form-kelengkapan-second-${nomorKelengkapan}" class="grid grid-cols-7 gap-4 md:gap-6 mt-5">
             <div class="relative z-0 col-span-2 w-full mb-6 group">
@@ -39,129 +39,140 @@ $(document).ready(function(){
                 </button>
             </div>
         </div>
-        `
+        `;
         kelengkapanSecondContainer.append(tambahFormKelengkapan);
-    
+
         fetch(`/kios/product/getKelengkapanSecond`)
-        .then(response => response.json())
-        .then(data => {
+            .then((response) => response.json())
+            .then((data) => {
+                $("#kelengkapan-second-" + nomorKelengkapan).html("");
 
-            $('#kelengkapan-second-' + nomorKelengkapan).html('');
+                const defaultOption = $("<option>", {
+                    text: "Kelengkapan Produk",
+                    hidden: true,
+                });
+                $("#kelengkapan-second-" + nomorKelengkapan).append(
+                    defaultOption
+                );
 
-            const defaultOption = $('<option>', {
-                text: 'Kelengkapan Produk',
-                hidden: true
+                const kelengkapanUnique = new Set();
+
+                data.forEach((entry) => {
+                    if (
+                        entry.produk_kelengkapan_id &&
+                        !kelengkapanUnique.has(entry.produk_kelengkapan_id)
+                    ) {
+                        kelengkapanUnique.add(entry.produk_kelengkapan_id);
+
+                        const option = $("<option>", {
+                            value: entry.produk_kelengkapan_id,
+                            text: entry.kelengkapans.kelengkapan,
+                        });
+
+                        $("#kelengkapan-second-" + nomorKelengkapan).append(
+                            option
+                        );
+                    }
+                });
+            })
+            .catch((error) => {
+                alert("Error fetching data: " + error);
             });
-            $('#kelengkapan-second-' + nomorKelengkapan).append(defaultOption);
-
-            const kelengkapanUnique = new Set();
-
-            data.forEach(entry => {
-                if (entry.produk_kelengkapan_id && !kelengkapanUnique.has(entry.produk_kelengkapan_id)) {
-                    kelengkapanUnique.add(entry.produk_kelengkapan_id);
-
-                    const option = $('<option>', {
-                        value: entry.produk_kelengkapan_id,
-                        text: entry.kelengkapans.kelengkapan
-                    });
-
-                    $('#kelengkapan-second-' + nomorKelengkapan).append(option);
-                }
-            });
-        })
-        .catch(error => {
-            alert('Error fetching data: ' + error);
-        });
     });
 
-    $(document).on("click", ".remove-kelengkapan-second", function() {
+    $(document).on("click", ".remove-kelengkapan-second", function () {
         let formId = $(this).data("id");
-        $("#form-kelengkapan-second-"+formId).remove();
+        $("#form-kelengkapan-second-" + formId).remove();
         hitungModal();
         checkHarga();
     });
 
-    $(document).on("change", ".kelengkapan-second", function() {
+    $(document).on("change", ".kelengkapan-second", function () {
         let ksId = $(this).data("id");
-        const valKelengkapan = $("#kelengkapan-second-"+ksId).val();
-        
+        const valKelengkapan = $("#kelengkapan-second-" + ksId).val();
+
         fetch(`/kios/product/getSNSecond/${valKelengkapan}`)
-        .then(response => response.json())
-        .then(data => {
-            $('#sn-second-' + ksId).html('');
+            .then((response) => response.json())
+            .then((data) => {
+                $("#sn-second-" + ksId).html("");
 
-            data.forEach(entry => {
-                const defaultOption = $('<option>', {
-                    text: 'SN Produk',
-                    hidden: true
-                });
-                $('#sn-second-' + ksId).append(defaultOption);
+                data.forEach((entry) => {
+                    const defaultOption = $("<option>", {
+                        text: "SN Produk",
+                        hidden: true,
+                    });
+                    $("#sn-second-" + ksId).append(defaultOption);
 
-                const option = $('<option>', {
-                    value: entry.pivot_qc_id,
-                    text: entry.serial_number
+                    const option = $("<option>", {
+                        value: entry.pivot_qc_id,
+                        text: entry.serial_number,
+                    });
+                    $("#sn-second-" + ksId).append(option);
                 });
-                $('#sn-second-' + ksId).append(option);
+            })
+            .catch((error) => {
+                alert("Error fetching data:" + error);
             });
-        })
-        .catch(error => {
-            alert('Error fetching data:' + error);
-        });
-
     });
 
-    $(document).on("change", ".sn-second", function() {
+    $(document).on("change", ".sn-second", function () {
         let snID = $(this).data("id");
-        const valSn = $("#sn-second-"+snID).val();
-        const priceSatuan = $('#harga_satuan_second-' + snID);
-        
+        const valSn = $("#sn-second-" + snID).val();
+        const priceSatuan = $("#harga_satuan_second-" + snID);
+
         fetch(`/kios/product/getPriceSecond/${valSn}`)
-        .then(response => response.json())
-        .then(data => {
-            priceSatuan.html('');
+            .then((response) => response.json())
+            .then((data) => {
+                priceSatuan.html("");
 
-            priceSatuan.val(formatRupiah(data));
+                priceSatuan.val(formatRupiah(data));
 
-            hitungModal();
-            checkHarga();
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-
+                hitungModal();
+                checkHarga();
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
     });
 
-    $(document).on('change', '#harga_jual_produk_second', function () {
-            checkHarga();
-    })
+    $(document).on("change", "#harga_jual_produk_second", function () {
+        checkHarga();
+    });
 
     function checkHarga() {
-        let hargaJualSecond = $('#harga_jual_produk_second').val();
-        let hargaModalSecond = $('#modal_produk_second').val();
-        let parsedSrp = parseFloat(hargaJualSecond.replace(/\D/g, ''));
-        let parsedModal = parseFloat(hargaModalSecond.replace(/\D/g, ''));
+        let hargaJualSecond = $("#harga_jual_produk_second").val();
+        let hargaModalSecond = $("#modal_produk_second").val();
+        let parsedSrp = parseFloat(hargaJualSecond.replace(/\D/g, ""));
+        let parsedModal = parseFloat(hargaModalSecond.replace(/\D/g, ""));
 
         if (parsedModal < parsedSrp) {
-            $('#btn-create-paket-second').removeClass('cursor-not-allowed').removeAttr('disabled', true);
+            $("#btn-create-paket-second")
+                .removeClass("cursor-not-allowed")
+                .removeAttr("disabled", true);
         } else {
-            $('#btn-create-paket-second').addClass('cursor-not-allowed').prop('disabled', true);
+            $("#btn-create-paket-second")
+                .addClass("cursor-not-allowed")
+                .prop("disabled", true);
         }
     }
 
-   function formatRupiah(angka) {
+    function formatRupiah(angka) {
         return accounting.formatMoney(angka, "", 0, ".", ",");
     }
 
     function hitungModal() {
-        var nilaiSatuanInputs = document.getElementsByName('harga_satuan_second[]');
+        var nilaiSatuanInputs = document.getElementsByName(
+            "harga_satuan_second[]"
+        );
         var totalHargaSatuan = 0;
 
         for (var i = 0; i < nilaiSatuanInputs.length; i++) {
-            var nilaiSatuan = parseFloat(nilaiSatuanInputs[i].value.replace(/\./g, ''));
+            var nilaiSatuan = parseFloat(
+                nilaiSatuanInputs[i].value.replace(/\./g, "")
+            );
             totalHargaSatuan += nilaiSatuan;
         }
 
         hargaModal.val(formatRupiah(totalHargaSatuan));
     }
-
- });
+});

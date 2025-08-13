@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\divisi\Divisi;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\customer\Customer;
+use App\Models\ekspedisi\Ekspedisi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -28,7 +29,7 @@ class LogistikServices
         private RepairCustomerRepository $customerRepo,
         private EkspedisiRepository $ekspedisiRepo,
         private Divisi $divisi,
-    ){}
+    ) {}
 
     // List Request Packing
     public function indexLRP()
@@ -58,26 +59,26 @@ class LogistikServices
 
                 $namaCustomer = ($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '') . ' - ' . ($customer->id ?? '');
                 $noTelponCustomer = $customer->no_telpon ?? '';
-                
-                $alamatCustomer = ($customer->nama_jalan ?? '') 
-                                    . ',' . ($customer->provinsi->name ?? '')
-                                    . ',' . ($customer->kota->name ?? '')
-                                    . ',' . ($customer->kecamatan->name ?? '')
-                                    . ',' . ($customer->kelurahan->name ?? '')
-                                    . ',' . ($customer->kode_pos ?? '');
-        
+
+                $alamatCustomer = ($customer->nama_jalan ?? '')
+                    . ',' . ($customer->provinsi->name ?? '')
+                    . ',' . ($customer->kota->name ?? '')
+                    . ',' . ($customer->kecamatan->name ?? '')
+                    . ',' . ($customer->kelurahan->name ?? '')
+                    . ',' . ($customer->kode_pos ?? '');
+
                 $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
             } else {
                 $namaCustomer = $dataReq->logCase->logPenerima->nama;
                 $noTelponCustomer = $dataReq->logCase->logPenerima->no_telpon;
 
-                $alamatCustomer = ($dataReq->logCase->logPenerima->nama_jalan ?? '') 
-                                    . ',' . ($dataReq->logCase->logPenerima->provinsi->name ?? '')
-                                    . ',' . ($dataReq->logCase->logPenerima->kota->name ?? '')
-                                    . ',' . ($dataReq->logCase->logPenerima->kecamatan->name ?? '')
-                                    . ',' . ($dataReq->logCase->logPenerima->kelurahan->name ?? '')
-                                    . ',' . ($dataReq->logCase->logPenerima->kode_pos ?? '');
-                
+                $alamatCustomer = ($dataReq->logCase->logPenerima->nama_jalan ?? '')
+                    . ',' . ($dataReq->logCase->logPenerima->provinsi->name ?? '')
+                    . ',' . ($dataReq->logCase->logPenerima->kota->name ?? '')
+                    . ',' . ($dataReq->logCase->logPenerima->kecamatan->name ?? '')
+                    . ',' . ($dataReq->logCase->logPenerima->kelurahan->name ?? '')
+                    . ',' . ($dataReq->logCase->logPenerima->kode_pos ?? '');
+
                 $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
             }
         } else {
@@ -87,27 +88,27 @@ class LogistikServices
                 $namaCustomer = $customer->nama;
                 $noTelponCustomer = $customer->no_telpon;
 
-                $alamatCustomer = ($customer->nama_jalan ?? '') 
-                                    . ',' . ($customer->provinsi->name ?? '')
-                                    . ',' . ($customer->kota->name ?? '')
-                                    . ',' . ($customer->kecamatan->name ?? '')
-                                    . ',' . ($customer->kelurahan->name ?? '')
-                                    . ',' . ($customer->kode_pos ?? '');
-                
+                $alamatCustomer = ($customer->nama_jalan ?? '')
+                    . ',' . ($customer->provinsi->name ?? '')
+                    . ',' . ($customer->kota->name ?? '')
+                    . ',' . ($customer->kecamatan->name ?? '')
+                    . ',' . ($customer->kelurahan->name ?? '')
+                    . ',' . ($customer->kode_pos ?? '');
+
                 $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
             } else {
                 $customer = $dataReq->customer;
-        
+
                 $namaCustomer = ($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '') . ' - ' . ($customer->id ?? '');
                 $noTelponCustomer = $customer->no_telpon ?? '';
-                
-                $alamatCustomer = ($customer->nama_jalan ?? '') 
-                                    . ',' . ($customer->provinsi->name ?? '')
-                                    . ',' . ($customer->kota->name ?? '')
-                                    . ',' . ($customer->kecamatan->name ?? '')
-                                    . ',' . ($customer->kelurahan->name ?? '')
-                                    . ',' . ($customer->kode_pos ?? '');
-        
+
+                $alamatCustomer = ($customer->nama_jalan ?? '')
+                    . ',' . ($customer->provinsi->name ?? '')
+                    . ',' . ($customer->kota->name ?? '')
+                    . ',' . ($customer->kecamatan->name ?? '')
+                    . ',' . ($customer->kelurahan->name ?? '')
+                    . ',' . ($customer->kode_pos ?? '');
+
                 $alamatCustomer = trim(preg_replace('/,+/', ',', $alamatCustomer), ',');
             }
         }
@@ -119,11 +120,10 @@ class LogistikServices
 
         if ($dataEkspedisi == 'Lion Parcel') {
             $textEkspedisi = $dataEkspedisi . ', ' . $dataReq->layananEkspedisi->nama_layanan
-                            . ($dataReq->biaya_customer_packing > 0 ? ', Pack Kayu' : '')
-                            . (($dataReq->nominal_asuransi == 0) ? '' : ($dataReq->nominal_produk < 10000000 
-                                ? ', RD' . substr($dataReq->nominal_produk, 0, 1) 
-                                : ', RD' . substr($dataReq->nominal_produk, 0, 2)));
-
+                . ($dataReq->biaya_customer_packing > 0 ? ', Pack Kayu' : '')
+                . (($dataReq->nominal_asuransi == 0) ? '' : ($dataReq->nominal_produk < 10000000
+                    ? ', RD' . substr($dataReq->nominal_produk, 0, 1)
+                    : ', RD' . substr($dataReq->nominal_produk, 0, 2)));
         } else {
             $textEkspedisi = $dataEkspedisi . ', ' . $dataReq->layananEkspedisi->nama_layanan;
         }
@@ -135,9 +135,9 @@ class LogistikServices
             'noTelponCustomer' => $noTelponCustomer,
             'alamat' => $alamatCustomer
         ];
-        
+
         $pdf = Pdf::loadView('logistik.lrp.label.preview-label-packing', $dataView)
-                    ->setPaper('a5', 'landscape');
+            ->setPaper('a5', 'landscape');
 
         return $pdf;
     }
@@ -200,9 +200,9 @@ class LogistikServices
             $employeeId = $user->id;
             $tanggalRequest = Carbon::now();
             $checkboxCustomer = $request->input('checkbox_customer');
-            $nominalOngkir = preg_replace("/[^0-9]/", "",$request->input('nominal_ongkir')) ?: 0;
-            $nominalPacking = preg_replace("/[^0-9]/", "",$request->input('nominal_packing')) ?: 0;
-            $nominalAsuransi = preg_replace("/[^0-9]/", "",$request->input('nominal_asuransi')) ?: 0;
+            $nominalOngkir = preg_replace("/[^0-9]/", "", $request->input('nominal_ongkir')) ?: 0;
+            $nominalPacking = preg_replace("/[^0-9]/", "", $request->input('nominal_packing')) ?: 0;
+            $nominalAsuransi = preg_replace("/[^0-9]/", "", $request->input('nominal_asuransi')) ?: 0;
 
             if ($checkboxCustomer) {
                 $dataCustomerNonRD = [
@@ -280,7 +280,6 @@ class LogistikServices
             $this->reqPacking->createLogRequest($dataRequestLogistik);
             $this->logTransaction->commitTransaction();
             return ['status' => 'success', 'message' => 'Berhasil menyimpan request packing.'];
-
         } catch (Exception $e) {
             Log::error('Error storing request packing: ' . $e->getMessage());
             $this->logTransaction->rollbackTransaction();
@@ -329,38 +328,56 @@ class LogistikServices
 
                 $this->logTransaction->commitTransaction();
                 return ['status' => 'success', 'message' => 'Berhasil update data menunggu resi.'];
-
             } elseif ($jenisForm == 'form-input-resi') {
+                $ekspedisi = Ekspedisi::findOrFail($request->input('option_ekspedisi'));
+                $namaEkspedisi = $ekspedisi->ekspedisi;
                 $checkboxResi = $request->input('checkbox_select_resi', []);
-                
+
                 foreach ($checkboxResi as $resi) {
+                    $namaCustomer = $request->input("nama_customer.$resi");
+                    $noTelpon = $request->input("no_telpon.$resi");
                     $noResi = $request->input("no_resi.$resi") ?: '';
-                
+
                     if ($noResi == '') {
                         $this->logTransaction->rollbackTransaction();
                         return ['status' => 'error', 'message' => 'Pada pilihan data terdapat resi yang kosong.'];
                     }
-                
+
                     $nominalOngkir = preg_replace("/[^0-9]/", "", $request->input("nominal_ongkir.$resi") ?: 0);
                     $nominalPacking = preg_replace("/[^0-9]/", "", $request->input("nominal_packing.$resi") ?: 0);
-                
+
                     $dataResi = [
                         'no_resi' => $noResi,
                         'biaya_ekspedisi_ongkir' => $nominalOngkir,
                         'biaya_ekspedisi_packing' => $nominalPacking,
                         'status_request' => 'Menunggu Request Pembayaran'
                     ];
-                    
+
                     $this->reqPacking->updateRequestPacking($resi, $dataResi);
+
+                    $message = "Hallo kak $namaCustomer\nUnit kakak telah dikirim menggunakan ekspedisi *$namaEkspedisi* dengan nomor resi *$noResi*.\n\nTerimakasih";
+                    $urlAPi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
+                    $response = Http::post($urlAPi, [
+                        'no_telpon' => $noTelpon,
+                        'pesan' => $message,
+                    ]);
+
+                    $decodePayloads = json_decode($response->body(), true);
+                    $status = $decodePayloads['status'];
+                    $message = $decodePayloads['message'];
+
+                    if ($status == 'success') {
+                        $this->logTransaction->commitTransaction();
+                    } else {
+                        return ['status' => 'error', 'message' => $message];
+                    }
                 }
 
-                $this->logTransaction->commitTransaction();
                 return ['status' => 'success', 'message' => 'Berhasil update data menunggu request pembayaran.'];
             } else {
                 $this->logTransaction->rollbackTransaction();
                 return ['status' => 'error', 'message' => 'Jenis form tidak teridentifikasi.'];
             }
-
         } catch (Exception $e) {
             $this->logTransaction->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -466,7 +483,7 @@ class LogistikServices
                 if ($statusUpdated) {
                     $this->reqPacking->updateRequestPacking($payment, ['status_request' => 'Done Payment']);
                 }
-            }            
+            }
 
             $files = [];
 
@@ -513,7 +530,6 @@ class LogistikServices
                 $this->logTransaction->rollbackTransaction();
                 return ['status' => 'error', 'message' => 'Terjadi kesalahan ketika menghubungkan dengan finance. Error: '];
             }
-
         } catch (Exception $e) {
             $this->logTransaction->rollbackTransaction();
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -542,5 +558,4 @@ class LogistikServices
     {
         return $this->ekspedisiRepo->getDataLayanan($id);
     }
-
 }
