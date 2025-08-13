@@ -366,11 +366,12 @@ class LogistikServices
                     $status = $decodePayloads['status'];
                     $message = $decodePayloads['message'];
 
-                    if ($status == 'success') {
-                        $this->logTransaction->commitTransaction();
-                    } else {
-                        return ['status' => 'error', 'message' => $message];
+                    if ($status != 'success') {
+                        $this->logTransaction->rollbackTransaction();
+                        return redirect()->back()->with('error', "Gagal kirim pesan ke $namaCustomer: $message");
                     }
+
+                    $this->logTransaction->commitTransaction();
                 }
 
                 return ['status' => 'success', 'message' => 'Berhasil update data menunggu request pembayaran.'];
