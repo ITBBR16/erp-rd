@@ -21,7 +21,7 @@ class KiosShopController extends Controller
 {
     public function __construct(
         private UmumRepository $umum
-    ){}
+    ) {}
 
     public function index()
     {
@@ -77,7 +77,7 @@ class KiosShopController extends Controller
         $connectionKios->beginTransaction();
         $connectionProduct->beginTransaction();
 
-        try{
+        try {
             $request->validate([
                 'supplier_kios' => 'required',
                 'paket_penjualan' => 'required|array',
@@ -111,7 +111,7 @@ class KiosShopController extends Controller
             $paket_penjualan = $request->input('paket_penjualan');
             $message = "List Purchase " . $supplierName . " :\n\n";
 
-            foreach($paket_penjualan as $key => $item) {
+            foreach ($paket_penjualan as $key => $item) {
                 $orderList = new KiosOrderList();
                 $orderList->order_id = $order->id;
                 $orderList->sub_jenis_id = $item;
@@ -126,13 +126,13 @@ class KiosShopController extends Controller
                 $history->save();
 
                 $productPacket = ProdukSubJenis::findOrFail($item);
-                $productName = $productPacket->paket_penjualan . " * " . $quantities[$key] ."\n";
+                $productName = $productPacket->paket_penjualan . " * " . $quantities[$key] . "\n";
                 $message .= $productName;
             }
 
             $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
             $messageGroupSupplier = [
-                'no_telp' => '6285143003374',
+                'no_telpon' => '6285143003374',
                 'pesan' => $message,
             ];
 
@@ -141,13 +141,11 @@ class KiosShopController extends Controller
             $connectionKios->commit();
             $connectionProduct->commit();
             return back()->with('success', 'Success Add New Order List.');
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $connectionKios->rollBack();
             $connectionProduct->rollBack();
             return back()->with('error', $e->getMessage());
         }
-
     }
 
     public function update(Request $request, $id)
@@ -155,14 +153,14 @@ class KiosShopController extends Controller
         $connectionKios = DB::connection('rumahdrone_kios');
         $connectionKios->beginTransaction();
 
-        try{
+        try {
             $request->validate([
                 'supplier_kios' => 'required',
                 'jenis_paket' => 'required|array',
                 'quantity' => 'required|array',
                 'nilai' => 'required|array',
             ]);
-            
+
             $suppId = $request->input('supplier_id');
             $supplier = SupplierKios::findOrFail($suppId);
             $supplierName = $supplier->nama_perusahaan;
@@ -170,7 +168,7 @@ class KiosShopController extends Controller
             $paymentSupplier = $searchPayment ? $searchPayment->id : null;
             $nilaiBeli = preg_replace("/[^0-9]/", "", $request->input('nilai'));
             $totalNilai = 0;
-            
+
             $order = KiosOrder::findOrFail($id);
             $order->status = 'Tervalidasi';
             $order->save();
@@ -178,20 +176,20 @@ class KiosShopController extends Controller
 
             $quantities = $request->input('quantity');
             $paketPenjualan = $request->input('jenis_paket');
-            
-            foreach($paketPenjualan as $index => $jenisPaket) {
+
+            foreach ($paketPenjualan as $index => $jenisPaket) {
                 $orderList = $order->orderLists()
-                            ->where('order_id', $id)
-                            ->where('sub_jenis_id', $jenisPaket)
-                            ->first();
+                    ->where('order_id', $id)
+                    ->where('sub_jenis_id', $jenisPaket)
+                    ->first();
 
                 $historiOrder = $order->histories()
-                            ->where('order_id', $id)
-                            ->where('sub_jenis_id', $jenisPaket)
-                            ->first();
+                    ->where('order_id', $id)
+                    ->where('sub_jenis_id', $jenisPaket)
+                    ->first();
 
                 $productPacket = ProdukSubJenis::findOrFail($jenisPaket);
-                $productName = $productPacket->paket_penjualan . " * " . $quantities[$index] ."\n";
+                $productName = $productPacket->paket_penjualan . " * " . $quantities[$index] . "\n";
                 $message .= $productName;
 
                 $existingSubJenisIds = $order->orderLists()->pluck('sub_jenis_id')->toArray();
@@ -204,7 +202,7 @@ class KiosShopController extends Controller
                     $order->histories()->whereIn('sub_jenis_id', $idsToDelete)->delete();
                 }
 
-                if($orderList) {
+                if ($orderList) {
                     $orderList->sub_jenis_id = $jenisPaket;
                     $orderList->quantity = $quantities[$index];
                     $orderList->nilai = $nilaiBeli[$index];
@@ -220,7 +218,6 @@ class KiosShopController extends Controller
                     $totalNilai += $total;
 
                     $supplier->subjenis()->attach($jenisPaket, ['nilai' => $nilaiBeli[$index]]);
-
                 } else {
                     $newOrderList = new KiosOrderList([
                         'sub_jenis_id' => $jenisPaket,
@@ -240,7 +237,6 @@ class KiosShopController extends Controller
                     $order->orderLists()->save($newOrderList);
                     $order->histories()->save($newHistory);
                 }
-
             }
 
             $payment = new KiosPayment([
@@ -255,7 +251,7 @@ class KiosShopController extends Controller
             $message .= "\nTotal Nominal : Rp. " . number_format($totalNilai, 0, ',', '.');
             $urlMessage = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
             $messageGroupSupplier = [
-                'no_telp' => '6285156519066',
+                'no_telpon' => '6285156519066',
                 'pesan' => $message,
             ];
 
@@ -265,8 +261,7 @@ class KiosShopController extends Controller
             $connectionKios->commit();
 
             return redirect()->route('shop.index')->with('success', 'Success Validasi Order.');
-            
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $connectionKios->rollBack();
             return back()->with('error', $e->getMessage());
         }
@@ -274,7 +269,7 @@ class KiosShopController extends Controller
 
     public function destroy($id)
     {
-        try{
+        try {
             $order = KiosOrder::findOrFail($id);
             KiosOrderList::where('order_id', $id)->delete();
 
@@ -285,5 +280,4 @@ class KiosShopController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
-
 }

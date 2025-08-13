@@ -85,8 +85,10 @@ $(document).ready(function () {
                     } else if (jenisForm == "form-input-resi") {
                         let namaCustomer = "";
                         let noTelpon = "";
+                        let namaDivisi = "";
 
                         if (item.tipe_penerima === "Other") {
+                            namaDivisi = item.log_case.divisi.nama;
                             if (item.log_case.jenis_penerima === "RD") {
                                 namaCustomer =
                                     item.log_case.customer.first_name +
@@ -100,6 +102,7 @@ $(document).ready(function () {
                                 noTelpon = item.log_case.log_penerima.no_telpon;
                             }
                         } else if (item.tipe_penerima === "Customer") {
+                            namaDivisi = item.divisi.nama;
                             namaCustomer =
                                 item.customer.first_name +
                                 " " +
@@ -125,6 +128,11 @@ $(document).ready(function () {
                             </td>
                             <td class="px-6 py-2">
                                 ${namaCustomer}
+                                <input type="text" name="nama_divisi[${
+                                    item.id
+                                }]" id="nama-divisi-${
+                            item.id
+                        }" value="${namaDivisi}">
                                 <input type="hidden" name="nama_customer[${
                                     item.id
                                 }]" id="nama-customer-${

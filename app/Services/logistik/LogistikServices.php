@@ -336,6 +336,7 @@ class LogistikServices
                 foreach ($checkboxResi as $resi) {
                     $namaCustomer = $request->input("nama_customer.$resi");
                     $noTelpon = $request->input("no_telpon.$resi");
+                    $namaDivisi = $request->input("nama_divisi.$resi");
                     $noResi = $request->input("no_resi.$resi") ?: '';
 
                     if ($noResi == '') {
@@ -356,7 +357,13 @@ class LogistikServices
                     $this->reqPacking->updateRequestPacking($resi, $dataResi);
 
                     $message = "Hallo kak $namaCustomer\nUnit kakak telah dikirim menggunakan ekspedisi *$namaEkspedisi* dengan nomor resi *$noResi*.\n\nTerimakasih";
-                    $urlAPi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
+
+                    if ($namaDivisi == 'Kios') {
+                        $urlAPi = 'https://script.google.com/macros/s/AKfycbxX0SumzrsaMm-1tHW_LKVqPZdIUG8sdp07QBgqmDsDQDIRh2RHZj5gKZMhAb-R1NgB6A/exec';
+                    } else {
+                        $urlAPi = 'https://script.google.com/macros/s/AKfycbyC2ojngj6cSxq2kqW3H_wT-FjFBQrCL7oGW9dsFMwIC-JV89B-8gvwp54qX-pvnNeclg/exec';
+                    }
+
                     $response = Http::post($urlAPi, [
                         'no_telpon' => $noTelpon,
                         'pesan' => $message,
@@ -368,7 +375,7 @@ class LogistikServices
 
                     if ($status != 'success') {
                         $this->logTransaction->rollbackTransaction();
-                        return redirect()->back()->with('error', "Gagal kirim pesan ke $namaCustomer: $message");
+                        return ['status' => 'error', 'message' => "Gagal kirim pesan ke $namaCustomer: $message."];
                     }
 
                     $this->logTransaction->commitTransaction();
@@ -395,7 +402,7 @@ class LogistikServices
                 return optional($item->layananEkspedisi)->ekspedisi?->id == $id;
             })
             ->values();
-        $dataRequest->load('customer', 'divisi', 'logCase.customer', 'logCase.logPenerima', 'logPenerima');
+        $dataRequest->load('customer', 'divisi', 'logCase.customer', 'logCase.logPenerima', 'logCase.divisi', 'logPenerima');
 
         return response()->json($dataRequest);
     }

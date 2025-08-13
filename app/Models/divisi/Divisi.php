@@ -2,6 +2,7 @@
 
 namespace App\Models\divisi;
 
+use App\Models\ekspedisi\LogCase;
 use App\Models\ekspedisi\LogRequest;
 use App\Models\employee\Employee;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,7 @@ class Divisi extends Model
 
     protected $guarded = ['id'];
 
-    public function employee() 
+    public function employee()
     {
         return $this->hasMany(Employee::class);
     }
@@ -30,5 +31,10 @@ class Divisi extends Model
     public function requestLogistik()
     {
         return $this->hasMany(LogRequest::class);
+    }
+
+    public function logistikCase()
+    {
+        return $this->hasMany(LogCase::class, 'asal_divisi_id');
     }
 }

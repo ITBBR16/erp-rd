@@ -3,6 +3,7 @@
 namespace App\Models\ekspedisi;
 
 use App\Models\customer\Customer;
+use App\Models\divisi\Divisi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,5 +28,10 @@ class LogCase extends Model
     public function logPenerima()
     {
         return $this->belongsTo(LogPenerima::class, 'penerima_id');
+    }
+
+    public function divisi()
+    {
+        return $this->belongsTo(Divisi::class, 'asal_divisi_id');
     }
 }
